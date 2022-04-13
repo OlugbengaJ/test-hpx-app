@@ -23,7 +23,12 @@ class _ModesState extends State<Modes> {
             Container(
               margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch, children: []),
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Color_Picker(
+                    //     title: 'Neutral (D65 White Point)',
+                    //     color: Colors.orangeAccent),
+                  ]),
             ),
           ],
         ));
