@@ -31,9 +31,23 @@ class _ThreeColumnsState extends State<ThreeColumns> {
           flex: widget.leftFlex,
           child: widget.left,
         ),
+        const VerticalDivider(
+          width: 20,
+          thickness: 1,
+          indent: 20,
+          endIndent: 0,
+          color: Colors.grey,
+        ),
         Expanded(
           flex: widget.centerFlex,
           child: widget.center,
+        ),
+        const VerticalDivider(
+          width: 20,
+          thickness: 1,
+          indent: 20,
+          endIndent: 0,
+          color: Colors.grey,
         ),
         Expanded(
           flex: widget.rightFlex,
