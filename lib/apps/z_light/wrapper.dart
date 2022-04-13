@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
+import 'package:hpx/apps/z_light/tools_effects/tools_effects_wrapper.dart';
 import 'layers/layers.dart';
 
-
 class Wrapper extends StatefulWidget {
-  const Wrapper({ Key? key }) : super(key: key);
+  const Wrapper({Key? key}) : super(key: key);
 
   @override
   State<Wrapper> createState() => _WrapperState();
@@ -27,7 +26,7 @@ class _WrapperState extends State<Wrapper> {
             ),
             Expanded(
               flex: 2,
-              child: Text("Tools effects"),
+              child: Tools_Effects_Wrapper(),
             ),
           ],
         ),
