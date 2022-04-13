@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
       darkTheme: dark_theme,
       themeMode: ThemeMode.dark,
       title: 'HP Xperience',
+      debugShowCheckedModeBanner: false,
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
