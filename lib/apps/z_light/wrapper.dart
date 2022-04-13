@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/widgets/layouts/three_columns.dart';
 
 import 'layers/layers.dart';
 
@@ -15,22 +16,11 @@ class _WrapperState extends State<Wrapper> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Row(
-          children: const [
-            Expanded(
-              flex: 2,
-              child: Layers(),
-            ),
-            Expanded(
-              flex: 8,
-              child: Text("Workspace"),
-            ),
-            Expanded(
-              flex: 2,
-              child: Text("Tools effects"),
-            ),
-          ],
-        ),
+        child: ThreeColumns(
+          left: Layers(),
+          center: Center(child: Text("Workspace")),
+          right: Center(child: Text("Tools effect")),
+        )
       ),
     );
   }
