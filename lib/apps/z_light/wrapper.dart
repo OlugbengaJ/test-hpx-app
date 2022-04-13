@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/apps/z_light/tools_effects/tools_effects_wrapper.dart';
+import 'package:hpx/widgets/layouts/three_columns.dart';
+
 import 'layers/layers.dart';
 
 class Wrapper extends StatefulWidget {
@@ -14,22 +15,11 @@ class _WrapperState extends State<Wrapper> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Row(
-          children: const [
-            Expanded(
-              flex: 2,
-              child: Layers(),
-            ),
-            Expanded(
-              flex: 8,
-              child: Text("Workspace"),
-            ),
-            Expanded(
-              flex: 2,
-              child: Tools_Effects_Wrapper(),
-            ),
-          ],
-        ),
+        child: ThreeColumns(
+          left: Layers(),
+          center: Center(child: Text("Workspace")),
+          right: Center(child: Text("Tools effect")),
+        )
       ),
     );
   }
