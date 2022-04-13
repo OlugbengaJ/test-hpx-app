@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/apps/z_light/tools_effects/color_mood.dart';
 import 'package:hpx/apps/z_light/tools_effects/color_preset.dart';
 
 class Tools_Effects_Wrapper extends StatefulWidget {
@@ -13,7 +14,7 @@ class _Tools_Effects_WrapperState extends State<Tools_Effects_Wrapper> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Color_Preset(),
+        child: Column(children: [Color_Mood(), Color_Preset()]),
       ),
     );
   }
