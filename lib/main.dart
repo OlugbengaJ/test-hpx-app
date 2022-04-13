@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/apps/z_light/wrapper.dart';
 import "widgets/theme.dart";
 
 void main() => runApp(MyApp());
@@ -13,7 +14,11 @@ class MyApp extends StatelessWidget {
       darkTheme: dark_theme,
       themeMode: ThemeMode.dark,
       title: 'HP Xperience',
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: "/",
+      routes: {
+        "/": (context) => const Wrapper(),
+      },
+      
     );
   }
 }

@@ -18,16 +18,16 @@ class _WrapperState extends State<Wrapper> {
         child: Row(
           children: const [
             Expanded(
-              flex: 1,
+              flex: 2,
               child: Layers(),
             ),
             Expanded(
               flex: 8,
-              child: Layers(),
+              child: Text("Workspace"),
             ),
             Expanded(
-              flex: 1,
-              child: Layers(),
+              flex: 2,
+              child: Text("Tools effects"),
             ),
           ],
         ),
