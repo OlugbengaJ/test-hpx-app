@@ -55,11 +55,11 @@ class _LayersState extends State<Layers> {
         Expanded(
           child: Container(
             margin: const EdgeInsets.all(8),
-            padding: const EdgeInsets.all(4),
+            padding: const EdgeInsets.all(1),
             color: Colors.black12,
             height: MediaQuery.of(context).size.height,
             child: ListView.builder(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(2),
               itemCount: _layers.length,
               itemBuilder: (BuildContext context, int index) {
                 return _layers[index];
