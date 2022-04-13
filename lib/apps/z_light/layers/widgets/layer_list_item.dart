@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
 
 
 class LayerListItem extends StatefulWidget {
-  const LayerListItem({ Key? key }) : super(key: key);
+  const LayerListItem({ Key? key, required this.deleteItem }) : super(key: key);
+  final Function deleteItem;
 
   @override
   State<LayerListItem> createState() => _LayerListItemState();
@@ -10,9 +12,21 @@ class LayerListItem extends StatefulWidget {
 
 class _LayerListItemState extends State<LayerListItem> {
   bool _showActions = false;
+  bool _shown = true;
+
   _onHover(isHovering){
     setState(() {
       _showActions = isHovering;
+    });
+  }
+  _toggleLayer(){
+    setState(() {
+      _shown = !_shown;
+    });
+  }
+  void _onTap(){
+    setState(() {
+      _shown = !_shown;
     });
   }
   @override
@@ -32,7 +46,14 @@ class _LayerListItemState extends State<LayerListItem> {
           color: Colors.black12,
           child: Row(
             children: [
-              const Icon(Icons.remove_red_eye),
+              InkWell(
+                onTap: _toggleLayer,
+                child:
+                (_shown)?
+                Icon(LineIcons.eye):
+                Icon(LineIcons.eyeSlash)
+              ),
+              SizedBox(width: 2,),
               Expanded(
                 child: Column(
                   children: [
@@ -46,7 +67,9 @@ class _LayerListItemState extends State<LayerListItem> {
                         Row(
                           children: const [
                             Icon(Icons.create_outlined),
-                            Icon(Icons.delete_outlined),
+                            InkWell(
+                              child: Icon(LineIcons.trash),
+                            ),
                             Icon(Icons.format_line_spacing_outlined),
                           ],
                         ): Container()

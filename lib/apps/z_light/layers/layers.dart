@@ -15,9 +15,18 @@ class _LayersState extends State<Layers> {
     super.initState();
     _addLayer(); // Default layer
   }
+
+  _deleteLayer(){
+    print("Delete item");
+  }
+  
   _addLayer(){
     setState(() {
-      _layers.add(const LayerListItem());
+      _layers.add(
+        LayerListItem(
+          deleteItem: _deleteLayer,
+        )
+      );
     });
   }
   @override
