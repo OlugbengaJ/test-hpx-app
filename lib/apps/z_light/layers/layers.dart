@@ -3,37 +3,28 @@ import 'package:hpx/apps/z_light/layers/widgets/layer_list_item.dart';
 import 'package:hpx/widgets/theme.dart';
 
 class Layers extends StatefulWidget {
-  const Layers({ Key? key }) : super(key: key);
+  const Layers({ Key? key, required this.addLayer, required this.layers }) : super(key: key);
+  final Function addLayer;
+  final List<LayerListItem> layers;
 
   @override
   State<Layers> createState() => _LayersState();
 }
 
 class _LayersState extends State<Layers> {
-  final List<Widget> _layers = [];
-  @override
-  void initState() {
-    super.initState();
-    _addLayer(); // Default layer
-  }
+  final List<LayerListItem> _layers = [];
 
-  _deleteLayer(){
+  _deleteLayer(layerID){
     // Delete all layers but one.
     if(_layers.length>1){
-      print("Delete item");
-    }    
+      setState(() {
+        _layers.removeWhere((item) => item.layerID == layerID);
+      });
+    }
+    
   }
   
-  _addLayer(){
-    // Add layer to the layers list
-    setState(() {
-      _layers.add(
-        LayerListItem(
-          deleteItem: _deleteLayer,
-        )
-      );
-    });
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +37,7 @@ class _LayersState extends State<Layers> {
           margin: const EdgeInsets.all(8),
           child: Text(
             "Layers",
-            style: h3Style,
+            style: h4Style,
           ),
         ),
         InkWell(
@@ -68,7 +59,9 @@ class _LayersState extends State<Layers> {
               ],
             ),
           ),
-          onTap: _addLayer,
+          onTap: (){
+            widget.addLayer();
+          },
         ),
         Expanded(
           child: Container(
@@ -77,12 +70,13 @@ class _LayersState extends State<Layers> {
             color: Colors.black12,
             height: MediaQuery.of(context).size.height,
             child: ReorderableListView.builder(
+              buildDefaultDragHandles: true,
               padding: const EdgeInsets.all(2),
-              itemCount: _layers.length,
+              itemCount: widget.layers.length,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
                   key: Key("$index"),
-                  child: _layers[index],
+                  child: widget.layers[index],
                 );
               }, onReorder: (int oldIndex, int newIndex) {
 

@@ -38,6 +38,7 @@ dependencies:
   line_icons: ^2.0.1
   resizable_widget: ^1.0.5
   get: ^4.6.1
+  ionicons: ^0.1.2
 
 dev_dependencies:
   flutter_test:

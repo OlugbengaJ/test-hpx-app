@@ -43,80 +43,109 @@ class ResizableWidget extends StatelessWidget {
                 visible: controller.showDragWidgets,
                 child: Stack(
                   children: [
+                    // center: given full height an full width so the whole center can be selected and dragged
+                    Align(
+                      alignment: Alignment.center,
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.move,
+                        child: DragDistance(
+                          child: Container(
+                            color: Colors.transparent,
+                            height: MediaQuery.of(context).size.height,
+                            width: MediaQuery.of(context).size.width,
+                            //child: dragWidget
+                          ),
+                          onDrag: controller.onCenterDrag,
+                        ),
+                      ),
+                    ),
                     // top left
                     Align(
                       alignment: Alignment.topLeft,
-                      child: DragDistance(
-                        child: dragWidget,
-                        onDrag: controller.onTopLeftDrag,
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.resizeUpLeft,
+                        child: DragDistance(
+                          child: dragWidget,
+                          onDrag: controller.onTopLeftDrag,
+                        ),
                       ),
                     ),
                     // top center
                     Align(
                       alignment: Alignment.topCenter,
-                      child: DragDistance(
-                        child: dragWidget,
-                        onDrag: controller.onTopCenterDrag,
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.resizeUp,
+                        child: DragDistance(
+                          child: dragWidget,
+                          onDrag: controller.onTopCenterDrag,
+                        ),
                       ),
                     ),
                     // top right
                     Align(
                       alignment: Alignment.topRight,
-                      child: DragDistance(
-                        child: dragWidget,
-                        onDrag: controller.onTopRightDrag,
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.resizeUpRight,
+                        child: DragDistance(
+                          child: dragWidget,
+                          onDrag: controller.onTopRightDrag,
+                        ),
                       ),
                     ),
                     // center left
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: DragDistance(
-                        child: dragWidget,
-                        onDrag: controller.onCenterLeftDrag,
-                      ),
-                    ),
-                    // center
-                    Align(
-                      alignment: Alignment.center,
-                      child: DragDistance(
-                        child: SizedBox(
-                          height: 200,
-                          width: 200,
-                          child: dragWidget
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.resizeLeft,
+                        child: DragDistance(
+                          child: dragWidget,
+                          onDrag: controller.onCenterLeftDrag,
                         ),
-                        onDrag: controller.onCenterDrag,
                       ),
                     ),
+                    
                     // center right
                     Align(
                       alignment: Alignment.centerRight,
-                      child: DragDistance(
-                        child: dragWidget,
-                        onDrag: controller.onCenterRightDrag,
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.resizeRight,
+                        child: DragDistance(
+                          child: dragWidget,
+                          onDrag: controller.onCenterRightDrag,
+                        ),
                       ),
                     ),
                     // bottom left
                     Align(
                       alignment: Alignment.bottomLeft,
-                      child: DragDistance(
-                        child: dragWidget,
-                        onDrag: controller.onBottomLeftDrag,
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.resizeDownLeft,
+                        child: DragDistance(
+                          child: dragWidget,
+                          onDrag: controller.onBottomLeftDrag,
+                        ),
                       ),
                     ),
                     // bottom center
                     Align(
                       alignment: Alignment.bottomCenter,
-                      child: DragDistance(
-                        child: dragWidget,
-                        onDrag: controller.onBottomCenterDrag,
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.resizeDown,
+                        child: DragDistance(
+                          child: dragWidget,
+                          onDrag: controller.onBottomCenterDrag,
+                        ),
                       ),
                     ),
                     // bottom right
                     Align(
                       alignment: Alignment.bottomRight,
-                      child: DragDistance(
-                        child: dragWidget,
-                        onDrag: controller.onBottomRightDrag,
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.resizeDownRight,
+                        child: DragDistance(
+                          child: dragWidget,
+                          onDrag: controller.onBottomRightDrag,
+                        ),
                       ),
                     ),
                   ],
