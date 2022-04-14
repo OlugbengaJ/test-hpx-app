@@ -7,12 +7,13 @@ ThemeData light_theme = ThemeData.light().copyWith(
   visualDensity: VisualDensity.adaptivePlatformDensity,
 );
 
-const h1Style = TextStyle(fontSize: 25, color: Colors.white70);
-const h2Style = TextStyle(fontSize: 20, color: Colors.white70);
-const h3Style = TextStyle(fontSize: 18, color: Colors.white70);
-const h4Style = TextStyle(fontSize: 16, color: Colors.white70);
-const labelStyle =
+
+TextStyle h1Style = const TextStyle(fontSize: 25, color: Colors.white70);
+TextStyle h2Style = const TextStyle(fontSize: 20, color: Colors.white70);
+TextStyle h3Style = const TextStyle(fontSize: 18, color: Colors.white70);
+TextStyle h4Style = const TextStyle(fontSize: 16, color: Colors.white70);
+TextStyle labelStyle = const
     TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.bold);
-const pStyle = TextStyle(fontSize: 12, color: Colors.grey);
+TextStyle pStyle = const TextStyle(fontSize: 12, color: Colors.grey, fontFamily: "GoogleSans");
 
 // const textBtnStyle = ButtonStyle();

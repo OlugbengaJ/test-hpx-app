@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_list_item.dart';
+import 'package:hpx/widgets/theme.dart';
 
 class Layers extends StatefulWidget {
   const Layers({ Key? key }) : super(key: key);
@@ -43,11 +44,9 @@ class _LayersState extends State<Layers> {
         Container(
           padding: const EdgeInsets.all(2),
           margin: const EdgeInsets.all(8),
-          child: const Text(
+          child: Text(
             "Layers",
-            style: TextStyle(
-              fontFamily: "GoogleSans"
-            ),
+            style: pStyle,
           ),
         ),
         InkWell(
