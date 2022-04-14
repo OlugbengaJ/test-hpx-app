@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:hpx/apps/z_light/tools_effects/widgets/presets/audio_visualization.dart';
+import 'package:hpx/apps/z_light/tools_effects/widgets/presets/moods.dart';
 import 'package:hpx/widgets/components/color_picker.dart';
 import 'package:hpx/widgets/theme.dart';
 
@@ -12,14 +14,11 @@ class toolModes extends StatefulWidget {
 class _toolModesState extends State<toolModes> {
   // List of items in our dropdown menu
   var items = [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Item 5',
+    'Mood',
+    'Audio Visualization',
   ];
 
-  String dropdownvalue = 'Item 1';
+  String dropdownvalue = '';
 
   @override
   Widget build(BuildContext context) {
@@ -57,11 +56,7 @@ class _toolModesState extends State<toolModes> {
               margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Color_Picker(
-                    //     title: 'Neutral (D65 White Point)',
-                    //     color: Colors.orangeAccent),
-                  ]),
+                  children: [MoodPreset(), AudioVisualPreset()]),
             ),
           ],
         ));

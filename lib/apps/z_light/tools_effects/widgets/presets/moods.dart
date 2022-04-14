@@ -4,12 +4,12 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:hpx/widgets/components/color_picker.dart';
 import 'package:hpx/widgets/theme.dart';
 
-class colorsPreset extends StatefulWidget {
+class MoodPreset extends StatefulWidget {
   @override
-  State<colorsPreset> createState() => _colorsPresetState();
+  State<MoodPreset> createState() => _MoodPresetState();
 }
 
-class _colorsPresetState extends State<colorsPreset> {
+class _MoodPresetState extends State<MoodPreset> {
   String activatedButton = "Themes";
 
   @override
