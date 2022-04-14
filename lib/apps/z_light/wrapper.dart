@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/tools_effects/tools_effects_wrapper.dart';
+import 'package:hpx/apps/z_light/workspace/workspace.dart';
 import 'package:hpx/widgets/layouts/three_columns.dart';
 
 import 'layers/layers.dart';
@@ -18,7 +19,9 @@ class _WrapperState extends State<Wrapper> {
       body: SafeArea(
           child: ThreeColumns(
         left: Layers(),
-        center: Center(child: Text("Workspace")),
+        center: Workspace(
+          
+        ),
         right: Center(child: Tools_Effects_Wrapper()),
       )),
     );
