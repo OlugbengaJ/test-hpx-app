@@ -31,21 +31,17 @@ class _toolModesState extends State<toolModes> {
           children: [
             Text("Tools & Effects", textAlign: TextAlign.left, style: h4Style),
             Container(
-                // width: 300,
                 width: MediaQuery.of(context).size.width * 0.3,
-                // margin: EdgeInsets.only(
-                //     top: 0, left: MediaQuery.of(context).size.width * 0.75),
+                margin: EdgeInsets.only(top: 0, left: 0, right: 30),
                 // padding: EdgeInsets.only(),
                 // crossAxisAlignment: CrossAxisAlignment.stretch,
                 child: DropdownButtonHideUnderline(
                     child: DropdownButton(
-                  isExpanded: false,
+                  isExpanded: true,
                   // Initial Value
                   value: dropdownvalue,
                   hint: new Text("Select City"),
-
-                  // Down Arrow Icon
-                  icon: const Icon(Icons.keyboard_arrow_down),
+                  icon: null,
 
                   // Array list of items
                   items: items.map((String items) {
