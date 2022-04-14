@@ -83,6 +83,7 @@ class _LayersState extends State<Layers> {
             color: Colors.black12,
             height: MediaQuery.of(context).size.height,
             child: ReorderableListView.builder(
+              buildDefaultDragHandles: true,
               padding: const EdgeInsets.all(2),
               itemCount: _layers.length,
               itemBuilder: (BuildContext context, int index) {
