@@ -13,5 +13,6 @@ const h3Style = TextStyle(fontSize: 18, color: Colors.white70);
 const h4Style = TextStyle(fontSize: 16, color: Colors.white70);
 const labelStyle =
     TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.bold);
+const pStyle = TextStyle(fontSize: 12, color: Colors.grey);
 
 // const textBtnStyle = ButtonStyle();

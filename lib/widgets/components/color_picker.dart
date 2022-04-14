@@ -23,45 +23,32 @@ class _Color_PickerState extends State<Color_Picker> {
 
   void selectcolor() {
     showDialog(
+        barrierColor: Colors.white.withOpacity(0),
+        barrierDismissible: false,
         context: context,
         builder: (context) {
-          return AlertDialog(
-            title: const Text('Pick a color!'),
-            content: SingleChildScrollView(
-              child: ColorPicker(
-                pickerColor: pickerColor,
-                onColorChanged: changeColor,
-              ),
-              // Use Material color picker:
-              //
-              // child: MaterialPicker(
-              //   pickerColor: pickerColor,
-              //   onColorChanged: changeColor,
-              //   showLabel: true, // only on portrait mode
-              // ),
-              //
-              // Use Block color picker:
-              //
-              // child: BlockPicker(
-              //   pickerColor: currentColor,
-              //   onColorChanged: changeColor,
-              // ),
-              //
-              // child: MultipleChoiceBlockPicker(
-              //   pickerColors: currentColors,
-              //   onColorsChanged: changeColors,
-              // ),
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: const Text('Got it'),
-                onPressed: () {
-                  setState(() => currentColor = pickerColor);
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
+          return SimpleDialog(
+              title: const Text('Pick a color!'),
+              alignment: Alignment.topRight,
+              insetPadding: EdgeInsets.only(top: 100, right: 330),
+              contentPadding:
+                  EdgeInsets.only(top: 20, right: 10, bottom: 20, left: 10),
+              children: <Widget>[
+                ColorPicker(
+                  hexInputBar: true,
+                  enableAlpha: true,
+                  portraitOnly: true,
+                  pickerColor: pickerColor,
+                  onColorChanged: changeColor,
+                ),
+                FlatButton(
+                    child: const Text('Got it'),
+                    color: Colors.grey,
+                    onPressed: () {
+                      setState(() => currentColor = pickerColor);
+                      Navigator.of(context).pop();
+                    })
+              ]);
         });
   }
 
@@ -74,12 +61,12 @@ class _Color_PickerState extends State<Color_Picker> {
           children: [
             Container(
               margin: EdgeInsets.only(
-                  left: 0.0, top: 15.0, right: 0.0, bottom: 7.0),
+                  left: 0.0, top: 15.0, right: 0.0, bottom: 10.0),
               child: FlatButton(
                 textColor: Colors.black,
-                height: 25.0,
+                height: 18.0,
                 color: widget.color,
-                shape: Border.all(width: 1, color: Colors.grey),
+                shape: Border.all(width: 0, color: Colors.grey),
                 child: Text(''),
                 onPressed: () {
                   selectcolor();
