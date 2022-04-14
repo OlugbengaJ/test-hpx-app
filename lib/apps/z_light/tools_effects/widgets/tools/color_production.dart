@@ -13,7 +13,9 @@ class _ColorProductionPresetState extends State<ColorProductionPreset> {
     return Container(
       margin: EdgeInsets.only(right: 10.0, bottom: 20.0),
       child: Color_Picker(
-          title: 'Netural (D65 White Point)', color: Colors.yellow),
+          leftTitle: '',
+          title: 'Netural (D65 White Point)',
+          color: Colors.yellow),
     );
   }
 }

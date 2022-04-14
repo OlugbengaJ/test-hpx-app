@@ -6,10 +6,15 @@ Color pickerColor = Color(0xff443a49);
 Color currentColor = Color(0xff443a49);
 
 class Color_Picker extends StatefulWidget {
-  const Color_Picker({Key? key, required this.title, required this.color})
+  const Color_Picker(
+      {Key? key,
+      required this.title,
+      required this.color,
+      required this.leftTitle})
       : super(key: key);
 
   final String title;
+  final String leftTitle;
   final Color color;
 
   @override
@@ -74,7 +79,11 @@ class _Color_PickerState extends State<Color_Picker> {
                 },
               ),
             ),
-            Text(widget.title, textAlign: TextAlign.left, style: labelStyle),
+            Row(children: [
+              Text(widget.title, textAlign: TextAlign.left, style: labelStyle),
+              Text(widget.leftTitle,
+                  textAlign: TextAlign.right, style: labelStyle)
+            ])
           ],
         ));
   }

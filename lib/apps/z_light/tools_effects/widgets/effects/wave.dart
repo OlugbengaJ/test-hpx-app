@@ -71,23 +71,55 @@ class _WavePresetState extends State<WavePreset> {
             ),
             Container(
               margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
+              height: 450,
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: (this.activatedButton == 'DEFAULT')
                       ? [
                           Color_Picker(
-                              title: 'Galaxy', color: Colors.orangeAccent),
-                          Color_Picker(title: 'Ocean', color: Colors.lightBlue),
+                              leftTitle: '',
+                              title: 'Galaxy',
+                              color: Colors.orangeAccent),
                           Color_Picker(
-                              title: 'Jungle', color: Colors.greenAccent),
+                              leftTitle: '',
+                              title: 'Ocean',
+                              color: Colors.lightBlue),
                           Color_Picker(
-                              title: 'Volcano', color: Colors.deepOrange),
-                          Color_Picker(title: 'OMEN', color: Colors.purple),
+                              leftTitle: '',
+                              title: 'Jungle',
+                              color: Colors.greenAccent),
+                          Color_Picker(
+                              leftTitle: '',
+                              title: 'Volcano',
+                              color: Colors.deepOrange),
+                          Color_Picker(
+                              leftTitle: '',
+                              title: 'OMEN',
+                              color: Colors.purple),
                         ]
-                      : [Color_Picker(title: '', color: Colors.transparent)]),
+                      : [
+                          const Color_Picker(
+                              title: '',
+                              leftTitle: 'Left',
+                              color: Colors.transparent)
+                        ]),
             ),
+            Container(
+                margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                child: Column(
+                  children: [
+                    Divider(
+                      color: Colors.white,
+                      height: 1,
+                    ),
+                  ],
+                )),
             Text("Speed", textAlign: TextAlign.left, style: h4Style),
-            Text("Direction", textAlign: TextAlign.left, style: h4Style),
+            Container(
+              margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
+              child:
+                  Text("Direction", textAlign: TextAlign.left, style: h4Style),
+            ),
           ],
         ));
   }

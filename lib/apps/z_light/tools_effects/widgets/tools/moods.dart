@@ -74,25 +74,47 @@ class _MoodPresetState extends State<MoodPreset> {
                   children: (this.activatedButton == 'Themes')
                       ? [
                           Color_Picker(
-                              title: 'Night Mode', color: Colors.orangeAccent),
-                          Color_Picker(title: 'Focus', color: Colors.lightBlue),
+                              leftTitle: '',
+                              title: 'Night Mode',
+                              color: Colors.orangeAccent),
                           Color_Picker(
-                              title: 'Relax', color: Colors.greenAccent),
+                              leftTitle: '',
+                              title: 'Focus',
+                              color: Colors.lightBlue),
                           Color_Picker(
-                              title: 'Create', color: Colors.deepOrange),
-                          Color_Picker(title: 'Ideate', color: Colors.purple),
+                              leftTitle: '',
+                              title: 'Relax',
+                              color: Colors.greenAccent),
+                          Color_Picker(
+                              leftTitle: '',
+                              title: 'Create',
+                              color: Colors.deepOrange),
+                          Color_Picker(
+                              leftTitle: '',
+                              title: 'Ideate',
+                              color: Colors.purple),
                         ]
                       : [
                           Color_Picker(
-                              title: 'Custom 1', color: Colors.transparent),
+                              leftTitle: '',
+                              title: 'Custom 1',
+                              color: Colors.transparent),
                           Color_Picker(
-                              title: 'Custom 2', color: Colors.transparent),
+                              leftTitle: '',
+                              title: 'Custom 2',
+                              color: Colors.transparent),
                           Color_Picker(
-                              title: 'Custom 3', color: Colors.transparent),
+                              leftTitle: '',
+                              title: 'Custom 3',
+                              color: Colors.transparent),
                           Color_Picker(
-                              title: 'Custom 4', color: Colors.transparent),
+                              leftTitle: '',
+                              title: 'Custom 4',
+                              color: Colors.transparent),
                           Color_Picker(
-                              title: 'Custom 5', color: Colors.transparent),
+                              leftTitle: '',
+                              title: 'Custom 5',
+                              color: Colors.transparent),
                         ]),
             ),
           ],
