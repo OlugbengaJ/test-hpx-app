@@ -17,10 +17,14 @@ class _LayersState extends State<Layers> {
   }
 
   _deleteLayer(){
-    print("Delete item");
+    // Delete all layers but one.
+    if(_layers.length>1){
+      print("Delete item");
+    }    
   }
   
   _addLayer(){
+    // Add layer to the layers list
     setState(() {
       _layers.add(
         LayerListItem(
@@ -29,6 +33,7 @@ class _LayersState extends State<Layers> {
       );
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -67,12 +72,17 @@ class _LayersState extends State<Layers> {
             padding: const EdgeInsets.all(1),
             color: Colors.black12,
             height: MediaQuery.of(context).size.height,
-            child: ListView.builder(
+            child: ReorderableListView.builder(
               padding: const EdgeInsets.all(2),
               itemCount: _layers.length,
               itemBuilder: (BuildContext context, int index) {
-                return _layers[index];
-              }
+                return Container(
+                  key: Key("$index"),
+                  child: _layers[index],
+                );
+              }, onReorder: (int oldIndex, int newIndex) {
+
+              },
             )
           ),
         )

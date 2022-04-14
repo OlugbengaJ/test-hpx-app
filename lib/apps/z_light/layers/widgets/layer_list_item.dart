@@ -19,16 +19,19 @@ class _LayerListItemState extends State<LayerListItem> {
       _showActions = isHovering;
     });
   }
+
   _toggleLayer(){
     setState(() {
       _shown = !_shown;
     });
   }
-  void _onTap(){
+
+  _onTap(){
     setState(() {
       _shown = !_shown;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -64,14 +67,19 @@ class _LayerListItemState extends State<LayerListItem> {
                           child: Text("Type"),
                         ),
                         (_showActions)?
-                        Row(
-                          children: const [
-                            Icon(Icons.create_outlined),
-                            InkWell(
-                              child: Icon(LineIcons.trash),
-                            ),
-                            Icon(Icons.format_line_spacing_outlined),
-                          ],
+                        Container(
+                          margin: EdgeInsets.only(right: 32),
+                          child: Row(
+                            children: [
+                              Icon(Icons.create_outlined),
+                              InkWell(
+                                child: Icon(LineIcons.trash),
+                                onTap: (){
+                                  widget.deleteItem();
+                                },
+                              ),
+                            ],
+                          ),
                         ): Container()
                       ],
                     ),
