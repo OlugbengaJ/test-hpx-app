@@ -3,9 +3,10 @@ import 'package:ionicons/ionicons.dart';
 
 
 class LayerListItem extends StatefulWidget {
-  const LayerListItem({ Key? key, required this.deleteItem, required this.layerID }) : super(key: key);
+  const LayerListItem({ Key? key, required this.deleteItem, required this.layerID, required this.currentIndex }) : super(key: key);
   final Function deleteItem;
   final int layerID;
+  final int currentIndex;
 
   @override
   State<LayerListItem> createState() => _LayerListItemState();
@@ -46,9 +47,7 @@ class _LayerListItemState extends State<LayerListItem> {
   }
 
   _onTap(){
-    setState(() {
-      _shown = !_shown;
-    });
+    
   }
 
   _onEdited (value){
@@ -67,9 +66,7 @@ class _LayerListItemState extends State<LayerListItem> {
         hoverColor: Colors.transparent,
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
-        onTap: (){
-          //print("Tapped");
-        },
+        onTap: _onTap,
         child: Container(
           padding: const EdgeInsets.all(2),
           color: Colors.black12,

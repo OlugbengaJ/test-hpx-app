@@ -3,7 +3,9 @@ import 'package:hpx/apps/z_light/layers/widgets/layer_list_item.dart';
 import 'package:hpx/widgets/theme.dart';
 
 class Layers extends StatefulWidget {
-  const Layers({ Key? key }) : super(key: key);
+  const Layers({ Key? key, required this.addLayer, required this.layers }) : super(key: key);
+  final Function addLayer;
+  final List<LayerListItem> layers;
 
   @override
   State<Layers> createState() => _LayersState();
@@ -11,12 +13,6 @@ class Layers extends StatefulWidget {
 
 class _LayersState extends State<Layers> {
   final List<LayerListItem> _layers = [];
-  int _nextIndex = 0;
-  @override
-  void initState() {
-    super.initState();
-    _addLayer(); // Default layer
-  }
 
   _deleteLayer(layerID){
     // Delete all layers but one.
@@ -28,18 +24,7 @@ class _LayersState extends State<Layers> {
     
   }
   
-  _addLayer(){
-    // Add layer to the layers list
-    setState(() {
-      _layers.add(
-        LayerListItem(
-          layerID: _nextIndex,
-          deleteItem: _deleteLayer,
-        )
-      );
-      _nextIndex += 1;
-    });
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +59,9 @@ class _LayersState extends State<Layers> {
               ],
             ),
           ),
-          onTap: _addLayer,
+          onTap: (){
+            widget.addLayer();
+          },
         ),
         Expanded(
           child: Container(
@@ -85,11 +72,11 @@ class _LayersState extends State<Layers> {
             child: ReorderableListView.builder(
               buildDefaultDragHandles: true,
               padding: const EdgeInsets.all(2),
-              itemCount: _layers.length,
+              itemCount: widget.layers.length,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
                   key: Key("$index"),
-                  child: _layers[index],
+                  child: widget.layers[index],
                 );
               }, onReorder: (int oldIndex, int newIndex) {
 
