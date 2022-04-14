@@ -33,25 +33,20 @@ class _toolModesState extends State<toolModes> {
             Container(
                 width: MediaQuery.of(context).size.width * 0.3,
                 margin: EdgeInsets.only(top: 0, left: 0, right: 30),
-                // padding: EdgeInsets.only(),
+                padding: EdgeInsets.zero,
                 // crossAxisAlignment: CrossAxisAlignment.stretch,
                 child: DropdownButtonHideUnderline(
                     child: DropdownButton(
                   isExpanded: true,
-                  // Initial Value
                   value: dropdownvalue,
                   hint: new Text("Select City"),
                   icon: null,
-
-                  // Array list of items
                   items: items.map((String items) {
                     return DropdownMenuItem(
                       value: items,
                       child: Text(items),
                     );
                   }).toList(),
-                  // After selecting the desired option,it will
-                  // change button value to selected value
                   onChanged: (String? newValue) {
                     setState(() {
                       dropdownvalue = newValue!;
