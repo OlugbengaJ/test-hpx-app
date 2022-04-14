@@ -15,15 +15,13 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin:
-            EdgeInsets.only(left: 10.0, top: 20.0, right: 10.0, bottom: 20.0),
+        margin: EdgeInsets.only(right: 10.0, bottom: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text("Color Presets", textAlign: TextAlign.left, style: h4Style),
             Container(
-              margin: EdgeInsets.only(
-                  left: 0.0, top: 20.0, right: 0.0, bottom: 0.0),
+              margin: EdgeInsets.only(top: 10.0),
               child: Row(
                 children: [
                   Expanded(

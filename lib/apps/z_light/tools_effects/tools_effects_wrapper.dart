@@ -13,7 +13,7 @@ class _toolsEffectsWrapperState extends State<toolsEffectsWrapper> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(children: [toolModes()]),
+        child: Column(children: [ToolModes()]),
       ),
     );
   }
