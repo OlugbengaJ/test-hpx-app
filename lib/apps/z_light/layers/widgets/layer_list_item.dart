@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:line_icons/line_icons.dart';
+import 'package:ionicons/ionicons.dart';
 
 
 class LayerListItem extends StatefulWidget {
@@ -15,6 +15,7 @@ class _LayerListItemState extends State<LayerListItem> {
   bool _showActions = false;
   bool _shown = true;
   bool _editing = false;
+  final double _iconSize = 16;
   TextEditingController _layerNameController = TextEditingController(text: "");
 
 
@@ -80,36 +81,49 @@ class _LayerListItemState extends State<LayerListItem> {
                   onTap: _toggleLayer,
                   child:
                   (_shown)?
-                  const Icon(LineIcons.eye):
-                  const Icon(LineIcons.eyeSlash)
+                  Icon(
+                    Ionicons.eye,
+                    size: _iconSize,
+                  ):
+                  Icon(
+                    Ionicons.eye_off,
+                    size: _iconSize,
+                  )
                 ),
                 const SizedBox(width: 2,),
                 Expanded(
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Row(
                         children:[
-                          const Icon(Icons.image),
+                          Icon(
+                            Ionicons.image,
+                            size: _iconSize,
+                          ),
+                          (_editing)?
+                          Container(
+                            height: 20,
+                            constraints: const BoxConstraints(
+                              maxWidth: 80,
+                            ),
+                            child: TextFormField(
+                              controller: _layerNameController,
+                              autofocus: true,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                overflow: TextOverflow.ellipsis,                             
+                              ),
+                              decoration: const InputDecoration(
+                                focusColor: Colors.white,
+                                border: OutlineInputBorder(),
+                                contentPadding: EdgeInsets.all(8)                                 
+                              ),
+                              onFieldSubmitted: _onEdited,
+                            ),
+                          ): 
                           Expanded(
                             child:
-                            (_editing)?
-                            SizedBox(
-                              height: 25,
-                              width: 50,
-                              child: TextField(
-                                controller: _layerNameController,
-                                autofocus: true,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                ),
-                                decoration: const InputDecoration(
-                                  focusColor: Colors.white,
-                                  border: OutlineInputBorder(
-                                  ),                                  
-                                ),
-                                onSubmitted: _onEdited,
-                              ),
-                            ): 
                             Text(
                               _layerNameController.text,
                               overflow: TextOverflow.ellipsis,
@@ -118,15 +132,22 @@ class _LayerListItemState extends State<LayerListItem> {
                           ),
                           (_showActions)?
                           Container(
-                            margin: EdgeInsets.only(right: 26),
+                            margin: const EdgeInsets.only(right: 26),
                             child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 InkWell(
-                                  child: const Icon(Icons.create_outlined),
+                                  child: Icon(
+                                    Ionicons.create,
+                                    size: _iconSize,
+                                  ),
                                   onTap: _toggleEditing,
                                 ),
                                 InkWell(
-                                  child: const Icon(LineIcons.trash),
+                                  child: Icon(
+                                    Ionicons.trash,
+                                    size: _iconSize,
+                                  ),
                                   onTap: (){
                                     widget.deleteItem(widget.layerID);
                                   },
