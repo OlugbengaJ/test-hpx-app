@@ -46,7 +46,7 @@ class _LayersState extends State<Layers> {
           margin: const EdgeInsets.all(8),
           child: Text(
             "Layers",
-            style: pStyle,
+            style: h3Style,
           ),
         ),
         InkWell(
