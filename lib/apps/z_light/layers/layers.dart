@@ -43,7 +43,12 @@ class _LayersState extends State<Layers> {
         Container(
           padding: const EdgeInsets.all(2),
           margin: const EdgeInsets.all(8),
-          child: const Text("Layers"),
+          child: const Text(
+            "Layers",
+            style: TextStyle(
+              fontFamily: "GoogleSans"
+            ),
+          ),
         ),
         InkWell(
           child: Container(
