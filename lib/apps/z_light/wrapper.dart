@@ -20,7 +20,6 @@ class _WrapperState extends State<Wrapper> {
           child: ThreeColumns(
         left: Layers(),
         center: Workspace(
-          
         ),
         right: toolsEffectsWrapper(),
         

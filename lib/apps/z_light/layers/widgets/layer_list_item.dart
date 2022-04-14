@@ -3,8 +3,9 @@ import 'package:line_icons/line_icons.dart';
 
 
 class LayerListItem extends StatefulWidget {
-  const LayerListItem({ Key? key, required this.deleteItem }) : super(key: key);
+  const LayerListItem({ Key? key, required this.deleteItem, required this.layerID }) : super(key: key);
   final Function deleteItem;
+  final int layerID; 
 
   @override
   State<LayerListItem> createState() => _LayerListItemState();
@@ -63,8 +64,8 @@ class _LayerListItemState extends State<LayerListItem> {
                     Row(
                       children:[
                         const Icon(Icons.image),
-                        const Expanded(
-                          child: Text("Type"),
+                        Expanded(
+                          child: Text("New layer ${widget.layerID}"),
                         ),
                         (_showActions)?
                         Container(
@@ -75,7 +76,7 @@ class _LayerListItemState extends State<LayerListItem> {
                               InkWell(
                                 child: Icon(LineIcons.trash),
                                 onTap: (){
-                                  widget.deleteItem();
+                                  widget.deleteItem(widget.layerID);
                                 },
                               ),
                             ],

@@ -10,18 +10,22 @@ class Layers extends StatefulWidget {
 }
 
 class _LayersState extends State<Layers> {
-  final List<Widget> _layers = [];
+  final List<LayerListItem> _layers = [];
+  int _nextIndex = 0;
   @override
   void initState() {
     super.initState();
     _addLayer(); // Default layer
   }
 
-  _deleteLayer(){
+  _deleteLayer(layerID){
     // Delete all layers but one.
     if(_layers.length>1){
-      print("Delete item");
-    }    
+      setState(() {
+        _layers.removeWhere((item) => item.layerID == layerID);
+      });
+    }
+    
   }
   
   _addLayer(){
@@ -29,9 +33,11 @@ class _LayersState extends State<Layers> {
     setState(() {
       _layers.add(
         LayerListItem(
+          layerID: _nextIndex,
           deleteItem: _deleteLayer,
         )
       );
+      _nextIndex += 1;
     });
   }
 
@@ -46,7 +52,7 @@ class _LayersState extends State<Layers> {
           margin: const EdgeInsets.all(8),
           child: Text(
             "Layers",
-            style: h3Style,
+            style: h4Style,
           ),
         ),
         InkWell(
