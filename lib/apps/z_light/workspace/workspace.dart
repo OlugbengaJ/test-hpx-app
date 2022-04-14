@@ -16,13 +16,9 @@ class _WorkspaceState extends State<Workspace> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        LayersStack(
-          layers: widget.layers,
-          currentIndex: widget.currentIndex,
-        ),
-      ],
+    return LayersStack(
+      layers: widget.layers,
+      currentIndex: widget.currentIndex,
     );
   }
 }

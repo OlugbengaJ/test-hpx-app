@@ -12,16 +12,10 @@ class LayersStack extends StatefulWidget {
 
 class _LayersStackState extends State<LayersStack> {
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-
-  }
-
-  @override
   Widget build(BuildContext context) {
    
     return IndexedStack(
+      index: widget.currentIndex,
       children: widget.layers,
     );
   }

@@ -20,6 +20,12 @@ class _WrapperState extends State<Wrapper> {
   int _nextIndex = 0;
   int _currentIndex = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    _addLayer();
+  }
+
   _addLayer(){
     // Add layer to the layers list
     setState(() {
@@ -27,32 +33,37 @@ class _WrapperState extends State<Wrapper> {
         LayerListItem(
           layerID: _nextIndex,
           deleteItem: _deleteLayer,
-          currentIndex: _currentIndex,
         )
       );
       _layersStackItems.add(LayerStackItem(
         layerID: _nextIndex,
       ));
-      _currentIndex = _nextIndex;
+      _currentIndex = _layersStackItems.length -1 ;
       _nextIndex += 1;
     });
   }
 
    _deleteLayer(layerID){
     // Delete all layers but one.
-    if(_layersListItems.length>1){
-      setState(() {
-        _layersListItems.removeWhere((item) => item.layerID == layerID);
-        _layersStackItems.removeWhere((item) => item.layerID == layerID);
-      });
-    }
+    // if(_layersListItems.length>1){
+    //   setState(() {
+    //     _layersListItems.removeWhere((item) => item.layerID == layerID);
+    //     _layersStackItems.removeWhere((item) => item.layerID == layerID);
+    //     _currentIndex = _layersStackItems[0].layerID;
+    //   });
+    // }
+    setState(() {
+      _layersListItems.removeWhere((item) => item.layerID == layerID);
+      _layersStackItems.removeWhere((item) => item.layerID == layerID);
+      if(_layersStackItems.isNotEmpty){
+        _currentIndex = _layersStackItems.length -1;
+      }
+      
+    });
     
   }
 
   
-  _removeLayer() {
-
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

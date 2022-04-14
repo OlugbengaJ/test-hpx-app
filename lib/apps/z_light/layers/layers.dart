@@ -11,20 +11,7 @@ class Layers extends StatefulWidget {
   State<Layers> createState() => _LayersState();
 }
 
-class _LayersState extends State<Layers> {
-  final List<LayerListItem> _layers = [];
-
-  _deleteLayer(layerID){
-    // Delete all layers but one.
-    if(_layers.length>1){
-      setState(() {
-        _layers.removeWhere((item) => item.layerID == layerID);
-      });
-    }
-    
-  }
-  
-  
+class _LayersState extends State<Layers> {  
 
   @override
   Widget build(BuildContext context) {

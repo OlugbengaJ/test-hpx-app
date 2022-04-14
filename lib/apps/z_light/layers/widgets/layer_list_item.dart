@@ -3,10 +3,9 @@ import 'package:ionicons/ionicons.dart';
 
 
 class LayerListItem extends StatefulWidget {
-  const LayerListItem({ Key? key, required this.deleteItem, required this.layerID, required this.currentIndex }) : super(key: key);
+  const LayerListItem({ Key? key, required this.deleteItem, required this.layerID }) : super(key: key);
   final Function deleteItem;
   final int layerID;
-  final int currentIndex;
 
   @override
   State<LayerListItem> createState() => _LayerListItemState();
@@ -38,6 +37,10 @@ class _LayerListItemState extends State<LayerListItem> {
     setState(() {
       _shown = !_shown;
     });
+  }
+
+  _layerSelected (layerID){
+
   }
 
   _toggleEditing(){
