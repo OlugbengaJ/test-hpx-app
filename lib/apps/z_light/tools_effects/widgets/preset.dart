@@ -3,13 +3,13 @@ import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:hpx/widgets/components/color_picker.dart';
 
-class Color_Preset extends StatefulWidget {
+class colorsPreset extends StatefulWidget {
   @override
-  State<Color_Preset> createState() => _Color_PresetState();
+  State<colorsPreset> createState() => _colorsPresetState();
 }
 
-class _Color_PresetState extends State<Color_Preset> {
-  String activated_btn = "Themes";
+class _colorsPresetState extends State<colorsPreset> {
+  String activatedButton = "Themes";
 
   @override
   Widget build(BuildContext context) {
@@ -32,17 +32,17 @@ class _Color_PresetState extends State<Color_Preset> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           FlatButton(
-                            textColor: (this.activated_btn == 'Custom')
+                            textColor: (this.activatedButton == 'Custom')
                                 ? Colors.grey
                                 : Colors.black,
                             height: 40.0,
-                            color: (this.activated_btn == 'Custom')
+                            color: (this.activatedButton == 'Custom')
                                 ? Colors.black
                                 : Colors.white,
                             child: Text('THEMES'),
                             onPressed: () {
                               setState(() {
-                                this.activated_btn = "Themes";
+                                this.activatedButton = "Themes";
                               });
                             },
                           ),
@@ -53,17 +53,17 @@ class _Color_PresetState extends State<Color_Preset> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           FlatButton(
-                            textColor: (this.activated_btn != 'Custom')
+                            textColor: (this.activatedButton != 'Custom')
                                 ? Colors.grey
                                 : Colors.black,
                             height: 40.0,
-                            color: (this.activated_btn != 'Custom')
+                            color: (this.activatedButton != 'Custom')
                                 ? Colors.black
                                 : Colors.white,
                             child: Text('CUSTOM'),
                             onPressed: () {
                               setState(() {
-                                this.activated_btn = "Custom";
+                                this.activatedButton = "Custom";
                               });
                             },
                           )
@@ -76,7 +76,7 @@ class _Color_PresetState extends State<Color_Preset> {
               margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: (this.activated_btn == 'Themes')
+                  children: (this.activatedButton == 'Themes')
                       ? [
                           Color_Picker(
                               title: 'Night Mode', color: Colors.orangeAccent),

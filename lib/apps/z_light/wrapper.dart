@@ -19,7 +19,7 @@ class _WrapperState extends State<Wrapper> {
           child: ThreeColumns(
         left: Layers(),
         center: Center(child: Text("Workspace")),
-        right: Center(child: Tools_Effects_Wrapper()),
+        right: toolsEffectsWrapper(),
       )),
     );
   }

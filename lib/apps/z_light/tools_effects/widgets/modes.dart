@@ -3,12 +3,12 @@ import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:hpx/widgets/components/color_picker.dart';
 
-class Modes extends StatefulWidget {
+class toolModes extends StatefulWidget {
   @override
-  State<Modes> createState() => _ModesState();
+  State<toolModes> createState() => _toolModesState();
 }
 
-class _ModesState extends State<Modes> {
+class _toolModesState extends State<toolModes> {
   @override
   Widget build(BuildContext context) {
     return Container(

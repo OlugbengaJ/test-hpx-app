@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/apps/z_light/tools_effects/tools_effect_modes.dart';
-import 'package:hpx/apps/z_light/tools_effects/color_preset.dart';
+import 'package:hpx/apps/z_light/tools_effects/widgets/modes.dart';
+import 'package:hpx/apps/z_light/tools_effects/widgets/preset.dart';
 
-class Tools_Effects_Wrapper extends StatefulWidget {
-  const Tools_Effects_Wrapper({Key? key}) : super(key: key);
+class toolsEffectsWrapper extends StatefulWidget {
+  const toolsEffectsWrapper({Key? key}) : super(key: key);
 
   @override
-  State<Tools_Effects_Wrapper> createState() => _Tools_Effects_WrapperState();
+  State<toolsEffectsWrapper> createState() => _toolsEffectsWrapperState();
 }
 
-class _Tools_Effects_WrapperState extends State<Tools_Effects_Wrapper> {
+class _toolsEffectsWrapperState extends State<toolsEffectsWrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(children: [Modes(), Color_Preset()]),
+        child: Column(children: [toolModes(), colorsPreset()]),
       ),
     );
   }
