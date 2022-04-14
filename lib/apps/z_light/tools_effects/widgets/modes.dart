@@ -10,6 +10,17 @@ class toolModes extends StatefulWidget {
 }
 
 class _toolModesState extends State<toolModes> {
+  // List of items in our dropdown menu
+  var items = [
+    'Item 1',
+    'Item 2',
+    'Item 3',
+    'Item 4',
+    'Item 5',
+  ];
+
+  String dropdownvalue = 'Item 1';
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,6 +30,38 @@ class _toolModesState extends State<toolModes> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text("Tools & Effects", textAlign: TextAlign.left, style: h4Style),
+            Container(
+                // width: 300,
+                width: MediaQuery.of(context).size.width * 0.3,
+                // margin: EdgeInsets.only(
+                //     top: 0, left: MediaQuery.of(context).size.width * 0.75),
+                // padding: EdgeInsets.only(),
+                // crossAxisAlignment: CrossAxisAlignment.stretch,
+                child: DropdownButtonHideUnderline(
+                    child: DropdownButton(
+                  isExpanded: false,
+                  // Initial Value
+                  value: dropdownvalue,
+                  hint: new Text("Select City"),
+
+                  // Down Arrow Icon
+                  icon: const Icon(Icons.keyboard_arrow_down),
+
+                  // Array list of items
+                  items: items.map((String items) {
+                    return DropdownMenuItem(
+                      value: items,
+                      child: Text(items),
+                    );
+                  }).toList(),
+                  // After selecting the desired option,it will
+                  // change button value to selected value
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      dropdownvalue = newValue!;
+                    });
+                  },
+                ))),
             Container(
               margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
               child: Column(
