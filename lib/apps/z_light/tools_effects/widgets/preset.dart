@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:hpx/widgets/components/color_picker.dart';
+import 'package:hpx/widgets/theme.dart';
 
 class colorsPreset extends StatefulWidget {
   @override
@@ -19,9 +20,7 @@ class _colorsPresetState extends State<colorsPreset> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text("Presets",
-                textAlign: TextAlign.left,
-                style: TextStyle(color: Colors.white70)),
+            Text("Presets", textAlign: TextAlign.left, style: h4Style),
             Container(
               margin: EdgeInsets.only(
                   left: 0.0, top: 20.0, right: 0.0, bottom: 0.0),

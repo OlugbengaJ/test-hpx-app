@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:hpx/widgets/components/color_picker.dart';
+import 'package:hpx/widgets/theme.dart';
 
 class toolModes extends StatefulWidget {
   @override
@@ -17,9 +18,7 @@ class _toolModesState extends State<toolModes> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text("Tools & Effects",
-                textAlign: TextAlign.left,
-                style: TextStyle(color: Colors.white70)),
+            Text("Tools & Effects", textAlign: TextAlign.left, style: h4Style),
             Container(
               margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
               child: Column(
