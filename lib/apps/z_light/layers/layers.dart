@@ -8,11 +8,9 @@ import 'package:provider/provider.dart';
 class Layers extends StatefulWidget {
   const Layers(
       {Key? key,
-      required this.addLayer,
       required this.layers,
       required this.onReorder})
       : super(key: key);
-  final Function addLayer;
   final Function(int oldIndex, int newIndex) onReorder;
   final List<LayerListItem> layers;
 

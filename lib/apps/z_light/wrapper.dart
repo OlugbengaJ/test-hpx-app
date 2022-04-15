@@ -84,7 +84,6 @@ class _WrapperState extends State<Wrapper> {
           child: ThreeColumns(
         left: Layers(
             onReorder: _updateLayers,
-            addLayer: _addLayer,
             layers: _layersListItems),
         center: Workspace(
           currentIndex: _currentIndex, // For hide and show
