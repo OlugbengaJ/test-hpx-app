@@ -117,7 +117,7 @@ class _WavePresetState extends State<WavePreset> {
               value: _currentSliderValue,
               max: 100,
               min: 0,
-              divisions: 1,
+              divisions: 100,
               label: _currentSliderValue.round().toString(),
               onChanged: (double value) {
                 setState(() {
@@ -152,7 +152,8 @@ class _WavePresetState extends State<WavePreset> {
                       flex: 2,
                       child: RotateButton(onChange: (double? returnValue) {
                         setState(() {
-                          degreeController.text = returnValue.toString();
+                          degreeController.text =
+                              (returnValue! * 100).toStringAsFixed(2);
                         });
                       })),
                   Expanded(
