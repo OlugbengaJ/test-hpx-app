@@ -8,11 +8,10 @@ class LayerListItem extends StatefulWidget {
   const LayerListItem(
       {Key? key,
       required this.layerID,
-      required this.deleteItem,
       required this.toggleItem,
-      required this.layerItemModel})
-      : super(key: key);
-  final Function deleteItem;
+      required this.layerItemModel}
+    ) : super(key: key);
+
   final Function toggleItem;
   final int layerID;
   final LayerItemModel layerItemModel;
@@ -123,8 +122,7 @@ class _LayerListItemState extends State<LayerListItem> {
                                           setState(() {
                                             _editing = !_editing;
                                           });
-                                          LayerItemModel layerItemModel =
-                                              _value.getItem(widget.layerID);
+                                          LayerItemModel layerItemModel =  _value.getItem(widget.layerID);
                                           _value.update(
                                               LayerItemModel(
                                                   id: widget.layerID,
