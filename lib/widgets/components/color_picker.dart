@@ -78,7 +78,7 @@ class _Color_PickerState extends State<Color_Picker> {
                   child: const Text(""),
                   style: TextButton.styleFrom(
                     side: const BorderSide(color: Colors.grey, width: 1),
-                    // maximumSize: const Size(100.00, 20.00),
+                    // maximumSize: Size(100, 20),
                     primary: Colors.black,
                     backgroundColor: widget.color,
                   ),
