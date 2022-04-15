@@ -17,8 +17,8 @@ class Wrapper extends StatefulWidget {
 }
 
 class _WrapperState extends State<Wrapper> {
-  List<LayerListItem> _layersListItems = [];
-  List<LayerStackItem> _layersStackItems = [];
+  final List<LayerListItem> _layersListItems = [];
+  final List<LayerStackItem> _layersStackItems = [];
   int _nextIndex = 0;
   int _currentIndex = 0;
 
@@ -89,7 +89,7 @@ class _WrapperState extends State<Wrapper> {
           currentIndex: _currentIndex, // For hide and show
           layers: _layersStackItems,
         ),
-        right: toolsEffectsWrapper(),
+        right: const ToolsEffectsWrapper(),
       )),
     );
   }

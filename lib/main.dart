@@ -18,7 +18,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      darkTheme: darkTheme,
+      darkTheme: darkTheme.copyWith(
+          sliderTheme: SliderTheme.of(context).copyWith(
+        //slider modifications
+        thumbColor: Colors.white,
+        inactiveTrackColor: Colors.grey.shade900,
+        activeTrackColor: Colors.grey.shade900,
+        overlayColor: Colors.grey.shade500,
+        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 5.0),
+        overlayShape: const RoundSliderOverlayShape(overlayRadius: 7.0),
+      )),
       themeMode: ThemeMode.dark,
       title: 'HP Xperience',
       debugShowCheckedModeBanner: false,
