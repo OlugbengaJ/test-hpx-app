@@ -2,20 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:hpx/widgets/theme.dart';
 
-Color pickerColor = Color(0xff443a49);
-Color currentColor = Color(0xff443a49);
+Color pickerColor = const Color(0xff443a49);
+Color currentColor = const Color(0xff443a49);
 
 class Color_Picker extends StatefulWidget {
-  const Color_Picker(
+  Color_Picker(
       {Key? key,
       required this.title,
       required this.color,
+      this.width,
+      this.height,
       required this.leftTitle})
       : super(key: key);
 
   final String title;
   final String leftTitle;
   final Color color;
+  final double? width;
+  final double? height;
 
   @override
   State<Color_Picker> createState() => _Color_PickerState();
@@ -46,9 +50,12 @@ class _Color_PickerState extends State<Color_Picker> {
                   pickerColor: pickerColor,
                   onColorChanged: changeColor,
                 ),
-                FlatButton(
-                    child: const Text('Got it'),
-                    color: Colors.grey,
+                TextButton(
+                    child: const Text("Got It"),
+                    style: TextButton.styleFrom(
+                      primary: Colors.black,
+                      backgroundColor: Colors.grey,
+                    ),
                     onPressed: () {
                       setState(() => currentColor = pickerColor);
                       Navigator.of(context).pop();
@@ -60,30 +67,45 @@ class _Color_PickerState extends State<Color_Picker> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(left: 0.0, top: 5.0, right: 0.0, bottom: 5.0),
+        margin:
+            const EdgeInsets.only(left: 0.0, top: 5.0, right: 0.0, bottom: 5.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-              margin: EdgeInsets.only(
-                  left: 0.0, top: 15.0, right: 0.0, bottom: 10.0),
-              child: FlatButton(
-                textColor: Colors.black,
-                height: 18.0,
-                color: widget.color,
-                shape: Border.all(width: 0, color: Colors.grey),
-                child: Text(''),
-                onPressed: () {
-                  pickerColor = widget.color;
-                  selectcolor();
-                },
-              ),
-            ),
+                margin: const EdgeInsets.only(right: 0.0, bottom: 10.0),
+                child: TextButton(
+                  child: const Text(""),
+                  style: TextButton.styleFrom(
+                    side: const BorderSide(color: Colors.grey, width: 1),
+                    // maximumSize: const Size(100.00, 20.00),
+                    primary: Colors.black,
+                    backgroundColor: widget.color,
+                  ),
+                  onPressed: () {
+                    pickerColor = widget.color;
+                    selectcolor();
+                  },
+                )),
             Row(children: [
-              Text(widget.title, textAlign: TextAlign.left, style: labelStyle),
-              Text(widget.leftTitle,
-                  textAlign: TextAlign.right, style: labelStyle)
-            ])
+              Expanded(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(widget.title,
+                      textAlign: TextAlign.left, style: labelStyle),
+                ],
+              )),
+              Expanded(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(widget.leftTitle,
+                      textAlign: TextAlign.right, style: labelStyle),
+                ],
+              ))
+            ]),
+            Container(margin: const EdgeInsets.only(bottom: 10.0))
           ],
         ));
   }

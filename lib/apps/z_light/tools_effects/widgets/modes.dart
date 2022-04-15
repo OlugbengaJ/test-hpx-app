@@ -41,7 +41,7 @@ List<PickerModel> moodList = [
 ];
 
 class _ToolModesState extends State<ToolModes> {
-  Widget? preset;
+  Widget? preset = AudioVisualPreset();
 
   changeComponent() {
     switch (pickerChoice?.value) {
@@ -56,21 +56,20 @@ class _ToolModesState extends State<ToolModes> {
       case "wave":
         return WavePreset();
       default:
-        return WavePreset();
+        return AudioVisualPreset();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.only(
-            left: 5.0, top: 20.0, right: 5.0, bottom: 20.0),
+        margin: const EdgeInsets.only(right: 5.0, top: 20.0, bottom: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text("Tools & Effects", textAlign: TextAlign.left, style: h4Style),
-            Container(
-                width: MediaQuery.of(context).size.width * 0.3,
+            SizedBox(
+                // width: MediaQuery.of(context).size.width * 0.3,
                 child: PickerDropdown(
                     onChange: (PickerModel? returnValue) {
                       setState(() {
@@ -79,8 +78,9 @@ class _ToolModesState extends State<ToolModes> {
                     },
                     pickerList: moodList)),
             Container(
-                margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-                child: preset),
+              margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+              child: preset,
+            ),
           ],
         ));
   }

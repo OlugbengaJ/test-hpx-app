@@ -15,13 +15,19 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(right: 10.0, bottom: 20.0),
+        margin: const EdgeInsets.only(bottom: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            Container(margin: const EdgeInsets.only(top: 20.0)),
+            const Divider(
+              color: Colors.white,
+              height: 1,
+            ),
+            Container(margin: const EdgeInsets.only(top: 20.0)),
             Text("Color Presets", textAlign: TextAlign.left, style: h4Style),
             Container(
-              margin: EdgeInsets.only(top: 10.0),
+              margin: const EdgeInsets.only(top: 10.0),
               child: Row(
                 children: [
                   Expanded(
@@ -29,17 +35,17 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           FlatButton(
-                            textColor: (this.activatedButton == 'Gradient')
+                            textColor: (activatedButton == 'Gradient')
                                 ? Colors.grey
                                 : Colors.black,
                             height: 40.0,
-                            color: (this.activatedButton == 'Gradient')
+                            color: (activatedButton == 'Gradient')
                                 ? Colors.black
                                 : Colors.white,
-                            child: Text('Solid'),
+                            child: const Text('Solid'),
                             onPressed: () {
                               setState(() {
-                                this.activatedButton = "Solid";
+                                activatedButton = "Solid";
                               });
                             },
                           ),
@@ -50,17 +56,17 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           FlatButton(
-                            textColor: (this.activatedButton != 'Gradient')
+                            textColor: (activatedButton != 'Gradient')
                                 ? Colors.grey
                                 : Colors.black,
                             height: 40.0,
-                            color: (this.activatedButton != 'Gradient')
+                            color: (activatedButton != 'Gradient')
                                 ? Colors.black
                                 : Colors.white,
                             child: Text('Gradient'),
                             onPressed: () {
                               setState(() {
-                                this.activatedButton = "Gradient";
+                                activatedButton = "Gradient";
                               });
                             },
                           )
@@ -68,6 +74,37 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
                   ),
                 ],
               ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text("Primary Color",
+                        textAlign: TextAlign.left, style: h5Style),
+                    Color_Picker(
+                        leftTitle: '',
+                        title: '',
+                        width: 30.0,
+                        height: 30.0,
+                        color: Colors.red),
+                    Text("Secondary Color",
+                        textAlign: TextAlign.left, style: h5Style),
+                    Color_Picker(
+                        leftTitle: '',
+                        title: '',
+                        width: 30.0,
+                        height: 30.0,
+                        color: Colors.orange),
+                    Text("Background Color",
+                        textAlign: TextAlign.left, style: h5Style),
+                    Color_Picker(
+                        leftTitle: '',
+                        title: '',
+                        width: 30.0,
+                        height: 30.0,
+                        color: Colors.transparent),
+                  ]),
             ),
           ],
         ));

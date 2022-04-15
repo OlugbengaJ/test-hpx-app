@@ -29,7 +29,7 @@ class _PickerDropdownState extends State<PickerDropdown> {
     return Container(
       padding: const EdgeInsets.only(left: 10),
       height: 40,
-      margin: const EdgeInsets.only(top: 10, left: 5, right: 30, bottom: 0),
+      margin: const EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
           border: Border.all(
         width: 1,
@@ -38,15 +38,16 @@ class _PickerDropdownState extends State<PickerDropdown> {
       child: DropdownButton<PickerModel>(
         dropdownColor: Colors.grey.shade900,
         hint: Row(
-          children: const [Text('Choose a Tool or Effect')],
+          children: const [Text('Choose ...')],
         ),
         value: pickerChoice,
-        icon: const Icon(Icons.arrow_drop_down_outlined),
+        icon: const Icon(
+          Icons.arrow_drop_down_outlined,
+          size: 20,
+        ),
         elevation: 2,
-        underline: Container(
+        underline: const SizedBox(
           height: 30,
-          margin: EdgeInsets.only(left: 0),
-          padding: EdgeInsets.only(left: 0),
           width: 2,
         ),
         onChanged: (PickerModel? newValue) {
@@ -61,12 +62,15 @@ class _PickerDropdownState extends State<PickerDropdown> {
             enabled: value.enabled,
             value: value,
             child: Container(
-              margin: EdgeInsets.only(left: 0),
+              margin: const EdgeInsets.only(left: 0),
               padding: EdgeInsets.only(
                   left: value.enabled ? 30 : 0, top: 0, bottom: 0),
               child: Row(
                 children: [
-                  Icon(value.icon),
+                  Icon(value.icon, size: 16),
+                  const SizedBox(
+                    width: 10,
+                  ),
                   Text(value.title),
                 ],
               ),
