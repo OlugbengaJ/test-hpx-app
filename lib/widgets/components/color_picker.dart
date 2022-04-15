@@ -78,18 +78,15 @@ class _Color_PickerState extends State<Color_Picker> {
                   selectcolor();
                 },
                 child: Container(
-                  // decoration: BoxDecoration(
-                  //   border: Border.all(color: Colors.grey, width: 1),
-                  // ),
                   width: (widget.width == null)
                       ? MediaQuery.of(context).size.width * 0.3
                       : widget.width,
                   height: (widget.width == null) ? 20.0 : widget.height,
                   decoration: BoxDecoration(
                       color: widget.color,
-                      // Red border with the width is equal to 5
                       border: Border.all(width: 1, color: Colors.grey)),
                 )),
+            Container(margin: const EdgeInsets.only(top: 5.0)),
             Row(children: [
               Expanded(
                   child: Column(
