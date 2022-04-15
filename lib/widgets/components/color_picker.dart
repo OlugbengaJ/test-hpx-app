@@ -10,14 +10,16 @@ class Color_Picker extends StatefulWidget {
       {Key? key,
       required this.title,
       required this.color,
-      this.size,
+      this.width,
+      this.height,
       required this.leftTitle})
       : super(key: key);
 
   final String title;
   final String leftTitle;
   final Color color;
-  final String? size;
+  final double? width;
+  final double? height;
 
   @override
   State<Color_Picker> createState() => _Color_PickerState();
@@ -68,27 +70,25 @@ class _Color_PickerState extends State<Color_Picker> {
         margin:
             const EdgeInsets.only(left: 0.0, top: 5.0, right: 0.0, bottom: 5.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-                margin: const EdgeInsets.only(right: 0.0, bottom: 10.0),
-                child: TextButton(
-                  child: const Text(""),
-                  style: TextButton.styleFrom(
-                    side: const BorderSide(color: Colors.grey, width: 1),
-                    minimumSize: (widget.size == 'box')
-                        ? const Size(30.0, 30.0)
-                        : const Size(100, 20),
-                    maximumSize: (widget.size == 'box')
-                        ? const Size(30.0, 30.0)
-                        : const Size(100, 20),
-                    primary: Colors.black,
-                    backgroundColor: widget.color,
-                  ),
-                  onPressed: () {
-                    pickerColor = widget.color;
-                    selectcolor();
-                  },
+            GestureDetector(
+                onTap: () {
+                  pickerColor = widget.color;
+                  selectcolor();
+                },
+                child: Container(
+                  // decoration: BoxDecoration(
+                  //   border: Border.all(color: Colors.grey, width: 1),
+                  // ),
+                  width: (widget.width == null)
+                      ? MediaQuery.of(context).size.width * 0.3
+                      : widget.width,
+                  height: (widget.width == null) ? 20.0 : widget.height,
+                  decoration: BoxDecoration(
+                      color: widget.color,
+                      // Red border with the width is equal to 5
+                      border: Border.all(width: 1, color: Colors.grey)),
                 )),
             Row(children: [
               Expanded(

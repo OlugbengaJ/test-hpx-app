@@ -92,61 +92,28 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
                       children: [
                           Text("Primary Color",
                               textAlign: TextAlign.left, style: h5Style),
-                          Row(
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.only(
-                                    top: 10, bottom: 20.0),
-                                // width: 30.0,
-                                // width: MediaQuery.of(context).size.width,
-                                height: 30.0,
-                                color: Colors.red,
-                                // child: Color_Picker(
-                                //     leftTitle: '', title: '', color: Colors.red),
-                              )
-                            ],
-                          ),
-                          Text("Secondary Color",
-                              textAlign: TextAlign.left, style: h5Style),
-                          Row(
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.only(
-                                    top: 10, bottom: 20.0),
-                                width: 30.0,
-                                height: 30.0,
-                                color: Colors.orange,
-                                // child: Color_Picker(
-                                // leftTitle: '',
-                                // title: '',
-                                // color: Colors.orange),
-                              )
-                            ],
-                          ),
-                          Text("Background Color",
-                              textAlign: TextAlign.left, style: h5Style),
-                          Row(
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.only(
-                                    top: 10, bottom: 50.0),
-                                width: 30.0,
-                                height: 30.0,
-                                color: Colors.grey.shade900,
-                                // child:  Color_Picker(
-                                // leftTitle: '',
-                                // title: '',
-                                // width: 30.0,
-                                // height: 30.0,
-                                // color: Colors.transparent),
-                              )
-                            ],
-                          ),
                           Color_Picker(
                               leftTitle: '',
                               title: '',
-                              size: 'box',
+                              width: 30.0,
+                              height: 30.0,
+                              color: Colors.red),
+                          Text("Secondary Color",
+                              textAlign: TextAlign.left, style: h5Style),
+                          Color_Picker(
+                              leftTitle: '',
+                              title: '',
+                              width: 30.0,
+                              height: 30.0,
                               color: Colors.orange),
+                          Text("Background Color",
+                              textAlign: TextAlign.left, style: h5Style),
+                          Color_Picker(
+                              leftTitle: '',
+                              title: '',
+                              width: 30.0,
+                              height: 30.0,
+                              color: Colors.transparent),
                         ]),
             ),
           ],
