@@ -41,7 +41,7 @@ List<PickerModel> moodList = [
 ];
 
 class _ToolModesState extends State<ToolModes> {
-  Widget? preset = AudioVisualPreset();
+  Widget? preset = WavePreset();
 
   changeComponent() {
     switch (pickerChoice?.value) {
@@ -50,13 +50,13 @@ class _ToolModesState extends State<ToolModes> {
       case "mood":
         return MoodPreset();
       case "colorsproduction":
-        return ColorProductionPreset();
+        return const ColorProductionPreset();
       case "audiovisualizer":
         return AudioVisualPreset();
       case "wave":
         return WavePreset();
       default:
-        return AudioVisualPreset();
+        return WavePreset();
     }
   }
 
