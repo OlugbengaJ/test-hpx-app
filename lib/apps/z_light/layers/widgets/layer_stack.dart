@@ -13,12 +13,26 @@ class LayersStack extends StatefulWidget {
 }
 
 class _LayersStackState extends State<LayersStack> {
+
+  _getStackedLayers(provider) {
+    List<Widget> layers = [];
+    provider.layeritems.forEach((layer)=>{
+      layers.add(
+        LayerStackItem(
+          layerID: layer.id,
+        )
+      )
+    });
+
+    return layers;
+  }
+
   @override
   Widget build(BuildContext context) {   
     return Consumer<LayersProvider>(
       builder: (context, value, child){
         return IndexedStack(
-          children: widget.layers,
+          children: _getStackedLayers(value),
         );
       },
     );
