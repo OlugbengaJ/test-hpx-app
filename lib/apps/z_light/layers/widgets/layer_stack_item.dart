@@ -15,6 +15,7 @@ class LayerStackItem extends StatefulWidget {
 
 class _LayerStackItemState extends State<LayerStackItem> {
   double dragWidgetSize = 50;
+  bool _visible = true;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,17 @@ class _LayerStackItemState extends State<LayerStackItem> {
         minHeight: 50,
       ),
     );
-    return Container(
+
+    _toggleItem(){
+      setState(() {
+        _visible =! _visible;
+      });
+    }
+
+
+    return 
+    (_visible)?
+    Container(
       color: Colors.transparent,
       child: ResizableWidget(
         dragWidgetHeight: dragWidgetSize,
@@ -63,6 +74,6 @@ class _LayerStackItemState extends State<LayerStackItem> {
           ),
         ),
       ),
-    );
+    ):Container();
   }
 }

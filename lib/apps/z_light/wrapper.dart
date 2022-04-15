@@ -33,6 +33,7 @@ class _WrapperState extends State<Wrapper> {
         LayerListItem(
           layerID: _nextIndex,
           deleteItem: _deleteLayer,
+          toggleItem: _toggleLayer,
         )
       );
       _layersStackItems.add(LayerStackItem(
@@ -44,14 +45,6 @@ class _WrapperState extends State<Wrapper> {
   }
 
    _deleteLayer(layerID){
-    // Delete all layers but one.
-    // if(_layersListItems.length>1){
-    //   setState(() {
-    //     _layersListItems.removeWhere((item) => item.layerID == layerID);
-    //     _layersStackItems.removeWhere((item) => item.layerID == layerID);
-    //     _currentIndex = _layersStackItems[0].layerID;
-    //   });
-    // }
     setState(() {
       _layersListItems.removeWhere((item) => item.layerID == layerID);
       _layersStackItems.removeWhere((item) => item.layerID == layerID);
@@ -61,6 +54,10 @@ class _WrapperState extends State<Wrapper> {
       
     });
     
+  }
+
+  _toggleLayer(layerID, bool show){ 
+
   }
 
   

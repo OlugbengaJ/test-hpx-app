@@ -15,7 +15,6 @@ class _LayersStackState extends State<LayersStack> {
   Widget build(BuildContext context) {
    
     return IndexedStack(
-      index: widget.currentIndex,
       children: widget.layers,
     );
   }
