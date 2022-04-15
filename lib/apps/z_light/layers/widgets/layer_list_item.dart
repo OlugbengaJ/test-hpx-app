@@ -3,8 +3,9 @@ import 'package:ionicons/ionicons.dart';
 
 
 class LayerListItem extends StatefulWidget {
-  const LayerListItem({ Key? key, required this.deleteItem, required this.layerID }) : super(key: key);
+  const LayerListItem({ Key? key, required this.layerID, required this.deleteItem, required this.toggleItem, }) : super(key: key);
   final Function deleteItem;
+  final Function toggleItem;
   final int layerID;
 
   @override
@@ -35,9 +36,16 @@ class _LayerListItemState extends State<LayerListItem> {
 
   _toggleLayer(){
     setState(() {
-      _shown = !_shown;
+      _shown =!_shown;
     });
+    widget.toggleItem(widget.layerID, _shown);
   }
+
+
+  _deleteItem(){
+    widget.deleteItem(widget.layerID);
+  }
+
 
   _toggleEditing(){
     setState(() {
@@ -45,13 +53,9 @@ class _LayerListItemState extends State<LayerListItem> {
     });
   }
 
-  _onTap(){
-    setState(() {
-      _shown = !_shown;
-    });
-  }
+  _onTap(){}
 
-  _onEdited (value){
+  _onEdited(value){
     setState(() {
       _editing = !_editing;
     });
@@ -67,9 +71,7 @@ class _LayerListItemState extends State<LayerListItem> {
         hoverColor: Colors.transparent,
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
-        onTap: (){
-          //print("Tapped");
-        },
+        onTap: _onTap,
         child: Container(
           padding: const EdgeInsets.all(2),
           color: Colors.black12,
@@ -148,9 +150,7 @@ class _LayerListItemState extends State<LayerListItem> {
                                     Ionicons.trash,
                                     size: _iconSize,
                                   ),
-                                  onTap: (){
-                                    widget.deleteItem(widget.layerID);
-                                  },
+                                  onTap: _deleteItem,
                                 ),                              
                               ],
                             ),

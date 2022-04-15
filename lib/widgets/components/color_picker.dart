@@ -6,10 +6,15 @@ Color pickerColor = Color(0xff443a49);
 Color currentColor = Color(0xff443a49);
 
 class Color_Picker extends StatefulWidget {
-  const Color_Picker({Key? key, required this.title, required this.color})
+  const Color_Picker(
+      {Key? key,
+      required this.title,
+      required this.color,
+      required this.leftTitle})
       : super(key: key);
 
   final String title;
+  final String leftTitle;
   final Color color;
 
   @override
@@ -23,14 +28,14 @@ class _Color_PickerState extends State<Color_Picker> {
 
   void selectcolor() {
     showDialog(
-        barrierColor: Colors.white.withOpacity(0),
-        barrierDismissible: false,
+        // barrierColor: Colors.white.withOpacity(0),
+        barrierDismissible: true,
         context: context,
         builder: (context) {
           return SimpleDialog(
               title: const Text('Pick a color!'),
               alignment: Alignment.topRight,
-              insetPadding: EdgeInsets.only(top: 100, right: 330),
+              // insetPadding: EdgeInsets.only(top: 100, right: 330),
               contentPadding:
                   EdgeInsets.only(top: 20, right: 10, bottom: 20, left: 10),
               children: <Widget>[
@@ -69,11 +74,16 @@ class _Color_PickerState extends State<Color_Picker> {
                 shape: Border.all(width: 0, color: Colors.grey),
                 child: Text(''),
                 onPressed: () {
+                  pickerColor = widget.color;
                   selectcolor();
                 },
               ),
             ),
-            Text(widget.title, textAlign: TextAlign.left, style: labelStyle),
+            Row(children: [
+              Text(widget.title, textAlign: TextAlign.left, style: labelStyle),
+              Text(widget.leftTitle,
+                  textAlign: TextAlign.right, style: labelStyle)
+            ])
           ],
         ));
   }

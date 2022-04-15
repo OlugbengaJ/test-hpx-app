@@ -1,68 +1,86 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/basic.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:hpx/widgets/components/color_picker.dart';
+import 'package:hpx/apps/z_light/tools_effects/widgets/effects/audio_visualization.dart';
+import 'package:hpx/apps/z_light/tools_effects/widgets/effects/wave.dart';
+import 'package:hpx/apps/z_light/tools_effects/widgets/tools/color_production.dart';
+import 'package:hpx/apps/z_light/tools_effects/widgets/tools/moods.dart';
+import 'package:hpx/apps/z_light/tools_effects/widgets/tools/shortcut_colors.dart';
+import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
 
-class toolModes extends StatefulWidget {
+class ToolModes extends StatefulWidget {
   @override
-  State<toolModes> createState() => _toolModesState();
+  State<ToolModes> createState() => _ToolModesState();
 }
 
-class _toolModesState extends State<toolModes> {
-  // List of items in our dropdown menu
-  var items = [
-    'Item 1',
-    'Item 2',
-    'Item 3',
-    'Item 4',
-    'Item 5',
-  ];
+List<PickerModel> moodList = [
+  PickerModel(
+    title: 'Tools',
+    enabled: false,
+  ),
+  PickerModel(
+      title: 'Shortcut Colors',
+      enabled: true,
+      value: 'shortcut',
+      icon: Icons.shortcut),
+  PickerModel(title: 'Mood', enabled: true, value: 'mood', icon: Icons.mood),
+  PickerModel(
+      title: 'Colors Production',
+      enabled: true,
+      value: 'colorsproduction',
+      icon: Icons.production_quantity_limits),
+  PickerModel(
+    title: 'Effects',
+    enabled: false,
+  ),
+  PickerModel(title: 'Wave', enabled: true, value: 'wave', icon: Icons.waves),
+  PickerModel(
+      title: 'Audio Visualizer',
+      enabled: true,
+      value: 'audiovisualizer',
+      icon: Icons.audiotrack)
+];
 
-  String dropdownvalue = 'Item 1';
+class _ToolModesState extends State<ToolModes> {
+  Widget? preset;
+
+  changeComponent() {
+    switch (pickerChoice?.value) {
+      case "shortcut":
+        return ShortcutColorsPreset();
+      case "mood":
+        return MoodPreset();
+      case "colorsproduction":
+        return ColorProductionPreset();
+      case "audiovisualizer":
+        return AudioVisualPreset();
+      case "wave":
+        return WavePreset();
+      default:
+        return WavePreset();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin:
-            EdgeInsets.only(left: 10.0, top: 20.0, right: 10.0, bottom: 20.0),
+        margin: const EdgeInsets.only(
+            left: 5.0, top: 20.0, right: 5.0, bottom: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text("Tools & Effects", textAlign: TextAlign.left, style: h4Style),
             Container(
                 width: MediaQuery.of(context).size.width * 0.3,
-                margin: EdgeInsets.only(top: 0, left: 0, right: 30),
-                padding: EdgeInsets.zero,
-                // crossAxisAlignment: CrossAxisAlignment.stretch,
-                child: DropdownButtonHideUnderline(
-                    child: DropdownButton(
-                  isExpanded: true,
-                  value: dropdownvalue,
-                  hint: new Text("Select City"),
-                  icon: null,
-                  items: items.map((String items) {
-                    return DropdownMenuItem(
-                      value: items,
-                      child: Text(items),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      dropdownvalue = newValue!;
-                    });
-                  },
-                ))),
+                child: PickerDropdown(
+                    onChange: (PickerModel? returnValue) {
+                      setState(() {
+                        preset = changeComponent();
+                      });
+                    },
+                    pickerList: moodList)),
             Container(
-              margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Color_Picker(
-                    //     title: 'Neutral (D65 White Point)',
-                    //     color: Colors.orangeAccent),
-                  ]),
-            ),
+                margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+                child: preset),
           ],
         ));
   }

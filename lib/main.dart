@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      darkTheme: dark_theme,
+      darkTheme: darkTheme,
       themeMode: ThemeMode.dark,
       title: 'HP Xperience',
       debugShowCheckedModeBanner: false,

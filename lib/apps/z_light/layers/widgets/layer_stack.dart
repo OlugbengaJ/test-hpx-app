@@ -1,62 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:hpx/apps/z_light/layers/widgets/resizable_widget.dart';
-import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
+import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
 
 class LayersStack extends StatefulWidget {
-  const LayersStack({ Key? key }) : super(key: key);
+  const LayersStack({ Key? key, required this.layers, required this.currentIndex }) : super(key: key);
+  final List<LayerStackItem> layers;
+  final int currentIndex;
 
   @override
   State<LayersStack> createState() => _LayersStackState();
 }
 
 class _LayersStackState extends State<LayersStack> {
-  double dragWidgetSize = 50;
-
   @override
   Widget build(BuildContext context) {
-    final areaHeight = Get.height * 0.70;
-    final areaWidth = Get.width * 0.70;
-    final controller = Get.put(
-      ResizableWidgetController(
-        initialPosition: Offset(areaWidth / 2, areaHeight / 2),
-        areaHeight: areaHeight,
-        areaWidth: areaWidth,
-        height: areaHeight / 2,
-        width: areaWidth / 2,
-        minWidth: 50,
-        minHeight: 50,
-      ),
-    );
-    return ResizableWidget(
-      dragWidgetHeight: dragWidgetSize,
-      dragWidgetWidth: dragWidgetSize,
-      controller: controller,
-      dragWidget: Container(
-        height: 50,
-        width: 50,
-        child: Center(
-          child: Container(
-            height: 5,
-            width: 5,
-            decoration: const BoxDecoration(
-              shape: BoxShape.rectangle,
-              color: Colors.white,
-            ),
-          ),
-        ),
-        decoration: const BoxDecoration(
-          shape: BoxShape.rectangle,
-          color: Colors.transparent,
-        ),
-      ),
-      child: Container(              
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.white,
-          ),
-        ),
-      ),
+   
+    return IndexedStack(
+      children: widget.layers,
     );
   }
 }
