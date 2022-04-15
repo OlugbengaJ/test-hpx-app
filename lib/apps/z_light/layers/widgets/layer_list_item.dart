@@ -8,11 +8,10 @@ class LayerListItem extends StatefulWidget {
   const LayerListItem(
       {Key? key,
       required this.layerID,
-      required this.deleteItem,
       required this.toggleItem,
-      required this.layerItemModel})
-      : super(key: key);
-  final Function deleteItem;
+      required this.layerItemModel}
+    ) : super(key: key);
+
   final Function toggleItem;
   final int layerID;
   final LayerItemModel layerItemModel;
@@ -32,7 +31,6 @@ class _LayerListItemState extends State<LayerListItem> {
   void initState() {
     super.initState();
     setState(() {
-      // _layerNameController = TextEditingController(text: "New layer ${widget.layerID}");
       _layerNameController =
           TextEditingController(text: widget.layerItemModel.layerText);
     });
@@ -49,10 +47,6 @@ class _LayerListItemState extends State<LayerListItem> {
       _shown = !_shown;
     });
     widget.toggleItem(widget.layerID, _shown);
-  }
-
-  _deleteItem() {
-    widget.deleteItem(widget.layerID);
   }
 
   _toggleEditing() {
@@ -128,8 +122,7 @@ class _LayerListItemState extends State<LayerListItem> {
                                           setState(() {
                                             _editing = !_editing;
                                           });
-                                          LayerItemModel layerItemModel =
-                                              _value.getItem(widget.layerID);
+                                          LayerItemModel layerItemModel =  _value.getItem(widget.layerID);
                                           _value.update(
                                               LayerItemModel(
                                                   id: widget.layerID,
@@ -151,28 +144,33 @@ class _LayerListItemState extends State<LayerListItem> {
                                   ),
                                 ),
                           (_showActions)
-                              ? Container(
-                                  margin: const EdgeInsets.only(right: 26),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      InkWell(
-                                        child: Icon(
-                                          Ionicons.create,
-                                          size: _iconSize,
+                              ? 
+                              Consumer<LayersProvider>(
+                                builder: (context, value, child) {
+                                  return Container(
+                                    margin: const EdgeInsets.only(right: 26),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        InkWell(
+                                          child: Icon(
+                                            Ionicons.create,
+                                            size: _iconSize,
+                                          ),
+                                          onTap: _toggleEditing,
                                         ),
-                                        onTap: _toggleEditing,
-                                      ),
-                                      InkWell(
-                                        child: Icon(
-                                          Ionicons.trash,
-                                          size: _iconSize,
+                                        InkWell(
+                                          child: Icon(
+                                            Ionicons.trash,
+                                            size: _iconSize,
+                                          ),
+                                          onTap: () => value.removeItem(widget.layerID),
                                         ),
-                                        onTap: _deleteItem,
-                                      ),
-                                    ],
-                                  ),
-                                )
+                                      ],
+                                    ),
+                                  );
+                                }
+                              )
                               : Container()
                         ],
                       ),

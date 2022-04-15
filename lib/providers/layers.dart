@@ -4,13 +4,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:hpx/models/layers/layer_item_model.dart';
 
 class LayersProvider extends ChangeNotifier {
-  List<LayerItemModel> _layeritems = [];
+  final List<LayerItemModel> _layeritems = [];
   int get lenght => _layeritems.length;
+
+
   void add(LayerItemModel item) {
     _layeritems.add(item);
-    // This call tells the widgets that are listening to this model to rebuild.
     notifyListeners();
   }
+  
+  List<LayerItemModel> get layeritems => _layeritems;
 
   LayerItemModel getItem(int index) {
     return _layeritems[index];
@@ -36,4 +39,6 @@ class LayersProvider extends ChangeNotifier {
     // This call tells the widgets that are listening to this model to rebuild.
     notifyListeners();
   }
+
+
 }

@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/tools_effects/tools_effects_wrapper.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
 import 'package:hpx/widgets/layouts/three_columns.dart';
+import 'package:provider/provider.dart';
 
+import '../../models/layers/layer_item_model.dart';
 import 'layers/layers.dart';
 import 'layers/widgets/layer_list_item.dart';
 import 'layers/widgets/layer_stack_item.dart';
@@ -25,7 +27,6 @@ class _WrapperState extends State<Wrapper> {
   @override
   void initState() {
     super.initState();
-    _addLayer();
   }
 
   _addLayer() {
@@ -41,16 +42,6 @@ class _WrapperState extends State<Wrapper> {
       ));
       _currentIndex = _layersStackItems.length - 1;
       _nextIndex += 1;
-    });
-  }
-
-  _deleteLayer(layerID) {
-    setState(() {
-      _layersListItems.removeWhere((item) => item.layerID == layerID);
-      _layersStackItems.removeWhere((item) => item.layerID == layerID);
-      if (_layersStackItems.isNotEmpty) {
-        _currentIndex = _layersStackItems.length - 1;
-      }
     });
   }
 
@@ -84,7 +75,6 @@ class _WrapperState extends State<Wrapper> {
           child: ThreeColumns(
         left: Layers(
             onReorder: _updateLayers,
-            addLayer: _addLayer,
             layers: _layersListItems),
         center: Workspace(
           currentIndex: _currentIndex, // For hide and show
