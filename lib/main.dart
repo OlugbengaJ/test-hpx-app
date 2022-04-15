@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/wrapper.dart';
+import 'package:hpx/providers/layers.dart';
+import 'package:provider/provider.dart';
 import "widgets/theme.dart";
 
-void main() => runApp(MyApp());
+void main() => runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LayersProvider()),
+      ],
+      child: MyApp(),
+    ));
 
 class MyApp extends StatelessWidget {
   @override
