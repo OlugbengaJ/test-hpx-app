@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/basic.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:hpx/widgets/components/color_picker.dart';
 import 'package:hpx/widgets/theme.dart';
 
@@ -11,11 +9,12 @@ class WavePreset extends StatefulWidget {
 
 class _WavePresetState extends State<WavePreset> {
   String activatedButton = "DEFAULT";
+  double _currentSliderValue = 0.0;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(right: 10.0, bottom: 20.0),
+        margin: const EdgeInsets.only(bottom: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -29,17 +28,17 @@ class _WavePresetState extends State<WavePreset> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           FlatButton(
-                            textColor: (this.activatedButton == 'CUSTOM')
+                            textColor: (activatedButton == 'CUSTOM')
                                 ? Colors.grey
                                 : Colors.black,
                             height: 40.0,
-                            color: (this.activatedButton == 'CUSTOM')
+                            color: (activatedButton == 'CUSTOM')
                                 ? Colors.black
                                 : Colors.white,
                             child: Text('DEFAULT'),
                             onPressed: () {
                               setState(() {
-                                this.activatedButton = "DEFAULT";
+                                activatedButton = "DEFAULT";
                               });
                             },
                           ),
@@ -50,17 +49,17 @@ class _WavePresetState extends State<WavePreset> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           FlatButton(
-                            textColor: (this.activatedButton != 'CUSTOM')
+                            textColor: (activatedButton != 'CUSTOM')
                                 ? Colors.grey
                                 : Colors.black,
                             height: 40.0,
-                            color: (this.activatedButton != 'CUSTOM')
+                            color: (activatedButton != 'CUSTOM')
                                 ? Colors.black
                                 : Colors.white,
                             child: Text('CUSTOM'),
                             onPressed: () {
                               setState(() {
-                                this.activatedButton = "CUSTOM";
+                                activatedButton = "CUSTOM";
                               });
                             },
                           )
@@ -70,11 +69,10 @@ class _WavePresetState extends State<WavePreset> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
-              height: 450,
+              margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: (this.activatedButton == 'DEFAULT')
+                  children: (activatedButton == 'DEFAULT')
                       ? [
                           Color_Picker(
                               leftTitle: '',
@@ -98,25 +96,51 @@ class _WavePresetState extends State<WavePreset> {
                               color: Colors.purple),
                         ]
                       : [
-                          const Color_Picker(
+                          Color_Picker(
                               title: '',
-                              leftTitle: 'Left',
+                              leftTitle: 'Edit',
                               color: Colors.transparent)
                         ]),
             ),
+            Container(margin: const EdgeInsets.only(bottom: 10.0)),
+            const Divider(
+              color: Colors.white,
+              height: 1,
+            ),
+            Container(margin: const EdgeInsets.only(bottom: 10.0)),
+            Text("Speed", textAlign: TextAlign.left, style: labelStyle),
+            Container(margin: const EdgeInsets.only(bottom: 10.0)),
+            Slider(
+              value: _currentSliderValue,
+              max: 100,
+              min: 0,
+              divisions: 1,
+              label: _currentSliderValue.round().toString(),
+              onChanged: (double value) {
+                setState(() {
+                  _currentSliderValue = value;
+                });
+              },
+            ),
+            Row(children: [
+              Expanded(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("0%", textAlign: TextAlign.left, style: pStyle),
+                ],
+              )),
+              Expanded(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text("100%", textAlign: TextAlign.right, style: pStyle),
+                ],
+              ))
+            ]),
+            Container(margin: const EdgeInsets.only(top: 20.0)),
             Container(
-                margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
-                child: Column(
-                  children: [
-                    Divider(
-                      color: Colors.white,
-                      height: 1,
-                    ),
-                  ],
-                )),
-            Text("Speed", textAlign: TextAlign.left, style: h4Style),
-            Container(
-              margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
+              margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
               child:
                   Text("Direction", textAlign: TextAlign.left, style: h4Style),
             ),

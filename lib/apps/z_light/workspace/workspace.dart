@@ -4,7 +4,8 @@ import 'package:hpx/apps/z_light/layers/widgets/layer_stack.dart';
 import '../layers/widgets/layer_stack_item.dart';
 
 class Workspace extends StatefulWidget {
-  const Workspace({ Key? key, required this.layers, required this.currentIndex }) : super(key: key);
+  const Workspace({Key? key, required this.layers, required this.currentIndex})
+      : super(key: key);
   final List<LayerStackItem> layers;
   final int currentIndex;
 
@@ -13,12 +14,19 @@ class Workspace extends StatefulWidget {
 }
 
 class _WorkspaceState extends State<Workspace> {
-
   @override
   Widget build(BuildContext context) {
-    return LayersStack(
-      layers: widget.layers,
-      currentIndex: widget.currentIndex,
+    return Container(
+      child: LayersStack(
+        layers: widget.layers,
+        currentIndex: widget.currentIndex,
+      ),
+      width: double.infinity,
+      height: double.infinity,
+      decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage("assets/images/backdrop.png"),
+              repeat: ImageRepeat.repeat)),
     );
   }
 }

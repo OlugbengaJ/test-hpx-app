@@ -8,12 +8,9 @@ class LayerListItem extends StatefulWidget {
   const LayerListItem(
       {Key? key,
       required this.layerID,
-      required this.deleteItem,
-      required this.toggleItem,
-      required this.layerItemModel})
-      : super(key: key);
-  final Function deleteItem;
-  final Function toggleItem;
+      required this.layerItemModel}
+    ) : super(key: key);
+
   final int layerID;
   final LayerItemModel layerItemModel;
 
@@ -23,7 +20,6 @@ class LayerListItem extends StatefulWidget {
 
 class _LayerListItemState extends State<LayerListItem> {
   bool _showActions = false;
-  bool _shown = true;
   bool _editing = false;
   final double _iconSize = 16;
   TextEditingController _layerNameController = TextEditingController(text: "");
@@ -32,7 +28,6 @@ class _LayerListItemState extends State<LayerListItem> {
   void initState() {
     super.initState();
     setState(() {
-      // _layerNameController = TextEditingController(text: "New layer ${widget.layerID}");
       _layerNameController =
           TextEditingController(text: widget.layerItemModel.layerText);
     });
@@ -44,15 +39,9 @@ class _LayerListItemState extends State<LayerListItem> {
     });
   }
 
-  _toggleLayer() {
-    setState(() {
-      _shown = !_shown;
-    });
-    widget.toggleItem(widget.layerID, _shown);
-  }
-
-  _deleteItem() {
-    widget.deleteItem(widget.layerID);
+  _toggleLayer(provider) {
+    LayerItemModel layerItemModel =  provider.getItem(widget.layerID);
+    provider.toggleVisibility(LayerItemModel(id: layerItemModel.id, layerText: layerItemModel.layerText, visible: !layerItemModel.visible), widget.layerID);
   }
 
   _toggleEditing() {
@@ -65,125 +54,130 @@ class _LayerListItemState extends State<LayerListItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 30,
-      margin: const EdgeInsets.only(bottom: 2),
-      child: InkWell(
-        onHover: _onHover,
-        hoverColor: Colors.transparent,
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        onTap: _onTap,
-        child: Container(
-          padding: const EdgeInsets.all(2),
-          color: Colors.black12,
-          child: SizedBox(
-            height: 25,
-            child: Row(
-              children: [
-                InkWell(
-                    onTap: _toggleLayer,
-                    child: (_shown)
-                        ? Icon(
-                            Ionicons.eye,
-                            size: _iconSize,
-                          )
-                        : Icon(
-                            Ionicons.eye_off,
-                            size: _iconSize,
-                          )),
-                const SizedBox(
-                  width: 2,
-                ),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
+    return 
+    Consumer<LayersProvider>(
+      builder: (context, _value, child) {
+        return Container(
+          height: 30,
+          margin: const EdgeInsets.only(bottom: 2),
+          child: InkWell(
+            onHover: _onHover,
+            hoverColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onTap: _onTap,
+            child: Container(
+              padding: const EdgeInsets.all(2),
+              color: Colors.black12,
+              child: SizedBox(
+                height: 25,
+                child: Row(
+                  children: [
+                    InkWell(
+                      onTap: () => _toggleLayer(_value) ,
+                      child:
+                      (_value.getItem(widget.layerID).visible)
+                      ? Icon(
+                          Ionicons.eye,
+                          size: _iconSize,
+                        )
+                      : Icon(
+                          Ionicons.eye_off,
+                          size: _iconSize,
+                        )
+                      ),
+                    const SizedBox(
+                      width: 2,
+                    ),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
-                            Ionicons.image,
-                            size: _iconSize,
-                          ),
-                          (_editing)
-                              ? Consumer<LayersProvider>(
-                                  builder: (context, _value, child) {
-                                    return Container(
-                                      height: 20,
-                                      constraints: const BoxConstraints(
-                                        maxWidth: 80,
+                          Row(
+                            children: [
+                              Icon(
+                                Ionicons.image,
+                                size: _iconSize,
+                              ),
+                              (_editing)
+                                  ? 
+                                  Container(
+                                    height: 20,
+                                    constraints: const BoxConstraints(
+                                      maxWidth: 80,
+                                    ),
+                                    child: TextFormField(
+                                      controller: _layerNameController,
+                                      autofocus: true,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      child: TextFormField(
-                                        controller: _layerNameController,
-                                        autofocus: true,
-                                        style: const TextStyle(
-                                          fontSize: 12,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                        decoration: const InputDecoration(
-                                            focusColor: Colors.white,
-                                            border: OutlineInputBorder(),
-                                            contentPadding: EdgeInsets.all(8)),
-                                        onFieldSubmitted: (value) {
-                                          setState(() {
-                                            _editing = !_editing;
-                                          });
-                                          LayerItemModel layerItemModel =
-                                              _value.getItem(widget.layerID);
-                                          _value.update(
-                                              LayerItemModel(
-                                                  id: widget.layerID,
-                                                  layerText: value),
-                                              widget.layerID);
+                                      decoration: const InputDecoration(
+                                          focusColor: Colors.white,
+                                          border: OutlineInputBorder(),
+                                          contentPadding: EdgeInsets.all(8)),
+                                      onFieldSubmitted: (value) {
+                                        setState(() {
+                                          _editing = !_editing;
+                                        });
+                                        LayerItemModel layerItemModel =  _value.getItem(widget.layerID);
+                                        _value.update(LayerItemModel( id: widget.layerID,layerText: value), widget.layerID);
+                                      },
+                                    ),
+                                  )
+                                  : Expanded(
+                                      child: Consumer<LayersProvider>(
+                                        builder: (context, value, child) {
+                                          return Text(
+                                            value.getItem(widget.layerID).layerText,
+                                            overflow: TextOverflow.ellipsis,
+                                          );
                                         },
                                       ),
-                                    );
-                                  },
-                                )
-                              : Expanded(
-                                  child: Consumer<LayersProvider>(
+                                    ),
+                              (_showActions)
+                                  ? 
+                                  Consumer<LayersProvider>(
                                     builder: (context, value, child) {
-                                      return Text(
-                                        value.getItem(widget.layerID).layerText,
-                                        overflow: TextOverflow.ellipsis,
+                                      return Container(
+                                        margin: const EdgeInsets.only(right: 26),
+                                        child: Row(
+                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          children: [
+                                            InkWell(
+                                              child: Icon(
+                                                Ionicons.create,
+                                                size: _iconSize,
+                                              ),
+                                              onTap: _toggleEditing,
+                                            ),
+                                            InkWell(
+                                              child: Icon(
+                                                Ionicons.trash,
+                                                size: _iconSize,
+                                              ),
+                                              onTap: () => value.removeItem(widget.layerID),
+                                            ),
+                                          ],
+                                        ),
                                       );
-                                    },
-                                  ),
-                                ),
-                          (_showActions)
-                              ? Container(
-                                  margin: const EdgeInsets.only(right: 26),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      InkWell(
-                                        child: Icon(
-                                          Ionicons.create,
-                                          size: _iconSize,
-                                        ),
-                                        onTap: _toggleEditing,
-                                      ),
-                                      InkWell(
-                                        child: Icon(
-                                          Ionicons.trash,
-                                          size: _iconSize,
-                                        ),
-                                        onTap: _deleteItem,
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              : Container()
+                                    }
+                                  )
+                                  : Container()
+                            ],
+                          ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        );
+        
+      },
+    );    
   }
 }

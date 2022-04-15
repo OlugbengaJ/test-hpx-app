@@ -13,13 +13,13 @@ class _MoodPresetState extends State<MoodPreset> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(right: 10.0, bottom: 20.0),
+        margin: const EdgeInsets.only(bottom: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text("Presets", textAlign: TextAlign.left, style: h4Style),
             Container(
-              margin: EdgeInsets.only(top: 10.0),
+              margin: const EdgeInsets.only(top: 10.0),
               child: Row(
                 children: [
                   Expanded(
@@ -27,17 +27,17 @@ class _MoodPresetState extends State<MoodPreset> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           FlatButton(
-                            textColor: (this.activatedButton == 'Custom')
+                            textColor: (activatedButton == 'Custom')
                                 ? Colors.grey
                                 : Colors.black,
                             height: 40.0,
-                            color: (this.activatedButton == 'Custom')
+                            color: (activatedButton == 'Custom')
                                 ? Colors.black
                                 : Colors.white,
-                            child: Text('Themes'),
+                            child: const Text('Themes'),
                             onPressed: () {
                               setState(() {
-                                this.activatedButton = "Themes";
+                                activatedButton = "Themes";
                               });
                             },
                           ),
@@ -48,17 +48,17 @@ class _MoodPresetState extends State<MoodPreset> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           FlatButton(
-                            textColor: (this.activatedButton != 'Custom')
+                            textColor: (activatedButton != 'Custom')
                                 ? Colors.grey
                                 : Colors.black,
                             height: 40.0,
-                            color: (this.activatedButton != 'Custom')
+                            color: (activatedButton != 'Custom')
                                 ? Colors.black
                                 : Colors.white,
-                            child: Text('Custom'),
+                            child: const Text('Custom'),
                             onPressed: () {
                               setState(() {
-                                this.activatedButton = "Custom";
+                                activatedButton = "Custom";
                               });
                             },
                           )
@@ -68,10 +68,10 @@ class _MoodPresetState extends State<MoodPreset> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
+              margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: (this.activatedButton == 'Themes')
+                  children: (activatedButton == 'Themes')
                       ? [
                           Color_Picker(
                               leftTitle: '',

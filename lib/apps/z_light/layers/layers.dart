@@ -8,11 +8,9 @@ import 'package:provider/provider.dart';
 class Layers extends StatefulWidget {
   const Layers(
       {Key? key,
-      required this.addLayer,
       required this.layers,
       required this.onReorder})
       : super(key: key);
-  final Function addLayer;
   final Function(int oldIndex, int newIndex) onReorder;
   final List<LayerListItem> layers;
 
@@ -21,6 +19,17 @@ class Layers extends StatefulWidget {
 }
 
 class _LayersState extends State<Layers> {
+
+  _addLayer(provider) {
+    provider.add(
+      LayerItemModel(
+        id: provider.lenght + 1,
+        layerText:  'New layer Value ' + (provider.lenght + 1).toString()
+      )
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -36,7 +45,7 @@ class _LayersState extends State<Layers> {
           ),
         ),
         Consumer<LayersProvider>(
-          builder: (context, value, child) {
+          builder: (context, provider, child) {
             return InkWell(
               child: Container(
                 decoration: const BoxDecoration(
@@ -54,13 +63,7 @@ class _LayersState extends State<Layers> {
                   ],
                 ),
               ),
-              onTap: () {
-                value.add(LayerItemModel(
-                    id: value.lenght + 1,
-                    layerText:
-                        'New layer Value ' + (value.lenght + 1).toString()));
-                // widget.addLayer();
-              },
+              onTap: () => _addLayer(provider),
             );
           },
         ),
@@ -80,10 +83,9 @@ class _LayersState extends State<Layers> {
                       return Container(
                         key: Key("$index"),
                         child: LayerListItem(
-                            deleteItem: () {},
-                            layerID: index,
-                            layerItemModel: value.getItem(index),
-                            toggleItem: () {}),
+                          layerID: index,
+                          layerItemModel: value.getItem(index),
+                        ),
                       );
                     },
                     // onReorder: (int oldIndex, int newIndex) {},

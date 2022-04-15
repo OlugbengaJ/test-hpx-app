@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/modes.dart';
 
-class toolsEffectsWrapper extends StatefulWidget {
-  const toolsEffectsWrapper({Key? key}) : super(key: key);
+class ToolsEffectsWrapper extends StatefulWidget {
+  const ToolsEffectsWrapper({Key? key}) : super(key: key);
 
   @override
-  State<toolsEffectsWrapper> createState() => _toolsEffectsWrapperState();
+  State<ToolsEffectsWrapper> createState() => _ToolsEffectsWrapperState();
 }
 
-class _toolsEffectsWrapperState extends State<toolsEffectsWrapper> {
+class _ToolsEffectsWrapperState extends State<ToolsEffectsWrapper> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(children: [ToolModes()]),
-      ),
+    return ListView(
+      children: [ToolModes()],
     );
   }
 }
