@@ -37,8 +37,11 @@ class _PickerDropdownState extends State<PickerDropdown> {
       )),
       child: DropdownButton<PickerModel>(
         dropdownColor: Colors.grey.shade900,
-        hint: Row(
-          children: const [Text('Choose ...')],
+        hint: Container(
+          width: MediaQuery.of(context).size.width * 0.14,
+          child: Row(
+            children: const [Text('Choose ...')],
+          ),
         ),
         value: pickerChoice,
         icon: const Icon(

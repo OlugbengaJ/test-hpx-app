@@ -40,8 +40,8 @@ class _Color_PickerState extends State<Color_Picker> {
               title: const Text('Pick a color!'),
               alignment: Alignment.topRight,
               // insetPadding: EdgeInsets.only(top: 100, right: 330),
-              contentPadding:
-                  EdgeInsets.only(top: 20, right: 10, bottom: 20, left: 10),
+              contentPadding: const EdgeInsets.only(
+                  top: 20, right: 10, bottom: 20, left: 10),
               children: <Widget>[
                 ColorPicker(
                   hexInputBar: true,
@@ -70,23 +70,23 @@ class _Color_PickerState extends State<Color_Picker> {
         margin:
             const EdgeInsets.only(left: 0.0, top: 5.0, right: 0.0, bottom: 5.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-                margin: const EdgeInsets.only(right: 0.0, bottom: 10.0),
-                child: TextButton(
-                  child: const Text(""),
-                  style: TextButton.styleFrom(
-                    side: const BorderSide(color: Colors.grey, width: 1),
-                    // maximumSize: Size(100, 20),
-                    primary: Colors.black,
-                    backgroundColor: widget.color,
-                  ),
-                  onPressed: () {
-                    pickerColor = widget.color;
-                    selectcolor();
-                  },
+            GestureDetector(
+                onTap: () {
+                  pickerColor = widget.color;
+                  selectcolor();
+                },
+                child: Container(
+                  width: (widget.width == null)
+                      ? MediaQuery.of(context).size.width * 0.3
+                      : widget.width,
+                  height: (widget.width == null) ? 20.0 : widget.height,
+                  decoration: BoxDecoration(
+                      color: widget.color,
+                      border: Border.all(width: 1, color: Colors.grey)),
                 )),
+            Container(margin: const EdgeInsets.only(top: 5.0)),
             Row(children: [
               Expanded(
                   child: Column(

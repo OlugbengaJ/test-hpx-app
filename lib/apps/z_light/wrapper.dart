@@ -73,9 +73,7 @@ class _WrapperState extends State<Wrapper> {
     return Scaffold(
       body: SafeArea(
           child: ThreeColumns(
-        left: Layers(
-            onReorder: _updateLayers,
-            layers: _layersListItems),
+        left: Layers(onReorder: _updateLayers, layers: _layersListItems),
         center: Workspace(
           currentIndex: _currentIndex, // For hide and show
           layers: _layersStackItems,

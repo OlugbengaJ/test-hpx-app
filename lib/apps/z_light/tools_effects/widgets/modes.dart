@@ -12,6 +12,17 @@ class ToolModes extends StatefulWidget {
   State<ToolModes> createState() => _ToolModesState();
 }
 
+List<PickerModel> audioVisualList = [
+  PickerModel(
+    title: 'Power Bars',
+    enabled: true,
+  ),
+  PickerModel(
+    title: 'Waveform',
+    enabled: true,
+  )
+];
+
 List<PickerModel> moodList = [
   PickerModel(
     title: 'Tools',
@@ -34,6 +45,16 @@ List<PickerModel> moodList = [
   ),
   PickerModel(title: 'Wave', enabled: true, value: 'wave', icon: Icons.waves),
   PickerModel(
+      title: 'Color Cycle',
+      enabled: true,
+      value: 'colorcycle',
+      icon: Icons.color_lens),
+  PickerModel(
+      title: 'Breathing',
+      enabled: true,
+      value: 'breathing',
+      icon: Icons.air_outlined),
+  PickerModel(
       title: 'Audio Visualizer',
       enabled: true,
       value: 'audiovisualizer',
@@ -41,22 +62,33 @@ List<PickerModel> moodList = [
 ];
 
 class _ToolModesState extends State<ToolModes> {
-  Widget? preset = WavePreset();
+  Widget? preset;
+  Widget? subPicker;
 
   changeComponent() {
     switch (pickerChoice?.value) {
       case "shortcut":
+        subPicker = Container();
         return ShortcutColorsPreset();
       case "mood":
+        subPicker = Container();
         return MoodPreset();
       case "colorsproduction":
+        subPicker = Container();
         return const ColorProductionPreset();
       case "audiovisualizer":
+        subPicker = SizedBox(
+            width: MediaQuery.of(context).size.width * 0.3,
+            child: PickerDropdown(
+                onChange: (PickerModel? returnValue) {
+                  // setState(() {});
+                },
+                pickerList: audioVisualList));
         return AudioVisualPreset();
       case "wave":
+        subPicker = Container();
         return WavePreset();
       default:
-        return WavePreset();
     }
   }
 
@@ -69,7 +101,7 @@ class _ToolModesState extends State<ToolModes> {
           children: [
             Text("Tools & Effects", textAlign: TextAlign.left, style: h4Style),
             SizedBox(
-                // width: MediaQuery.of(context).size.width * 0.3,
+                width: MediaQuery.of(context).size.width * 0.3,
                 child: PickerDropdown(
                     onChange: (PickerModel? returnValue) {
                       setState(() {
@@ -77,6 +109,9 @@ class _ToolModesState extends State<ToolModes> {
                       });
                     },
                     pickerList: moodList)),
+            // Container(
+            //     margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+            //     child: subPicker),
             Container(
               margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
               child: preset,

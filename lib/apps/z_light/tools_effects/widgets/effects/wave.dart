@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:hpx/widgets/components/color_picker.dart';
+import 'package:hpx/widgets/components/rotate_button.dart';
 import 'package:hpx/widgets/theme.dart';
 
 class WavePreset extends StatefulWidget {
@@ -10,6 +13,8 @@ class WavePreset extends StatefulWidget {
 class _WavePresetState extends State<WavePreset> {
   String activatedButton = "DEFAULT";
   double _currentSliderValue = 0.0;
+  double _currentAngleValue = 0.0;
+  TextEditingController degreeController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -107,14 +112,14 @@ class _WavePresetState extends State<WavePreset> {
               color: Colors.white,
               height: 1,
             ),
-            Container(margin: const EdgeInsets.only(bottom: 10.0)),
+            Container(margin: const EdgeInsets.only(bottom: 20.0)),
             Text("Speed", textAlign: TextAlign.left, style: labelStyle),
             Container(margin: const EdgeInsets.only(bottom: 10.0)),
             Slider(
               value: _currentSliderValue,
               max: 100,
               min: 0,
-              divisions: 1,
+              divisions: 100,
               label: _currentSliderValue.round().toString(),
               onChanged: (double value) {
                 setState(() {
@@ -138,12 +143,53 @@ class _WavePresetState extends State<WavePreset> {
                 ],
               ))
             ]),
-            Container(margin: const EdgeInsets.only(top: 20.0)),
-            Container(
-              margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-              child:
-                  Text("Direction", textAlign: TextAlign.left, style: h4Style),
-            ),
+            Container(margin: const EdgeInsets.only(top: 30.0)),
+            Text("Direction", textAlign: TextAlign.left, style: h4Style),
+            Container(margin: const EdgeInsets.only(top: 10.0)),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                      flex: 2,
+                      child: RotateButton(onChange: (double? returnValue) {
+                        setState(() {
+                          degreeController.text = (returnValue! < 0
+                                  ? (360 - (0 - returnValue) * (180 / pi))
+                                  : returnValue * (180 / pi))
+                              .toStringAsFixed(2);
+                        });
+                      })),
+                  Expanded(
+                      child: Column(
+                    children: [
+                      Text("Degrees (o)",
+                          textAlign: TextAlign.left, style: labelStyle),
+                      Container(margin: const EdgeInsets.only(top: 10.0)),
+                      SizedBox(
+                          width: 200,
+                          height: 30,
+                          child: TextField(
+                            style: const TextStyle(fontSize: 14),
+                            controller: degreeController,
+                            obscureText: false,
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 0, horizontal: 5),
+                              hintStyle: TextStyle(color: Colors.grey),
+                            ),
+                          ))
+                    ],
+                  )),
+                  // const VerticalDivider(
+                  //   width: 10,
+                  //   thickness: 0,
+                  //   indent: 20,
+                  //   endIndent: 0,
+                  // ),
+                  // Expanded(child: Text("o", style: h1Style)),
+                ])
           ],
         ));
   }

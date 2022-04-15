@@ -6,10 +6,7 @@ import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
 class Layers extends StatefulWidget {
-  const Layers(
-      {Key? key,
-      required this.layers,
-      required this.onReorder})
+  const Layers({Key? key, required this.layers, required this.onReorder})
       : super(key: key);
   final Function(int oldIndex, int newIndex) onReorder;
   final List<LayerListItem> layers;
@@ -19,16 +16,11 @@ class Layers extends StatefulWidget {
 }
 
 class _LayersState extends State<Layers> {
-
   _addLayer(provider) {
-    provider.add(
-      LayerItemModel(
+    provider.add(LayerItemModel(
         id: provider.lenght + 1,
-        layerText:  'New layer Value ' + (provider.lenght + 1).toString()
-      )
-    );
+        layerText: 'New layer Value ' + (provider.lenght + 1).toString()));
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +30,8 @@ class _LayersState extends State<Layers> {
       children: [
         Container(
           padding: const EdgeInsets.all(2),
-          margin: const EdgeInsets.all(8),
+          margin: const EdgeInsets.only(
+              left: 8.0, right: 8.0, top: 20.0, bottom: 10.0),
           child: Text(
             "Layers",
             style: h4Style,

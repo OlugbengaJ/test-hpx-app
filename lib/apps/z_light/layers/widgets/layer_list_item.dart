@@ -6,10 +6,8 @@ import 'package:provider/provider.dart';
 
 class LayerListItem extends StatefulWidget {
   const LayerListItem(
-      {Key? key,
-      required this.layerID,
-      required this.layerItemModel}
-    ) : super(key: key);
+      {Key? key, required this.layerID, required this.layerItemModel})
+      : super(key: key);
 
   final int layerID;
   final LayerItemModel layerItemModel;
@@ -40,8 +38,13 @@ class _LayerListItemState extends State<LayerListItem> {
   }
 
   _toggleLayer(provider) {
-    LayerItemModel layerItemModel =  provider.getItem(widget.layerID);
-    provider.toggleVisibility(LayerItemModel(id: layerItemModel.id, layerText: layerItemModel.layerText, visible: !layerItemModel.visible), widget.layerID);
+    LayerItemModel layerItemModel = provider.getItem(widget.layerID);
+    provider.toggleVisibility(
+        LayerItemModel(
+            id: layerItemModel.id,
+            layerText: layerItemModel.layerText,
+            visible: !layerItemModel.visible),
+        widget.layerID);
   }
 
   _toggleEditing() {
@@ -54,8 +57,7 @@ class _LayerListItemState extends State<LayerListItem> {
 
   @override
   Widget build(BuildContext context) {
-    return 
-    Consumer<LayersProvider>(
+    return Consumer<LayersProvider>(
       builder: (context, _value, child) {
         return Container(
           height: 30,
@@ -74,18 +76,16 @@ class _LayerListItemState extends State<LayerListItem> {
                 child: Row(
                   children: [
                     InkWell(
-                      onTap: () => _toggleLayer(_value) ,
-                      child:
-                      (_value.getItem(widget.layerID).visible)
-                      ? Icon(
-                          Ionicons.eye,
-                          size: _iconSize,
-                        )
-                      : Icon(
-                          Ionicons.eye_off,
-                          size: _iconSize,
-                        )
-                      ),
+                        onTap: () => _toggleLayer(_value),
+                        child: (_value.getItem(widget.layerID).visible)
+                            ? Icon(
+                                Ionicons.eye,
+                                size: _iconSize,
+                              )
+                            : Icon(
+                                Ionicons.eye_off,
+                                size: _iconSize,
+                              )),
                     const SizedBox(
                       width: 2,
                     ),
@@ -100,50 +100,57 @@ class _LayerListItemState extends State<LayerListItem> {
                                 size: _iconSize,
                               ),
                               (_editing)
-                                  ? 
-                                  Container(
-                                    height: 20,
-                                    constraints: const BoxConstraints(
-                                      maxWidth: 80,
-                                    ),
-                                    child: TextFormField(
-                                      controller: _layerNameController,
-                                      autofocus: true,
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        overflow: TextOverflow.ellipsis,
+                                  ? Container(
+                                      height: 20,
+                                      constraints: const BoxConstraints(
+                                        maxWidth: 80,
                                       ),
-                                      decoration: const InputDecoration(
-                                          focusColor: Colors.white,
-                                          border: OutlineInputBorder(),
-                                          contentPadding: EdgeInsets.all(8)),
-                                      onFieldSubmitted: (value) {
-                                        setState(() {
-                                          _editing = !_editing;
-                                        });
-                                        LayerItemModel layerItemModel =  _value.getItem(widget.layerID);
-                                        _value.update(LayerItemModel( id: widget.layerID,layerText: value), widget.layerID);
-                                      },
-                                    ),
-                                  )
+                                      child: TextFormField(
+                                        controller: _layerNameController,
+                                        autofocus: true,
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        decoration: const InputDecoration(
+                                            focusColor: Colors.white,
+                                            border: OutlineInputBorder(),
+                                            contentPadding: EdgeInsets.all(8)),
+                                        onFieldSubmitted: (value) {
+                                          setState(() {
+                                            _editing = !_editing;
+                                          });
+                                          LayerItemModel layerItemModel =
+                                              _value.getItem(widget.layerID);
+                                          _value.update(
+                                              LayerItemModel(
+                                                  id: widget.layerID,
+                                                  layerText: value),
+                                              widget.layerID);
+                                        },
+                                      ),
+                                    )
                                   : Expanded(
                                       child: Consumer<LayersProvider>(
                                         builder: (context, value, child) {
                                           return Text(
-                                            value.getItem(widget.layerID).layerText,
+                                            value
+                                                .getItem(widget.layerID)
+                                                .layerText,
                                             overflow: TextOverflow.ellipsis,
                                           );
                                         },
                                       ),
                                     ),
                               (_showActions)
-                                  ? 
-                                  Consumer<LayersProvider>(
-                                    builder: (context, value, child) {
+                                  ? Consumer<LayersProvider>(
+                                      builder: (context, value, child) {
                                       return Container(
-                                        margin: const EdgeInsets.only(right: 26),
+                                        margin:
+                                            const EdgeInsets.only(right: 26),
                                         child: Row(
-                                          crossAxisAlignment: CrossAxisAlignment.end,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
                                           children: [
                                             InkWell(
                                               child: Icon(
@@ -157,13 +164,13 @@ class _LayerListItemState extends State<LayerListItem> {
                                                 Ionicons.trash,
                                                 size: _iconSize,
                                               ),
-                                              onTap: () => value.removeItem(widget.layerID),
+                                              onTap: () => value
+                                                  .removeItem(widget.layerID),
                                             ),
                                           ],
                                         ),
                                       );
-                                    }
-                                  )
+                                    })
                                   : Container()
                             ],
                           ),
@@ -176,8 +183,7 @@ class _LayerListItemState extends State<LayerListItem> {
             ),
           ),
         );
-        
       },
-    );    
+    );
   }
 }
