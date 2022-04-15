@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
-import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
 import 'package:hpx/models/layers/layer_item_model.dart';
 
 class LayersProvider extends ChangeNotifier {

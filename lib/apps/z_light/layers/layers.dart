@@ -29,7 +29,8 @@ class _LayersState extends State<Layers> {
       children: [
         Container(
           padding: const EdgeInsets.all(2),
-          margin: const EdgeInsets.all(8),
+          margin: const EdgeInsets.only(
+              left: 8.0, right: 8.0, top: 20.0, bottom: 10.0),
           child: Text(
             "Layers",
             style: h4Style,

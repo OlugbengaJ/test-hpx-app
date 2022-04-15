@@ -20,7 +20,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       darkTheme: darkTheme.copyWith(
           sliderTheme: SliderTheme.of(context).copyWith(
-        //slider modifications
         thumbColor: Colors.white,
         inactiveTrackColor: Colors.grey.shade900,
         activeTrackColor: Colors.grey.shade900,
