@@ -10,16 +10,14 @@ class Color_Picker extends StatefulWidget {
       {Key? key,
       required this.title,
       required this.color,
-      this.width,
-      this.height,
+      this.size,
       required this.leftTitle})
       : super(key: key);
 
   final String title;
   final String leftTitle;
   final Color color;
-  final double? width;
-  final double? height;
+  final String? size;
 
   @override
   State<Color_Picker> createState() => _Color_PickerState();
@@ -40,8 +38,8 @@ class _Color_PickerState extends State<Color_Picker> {
               title: const Text('Pick a color!'),
               alignment: Alignment.topRight,
               // insetPadding: EdgeInsets.only(top: 100, right: 330),
-              contentPadding:
-                  EdgeInsets.only(top: 20, right: 10, bottom: 20, left: 10),
+              contentPadding: const EdgeInsets.only(
+                  top: 20, right: 10, bottom: 20, left: 10),
               children: <Widget>[
                 ColorPicker(
                   hexInputBar: true,
@@ -78,7 +76,12 @@ class _Color_PickerState extends State<Color_Picker> {
                   child: const Text(""),
                   style: TextButton.styleFrom(
                     side: const BorderSide(color: Colors.grey, width: 1),
-                    // maximumSize: Size(100, 20),
+                    minimumSize: (widget.size == 'box')
+                        ? const Size(30.0, 30.0)
+                        : const Size(100, 20),
+                    maximumSize: (widget.size == 'box')
+                        ? const Size(30.0, 30.0)
+                        : const Size(100, 20),
                     primary: Colors.black,
                     backgroundColor: widget.color,
                   ),

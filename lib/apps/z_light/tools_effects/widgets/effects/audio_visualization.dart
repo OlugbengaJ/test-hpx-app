@@ -76,6 +76,7 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
               ),
             ),
             Container(
+              width: MediaQuery.of(context).size.width,
               margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
               child: (activatedButton == 'Gradient')
                   ? Column(
@@ -96,7 +97,8 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
                               Container(
                                 margin: const EdgeInsets.only(
                                     top: 10, bottom: 20.0),
-                                width: 30.0,
+                                // width: 30.0,
+                                // width: MediaQuery.of(context).size.width,
                                 height: 30.0,
                                 color: Colors.red,
                                 // child: Color_Picker(
@@ -140,6 +142,11 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
                               )
                             ],
                           ),
+                          Color_Picker(
+                              leftTitle: '',
+                              title: '',
+                              size: 'box',
+                              color: Colors.orange),
                         ]),
             ),
           ],
