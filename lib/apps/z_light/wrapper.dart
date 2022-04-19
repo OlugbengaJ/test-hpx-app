@@ -72,14 +72,15 @@ class _WrapperState extends State<Wrapper> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: ThreeColumns(
-        left: Layers(onReorder: _updateLayers, layers: _layersListItems),
-        center: Workspace(
-          currentIndex: _currentIndex, // For hide and show
-          layers: _layersStackItems,
+        child: ThreeColumns(
+          left: Layers(onReorder: _updateLayers, layers: _layersListItems),
+          center: Workspace(
+            currentIndex: _currentIndex, // For hide and show
+            layers: _layersStackItems,
+          ),
+          right: const ToolsEffectsWrapper(),
         ),
-        right: const ToolsEffectsWrapper(),
-      )),
+      ),
     );
   }
 }

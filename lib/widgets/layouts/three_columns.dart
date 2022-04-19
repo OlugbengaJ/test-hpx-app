@@ -10,6 +10,7 @@ class ThreeColumns extends StatefulWidget {
     required this.right,
     this.rightFlex = 2,
   }) : super(key: key);
+  
   final Widget left;
   final int leftFlex;
   final Widget center;
