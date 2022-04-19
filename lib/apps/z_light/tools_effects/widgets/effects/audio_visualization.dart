@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/basic.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:hpx/widgets/components/color_picker.dart';
 import 'package:hpx/widgets/theme.dart';
 
@@ -84,6 +82,7 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
                         Color_Picker(
                             leftTitle: 'Edit',
                             title: '',
+                            picker: true,
                             color: Colors.greenAccent)
                       ],
                     )
@@ -97,6 +96,7 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
                               title: '',
                               width: 30.0,
                               height: 30.0,
+                              picker: true,
                               color: Colors.red),
                           Text("Secondary Color",
                               textAlign: TextAlign.left, style: h5Style),
@@ -105,6 +105,7 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
                               title: '',
                               width: 30.0,
                               height: 30.0,
+                              picker: true,
                               color: Colors.orange),
                           Text("Background Color",
                               textAlign: TextAlign.left, style: h5Style),
@@ -113,6 +114,7 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
                               title: '',
                               width: 30.0,
                               height: 30.0,
+                              picker: true,
                               color: Colors.transparent),
                         ]),
             ),

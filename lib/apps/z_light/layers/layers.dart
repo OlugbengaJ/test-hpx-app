@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_list_item.dart';
+import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
 import 'package:hpx/models/layers/layer_item_model.dart';
 import 'package:hpx/providers/layers.dart';
 import 'package:hpx/widgets/theme.dart';
@@ -16,10 +18,25 @@ class Layers extends StatefulWidget {
 }
 
 class _LayersState extends State<Layers> {
+  final areaHeight = Get.height * 0.70;
+  final areaWidth = Get.width * 0.70;    
+  
   _addLayer(provider) {
-    provider.add(LayerItemModel(
+    provider.add(
+      LayerItemModel(
         id: provider.lenght + 1,
-        layerText: 'New layer Value ' + (provider.lenght + 1).toString()));
+        layerText: 'New layer Value ' + (provider.lenght + 1).toString(),
+        controller: ResizableWidgetController(
+          initialPosition: Offset(areaWidth / 2, areaHeight / 2),
+          areaHeight: areaHeight,
+          areaWidth: areaWidth,
+          height: areaHeight / 2,
+          width: areaWidth / 2,
+          minWidth: 50,
+          minHeight: 50,
+        )
+      )        
+    );
   }
 
   @override
@@ -72,6 +89,7 @@ class _LayersState extends State<Layers> {
                     buildDefaultDragHandles: true,
                     padding: const EdgeInsets.all(2),
                     itemCount: value.lenght,
+                    scrollController: ScrollController(keepScrollOffset: false),
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
                         key: Key("$index"),
@@ -81,7 +99,6 @@ class _LayersState extends State<Layers> {
                         ),
                       );
                     },
-                    // onReorder: (int oldIndex, int newIndex) {},
                     onReorder: value.reorder,
                   );
                 },

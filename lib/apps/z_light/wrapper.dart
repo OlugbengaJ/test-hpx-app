@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/tools_effects/tools_effects_wrapper.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
 import 'package:hpx/widgets/layouts/three_columns.dart';
-import 'package:provider/provider.dart';
+import 'package:hpx/widgets/theme.dart';
 
-import '../../models/layers/layer_item_model.dart';
 import 'layers/layers.dart';
 import 'layers/widgets/layer_list_item.dart';
 import 'layers/widgets/layer_stack_item.dart';
@@ -21,31 +20,14 @@ class Wrapper extends StatefulWidget {
 class _WrapperState extends State<Wrapper> {
   final List<LayerListItem> _layersListItems = [];
   final List<LayerStackItem> _layersStackItems = [];
-  int _nextIndex = 0;
-  int _currentIndex = 0;
+  final int _nextIndex = 0;
+  final int _currentIndex = 0;
+  String currentView = "workspace";
 
   @override
   void initState() {
     super.initState();
   }
-
-  _addLayer() {
-    // Add layer to the layers list
-    // setState(() {
-    //   // _layersListItems.add(LayerListItem(
-    //   //   layerID: 'New layer $_nextIndex',
-    //   //   deleteItem: _deleteLayer,
-    //   //   toggleItem: _toggleLayer,
-    //   // ));
-    //   _layersStackItems.add(LayerStackItem(
-    //     layerID: _nextIndex,
-    //   ));
-    //   _currentIndex = _layersStackItems.length - 1;
-    //   _nextIndex += 1;
-    // });
-  }
-
-  _toggleLayer(layerID, bool show) {}
 
   _updateLayers(int oldIndex, int newIndex) {
     log([
@@ -68,18 +50,78 @@ class _WrapperState extends State<Wrapper> {
     });
   }
 
+  _changeView() {
+    setState(() {
+      currentView = (currentView == "workspace") ? "lighting" : 'workspace';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-          child: ThreeColumns(
-        left: Layers(onReorder: _updateLayers, layers: _layersListItems),
-        center: Workspace(
-          currentIndex: _currentIndex, // For hide and show
-          layers: _layersStackItems,
+      appBar: AppBar(
+        //title: const Text("Z Light Space"),
+        title: SizedBox(
+          width: 400,
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TextButton(
+                        style: TextButton.styleFrom(
+                            fixedSize: const Size(150, 50),
+                            primary: (currentView == "workspace")
+                                ? Colors.white
+                                : Colors.grey,
+                            backgroundColor: Colors.transparent,
+                            textStyle: h3Style),
+                        child: const Text('Workspace'),
+                        onPressed: () {
+                          _changeView();
+                        },
+                      ),
+                    ]),
+              ),
+              Expanded(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TextButton(
+                        style: TextButton.styleFrom(
+                            fixedSize: const Size(150, 50),
+                            primary: (currentView != "workspace")
+                                ? Colors.white
+                                : Colors.grey,
+                            backgroundColor: Colors.transparent,
+                            textStyle: h3Style),
+                        child: const Text('Lighting Options'),
+                        onPressed: () {
+                          _changeView();
+                        },
+                      ),
+                    ]),
+              ),
+            ],
+          ),
         ),
-        right: const ToolsEffectsWrapper(),
-      )),
+      ),
+      body: SafeArea(
+          child: (currentView == "workspace")
+              ? Workspace(
+                  currentIndex: _currentIndex, // For hide and show
+                  layers: _layersStackItems,
+                )
+              : ThreeColumns(
+                  left: Layers(
+                      onReorder: _updateLayers, layers: _layersListItems),
+                  center: Workspace(
+                    currentIndex: _currentIndex, // For hide and show
+                    layers: _layersStackItems,
+                  ),
+                  right: const ToolsEffectsWrapper(),
+                )),
     );
   }
 }

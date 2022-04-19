@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 import 'resizable_widget_controller.dart';
 import 'drag_distance.dart';
 
-class ResizableWidget extends StatelessWidget {
-  const ResizableWidget({
-    Key? key,
+class StatefulResizableWidget extends StatefulWidget {
+  const StatefulResizableWidget({ 
+    Key? key ,
     required this.child,
     required this.controller,
     required this.dragWidget,
@@ -20,11 +20,27 @@ class ResizableWidget extends StatelessWidget {
   final double dragWidgetWidth;
 
   @override
+  State<StatefulResizableWidget> createState() => _StatefulResizableWidgetState();
+}
+
+class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
+  late ResizableWidgetController controller;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      controller = widget.controller;
+    });
+  }
+  @override
   Widget build(BuildContext context) {
     return GetBuilder<ResizableWidgetController>(
       global: false,
-      init: controller,
-      builder: (controller) {
+      init: widget.controller,
+      builder: (controller)
+       {
         return Stack(
           children: <Widget>[
             Positioned(
@@ -32,13 +48,13 @@ class ResizableWidget extends StatelessWidget {
               left: controller.left,
               bottom: controller.bottom,
               right: controller.right,
-              child: child,
+              child: widget.child,
             ),
             Positioned(
-              top: controller.top - dragWidgetHeight / 2,
-              left: controller.left - dragWidgetWidth / 2,
-              bottom: controller.bottom - dragWidgetHeight / 2,
-              right: controller.right - dragWidgetWidth / 2,
+              top: controller.top - widget.dragWidgetHeight / 2,
+              left: controller.left - widget.dragWidgetWidth / 2,
+              bottom: controller.bottom - widget.dragWidgetHeight / 2,
+              right: controller.right - widget.dragWidgetWidth / 2,
               child: Visibility(
                 visible: controller.showDragWidgets,
                 child: Stack(
@@ -65,7 +81,7 @@ class ResizableWidget extends StatelessWidget {
                       child: MouseRegion(
                         cursor: SystemMouseCursors.resizeUpLeft,
                         child: DragDistance(
-                          child: dragWidget,
+                          child: widget.dragWidget,
                           onDrag: controller.onTopLeftDrag,
                         ),
                       ),
@@ -76,7 +92,7 @@ class ResizableWidget extends StatelessWidget {
                       child: MouseRegion(
                         cursor: SystemMouseCursors.resizeUp,
                         child: DragDistance(
-                          child: dragWidget,
+                          child: widget.dragWidget,
                           onDrag: controller.onTopCenterDrag,
                         ),
                       ),
@@ -87,7 +103,7 @@ class ResizableWidget extends StatelessWidget {
                       child: MouseRegion(
                         cursor: SystemMouseCursors.resizeUpRight,
                         child: DragDistance(
-                          child: dragWidget,
+                          child: widget.dragWidget,
                           onDrag: controller.onTopRightDrag,
                         ),
                       ),
@@ -98,7 +114,7 @@ class ResizableWidget extends StatelessWidget {
                       child: MouseRegion(
                         cursor: SystemMouseCursors.resizeLeft,
                         child: DragDistance(
-                          child: dragWidget,
+                          child: widget.dragWidget,
                           onDrag: controller.onCenterLeftDrag,
                         ),
                       ),
@@ -110,7 +126,7 @@ class ResizableWidget extends StatelessWidget {
                       child: MouseRegion(
                         cursor: SystemMouseCursors.resizeRight,
                         child: DragDistance(
-                          child: dragWidget,
+                          child: widget.dragWidget,
                           onDrag: controller.onCenterRightDrag,
                         ),
                       ),
@@ -121,7 +137,7 @@ class ResizableWidget extends StatelessWidget {
                       child: MouseRegion(
                         cursor: SystemMouseCursors.resizeDownLeft,
                         child: DragDistance(
-                          child: dragWidget,
+                          child: widget.dragWidget,
                           onDrag: controller.onBottomLeftDrag,
                         ),
                       ),
@@ -132,7 +148,7 @@ class ResizableWidget extends StatelessWidget {
                       child: MouseRegion(
                         cursor: SystemMouseCursors.resizeDown,
                         child: DragDistance(
-                          child: dragWidget,
+                          child: widget.dragWidget,
                           onDrag: controller.onBottomCenterDrag,
                         ),
                       ),
@@ -143,7 +159,7 @@ class ResizableWidget extends StatelessWidget {
                       child: MouseRegion(
                         cursor: SystemMouseCursors.resizeDownRight,
                         child: DragDistance(
-                          child: dragWidget,
+                          child: widget.dragWidget,
                           onDrag: controller.onBottomRightDrag,
                         ),
                       ),

@@ -1,9 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:hpx/apps/z_light/layers/widgets/resizable_widget.dart';
-import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
+import 'package:hpx/apps/z_light/layers/widgets/stateful_resizable.dart';
 import 'package:hpx/providers/layers.dart';
 import 'package:provider/provider.dart';
 
@@ -23,30 +19,16 @@ class _LayerStackItemState extends State<LayerStackItem> {
 
   @override
   Widget build(BuildContext context) {
-    final areaHeight = Get.height * 0.70;
-    final areaWidth = Get.width * 0.70;
-    final controller = Get.put(
-      ResizableWidgetController(
-        initialPosition: Offset(areaWidth / 2, areaHeight / 2),
-        areaHeight: areaHeight,
-        areaWidth: areaWidth,
-        height: areaHeight / 2,
-        width: areaWidth / 2,
-        minWidth: 50,
-        minHeight: 50,
-      ),
-    );
-
     return  Consumer<LayersProvider>(
       builder: (context, _value, child){
         return
         Container(
           color: Colors.transparent,
             child: 
-            ResizableWidget(
+            StatefulResizableWidget(
               dragWidgetHeight: dragWidgetSize,
               dragWidgetWidth: dragWidgetSize,
-              controller: controller,
+              controller: widget.layerItemModel.controller,
               dragWidget: Container(
                 height: 50,
                 width: 50,
@@ -56,7 +38,7 @@ class _LayerStackItemState extends State<LayerStackItem> {
                     width: 5,
                     decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
-                      color: (widget.layerItemModel.visible)?Colors.white: Colors.transparent,
+                      color: (widget.layerItemModel.visible)? Colors.white: Colors.transparent,
                     ),
                   ),
                 ),
@@ -68,7 +50,7 @@ class _LayerStackItemState extends State<LayerStackItem> {
               child: Container(     
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: (widget.layerItemModel.visible)?Colors.white: Colors.transparent,
+                    color: (widget.layerItemModel.visible)? Colors.white: Colors.transparent,
                   ),
                 ),
               ),

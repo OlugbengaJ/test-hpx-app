@@ -3,11 +3,11 @@ import 'package:get/get.dart';
 
 class ResizableWidgetController extends GetxController {
   ResizableWidgetController({
-    required this.initialPosition,
-    required this.areaHeight,
-    required this.areaWidth,
-    required this.height,
-    required this.width,
+    required this.initialPosition ,
+    this.areaHeight = 500,
+    this.areaWidth = 500,
+    this.height = 500,
+    this.width = 500,
     this.minWidth = 0.0,
     this.minHeight = 0.0,
     this.showDragWidgets = true,
@@ -62,30 +62,24 @@ class ResizableWidgetController extends GetxController {
     update();
   }
 
-  void setSize({
-    double? newTop,
-    double? newLeft,
-    double? newRight,
-    double? newBottom,
-  }) {
+  void setSize({double? newTop,  double? newLeft,double? newRight, double? newBottom,}) {
+
     newTop = newTop ?? top;
     newLeft = newLeft ?? left;
     newRight = newRight ?? right;
     newBottom = newBottom ?? bottom;
+
     quantify(
       newTop: newTop,
       newLeft: newLeft,
       newRight: newRight,
       newBottom: newBottom,
     );
+
+    update();
   }
 
-  void quantify({
-    required final double newTop,
-    required final double newLeft,
-    required final double newRight,
-    required final double newBottom,
-  }) {
+  void quantify({ required final double newTop, required final double newLeft, required final double newRight, required final double newBottom,}) {
     calculateWidgetSize(
         top: newTop, left: newLeft, bottom: newBottom, right: newRight);
     if (checkTopBotMaxSize(newTop, newBottom)) {
@@ -97,19 +91,12 @@ class ResizableWidgetController extends GetxController {
       right = newRight;
     }
     calculateWidgetSize(bottom: bottom, left: left, right: right, top: top);
-    update();
   }
 
-  bool checkTopBotMaxSize(final double newTop, final double newBottom) =>
-      (newTop >= 0 && newBottom >= 0) && (height >= minHeight);
-  bool checkLeftRightMaxSize(final double newLeft, final double newRight) =>
-      (newLeft >= 0 && newRight >= 0) && (width >= minWidth);
+  bool checkTopBotMaxSize(final double newTop, final double newBottom) =>  (newTop >= 0 && newBottom >= 0) && (height >= minHeight);
+  bool checkLeftRightMaxSize(final double newLeft, final double newRight) => (newLeft >= 0 && newRight >= 0) && (width >= minWidth);
 
-  void calculateWidgetSize({
-    required final double top,
-    required final double left,
-    required final double bottom,
-    required final double right,
+  void calculateWidgetSize({ required final double top, required final double left, required final double bottom, required final double right,
   }) {
     width = areaWidth - (left + right);
     height = areaHeight - (top + bottom);
@@ -124,11 +111,13 @@ class ResizableWidgetController extends GetxController {
   }
 
   void onTopCenterDrag(dx, dy) {
-    setSize(newTop: top + dy);
+    setSize(
+      newTop: top + dy
+    );
   }
 
   void onTopRightDrag(dx, dy) {
-    var mid = (dx + (dy * -1)) / 2;
+    var mid = (dx - dy) / 2;
     setSize(
       newTop: top - mid,
       newRight: right - mid,
@@ -153,9 +142,8 @@ class ResizableWidgetController extends GetxController {
   }
 
   void onBottomLeftDrag(dx, dy) {
-    var mid = ((dx * -1) + dy) / 2;
+    var mid = (dy - dx) / 2;
     setSize(newBottom: bottom - mid, newLeft: left - mid);
-    update();
   }
 
   void onBottomCenterDrag(dx, dy) {
