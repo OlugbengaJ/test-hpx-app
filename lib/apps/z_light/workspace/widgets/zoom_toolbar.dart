@@ -5,14 +5,16 @@ import 'package:hpx/apps/z_light/workspace/widgets/round_button.dart';
 class ZoomToolbar extends StatelessWidget {
   const ZoomToolbar({Key? key}) : super(key: key);
 
+  final double _buttonSize = 24;
+
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const RoundButton(
+        RoundButton(
           iconData: Icons.add_circle_rounded,
-          size: 24,
+          size: _buttonSize,
           onPressed: null,
         ),
         Container(
@@ -20,14 +22,21 @@ class ZoomToolbar extends StatelessWidget {
             keyboardType: TextInputType.number,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             decoration: const InputDecoration(
-              border: OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.zero),
+                borderSide: BorderSide.none
+              ),
+              fillColor: Colors.black,
+              filled: true,
+              contentPadding: EdgeInsets.all(0),
             ),
+            textAlign: TextAlign.center,
           ),
           constraints: const BoxConstraints(maxWidth: 48, maxHeight: 24),
         ),
-        const RoundButton(
+        RoundButton(
           iconData: Icons.remove_circle_rounded,
-          size: 24,
+          size: _buttonSize,
           onPressed: null,
         ),
       ],

@@ -55,16 +55,23 @@ class _WorkspaceState extends State<Workspace> {
             ),
           ),
           Positioned(
-            bottom: -40,
+            bottom: 0,
             left: 0,
             right: 0,
             child: Center(
               child: Container(
-                alignment: AlignmentDirectional.bottomCenter,
                 child: const SizedBox(
                   child: ZoomToolbar(),
                   width: 160,
-                  height: 120,
+                  height: 40,
+                ),
+                decoration: const BoxDecoration(
+                  // TODO: refactor to use themes
+                  color: Color.fromARGB(255, 54, 53, 53),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(4),
+                      topRight: Radius.circular(4),
+                    )
                 ),
               ),
             ),
