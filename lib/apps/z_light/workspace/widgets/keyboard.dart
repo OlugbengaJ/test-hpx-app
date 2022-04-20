@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/key_path_clipper.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/key_path.dart';
 
-class KeyboardEn extends StatelessWidget {
-  const KeyboardEn({Key? key}) : super(key: key);
+class Keyboard extends StatelessWidget {
+  const Keyboard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // return Container(
-
-    // );
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
 
@@ -19,30 +16,33 @@ class KeyboardEn extends StatelessWidget {
           Align(
             alignment: const Alignment(0, 9),
             child: SizedBox(
-              width: width,
-              height: height * 0.99,
+              width: 50,
+              height: 50,
               child: GestureDetector(
                 onTap: () => debugPrint('\r\ngesture triggered'),
                 child: KeyPath(
-                  clipper: const KeyPathClipper(zoomScale: 0.5),
-                  child: Container(
-                    margin: EdgeInsets.zero,
-                    child: const Text('Q'),
+                  clipper: const KeyPathClipper(zoomScale: 0.1),
+                  child: Center(
+                    child: Container(
+                      margin: EdgeInsets.zero,
+                      child:
+                          const Text('Q', style: TextStyle(color: Colors.red)),
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-          Align(
-            alignment: Alignment.topCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 100),
-              child: Text(
-                'Keys',
-                style: Theme.of(context).textTheme.headline1,
-              ),
-            ),
-          ),
+          // Align(
+          //   alignment: Alignment.topCenter,
+          //   child: Padding(
+          //     padding: const EdgeInsets.only(top: 100),
+          //     child: Text(
+          //       'Keys',
+          //       style: Theme.of(context).textTheme.headline1,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

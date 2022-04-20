@@ -56,7 +56,7 @@ class _WorkspaceState extends State<Workspace> {
                 currentIndex: widget.currentIndex,
               ),
             ),
-            const KeyboardEn(),
+            const Keyboard(),
             Positioned(
               bottom: 0,
               left: 0,

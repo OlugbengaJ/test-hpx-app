@@ -10,15 +10,49 @@ class KeyPathClipper extends CustomClipper<Path> {
   Path getClip(Size size) {
     Path path = Path();
 
-    path.moveTo(1060.7023 * zoomScale, 962.80119 * zoomScale);
+    path.lineTo(0, -0.02);
     path.cubicTo(
-      56.1407 * zoomScale,
-      2.4252 * zoomScale,
-      2.6558 * zoomScale,
-      2.61344 * zoomScale,
-      2.4889 * zoomScale,
-      4.44126 * zoomScale,
+      0,
+      -0.02,
+      size.width,
+      -0.02,
+      size.width,
+      -0.02,
     );
+    path.cubicTo(
+      size.width,
+      -0.02,
+      size.width,
+      size.height * 0.52,
+      size.width,
+      size.height * 0.52,
+    );
+    path.cubicTo(
+      size.width,
+      size.height * 0.52,
+      0,
+      size.height * 0.52,
+      0,
+      size.height * 0.52,
+    );
+    path.cubicTo(
+      0,
+      size.height * 0.52,
+      0,
+      -0.02,
+      0,
+      -0.02,
+    );
+
+    // path.moveTo(1060.7023 * zoomScale, 962.80119 * zoomScale);
+    // path.cubicTo(
+    //   300 * zoomScale,
+    //   12.492361 * zoomScale,
+    //   95.567398 * zoomScale,
+    //   692.82202 * zoomScale,
+    //   210.658491 * zoomScale,
+    //   -16.91273 * zoomScale,
+    // );
 
     // path.cubicTo(
     //   119.396 * zoomScale,
