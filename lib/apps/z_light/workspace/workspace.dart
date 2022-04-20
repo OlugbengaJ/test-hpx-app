@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/keyboard.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/zoom_toolbar.dart';
 import 'package:hpx/widgets/theme.dart';
 
@@ -55,6 +56,7 @@ class _WorkspaceState extends State<Workspace> {
                 currentIndex: widget.currentIndex,
               ),
             ),
+            const KeyboardEn(),
             Positioned(
               bottom: 0,
               left: 0,
