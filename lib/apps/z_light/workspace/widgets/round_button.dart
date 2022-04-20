@@ -18,15 +18,15 @@ class RoundButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
-      child: Icon(
-        iconData,
-        size: size,
-      ),
       // label: Text(buttonText ?? ''),
       style: ElevatedButton.styleFrom(
         fixedSize: Size(size, size),
         padding: const EdgeInsets.all(0),
         shape: const CircleBorder(),
+      ),
+      child: Icon(
+        iconData,
+        size: size,
       ),
     );
   }

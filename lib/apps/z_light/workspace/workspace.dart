@@ -35,48 +35,50 @@ class _WorkspaceState extends State<Workspace> {
             ],
           ),
         ),
-        Stack(children: [
-          Container(
-            child: LayersStack(
-              layers: widget.layers,
-              currentIndex: widget.currentIndex,
-            ),
-            // width: double.infinity,
-            // height: MediaQuery.of(context).size.height, // avoid double.infinity to avoid height overflow
-            constraints: BoxConstraints(
-              maxWidth: double.infinity,
-              maxHeight: MediaQuery.of(context).size.height - 70,
-            ),
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("assets/images/backdrop.png"),
-                repeat: ImageRepeat.repeat,
+        Stack(
+          children: [
+            Container(
+              // width: double.infinity,
+              // height: MediaQuery.of(context).size.height, // avoid double.infinity to avoid height overflow
+              constraints: BoxConstraints(
+                maxWidth: double.infinity,
+                maxHeight: MediaQuery.of(context).size.height - 70,
+              ),
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/images/backdrop.png"),
+                  repeat: ImageRepeat.repeat,
+                ),
+              ),
+              child: LayersStack(
+                layers: widget.layers,
+                currentIndex: widget.currentIndex,
               ),
             ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: Container(
-                child: const SizedBox(
-                  child: ZoomToolbar(),
-                  width: 160,
-                  height: 40,
-                ),
-                decoration: const BoxDecoration(
-                  // TODO: refactor to use themes
-                  color: Color.fromARGB(255, 54, 53, 53),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    // TODO: refactor to use themes
+                    color: Color.fromARGB(255, 54, 53, 53),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(4),
                       topRight: Radius.circular(4),
-                    )
+                    ),
+                  ),
+                  child: const SizedBox(
+                    width: 160,
+                    height: 40,
+                    child: ZoomToolbar(),
+                  ),
                 ),
               ),
             ),
-          ),
-        ]),
+          ],
+        ),
       ],
     );
   }

@@ -18,6 +18,7 @@ class ZoomToolbar extends StatelessWidget {
           onPressed: null,
         ),
         Container(
+          constraints: const BoxConstraints(maxWidth: 48, maxHeight: 24),
           child: TextField(
             keyboardType: TextInputType.number,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -32,7 +33,6 @@ class ZoomToolbar extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          constraints: const BoxConstraints(maxWidth: 48, maxHeight: 24),
         ),
         RoundButton(
           iconData: Icons.remove_circle_rounded,
