@@ -1,36 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/key_rrect.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/key_rrect_clipper.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/keyboard_row_fn.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/keyboard_row_num.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/keyboard_row_tab.dart';
 
 class Keyboard extends StatelessWidget {
-  const Keyboard({Key? key}) : super(key: key);
+  const Keyboard({Key? key, required this.zoomScale}) : super(key: key);
+
+  final double zoomScale;
 
   @override
   Widget build(BuildContext context) {
-    const double _zoomScale = 1;
-
-    return Stack(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Center(
-          child: GestureDetector(
-            onTap: () => debugPrint('\r\ngesture triggered'),
-            child: const KeyRRect(
-              clipper: KeyRRectClipper(zoomScale: _zoomScale),
-              zoomScale: _zoomScale,
-              // child: Container(),
-            ),
-          ),
-        ),
-        // Align(
-        //   alignment: Alignment.topCenter,
-        //   child: Padding(
-        //     padding: const EdgeInsets.only(top: 100),
-        //     child: Text(
-        //       'Keys',
-        //       style: Theme.of(context).textTheme.headline1,
-        //     ),
-        //   ),
-        // ),
+        KeyboardRowFn(zoomScale: zoomScale),
+        KeyboardRowNum(zoomScale: zoomScale),
+        KeyboardRowTab(zoomScale: zoomScale),
       ],
     );
   }

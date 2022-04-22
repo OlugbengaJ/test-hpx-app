@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
 
 class KeyRRectClipper extends CustomClipper<RRect> {
-  const KeyRRectClipper({Listenable? reclip, required this.zoomScale})
-      : super(reclip: reclip);
+  const KeyRRectClipper({
+    Listenable? reclip,
+    required this.zoomScale,
+    required this.keyLeft,
+    required this.keyTop,
+    required this.keyRadius,
+  }) : super(reclip: reclip);
 
   final double zoomScale;
+  final double keyLeft;
+  final double keyTop;
+  final double keyRadius;
 
   @override
   RRect getClip(Size size) {
     return RRect.fromRectAndCorners(
       Rect.fromLTWH(
-        size.width * 0.01795162,
-        size.height * 0.003479,
-        zoomScale * size.width * 0.03914955,
-        zoomScale * size.height * 0.1312806,
+        size.width * keyLeft,
+        size.height * keyTop,
+        size.width,
+        size.height,
       ),
-      bottomRight: Radius.circular(zoomScale * size.width * 0.001594051),
-      bottomLeft: Radius.circular(zoomScale * size.width * 0.001594051),
-      topLeft: Radius.circular(zoomScale * size.width * 0.001594051),
-      topRight: Radius.circular(zoomScale * size.width * 0.001594051),
+      bottomRight: Radius.circular(zoomScale * size.width * keyRadius),
+      bottomLeft: Radius.circular(zoomScale * size.width * keyRadius),
+      topLeft: Radius.circular(zoomScale * size.width * keyRadius),
+      topRight: Radius.circular(zoomScale * size.width * keyRadius),
     );
   }
 
