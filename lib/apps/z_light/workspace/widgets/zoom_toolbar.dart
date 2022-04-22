@@ -9,37 +9,58 @@ class ZoomToolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        RoundButton(
-          iconData: Icons.add_circle_rounded,
-          size: _buttonSize,
-          onPressed: null,
-        ),
-        Container(
-          constraints: const BoxConstraints(maxWidth: 48, maxHeight: 24),
-          child: TextField(
-            keyboardType: TextInputType.number,
-            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.zero),
-                borderSide: BorderSide.none
-              ),
-              fillColor: Colors.black,
-              filled: true,
-              contentPadding: EdgeInsets.all(0),
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      right: 0,
+      child: Center(
+        child: Container(
+          decoration: const BoxDecoration(
+            // TODO: refactor to use themes
+            color: Color.fromARGB(255, 54, 53, 53),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(4),
+              topRight: Radius.circular(4),
             ),
-            textAlign: TextAlign.center,
+          ),
+          child: SizedBox(
+            width: 160,
+            height: 40,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                RoundButton(
+                  iconData: Icons.add_circle_rounded,
+                  size: _buttonSize,
+                  onPressed: null,
+                ),
+                Container(
+                  constraints:
+                      const BoxConstraints(maxWidth: 48, maxHeight: 24),
+                  child: TextField(
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.zero),
+                          borderSide: BorderSide.none),
+                      fillColor: Colors.black,
+                      filled: true,
+                      contentPadding: EdgeInsets.all(0),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                RoundButton(
+                  iconData: Icons.remove_circle_rounded,
+                  size: _buttonSize,
+                  onPressed: null,
+                ),
+              ],
+            ),
           ),
         ),
-        RoundButton(
-          iconData: Icons.remove_circle_rounded,
-          size: _buttonSize,
-          onPressed: null,
-        ),
-      ],
+      ),
     );
   }
 }
