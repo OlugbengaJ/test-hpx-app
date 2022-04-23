@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/key_rrect.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/keyboard/key_rrect.dart';
 
 class KeyboardKey extends StatelessWidget {
   const KeyboardKey({
@@ -10,6 +10,7 @@ class KeyboardKey extends StatelessWidget {
     this.keyPathColors = const [Colors.red, Colors.white],
     this.keyLeft = 0,
     this.keyTop = 0,
+    this.paintingStyle = PaintingStyle.stroke,
     required this.keyWidth,
     required this.keyHeight,
     required this.keyRadius,
@@ -21,6 +22,7 @@ class KeyboardKey extends StatelessWidget {
   final String? keyText;
   final Color? keyColor;
   final List<Color>? keyPathColors;
+  final PaintingStyle paintingStyle;
 
   final double keyLeft;
   final double keyTop;
@@ -33,18 +35,21 @@ class KeyboardKey extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        InkWell(
-          onTap: onTapHandler,
-          child: KeyRRect(
-            keyText: keyText,
-            keyColor: keyColor!,
-            keyPathColors: keyPathColors!,
-            zoomScale: zoomScale,
-            keyLeft: keyLeft * zoomScale,
-            keyTop: keyTop * zoomScale,
-            keyRadius: keyRadius,
-            keyWidth: keyWidth,
-            keyHeight: keyHeight,
+        Material(
+          child: InkWell(
+            onTap: onTapHandler,
+            child: KeyRRect(
+              paintingStyle: paintingStyle,
+              keyText: keyText,
+              keyColor: keyColor!,
+              keyPathColors: keyPathColors!,
+              zoomScale: zoomScale,
+              keyLeft: keyLeft * zoomScale,
+              keyTop: keyTop * zoomScale,
+              keyRadius: keyRadius,
+              keyWidth: keyWidth,
+              keyHeight: keyHeight,
+            ),
           ),
         ),
         // Align(

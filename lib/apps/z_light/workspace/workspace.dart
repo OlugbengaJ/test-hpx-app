@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/keyboard.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/keyboard_row_fn.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/keyboard_key.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/zoom_toolbar.dart';
 import 'package:hpx/widgets/theme.dart';
 
@@ -57,7 +55,11 @@ class _WorkspaceState extends State<Workspace> {
                   currentIndex: widget.currentIndex,
                 ),
               ),
-              const Keyboard(zoomScale: 1.5),
+
+              /// Keyboard widget takes a zoom scale that applies to all keys.
+              ///
+              /// This ensures seamless zooming of all parts of the keyboard.
+              const Keyboard(zoomScale: 1.4),
               const Positioned(
                 bottom: 0,
                 left: 0,

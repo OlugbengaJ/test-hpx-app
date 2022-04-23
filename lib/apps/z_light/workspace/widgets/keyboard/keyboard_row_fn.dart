@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/keyboard_key.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard_key.dart';
 
-class KeyboardRowTab extends StatelessWidget {
-  const KeyboardRowTab({Key? key, required this.zoomScale}) : super(key: key);
+class KeyboardRowFn extends StatelessWidget {
+  const KeyboardRowFn({Key? key, required this.zoomScale}) : super(key: key);
 
   final double zoomScale;
 
   @override
   Widget build(BuildContext context) {
     const double _keyRadius = 0.001594051;
-    const double _tabKeyWidth = 0.06137159;
-    const double _pipeKeyWidth = 0.06010505;
+    const double _fnKeyWidth = 0.03314955;
     const double _keyWidth = 0.03914955;
-    const double _keyHeight = 0.1312806;
+    const double _keyHeight = 0.0656403;
     double _zoomedPadding = 2.0 * zoomScale;
 
     return Row(
@@ -21,19 +20,10 @@ class KeyboardRowTab extends StatelessWidget {
         Padding(
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key tab triggered'),
-            keyText: 'Tab',
-            keyWidth: _tabKeyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key Q triggered'),
-            keyText: 'Q',
+            onTapHandler: () => debugPrint('\r\n key esc triggered'),
+            keyText: 'Esc',
+            keyColor: Colors.orange,
+            keyPathColors: const [Colors.green, Colors.yellow],
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
             keyRadius: _keyRadius,
@@ -43,9 +33,9 @@ class KeyboardRowTab extends StatelessWidget {
         Padding(
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key W triggered'),
-            keyText: 'W',
-            keyWidth: _keyWidth,
+            onTapHandler: () => debugPrint('\r\n key F1 triggered'),
+            keyText: 'F1',
+            keyWidth: _fnKeyWidth,
             keyHeight: _keyHeight,
             keyRadius: _keyRadius,
             zoomScale: zoomScale,
@@ -54,9 +44,9 @@ class KeyboardRowTab extends StatelessWidget {
         Padding(
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key E triggered'),
-            keyText: 'E',
-            keyWidth: _keyWidth,
+            onTapHandler: () => debugPrint('\r\n key F2 triggered'),
+            keyText: 'F2',
+            keyWidth: _fnKeyWidth,
             keyHeight: _keyHeight,
             keyRadius: _keyRadius,
             zoomScale: zoomScale,
@@ -65,9 +55,9 @@ class KeyboardRowTab extends StatelessWidget {
         Padding(
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key R triggered'),
-            keyText: 'R',
-            keyWidth: _keyWidth,
+            onTapHandler: () => debugPrint('\r\n key F3 triggered'),
+            keyText: 'F3',
+            keyWidth: _fnKeyWidth,
             keyHeight: _keyHeight,
             keyRadius: _keyRadius,
             zoomScale: zoomScale,
@@ -76,9 +66,9 @@ class KeyboardRowTab extends StatelessWidget {
         Padding(
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key T triggered'),
-            keyText: 'T',
-            keyWidth: _keyWidth,
+            onTapHandler: () => debugPrint('\r\n key F4 triggered'),
+            keyText: 'F4',
+            keyWidth: _fnKeyWidth,
             keyHeight: _keyHeight,
             keyRadius: _keyRadius,
             zoomScale: zoomScale,
@@ -87,9 +77,9 @@ class KeyboardRowTab extends StatelessWidget {
         Padding(
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key Y triggered'),
-            keyText: 'Y',
-            keyWidth: _keyWidth,
+            onTapHandler: () => debugPrint('\r\n key F5 triggered'),
+            keyText: 'F5',
+            keyWidth: _fnKeyWidth,
             keyHeight: _keyHeight,
             keyRadius: _keyRadius,
             zoomScale: zoomScale,
@@ -98,9 +88,9 @@ class KeyboardRowTab extends StatelessWidget {
         Padding(
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key U triggered'),
-            keyText: 'U',
-            keyWidth: _keyWidth,
+            onTapHandler: () => debugPrint('\r\n key F6 triggered'),
+            keyText: 'F6',
+            keyWidth: _fnKeyWidth,
             keyHeight: _keyHeight,
             keyRadius: _keyRadius,
             zoomScale: zoomScale,
@@ -109,9 +99,9 @@ class KeyboardRowTab extends StatelessWidget {
         Padding(
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key I triggered'),
-            keyText: 'I',
-            keyWidth: _keyWidth,
+            onTapHandler: () => debugPrint('\r\n key F7 triggered'),
+            keyText: 'F7',
+            keyWidth: _fnKeyWidth,
             keyHeight: _keyHeight,
             keyRadius: _keyRadius,
             zoomScale: zoomScale,
@@ -120,9 +110,9 @@ class KeyboardRowTab extends StatelessWidget {
         Padding(
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key O triggered'),
-            keyText: 'O',
-            keyWidth: _keyWidth,
+            onTapHandler: () => debugPrint('\r\n key F8 triggered'),
+            keyText: 'F8',
+            keyWidth: _fnKeyWidth,
             keyHeight: _keyHeight,
             keyRadius: _keyRadius,
             zoomScale: zoomScale,
@@ -131,9 +121,9 @@ class KeyboardRowTab extends StatelessWidget {
         Padding(
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key P triggered'),
-            keyText: 'P',
-            keyWidth: _keyWidth,
+            onTapHandler: () => debugPrint('\r\n key F9 triggered'),
+            keyText: 'F9',
+            keyWidth: _fnKeyWidth,
             keyHeight: _keyHeight,
             keyRadius: _keyRadius,
             zoomScale: zoomScale,
@@ -142,9 +132,9 @@ class KeyboardRowTab extends StatelessWidget {
         Padding(
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key [ triggered'),
-            keyText: '[ {',
-            keyWidth: _keyWidth,
+            onTapHandler: () => debugPrint('\r\n key F10 triggered'),
+            keyText: 'F10',
+            keyWidth: _fnKeyWidth,
             keyHeight: _keyHeight,
             keyRadius: _keyRadius,
             zoomScale: zoomScale,
@@ -153,9 +143,9 @@ class KeyboardRowTab extends StatelessWidget {
         Padding(
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key ] triggered'),
-            keyText: '] }',
-            keyWidth: _keyWidth,
+            onTapHandler: () => debugPrint('\r\n key F11 triggered'),
+            keyText: 'F11',
+            keyWidth: _fnKeyWidth,
             keyHeight: _keyHeight,
             keyRadius: _keyRadius,
             zoomScale: zoomScale,
@@ -164,9 +154,53 @@ class KeyboardRowTab extends StatelessWidget {
         Padding(
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key pipe | triggered'),
-            keyText: '\\ |',
-            keyWidth: _pipeKeyWidth,
+            onTapHandler: () => debugPrint('\r\n key F12 triggered'),
+            keyText: 'F12',
+            keyWidth: _fnKeyWidth,
+            keyHeight: _keyHeight,
+            keyRadius: _keyRadius,
+            zoomScale: zoomScale,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(_zoomedPadding),
+          child: KeyboardKey(
+            onTapHandler: () => debugPrint('\r\n key home triggered'),
+            keyText: 'Home',
+            keyWidth: _fnKeyWidth,
+            keyHeight: _keyHeight,
+            keyRadius: _keyRadius,
+            zoomScale: zoomScale,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(_zoomedPadding),
+          child: KeyboardKey(
+            onTapHandler: () => debugPrint('\r\n key end triggered'),
+            keyText: 'End',
+            keyWidth: _fnKeyWidth,
+            keyHeight: _keyHeight,
+            keyRadius: _keyRadius,
+            zoomScale: zoomScale,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(_zoomedPadding),
+          child: KeyboardKey(
+            onTapHandler: () => debugPrint('\r\n key insert triggered'),
+            keyText: 'Insert',
+            keyWidth: _fnKeyWidth,
+            keyHeight: _keyHeight,
+            keyRadius: _keyRadius,
+            zoomScale: zoomScale,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(_zoomedPadding),
+          child: KeyboardKey(
+            onTapHandler: () => debugPrint('\r\n key del triggered'),
+            keyText: 'Delete',
+            keyWidth: _keyWidth,
             keyHeight: _keyHeight,
             keyRadius: _keyRadius,
             zoomScale: zoomScale,

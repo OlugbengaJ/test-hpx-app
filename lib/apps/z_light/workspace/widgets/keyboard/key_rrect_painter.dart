@@ -8,6 +8,7 @@ class KeyRRectPainter extends CustomPainter {
   const KeyRRectPainter({
     Listenable? repaint,
     this.keyText,
+    required this.paintingStyle,
     required this.keyPathColors,
     required this.keyColor,
     required this.clipper,
@@ -21,10 +22,12 @@ class KeyRRectPainter extends CustomPainter {
   final Color keyColor;
 
   final double zoomScale;
+  final PaintingStyle paintingStyle;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final int pathColorsLength = keyPathColors.length;
+    const double _defaultStrokeWidth = 50;
+    final int _pathColorsLength = keyPathColors.length;
 
     final Paint paint = Paint()
       // ..color = keyPathColor.withOpacity(1)
@@ -32,25 +35,30 @@ class KeyRRectPainter extends CustomPainter {
       ..shader = ui.Gradient.radial(
         Offset.zero,
         size.width,
-        // Offset(0, size.width),
         keyPathColors,
         keyPathColors.map((element) {
-          return keyPathColors.indexOf(element) / (pathColorsLength - 1);
+          return keyPathColors.indexOf(element) / (_pathColorsLength - 1);
         }).toList(),
       )
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = size.width * zoomScale * 0.009211208 //0.0009211208
+      ..style = paintingStyle
+      ..strokeWidth =
+          _defaultStrokeWidth * zoomScale * 0.009211208 //0.0009211208
       ..strokeCap = StrokeCap.round;
 
-    /// TextPainter draws the text on the key as long as a text is not empty
+    RRect rrect = clipper.getClip(size).shift(Offset.zero);
+    // canvas.clipRRect(rrect);
+    canvas.drawRRect(rrect, paint);
+
+    /// TextPainter draws the text on the key as long as text is not empty.
     ///
+    /// The text should be painted after the key to ensure it's up.
     if (keyText != null && keyText!.isNotEmpty) {
       final TextPainter textPainter = TextPainter(
         text: TextSpan(
           text: keyText,
           style: TextStyle(
             color: keyColor,
-            fontSize: 8 * zoomScale,
+            fontSize: .23 * size.height * zoomScale,
           ),
         ),
         textDirection: TextDirection.ltr,
@@ -58,12 +66,8 @@ class KeyRRectPainter extends CustomPainter {
       );
 
       textPainter.layout(minWidth: 0, maxWidth: size.width);
-      textPainter.paint(canvas, Offset(4 * zoomScale, 1 * zoomScale));
+      textPainter.paint(canvas, Offset(3 * zoomScale, 1 * zoomScale));
     }
-
-    RRect rrect = clipper.getClip(size).shift(Offset.zero);
-    // canvas.clipRRect(rrect);
-    canvas.drawRRect(rrect, paint);
   }
 
   @override
