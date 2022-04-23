@@ -56,9 +56,9 @@ class _WorkspaceState extends State<Workspace> {
                 ),
               ),
 
-              /// Keyboard widget takes a zoom scale that applies to all keys.
+              /// Keyboard widget takes a zoom scale which is applied to all keys.
               ///
-              /// This ensures seamless zooming of all parts of the keyboard.
+              /// This ensures seamless zooming of the entire keyboard.
               const Keyboard(zoomScale: 1.4),
               const Positioned(
                 bottom: 0,
