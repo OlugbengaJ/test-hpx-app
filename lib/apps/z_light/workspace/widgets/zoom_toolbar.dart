@@ -3,9 +3,17 @@ import 'package:flutter/services.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/round_button.dart';
 
 class ZoomToolbar extends StatelessWidget {
-  const ZoomToolbar({Key? key}) : super(key: key);
+  const ZoomToolbar({
+    Key? key,
+    required this.zoomTextController,
+    required this.zoomInHandler,
+    required this.zoomOutHandler,
+  }) : super(key: key);
 
-  final double _buttonSize = 24;
+  final TextEditingController zoomTextController;
+  final VoidCallback zoomInHandler;
+  final VoidCallback zoomOutHandler;
+  final double buttonSize = 24;
 
   @override
   Widget build(BuildContext context) {
@@ -26,12 +34,13 @@ class ZoomToolbar extends StatelessWidget {
           children: [
             RoundButton(
               iconData: Icons.add_circle_rounded,
-              size: _buttonSize,
-              onPressed: null,
+              size: buttonSize,
+              onPressed: zoomInHandler,
             ),
             Container(
               constraints: const BoxConstraints(maxWidth: 48, maxHeight: 24),
               child: TextField(
+                controller: zoomTextController,
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 decoration: const InputDecoration(
@@ -47,8 +56,8 @@ class ZoomToolbar extends StatelessWidget {
             ),
             RoundButton(
               iconData: Icons.remove_circle_rounded,
-              size: _buttonSize,
-              onPressed: null,
+              size: buttonSize,
+              onPressed: zoomOutHandler,
             ),
           ],
         ),

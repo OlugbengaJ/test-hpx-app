@@ -22,7 +22,8 @@ class _WorkspaceState extends State<Workspace> {
   double _zoomValue = 100;
   double _zoomScale = 1;
 
-  final TextEditingController _zoomCtrl = TextEditingController(text: '100');
+  final TextEditingController _zoomTextCtrl =
+      TextEditingController(text: '100');
 
   /// zoomIn increase the zoomValue only up to the zoomIn threshold
   /// preventing scenario where content is unnecessarily large.
@@ -46,9 +47,9 @@ class _WorkspaceState extends State<Workspace> {
     });
   }
 
-  /// updateZoom sets the zoom text and zoom scale.
+  /// updateZoom sets the zoom text (without fractions) and zoom scale.
   void _updateZoom() {
-    _zoomCtrl.text = '$_zoomValue';
+    _zoomTextCtrl.text = '${_zoomValue.ceil()}';
     _zoomScale = _zoomValue / 100;
   }
 
@@ -102,11 +103,17 @@ class _WorkspaceState extends State<Workspace> {
               ///
               /// This ensures seamless zooming of the entire keyboard.
               Keyboard(zoomScale: _zoomScale),
-              const Positioned(
+              Positioned(
                 bottom: 0,
                 left: 0,
                 right: 0,
-                child: Center(child: ZoomToolbar()),
+                child: Center(
+                  child: ZoomToolbar(
+                    zoomTextController: _zoomTextCtrl,
+                    zoomInHandler: _zoomIn,
+                    zoomOutHandler: _zoomOut,
+                  ),
+                ),
               )
             ],
           ),

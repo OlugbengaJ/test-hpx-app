@@ -18,6 +18,7 @@ class RoundButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
+      onLongPress: onPressed,
       // label: Text(buttonText ?? ''),
       style: ElevatedButton.styleFrom(
         fixedSize: Size(size, size),
