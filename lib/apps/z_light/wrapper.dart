@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:hpx/apps/z_light/app_constants.dart';
 import 'package:hpx/apps/z_light/tools_effects/tools_effects_wrapper.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
 import 'package:hpx/widgets/layouts/three_columns.dart';
@@ -22,7 +23,7 @@ class _WrapperState extends State<Wrapper> {
   final List<LayerStackItem> _layersStackItems = [];
   final int _nextIndex = 0;
   final int _currentIndex = 0;
-  String currentView = "workspace";
+  AppConstants currentView = AppConstants.workspace;
 
   @override
   void initState() {
@@ -52,7 +53,9 @@ class _WrapperState extends State<Wrapper> {
 
   _changeView() {
     setState(() {
-      currentView = (currentView == "workspace") ? "lighting" : 'workspace';
+      currentView = (currentView == AppConstants.workspace)
+          ? AppConstants.lighting
+          : AppConstants.workspace;
     });
   }
 
@@ -72,7 +75,7 @@ class _WrapperState extends State<Wrapper> {
                       TextButton(
                         style: TextButton.styleFrom(
                             fixedSize: const Size(150, 50),
-                            primary: (currentView == "workspace")
+                            primary: (currentView == AppConstants.workspace)
                                 ? Colors.white
                                 : Colors.grey,
                             backgroundColor: Colors.transparent,
@@ -91,7 +94,7 @@ class _WrapperState extends State<Wrapper> {
                       TextButton(
                         style: TextButton.styleFrom(
                             fixedSize: const Size(150, 50),
-                            primary: (currentView != "workspace")
+                            primary: (currentView != AppConstants.workspace)
                                 ? Colors.white
                                 : Colors.grey,
                             backgroundColor: Colors.transparent,
@@ -108,7 +111,7 @@ class _WrapperState extends State<Wrapper> {
         ),
       ),
       body: SafeArea(
-          child: (currentView == "workspace")
+          child: (currentView == AppConstants.workspace)
               ? Workspace(
                   currentIndex: _currentIndex, // For hide and show
                   layers: _layersStackItems,
