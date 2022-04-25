@@ -58,7 +58,7 @@ class KeyRRectPainter extends CustomPainter {
           text: keyText,
           style: TextStyle(
             color: keyColor,
-            fontSize: .23 * size.height * zoomScale,
+            fontSize: .3 * size.height,
           ),
         ),
         textDirection: TextDirection.ltr,
