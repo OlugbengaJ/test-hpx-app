@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 ThemeData darkTheme = ThemeData.dark().copyWith(
   visualDensity: VisualDensity.adaptivePlatformDensity,
+  highlightColor: Colors.transparent,
 );
 ThemeData lightTheme = ThemeData.light().copyWith(
   visualDensity: VisualDensity.adaptivePlatformDensity,

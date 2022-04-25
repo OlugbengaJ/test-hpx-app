@@ -10,6 +10,7 @@ class Color_Picker extends StatefulWidget {
       {Key? key,
       required this.title,
       required this.color,
+      this.picker,
       this.width,
       this.height,
       required this.leftTitle})
@@ -18,6 +19,7 @@ class Color_Picker extends StatefulWidget {
   final String title;
   final String leftTitle;
   final Color color;
+  final bool? picker;
   final double? width;
   final double? height;
 
@@ -30,36 +32,86 @@ class _Color_PickerState extends State<Color_Picker> {
     setState(() => pickerColor = color);
   }
 
+  void setCurrentColor(Color color) {
+    setState(() => {currentColor = color});
+    closeDialog();
+  }
+
+  void closeDialog() {
+    setState(() {});
+    Navigator.of(context).pop();
+  }
+
   void selectcolor() {
     showDialog(
-        // barrierColor: Colors.white.withOpacity(0),
-        barrierDismissible: true,
+        barrierColor: Colors.white.withOpacity(0),
+        barrierDismissible: false,
         context: context,
         builder: (context) {
           return SimpleDialog(
-              title: const Text('Pick a color!'),
               alignment: Alignment.topRight,
-              // insetPadding: EdgeInsets.only(top: 100, right: 330),
+              insetPadding: EdgeInsets.only(
+                  top: 100, right: MediaQuery.of(context).size.width * 0.175),
               contentPadding: const EdgeInsets.only(
                   top: 20, right: 10, bottom: 20, left: 10),
               children: <Widget>[
+                Text("Current Color",
+                    textAlign: TextAlign.left, style: h4Style),
+                Container(
+                    width: 30.0,
+                    height: 30.0,
+                    color: pickerColor,
+                    margin: const EdgeInsets.only(top: 10.0, bottom: 20.0)),
+                Text("Color Picker", textAlign: TextAlign.left, style: h4Style),
+                Container(margin: const EdgeInsets.only(top: 10.0)),
                 ColorPicker(
                   hexInputBar: true,
                   enableAlpha: true,
+                  // paletteType: PaletteType.hsvWithValue,
                   portraitOnly: true,
+                  colorPickerWidth: 200,
                   pickerColor: pickerColor,
                   onColorChanged: changeColor,
                 ),
-                TextButton(
-                    child: const Text("Got It"),
-                    style: TextButton.styleFrom(
-                      primary: Colors.black,
-                      backgroundColor: Colors.grey,
-                    ),
-                    onPressed: () {
-                      setState(() => currentColor = pickerColor);
-                      Navigator.of(context).pop();
-                    })
+                Container(
+                    margin: const EdgeInsets.only(top: 20.0, bottom: 20.0)),
+                Row(children: [
+                  Expanded(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                        TextButton(
+                            child: const Text("Cancel"),
+                            style: TextButton.styleFrom(
+                              primary: Colors.white,
+                              backgroundColor: Colors.red.shade900,
+                            ),
+                            onPressed: () {
+                              closeDialog();
+                            })
+                      ])),
+                  const VerticalDivider(
+                    width: 20,
+                    thickness: 1,
+                    color: Colors.transparent,
+                    indent: 20,
+                    endIndent: 0,
+                  ),
+                  Expanded(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                        TextButton(
+                            child: const Text("Got It"),
+                            style: TextButton.styleFrom(
+                              primary: Colors.black,
+                              backgroundColor: Colors.white70,
+                            ),
+                            onPressed: () {
+                              setCurrentColor(pickerColor);
+                            })
+                      ])),
+                ]),
               ]);
         });
   }
@@ -74,14 +126,16 @@ class _Color_PickerState extends State<Color_Picker> {
           children: [
             GestureDetector(
                 onTap: () {
-                  pickerColor = widget.color;
-                  selectcolor();
+                  currentColor = pickerColor = widget.color;
+                  (widget.picker == null || widget.picker == false)
+                      ? ''
+                      : selectcolor();
                 },
                 child: Container(
                   width: (widget.width == null)
                       ? MediaQuery.of(context).size.width * 0.3
                       : widget.width,
-                  height: (widget.width == null) ? 20.0 : widget.height,
+                  height: (widget.width == null) ? 30.0 : widget.height,
                   decoration: BoxDecoration(
                       color: widget.color,
                       border: Border.all(width: 1, color: Colors.grey)),

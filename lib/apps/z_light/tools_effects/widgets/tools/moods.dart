@@ -97,22 +97,27 @@ class _MoodPresetState extends State<MoodPreset> {
                       : [
                           Color_Picker(
                               leftTitle: 'Edit',
+                              picker: true,
                               title: 'Custom 1',
                               color: Colors.transparent),
                           Color_Picker(
                               leftTitle: 'Edit',
+                              picker: true,
                               title: 'Custom 2',
                               color: Colors.transparent),
                           Color_Picker(
                               leftTitle: 'Edit',
+                              picker: true,
                               title: 'Custom 3',
                               color: Colors.transparent),
                           Color_Picker(
                               leftTitle: 'Edit',
+                              picker: true,
                               title: 'Custom 4',
                               color: Colors.transparent),
                           Color_Picker(
                               leftTitle: 'Edit',
+                              picker: true,
                               title: 'Custom 5',
                               color: Colors.transparent),
                         ]),

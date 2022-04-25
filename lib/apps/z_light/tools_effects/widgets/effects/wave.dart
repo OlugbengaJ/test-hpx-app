@@ -13,8 +13,23 @@ class WavePreset extends StatefulWidget {
 class _WavePresetState extends State<WavePreset> {
   String activatedButton = "DEFAULT";
   double _currentSliderValue = 0.0;
-  double _currentAngleValue = 0.0;
-  TextEditingController degreeController = new TextEditingController();
+  final double _currentAngleValue = 0.0;
+  TextEditingController degreeController = TextEditingController();
+
+  void _setDegreeValue(double? returnValue) {
+    setState(() {
+      degreeController.text = (returnValue! < 0
+              ? (360 - (0 - returnValue) * (180 / pi))
+              : returnValue * (180 / pi))
+          .toStringAsFixed(2);
+    });
+  }
+
+  void _setSliderValue(double returnValue) {
+    setState(() {
+      _currentSliderValue = returnValue;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,39 +89,52 @@ class _WavePresetState extends State<WavePreset> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: (activatedButton == 'DEFAULT')
-                      ? [
-                          Color_Picker(
-                              leftTitle: '',
-                              title: 'Galaxy',
-                              color: Colors.orangeAccent),
-                          Color_Picker(
-                              leftTitle: '',
-                              title: 'Ocean',
-                              color: Colors.lightBlue),
-                          Color_Picker(
-                              leftTitle: '',
-                              title: 'Jungle',
-                              color: Colors.greenAccent),
-                          Color_Picker(
-                              leftTitle: '',
-                              title: 'Volcano',
-                              color: Colors.deepOrange),
-                          Color_Picker(
-                              leftTitle: '',
-                              title: 'OMEN',
-                              color: Colors.purple),
-                        ]
-                      : [
-                          Color_Picker(
-                              title: '',
-                              leftTitle: 'Edit',
-                              color: Colors.transparent)
-                        ]),
-            ),
+                margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Wrap(
+                          children: (activatedButton == 'DEFAULT')
+                              ? [
+                                  Color_Picker(
+                                      leftTitle: '',
+                                      title: 'Galaxy',
+                                      width: 30.0,
+                                      height: 30.0,
+                                      color: Colors.orangeAccent),
+                                  Color_Picker(
+                                      leftTitle: '',
+                                      title: 'Ocean',
+                                      width: 30.0,
+                                      height: 30.0,
+                                      color: Colors.lightBlue),
+                                  Color_Picker(
+                                      leftTitle: '',
+                                      title: 'Jungle',
+                                      width: 30.0,
+                                      height: 30.0,
+                                      color: Colors.greenAccent),
+                                  Color_Picker(
+                                      leftTitle: '',
+                                      title: 'Volcano',
+                                      width: 30.0,
+                                      height: 30.0,
+                                      color: Colors.deepOrange),
+                                  Color_Picker(
+                                      leftTitle: '',
+                                      title: 'OMEN',
+                                      width: 30.0,
+                                      height: 30.0,
+                                      color: Colors.purple),
+                                ]
+                              : [
+                                  Color_Picker(
+                                      title: '',
+                                      leftTitle: 'Edit',
+                                      picker: true,
+                                      color: Colors.transparent)
+                                ])
+                    ])),
             Container(margin: const EdgeInsets.only(bottom: 10.0)),
             const Divider(
               color: Colors.white,
@@ -122,9 +150,7 @@ class _WavePresetState extends State<WavePreset> {
               divisions: 100,
               label: _currentSliderValue.round().toString(),
               onChanged: (double value) {
-                setState(() {
-                  _currentSliderValue = value;
-                });
+                _setSliderValue(value);
               },
             ),
             Row(children: [
@@ -153,12 +179,7 @@ class _WavePresetState extends State<WavePreset> {
                   Expanded(
                       flex: 2,
                       child: RotateButton(onChange: (double? returnValue) {
-                        setState(() {
-                          degreeController.text = (returnValue! < 0
-                                  ? (360 - (0 - returnValue) * (180 / pi))
-                                  : returnValue * (180 / pi))
-                              .toStringAsFixed(2);
-                        });
+                        _setDegreeValue(returnValue);
                       })),
                   Expanded(
                       child: Column(

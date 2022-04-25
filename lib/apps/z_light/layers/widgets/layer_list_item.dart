@@ -26,8 +26,7 @@ class _LayerListItemState extends State<LayerListItem> {
   void initState() {
     super.initState();
     setState(() {
-      _layerNameController =
-          TextEditingController(text: widget.layerItemModel.layerText);
+      _layerNameController = TextEditingController(text: widget.layerItemModel.layerText);
     });
   }
 
@@ -39,12 +38,7 @@ class _LayerListItemState extends State<LayerListItem> {
 
   _toggleLayer(provider) {
     LayerItemModel layerItemModel = provider.getItem(widget.layerID);
-    provider.toggleVisibility(
-        LayerItemModel(
-            id: layerItemModel.id,
-            layerText: layerItemModel.layerText,
-            visible: !layerItemModel.visible),
-        widget.layerID);
+    provider.toggleVisibility(LayerItemModel(id: layerItemModel.id, layerText: layerItemModel.layerText, visible: !layerItemModel.visible, controller: layerItemModel.controller), widget.layerID);
   }
 
   _toggleEditing() {
@@ -53,7 +47,9 @@ class _LayerListItemState extends State<LayerListItem> {
     });
   }
 
-  _onTap() {}
+  _onTap(provider) {
+    provider.changeIndex(widget.layerID);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +63,7 @@ class _LayerListItemState extends State<LayerListItem> {
             hoverColor: Colors.transparent,
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            onTap: _onTap,
+            onTap: ()=> _onTap(_value),
             child: Container(
               padding: const EdgeInsets.all(2),
               color: Colors.black12,
@@ -124,8 +120,10 @@ class _LayerListItemState extends State<LayerListItem> {
                                               _value.getItem(widget.layerID);
                                           _value.update(
                                               LayerItemModel(
-                                                  id: widget.layerID,
-                                                  layerText: value),
+                                                id: widget.layerID,
+                                                layerText: value,
+                                                controller: layerItemModel.controller
+                                              ),
                                               widget.layerID);
                                         },
                                       ),
