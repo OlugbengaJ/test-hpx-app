@@ -62,13 +62,13 @@ class ZoomToolbar extends StatelessWidget {
                   controller: zoomTextController,
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.zero),
                         borderSide: BorderSide.none),
-                    fillColor: Colors.black,
+                    fillColor: Theme.of(context).primaryColor,
                     filled: true,
-                    contentPadding: EdgeInsets.all(0),
+                    contentPadding: const EdgeInsets.all(0),
                   ),
                   textAlign: TextAlign.center,
                 ),
