@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
@@ -17,32 +19,82 @@ class Workspace extends StatefulWidget {
 }
 
 class _WorkspaceState extends State<Workspace> {
+  final _zoomTextCtrl = TextEditingController(text: '100');
+
   final double _zoomInThreshold = 400;
   final double _zoomOutThreshold = 50;
   double _zoomValue = 100;
   double _zoomScale = 1;
 
-  final TextEditingController _zoomTextCtrl =
-      TextEditingController(text: '100');
+  Timer _timer = Timer.periodic(Duration.zero, ((t) {}));
+  final _duration = const Duration(milliseconds: 100);
 
-  /// zoomIn increase the zoomValue only up to the zoomIn threshold
+  /// zoomTextChanged ensure user enters only digits
+  /// that are within the acceptable zoom threshold.
+  void _zoomTextChanged() {
+    double? value = double.tryParse(_zoomTextCtrl.text);
+
+    if (value != null) {
+      if (value >= _zoomOutThreshold && value <= _zoomInThreshold) {
+        setState(() {
+          _zoomValue = value;
+          _zoomScale = _zoomValue / 100;
+        });
+      }
+    }
+  }
+
+  /// zoomEnd terminates continuous zoom
+  ///
+  /// timer is canceled to stop zooming by the duration specified
+  void _zoomEnd() {
+    _timer.cancel();
+  }
+
+  /// zoomIn increases the zoomValue only up to the zoomIn threshold
   /// preventing scenario where content is unnecessarily large.
   void _zoomIn() {
-    if (_zoomValue == _zoomInThreshold) return;
+    _timer = Timer.periodic(_duration, (t) {
+      if (_zoomValue == _zoomInThreshold) {
+        _timer.cancel();
+        return;
+      }
 
+      setState(() {
+        _zoomValue += 1;
+        _updateZoom();
+      });
+    });
+  }
+
+  /// zoomExpanded sets the zoomValue to half the zoomIn threshold.
+  void _zoomExpand() {
     setState(() {
-      _zoomValue += 1;
+      _zoomValue = _zoomInThreshold / 2;
       _updateZoom();
     });
   }
 
-  /// zoomOut decrease the zoomValue only up to the zoomOut threshold
+  /// zoomOut decreases the zoomValue only up to the zoomOut threshold
   /// preventing scenario where content is completely not visible.
   void _zoomOut() {
-    if (_zoomValue == _zoomOutThreshold) return;
+    _timer = Timer.periodic(_duration, (t) {
+      if (_zoomValue == _zoomOutThreshold) {
+        _timer.cancel();
+        return;
+      }
 
+      setState(() {
+        _zoomValue -= 1;
+        _updateZoom();
+      });
+    });
+  }
+
+  /// zoomCollapse sets the zoomValue to the double zoomOut threshold.
+  void _zoomCollapse() {
     setState(() {
-      _zoomValue -= 1;
+      _zoomValue = _zoomOutThreshold * 2;
       _updateZoom();
     });
   }
@@ -50,7 +102,21 @@ class _WorkspaceState extends State<Workspace> {
   /// updateZoom sets the zoom text (without fractions) and zoom scale.
   void _updateZoom() {
     _zoomTextCtrl.text = '${_zoomValue.ceil()}';
-    _zoomScale = _zoomValue / 100;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Start listening to changes.
+    _zoomTextCtrl.addListener(_zoomTextChanged);
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    _zoomTextCtrl.dispose();
+    super.dispose();
   }
 
   @override
@@ -111,7 +177,11 @@ class _WorkspaceState extends State<Workspace> {
                   child: ZoomToolbar(
                     zoomTextController: _zoomTextCtrl,
                     zoomInHandler: _zoomIn,
+                    zoomExpandHandler: _zoomExpand,
                     zoomOutHandler: _zoomOut,
+                    zoomCollapseHandler: _zoomCollapse,
+                    zoomEndHandler: _zoomEnd,
+                    // zoomTextChangedHandler: _zoomTextChanged,
                   ),
                 ),
               )
