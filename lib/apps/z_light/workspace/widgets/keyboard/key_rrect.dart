@@ -6,8 +6,9 @@ class KeyRRect extends StatelessWidget {
   const KeyRRect({
     Key? key,
     this.keyText,
+    this.keyTextColor,
+    this.keyTextDirection,
     required this.paintingStyle,
-    required this.keyColor,
     required this.keyPathColors,
     required this.keyLeft,
     required this.keyTop,
@@ -18,7 +19,8 @@ class KeyRRect extends StatelessWidget {
   }) : super(key: key);
 
   final String? keyText;
-  final Color keyColor;
+  final Color? keyTextColor;
+  final TextDirection? keyTextDirection;
   final List<Color> keyPathColors;
   final PaintingStyle paintingStyle;
 
@@ -45,7 +47,8 @@ class KeyRRect extends StatelessWidget {
       painter: KeyRRectPainter(
         paintingStyle: paintingStyle,
         keyText: keyText,
-        keyColor: keyColor,
+        keyTextColor: keyTextColor,
+        keyTextDirection: keyTextDirection,
         keyPathColors: keyPathColors,
         zoomScale: zoomScale,
         clipper: KeyRRectClipper(

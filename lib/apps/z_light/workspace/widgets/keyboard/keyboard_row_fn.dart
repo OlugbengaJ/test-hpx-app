@@ -22,7 +22,7 @@ class KeyboardRowFn extends StatelessWidget {
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key esc triggered'),
             keyText: 'Esc',
-            keyColor: Colors.orange,
+            keyTextColor: Colors.orange,
             keyPathColors: const [Colors.green, Colors.yellow],
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,

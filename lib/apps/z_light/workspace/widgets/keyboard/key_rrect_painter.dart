@@ -8,9 +8,10 @@ class KeyRRectPainter extends CustomPainter {
   const KeyRRectPainter({
     Listenable? repaint,
     this.keyText,
+    this.keyTextColor,
+    this.keyTextDirection,
     required this.paintingStyle,
     required this.keyPathColors,
-    required this.keyColor,
     required this.clipper,
     required this.zoomScale,
   }) : super(repaint: repaint);
@@ -18,8 +19,9 @@ class KeyRRectPainter extends CustomPainter {
   final CustomClipper<RRect> clipper;
 
   final String? keyText;
+  final Color? keyTextColor;
+  final TextDirection? keyTextDirection;
   final List<Color> keyPathColors;
-  final Color keyColor;
 
   final double zoomScale;
   final PaintingStyle paintingStyle;
@@ -30,39 +32,50 @@ class KeyRRectPainter extends CustomPainter {
     final int _pathColorsLength = keyPathColors.length;
 
     final Paint paint = Paint()
-      // ..color = keyPathColor.withOpacity(1)
-      // ..colorFilter = ColorFilter.mode(keyPathColors, BlendMode.luminosity)
-      ..shader = ui.Gradient.radial(
+      ..style = paintingStyle
+      ..strokeWidth = _defaultStrokeWidth * zoomScale * 0.009211208
+      ..strokeCap = StrokeCap.round;
+
+    /// use Paint.shader when multiple colors supplied, else set the color.
+    if (keyPathColors.length > 1) {
+      paint.shader = ui.Gradient.radial(
         Offset.zero,
         size.width,
         keyPathColors,
         keyPathColors.map((element) {
           return keyPathColors.indexOf(element) / (_pathColorsLength - 1);
         }).toList(),
-      )
-      ..style = paintingStyle
-      ..strokeWidth =
-          _defaultStrokeWidth * zoomScale * 0.009211208 //0.0009211208
-      ..strokeCap = StrokeCap.round;
+      );
+    } else {
+      Color keyPathColor = keyPathColors.first;
+      paint
+        ..color = keyPathColor.withOpacity(1)
+        ..colorFilter = ColorFilter.mode(keyPathColor, BlendMode.luminosity);
+    }
 
     RRect rrect = clipper.getClip(size).shift(Offset.zero);
+
+    /// canvas.clipRRect(rrect) can be called for a more aggressive clip.
+    ///
+    /// However this was disabled because the left and bottom
+    /// of the key looked thiner than the top and right.
     // canvas.clipRRect(rrect);
     canvas.drawRRect(rrect, paint);
 
     /// TextPainter draws the text on the key as long as text is not empty.
     ///
-    /// The text should be painted after the key to ensure it's up.
+    /// The text should be painted after the key to ensure it's displayed.
     if (keyText != null && keyText!.isNotEmpty) {
       final TextPainter textPainter = TextPainter(
         text: TextSpan(
           text: keyText,
           style: TextStyle(
-            color: keyColor,
+            color: keyTextColor,
             fontSize: .3 * size.height,
           ),
         ),
-        textDirection: TextDirection.ltr,
-        locale: const Locale.fromSubtags(languageCode: 'fr'),
+        textDirection: keyTextDirection,
+        locale: const Locale.fromSubtags(languageCode: 'en'),
       );
 
       textPainter.layout(minWidth: 0, maxWidth: size.width);

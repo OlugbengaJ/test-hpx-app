@@ -22,7 +22,7 @@ class KeyboardRowNum extends StatelessWidget {
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key tilda triggered'),
             keyText: '` ~',
-            keyColor: Colors.purple.shade200,
+            keyTextColor: Colors.purple.shade200,
             keyPathColors: const [Colors.pinkAccent, Colors.indigo],
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,

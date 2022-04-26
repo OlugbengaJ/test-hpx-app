@@ -6,11 +6,12 @@ class KeyboardKey extends StatelessWidget {
     Key? key,
     this.onTapHandler,
     this.keyText,
-    this.keyColor = Colors.white,
+    this.keyTextColor = Colors.white,
+    this.keyTextDirection = TextDirection.ltr,
     this.keyPathColors = const [Colors.red, Colors.white],
+    this.paintingStyle = PaintingStyle.stroke,
     this.keyLeft = 0,
     this.keyTop = 0,
-    this.paintingStyle = PaintingStyle.stroke,
     required this.keyWidth,
     required this.keyHeight,
     required this.keyRadius,
@@ -20,7 +21,8 @@ class KeyboardKey extends StatelessWidget {
   final VoidCallback? onTapHandler;
 
   final String? keyText;
-  final Color? keyColor;
+  final Color? keyTextColor;
+  final TextDirection? keyTextDirection;
   final List<Color>? keyPathColors;
   final PaintingStyle paintingStyle;
 
@@ -41,7 +43,8 @@ class KeyboardKey extends StatelessWidget {
             child: KeyRRect(
               paintingStyle: paintingStyle,
               keyText: keyText,
-              keyColor: keyColor!,
+              keyTextColor: keyTextColor,
+              keyTextDirection: keyTextDirection,
               keyPathColors: keyPathColors!,
               zoomScale: zoomScale,
               keyLeft: keyLeft * zoomScale,
