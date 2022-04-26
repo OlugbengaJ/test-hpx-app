@@ -5,6 +5,7 @@ class KeyboardKey extends StatelessWidget {
   const KeyboardKey({
     Key? key,
     this.onTapHandler,
+    required this.keyCode,
     this.keyText,
     this.keyTextColor = Colors.white,
     this.keyTextDirection = TextDirection.ltr,
@@ -20,6 +21,7 @@ class KeyboardKey extends StatelessWidget {
 
   final VoidCallback? onTapHandler;
 
+  final String keyCode;
   final String? keyText;
   final Color? keyTextColor;
   final TextDirection? keyTextDirection;

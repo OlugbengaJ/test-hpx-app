@@ -22,6 +22,7 @@ class KeyboardRowCaps extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key Caps Lock triggered'),
+            keyCode: 'KEY_CAPS',
             keyText: 'Caps Lock',
             keyWidth: _capsKeyWidth,
             keyHeight: _keyHeight,
@@ -33,6 +34,7 @@ class KeyboardRowCaps extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key A triggered'),
+            keyCode: 'KEY_A',
             keyText: 'A',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -44,6 +46,7 @@ class KeyboardRowCaps extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key S triggered'),
+            keyCode: 'KEY_S',
             keyText: 'S',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -55,6 +58,7 @@ class KeyboardRowCaps extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key D triggered'),
+            keyCode: 'KEY_D',
             keyText: 'D',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -66,6 +70,7 @@ class KeyboardRowCaps extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key F triggered'),
+            keyCode: 'KEY_F',
             keyText: 'F',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -77,6 +82,7 @@ class KeyboardRowCaps extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key G triggered'),
+            keyCode: 'KEY_G',
             keyText: 'G',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -88,6 +94,7 @@ class KeyboardRowCaps extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key H triggered'),
+            keyCode: 'KEY_H',
             keyText: 'H',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -99,6 +106,7 @@ class KeyboardRowCaps extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key J triggered'),
+            keyCode: 'KEY_J',
             keyText: 'J',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -110,6 +118,7 @@ class KeyboardRowCaps extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key K triggered'),
+            keyCode: 'KEY_K',
             keyText: 'K',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -121,6 +130,7 @@ class KeyboardRowCaps extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key L triggered'),
+            keyCode: 'KEY_L',
             keyText: 'L',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -132,6 +142,7 @@ class KeyboardRowCaps extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key ; triggered'),
+            keyCode: 'KEY_COLON',
             keyText: '; :',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -143,6 +154,7 @@ class KeyboardRowCaps extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key \' triggered'),
+            keyCode: 'KEY_QUOTE',
             keyText: '\' "',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -154,6 +166,7 @@ class KeyboardRowCaps extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key Enter triggered'),
+            keyCode: 'KEY_ENTER',
             keyText: 'Enter',
             keyWidth: _enterKeyWidth,
             keyHeight: _keyHeight,

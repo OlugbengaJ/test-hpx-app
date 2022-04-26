@@ -22,6 +22,7 @@ class KeyboardRowShift extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key Left Shift triggered'),
+            keyCode: 'KEY_SHIFT_LEFT',
             keyText: 'Shift',
             keyWidth: _lShiftKeyWidth,
             keyHeight: _keyHeight,
@@ -33,6 +34,7 @@ class KeyboardRowShift extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key Z triggered'),
+            keyCode: 'KEY_Z',
             keyText: 'Z',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -44,6 +46,7 @@ class KeyboardRowShift extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key X triggered'),
+            keyCode: 'KEY_X',
             keyText: 'X',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -55,6 +58,7 @@ class KeyboardRowShift extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key C triggered'),
+            keyCode: 'KEY_C',
             keyText: 'C',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -66,6 +70,7 @@ class KeyboardRowShift extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key V triggered'),
+            keyCode: 'KEY_V',
             keyText: 'V',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -77,6 +82,7 @@ class KeyboardRowShift extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key B triggered'),
+            keyCode: 'KEY_B',
             keyText: 'B',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -88,6 +94,7 @@ class KeyboardRowShift extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key N triggered'),
+            keyCode: 'KEY_N',
             keyText: 'N',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -99,6 +106,7 @@ class KeyboardRowShift extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key M triggered'),
+            keyCode: 'KEY_M',
             keyText: 'M',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -110,6 +118,7 @@ class KeyboardRowShift extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key , triggered'),
+            keyCode: 'KEY_COMMA',
             keyText: ', <',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -121,6 +130,7 @@ class KeyboardRowShift extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key period . triggered'),
+            keyCode: 'KEY_PERIOD',
             keyText: '. >',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -132,6 +142,7 @@ class KeyboardRowShift extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key / triggered'),
+            keyCode: 'KEY_FORWARD_SLASH',
             keyText: '/ ?',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -143,6 +154,7 @@ class KeyboardRowShift extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key Right Shift triggered'),
+            keyCode: 'KEY_SHIFT_RIGHT',
             keyText: 'Shift',
             keyWidth: _rShiftKeyWidth,
             keyHeight: _keyHeight,

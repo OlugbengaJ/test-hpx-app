@@ -25,6 +25,7 @@ class KeyboardRowCtrl extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key Left Ctrl triggered'),
+            keyCode: 'KEY_CTRL_LEFT',
             keyText: 'Ctrl',
             keyWidth: _lCtrlKeyWidth,
             keyHeight: _keyHeight,
@@ -36,6 +37,7 @@ class KeyboardRowCtrl extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key Fn triggered'),
+            keyCode: 'KEY_FN',
             keyText: 'Fn',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -47,6 +49,7 @@ class KeyboardRowCtrl extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key Win triggered'),
+            keyCode: 'KEY_WIN',
             keyText: 'Win',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -58,6 +61,7 @@ class KeyboardRowCtrl extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key Left Alt triggered'),
+            keyCode: 'KEY_ALT_LEFT',
             keyText: 'Alt',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -69,6 +73,7 @@ class KeyboardRowCtrl extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key Spacebar triggered'),
+            keyCode: 'KEY_SPACEBAR',
             keyWidth: _spacebarKeyWidth,
             keyHeight: _keyHeight,
             keyRadius: _keyRadius,
@@ -79,6 +84,7 @@ class KeyboardRowCtrl extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key Right Alt triggered'),
+            keyCode: 'KEY_ALT_RIGHT',
             keyText: 'Alt',
             keyWidth: _keyWidth,
             keyHeight: _keyHeight,
@@ -90,6 +96,7 @@ class KeyboardRowCtrl extends StatelessWidget {
           padding: EdgeInsets.all(_zoomedPadding),
           child: KeyboardKey(
             onTapHandler: () => debugPrint('\r\n key Right Ctrl triggered'),
+            keyCode: 'KEY_CTRL_RIGHT',
             keyText: 'Ctrl',
             keyWidth: _rCtrlKeyWidth,
             keyHeight: _keyHeight,
@@ -107,6 +114,7 @@ class KeyboardRowCtrl extends StatelessWidget {
                   KeyboardKey(
                     onTapHandler: () =>
                         debugPrint('\r\n key Page Up triggered'),
+                    keyCode: 'KEY_PAGE_UP',
                     keyText: 'P.Up',
                     keyWidth: _keyWidth,
                     keyHeight: _arrowKeyHeight,
@@ -115,6 +123,7 @@ class KeyboardRowCtrl extends StatelessWidget {
                   ),
                   KeyboardKey(
                     onTapHandler: () => debugPrint('\r\n key Up triggered'),
+                    keyCode: 'KEY_ARROW_UP',
                     keyText: '↑',
                     keyWidth: _keyWidth,
                     keyHeight: _arrowKeyHeight,
@@ -124,6 +133,7 @@ class KeyboardRowCtrl extends StatelessWidget {
                   KeyboardKey(
                     onTapHandler: () =>
                         debugPrint('\r\n key Page Down triggered'),
+                    keyCode: 'KEY_PAGE_DOWN',
                     keyText: 'P.Down',
                     keyWidth: _keyWidth,
                     keyHeight: _arrowKeyHeight,
@@ -136,6 +146,7 @@ class KeyboardRowCtrl extends StatelessWidget {
                 children: [
                   KeyboardKey(
                     onTapHandler: () => debugPrint('\r\n key Left triggered'),
+                    keyCode: 'KEY_ARROW_LEFT',
                     keyText: '←',
                     keyWidth: _keyWidth,
                     keyHeight: _arrowKeyHeight,
@@ -144,6 +155,7 @@ class KeyboardRowCtrl extends StatelessWidget {
                   ),
                   KeyboardKey(
                     onTapHandler: () => debugPrint('\r\n key Down triggered'),
+                    keyCode: 'KEY_ARROW_DOWN',
                     keyText: '↓',
                     keyWidth: _keyWidth,
                     keyHeight: _arrowKeyHeight,
@@ -152,6 +164,7 @@ class KeyboardRowCtrl extends StatelessWidget {
                   ),
                   KeyboardKey(
                     onTapHandler: () => debugPrint('\r\n key Right triggered'),
+                    keyCode: 'KEY_ARROW_RIGHT',
                     keyText: '→',
                     keyWidth: _keyWidth,
                     keyHeight: _arrowKeyHeight,
