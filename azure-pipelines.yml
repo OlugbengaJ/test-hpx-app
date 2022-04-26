@@ -1,20 +1,108 @@
-# Xcode
-# Build, test, and archive an Xcode workspace on macOS.
-# Add steps that install certificates, test, sign, and distribute an app, save build artifacts, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/xcode
-
 trigger:
-- development
+-  main
 
-pool:
-  vmImage: 'macos-latest'
+# variables:
+#   buildConfiguration: 'Release'
 
-steps:
-- task: Xcode@5
-  inputs:
-    actions: 'build'
-    scheme: ''
-    sdk: 'iphoneos'
-    configuration: 'Release'
-    xcWorkspacePath: '**/*.xcodeproj/project.xcworkspace'
-    xcodeVersion: 'default' # Options: 8, 9, 10, 11, 12, default, specifyPath
+jobs:
+- job: Android
+  displayName: 'Build Andriod'
+  pool:
+    vmImage: 'macOS-latest'
+
+  steps:
+  - task: FlutterInstall@0
+
+  - task: FlutterBuild@0
+    inputs:
+      target: apk
+      projectDirectory: $(Build.SourcesDirectory)
+
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(Build.SourcesDirectory)/build/app/outputs/flutter-apk'
+      contents: 'app.apk'
+      targetFolder: '$(build.artifactStagingDirectory)'
+  
+  - task: PublishBuildArtifacts@1
+    inputs: 
+      pathToPublish: '$(Build.ArtifactStagingDirectory)' 
+      artifactName: APK
+      #publishLocation: 'Container' # Options: container, filePath
+      # targetPath: $(Build.Repository.LocalPath)/build/app/outputs/flutter-apk/app.apk
+      # artifactType: pipeline
+  
+
+- job: WEB
+  displayName: 'WEB'
+  pool:
+    vmImage: 'macOS-latest'
+
+  steps:
+  - task: FlutterInstall@0
+
+  - task: FlutterBuild@0
+    inputs:
+      target: web
+      projectDirectory: $(Build.SourcesDirectory)
+
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(Build.SourcesDirectory)/build/web'
+      #contents: 'app.apk'
+      targetFolder: '$(build.artifactStagingDirectory)'
+  
+  - task: PublishBuildArtifacts@1
+    inputs: 
+      pathToPublish: '$(Build.ArtifactStagingDirectory)' 
+      artifactName: WEB
+      #publishLocation: 'Container' # Options: container, filePath
+      # targetPath: $(Build.Repository.LocalPath)/build/app/outputs/flutter-apk/app.apk
+      # artifactType: pipeline
+
+- job: Windows
+  displayName: 'Windows'
+  pool:
+    vmImage: 'windows-latest'
+
+  steps:
+  - task: FlutterInstall@0
+
+  - task: FlutterBuild@0
+    inputs:
+      target: windows
+      projectDirectory: $(Build.SourcesDirectory)
+
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(Build.SourcesDirectory)/build/windows/runner/Release'
+      targetFolder: '$(build.artifactStagingDirectory)'
+  
+  - task: PublishBuildArtifacts@1
+    inputs: 
+      pathToPublish: '$(Build.ArtifactStagingDirectory)' 
+      artifactName: Windows
+
+
+- job: Linux
+  displayName: 'Linux'
+  pool:
+    vmImage: 'ubuntu-20.04'
+
+  steps:
+  - task: FlutterInstall@0
+
+  - task: FlutterBuild@0
+    inputs:
+      target: linux
+      projectDirectory: $(Build.SourcesDirectory)
+
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: '$(Build.SourcesDirectory)'
+      targetFolder: '$(build.artifactStagingDirectory)'
+  
+  - task: PublishBuildArtifacts@1
+    inputs: 
+      pathToPublish: '$(Build.ArtifactStagingDirectory)' 
+      artifactName: Linux
