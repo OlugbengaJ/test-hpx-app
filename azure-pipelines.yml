@@ -4,6 +4,10 @@ trigger:
 # variables:
 #   buildConfiguration: 'Release'
 
+
+
+
+# Andriod Build
 jobs:
 - job: Android
   displayName: 'Build Andriod'
@@ -31,8 +35,11 @@ jobs:
       #publishLocation: 'Container' # Options: container, filePath
       # targetPath: $(Build.Repository.LocalPath)/build/app/outputs/flutter-apk/app.apk
       # artifactType: pipeline
-  
 
+
+
+
+# WEB Build
 - job: WEB
   displayName: 'WEB'
   pool:
@@ -49,7 +56,6 @@ jobs:
   - task: CopyFiles@2
     inputs:
       sourceFolder: '$(Build.SourcesDirectory)/build/web'
-      #contents: 'app.apk'
       targetFolder: '$(build.artifactStagingDirectory)'
   
   - task: PublishBuildArtifacts@1
@@ -60,6 +66,10 @@ jobs:
       # targetPath: $(Build.Repository.LocalPath)/build/app/outputs/flutter-apk/app.apk
       # artifactType: pipeline
 
+
+
+
+# Windows Build
 - job: Windows
   displayName: 'Windows'
   pool:
@@ -84,13 +94,28 @@ jobs:
       artifactName: Windows
 
 
+
+
+# Linux Build
 - job: Linux
   displayName: 'Linux'
   pool:
-    vmImage: 'ubuntu-20.04'
+    vmImage: 'ubuntu-latest'
 
   steps:
   - task: FlutterInstall@0
+
+  - task: Bash@3
+    displayName: 'Enable linux desktop flutter'
+    inputs:
+      targetType: 'inline'
+      script: |
+        set -e ; set -o pipefail
+        $(FlutterToolPath)/flutter --version
+        export PATH=$PATH:$(FlutterToolPath)
+        sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+        flutter config --enable-linux-desktop
+        flutter create --platforms=linux .
 
   - task: FlutterBuild@0
     inputs:
@@ -99,7 +124,7 @@ jobs:
 
   - task: CopyFiles@2
     inputs:
-      sourceFolder: '$(Build.SourcesDirectory)'
+      sourceFolder: '$(Build.SourcesDirectory)/build/linux/x64/release/bundle'
       targetFolder: '$(build.artifactStagingDirectory)'
   
   - task: PublishBuildArtifacts@1
