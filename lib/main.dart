@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/wrapper.dart';
+import 'package:hpx/providers/keyboard_provider.dart';
 import 'package:hpx/providers/layers.dart';
 import 'package:provider/provider.dart';
 import "widgets/theme.dart";
@@ -7,6 +8,7 @@ import "widgets/theme.dart";
 void main() => runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LayersProvider()),
+        ChangeNotifierProvider(create: (context) => KeyboardProvider()),
       ],
       child: const MyApp(),
     ));
