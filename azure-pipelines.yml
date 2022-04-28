@@ -1,8 +1,11 @@
-trigger:
--  development
-
-# variables:
-#   buildConfiguration: 'Release'
+pr:
+  branches:
+    include:
+    - development
+    - qa
+  paths:
+    exclude:
+    - README.md
 
 
 
