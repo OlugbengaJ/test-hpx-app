@@ -21,9 +21,7 @@ class Wrapper extends StatefulWidget {
 class _WrapperState extends State<Wrapper> {
   final List<LayerListItem> _layersListItems = [];
   final List<LayerStackItem> _layersStackItems = [];
-  final int _nextIndex = 0;
-  final int _currentIndex = 0;
-  AppConstants currentView = AppConstants.workspace;
+  AppConstants _currentView = AppConstants.workspace;
 
   @override
   void initState() {
@@ -53,7 +51,7 @@ class _WrapperState extends State<Wrapper> {
 
   _changeView() {
     setState(() {
-      currentView = (currentView == AppConstants.workspace)
+      _currentView = (_currentView == AppConstants.workspace)
           ? AppConstants.lighting
           : AppConstants.workspace;
     });
@@ -75,7 +73,7 @@ class _WrapperState extends State<Wrapper> {
                       TextButton(
                         style: TextButton.styleFrom(
                             fixedSize: const Size(150, 50),
-                            primary: (currentView == AppConstants.workspace)
+                            primary: (_currentView == AppConstants.workspace)
                                 ? Colors.white
                                 : Colors.grey,
                             backgroundColor: Colors.transparent,
@@ -94,7 +92,7 @@ class _WrapperState extends State<Wrapper> {
                       TextButton(
                         style: TextButton.styleFrom(
                             fixedSize: const Size(150, 50),
-                            primary: (currentView != AppConstants.workspace)
+                            primary: (_currentView != AppConstants.workspace)
                                 ? Colors.white
                                 : Colors.grey,
                             backgroundColor: Colors.transparent,
@@ -111,17 +109,17 @@ class _WrapperState extends State<Wrapper> {
         ),
       ),
       body: SafeArea(
-          child: (currentView == AppConstants.workspace)
+          child: (_currentView == AppConstants.workspace)
               ? Workspace(
-                  currentIndex: _currentIndex, // For hide and show
                   layers: _layersStackItems,
+                  currentView: _currentView,
                 )
               : ThreeColumns(
                   left: Layers(
                       onReorder: _updateLayers, layers: _layersListItems),
                   center: Workspace(
-                    currentIndex: _currentIndex, // For hide and show
                     layers: _layersStackItems,
+                    currentView: _currentView,
                   ),
                   right: const ToolsEffectsWrapper(),
                 )),

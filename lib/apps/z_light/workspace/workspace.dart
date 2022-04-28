@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:hpx/apps/z_light/app_constants.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
@@ -8,11 +9,11 @@ import 'package:hpx/apps/z_light/workspace/widgets/zoom_toolbar.dart';
 import 'package:hpx/widgets/theme.dart';
 
 class Workspace extends StatefulWidget {
-  const Workspace({Key? key, required this.layers, required this.currentIndex})
+  const Workspace({Key? key, required this.layers, required this.currentView})
       : super(key: key);
 
   final List<LayerStackItem> layers;
-  final int currentIndex;
+  final AppConstants currentView;
 
   @override
   State<Workspace> createState() => _WorkspaceState();
@@ -22,7 +23,7 @@ class _WorkspaceState extends State<Workspace> {
   final _zoomTextCtrl = TextEditingController(text: '100');
 
   final double _zoomInThreshold = 400;
-  final double _zoomOutThreshold = 50;
+  final double _zoomOutThreshold = 60;
   double _zoomValue = 100;
   double _zoomScale = 1;
 
@@ -91,10 +92,10 @@ class _WorkspaceState extends State<Workspace> {
     });
   }
 
-  /// zoomCollapse sets the zoomValue to the double zoomOut threshold.
+  /// zoomCollapse sets the zoomValue to the zoomOut threshold.
   void _zoomCollapse() {
     setState(() {
-      _zoomValue = _zoomOutThreshold * 2;
+      _zoomValue = _zoomOutThreshold;
       _updateZoom();
     });
   }
@@ -131,22 +132,24 @@ class _WorkspaceState extends State<Workspace> {
         /// Setting width/height with double.infinity is not recommended,
         /// instead we want to keep the view constrained and have excessive
         /// sub-widgets cliped only to the view.
-        ConstrainedBox(
-          constraints: const BoxConstraints(maxHeight: 80),
-          child: Container(
-            margin: const EdgeInsets.only(right: 5.0, top: 20.0, bottom: 20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'Zone Selection',
-                  textAlign: TextAlign.left,
-                  style: h4Style,
-                ),
-              ],
+        if (widget.currentView == AppConstants.lighting)
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 80),
+            child: Container(
+              margin:
+                  const EdgeInsets.only(right: 5.0, top: 20.0, bottom: 20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'Zone Selection',
+                    textAlign: TextAlign.left,
+                    style: h4Style,
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
         Expanded(
           child: Stack(
             alignment: Alignment.bottomLeft,
@@ -161,14 +164,31 @@ class _WorkspaceState extends State<Workspace> {
                 ),
                 child: LayersStack(
                   layers: widget.layers,
-                  currentIndex: widget.currentIndex,
+                  currentIndex: 0,
                 ),
               ),
 
               /// Keyboard widget takes a zoom scale which is applied to all keys.
               ///
               /// This ensures seamless zooming of the entire keyboard.
-              Keyboard(zoomScale: _zoomScale),
+              LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  return InteractiveViewer(
+                    onInteractionUpdate: (details) {
+                      debugPrint('max height ${constraints.maxHeight}');
+                      debugPrint('iv update=> scale: ${details.scale}');
+                      final v = _zoomScale * details.scale;
+
+                      // _zoomTextCtrl.text =
+                      //     '${details.localFocalPoint.distance}';
+                      // debugPrint('iv focal point: ${details.focalPoint}');
+                    },
+                    minScale: 0.8,
+                    maxScale: 4,
+                    child: Keyboard(zoomScale: _zoomScale),
+                  );
+                },
+              ),
               Positioned(
                 bottom: 0,
                 left: 0,

@@ -37,16 +37,6 @@ class KeyboardKeyCopy extends StatelessWidget {
             ),
           ),
         ),
-        // Align(
-        //   alignment: Alignment.topCenter,
-        //   child: Padding(
-        //     padding: const EdgeInsets.only(top: 100),
-        //     child: Text(
-        //       'Keys',
-        //       style: Theme.of(context).textTheme.headline1,
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }

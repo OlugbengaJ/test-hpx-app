@@ -3,6 +3,7 @@ import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard_key.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard_key_copy.dart';
 import 'package:hpx/providers/keyboard_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:hpx/apps/z_light/globals.dart';
 
 class KeyboardRowFn extends StatelessWidget {
   const KeyboardRowFn({Key? key, required this.zoomScale}) : super(key: key);
@@ -41,19 +42,7 @@ class KeyboardRowFn extends StatelessWidget {
               keyModel: keyModel,
               zoomScale: zoomScale,
             );
-          }
-              // KeyboardKey(
-              //   onTapHandler: () => debugPrint('\r\n key esc triggered'),
-              // decimalId: 27,
-              //   keyText: 'Esc',
-              //   keyTextColor: Colors.orange,
-              //   keyPathColors: const [Colors.green, Colors.yellow],
-              //   keyWidth: _keyWidth,
-              //   keyHeight: _keyHeight,
-              //   keyRadius: _keyRadius,
-              //   zoomScale: zoomScale,
-              // ),
-              ),
+          }),
         ),
         Padding(
           padding: EdgeInsets.all(_zoomedPadding),
@@ -68,9 +57,50 @@ class KeyboardRowFn extends StatelessWidget {
                   // zoomScale: keyModel.zoomScale,
                   paintingStyle: PaintingStyle.fill);
 
+              // TODO: Snackbar test
+              const SnackBar snackBar = SnackBar(
+                // duration: Duration(milliseconds: 0),
+                behavior: SnackBarBehavior.floating,
+                content: Text('Yummy in the tummy'),
+              );
+              scaffoldKey.currentState?.showSnackBar(snackBar);
+
               c.add(newKey);
+
               debugPrint('\r\n key F1 triggered');
             },
+            keyCode: 'KEY_F1',
+            keyText: 'F1',
+            keyWidth: _fnKeyWidth,
+            keyHeight: _keyHeight,
+            keyRadius: _keyRadius,
+            zoomScale: zoomScale,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(_zoomedPadding),
+          child: KeyboardKey(
+            onTapHandler: () => debugPrint('\r\n key esc triggered'),
+            keyCode: 'KEY_ESC',
+            keyText: 'Esc',
+            keyTextColor: Colors.orange,
+            keyPathColors: const [
+              Colors.green,
+              Colors.red,
+              Colors.yellow,
+              Colors.indigo
+            ],
+            keyWidth: _keyWidth,
+            keyHeight: _keyHeight,
+            keyRadius: _keyRadius,
+            paintingStyle: PaintingStyle.fill,
+            zoomScale: zoomScale,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(_zoomedPadding),
+          child: KeyboardKey(
+            onTapHandler: () => debugPrint('\r\n key F1 triggered'),
             keyCode: 'KEY_F1',
             keyText: 'F1',
             keyWidth: _fnKeyWidth,
