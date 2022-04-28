@@ -131,6 +131,8 @@ jobs:
       targetFolder: '$(build.artifactStagingDirectory)'
   
   - task: PublishBuildArtifacts@1
+    displayName: Publish built ISO image
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
     inputs: 
       pathToPublish: '$(Build.ArtifactStagingDirectory)' 
       artifactName: Linux
