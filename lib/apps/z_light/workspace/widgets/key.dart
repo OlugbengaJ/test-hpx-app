@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 
+/// KeyCustomPainter is a reference to a custom key layout.
+///
+/// Although it is not imported anywhere in the project, it was written as
+/// an initial proof of concept which served as a guide to the current code
+/// setup for the keyboard rendering.
 class KeyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    // debugPrint('h ${size.height}, w ${size.width}');
     // var rect = ui.Offset.zero & size;
     // canvas.clipRect(rect);
 
@@ -2194,4 +2198,3 @@ class KeyCustomPainter extends CustomPainter {
     return true;
   }
 }
-
