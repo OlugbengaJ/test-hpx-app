@@ -7,7 +7,13 @@ pr:
     exclude:
     - README.md
 
-
+variables:
+- name: BranchSource
+  value: $[ variables['Build.SourceBranch'] ]
+- name: isDevelopment
+  value: refs/heads/development
+- name: isQA
+  value: refs/heads/qa
 
 
 # Andriod Build
@@ -26,12 +32,14 @@ jobs:
       projectDirectory: $(Build.SourcesDirectory)
 
   - task: CopyFiles@2
+    condition: or(and(succeeded(), eq(variables.BranchSource, variables.isDevelopment)), and(succeeded(), eq(variables.BranchSource, variables.isQA)))
     inputs:
       sourceFolder: '$(Build.SourcesDirectory)/build/app/outputs/flutter-apk'
       contents: 'app.apk'
       targetFolder: '$(build.artifactStagingDirectory)'
   
   - task: PublishBuildArtifacts@1
+    condition: or(and(succeeded(), eq(variables.BranchSource, variables.isDevelopment)), and(succeeded(), eq(variables.BranchSource, variables.isQA)))
     inputs: 
       pathToPublish: '$(Build.ArtifactStagingDirectory)' 
       artifactName: APK
@@ -57,11 +65,13 @@ jobs:
       projectDirectory: $(Build.SourcesDirectory)
 
   - task: CopyFiles@2
+    condition: or(and(succeeded(), eq(variables.BranchSource, variables.isDevelopment)), and(succeeded(), eq(variables.BranchSource, variables.isQA)))
     inputs:
       sourceFolder: '$(Build.SourcesDirectory)/build/web'
       targetFolder: '$(build.artifactStagingDirectory)'
   
   - task: PublishBuildArtifacts@1
+    condition: or(and(succeeded(), eq(variables.BranchSource, variables.isDevelopment)), and(succeeded(), eq(variables.BranchSource, variables.isQA)))
     inputs: 
       pathToPublish: '$(Build.ArtifactStagingDirectory)' 
       artifactName: WEB
@@ -87,11 +97,13 @@ jobs:
       projectDirectory: $(Build.SourcesDirectory)
 
   - task: CopyFiles@2
+    condition: or(and(succeeded(), eq(variables.BranchSource, variables.isDevelopment)), and(succeeded(), eq(variables.BranchSource, variables.isQA)))
     inputs:
       sourceFolder: '$(Build.SourcesDirectory)/build/windows/runner/Release'
       targetFolder: '$(build.artifactStagingDirectory)'
   
   - task: PublishBuildArtifacts@1
+    condition: or(and(succeeded(), eq(variables.BranchSource, variables.isDevelopment)), and(succeeded(), eq(variables.BranchSource, variables.isQA)))
     inputs: 
       pathToPublish: '$(Build.ArtifactStagingDirectory)' 
       artifactName: Windows
@@ -126,13 +138,13 @@ jobs:
       projectDirectory: $(Build.SourcesDirectory)
 
   - task: CopyFiles@2
+    condition: or(and(succeeded(), eq(variables.BranchSource, variables.isDevelopment)), and(succeeded(), eq(variables.BranchSource, variables.isQA)))
     inputs:
       sourceFolder: '$(Build.SourcesDirectory)/build/linux/x64/release/bundle'
       targetFolder: '$(build.artifactStagingDirectory)'
   
   - task: PublishBuildArtifacts@1
-    displayName: Publish built ISO image
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/development'))
+    condition: or(and(succeeded(), eq(variables.BranchSource, variables.isDevelopment)), and(succeeded(), eq(variables.BranchSource, variables.isQA)))
     inputs: 
       pathToPublish: '$(Build.ArtifactStagingDirectory)' 
       artifactName: Linux
