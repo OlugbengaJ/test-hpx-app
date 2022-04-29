@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/apps/z_light/wrapper.dart';
-import 'package:hpx/providers/keyboard_provider.dart';
+import 'package:hpx/providers/keys_provider.dart';
 import 'package:hpx/providers/layers.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 void main() => runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LayersProvider()),
-        ChangeNotifierProvider(create: (context) => KeyboardProvider()),
+        ChangeNotifierProvider(create: (context) => KeysProvider()),
       ],
       child: const MyApp(),
     ));

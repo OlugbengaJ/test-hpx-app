@@ -175,17 +175,20 @@ class _WorkspaceState extends State<Workspace> {
                 builder: (BuildContext context, BoxConstraints constraints) {
                   return InteractiveViewer(
                     onInteractionUpdate: (details) {
-                      debugPrint('max height ${constraints.maxHeight}');
-                      debugPrint('iv update=> scale: ${details.scale}');
-                      final v = _zoomScale * details.scale;
-
-                      // _zoomTextCtrl.text =
-                      //     '${details.localFocalPoint.distance}';
-                      // debugPrint('iv focal point: ${details.focalPoint}');
+                      // debugPrint('max height ${constraints.maxHeight}');
+                      // debugPrint('iv update=> scale: ${details.scale}');
+                      // final v = _zoomScale * details.scale;
                     },
                     minScale: 0.8,
                     maxScale: 4,
-                    child: Keyboard(zoomScale: _zoomScale),
+                    child: Draggable<bool>(
+                        data: true,
+                        feedback: Container(
+                          color: Colors.white.withOpacity(0.4),
+                          height: 100,
+                          width: 100,
+                        ),
+                        child: Keyboard(zoomScale: _zoomScale)),
                   );
                 },
               ),
