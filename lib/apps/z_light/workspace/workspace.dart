@@ -5,6 +5,7 @@ import 'package:hpx/apps/z_light/app_constants.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/round_button.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/zoom_toolbar.dart';
 import 'package:hpx/widgets/theme.dart';
 
@@ -21,7 +22,6 @@ class Workspace extends StatefulWidget {
 
 class _WorkspaceState extends State<Workspace> {
   final _zoomTextCtrl = TextEditingController(text: '100');
-
   final double _zoomInThreshold = 400;
   final double _zoomOutThreshold = 60;
   double _zoomValue = 100;
@@ -29,6 +29,8 @@ class _WorkspaceState extends State<Workspace> {
 
   Timer _timer = Timer.periodic(Duration.zero, ((t) {}));
   final _duration = const Duration(milliseconds: 100);
+
+  final double _buttonSize = 24.0;
 
   /// zoomTextChanged ensure user enters only digits
   /// that are within the acceptable zoom threshold.
@@ -124,8 +126,6 @@ class _WorkspaceState extends State<Workspace> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // TODO: toggle visibility based on Workspace/Lighting Options
-
         /// Workspace area must be constrained to avoid width/height overflow
         /// i.e. unconstrained error, and ultimately unexpected view behavior.
         ///
@@ -134,17 +134,50 @@ class _WorkspaceState extends State<Workspace> {
         /// sub-widgets cliped only to the view.
         if (widget.currentView == AppConstants.lighting)
           ConstrainedBox(
-            constraints: const BoxConstraints(maxHeight: 80),
+            constraints: const BoxConstraints(
+              maxHeight: 90, //MediaQuery.of(context).size.height * 0.12
+            ),
             child: Container(
-              margin:
-                  const EdgeInsets.only(right: 5.0, top: 20.0, bottom: 20.0),
+              margin: const EdgeInsets.only(top: 20, right: 10, bottom: 5),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Zone Selection',
-                    textAlign: TextAlign.left,
-                    style: h4Style,
+                  Expanded(
+                    child: Text(
+                      'Zone Selection',
+                      textAlign: TextAlign.left,
+                      style: h4Style,
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 20),
+                        child: RoundButton(
+                          onTapDown: () {},
+                          onTapUp: () {},
+                          size: _buttonSize,
+                          iconData: Icons.select_all,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 20),
+                        child: RoundButton(
+                          onTapDown: () {},
+                          onTapUp: () {},
+                          size: _buttonSize,
+                          iconData: Icons.highlight_alt,
+                        ),
+                      ),
+                      RoundButton(
+                        onTapDown: () {},
+                        onTapUp: () {},
+                        size: _buttonSize,
+                        iconData: Icons.mouse,
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -204,7 +237,6 @@ class _WorkspaceState extends State<Workspace> {
                     zoomOutHandler: _zoomOut,
                     zoomCollapseHandler: _zoomCollapse,
                     zoomEndHandler: _zoomEnd,
-                    // zoomTextChangedHandler: _zoomTextChanged,
                   ),
                 ),
               )

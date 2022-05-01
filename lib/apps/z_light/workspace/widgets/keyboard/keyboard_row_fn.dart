@@ -22,15 +22,10 @@ class KeyboardRowFn extends StatelessWidget {
           (keyModel) => Padding(
             padding: EdgeInsets.all(_zoomedPadding),
             child: ChangeNotifierProvider(
-              create: (BuildContext context) => keyModel,
-              // builder: (c, g) => KeyboardKeyCopy(
-              //   onTapHandler: () =>
-              //       debugPrint('\r\n key ${keyModel.keyCode} triggered'),
-              //   keyModel: keyModel,
-              //   zoomScale: zoomScale,
-              // ),
-              child: DragTarget<bool>(
+              create: (_) => keyModel,
+              builder: (_, w) => DragTarget<bool>(
                 builder: (context, candidateData, rejectedData) => KeyboardKey(
+                  key: ValueKey(keyModel.keyCode),
                   onTapHandler: () {
                     debugPrint('\r\n key ${keyModel.keyCode} triggered');
                   },

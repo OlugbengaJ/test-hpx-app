@@ -20,8 +20,8 @@ class RoundButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       child: Ink(
-        width: size * 1.5,
-        height: size * 1.5,
+        width: size,
+        height: size,
         decoration: const BoxDecoration(
           shape: BoxShape.circle,
         ),
@@ -33,7 +33,7 @@ class RoundButton extends StatelessWidget {
           splashColor: Theme.of(context).primaryColor,
           child: Icon(
             iconData,
-            size: size,
+            size: size * 0.7,
             color: Theme.of(context).primaryColorLight,
           ),
         ),

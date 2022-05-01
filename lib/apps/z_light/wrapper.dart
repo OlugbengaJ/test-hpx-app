@@ -49,12 +49,12 @@ class _WrapperState extends State<Wrapper> {
     });
   }
 
-  _changeView() {
-    setState(() {
-      _currentView = (_currentView == AppConstants.workspace)
-          ? AppConstants.lighting
-          : AppConstants.workspace;
-    });
+  _changeView(AppConstants view) {
+    if (view != _currentView) {
+      setState(() {
+        _currentView = view;
+      });
+    }
   }
 
   @override
@@ -80,49 +80,49 @@ class _WrapperState extends State<Wrapper> {
                             textStyle: h3Style),
                         child: const Text('Workspace'),
                         onPressed: () {
-                          _changeView();
+                          _changeView(AppConstants.workspace);
                         },
                       ),
                     ]),
               ),
               Expanded(
                 child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      TextButton(
-                        style: TextButton.styleFrom(
-                            fixedSize: const Size(150, 50),
-                            primary: (_currentView != AppConstants.workspace)
-                                ? Colors.white
-                                : Colors.grey,
-                            backgroundColor: Colors.transparent,
-                            textStyle: h3Style),
-                        child: const Text('Lighting Options'),
-                        onPressed: () {
-                          _changeView();
-                        },
-                      ),
-                    ]),
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TextButton(
+                      style: TextButton.styleFrom(
+                          fixedSize: const Size(150, 50),
+                          primary: (_currentView != AppConstants.workspace)
+                              ? Colors.white
+                              : Colors.grey,
+                          backgroundColor: Colors.transparent,
+                          textStyle: h3Style),
+                      child: const Text('Lighting Options'),
+                      onPressed: () {
+                        _changeView(AppConstants.lighting);
+                      },
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
         ),
       ),
       body: SafeArea(
-          child: (_currentView == AppConstants.workspace)
-              ? Workspace(
-                  layers: _layersStackItems,
-                  currentView: _currentView,
-                )
-              : ThreeColumns(
-                  left: Layers(
-                      onReorder: _updateLayers, layers: _layersListItems),
-                  center: Workspace(
-                    layers: _layersStackItems,
-                    currentView: _currentView,
-                  ),
-                  right: const ToolsEffectsWrapper(),
-                )),
+        child: ThreeColumns(
+          left: (_currentView != AppConstants.workspace)
+              ? Layers(onReorder: _updateLayers, layers: _layersListItems)
+              : null,
+          center: Workspace(
+            layers: _layersStackItems,
+            currentView: _currentView,
+          ),
+          right: (_currentView != AppConstants.workspace)
+              ? const ToolsEffectsWrapper()
+              : null,
+        ),
+      ),
     );
   }
 }
