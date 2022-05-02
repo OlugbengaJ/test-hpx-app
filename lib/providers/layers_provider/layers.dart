@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
 import 'package:hpx/models/layers/layer_item_model.dart';
-
-import '../../../../apps/z_light/layers/widgets/resizable_widget_controller.dart';
 
 List<Color> colors = const [
   Colors.blue,
@@ -16,15 +15,15 @@ List<Color> colors = const [
 
 class LayersProvider extends ChangeNotifier {
   final areaHeight = Get.height * 0.70;
-    final areaWidth = Get.width * 0.70;
-  final List<LayerItemModel> _layeritems = [
-  ];
-  final List<LayerItemModel> _stackedLayeritems = []; // Used to display the staked layers
+  final areaWidth = Get.width * 0.70;
+  final List<LayerItemModel> _layeritems = [];
+  final List<LayerItemModel> _stackedLayeritems =
+      []; // Used to display the staked layers
   bool hideStackedLayers = false;
-  
+
   int _index = 0;
   int get length => _layeritems.length;
-  int get index =>  _index;
+  int get index => _index;
 
   List<LayerItemModel> get layeritems => _layeritems;
   List<LayerItemModel> get stackedLayeritems => _stackedLayeritems;
@@ -33,22 +32,19 @@ class LayersProvider extends ChangeNotifier {
     return _layeritems[index];
   }
 
-  void toggleHideStackedLayers(bool show){
+  void toggleHideStackedLayers(bool show) {
     hideStackedLayers = show;
   }
 
-
-  int getTheBiggestID(){
+  int getTheBiggestID() {
     int id = 1;
     for (var item in _layeritems) {
-      if(id<=item.id){
+      if (id <= item.id) {
         id = item.id;
       }
     }
-    return id+1;
+    return id + 1;
   }
-
-
 
   void add(LayerItemModel item) {
     for (var element in _layeritems) {
@@ -65,18 +61,15 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-  void rearranegStack(){
+  void rearranegStack() {
     // Not working properly
     stackedLayeritems.clear();
     List<LayerItemModel> reversedList = layeritems.reversed.toList();
     for (var item in reversedList) {
       stackedLayeritems.insert(0, item);
-      
     }
     notifyListeners();
   }
-
 
   void duplicate(LayerItemModel item, index) {
     for (var element in _layeritems) {
@@ -101,12 +94,9 @@ class LayersProvider extends ChangeNotifier {
     controller.width = item.controller.width;
 
     LayerItemModel duplicatedItem = LayerItemModel(
-      id: getTheBiggestID(),
-      layerText: "Copy ${item.layerText}", 
-      controller: controller
-    );
-
-    
+        id: getTheBiggestID(),
+        layerText: "Copy ${item.layerText}",
+        controller: controller);
 
     _layeritems.insert(index + 1, duplicatedItem);
     _stackedLayeritems.add(duplicatedItem);
@@ -115,18 +105,16 @@ class LayersProvider extends ChangeNotifier {
 
     notifyListeners();
   }
-  
-  
 
-  void changeIndex(int index){
+  void changeIndex(int index) {
     for (var element in _layeritems) {
       element.listDisplayColor = Colors.grey;
     }
-    final item =  _layeritems[index];
+    final item = _layeritems[index];
     item.listDisplayColor = Colors.white;
     _layeritems[index] = item;
-    for( var i = 0 ; i < _stackedLayeritems.length; i++ ) { 
-      if(_stackedLayeritems[i].id==_layeritems[index].id){
+    for (var i = 0; i < _stackedLayeritems.length; i++) {
+      if (_stackedLayeritems[i].id == _layeritems[index].id) {
         _index = i;
         break;
       }
@@ -140,10 +128,10 @@ class LayersProvider extends ChangeNotifier {
 
     _layeritems[index] = item;
 
-    for( var i = 0 ; i < _layeritems.length; i++ ) {
-        if(_stackedLayeritems[i].id==toEdit){
-          stackedIndex = i;
-        }
+    for (var i = 0; i < _layeritems.length; i++) {
+      if (_stackedLayeritems[i].id == toEdit) {
+        stackedIndex = i;
+      }
     }
 
     _stackedLayeritems[stackedIndex] = item;
@@ -151,21 +139,20 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
   void toggleVisibility(LayerItemModel item, int index) {
     int toEdit = _layeritems[index].id;
     int stackedIndex = 0; // The stack index is different from the list index
 
     item.listDisplayColor = Colors.grey;
 
-    if(item.visible){
+    if (item.visible) {
       item.listDisplayColor = Colors.white;
     }
 
     _layeritems[index] = item;
 
-    for( var i = 0 ; i < _layeritems.length; i++ ) {
-      if(_stackedLayeritems[i].id==toEdit){
+    for (var i = 0; i < _layeritems.length; i++) {
+      if (_stackedLayeritems[i].id == toEdit) {
         stackedIndex = i;
         break;
       }
@@ -189,8 +176,8 @@ class LayersProvider extends ChangeNotifier {
     final item = _layeritems[index];
     int stackedIndex = 0;
 
-    for( var i = 0 ; i < _layeritems.length; i++ ) { 
-      if(_stackedLayeritems[i].id==_layeritems[index].id){
+    for (var i = 0; i < _layeritems.length; i++) {
+      if (_stackedLayeritems[i].id == _layeritems[index].id) {
         stackedIndex = i;
         break;
       }
@@ -200,15 +187,12 @@ class LayersProvider extends ChangeNotifier {
     _stackedLayeritems[stackedIndex] = item;
     _layeritems.remove(item);
 
-    
-    if(_layeritems.isNotEmpty){
+    if (_layeritems.isNotEmpty) {
       changeIndex(0);
-    }else{
+    } else {
       stackedLayeritems.clear();
     }
 
     notifyListeners();
   }
-
-
 }

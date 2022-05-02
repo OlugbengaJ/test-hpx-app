@@ -13,10 +13,10 @@ void main() => runApp(
       MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => LayersProvider()),
-          ChangeNotifierProvider(create: (context) => KeysProvider()),
-          ChangeNotifierProvider(create: (context) => KeySelectorProvider()),
-          ChangeNotifierProvider(create: (context) => WorkspaceProvider()),
           ChangeNotifierProvider(create: (_) => ZoneSelectorProvider()),
+          ChangeNotifierProvider(create: (context) => KeySelectorProvider()),
+          ChangeNotifierProvider(create: (context) => KeysProvider()),
+          ChangeNotifierProvider(create: (context) => WorkspaceProvider()),
         ],
         child: const MyApp(),
       ),

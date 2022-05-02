@@ -11,6 +11,7 @@ import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/providers/keyboard/keys_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
+import 'package:hpx/widgets/components/zone_selector/zone_selector.dart';
 import 'package:hpx/widgets/components/zone_selector/zone_selector_provider.dart';
 import 'package:hpx/widgets/layouts/three_columns.dart';
 import 'package:hpx/widgets/theme.dart';
@@ -26,7 +27,7 @@ class Wrapper extends StatefulWidget {
 class _WrapperState extends State<Wrapper> {
   final List<LayerListItem> _layersListItems = [];
   final List<LayerStackItem> _layersStackItems = [];
-  String currentView = "workspace";
+  WorkspaceView currentView = WorkspaceView.workspace;
   final _modeProvider = ModeProvider();
   final PickerModel _defaultPreset = PickerModel(
       title: 'Default', enabled: true, value: 'default', icon: Icons.dashboard);
@@ -57,15 +58,15 @@ class _WrapperState extends State<Wrapper> {
     });
   }
 
-  _changeView() {
+  _changeView(WorkspaceView view) {
     // setState(() {
-    //   currentView = value;
+    //   currentView = view;
     // });
 
     context.read<KeySelectorProvider>().clearKeys();
     context.read<ZoneSelectorProvider>().updatePosition();
 
-    // if (currentView == "lighting") {
+    // if (currentView == WorkspaceView.lighting) {
     //   context.read<LayersProvider>().toggleHideStackedLayers(false);
     // } else {
     //   context.read<LayersProvider>().toggleHideStackedLayers(true);
@@ -99,7 +100,7 @@ class _WrapperState extends State<Wrapper> {
                       child: const Text('Workspace'),
                       onPressed: () {
                         workspaceProvider.toggleView(WorkspaceView.workspace);
-                        _changeView();
+                        _changeView(WorkspaceView.workspace);
                       },
                     ),
                   ]),
@@ -119,7 +120,7 @@ class _WrapperState extends State<Wrapper> {
                     child: const Text('Lighting Options'),
                     onPressed: () {
                       workspaceProvider.toggleView(WorkspaceView.lighting);
-                      _changeView();
+                      _changeView(WorkspaceView.lighting);
                     },
                   ),
                 ],
@@ -160,9 +161,19 @@ class _WrapperState extends State<Wrapper> {
         child: ThreeColumns(
           leftWidget:
               Layers(onReorder: _updateLayers, layers: _layersListItems),
-          centerWidget: Workspace(
-            layers: _layersStackItems,
-          ),
+          centerWidget: Stack(children: [
+            Workspace(
+              layers: _layersStackItems,
+            ),
+            Consumer<KeySelectorProvider>(builder: (_, provider, child) {
+              return provider.keySelectorDisplayed
+                  ? ZoneSelector(
+                      getSize: _getSize,
+                      widgetsKeys: provider.keysTowatch,
+                    )
+                  : Container();
+            }),
+          ]),
           rightWidget: const ToolsEffectsWrapper(),
         ),
       ),
