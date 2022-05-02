@@ -21,25 +21,6 @@ void main() => runApp(
         child: const MyApp(),
       ),
     );
-// import 'package:hpx/providers/apps/zlightspace_providers/layers_provider/layers.dart';
-// import 'providers/apps/zlightspace_providers/keyboard/keys_provider.dart';
-// import 'widgets/components/zone_selector/zone_selector_provider.dart';
-// import "widgets/theme.dart";
-
-// void main() => runApp(MultiProvider(
-//       providers: [
-//         ChangeNotifierProvider(
-//           create: (_) => LayersProvider(),
-//         ),
-//         ChangeNotifierProvider(
-//           create: (_) => ZoneSelectorProvider(),
-//         ),
-//         ChangeNotifierProvider(
-//           create: (_) => KeysProvider(),
-//         ),
-//       ],
-//       child: const MyApp(),
-//     ));
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
