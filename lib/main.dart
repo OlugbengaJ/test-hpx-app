@@ -7,14 +7,16 @@ import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => LayersProvider()),
-        ChangeNotifierProvider(create: (context) => KeysProvider()),
-        ChangeNotifierProvider(create: (context) => WorkspaceProvider()),
-      ],
-      child: const MyApp(),
-    ));
+void main() => runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => LayersProvider()),
+          ChangeNotifierProvider(create: (context) => KeysProvider()),
+          ChangeNotifierProvider(create: (context) => WorkspaceProvider()),
+        ],
+        child: const MyApp(),
+      ),
+    );
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

@@ -19,6 +19,7 @@ class RoundButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
+      color: Colors.transparent,
       child: Ink(
         width: size,
         height: size,

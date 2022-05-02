@@ -187,6 +187,35 @@ class _WorkspaceState extends State<Workspace> {
                 )
               : Container(),
         ),
+        Consumer<WorkspaceProvider>(
+            builder: (context, value, child) => //(value.showStripNotification)
+                // ?
+                Container(
+                  color: Colors.yellow,
+                  padding: const EdgeInsets.all(2),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.all(0),
+                        child: Text(
+                          value.stripNotificationText,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      RoundButton(
+                        onTapDown: () {
+                          value.toggleStripNotification();
+                        },
+                        onTapUp: () {},
+                        size: 24,
+                        iconData: Icons.cancel,
+                      )
+                    ],
+                  ),
+                )
+            // : Container(),
+            ),
         Expanded(
           child: Stack(
             alignment: Alignment.bottomLeft,
