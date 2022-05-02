@@ -203,14 +203,17 @@ class _WorkspaceState extends State<Workspace> {
                           ),
                         ),
                       ),
-                      RoundButton(
-                        onTapDown: () {
-                          value.toggleStripNotification();
-                        },
-                        onTapUp: () {},
-                        size: 24,
-                        icon: Icons.close,
-                        iconColor: Theme.of(context).primaryColor,
+                      Tooltip(
+                        message: 'Close',
+                        child: RoundButton(
+                          onTapDown: () {
+                            value.toggleStripNotification();
+                          },
+                          onTapUp: () {},
+                          size: 24,
+                          icon: Icons.close,
+                          iconColor: Theme.of(context).primaryColor,
+                        ),
                       ),
                     ],
                   ),
