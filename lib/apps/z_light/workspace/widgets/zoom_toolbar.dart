@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/round_button.dart';
 
 class ZoomToolbar extends StatelessWidget {
+  /// [ZoomToolbar] displays the zoom controls at the bottom of the screen.
   const ZoomToolbar({
     Key? key,
     required this.zoomTextController,

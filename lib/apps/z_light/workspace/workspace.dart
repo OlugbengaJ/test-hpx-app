@@ -6,12 +6,25 @@ import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/round_button.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/zoom_toolbar.dart';
+import 'package:hpx/providers/keyboard/keys_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
 class Workspace extends StatefulWidget {
   const Workspace({Key? key, required this.layers}) : super(key: key);
+// import 'package:hpx/providers/apps/zlightspace_providers/keyboard/keys_provider.dart';
+// import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+// import 'package:provider/provider.dart';
+
+// import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
+// import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
+// import 'package:hpx/apps/z_light/workspace/widgets/zoom_toolbar.dart';
+// import 'package:hpx/widgets/theme.dart';
+
+// class Workspace extends StatefulWidget {
+//   const Workspace({Key? key, required this.layers, required this.currentIndex})
+//       : super(key: key);
 
   final List<LayerStackItem> layers;
 
@@ -53,6 +66,11 @@ class _WorkspaceState extends State<Workspace> {
     _timer.cancel();
   }
 
+  /// updateZoom sets the zoom text (without fractions) and zoom scale.
+  void _updateZoom() {
+    _zoomTextCtrl.text = '${_zoomValue.ceil()}';
+  }
+
   /// zoomIn increases the zoomValue only up to the zoomIn threshold
   /// preventing scenario where content is unnecessarily large.
   void _zoomIn() {
@@ -77,6 +95,14 @@ class _WorkspaceState extends State<Workspace> {
     });
   }
 
+  _keysSelection() {
+    context.read<KeysProvider>().toggleKeySelector(true);
+  }
+
+  _selectDraggable() {
+    context.read<KeysProvider>().toggleKeySelector(false);
+  }
+
   /// zoomOut decreases the zoomValue only up to the zoomOut threshold
   /// preventing scenario where content is completely not visible.
   void _zoomOut() {
@@ -99,11 +125,6 @@ class _WorkspaceState extends State<Workspace> {
       _zoomValue = _zoomOutThreshold;
       _updateZoom();
     });
-  }
-
-  /// updateZoom sets the zoom text (without fractions) and zoom scale.
-  void _updateZoom() {
-    _zoomTextCtrl.text = '${_zoomValue.ceil()}';
   }
 
   @override
@@ -157,7 +178,7 @@ class _WorkspaceState extends State<Workspace> {
                             Padding(
                               padding: const EdgeInsets.only(right: 20),
                               child: RoundButton(
-                                onTapDown: () {},
+                                onTapDown: _keysSelection,
                                 onTapUp: () {},
                                 size: _buttonSize,
                                 icon: Icons.select_all,
@@ -166,7 +187,7 @@ class _WorkspaceState extends State<Workspace> {
                             Padding(
                               padding: const EdgeInsets.only(right: 20),
                               child: RoundButton(
-                                onTapDown: () {},
+                                onTapDown: _selectDraggable,
                                 onTapUp: () {},
                                 size: _buttonSize,
                                 icon: Icons.highlight_alt,

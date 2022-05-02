@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/widgets/components/color_picker.dart';
-import 'package:hpx/widgets/theme.dart';
 
 class ShortcutColorsPreset extends StatefulWidget {
   @override

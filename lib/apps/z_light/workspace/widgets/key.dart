@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// KeyCustomPainter is a reference to a custom key layout.
+/// [KeyCustomPainter] is a reference to a custom key layout.
 ///
 /// Although it is not imported anywhere in the project, it was written as
 /// an initial proof of concept which served as a guide to the current code

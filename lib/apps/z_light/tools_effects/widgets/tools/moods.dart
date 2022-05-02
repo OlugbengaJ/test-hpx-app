@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/widgets/components/color_picker.dart';
+import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/widgets/theme.dart';
 
 class MoodPreset extends StatefulWidget {
@@ -9,15 +9,16 @@ class MoodPreset extends StatefulWidget {
 
 class _MoodPresetState extends State<MoodPreset> {
   String activatedButton = "Themes";
+  final _colorPickerProvider = ColorPickerProvider();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.only(bottom: 20.0),
+        margin: const EdgeInsets.only(top: 20, bottom: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text("Presets", textAlign: TextAlign.left, style: h4Style),
+            Text("Presets", textAlign: TextAlign.left, style: labelStyle),
             Container(
               margin: const EdgeInsets.only(top: 10.0),
               child: Row(
@@ -34,7 +35,7 @@ class _MoodPresetState extends State<MoodPreset> {
                             color: (activatedButton == 'Custom')
                                 ? Colors.black
                                 : Colors.white,
-                            child: const Text('Themes'),
+                            child: const Text('THEMES'),
                             onPressed: () {
                               setState(() {
                                 activatedButton = "Themes";
@@ -55,7 +56,7 @@ class _MoodPresetState extends State<MoodPreset> {
                             color: (activatedButton != 'Custom')
                                 ? Colors.black
                                 : Colors.white,
-                            child: const Text('Custom'),
+                            child: const Text('CUSTOM'),
                             onPressed: () {
                               setState(() {
                                 activatedButton = "Custom";
@@ -71,56 +72,14 @@ class _MoodPresetState extends State<MoodPreset> {
               margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: (activatedButton == 'Themes')
-                      ? [
-                          Color_Picker(
-                              leftTitle: '',
-                              title: 'Night Mode',
-                              color: Colors.orangeAccent),
-                          Color_Picker(
-                              leftTitle: '',
-                              title: 'Focus',
-                              color: Colors.lightBlue),
-                          Color_Picker(
-                              leftTitle: '',
-                              title: 'Relax',
-                              color: Colors.greenAccent),
-                          Color_Picker(
-                              leftTitle: '',
-                              title: 'Create',
-                              color: Colors.deepOrange),
-                          Color_Picker(
-                              leftTitle: '',
-                              title: 'Ideate',
-                              color: Colors.purple),
-                        ]
-                      : [
-                          Color_Picker(
-                              leftTitle: 'Edit',
-                              picker: true,
-                              title: 'Custom 1',
-                              color: Colors.transparent),
-                          Color_Picker(
-                              leftTitle: 'Edit',
-                              picker: true,
-                              title: 'Custom 2',
-                              color: Colors.transparent),
-                          Color_Picker(
-                              leftTitle: 'Edit',
-                              picker: true,
-                              title: 'Custom 3',
-                              color: Colors.transparent),
-                          Color_Picker(
-                              leftTitle: 'Edit',
-                              picker: true,
-                              title: 'Custom 4',
-                              color: Colors.transparent),
-                          Color_Picker(
-                              leftTitle: 'Edit',
-                              picker: true,
-                              title: 'Custom 5',
-                              color: Colors.transparent),
-                        ]),
+                  children: [
+                    Wrap(
+                        children:
+                            _colorPickerProvider.generateColorPickerWidget(
+                                activatedButton == 'Themes'
+                                    ? moodThemesList
+                                    : moodCustomList))
+                  ]),
             ),
           ],
         ));

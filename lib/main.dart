@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/apps/z_light/wrapper.dart';
 import 'package:hpx/providers/keys_provider.dart';
-import 'package:hpx/providers/layers.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/workspace_provider.dart';
+import 'package:hpx/widgets/components/zone_selector/zone_selector_provider.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -13,10 +14,30 @@ void main() => runApp(
           ChangeNotifierProvider(create: (_) => LayersProvider()),
           ChangeNotifierProvider(create: (context) => KeysProvider()),
           ChangeNotifierProvider(create: (context) => WorkspaceProvider()),
+          ChangeNotifierProvider(create: (_) => ZoneSelectorProvider()),
         ],
         child: const MyApp(),
       ),
     );
+// import 'package:hpx/providers/apps/zlightspace_providers/layers_provider/layers.dart';
+// import 'providers/apps/zlightspace_providers/keyboard/keys_provider.dart';
+// import 'widgets/components/zone_selector/zone_selector_provider.dart';
+// import "widgets/theme.dart";
+
+// void main() => runApp(MultiProvider(
+//       providers: [
+//         ChangeNotifierProvider(
+//           create: (_) => LayersProvider(),
+//         ),
+//         ChangeNotifierProvider(
+//           create: (_) => ZoneSelectorProvider(),
+//         ),
+//         ChangeNotifierProvider(
+//           create: (_) => KeysProvider(),
+//         ),
+//       ],
+//       child: const MyApp(),
+//     ));
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

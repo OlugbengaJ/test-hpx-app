@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../utils/common.dart';
 import 'resizable_widget_controller.dart';
 import 'drag_distance.dart';
 
@@ -67,8 +68,8 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                         child: DragDistance(
                           child: Container(
                             color: Colors.transparent,
-                            height: MediaQuery.of(context).size.height,
-                            width: MediaQuery.of(context).size.width,
+                            height: screenDimension(context).height,
+                            width: screenDimension(context).width,
                             //child: dragWidget
                           ),
                           onDrag: controller.onCenterDrag,

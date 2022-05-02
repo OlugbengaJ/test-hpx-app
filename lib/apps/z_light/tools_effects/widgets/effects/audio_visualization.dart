@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/widgets/components/color_picker.dart';
+import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/color_picker_provider.dart';
+import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/mode_provider.dart';
+import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
 
 class AudioVisualPreset extends StatefulWidget {
@@ -9,21 +11,38 @@ class AudioVisualPreset extends StatefulWidget {
 
 class _AudioVisualPresetState extends State<AudioVisualPreset> {
   String activatedButton = "Solid";
+  final _modeProvider = ModeProvider();
+  final _colorPickerProvider = ColorPickerProvider();
+  final PickerModel _defaultPicker = PickerModel(
+      title: 'Power Bars',
+      enabled: true,
+      value: 'powerbar',
+      icon: Icons.power_input_outlined);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.only(bottom: 20.0),
+        margin: const EdgeInsets.only(top: 20, bottom: 30.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(margin: const EdgeInsets.only(top: 20.0)),
-            const Divider(
-              color: Colors.white,
+            SizedBox(
+                width: MediaQuery.of(context).size.width * 0.45,
+                child: PickerDropdown(
+                    onChange: (PickerModel? returnValue) {
+                      setState(() {
+                        // preset = changeComponent();
+                      });
+                    },
+                    defaultPicker: _defaultPicker,
+                    pickerList: _modeProvider.getPickerModes('audiolist'))),
+            Container(margin: const EdgeInsets.only(top: 30.0)),
+            Divider(
+              color: Colors.grey.shade800,
               height: 1,
             ),
             Container(margin: const EdgeInsets.only(top: 20.0)),
-            Text("Color Presets", textAlign: TextAlign.left, style: h4Style),
+            Text("Color Presets", textAlign: TextAlign.left, style: labelStyle),
             Container(
               margin: const EdgeInsets.only(top: 10.0),
               child: Row(
@@ -76,47 +95,11 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
             Container(
               width: MediaQuery.of(context).size.width,
               margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-              child: (activatedButton == 'Gradient')
-                  ? Column(
-                      children: [
-                        Color_Picker(
-                            leftTitle: 'Edit',
-                            title: '',
-                            picker: true,
-                            color: Colors.greenAccent)
-                      ],
-                    )
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                          Text("Primary Color",
-                              textAlign: TextAlign.left, style: h5Style),
-                          Color_Picker(
-                              leftTitle: '',
-                              title: '',
-                              width: 30.0,
-                              height: 30.0,
-                              picker: true,
-                              color: Colors.red),
-                          Text("Secondary Color",
-                              textAlign: TextAlign.left, style: h5Style),
-                          Color_Picker(
-                              leftTitle: '',
-                              title: '',
-                              width: 30.0,
-                              height: 30.0,
-                              picker: true,
-                              color: Colors.orange),
-                          Text("Background Color",
-                              textAlign: TextAlign.left, style: h5Style),
-                          Color_Picker(
-                              leftTitle: '',
-                              title: '',
-                              width: 30.0,
-                              height: 30.0,
-                              picker: true,
-                              color: Colors.transparent),
-                        ]),
+              child: Wrap(
+                  children: _colorPickerProvider.generateColorPickerWidget(
+                      activatedButton == 'Gradient'
+                          ? audioVisualGradientList
+                          : audioVisualSolidList)),
             ),
           ],
         ));

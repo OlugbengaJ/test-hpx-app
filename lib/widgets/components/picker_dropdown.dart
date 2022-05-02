@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/widgets/theme.dart';
 
 class PickerModel {
   final String title;
@@ -7,15 +8,26 @@ class PickerModel {
   final IconData? icon;
   PickerModel(
       {required this.title, this.value, required this.enabled, this.icon});
-}
 
-PickerModel? pickerChoice;
+  @override
+  bool operator ==(Object other) =>
+      other is PickerModel && other.value == value;
+
+  @override
+  int get hashCode => value.hashCode;
+}
 
 class PickerDropdown extends StatefulWidget {
   const PickerDropdown(
-      {Key? key, required this.pickerList, required this.onChange})
+      {Key? key,
+      required this.pickerList,
+      this.defaultPicker,
+      this.pickerHintText = "Choose an option ..",
+      required this.onChange})
       : super(key: key);
 
+  final PickerModel? defaultPicker;
+  final String? pickerHintText;
   final List<PickerModel> pickerList;
   final Function(PickerModel? pickerModel) onChange;
 
@@ -24,62 +36,86 @@ class PickerDropdown extends StatefulWidget {
 }
 
 class _PickerDropdownState extends State<PickerDropdown> {
+  PickerModel? currentPickerValue;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+      currentPickerValue = widget.defaultPicker;
+      // widget.onChange(widget.defaultPicker);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(left: 10),
-      height: 40,
-      margin: const EdgeInsets.only(top: 10),
-      decoration: BoxDecoration(
-          border: Border.all(
-        width: 1,
-        color: Colors.grey,
-      )),
-      child: DropdownButton<PickerModel>(
-        dropdownColor: Colors.grey.shade900,
-        hint: Container(
-          width: MediaQuery.of(context).size.width * 0.14,
-          child: Row(
-            children: const [Text('Choose ...')],
-          ),
-        ),
-        value: pickerChoice,
-        icon: const Icon(
-          Icons.arrow_drop_down_outlined,
-          size: 20,
-        ),
-        elevation: 2,
-        underline: const SizedBox(
-          height: 30,
-          width: 2,
-        ),
-        onChanged: (PickerModel? newValue) {
-          setState(() {
-            pickerChoice = newValue!;
-            widget.onChange(newValue);
-          });
-        },
-        items: widget.pickerList
-            .map<DropdownMenuItem<PickerModel>>((PickerModel value) {
-          return DropdownMenuItem<PickerModel>(
-            enabled: value.enabled,
-            value: value,
-            child: Container(
-              margin: const EdgeInsets.only(left: 0),
-              padding: EdgeInsets.only(
-                  left: value.enabled ? 30 : 0, top: 0, bottom: 0),
-              child: Row(
-                children: [
-                  Icon(value.icon, size: 16),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(value.title),
-                ],
-              ),
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.10,
+      child: Container(
+        padding: const EdgeInsets.only(left: 10),
+        height: 35,
+        margin: const EdgeInsets.only(top: 10, bottom: 0),
+        decoration: BoxDecoration(
+            border: Border.all(
+          width: 1,
+          color: Colors.grey.shade700,
+        )),
+        child: DropdownButton<PickerModel>(
+          menuMaxHeight: 400,
+          focusColor: Colors.transparent,
+          value: currentPickerValue,
+          dropdownColor: Colors.grey.shade900,
+          hint: SizedBox(
+            child: Row(
+              children: [Text(widget.pickerHintText!)],
             ),
-          );
-        }).toList(),
+          ),
+          icon: const Icon(
+            Icons.arrow_drop_down_outlined,
+            size: 20,
+          ),
+          elevation: 2,
+          alignment: AlignmentDirectional.bottomStart,
+          underline: const SizedBox(
+            height: 30,
+            width: 2,
+          ),
+          onChanged: (PickerModel? newValue) {
+            setState(() {
+              currentPickerValue = newValue;
+              widget.onChange(newValue);
+            });
+          },
+          items: widget.pickerList
+              .map<DropdownMenuItem<PickerModel>>((PickerModel value) {
+            return DropdownMenuItem<PickerModel>(
+              enabled: value.enabled,
+              value: value,
+              child: Container(
+                // margin: const EdgeInsets.only(left: 10),
+                padding: EdgeInsets.only(
+                    left: value.enabled == true ? 20 : 0, top: 0, bottom: 0),
+                child: Row(
+                  children: [
+                    value.enabled == false || value.icon == null
+                        ? Container()
+                        : Icon(value.icon, size: 16),
+                    value.enabled == false || value.icon == null
+                        ? Container()
+                        : const SizedBox(
+                            width: 20,
+                          ),
+                    Text(
+                      value.title,
+                      style: value.enabled == true ? TextStyle() : labelStyle,
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }).toList(),
+        ),
       ),
     );
   }
