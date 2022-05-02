@@ -19,12 +19,12 @@ class Keyboard extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        KeyboardRowFn(key: const ValueKey(0), zoomScale: zoomScale),
-        KeyboardRowNum(key: const ValueKey(1), zoomScale: zoomScale),
-        KeyboardRowTab(key: const ValueKey(2), zoomScale: zoomScale),
-        KeyboardRowCaps(key: const ValueKey(3), zoomScale: zoomScale),
-        KeyboardRowShift(key: const ValueKey(4), zoomScale: zoomScale),
-        KeyboardRowCtrl(key: const ValueKey(5), zoomScale: zoomScale),
+        KeyboardRowFn(zoomScale: zoomScale),
+        KeyboardRowNum(zoomScale: zoomScale),
+        KeyboardRowTab(zoomScale: zoomScale),
+        KeyboardRowCaps(zoomScale: zoomScale),
+        KeyboardRowShift(zoomScale: zoomScale),
+        KeyboardRowCtrl(zoomScale: zoomScale),
       ],
     );
   }
