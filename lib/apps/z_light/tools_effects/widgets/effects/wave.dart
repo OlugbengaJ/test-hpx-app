@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:hpx/widgets/components/color_picker.dart';
+import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/widgets/components/rotate_button.dart';
 import 'package:hpx/widgets/theme.dart';
 
@@ -15,6 +15,7 @@ class _WavePresetState extends State<WavePreset> {
   double _currentSliderValue = 0.0;
   final double _currentAngleValue = 0.0;
   TextEditingController degreeController = TextEditingController();
+  final _colorPickerProvider = ColorPickerProvider();
 
   void _setDegreeValue(double? returnValue) {
     setState(() {
@@ -34,11 +35,11 @@ class _WavePresetState extends State<WavePreset> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.only(bottom: 20.0),
+        margin: const EdgeInsets.only(top: 20, bottom: 30.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text("Color Presets", textAlign: TextAlign.left, style: h4Style),
+            Text("Color Presets", textAlign: TextAlign.left, style: labelStyle),
             Container(
               margin: const EdgeInsets.only(top: 10.0),
               child: Row(
@@ -94,50 +95,15 @@ class _WavePresetState extends State<WavePreset> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Wrap(
-                          children: (activatedButton == 'DEFAULT')
-                              ? [
-                                  Color_Picker(
-                                      leftTitle: '',
-                                      title: 'Galaxy',
-                                      width: 30.0,
-                                      height: 30.0,
-                                      color: Colors.orangeAccent),
-                                  Color_Picker(
-                                      leftTitle: '',
-                                      title: 'Ocean',
-                                      width: 30.0,
-                                      height: 30.0,
-                                      color: Colors.lightBlue),
-                                  Color_Picker(
-                                      leftTitle: '',
-                                      title: 'Jungle',
-                                      width: 30.0,
-                                      height: 30.0,
-                                      color: Colors.greenAccent),
-                                  Color_Picker(
-                                      leftTitle: '',
-                                      title: 'Volcano',
-                                      width: 30.0,
-                                      height: 30.0,
-                                      color: Colors.deepOrange),
-                                  Color_Picker(
-                                      leftTitle: '',
-                                      title: 'OMEN',
-                                      width: 30.0,
-                                      height: 30.0,
-                                      color: Colors.purple),
-                                ]
-                              : [
-                                  Color_Picker(
-                                      title: '',
-                                      leftTitle: 'Edit',
-                                      picker: true,
-                                      color: Colors.transparent)
-                                ])
+                          children:
+                              _colorPickerProvider.generateColorPickerWidget(
+                                  activatedButton == 'DEFAULT'
+                                      ? waveDefaultsList
+                                      : waveCustomList))
                     ])),
             Container(margin: const EdgeInsets.only(bottom: 10.0)),
-            const Divider(
-              color: Colors.white,
+            Divider(
+              color: Colors.grey.shade800,
               height: 1,
             ),
             Container(margin: const EdgeInsets.only(bottom: 20.0)),

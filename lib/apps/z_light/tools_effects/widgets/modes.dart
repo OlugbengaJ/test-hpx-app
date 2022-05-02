@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/apps/z_light/tools_effects/widgets/effects/ambient.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/effects/audio_visualization.dart';
+import 'package:hpx/apps/z_light/tools_effects/widgets/effects/blinking.dart';
+import 'package:hpx/apps/z_light/tools_effects/widgets/effects/breathing.dart';
+import 'package:hpx/apps/z_light/tools_effects/widgets/effects/color_cycle.dart';
+import 'package:hpx/apps/z_light/tools_effects/widgets/effects/image.dart';
+import 'package:hpx/apps/z_light/tools_effects/widgets/effects/interactive.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/effects/wave.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/tools/color_production.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/tools/moods.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/tools/shortcut_colors.dart';
+import 'package:hpx/models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
 
@@ -12,109 +20,69 @@ class ToolModes extends StatefulWidget {
   State<ToolModes> createState() => _ToolModesState();
 }
 
-List<PickerModel> audioVisualList = [
-  PickerModel(
-    title: 'Power Bars',
-    enabled: true,
-  ),
-  PickerModel(
-    title: 'Waveform',
-    enabled: true,
-  )
-];
-
-List<PickerModel> moodList = [
-  PickerModel(
-    title: 'Tools',
-    enabled: false,
-  ),
-  PickerModel(
-      title: 'Shortcut Colors',
-      enabled: true,
-      value: 'shortcut',
-      icon: Icons.shortcut),
-  PickerModel(title: 'Mood', enabled: true, value: 'mood', icon: Icons.mood),
-  PickerModel(
-      title: 'Colors Production',
-      enabled: true,
-      value: 'colorsproduction',
-      icon: Icons.production_quantity_limits),
-  PickerModel(
-    title: 'Effects',
-    enabled: false,
-  ),
-  PickerModel(title: 'Wave', enabled: true, value: 'wave', icon: Icons.waves),
-  PickerModel(
-      title: 'Color Cycle',
-      enabled: true,
-      value: 'colorcycle',
-      icon: Icons.color_lens),
-  PickerModel(
-      title: 'Breathing',
-      enabled: true,
-      value: 'breathing',
-      icon: Icons.air_outlined),
-  PickerModel(
-      title: 'Audio Visualizer',
-      enabled: true,
-      value: 'audiovisualizer',
-      icon: Icons.audiotrack)
-];
-
 class _ToolModesState extends State<ToolModes> {
   Widget? preset;
-  Widget? subPicker;
+  final PickerModel _defaultPreset =
+      PickerModel(title: 'Mood', value: 'mood', enabled: true);
+  final _modeProvider = ModeProvider();
 
-  changeComponent() {
-    switch (pickerChoice?.value) {
+  changeComponent(PickerModel pickerChoice) {
+    _modeProvider.setCurrentMode(ToolsModeModel(
+        name: pickerChoice.title,
+        effects: [],
+        currentColor: [],
+        value: pickerChoice.value));
+    switch (pickerChoice.value) {
       case "shortcut":
-        subPicker = Container();
         return ShortcutColorsPreset();
       case "mood":
-        subPicker = Container();
         return MoodPreset();
       case "colorsproduction":
-        subPicker = Container();
         return const ColorProductionPreset();
       case "audiovisualizer":
-        subPicker = SizedBox(
-            width: MediaQuery.of(context).size.width * 0.3,
-            child: PickerDropdown(
-                onChange: (PickerModel? returnValue) {
-                  // setState(() {});
-                },
-                pickerList: audioVisualList));
         return AudioVisualPreset();
       case "wave":
-        subPicker = Container();
         return WavePreset();
+      case "colorcycle":
+        return ColorCyclePreset();
+      case "breathing":
+        return const BreathingPreset();
+      case "blinking":
+        return const BlinkingPreset();
+      case "interactive":
+        return const InteractivePreset();
+      case "image":
+        return const ImagePreset();
+      case "ambient":
+        return const AmbeintPreset();
       default:
+        return Container();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.only(right: 5.0, top: 20.0, bottom: 20.0),
+        margin: const EdgeInsets.only(right: 10.0, top: 20.0, bottom: 30.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text("Tools & Effects", textAlign: TextAlign.left, style: h4Style),
             SizedBox(
-                width: MediaQuery.of(context).size.width * 0.3,
+                width: MediaQuery.of(context).size.width * 0.45,
                 child: PickerDropdown(
-                    onChange: (PickerModel? returnValue) {
-                      setState(() {
-                        preset = changeComponent();
-                      });
-                    },
-                    pickerList: moodList)),
-            // Container(
-            //     margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-            //     child: subPicker),
+                  onChange: (PickerModel? returnValue) {
+                    setState(() {
+                      preset = changeComponent(returnValue!);
+                    });
+                  },
+                  pickerHintText: "Picker a tool or effect mode ....",
+                  pickerList: _modeProvider.getPickerModes('mood'),
+                  defaultPicker: _defaultPreset,
+                )),
             Container(
-              margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
-              child: preset,
+              margin: const EdgeInsets.only(top: 0.0, bottom: 20.0),
+              child: preset ?? changeComponent(_defaultPreset),
             ),
           ],
         ));

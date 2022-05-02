@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/layers/layer_item_model.dart';
-import 'package:hpx/providers/layers.dart';
+import 'package:hpx/providers/apps/zlightspace_providers/layers_provider/layers.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 
 class LayerListItem extends StatefulWidget {
   const LayerListItem(
-      {Key? key, required this.layerID, required this.layerItemModel})
+      {Key? key, required this.layerIndex, required this.layerItemModel})
       : super(key: key);
 
-  final int layerID;
+  final int layerIndex;
   final LayerItemModel layerItemModel;
 
   @override
@@ -25,9 +25,6 @@ class _LayerListItemState extends State<LayerListItem> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      _layerNameController = TextEditingController(text: widget.layerItemModel.layerText);
-    });
   }
 
   _onHover(isHovering) {
@@ -37,18 +34,38 @@ class _LayerListItemState extends State<LayerListItem> {
   }
 
   _toggleLayer(provider) {
-    LayerItemModel layerItemModel = provider.getItem(widget.layerID);
-    provider.toggleVisibility(LayerItemModel(id: layerItemModel.id, layerText: layerItemModel.layerText, visible: !layerItemModel.visible, controller: layerItemModel.controller), widget.layerID);
+    LayerItemModel layerItemModel = widget.layerItemModel;
+    provider.toggleVisibility(
+        LayerItemModel(
+            id: layerItemModel.id,
+            layerText: layerItemModel.layerText,
+            visible: !layerItemModel.visible,
+            controller: layerItemModel.controller),
+        widget.layerIndex);
   }
 
-  _toggleEditing() {
+  _toggleEditing(value) {
     setState(() {
       _editing = !_editing;
+      _layerNameController = TextEditingController(
+          text: value.getItem(widget.layerIndex).layerText);
     });
   }
 
   _onTap(provider) {
-    provider.changeIndex(widget.layerID);
+    provider.changeIndex(widget.layerIndex);
+  }
+
+  _onSubmit(value, provider) {
+    setState(() {
+      _editing = !_editing;
+    });
+    provider.update(
+        LayerItemModel(
+            id: widget.layerItemModel.id,
+            layerText: value,
+            controller: widget.layerItemModel.controller),
+        widget.layerIndex);
   }
 
   @override
@@ -63,7 +80,7 @@ class _LayerListItemState extends State<LayerListItem> {
             hoverColor: Colors.transparent,
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            onTap: ()=> _onTap(_value),
+            onTap: () => _onTap(_value),
             child: Container(
               padding: const EdgeInsets.all(2),
               color: Colors.black12,
@@ -73,15 +90,16 @@ class _LayerListItemState extends State<LayerListItem> {
                   children: [
                     InkWell(
                         onTap: () => _toggleLayer(_value),
-                        child: (_value.getItem(widget.layerID).visible)
-                            ? Icon(
-                                Ionicons.eye,
-                                size: _iconSize,
-                              )
-                            : Icon(
-                                Ionicons.eye_off,
-                                size: _iconSize,
-                              )),
+                        child: Tooltip(
+                          message: "Toogle visibility",
+                          child: Icon(
+                            (_value.getItem(widget.layerIndex).visible)
+                                ? Ionicons.eye
+                                : Ionicons.eye_off,
+                            size: _iconSize,
+                            color: widget.layerItemModel.listDisplayColor,
+                          ),
+                        )),
                     const SizedBox(
                       width: 2,
                     ),
@@ -93,6 +111,7 @@ class _LayerListItemState extends State<LayerListItem> {
                             children: [
                               Icon(
                                 Ionicons.image,
+                                color: widget.layerItemModel.listDisplayColor,
                                 size: _iconSize,
                               ),
                               (_editing)
@@ -112,20 +131,8 @@ class _LayerListItemState extends State<LayerListItem> {
                                             focusColor: Colors.white,
                                             border: OutlineInputBorder(),
                                             contentPadding: EdgeInsets.all(8)),
-                                        onFieldSubmitted: (value) {
-                                          setState(() {
-                                            _editing = !_editing;
-                                          });
-                                          LayerItemModel layerItemModel =
-                                              _value.getItem(widget.layerID);
-                                          _value.update(
-                                              LayerItemModel(
-                                                id: widget.layerID,
-                                                layerText: value,
-                                                controller: layerItemModel.controller
-                                              ),
-                                              widget.layerID);
-                                        },
+                                        onFieldSubmitted: (value) =>
+                                            _onSubmit(value, _value),
                                       ),
                                     )
                                   : Expanded(
@@ -133,9 +140,12 @@ class _LayerListItemState extends State<LayerListItem> {
                                         builder: (context, value, child) {
                                           return Text(
                                             value
-                                                .getItem(widget.layerID)
+                                                .getItem(widget.layerIndex)
                                                 .layerText,
                                             overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: widget.layerItemModel
+                                                    .listDisplayColor),
                                           );
                                         },
                                       ),
@@ -150,20 +160,45 @@ class _LayerListItemState extends State<LayerListItem> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.end,
                                           children: [
-                                            InkWell(
-                                              child: Icon(
-                                                Ionicons.create,
-                                                size: _iconSize,
+                                            Tooltip(
+                                              message: "Duplicate",
+                                              child: InkWell(
+                                                child: Icon(
+                                                  Ionicons.copy,
+                                                  size: _iconSize,
+                                                  color: widget.layerItemModel
+                                                      .listDisplayColor,
+                                                ),
+                                                onTap: () => value.duplicate(
+                                                    widget.layerItemModel,
+                                                    widget.layerIndex),
                                               ),
-                                              onTap: _toggleEditing,
                                             ),
-                                            InkWell(
-                                              child: Icon(
-                                                Ionicons.trash,
-                                                size: _iconSize,
+                                            Tooltip(
+                                              message: "Edit",
+                                              child: InkWell(
+                                                child: Icon(
+                                                  Ionicons.create,
+                                                  size: _iconSize,
+                                                  color: widget.layerItemModel
+                                                      .listDisplayColor,
+                                                ),
+                                                onTap: () =>
+                                                    _toggleEditing(value),
                                               ),
-                                              onTap: () => value
-                                                  .removeItem(widget.layerID),
+                                            ),
+                                            Tooltip(
+                                              message: "Delete",
+                                              child: InkWell(
+                                                child: Icon(
+                                                  Ionicons.trash,
+                                                  size: _iconSize,
+                                                  color: widget.layerItemModel
+                                                      .listDisplayColor,
+                                                ),
+                                                onTap: () => value.removeItem(
+                                                    widget.layerIndex),
+                                              ),
                                             ),
                                           ],
                                         ),

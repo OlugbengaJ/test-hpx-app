@@ -10,6 +10,7 @@ class ThreeColumns extends StatefulWidget {
     required this.right,
     this.rightFlex = 2,
   }) : super(key: key);
+
   final Widget left;
   final int leftFlex;
   final Widget center;
@@ -30,22 +31,12 @@ class _ThreeColumnsState extends State<ThreeColumns> {
           flex: widget.leftFlex,
           child: widget.left,
         ),
-        const VerticalDivider(
-          width: 20,
-          thickness: 1,
-          indent: 20,
-          endIndent: 0,
-        ),
+        Container(margin: const EdgeInsets.only(right: 10.0)),
         Expanded(
           flex: widget.centerFlex,
           child: widget.center,
         ),
-        const VerticalDivider(
-          width: 20,
-          thickness: 1,
-          indent: 20,
-          endIndent: 0,
-        ),
+        Container(margin: const EdgeInsets.only(right: 20.0)),
         Expanded(
           flex: widget.rightFlex,
           child: widget.right,

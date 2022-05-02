@@ -1,32 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/wrapper.dart';
-import 'package:hpx/providers/layers.dart';
+import 'package:hpx/providers/apps/zlightspace_providers/layers_provider/layers.dart';
 import 'package:provider/provider.dart';
+import 'providers/apps/zlightspace_providers/keyboard/keys_provider.dart';
+import 'widgets/components/zone_selector/zone_selector_provider.dart';
 import "widgets/theme.dart";
 
 void main() => runApp(MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => LayersProvider()),
+        ChangeNotifierProvider(
+          create: (_) => LayersProvider(),          
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ZoneSelectorProvider(),        
+        ),
+        ChangeNotifierProvider(
+          create: (_) => KeysProvider(),        
+        ),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ));
 
 class MyApp extends StatelessWidget {
-  @override
+  const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       darkTheme: darkTheme.copyWith(
-          sliderTheme: SliderTheme.of(context).copyWith(
-        thumbColor: Colors.white,
-        inactiveTrackColor: Colors.grey.shade900,
-        activeTrackColor: Colors.grey.shade900,
-        overlayColor: Colors.grey.shade500,
-        thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 5.0),
-        overlayShape: const RoundSliderOverlayShape(overlayRadius: 7.0),
-      )),
+        sliderTheme: SliderTheme.of(context).copyWith(
+          thumbColor: Colors.white,
+          inactiveTrackColor: Colors.grey.shade900,
+          activeTrackColor: Colors.grey.shade900,
+          overlayColor: Colors.grey.shade500,
+          thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 5.0),
+          overlayShape: const RoundSliderOverlayShape(overlayRadius: 7.0),
+        ),
+      ),
       themeMode: ThemeMode.dark,
       title: 'HP Xperience',
       debugShowCheckedModeBanner: false,

@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:hpx/providers/apps/zlightspace_providers/keyboard/keys_provider.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:provider/provider.dart';
 
-import '../layers/widgets/layer_stack_item.dart';
+import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/zoom_toolbar.dart';
+import 'package:hpx/widgets/theme.dart';
 
 class Workspace extends StatefulWidget {
   const Workspace({Key? key, required this.layers, required this.currentIndex})
       : super(key: key);
+
   final List<LayerStackItem> layers;
   final int currentIndex;
 
@@ -16,135 +22,114 @@ class Workspace extends StatefulWidget {
 
 class _WorkspaceState extends State<Workspace> {
   double zoomValue = 1.0;
-  TextEditingController zoomController = TextEditingController();
 
-  void _zoomWorkspaceIn() {
-    setState(() {
-      zoomValue -= 0.01;
-      zoomController.text = (zoomValue * 100).toString() + "%";
-    });
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 
-  void _zoomWorkspaceOut() {
-    setState(() {
-      zoomValue += 0.01;
-      zoomController.text = (zoomValue * 100).toString() + "%";
-    });
+  _keysSelection() {
+    context.read<KeysProvider>().toggleKeySelector(true);
+  }
+
+  _selectDraggable() {
+    context.read<KeysProvider>().toggleKeySelector(false);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Stack(
-        children: [
-          Transform.scale(
-              scale: zoomValue,
-              child: LayersStack(
-                layers: widget.layers,
-                currentIndex: widget.currentIndex,
-              )),
-          Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                padding: const EdgeInsets.only(top: 15.0),
-                width: 300,
-                height: 60,
-                color: Colors.grey.shade900,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(children: [
-                        TextButton(
-                          style: TextButton.styleFrom(
-                              primary: Colors.white,
-                              backgroundColor: Colors.transparent),
-                          child: const Icon(
-                            Ionicons.add_circle,
-                            size: 30.0,
-                          ),
-                          onPressed: () {
-                            _zoomWorkspaceOut();
-                          },
-                        ),
-                      ]),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        SizedBox(
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 20.0, left: 10.0),
+              child: Text(
+                'Zone Selection',
+                textAlign: TextAlign.left,
+                style: h4Style,
+              ),
+            ),
+            Container(margin: const EdgeInsets.only(top: 5.0)),
+            SizedBox(
+              width: 200,
+              height: 50,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    style: TextButton.styleFrom(
+                        primary: Colors.white,
+                        backgroundColor: Colors.transparent,
+                        textStyle: h3Style),
+                    child: const Center(
+                      child: Icon(MdiIcons.selectAll),
                     ),
-                    Expanded(
-                      child: Column(children: [
-                        SizedBox(
-                            width: 300,
-                            height: 30,
-                            child: TextField(
-                              style: const TextStyle(fontSize: 14),
-                              obscureText: false,
-                              controller: zoomController,
-                              // maxLength: 3,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 0, horizontal: 5),
-                                hintStyle: TextStyle(color: Colors.white),
-                              ),
-                            ))
-                      ]),
-                    ),
-                    Expanded(
-                      child: Column(children: [
-                        TextButton(
-                          style: TextButton.styleFrom(
-                              primary: Colors.white,
-                              backgroundColor: Colors.transparent),
-                          child: const Icon(
-                            Ionicons.remove_circle,
-                            size: 30.0,
-                          ),
-                          onPressed: () {
-                            _zoomWorkspaceIn();
-                          },
-                        ),
-                      ]),
-                    ),
-                    Container(margin: const EdgeInsets.only(right: 20.0)),
-                    Expanded(
-                      child: Column(children: [
-                        TextButton(
-                          style: TextButton.styleFrom(
-                              primary: Colors.white,
-                              backgroundColor: Colors.transparent),
-                          child: const Icon(
-                            Ionicons.scan_outline,
-                            size: 30.0,
-                            color: Colors.grey,
-                          ),
-                          onPressed: () {},
-                        )
-                      ]),
-                    ),
-                    Expanded(
-                      child: Column(children: [
-                        TextButton(
-                          style: TextButton.styleFrom(
-                              primary: Colors.white,
-                              backgroundColor: Colors.transparent),
-                          child: const Icon(
-                            Ionicons.expand_outline,
-                            size: 30.0,
-                            color: Colors.grey,
-                          ),
-                          onPressed: () {},
-                        )
-                      ]),
-                    ),
-                  ],
-                ),
-              )),
-        ],
-      ),
-      width: double.infinity,
-      height: double.infinity,
-      decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage("assets/images/backdrop.png"),
-              repeat: ImageRepeat.repeat)),
+                    onPressed: _keysSelection,
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                        primary: Colors.white,
+                        backgroundColor: Colors.transparent,
+                        textStyle: h3Style),
+                    child: const Center(child: Icon(MdiIcons.selectDrag)),
+                    onPressed: _selectDraggable,
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                        primary: Colors.white,
+                        backgroundColor: Colors.transparent,
+                        textStyle: h3Style),
+                    child: const Center(child: Icon(MdiIcons.mouse)),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+            ),
+          ],
+        )),
+        Expanded(
+          child: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/backdrop.png"),
+                repeat: ImageRepeat.repeat,
+              ),
+            ),
+            child: Stack(
+              alignment: Alignment.bottomLeft,
+              fit: StackFit.expand,
+              children: [
+                const Keyboard(zoomScale: 1.4),
+                Transform.scale(
+                    scale: zoomValue,
+                    child: LayersStack(
+                      layers: widget.layers,
+                      currentIndex: widget.currentIndex,
+                    )),
+                Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: ZoomToolbar(
+                          zoomIndex: zoomValue,
+                          onChange: (double zoom) {
+                            setState(() {
+                              zoomValue = zoom;
+                              print(zoomValue);
+                            });
+                          }),
+                    )),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
