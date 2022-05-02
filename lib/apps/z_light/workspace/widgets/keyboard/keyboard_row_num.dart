@@ -4,6 +4,9 @@ import 'package:hpx/providers/keys_provider.dart';
 import 'package:provider/provider.dart';
 
 class KeyboardRowNum extends StatelessWidget {
+  /// [KeyboardRowNum] displays keys in the number key row i.e. tilde to backspace.
+  ///
+  /// Actual keys are drawn by [KeyboardKey].
   const KeyboardRowNum({Key? key, required this.zoomScale}) : super(key: key);
 
   final double zoomScale;

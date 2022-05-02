@@ -4,6 +4,9 @@ import 'package:hpx/providers/keys_provider.dart';
 import 'package:provider/provider.dart';
 
 class KeyboardRowTab extends StatelessWidget {
+  /// [KeyboardRowTab] displays keys in the tab key row i.e. tab to backslash.
+  ///
+  /// Actual keys are drawn by [KeyboardKey].
   const KeyboardRowTab({Key? key, required this.zoomScale}) : super(key: key);
 
   final double zoomScale;

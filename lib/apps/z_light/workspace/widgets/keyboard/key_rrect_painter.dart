@@ -1,10 +1,10 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
-/// Extends a custom painter to paint a key.
-///
-/// The painter will resize the canvas and clipper based on zoomScale.
 class KeyRRectPainter extends CustomPainter {
+  /// [KeyRRectPainter] Extends a custom painter to paint a key.
+  ///
+  /// The painter uses the clipper to draw actual object on the canvas.
   const KeyRRectPainter({
     Listenable? repaint,
     this.keyText,

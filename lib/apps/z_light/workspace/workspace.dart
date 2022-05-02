@@ -131,7 +131,6 @@ class _WorkspaceState extends State<Workspace> {
         /// Setting width/height with double.infinity is not recommended,
         /// instead we want to keep the view constrained and have excessive
         /// sub-widgets cliped only to the view.
-        ///
         Consumer<WorkspaceProvider>(
           builder: (context, value, child) => (value.showLighting)
               ? ConstrainedBox(
@@ -161,7 +160,7 @@ class _WorkspaceState extends State<Workspace> {
                                 onTapDown: () {},
                                 onTapUp: () {},
                                 size: _buttonSize,
-                                iconData: Icons.select_all,
+                                icon: Icons.select_all,
                               ),
                             ),
                             Padding(
@@ -170,14 +169,14 @@ class _WorkspaceState extends State<Workspace> {
                                 onTapDown: () {},
                                 onTapUp: () {},
                                 size: _buttonSize,
-                                iconData: Icons.highlight_alt,
+                                icon: Icons.highlight_alt,
                               ),
                             ),
                             RoundButton(
                               onTapDown: () {},
                               onTapUp: () {},
                               size: _buttonSize,
-                              iconData: Icons.mouse,
+                              icon: Icons.mouse,
                             ),
                           ],
                         ),
@@ -188,11 +187,10 @@ class _WorkspaceState extends State<Workspace> {
               : Container(),
         ),
         Consumer<WorkspaceProvider>(
-            builder: (context, value, child) => //(value.showStripNotification)
-                // ?
-                Container(
+          builder: (context, value, child) => (value.showStripNotification)
+              ? Container(
                   color: Colors.yellow,
-                  padding: const EdgeInsets.all(2),
+                  padding: const EdgeInsets.all(5),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -200,7 +198,9 @@ class _WorkspaceState extends State<Workspace> {
                         margin: const EdgeInsets.all(0),
                         child: Text(
                           value.stripNotificationText,
-                          style: const TextStyle(color: Colors.white),
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColorDark,
+                          ),
                         ),
                       ),
                       RoundButton(
@@ -209,13 +209,14 @@ class _WorkspaceState extends State<Workspace> {
                         },
                         onTapUp: () {},
                         size: 24,
-                        iconData: Icons.cancel,
-                      )
+                        icon: Icons.close,
+                        iconColor: Theme.of(context).primaryColor,
+                      ),
                     ],
                   ),
                 )
-            // : Container(),
-            ),
+              : Container(),
+        ),
         Expanded(
           child: Stack(
             alignment: Alignment.bottomLeft,

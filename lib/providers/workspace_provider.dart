@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
 
+/// [WorkspaceProvider] handles the workspace events
+/// e.g. display certain widgets based on certain events.
 class WorkspaceProvider with ChangeNotifier {
-  /// showLighting determines if the lighting options is displayed.
+  /// [showLighting] determines if the lighting options is displayed.
   bool showLighting = false;
+
+  /// [showStripNotification] indicates if the strip notifcation should be displayed.
   bool showStripNotification = false;
+
+  /// [stripNotificationText] indicates text used by the strip notifcation.
   String stripNotificationText = '';
 
   void toggleView(WorkspaceView view) {

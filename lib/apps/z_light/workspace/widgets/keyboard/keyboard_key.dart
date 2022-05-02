@@ -4,6 +4,9 @@ import 'package:hpx/providers/key_model.dart';
 import 'package:provider/provider.dart';
 
 class KeyboardKey extends StatelessWidget {
+  /// [KeyboardKey] draws a key based on [KeyModel] specification.
+  ///
+  /// Zoom scale impacts the size of the key.
   const KeyboardKey({
     Key? key,
     this.onTapHandler,

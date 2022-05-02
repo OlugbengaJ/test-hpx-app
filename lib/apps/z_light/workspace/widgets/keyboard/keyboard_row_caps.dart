@@ -4,6 +4,9 @@ import 'package:hpx/providers/keys_provider.dart';
 import 'package:provider/provider.dart';
 
 class KeyboardRowCaps extends StatelessWidget {
+  /// [KeyboardRowCaps] displays keys in the caps key row i.e. caps to enter.
+  ///
+  /// Actual keys are drawn by [KeyboardKey].
   const KeyboardRowCaps({Key? key, required this.zoomScale}) : super(key: key);
 
   final double zoomScale;

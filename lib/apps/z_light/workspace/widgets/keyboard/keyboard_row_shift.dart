@@ -4,6 +4,9 @@ import 'package:hpx/providers/keys_provider.dart';
 import 'package:provider/provider.dart';
 
 class KeyboardRowShift extends StatelessWidget {
+  /// [KeyboardRowShift] displays keys in the shift key row i.e. left shift to right shift.
+  ///
+  /// Actual keys are drawn by [KeyboardKey].
   const KeyboardRowShift({Key? key, required this.zoomScale}) : super(key: key);
 
   final double zoomScale;

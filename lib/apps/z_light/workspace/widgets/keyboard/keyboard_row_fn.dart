@@ -4,6 +4,9 @@ import 'package:hpx/providers/keys_provider.dart';
 import 'package:provider/provider.dart';
 
 class KeyboardRowFn extends StatelessWidget {
+  /// [KeyboardRowFn] displays keys in the function key row i.e. esc to delete.
+  ///
+  /// Actual keys are drawn by [KeyboardKey].
   const KeyboardRowFn({Key? key, required this.zoomScale}) : super(key: key);
 
   final double zoomScale;

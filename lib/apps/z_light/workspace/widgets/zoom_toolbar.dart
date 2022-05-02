@@ -46,7 +46,7 @@ class ZoomToolbar extends StatelessWidget {
                 message: 'Zoom In',
                 triggerMode: TooltipTriggerMode.tap,
                 child: RoundButton(
-                  iconData: Icons.add_circle_rounded,
+                  icon: Icons.add_circle_rounded,
                   size: buttonSize,
                   onTapDown: zoomInHandler,
                   onTapUp: zoomEndHandler,
@@ -81,7 +81,7 @@ class ZoomToolbar extends StatelessWidget {
                 message: 'Zoom Out',
                 triggerMode: TooltipTriggerMode.tap,
                 child: RoundButton(
-                  iconData: Icons.remove_circle_rounded,
+                  icon: Icons.remove_circle_rounded,
                   size: buttonSize,
                   onTapDown: zoomOutHandler,
                   onTapUp: zoomEndHandler,
@@ -95,7 +95,7 @@ class ZoomToolbar extends StatelessWidget {
                 message: 'Collapse',
                 triggerMode: TooltipTriggerMode.tap,
                 child: RoundButton(
-                  iconData: Icons.center_focus_strong_sharp,
+                  icon: Icons.center_focus_strong_sharp,
                   size: buttonSize,
                   onTapDown: zoomCollapseHandler,
                   onTapUp: zoomEndHandler,
@@ -109,7 +109,7 @@ class ZoomToolbar extends StatelessWidget {
                 message: 'Expand',
                 triggerMode: TooltipTriggerMode.tap,
                 child: RoundButton(
-                  iconData: Icons.fullscreen_sharp,
+                  icon: Icons.fullscreen_sharp,
                   size: buttonSize + 6, // adjust the icon size to match
                   onTapDown: zoomExpandHandler,
                   onTapUp: zoomEndHandler,

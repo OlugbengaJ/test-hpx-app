@@ -4,6 +4,9 @@ import 'package:hpx/providers/keys_provider.dart';
 import 'package:provider/provider.dart';
 
 class KeyboardRowCtrl extends StatelessWidget {
+  /// [KeyboardRowCtrl] displays keys in the ctrl row i.e. ctrl to arrow_right.
+  ///
+  /// Actual keys are drawn by [KeyboardKey].
   const KeyboardRowCtrl({Key? key, required this.zoomScale}) : super(key: key);
 
   final double zoomScale;
