@@ -255,7 +255,6 @@ class _WorkspaceState extends State<Workspace> {
                 ),
                 child: LayersStack(
                   layers: widget.layers,
-                  currentIndex: 0,
                 ),
               ),
 
