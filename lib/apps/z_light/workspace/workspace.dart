@@ -13,18 +13,6 @@ import 'package:provider/provider.dart';
 
 class Workspace extends StatefulWidget {
   const Workspace({Key? key, required this.layers}) : super(key: key);
-// import 'package:hpx/providers/apps/zlightspace_providers/keyboard/keys_provider.dart';
-// import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-// import 'package:provider/provider.dart';
-
-// import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
-// import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
-// import 'package:hpx/apps/z_light/workspace/widgets/zoom_toolbar.dart';
-// import 'package:hpx/widgets/theme.dart';
-
-// class Workspace extends StatefulWidget {
-//   const Workspace({Key? key, required this.layers, required this.currentIndex})
-//       : super(key: key);
 
   final List<LayerStackItem> layers;
 
