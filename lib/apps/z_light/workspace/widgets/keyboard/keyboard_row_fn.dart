@@ -30,18 +30,12 @@ class KeyboardRowFn extends StatelessWidget {
             // when flutter rebuilds the widget tree
             child: ChangeNotifierProvider.value(
               value: keyModel,
-              builder: (_, w) => DragTarget<bool>(
-                builder: (ctx, candidateData, rejectedData) => KeyboardKey(
-                  key: ValueKey(keyModel.keyCode),
-                  onTapHandler: () {
-                    debugPrint('\r\n key ${keyModel.keyCode} triggered');
-                  },
-                  zoomScale: zoomScale,
-                ),
-                onAccept: (e) {
-                  debugPrint('fn row $e');
-                  keyModel.keyHighlighted();
+              builder: (_, w) => KeyboardKey(
+                key: ValueKey(keyModel.keyCode),
+                onTapHandler: () {
+                  debugPrint('\r\n key ${keyModel.keyCode} triggered');
                 },
+                zoomScale: zoomScale,
               ),
             ),
           ),

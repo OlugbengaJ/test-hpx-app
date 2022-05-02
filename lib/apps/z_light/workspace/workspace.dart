@@ -259,14 +259,7 @@ class _WorkspaceState extends State<Workspace> {
                     },
                     minScale: 0.8,
                     maxScale: 4,
-                    child: Draggable<bool>(
-                        data: true,
-                        feedback: Container(
-                          color: Colors.white.withOpacity(0.4),
-                          height: 100,
-                          width: 100,
-                        ),
-                        child: Keyboard(zoomScale: _zoomScale)),
+                    child: Keyboard(zoomScale: _zoomScale),
                   );
                 },
               ),
