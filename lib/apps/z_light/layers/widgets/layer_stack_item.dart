@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/layers/widgets/stateful_resizable.dart';
-import 'package:hpx/providers/apps/zlightspace_providers/layers_provider/layers.dart';
+import 'package:hpx/models/layers/layer_item_model.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../models/layers/layer_item_model.dart';
 
 class LayerStackItem extends StatefulWidget {
   const LayerStackItem({Key? key, required this.layerItemModel})

@@ -11,7 +11,7 @@ import 'package:hpx/apps/z_light/tools_effects/widgets/tools/color_production.da
 import 'package:hpx/apps/z_light/tools_effects/widgets/tools/moods.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/tools/shortcut_colors.dart';
 import 'package:hpx/models/tools_effect/tools_mode_model.dart';
-import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/mode_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
 

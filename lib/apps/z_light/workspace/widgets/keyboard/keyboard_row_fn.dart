@@ -16,7 +16,7 @@ class KeyboardRowFn extends StatelessWidget {
     double _zoomedPadding = 2.0 * zoomScale;
 
     final keysProvider = Provider.of<KeysProvider>(context);
-    final rowKeys = keysProvider.getKeyInRow(1);
+    final rowKeys = keysProvider.getKeyInRow(0);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

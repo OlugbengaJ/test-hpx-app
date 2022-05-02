@@ -96,11 +96,11 @@ class _WorkspaceState extends State<Workspace> {
   }
 
   _keysSelection() {
-    context.read<KeysProvider>().toggleKeySelector(true);
+    context.read<KeySelectorProvider>().toggleKeySelector(true);
   }
 
   _selectDraggable() {
-    context.read<KeysProvider>().toggleKeySelector(false);
+    context.read<KeySelectorProvider>().toggleKeySelector(false);
   }
 
   /// zoomOut decreases the zoomValue only up to the zoomOut threshold

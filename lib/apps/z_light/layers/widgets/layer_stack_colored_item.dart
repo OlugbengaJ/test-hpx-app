@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/apps/z_light/layers/widgets/stateful_resizable.dart';
-import 'package:hpx/providers/apps/zlightspace_providers/layers_provider/layers.dart';
+import 'package:hpx/apps/z_light/layers/widgets/colored_resizable.dart';
+import 'package:hpx/models/layers/layer_item_model.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../models/layers/layer_item_model.dart';
-import 'colored_resizable.dart';
 
 class LayerStackColoredItem extends StatefulWidget {
   const LayerStackColoredItem({Key? key, required this.layerItemModel})
@@ -20,11 +18,10 @@ class _LayerStackColoredItemState extends State<LayerStackColoredItem> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Consumer<LayersProvider>(builder: (context, _value, child) {
       return Container(
         color: Colors.transparent,
-        child: ColoredResizable(          
+        child: ColoredResizable(
           dragWidgetHeight: dragWidgetSize,
           dragWidgetWidth: dragWidgetSize,
           controller: widget.layerItemModel.controller,

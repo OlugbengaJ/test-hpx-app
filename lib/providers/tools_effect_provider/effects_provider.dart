@@ -1,5 +1,5 @@
 import 'package:hpx/models/tools_effect/effects_model.dart';
-import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/mode_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 
 class EffectProvider {
   EffectsModel? currentEffect;

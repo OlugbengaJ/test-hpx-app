@@ -16,7 +16,7 @@ class KeyboardRowShift extends StatelessWidget {
     double _zoomedPadding = 2.0 * zoomScale;
 
     final keysProvider = Provider.of<KeysProvider>(context);
-    final rowKeys = keysProvider.getKeyInRow(5);
+    final rowKeys = keysProvider.getKeyInRow(4);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,

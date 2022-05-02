@@ -16,7 +16,7 @@ class KeyboardRowCtrl extends StatelessWidget {
     double _zoomedPadding = 2.0 * zoomScale;
 
     final keysProvider = Provider.of<KeysProvider>(context);
-    final rowKeysFiltered = keysProvider.getKeyInRow(6).where((element) =>
+    final rowKeysFiltered = keysProvider.getKeyInRow(5).where((element) =>
         element.keyCode != 'KEY_ARROW_UP' &&
         element.keyCode != 'KEY_ARROW_DOWN' &&
         element.keyCode != 'KEY_ARROW_RIGHT');

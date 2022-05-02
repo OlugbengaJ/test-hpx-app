@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/apps/z_light/wrapper.dart';
+import 'package:hpx/providers/keyboard/keys_provider.dart';
 import 'package:hpx/providers/keys_provider.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/workspace_provider.dart';
@@ -13,6 +14,7 @@ void main() => runApp(
         providers: [
           ChangeNotifierProvider(create: (_) => LayersProvider()),
           ChangeNotifierProvider(create: (context) => KeysProvider()),
+          ChangeNotifierProvider(create: (context) => KeySelectorProvider()),
           ChangeNotifierProvider(create: (context) => WorkspaceProvider()),
           ChangeNotifierProvider(create: (_) => ZoneSelectorProvider()),
         ],

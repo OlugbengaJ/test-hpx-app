@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/tools_effect/color_picker_model.dart';
-import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/mode_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/color_picker.dart';
 
 // waves lists

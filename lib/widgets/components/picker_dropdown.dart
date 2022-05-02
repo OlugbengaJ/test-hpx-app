@@ -40,11 +40,9 @@ class _PickerDropdownState extends State<PickerDropdown> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
       currentPickerValue = widget.defaultPicker;
-      // widget.onChange(widget.defaultPicker);
     });
   }
 
@@ -57,10 +55,11 @@ class _PickerDropdownState extends State<PickerDropdown> {
         height: 35,
         margin: const EdgeInsets.only(top: 10, bottom: 0),
         decoration: BoxDecoration(
-            border: Border.all(
-          width: 1,
-          color: Colors.grey.shade700,
-        )),
+          border: Border.all(
+            width: 1,
+            color: Colors.grey.shade700,
+          ),
+        ),
         child: DropdownButton<PickerModel>(
           menuMaxHeight: 400,
           focusColor: Colors.transparent,
@@ -68,7 +67,9 @@ class _PickerDropdownState extends State<PickerDropdown> {
           dropdownColor: Colors.grey.shade900,
           hint: SizedBox(
             child: Row(
-              children: [Text(widget.pickerHintText!)],
+              children: [
+                Text(widget.pickerHintText!),
+              ],
             ),
           ),
           icon: const Icon(
@@ -77,10 +78,6 @@ class _PickerDropdownState extends State<PickerDropdown> {
           ),
           elevation: 2,
           alignment: AlignmentDirectional.bottomStart,
-          underline: const SizedBox(
-            height: 30,
-            width: 2,
-          ),
           onChanged: (PickerModel? newValue) {
             setState(() {
               currentPickerValue = newValue;
@@ -93,7 +90,6 @@ class _PickerDropdownState extends State<PickerDropdown> {
               enabled: value.enabled,
               value: value,
               child: Container(
-                // margin: const EdgeInsets.only(left: 10),
                 padding: EdgeInsets.only(
                     left: value.enabled == true ? 20 : 0, top: 0, bottom: 0),
                 child: Row(
@@ -115,6 +111,10 @@ class _PickerDropdownState extends State<PickerDropdown> {
               ),
             );
           }).toList(),
+          underline: const SizedBox(
+            height: 30,
+            width: 2,
+          ),
         ),
       ),
     );

@@ -8,8 +8,8 @@ import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
 import 'package:hpx/apps/z_light/tools_effects/tools_effects_wrapper.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
 import 'package:hpx/providers/workspace_provider.dart';
-import 'package:hpx/providers/apps/zlightspace_providers/keyboard/keys_provider.dart';
-import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/mode_provider.dart';
+import 'package:hpx/providers/keyboard/keys_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/components/zone_selector/zone_selector_provider.dart';
 import 'package:hpx/widgets/layouts/three_columns.dart';
@@ -62,7 +62,7 @@ class _WrapperState extends State<Wrapper> {
     //   currentView = value;
     // });
 
-    context.read<KeysProvider>().clearKeys();
+    context.read<KeySelectorProvider>().clearKeys();
     context.read<ZoneSelectorProvider>().updatePosition();
 
     // if (currentView == "lighting") {
