@@ -15,7 +15,7 @@ class KeyboardKey extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final KeyModel keyModel = Provider.of<KeyModel>(context);
+    // final KeyModel keyModel = Provider.of<KeyModel>(context);
 
     return Stack(
       children: [
@@ -24,18 +24,20 @@ class KeyboardKey extends StatelessWidget {
             onTap: onTapHandler,
             onTapDown: (details) => debugPrint('tap down'),
             onHighlightChanged: (e) => debugPrint('highlight $e'),
-            child: KeyRRect(
-              paintingStyle: keyModel.paintingStyle,
-              keyText: keyModel.keyText,
-              keyTextColor: keyModel.keyTextColor,
-              keyTextDirection: keyModel.keyTextDirection,
-              keyPathColors: keyModel.keyPathColors!,
-              zoomScale: zoomScale,
-              keyLeft: keyModel.keyLeft * zoomScale,
-              keyTop: keyModel.keyTop * zoomScale,
-              keyRadius: keyModel.keyRadius,
-              keyWidth: keyModel.keyWidth,
-              keyHeight: keyModel.keyHeight,
+            child: Consumer<KeyModel>(
+              builder: (context, keyModel, child) => KeyRRect(
+                paintingStyle: keyModel.paintingStyle,
+                keyText: keyModel.keyText,
+                keyTextColor: keyModel.keyTextColor,
+                keyTextDirection: keyModel.keyTextDirection,
+                keyPathColors: keyModel.keyPathColors!,
+                zoomScale: zoomScale,
+                keyLeft: keyModel.keyLeft * zoomScale,
+                keyTop: keyModel.keyTop * zoomScale,
+                keyRadius: keyModel.keyRadius,
+                keyWidth: keyModel.keyWidth,
+                keyHeight: keyModel.keyHeight,
+              ),
             ),
           ),
         ),

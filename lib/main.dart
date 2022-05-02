@@ -3,6 +3,7 @@ import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/apps/z_light/wrapper.dart';
 import 'package:hpx/providers/keys_provider.dart';
 import 'package:hpx/providers/layers.dart';
+import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -10,6 +11,7 @@ void main() => runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LayersProvider()),
         ChangeNotifierProvider(create: (context) => KeysProvider()),
+        ChangeNotifierProvider(create: (context) => WorkspaceProvider()),
       ],
       child: const MyApp(),
     ));

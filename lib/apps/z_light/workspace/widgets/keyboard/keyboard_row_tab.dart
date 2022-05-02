@@ -21,9 +21,13 @@ class KeyboardRowTab extends StatelessWidget {
         ...rowKeys.map(
           (keyModel) => Padding(
             padding: EdgeInsets.all(_zoomedPadding),
-            child: ChangeNotifierProvider(
-              create: (BuildContext context) => keyModel,
-              child: KeyboardKey(
+
+            // use ChangeNotifierProvider.value() when using child values of Provider.of()
+            // as notifier; otherwise you encounter errors with ChangeNotifierProvider(create)
+            // when flutter rebuilds the widget tree
+            child: ChangeNotifierProvider.value(
+              value: keyModel,
+              builder: (context, child) => KeyboardKey(
                 onTapHandler: () {
                   debugPrint('\r\n key ${keyModel.keyCode} triggered');
                 },

@@ -36,7 +36,6 @@ class KeyModel with ChangeNotifier {
   final double keyRadius;
 
   List<Color>? oldColors;
-  KeyModel? oldInstance;
 
   void keyHighlighted() {
     debugPrint('$keyCode highlighted');

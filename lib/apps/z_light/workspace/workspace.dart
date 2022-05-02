@@ -1,20 +1,19 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:hpx/apps/z_light/app_constants.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/round_button.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/zoom_toolbar.dart';
+import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/widgets/theme.dart';
+import 'package:provider/provider.dart';
 
 class Workspace extends StatefulWidget {
-  const Workspace({Key? key, required this.layers, required this.currentView})
-      : super(key: key);
+  const Workspace({Key? key, required this.layers}) : super(key: key);
 
   final List<LayerStackItem> layers;
-  final AppConstants currentView;
 
   @override
   State<Workspace> createState() => _WorkspaceState();
@@ -132,57 +131,62 @@ class _WorkspaceState extends State<Workspace> {
         /// Setting width/height with double.infinity is not recommended,
         /// instead we want to keep the view constrained and have excessive
         /// sub-widgets cliped only to the view.
-        if (widget.currentView == AppConstants.lighting)
-          ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxHeight: 90, //MediaQuery.of(context).size.height * 0.12
-            ),
-            child: Container(
-              margin: const EdgeInsets.only(top: 20, right: 10, bottom: 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Text(
-                      'Zone Selection',
-                      textAlign: TextAlign.left,
-                      style: h4Style,
+        ///
+        Consumer<WorkspaceProvider>(
+          builder: (context, value, child) => (value.showLighting)
+              ? ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    maxHeight: 90, //MediaQuery.of(context).size.height * 0.12
+                  ),
+                  child: Container(
+                    margin:
+                        const EdgeInsets.only(top: 20, right: 10, bottom: 5),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'Zone Selection',
+                            textAlign: TextAlign.left,
+                            style: h4Style,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 20),
+                              child: RoundButton(
+                                onTapDown: () {},
+                                onTapUp: () {},
+                                size: _buttonSize,
+                                iconData: Icons.select_all,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 20),
+                              child: RoundButton(
+                                onTapDown: () {},
+                                onTapUp: () {},
+                                size: _buttonSize,
+                                iconData: Icons.highlight_alt,
+                              ),
+                            ),
+                            RoundButton(
+                              onTapDown: () {},
+                              onTapUp: () {},
+                              size: _buttonSize,
+                              iconData: Icons.mouse,
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 20),
-                        child: RoundButton(
-                          onTapDown: () {},
-                          onTapUp: () {},
-                          size: _buttonSize,
-                          iconData: Icons.select_all,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 20),
-                        child: RoundButton(
-                          onTapDown: () {},
-                          onTapUp: () {},
-                          size: _buttonSize,
-                          iconData: Icons.highlight_alt,
-                        ),
-                      ),
-                      RoundButton(
-                        onTapDown: () {},
-                        onTapUp: () {},
-                        size: _buttonSize,
-                        iconData: Icons.mouse,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
+                )
+              : Container(),
+        ),
         Expanded(
           child: Stack(
             alignment: Alignment.bottomLeft,

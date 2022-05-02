@@ -17,11 +17,11 @@ class Keyboard extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         KeyboardRowFn(key: const ValueKey(1), zoomScale: zoomScale),
-        // KeyboardRowNum(zoomScale: zoomScale),
-        // KeyboardRowTab(zoomScale: zoomScale),
-        // KeyboardRowCaps(zoomScale: zoomScale),
-        // KeyboardRowShift(zoomScale: zoomScale),
-        // KeyboardRowCtrl(zoomScale: zoomScale),
+        KeyboardRowNum(zoomScale: zoomScale),
+        KeyboardRowTab(zoomScale: zoomScale),
+        KeyboardRowCaps(zoomScale: zoomScale),
+        KeyboardRowShift(zoomScale: zoomScale),
+        KeyboardRowCtrl(zoomScale: zoomScale),
       ],
     );
   }

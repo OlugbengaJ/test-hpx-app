@@ -27,9 +27,13 @@ class KeyboardRowCtrl extends StatelessWidget {
         ...rowKeysFiltered.map(
           (keyModel) => Padding(
             padding: EdgeInsets.all(_zoomedPadding),
-            child: ChangeNotifierProvider(
-              create: (BuildContext context) => keyModel,
-              child: KeyboardKey(
+
+            // use ChangeNotifierProvider.value() when using child values of Provider.of()
+            // as notifier; otherwise you encounter errors with ChangeNotifierProvider(create)
+            // when flutter rebuilds the widget tree
+            child: ChangeNotifierProvider.value(
+              value: keyModel,
+              builder: (context, child) => KeyboardKey(
                 onTapHandler: () {
                   debugPrint('\r\n key ${keyModel.keyCode} triggered');
                 },
@@ -45,9 +49,9 @@ class KeyboardRowCtrl extends StatelessWidget {
             children: [
               Padding(
                 padding: EdgeInsets.only(bottom: _zoomedPadding),
-                child: ChangeNotifierProvider(
-                  create: (BuildContext context) => rowKeyUp,
-                  child: KeyboardKey(
+                child: ChangeNotifierProvider.value(
+                  value: rowKeyUp,
+                  builder: (context, child) => KeyboardKey(
                     onTapHandler: () {
                       debugPrint('\r\n key ${rowKeyUp.keyCode} triggered');
                     },
@@ -57,9 +61,9 @@ class KeyboardRowCtrl extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.only(top: _zoomedPadding),
-                child: ChangeNotifierProvider(
-                  create: (BuildContext context) => rowKeyDown,
-                  child: KeyboardKey(
+                child: ChangeNotifierProvider.value(
+                  value: rowKeyDown,
+                  builder: (context, child) => KeyboardKey(
                     onTapHandler: () {
                       debugPrint('\r\n key ${rowKeyDown.keyCode} triggered');
                     },
@@ -72,9 +76,9 @@ class KeyboardRowCtrl extends StatelessWidget {
         ),
         Padding(
           padding: EdgeInsets.all(_zoomedPadding),
-          child: ChangeNotifierProvider(
-            create: (BuildContext context) => rowKeyRight,
-            child: KeyboardKey(
+          child: ChangeNotifierProvider.value(
+            value: rowKeyRight,
+            builder: (context, child) => KeyboardKey(
               onTapHandler: () {
                 debugPrint('\r\n key ${rowKeyRight.keyCode} triggered');
               },

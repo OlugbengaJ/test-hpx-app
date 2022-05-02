@@ -21,10 +21,14 @@ class KeyboardRowFn extends StatelessWidget {
         ...rowKeys.map(
           (keyModel) => Padding(
             padding: EdgeInsets.all(_zoomedPadding),
-            child: ChangeNotifierProvider(
-              create: (_) => keyModel,
+
+            // use ChangeNotifierProvider.value() when using child values of Provider.of()
+            // as notifier; otherwise you encounter errors with ChangeNotifierProvider(create)
+            // when flutter rebuilds the widget tree
+            child: ChangeNotifierProvider.value(
+              value: keyModel,
               builder: (_, w) => DragTarget<bool>(
-                builder: (context, candidateData, rejectedData) => KeyboardKey(
+                builder: (ctx, candidateData, rejectedData) => KeyboardKey(
                   key: ValueKey(keyModel.keyCode),
                   onTapHandler: () {
                     debugPrint('\r\n key ${keyModel.keyCode} triggered');

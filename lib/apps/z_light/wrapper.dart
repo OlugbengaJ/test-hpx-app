@@ -1,11 +1,13 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:hpx/apps/z_light/app_constants.dart';
+import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/tools_effects/tools_effects_wrapper.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
+import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/widgets/layouts/three_columns.dart';
 import 'package:hpx/widgets/theme.dart';
+import 'package:provider/provider.dart';
 
 import 'layers/layers.dart';
 import 'layers/widgets/layer_list_item.dart';
@@ -21,7 +23,6 @@ class Wrapper extends StatefulWidget {
 class _WrapperState extends State<Wrapper> {
   final List<LayerListItem> _layersListItems = [];
   final List<LayerStackItem> _layersStackItems = [];
-  AppConstants _currentView = AppConstants.workspace;
 
   @override
   void initState() {
@@ -49,16 +50,10 @@ class _WrapperState extends State<Wrapper> {
     });
   }
 
-  _changeView(AppConstants view) {
-    if (view != _currentView) {
-      setState(() {
-        _currentView = view;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final workspaceProvider = Provider.of<WorkspaceProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         //title: const Text("Z Light Space"),
@@ -73,14 +68,14 @@ class _WrapperState extends State<Wrapper> {
                       TextButton(
                         style: TextButton.styleFrom(
                             fixedSize: const Size(150, 50),
-                            primary: (_currentView == AppConstants.workspace)
+                            primary: (!workspaceProvider.showLighting)
                                 ? Colors.white
                                 : Colors.grey,
                             backgroundColor: Colors.transparent,
                             textStyle: h3Style),
                         child: const Text('Workspace'),
                         onPressed: () {
-                          _changeView(AppConstants.workspace);
+                          workspaceProvider.toggleView(WorkspaceView.workspace);
                         },
                       ),
                     ]),
@@ -92,14 +87,14 @@ class _WrapperState extends State<Wrapper> {
                     TextButton(
                       style: TextButton.styleFrom(
                           fixedSize: const Size(150, 50),
-                          primary: (_currentView != AppConstants.workspace)
+                          primary: (workspaceProvider.showLighting)
                               ? Colors.white
                               : Colors.grey,
                           backgroundColor: Colors.transparent,
                           textStyle: h3Style),
                       child: const Text('Lighting Options'),
                       onPressed: () {
-                        _changeView(AppConstants.lighting);
+                        workspaceProvider.toggleView(WorkspaceView.lighting);
                       },
                     ),
                   ],
@@ -111,16 +106,12 @@ class _WrapperState extends State<Wrapper> {
       ),
       body: SafeArea(
         child: ThreeColumns(
-          left: (_currentView != AppConstants.workspace)
-              ? Layers(onReorder: _updateLayers, layers: _layersListItems)
-              : null,
-          center: Workspace(
+          leftWidget:
+              Layers(onReorder: _updateLayers, layers: _layersListItems),
+          centerWidget: Workspace(
             layers: _layersStackItems,
-            currentView: _currentView,
           ),
-          right: (_currentView != AppConstants.workspace)
-              ? const ToolsEffectsWrapper()
-              : null,
+          rightWidget: const ToolsEffectsWrapper(),
         ),
       ),
     );
