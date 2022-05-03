@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard_key.dart';
 
 class KeyModel with ChangeNotifier {
   KeyModel({
@@ -35,17 +36,26 @@ class KeyModel with ChangeNotifier {
   final double keyHeight;
   final double keyRadius;
 
-  List<Color>? oldColors;
+  List<Color>? keyPathColorsBefore;
+  PaintingStyle? paintingStyleBefore;
 
-  void keyHighlighted() {
+  /// [getRenderObject] gets the current [RenderObject] of the [KeyboardKey] widget.
+  RenderBox? getRenderObject(BuildContext context) {
+    return context.findRenderObject() as RenderBox?;
+  }
+
+  /// [shouldHighlight] indicates if [KeyModel] is under a selected zone or added by click.
+  void shouldHighlight(Offset zoneOffset) {
     debugPrint('$keyCode highlighted');
+    debugPrint('$keyCode parent offset $zoneOffset');
 
     if (keyPathColors != null) {
-      oldColors = [...keyPathColors!];
+      keyPathColorsBefore = [...keyPathColors!];
+      paintingStyleBefore = paintingStyle;
     }
 
     // highlight the color
-    keyPathColors = [Colors.red.withOpacity(0)];
+    keyPathColors = [Colors.orange];
     paintingStyle = PaintingStyle.fill;
 
     notifyListeners();

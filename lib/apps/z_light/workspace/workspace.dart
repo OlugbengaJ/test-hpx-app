@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
@@ -132,6 +133,8 @@ class _WorkspaceState extends State<Workspace> {
 
   @override
   Widget build(BuildContext context) {
+    final workspaceProvider = Provider.of<WorkspaceProvider>(context);
+
     return Column(
       children: [
         /// Workspace area must be constrained to avoid width/height overflow
@@ -193,7 +196,10 @@ class _WorkspaceState extends State<Workspace> {
                     ),
                   ),
                 )
-              : Container(),
+              : ConstrainedBox(
+                  constraints: const BoxConstraints(maxHeight: 0),
+                  child: Container(),
+                ),
         ),
         Consumer<WorkspaceProvider>(
           builder: (context, value, child) => (value.showStripNotification)
@@ -230,57 +236,90 @@ class _WorkspaceState extends State<Workspace> {
               : Container(),
         ),
         Expanded(
-          child: Stack(
-            alignment: Alignment.bottomLeft,
-            fit: StackFit.expand,
-            children: [
-              Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/images/backdrop.png"),
-                    repeat: ImageRepeat.repeat,
-                  ),
-                ),
-                child: LayersStack(
-                  layers: widget.layers,
-                ),
+          child: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/backdrop.png"),
+                repeat: ImageRepeat.repeat,
               ),
+            ),
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              dragStartBehavior: DragStartBehavior.start,
+              onPanStart: (details) => workspaceProvider.onPanStart(
+                  details, MediaQuery.of(context).size),
+              onPanUpdate: (details) => workspaceProvider.onPanUpdate(details),
+              onPanEnd: (details) => workspaceProvider.onPanEnd(details),
+              onPanCancel: () => workspaceProvider.onPanCancel(),
+              child: Stack(
+                alignment: Alignment.bottomLeft,
+                fit: StackFit.expand,
+                children: [
+                  /// Keyboard widget takes a zoom scale which is applied to all keys.
+                  ///
+                  /// This ensures seamless zooming of the entire keyboard.
+                  Keyboard(zoomScale: _zoomScale),
+                  LayersStack(
+                    layers: widget.layers,
+                  ),
+                  if (workspaceProvider.panStartDetails != null &&
+                      workspaceProvider.panUpdateDetails != null)
+                    Consumer<WorkspaceProvider>(
+                      builder: (context, value, child) => Positioned(
+                        left: value.leftZonePosition,
+                        top: value.topZonePosition,
+                        right: value.rightZonePosition,
+                        bottom: value.bottomZonePosition,
+                        child: Container(
+                          margin: EdgeInsets.zero,
+                          height: value.zoneHeight,
+                          width: value.zoneWidth,
+                          decoration: BoxDecoration(
+                            color: Colors.blue.withOpacity(0.3),
+                          ),
+                        ),
+                      ),
+                    ),
+                  // ),
 
-              /// Keyboard widget takes a zoom scale which is applied to all keys.
-              ///
-              /// This ensures seamless zooming of the entire keyboard.
-              LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-                  return InteractiveViewer(
-                    onInteractionUpdate: (details) {
-                      // debugPrint('max height ${constraints.maxHeight}');
-                      // debugPrint('iv update=> scale: ${details.scale}');
-                      // final v = _zoomScale * details.scale;
-                    },
-                    minScale: 0.8,
-                    maxScale: 4,
-                    child: Keyboard(zoomScale: _zoomScale),
-                  );
-                },
+                  /// Keyboard widget takes a zoom scale which is applied to all keys.
+                  ///
+                  /// This ensures seamless zooming of the entire keyboard.
+                  // LayoutBuilder(
+                  //   builder: (BuildContext context, BoxConstraints constraints) {
+                  //     return InteractiveViewer(
+                  //       onInteractionUpdate: (details) {
+                  //         // debugPrint('max height ${constraints.maxHeight}');
+                  //         // debugPrint('iv update=> scale: ${details.scale}');
+                  //         // final v = _zoomScale * details.scale;
+                  //       },
+                  //       minScale: 0.8,
+                  //       maxScale: 4,
+                  //       child: Keyboard(zoomScale: _zoomScale),
+                  //     );
+                  //   },
+                  // ),
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: ZoomToolbar(
+                        zoomTextController: _zoomTextCtrl,
+                        zoomInHandler: _zoomIn,
+                        zoomExpandHandler: _zoomExpand,
+                        zoomOutHandler: _zoomOut,
+                        zoomCollapseHandler: _zoomCollapse,
+                        zoomEndHandler: _zoomEnd,
+                      ),
+                    ),
+                  )
+                ],
               ),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Center(
-                  child: ZoomToolbar(
-                    zoomTextController: _zoomTextCtrl,
-                    zoomInHandler: _zoomIn,
-                    zoomExpandHandler: _zoomExpand,
-                    zoomOutHandler: _zoomOut,
-                    zoomCollapseHandler: _zoomCollapse,
-                    zoomEndHandler: _zoomEnd,
-                  ),
-                ),
-              )
-            ],
+            ),
           ),
-        ),
+          // ],
+        )
       ],
     );
   }
