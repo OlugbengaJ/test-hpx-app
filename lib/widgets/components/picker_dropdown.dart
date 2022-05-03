@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/theme.dart';
+import 'package:provider/provider.dart';
 
 class PickerModel {
   final String title;
@@ -40,11 +43,12 @@ class _PickerDropdownState extends State<PickerDropdown> {
 
   @override
   void initState() {
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
     // TODO: implement initState
     super.initState();
     setState(() {
       currentPickerValue = widget.defaultPicker;
-      // widget.onChange(widget.defaultPicker);
     });
   }
 
@@ -82,6 +86,7 @@ class _PickerDropdownState extends State<PickerDropdown> {
             width: 2,
           ),
           onChanged: (PickerModel? newValue) {
+            // print(modeProvider.currentMode?.value);
             setState(() {
               currentPickerValue = newValue;
               widget.onChange(newValue);

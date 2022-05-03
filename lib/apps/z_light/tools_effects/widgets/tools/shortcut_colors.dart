@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ShortcutColorsPreset extends StatefulWidget {
+  const ShortcutColorsPreset({Key? key}) : super(key: key);
+
   @override
   State<ShortcutColorsPreset> createState() => _ShortcutColorsPresetState();
 }

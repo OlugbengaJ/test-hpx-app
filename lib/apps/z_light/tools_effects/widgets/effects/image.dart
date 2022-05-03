@@ -20,7 +20,7 @@ class _ImagePresetState extends State<ImagePreset> {
               children: [
                 Container(
                     height: 170,
-                    width: MediaQuery.of(context).size.width * 0.16,
+                    width: MediaQuery.of(context).size.width * 0.155,
                     decoration: const BoxDecoration(
                       image: DecorationImage(
                           image: AssetImage("assets/images/backdrop.png"),

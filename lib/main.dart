@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/wrapper.dart';
 import 'package:hpx/providers/apps/zlightspace_providers/layers_provider/layers.dart';
+import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/color_picker_provider.dart';
+import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/effects_provider.dart';
+import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/mode_provider.dart';
 import 'package:provider/provider.dart';
 import 'providers/apps/zlightspace_providers/keyboard/keys_provider.dart';
 import 'widgets/components/zone_selector/zone_selector_provider.dart';
@@ -9,13 +12,22 @@ import "widgets/theme.dart";
 void main() => runApp(MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (_) => LayersProvider(),          
+          create: (_) => LayersProvider(),
         ),
         ChangeNotifierProvider(
-          create: (_) => ZoneSelectorProvider(),        
+          create: (_) => ColorPickerProvider(),
         ),
         ChangeNotifierProvider(
-          create: (_) => KeysProvider(),        
+          create: (_) => ModeProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => EffectProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ZoneSelectorProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => KeysProvider(),
         ),
       ],
       child: const MyApp(),

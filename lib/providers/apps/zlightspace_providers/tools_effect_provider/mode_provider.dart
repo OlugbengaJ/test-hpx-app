@@ -89,11 +89,13 @@ List<PickerModel> moodList = [
       icon: Icons.layers_outlined),
 ];
 
-class ModeProvider {
-  ToolsModeModel? currentMode;
+class ModeProvider extends ChangeNotifier {
+  ToolsModeModel currentMode =
+      ToolsModeModel(currentColor: [], effects: [], name: "");
 
   void setCurrentMode(ToolsModeModel data) {
     currentMode = data;
+    notifyListeners();
   }
 
   List<PickerModel> getPickerModes(String mode) {
@@ -115,6 +117,7 @@ class ModeProvider {
     }
   }
 
-  void saveModeInformation() {}
-  void getModeInformation() {}
+  getModeInformation() {
+    return currentMode;
+  }
 }

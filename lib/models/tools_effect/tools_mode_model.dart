@@ -9,6 +9,6 @@ class ToolsModeModel {
 
   final String name;
   final String? value;
-  late final List<ColorPickerWidgetModel> currentColor;
+  late final List<dynamic> currentColor;
   late final List<dynamic> effects;
 }

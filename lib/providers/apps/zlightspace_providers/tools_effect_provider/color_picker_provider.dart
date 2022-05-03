@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/tools_effect/color_picker_model.dart';
-import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/color_picker.dart';
 
 // waves lists
@@ -146,31 +145,31 @@ List<ColorPickerWidgetModel> moodCustomList = [
     action: 'Edit',
     name: "Custom 1",
     canEdit: true,
-    colorCode: [Colors.grey.shade800],
+    colorCode: [Colors.transparent],
   ),
   ColorPickerWidgetModel(
     action: 'Edit',
     name: "Custom 2",
     canEdit: true,
-    colorCode: [Colors.grey.shade800],
+    colorCode: [Colors.transparent],
   ),
   ColorPickerWidgetModel(
     action: 'Edit',
     canEdit: true,
     name: "Custom 3",
-    colorCode: [Colors.grey.shade800],
+    colorCode: [Colors.transparent],
   ),
   ColorPickerWidgetModel(
     action: 'Edit',
     canEdit: true,
     name: "Custom 4",
-    colorCode: [Colors.grey.shade800],
+    colorCode: [Colors.transparent],
   ),
   ColorPickerWidgetModel(
     action: 'Edit',
     canEdit: true,
     name: "Custom 5",
-    colorCode: [Colors.grey.shade800],
+    colorCode: [Colors.transparent],
   ),
 ];
 
@@ -208,16 +207,12 @@ List<ColorPickerWidgetModel> audioVisualGradientList = [
   ])
 ];
 
-class ColorPickerProvider {
-  late ColorPickerWidgetModel? currentColor;
-  final _modeProvider = ModeProvider();
+class ColorPickerProvider extends ChangeNotifier {
+  ColorPickerWidgetModel? currentColor;
 
-  void getCurrentPickerWidget(ColorPickerWidgetModel data) {
+  void setCurrentPickerWidget(ColorPickerWidgetModel data) {
     currentColor = data;
-    // _modeProvider.currentMode!.currentColor =
-    //     data as List<ColorPickerWidgetModel>;
-    // _modeProvider.setCurrentMode();
-    // print(_modeProvider.currentMode!.currentColor);
+    notifyListeners();
   }
 
   List<Widget> generateColorPickerWidget(List<ColorPickerWidgetModel> list) {

@@ -3,6 +3,8 @@ import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/c
 import 'package:hpx/widgets/theme.dart';
 
 class MoodPreset extends StatefulWidget {
+  const MoodPreset({Key? key}) : super(key: key);
+
   @override
   State<MoodPreset> createState() => _MoodPresetState();
 }
