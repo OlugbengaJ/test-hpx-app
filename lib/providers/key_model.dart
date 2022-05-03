@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard_key.dart';
 
 class KeyModel with ChangeNotifier {
   KeyModel({
@@ -9,7 +8,6 @@ class KeyModel with ChangeNotifier {
     required this.keyHeight,
     required this.keyRadius,
     this.keyText,
-    this.keyPathColors = const [Colors.red, Colors.white],
     this.keyTextColor = Colors.white,
     this.keyTextDirection = TextDirection.ltr,
     this.paintingStyle = PaintingStyle.stroke,
@@ -26,7 +24,6 @@ class KeyModel with ChangeNotifier {
   final String keyCode;
 
   String? keyText;
-  List<Color>? keyPathColors;
   Color? keyTextColor;
   TextDirection? keyTextDirection;
   PaintingStyle paintingStyle;
@@ -36,28 +33,48 @@ class KeyModel with ChangeNotifier {
   final double keyHeight;
   final double keyRadius;
 
-  List<Color>? keyPathColorsBefore;
-  PaintingStyle? paintingStyleBefore;
+  static const Color _highlightColor = Colors.red;
 
-  /// [getRenderObject] gets the current [RenderObject] of the [KeyboardKey] widget.
-  RenderBox? getRenderObject(BuildContext context) {
-    return context.findRenderObject() as RenderBox?;
+  List<Color> _keyPathColors = [Colors.red, Colors.white];
+  List<Color>? _keyPathColorsBefore;
+  PaintingStyle? _paintingStyleBefore;
+
+  /// [keyPathColors] returns the list of colors for the key
+  List<Color> get keyPathColors => [..._keyPathColors];
+
+  /// [setPathColors] replaces colors of [_keyPathColors].
+  void setPathColors(List<Color> colors) {
+    _keyPathColors = [...colors];
   }
 
-  /// [shouldHighlight] indicates if [KeyModel] is under a selected zone or added by click.
-  void shouldHighlight(Offset zoneOffset) {
-    debugPrint('$keyCode highlighted');
-    debugPrint('$keyCode parent offset $zoneOffset');
+  /// [highlightKey] indicates if [KeyModel] is under a selected zone
+  /// or added by clicking the widget.
+  void highlightKey(bool? isHighlighted) {
+    if (isHighlighted == true) {
+      // save previous key settings if null
+      if (_keyPathColorsBefore == null) {
+        _keyPathColorsBefore = [..._keyPathColors];
+        _paintingStyleBefore = paintingStyle;
+      }
 
-    if (keyPathColors != null) {
-      keyPathColorsBefore = [...keyPathColors!];
-      paintingStyleBefore = paintingStyle;
+      // highlight the with
+      paintingStyle = PaintingStyle.fill;
+      _keyPathColors = [_highlightColor];
+    } else if (isHighlighted == false) {
+      // highlight not done, so retrieve previous key color and paint style
+      if (_keyPathColorsBefore != null && _paintingStyleBefore != null) {
+        _keyPathColors = [..._keyPathColorsBefore!];
+        paintingStyle = _paintingStyleBefore!;
+      }
     }
+  }
 
-    // highlight the color
-    keyPathColors = [Colors.orange];
-    paintingStyle = PaintingStyle.fill;
-
-    notifyListeners();
+  /// [resetKeyHighlight] restore [KeyModel] previous settings.
+  void resetKeyHighlight() {
+    // restore previous key settings
+    if (_keyPathColorsBefore != null) {
+      _keyPathColors = [..._keyPathColorsBefore!];
+      paintingStyle = _paintingStyleBefore!;
+    }
   }
 }

@@ -4,3 +4,9 @@ enum WorkspaceView {
   workspace,
   lighting,
 }
+
+enum WorkspaceSelectionMode {
+  click,
+  resizable,
+  zone,
+}

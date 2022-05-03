@@ -1,7 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
@@ -29,11 +29,11 @@ class _WorkspaceState extends State<Workspace> {
   double _zoomScale = 1;
 
   Timer _timer = Timer.periodic(Duration.zero, ((t) {}));
-  final _duration = const Duration(milliseconds: 100);
+  final _duration = const Duration(milliseconds: 50);
 
   final double _buttonSize = 24.0;
 
-  /// zoomTextChanged ensure user enters only digits
+  /// [_zoomTextChanged] ensure user enters only digits
   /// that are within the acceptable zoom threshold.
   void _zoomTextChanged() {
     double? value = double.tryParse(_zoomTextCtrl.text);
@@ -48,19 +48,19 @@ class _WorkspaceState extends State<Workspace> {
     }
   }
 
-  /// zoomEnd terminates continuous zoom
+  /// [_zoomEnd] terminates continuous zoom
   ///
   /// timer is canceled to stop zooming by the duration specified
   void _zoomEnd() {
     _timer.cancel();
   }
 
-  /// updateZoom sets the zoom text (without fractions) and zoom scale.
+  /// [_updateZoom] sets the zoom text (without fractions) and zoom scale.
   void _updateZoom() {
     _zoomTextCtrl.text = '${_zoomValue.ceil()}';
   }
 
-  /// zoomIn increases the zoomValue only up to the zoomIn threshold
+  /// [_zoomIn] increases the zoomValue only up to the zoomIn threshold
   /// preventing scenario where content is unnecessarily large.
   void _zoomIn() {
     _timer = Timer.periodic(_duration, (t) {
@@ -76,7 +76,7 @@ class _WorkspaceState extends State<Workspace> {
     });
   }
 
-  /// zoomExpanded sets the zoomValue to half the zoomIn threshold.
+  /// [_zoomExpand] sets the zoomValue to half the zoomIn threshold.
   void _zoomExpand() {
     setState(() {
       _zoomValue = _zoomInThreshold / 2;
@@ -144,7 +144,7 @@ class _WorkspaceState extends State<Workspace> {
         /// instead we want to keep the view constrained and have excessive
         /// sub-widgets cliped only to the view.
         Consumer<WorkspaceProvider>(
-          builder: (context, value, child) => (value.showLighting)
+          builder: (context, provider, child) => (provider.showLighting)
               ? ConstrainedBox(
                   constraints: const BoxConstraints(
                     maxHeight: 90, //MediaQuery.of(context).size.height * 0.12
@@ -169,19 +169,35 @@ class _WorkspaceState extends State<Workspace> {
                             Padding(
                               padding: const EdgeInsets.only(right: 20),
                               child: RoundButton(
-                                onTapDown: _keysSelection,
+                                onTapDown: () {
+                                  // _keysSelection,
+                                  provider.toggleSelectionMode(
+                                      WorkspaceSelectionMode.resizable);
+                                },
                                 onTapUp: () {},
                                 size: _buttonSize,
                                 icon: Icons.select_all,
+                                iconColor: provider.getMode ==
+                                        WorkspaceSelectionMode.resizable
+                                    ? Theme.of(context).colorScheme.primary
+                                    : null,
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(right: 20),
                               child: RoundButton(
-                                onTapDown: _selectDraggable,
+                                onTapDown: () {
+                                  //_selectDraggable,
+                                  provider.toggleSelectionMode(
+                                      WorkspaceSelectionMode.zone);
+                                },
                                 onTapUp: () {},
                                 size: _buttonSize,
                                 icon: Icons.highlight_alt,
+                                iconColor: provider.getMode ==
+                                        WorkspaceSelectionMode.zone
+                                    ? Theme.of(context).colorScheme.primary
+                                    : null,
                               ),
                             ),
                             RoundButton(
@@ -250,7 +266,7 @@ class _WorkspaceState extends State<Workspace> {
                   details, MediaQuery.of(context).size),
               onPanUpdate: (details) => workspaceProvider.onPanUpdate(details),
               onPanEnd: (details) => workspaceProvider.onPanEnd(details),
-              onPanCancel: () => workspaceProvider.onPanCancel(),
+              onPanCancel: () => workspaceProvider.onPanClear(),
               child: Stack(
                 alignment: Alignment.bottomLeft,
                 fit: StackFit.expand,
@@ -262,8 +278,7 @@ class _WorkspaceState extends State<Workspace> {
                   LayersStack(
                     layers: widget.layers,
                   ),
-                  if (workspaceProvider.panStartDetails != null &&
-                      workspaceProvider.panUpdateDetails != null)
+                  if (workspaceProvider.isPanning)
                     Consumer<WorkspaceProvider>(
                       builder: (context, value, child) => Positioned(
                         left: value.leftZonePosition,
@@ -280,25 +295,6 @@ class _WorkspaceState extends State<Workspace> {
                         ),
                       ),
                     ),
-                  // ),
-
-                  /// Keyboard widget takes a zoom scale which is applied to all keys.
-                  ///
-                  /// This ensures seamless zooming of the entire keyboard.
-                  // LayoutBuilder(
-                  //   builder: (BuildContext context, BoxConstraints constraints) {
-                  //     return InteractiveViewer(
-                  //       onInteractionUpdate: (details) {
-                  //         // debugPrint('max height ${constraints.maxHeight}');
-                  //         // debugPrint('iv update=> scale: ${details.scale}');
-                  //         // final v = _zoomScale * details.scale;
-                  //       },
-                  //       minScale: 0.8,
-                  //       maxScale: 4,
-                  //       child: Keyboard(zoomScale: _zoomScale),
-                  //     );
-                  //   },
-                  // ),
                   Positioned(
                     bottom: 0,
                     left: 0,

@@ -17,37 +17,34 @@ class KeyboardKey extends StatelessWidget {
   final VoidCallback? onTapHandler;
   final double zoomScale;
 
+  KeyModel _getKeyPathColor(
+    WorkspaceProvider provider,
+    KeyModel keyModel,
+    RenderBox? renderBox,
+  ) {
+    final isWidgetInZone = provider.isWidgetInZone(renderBox, keyModel.keyCode);
+
+    keyModel.highlightKey(isWidgetInZone);
+    return keyModel;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final KeyModel keyModelr = Provider.of<KeyModel>(context);
-
-    /// Gets access to the widget's position (offset) in the widget tree.
-    final box = keyModelr.getRenderObject(context);
-
-    debugPrint('${box?.localToGlobal(const Offset(0, 0))}');
+    // Gets access to the widget's position (offset) in the widget tree.
+    final box = context.findRenderObject() as RenderBox?;
 
     return Stack(
       children: [
         Material(
           child: Consumer<WorkspaceProvider>(
-            builder: (context, value, child) => InkWell(
+            builder: (context, workspaceProvider, child) => InkWell(
               onTap: onTapHandler,
-              onTapDown: (details) => debugPrint('tap down'),
 
-              /// listens to key changes and allows updating this key instance
+              // listens to key changes and allows updating this key instance
               child: Consumer<KeyModel>(
                 builder: (context, keyModel, child) => KeyRRect(
-                  paintingStyle: keyModel.paintingStyle,
-                  keyText: keyModel.keyText,
-                  keyTextColor: keyModel.keyTextColor,
-                  keyTextDirection: keyModel.keyTextDirection,
-                  keyPathColors: keyModel.keyPathColors!,
+                  keyModel: _getKeyPathColor(workspaceProvider, keyModel, box),
                   zoomScale: zoomScale,
-                  keyLeft: keyModel.keyLeft * zoomScale,
-                  keyTop: keyModel.keyTop * zoomScale,
-                  keyRadius: keyModel.keyRadius,
-                  keyWidth: keyModel.keyWidth,
-                  keyHeight: keyModel.keyHeight,
                 ),
               ),
             ),
