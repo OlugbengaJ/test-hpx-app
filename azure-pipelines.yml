@@ -1,20 +1,158 @@
-# Xcode
-# Build, test, and archive an Xcode workspace on macOS.
-# Add steps that install certificates, test, sign, and distribute an app, save build artifacts, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/xcode
+pr:
+  branches:
+    include:
+    - development
+    - qa
+  paths:
+    exclude:
+    - README.md
 
-trigger:
-- development
+variables:
+- name: BranchSource
+  value: $[ variables['Build.SourceBranch'] ]
+- name: isDevelopment
+  value: refs/heads/development
+- name: isQA
+  value: refs/heads/qa
 
-pool:
-  vmImage: 'macos-latest'
 
-steps:
-- task: Xcode@5
-  inputs:
-    actions: 'build'
-    scheme: ''
-    sdk: 'iphoneos'
-    configuration: 'Release'
-    xcWorkspacePath: '**/*.xcodeproj/project.xcworkspace'
-    xcodeVersion: 'default' # Options: 8, 9, 10, 11, 12, default, specifyPath
+# Andriod Build
+jobs:
+- job: Android
+  displayName: 'Build Andriod'
+  pool:
+    vmImage: 'macOS-latest'
+  workspace:
+      clean: all
+
+  steps:
+  - task: FlutterInstall@0
+
+  - task: FlutterBuild@0
+    inputs:
+      target: apk
+      projectDirectory: $(Build.SourcesDirectory)
+
+  - task: CopyFiles@2
+    condition: or(and(succeeded(), eq(variables.BranchSource, variables.isDevelopment)), and(succeeded(), eq(variables.BranchSource, variables.isQA)))
+    inputs:
+      sourceFolder: '$(Build.SourcesDirectory)/build/app/outputs/flutter-apk'
+      contents: 'app.apk'
+      targetFolder: '$(Build.ArtifactStagingDirectory)'
+  
+  - task: PublishBuildArtifacts@1
+    condition: or(and(succeeded(), eq(variables.BranchSource, variables.isDevelopment)), and(succeeded(), eq(variables.BranchSource, variables.isQA)))
+    inputs: 
+      pathToPublish: '$(Build.ArtifactStagingDirectory)' 
+      artifactName: APK_$(Build.BuildNumber)
+      #publishLocation: 'Container' # Options: container, filePath
+      # targetPath: $(Build.Repository.LocalPath)/build/app/outputs/flutter-apk/app.apk
+      # artifactType: pipeline
+
+
+
+
+# WEB Build
+- job: WEB
+  displayName: 'WEB'
+  pool:
+    vmImage: 'macOS-latest'
+  workspace:
+      clean: all
+
+  steps:
+  - task: FlutterInstall@0
+
+  - task: FlutterBuild@0
+    inputs:
+      target: web
+      projectDirectory: $(Build.SourcesDirectory)
+
+  - task: CopyFiles@2
+    condition: or(and(succeeded(), eq(variables.BranchSource, variables.isDevelopment)), and(succeeded(), eq(variables.BranchSource, variables.isQA)))
+    inputs:
+      sourceFolder: '$(Build.SourcesDirectory)/build/web'
+      targetFolder: '$(Build.ArtifactStagingDirectory)'
+  
+  - task: PublishBuildArtifacts@1
+    condition: or(and(succeeded(), eq(variables.BranchSource, variables.isDevelopment)), and(succeeded(), eq(variables.BranchSource, variables.isQA)))
+    inputs: 
+      pathToPublish: '$(Build.ArtifactStagingDirectory)' 
+      artifactName: WEB_$(Build.BuildNumber)
+      #publishLocation: 'Container' # Options: container, filePath
+      # targetPath: $(Build.Repository.LocalPath)/build/app/outputs/flutter-apk/app.apk
+      # artifactType: pipeline
+
+
+
+
+# Windows Build
+- job: Windows
+  displayName: 'Windows'
+  pool:
+    vmImage: 'windows-latest'
+  workspace:
+      clean: all
+
+  steps:
+  - task: FlutterInstall@0
+
+  - task: FlutterBuild@0
+    inputs:
+      target: windows
+      projectDirectory: $(Build.SourcesDirectory)
+
+  - task: CopyFiles@2
+    condition: or(and(succeeded(), eq(variables.BranchSource, variables.isDevelopment)), and(succeeded(), eq(variables.BranchSource, variables.isQA)))
+    inputs:
+      sourceFolder: '$(Build.SourcesDirectory)/build/windows/runner/Release'
+      targetFolder: '$(Build.ArtifactStagingDirectory)'
+  
+  - task: PublishBuildArtifacts@1
+    condition: or(and(succeeded(), eq(variables.BranchSource, variables.isDevelopment)), and(succeeded(), eq(variables.BranchSource, variables.isQA)))
+    inputs: 
+      pathToPublish: '$(Build.ArtifactStagingDirectory)' 
+      artifactName: Windows_$(Build.BuildNumber)
+
+
+
+
+# Linux Build
+- job: Linux
+  displayName: 'Linux'
+  pool:
+    vmImage: 'ubuntu-latest'
+  workspace:
+      clean: all
+
+  steps:
+  - task: FlutterInstall@0
+
+  - task: Bash@3
+    displayName: 'Enable linux desktop flutter'
+    inputs:
+      targetType: 'inline'
+      script: |
+        set -e ; set -o pipefail
+        $(FlutterToolPath)/flutter --version
+        export PATH=$PATH:$(FlutterToolPath)
+        sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+        flutter config --enable-linux-desktop
+        flutter create --platforms=linux .
+
+  - task: FlutterBuild@0
+    inputs:
+      target: linux
+      projectDirectory: $(Build.SourcesDirectory)
+
+  - task: CopyFiles@2
+    condition: or(and(succeeded(), eq(variables.BranchSource, variables.isDevelopment)), and(succeeded(), eq(variables.BranchSource, variables.isQA)))
+    inputs:
+      sourceFolder: '$(Build.SourcesDirectory)/build/linux/x64/release/bundle'
+      targetFolder: '$(Build.ArtifactStagingDirectory)'
+  
+  - task: PublishBuildArtifacts@1
+    condition: or(and(succeeded(), eq(variables.BranchSource, variables.isDevelopment)), and(succeeded(), eq(variables.BranchSource, variables.isQA)))
+    inputs: 
+      pathToPublish: '$(Build.ArtifactStagingDirectory)' 
+      artifactName: Linux_$(Build.BuildNumber)
