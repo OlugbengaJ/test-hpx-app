@@ -51,7 +51,7 @@ class _PickerDropdownState extends State<PickerDropdown> {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.10,
       child: Container(
-        padding: const EdgeInsets.only(left: 10),
+        // padding: const EdgeInsets.only(left: 10),
         height: 35,
         margin: const EdgeInsets.only(top: 10, bottom: 0),
         decoration: BoxDecoration(

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
+import 'package:hpx/apps/z_light/workspace/workspace.dart';
 
 /// [WorkspaceProvider] handles the workspace events
 /// e.g. display certain widgets based on certain events.
 class WorkspaceProvider with ChangeNotifier {
-  /// [showLighting] determines if the lighting options is displayed.
-  bool showLighting = false;
+  // bool showLighting = false;
 
   /// [showStripNotification] indicates if the strip notifcation should be displayed.
   bool showStripNotification = false;
@@ -13,13 +13,35 @@ class WorkspaceProvider with ChangeNotifier {
   /// [stripNotificationText] indicates text used by the strip notifcation.
   String stripNotificationText = '';
 
-  void toggleView(WorkspaceView view) {
-    if ((showLighting && view == WorkspaceView.workspace) ||
-        (!showLighting && view == WorkspaceView.lighting)) {
-      showLighting = !showLighting;
+  /// [_workspaceView] determines if the lighting options is displayed.
+  WorkspaceView _workspaceView = WorkspaceView.workspace;
 
-      notifyListeners();
+  /// [getWorkspaceView] returns the current view.
+  WorkspaceView get getWorkspaceView => _workspaceView;
+
+  bool get isLightingView => _workspaceView == WorkspaceView.lighting;
+  bool get isWorkspaceView => _workspaceView == WorkspaceView.workspace;
+
+  void toggleView(WorkspaceView view) {
+    _workspaceView = view;
+
+    notifyListeners();
+  }
+
+  /// Selection mode is used in zone selection, resizable, or click mode.
+  ///
+  /// [getMode] returns the current mode of the [Workspace].
+  /// Use the [toggleSelectionMode] to change the current mode.
+  WorkspaceSelectionMode? get getMode => _keySelectionMode;
+  void toggleSelectionMode(WorkspaceSelectionMode mode) {
+    if (_keySelectionMode == mode) {
+      // reset selection mode
+      _keySelectionMode = null;
+    } else {
+      _keySelectionMode = mode;
     }
+
+    notifyListeners();
   }
 
   /// Strip notification shows up just right under the Zone Selection and is
@@ -34,35 +56,22 @@ class WorkspaceProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  DragStartDetails? panStartDetails;
+  DragDownDetails? panDownDetails;
   DragUpdateDetails? panUpdateDetails;
-  // bool _isPanComplete = false;
+  WorkspaceSelectionMode? _keySelectionMode;
+  Size? _viewSize;
+
   bool _isPanStarted = false;
-  WorkspaceSelectionMode? _mode;
-  Size? viewSize;
-
   bool get isPanning => _isPanStarted;
-  WorkspaceSelectionMode? get getMode => _mode;
 
-  void toggleSelectionMode(WorkspaceSelectionMode mode) {
-    if (_mode == mode) {
-      // reset selection mode
-      _mode = null;
-    }
-
-    _mode = mode;
-
-    notifyListeners();
-  }
-
-  void onPanStart(DragStartDetails details, Size size) {
-    // _isPanComplete = false;
-    if (_mode == WorkspaceSelectionMode.zone) {
-      panStartDetails = details;
+  void onPanDown(DragDownDetails details, Size size) {
+    if (_keySelectionMode == WorkspaceSelectionMode.zone) {
+      debugPrint('size $_viewSize');
+      panDownDetails = details;
       panUpdateDetails =
           DragUpdateDetails(globalPosition: details.globalPosition);
       _isPanStarted = true;
-      viewSize = size;
+      _viewSize = size;
 
       notifyListeners();
     }
@@ -80,72 +89,73 @@ class WorkspaceProvider with ChangeNotifier {
   }
 
   onPanClear() {
-    // _isPanComplete = true;
     _isPanStarted = false;
 
-    panStartDetails = null;
+    panDownDetails = null;
     panUpdateDetails = null;
 
     notifyListeners();
   }
 
   double? get leftZonePosition {
-    if (panStartDetails == null || panUpdateDetails == null) return null;
+    if (panDownDetails == null || panUpdateDetails == null) return null;
 
-    if (panUpdateDetails!.localPosition.dx >
-        panStartDetails!.localPosition.dx) {
-      return panStartDetails!.localPosition.dx;
+    if (panUpdateDetails!.localPosition.dx > panDownDetails!.localPosition.dx) {
+      return panDownDetails!.localPosition.dx;
     }
 
     return null;
   }
 
   double? get topZonePosition {
-    if (panStartDetails == null || panUpdateDetails == null) return null;
+    if (panDownDetails == null || panUpdateDetails == null) return null;
 
-    if (panUpdateDetails!.localPosition.dy >
-        panStartDetails!.localPosition.dy) {
-      return panStartDetails!.localPosition.dy;
+    if (panUpdateDetails!.localPosition.dy > panDownDetails!.localPosition.dy) {
+      return panDownDetails!.localPosition.dy;
     }
 
     return null;
   }
 
   double? get rightZonePosition {
-    if (panStartDetails == null || panUpdateDetails == null) return null;
+    if (panDownDetails == null || panUpdateDetails == null) return null;
 
-    if (panUpdateDetails!.localPosition.dx <
-        panStartDetails!.localPosition.dx) {
-      return viewSize!.width - panStartDetails!.localPosition.dx;
+    if (panUpdateDetails!.localPosition.dx < panDownDetails!.localPosition.dx) {
+      return _viewSize!.width - panDownDetails!.localPosition.dx;
     }
 
     return null;
   }
 
   double? get bottomZonePosition {
-    if (panStartDetails == null || panUpdateDetails == null) return null;
+    if (panDownDetails == null || panUpdateDetails == null) return null;
 
-    if (panUpdateDetails!.localPosition.dy <
-        panStartDetails!.localPosition.dy) {
-      return viewSize!.height - panStartDetails!.globalPosition.dy;
+    if (panUpdateDetails!.localPosition.dy < panDownDetails!.localPosition.dy) {
+      return _viewSize!.height - panDownDetails!.localPosition.dy;
     }
 
     return null;
   }
 
   double? get zoneHeight {
-    if (panStartDetails == null || panUpdateDetails == null) return null;
+    if (panDownDetails == null ||
+        panUpdateDetails == null ||
+        panDownDetails!.globalPosition.dy ==
+            panUpdateDetails!.globalPosition.dy) return 0.0;
 
     return (panUpdateDetails!.localPosition.dy -
-            panStartDetails!.localPosition.dy)
+            panDownDetails!.localPosition.dy)
         .abs();
   }
 
   double? get zoneWidth {
-    if (panStartDetails == null || panUpdateDetails == null) return null;
+    if (panDownDetails == null ||
+        panUpdateDetails == null ||
+        panDownDetails!.globalPosition.dx ==
+            panUpdateDetails!.globalPosition.dx) return 0.0;
 
     return (panUpdateDetails!.localPosition.dx -
-            panStartDetails!.localPosition.dx)
+            panDownDetails!.localPosition.dx)
         .abs();
   }
 
@@ -154,7 +164,7 @@ class WorkspaceProvider with ChangeNotifier {
 
     final boxRect = box.localToGlobal(Offset.zero) & box.size;
     final selRect = Rect.fromPoints(
-        panStartDetails!.globalPosition, panUpdateDetails!.globalPosition);
+        panDownDetails!.globalPosition, panUpdateDetails!.globalPosition);
 
     final rectIntersect = selRect.intersect(boxRect);
 

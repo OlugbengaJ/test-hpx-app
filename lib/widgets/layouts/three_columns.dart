@@ -8,7 +8,7 @@ class ThreeColumns extends StatefulWidget {
     required this.leftWidget,
     this.leftFlex = 2,
     required this.centerWidget,
-    this.centerFlex = 8,
+    this.centerFlex = 5,
     required this.rightWidget,
     this.rightFlex = 2,
   }) : super(key: key);
@@ -32,47 +32,34 @@ class _ThreeColumnsState extends State<ThreeColumns> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Consumer<WorkspaceProvider>(
-          builder: (context, value, child) => (value.showLighting)
+          builder: (context, value, child) => value.isLightingView
               ? Expanded(
-                  flex: widget.leftFlex,
-                  child: widget.leftWidget,
+                  // flex: widget.leftFlex,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: widget.leftWidget,
+                  ),
                 )
-              : Container(),
-        ),
-        Consumer<WorkspaceProvider>(
-          builder: (context, value, child) => (value.showLighting)
-              ? const VerticalDivider(
-                  width: 20,
-                  thickness: 1,
-                  indent: 20,
-                  endIndent: 0,
-                )
-              : Container(),
+              : const SizedBox(width: 0, child: null),
         ),
         // Center widget does not consume WorkspaceProvider to prevent recreating
         Expanded(
-          flex: widget.centerFlex,
+          flex: 3, //widget.centerFlex,
           child: widget.centerWidget,
         ),
         Consumer<WorkspaceProvider>(
-          builder: (context, value, child) => (value.showLighting)
-              ? const VerticalDivider(
-                  width: 20,
-                  thickness: 1,
-                  indent: 20,
-                  endIndent: 0,
-                )
-              : Container(),
-        ),
-        Consumer<WorkspaceProvider>(
-          builder: (context, value, child) => (value.showLighting)
+          builder: (context, value, child) => value.isLightingView
               ? Expanded(
-                  flex: widget.rightFlex,
-                  child: widget.rightWidget,
+                  // flex: widget.rightFlex,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: widget.rightWidget,
+                  ),
                 )
-              : Container(),
+              : const SizedBox(width: 0, child: null),
         ),
       ],
     );

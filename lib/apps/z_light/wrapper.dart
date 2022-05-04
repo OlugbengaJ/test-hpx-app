@@ -59,18 +59,8 @@ class _WrapperState extends State<Wrapper> {
   }
 
   _changeView(WorkspaceView view) {
-    // setState(() {
-    //   currentView = view;
-    // });
-
     context.read<KeySelectorProvider>().clearKeys();
-    context.read<ZoneSelectorProvider>().updatePosition();
-
-    // if (currentView == WorkspaceView.lighting) {
-    //   context.read<LayersProvider>().toggleHideStackedLayers(false);
-    // } else {
-    //   context.read<LayersProvider>().toggleHideStackedLayers(true);
-    // }
+    // context.read<ZoneSelectorProvider>().updatePosition();
   }
 
   void _getSize(Size size) {}
@@ -84,47 +74,35 @@ class _WrapperState extends State<Wrapper> {
         bottomOpacity: 0.0,
         elevation: 0.0,
         title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Expanded(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    TextButton(
-                      style: TextButton.styleFrom(
-                          fixedSize: const Size(150, 50),
-                          primary: (!workspaceProvider.showLighting)
-                              ? Colors.white
-                              : Colors.grey,
-                          backgroundColor: Colors.transparent,
-                          textStyle: h3Style),
-                      child: const Text('Workspace'),
-                      onPressed: () {
-                        workspaceProvider.toggleView(WorkspaceView.workspace);
-                        _changeView(WorkspaceView.workspace);
-                      },
-                    ),
-                  ]),
+            TextButton(
+              style: TextButton.styleFrom(
+                  fixedSize: const Size(150, 50),
+                  primary: workspaceProvider.isWorkspaceView
+                      ? Colors.white
+                      : Colors.grey,
+                  backgroundColor: Colors.transparent,
+                  textStyle: h4Style),
+              child: const Text('Workspace'),
+              onPressed: () {
+                workspaceProvider.toggleView(WorkspaceView.workspace);
+                _changeView(WorkspaceView.workspace);
+              },
             ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  TextButton(
-                    style: TextButton.styleFrom(
-                        fixedSize: const Size(150, 50),
-                        primary: (workspaceProvider.showLighting)
-                            ? Colors.white
-                            : Colors.grey,
-                        backgroundColor: Colors.transparent,
-                        textStyle: h3Style),
-                    child: const Text('Lighting Options'),
-                    onPressed: () {
-                      workspaceProvider.toggleView(WorkspaceView.lighting);
-                      _changeView(WorkspaceView.lighting);
-                    },
-                  ),
-                ],
-              ),
+            TextButton(
+              style: TextButton.styleFrom(
+                  fixedSize: const Size(150, 50),
+                  primary: workspaceProvider.isLightingView
+                      ? Colors.white
+                      : Colors.grey,
+                  backgroundColor: Colors.transparent,
+                  textStyle: h4Style),
+              child: const Text('Lighting Options'),
+              onPressed: () {
+                workspaceProvider.toggleView(WorkspaceView.lighting);
+                _changeView(WorkspaceView.lighting);
+              },
             ),
           ],
         ),
@@ -132,9 +110,9 @@ class _WrapperState extends State<Wrapper> {
           Container(
             margin: const EdgeInsets.only(top: 20, right: 20),
             child: Text(
-              "Selected Profile : ",
+              "Selected Profile",
               textAlign: TextAlign.left,
-              style: h4Style,
+              style: h5Style,
             ),
           ),
           Column(

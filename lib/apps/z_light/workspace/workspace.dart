@@ -31,7 +31,7 @@ class _WorkspaceState extends State<Workspace> {
   Timer _timer = Timer.periodic(Duration.zero, ((t) {}));
   final _duration = const Duration(milliseconds: 50);
 
-  final double _buttonSize = 24.0;
+  final double _buttonSize = 32.0;
 
   /// [_zoomTextChanged] ensure user enters only digits
   /// that are within the acceptable zoom threshold.
@@ -144,24 +144,20 @@ class _WorkspaceState extends State<Workspace> {
         /// instead we want to keep the view constrained and have excessive
         /// sub-widgets cliped only to the view.
         Consumer<WorkspaceProvider>(
-          builder: (context, provider, child) => (provider.showLighting)
+          builder: (context, provider, child) => (provider.isLightingView)
               ? ConstrainedBox(
                   constraints: const BoxConstraints(
-                    maxHeight: 90, //MediaQuery.of(context).size.height * 0.12
+                    maxHeight: 75,
                   ),
                   child: Container(
-                    margin:
-                        const EdgeInsets.only(top: 20, right: 10, bottom: 5),
+                    margin: const EdgeInsets.only(
+                        left: 15, top: 10, right: 15, bottom: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
-                          child: Text(
-                            'Zone Selection',
-                            textAlign: TextAlign.left,
-                            style: h4Style,
-                          ),
+                          child: Text('Zone Selection', style: h5Style),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -191,7 +187,6 @@ class _WorkspaceState extends State<Workspace> {
                                   provider.toggleSelectionMode(
                                       WorkspaceSelectionMode.zone);
                                 },
-                                onTapUp: () {},
                                 size: _buttonSize,
                                 icon: Icons.highlight_alt,
                                 iconColor: provider.getMode ==
@@ -202,7 +197,6 @@ class _WorkspaceState extends State<Workspace> {
                             ),
                             RoundButton(
                               onTapDown: () {},
-                              onTapUp: () {},
                               size: _buttonSize,
                               icon: Icons.mouse,
                             ),
@@ -261,8 +255,9 @@ class _WorkspaceState extends State<Workspace> {
             ),
             child: GestureDetector(
               behavior: HitTestBehavior.translucent,
-              dragStartBehavior: DragStartBehavior.start,
-              onPanStart: (details) => workspaceProvider.onPanStart(
+              // dragStartBehavior: DragStartBehavior.start,
+              // onPanDown: (details) => workspaceProvider.onPanDown(),
+              onPanDown: (details) => workspaceProvider.onPanDown(
                   details, MediaQuery.of(context).size),
               onPanUpdate: (details) => workspaceProvider.onPanUpdate(details),
               onPanEnd: (details) => workspaceProvider.onPanEnd(details),
@@ -271,9 +266,8 @@ class _WorkspaceState extends State<Workspace> {
                 alignment: Alignment.bottomLeft,
                 fit: StackFit.expand,
                 children: [
-                  /// Keyboard widget takes a zoom scale which is applied to all keys.
-                  ///
-                  /// This ensures seamless zooming of the entire keyboard.
+                  // Keyboard widget takes a zoom scale which is applied to all keys.
+                  // This ensures seamless zooming of the entire keyboard.
                   Keyboard(zoomScale: _zoomScale),
                   LayersStack(
                     layers: widget.layers,
@@ -290,7 +284,7 @@ class _WorkspaceState extends State<Workspace> {
                           height: value.zoneHeight,
                           width: value.zoneWidth,
                           decoration: BoxDecoration(
-                            color: Colors.blue.withOpacity(0.3),
+                            color: Colors.blue.withOpacity(0.4),
                           ),
                         ),
                       ),

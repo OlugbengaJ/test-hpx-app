@@ -17,7 +17,7 @@ class KeyboardKey extends StatelessWidget {
   final VoidCallback? onTapHandler;
   final double zoomScale;
 
-  KeyModel _getKeyPathColor(
+  KeyModel _getKey(
     WorkspaceProvider provider,
     KeyModel keyModel,
     RenderBox? renderBox,
@@ -43,7 +43,7 @@ class KeyboardKey extends StatelessWidget {
               // listens to key changes and allows updating this key instance
               child: Consumer<KeyModel>(
                 builder: (context, keyModel, child) => KeyRRect(
-                  keyModel: _getKeyPathColor(workspaceProvider, keyModel, box),
+                  keyModel: _getKey(workspaceProvider, keyModel, box),
                   zoomScale: zoomScale,
                 ),
               ),

@@ -5,15 +5,15 @@ class RoundButton extends StatelessWidget {
   /// and color which keeps the entire app consistent.
   const RoundButton({
     Key? key,
-    required this.onTapDown,
-    required this.onTapUp,
     required this.size,
+    required this.onTapDown,
+    this.onTapUp,
     this.icon,
     this.iconColor,
   }) : super(key: key);
 
   final VoidCallback onTapDown;
-  final VoidCallback onTapUp;
+  final VoidCallback? onTapUp;
   final double size;
   final IconData? icon;
   final Color? iconColor;
@@ -29,7 +29,7 @@ class RoundButton extends StatelessWidget {
           shape: BoxShape.circle,
         ),
         child: InkWell(
-          onTap: onTapUp,
+          onTap: onTapUp ?? () {},
           onTapCancel: onTapUp,
           onTapDown: (details) => onTapDown(),
           customBorder: const CircleBorder(),
