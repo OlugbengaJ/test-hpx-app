@@ -167,14 +167,13 @@ class _WorkspaceState extends State<Workspace> {
                               child: RoundButton(
                                 onTapDown: () {
                                   // _keysSelection,
-                                  provider.toggleSelectionMode(
-                                      WorkspaceSelectionMode.resizable);
+                                  provider.toggleDragMode(
+                                      WORKSPACE_DRAG_MODE.resizable);
                                 },
                                 onTapUp: () {},
                                 size: _buttonSize,
                                 icon: Icons.select_all,
-                                iconColor: provider.getMode ==
-                                        WorkspaceSelectionMode.resizable
+                                iconColor: provider.isDragModeResizable
                                     ? Theme.of(context).colorScheme.primary
                                     : null,
                               ),
@@ -184,21 +183,26 @@ class _WorkspaceState extends State<Workspace> {
                               child: RoundButton(
                                 onTapDown: () {
                                   //_selectDraggable,
-                                  provider.toggleSelectionMode(
-                                      WorkspaceSelectionMode.zone);
+                                  provider
+                                      .toggleDragMode(WORKSPACE_DRAG_MODE.zone);
                                 },
                                 size: _buttonSize,
                                 icon: Icons.highlight_alt,
-                                iconColor: provider.getMode ==
-                                        WorkspaceSelectionMode.zone
+                                iconColor: provider.isDragModeZone
                                     ? Theme.of(context).colorScheme.primary
                                     : null,
                               ),
                             ),
                             RoundButton(
-                              onTapDown: () {},
+                              onTapDown: () {
+                                provider
+                                    .toggleDragMode(WORKSPACE_DRAG_MODE.click);
+                              },
                               size: _buttonSize,
                               icon: Icons.mouse,
+                              iconColor: provider.isDragModeClick
+                                  ? Theme.of(context).colorScheme.primary
+                                  : null,
                             ),
                           ],
                         ),
@@ -212,7 +216,7 @@ class _WorkspaceState extends State<Workspace> {
                 ),
         ),
         Consumer<WorkspaceProvider>(
-          builder: (context, value, child) => (value.showStripNotification)
+          builder: (context, value, child) => (value.isStripNotify)
               ? Container(
                   color: Colors.yellow,
                   padding: const EdgeInsets.all(5),
@@ -255,10 +259,7 @@ class _WorkspaceState extends State<Workspace> {
             ),
             child: GestureDetector(
               behavior: HitTestBehavior.translucent,
-              // dragStartBehavior: DragStartBehavior.start,
-              // onPanDown: (details) => workspaceProvider.onPanDown(),
-              onPanDown: (details) => workspaceProvider.onPanDown(
-                  details, MediaQuery.of(context).size),
+              onPanDown: (details) => workspaceProvider.onPanDown(details),
               onPanUpdate: (details) => workspaceProvider.onPanUpdate(details),
               onPanEnd: (details) => workspaceProvider.onPanEnd(details),
               onPanCancel: () => workspaceProvider.onPanClear(),
@@ -277,8 +278,6 @@ class _WorkspaceState extends State<Workspace> {
                       builder: (context, value, child) => Positioned(
                         left: value.leftZonePosition,
                         top: value.topZonePosition,
-                        right: value.rightZonePosition,
-                        bottom: value.bottomZonePosition,
                         child: Container(
                           margin: EdgeInsets.zero,
                           height: value.zoneHeight,

@@ -5,19 +5,19 @@ import 'package:provider/provider.dart';
 class ThreeColumns extends StatefulWidget {
   const ThreeColumns({
     Key? key,
-    required this.leftWidget,
+    required this.leftChild,
     this.leftFlex = 2,
-    required this.centerWidget,
+    required this.centerChild,
     this.centerFlex = 5,
-    required this.rightWidget,
+    required this.rightChild,
     this.rightFlex = 2,
   }) : super(key: key);
 
-  final Widget leftWidget;
+  final Widget leftChild;
   final int leftFlex;
-  final Widget centerWidget;
+  final Widget centerChild;
   final int centerFlex;
-  final Widget rightWidget;
+  final Widget rightChild;
   final int rightFlex;
 
   @override
@@ -37,26 +37,26 @@ class _ThreeColumnsState extends State<ThreeColumns> {
         Consumer<WorkspaceProvider>(
           builder: (context, value, child) => value.isLightingView
               ? Expanded(
-                  // flex: widget.leftFlex,
+                  flex: widget.leftFlex,
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
-                    child: widget.leftWidget,
+                    child: widget.leftChild,
                   ),
                 )
               : const SizedBox(width: 0, child: null),
         ),
         // Center widget does not consume WorkspaceProvider to prevent recreating
         Expanded(
-          flex: 3, //widget.centerFlex,
-          child: widget.centerWidget,
+          flex: widget.centerFlex,
+          child: widget.centerChild,
         ),
         Consumer<WorkspaceProvider>(
           builder: (context, value, child) => value.isLightingView
               ? Expanded(
-                  // flex: widget.rightFlex,
+                  flex: widget.rightFlex,
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
-                    child: widget.rightWidget,
+                    child: widget.rightChild,
                   ),
                 )
               : const SizedBox(width: 0, child: null),

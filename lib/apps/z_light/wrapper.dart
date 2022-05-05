@@ -27,7 +27,7 @@ class Wrapper extends StatefulWidget {
 class _WrapperState extends State<Wrapper> {
   final List<LayerListItem> _layersListItems = [];
   final List<LayerStackItem> _layersStackItems = [];
-  WorkspaceView currentView = WorkspaceView.workspace;
+  WORKSPACE_VIEW currentView = WORKSPACE_VIEW.workspace;
   final _modeProvider = ModeProvider();
   final PickerModel _defaultPreset = PickerModel(
       title: 'Default', enabled: true, value: 'default', icon: Icons.dashboard);
@@ -58,7 +58,7 @@ class _WrapperState extends State<Wrapper> {
     });
   }
 
-  _changeView(WorkspaceView view) {
+  _changeView(WORKSPACE_VIEW view) {
     context.read<KeySelectorProvider>().clearKeys();
     // context.read<ZoneSelectorProvider>().updatePosition();
   }
@@ -86,8 +86,8 @@ class _WrapperState extends State<Wrapper> {
                   textStyle: h4Style),
               child: const Text('Workspace'),
               onPressed: () {
-                workspaceProvider.toggleView(WorkspaceView.workspace);
-                _changeView(WorkspaceView.workspace);
+                workspaceProvider.toggleView(WORKSPACE_VIEW.workspace);
+                _changeView(WORKSPACE_VIEW.workspace);
               },
             ),
             TextButton(
@@ -100,8 +100,8 @@ class _WrapperState extends State<Wrapper> {
                   textStyle: h4Style),
               child: const Text('Lighting Options'),
               onPressed: () {
-                workspaceProvider.toggleView(WorkspaceView.lighting);
-                _changeView(WorkspaceView.lighting);
+                workspaceProvider.toggleView(WORKSPACE_VIEW.lighting);
+                _changeView(WORKSPACE_VIEW.lighting);
               },
             ),
           ],
@@ -137,9 +137,8 @@ class _WrapperState extends State<Wrapper> {
       ),
       body: SafeArea(
         child: ThreeColumns(
-          leftWidget:
-              Layers(onReorder: _updateLayers, layers: _layersListItems),
-          centerWidget: Stack(children: [
+          leftChild: Layers(onReorder: _updateLayers, layers: _layersListItems),
+          centerChild: Stack(children: [
             Workspace(
               layers: _layersStackItems,
             ),
@@ -152,7 +151,7 @@ class _WrapperState extends State<Wrapper> {
                   : Container();
             }),
           ]),
-          rightWidget: const ToolsEffectsWrapper(),
+          rightChild: const ToolsEffectsWrapper(),
         ),
       ),
     );

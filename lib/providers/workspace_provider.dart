@@ -5,40 +5,46 @@ import 'package:hpx/apps/z_light/workspace/workspace.dart';
 /// [WorkspaceProvider] handles the workspace events
 /// e.g. display certain widgets based on certain events.
 class WorkspaceProvider with ChangeNotifier {
-  // bool showLighting = false;
+  bool _isStripNotify = false;
 
-  /// [showStripNotification] indicates if the strip notifcation should be displayed.
-  bool showStripNotification = false;
+  /// [isStripNotify] indicates if the strip notifcation should be displayed.
+  bool get isStripNotify => _isStripNotify;
 
   /// [stripNotificationText] indicates text used by the strip notifcation.
-  String stripNotificationText = '';
+  String? _stripNotificationText;
+  String get stripNotificationText => _stripNotificationText ?? '';
 
   /// [_workspaceView] determines if the lighting options is displayed.
-  WorkspaceView _workspaceView = WorkspaceView.workspace;
+  WORKSPACE_VIEW _workspaceView = WORKSPACE_VIEW.workspace;
 
   /// [getWorkspaceView] returns the current view.
-  WorkspaceView get getWorkspaceView => _workspaceView;
+  WORKSPACE_VIEW get getWorkspaceView => _workspaceView;
 
-  bool get isLightingView => _workspaceView == WorkspaceView.lighting;
-  bool get isWorkspaceView => _workspaceView == WorkspaceView.workspace;
+  bool get isLightingView => _workspaceView == WORKSPACE_VIEW.lighting;
+  bool get isWorkspaceView => _workspaceView == WORKSPACE_VIEW.workspace;
 
-  void toggleView(WorkspaceView view) {
+  void toggleView(WORKSPACE_VIEW view) {
     _workspaceView = view;
 
     notifyListeners();
   }
 
+  bool get isDragModeClick => _keyDragMode == WORKSPACE_DRAG_MODE.click;
+  bool get isDragModeResizable => _keyDragMode == WORKSPACE_DRAG_MODE.resizable;
+  bool get isDragModeZone => _keyDragMode == WORKSPACE_DRAG_MODE.zone;
+
+  /// [getMode] returns the current mode of the [Workspace].
+  WORKSPACE_DRAG_MODE? get getMode => _keyDragMode;
+
   /// Selection mode is used in zone selection, resizable, or click mode.
   ///
-  /// [getMode] returns the current mode of the [Workspace].
-  /// Use the [toggleSelectionMode] to change the current mode.
-  WorkspaceSelectionMode? get getMode => _keySelectionMode;
-  void toggleSelectionMode(WorkspaceSelectionMode mode) {
-    if (_keySelectionMode == mode) {
+  /// [toggleDragMode] changes the current mode.
+  void toggleDragMode(WORKSPACE_DRAG_MODE mode) {
+    if (_keyDragMode == mode) {
       // reset selection mode
-      _keySelectionMode = null;
+      _keyDragMode = null;
     } else {
-      _keySelectionMode = mode;
+      _keyDragMode = mode;
     }
 
     notifyListeners();
@@ -47,38 +53,32 @@ class WorkspaceProvider with ChangeNotifier {
   /// Strip notification shows up just right under the Zone Selection and is
   /// intended to display very limited information.
   void toggleStripNotification([String? value]) {
-    if (value == null || value.isEmpty) {
-      showStripNotification = false;
-    } else {
-      stripNotificationText = value;
-      showStripNotification = true;
-    }
+    _isStripNotify = !(value == null || value.isEmpty);
+    _stripNotificationText = value;
+
     notifyListeners();
   }
 
-  DragDownDetails? panDownDetails;
-  DragUpdateDetails? panUpdateDetails;
-  WorkspaceSelectionMode? _keySelectionMode;
-  Size? _viewSize;
+  DragDownDetails? _panDownDetails;
+  DragUpdateDetails? _panUpdateDetails;
+  WORKSPACE_DRAG_MODE? _keyDragMode;
 
-  bool _isPanStarted = false;
-  bool get isPanning => _isPanStarted;
+  bool _isPanning = false;
+  bool get isPanning => _isPanning;
 
-  void onPanDown(DragDownDetails details, Size size) {
-    if (_keySelectionMode == WorkspaceSelectionMode.zone) {
-      debugPrint('size $_viewSize');
-      panDownDetails = details;
-      panUpdateDetails =
+  void onPanDown(DragDownDetails details) {
+    if (_keyDragMode == WORKSPACE_DRAG_MODE.zone) {
+      _panDownDetails = details;
+      _panUpdateDetails =
           DragUpdateDetails(globalPosition: details.globalPosition);
-      _isPanStarted = true;
-      _viewSize = size;
+      _isPanning = true;
 
       notifyListeners();
     }
   }
 
   void onPanUpdate(DragUpdateDetails details) {
-    panUpdateDetails = details;
+    _panUpdateDetails = details;
 
     notifyListeners();
   }
@@ -89,82 +89,66 @@ class WorkspaceProvider with ChangeNotifier {
   }
 
   onPanClear() {
-    _isPanStarted = false;
+    _isPanning = false;
 
-    panDownDetails = null;
-    panUpdateDetails = null;
+    _panDownDetails = null;
+    _panUpdateDetails = null;
 
     notifyListeners();
   }
 
   double? get leftZonePosition {
-    if (panDownDetails == null || panUpdateDetails == null) return null;
+    if (_panDownDetails == null || _panUpdateDetails == null) return null;
 
-    if (panUpdateDetails!.localPosition.dx > panDownDetails!.localPosition.dx) {
-      return panDownDetails!.localPosition.dx;
+    if (_panUpdateDetails!.localPosition.dx >
+        _panDownDetails!.localPosition.dx) {
+      return _panDownDetails!.localPosition.dx;
     }
 
-    return null;
+    // mouse drag going left, reset the left to the current offset.dx
+    return _panUpdateDetails!.localPosition.dx;
   }
 
   double? get topZonePosition {
-    if (panDownDetails == null || panUpdateDetails == null) return null;
+    if (_panDownDetails == null || _panUpdateDetails == null) return null;
 
-    if (panUpdateDetails!.localPosition.dy > panDownDetails!.localPosition.dy) {
-      return panDownDetails!.localPosition.dy;
+    if (_panUpdateDetails!.localPosition.dy >
+        _panDownDetails!.localPosition.dy) {
+      return _panDownDetails!.localPosition.dy;
     }
 
-    return null;
-  }
-
-  double? get rightZonePosition {
-    if (panDownDetails == null || panUpdateDetails == null) return null;
-
-    if (panUpdateDetails!.localPosition.dx < panDownDetails!.localPosition.dx) {
-      return _viewSize!.width - panDownDetails!.localPosition.dx;
-    }
-
-    return null;
-  }
-
-  double? get bottomZonePosition {
-    if (panDownDetails == null || panUpdateDetails == null) return null;
-
-    if (panUpdateDetails!.localPosition.dy < panDownDetails!.localPosition.dy) {
-      return _viewSize!.height - panDownDetails!.localPosition.dy;
-    }
-
-    return null;
+    // mouse drag going up, reset the top to the current offset.dy
+    return _panUpdateDetails!.localPosition.dy;
   }
 
   double? get zoneHeight {
-    if (panDownDetails == null ||
-        panUpdateDetails == null ||
-        panDownDetails!.globalPosition.dy ==
-            panUpdateDetails!.globalPosition.dy) return 0.0;
+    if (_panDownDetails == null ||
+        _panUpdateDetails == null ||
+        _panDownDetails!.globalPosition.dy ==
+            _panUpdateDetails!.globalPosition.dy) return 0.0;
 
-    return (panUpdateDetails!.localPosition.dy -
-            panDownDetails!.localPosition.dy)
+    return (_panUpdateDetails!.localPosition.dy -
+            _panDownDetails!.localPosition.dy)
         .abs();
   }
 
   double? get zoneWidth {
-    if (panDownDetails == null ||
-        panUpdateDetails == null ||
-        panDownDetails!.globalPosition.dx ==
-            panUpdateDetails!.globalPosition.dx) return 0.0;
+    if (_panDownDetails == null ||
+        _panUpdateDetails == null ||
+        _panDownDetails!.globalPosition.dx ==
+            _panUpdateDetails!.globalPosition.dx) return 0.0;
 
-    return (panUpdateDetails!.localPosition.dx -
-            panDownDetails!.localPosition.dx)
+    return (_panUpdateDetails!.localPosition.dx -
+            _panDownDetails!.localPosition.dx)
         .abs();
   }
 
   bool? isWidgetInZone(RenderBox? box, String k) {
-    if (box == null || panUpdateDetails == null || !_isPanStarted) return null;
+    if (box == null || _panUpdateDetails == null || !_isPanning) return null;
 
     final boxRect = box.localToGlobal(Offset.zero) & box.size;
     final selRect = Rect.fromPoints(
-        panDownDetails!.globalPosition, panUpdateDetails!.globalPosition);
+        _panDownDetails!.globalPosition, _panUpdateDetails!.globalPosition);
 
     final rectIntersect = selRect.intersect(boxRect);
 
