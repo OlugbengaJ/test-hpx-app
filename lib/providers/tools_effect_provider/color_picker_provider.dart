@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:hpx/models/tools_effect/color_picker_model.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
@@ -237,5 +239,9 @@ class ColorPickerProvider {
       ));
     }
     return generatedUI;
+  }
+
+  generateRandomColor() {
+    return Color(0xffffffff & Random().nextInt(0xffffffff));
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
@@ -167,4 +169,10 @@ class WorkspaceProvider with ChangeNotifier {
 
     return (rectIntersect.width >= 0 && rectIntersect.height >= 0);
   }
+
+  // TODO: this is a debug implementation and must be refactored for production.
+  // send random color to animate
+  List<Color> get animColors => [colorRandom];
 }
+
+Color get colorRandom => Color(0xffffffff & Random().nextInt(0xffffffff));
