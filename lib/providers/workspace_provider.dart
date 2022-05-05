@@ -23,6 +23,7 @@ class WorkspaceProvider with ChangeNotifier {
   bool get isLightingView => _workspaceView == WORKSPACE_VIEW.lighting;
   bool get isWorkspaceView => _workspaceView == WORKSPACE_VIEW.workspace;
 
+  /// [toggleView] is used to switch views within the app.
   void toggleView(WORKSPACE_VIEW view) {
     _workspaceView = view;
 
@@ -52,7 +53,9 @@ class WorkspaceProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  /// Strip notification shows up just right under the Zone Selection and is
+  /// [toggleStripNotification] is used to hide or show a notification.
+  ///
+  /// The Strip notification shows up right under the Zone Selection and is
   /// intended to display very limited information.
   void toggleStripNotification([String? value]) {
     _isStripNotify = !(value == null || value.isEmpty);
@@ -68,6 +71,7 @@ class WorkspaceProvider with ChangeNotifier {
   bool _isPanning = false;
   bool get isPanning => _isPanning;
 
+  /// [onPanDown] indicates the the primary mouse is down and pan started.
   void onPanDown(DragDownDetails details) {
     if (_keyDragMode == WORKSPACE_DRAG_MODE.zone) {
       _panDownDetails = details;
@@ -79,26 +83,29 @@ class WorkspaceProvider with ChangeNotifier {
     }
   }
 
+  /// [onPanUpdate] indicates the current position of the pan.
   void onPanUpdate(DragUpdateDetails details) {
     _panUpdateDetails = details;
 
     notifyListeners();
   }
 
+  /// [onPanEnd] indicates the primary mouse is up and the end of pan.
   void onPanEnd(DragEndDetails details) {
     // update state and clear unwanted data
     onPanClear();
   }
 
+  /// [onPanClear] resets variables used to indicate pan in progress.
   onPanClear() {
     _isPanning = false;
-
     _panDownDetails = null;
     _panUpdateDetails = null;
 
     notifyListeners();
   }
 
+  /// [leftZonePosition] calculates the left of the zone selection highlight.
   double? get leftZonePosition {
     if (_panDownDetails == null || _panUpdateDetails == null) return null;
 
@@ -111,6 +118,7 @@ class WorkspaceProvider with ChangeNotifier {
     return _panUpdateDetails!.localPosition.dx;
   }
 
+  /// [topZonePosition] calculates the top of the zone selection highlight.
   double? get topZonePosition {
     if (_panDownDetails == null || _panUpdateDetails == null) return null;
 
@@ -123,6 +131,7 @@ class WorkspaceProvider with ChangeNotifier {
     return _panUpdateDetails!.localPosition.dy;
   }
 
+  /// [zoneHeight] calculate the zone selection height
   double? get zoneHeight {
     if (_panDownDetails == null ||
         _panUpdateDetails == null ||
@@ -134,6 +143,7 @@ class WorkspaceProvider with ChangeNotifier {
         .abs();
   }
 
+  /// [zoneWidth] calculates the zone selection width
   double? get zoneWidth {
     if (_panDownDetails == null ||
         _panUpdateDetails == null ||
@@ -145,7 +155,8 @@ class WorkspaceProvider with ChangeNotifier {
         .abs();
   }
 
-  bool? isWidgetInZone(RenderBox? box, String k) {
+  /// [isWidgetInZone] checks a widget intersects with the zone selection
+  bool? isWidgetInZone(RenderBox? box) {
     if (box == null || _panUpdateDetails == null || !_isPanning) return null;
 
     final boxRect = box.localToGlobal(Offset.zero) & box.size;

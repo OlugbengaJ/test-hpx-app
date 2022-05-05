@@ -22,7 +22,7 @@ class KeyboardKey extends StatelessWidget {
     KeyModel keyModel,
     RenderBox? renderBox,
   ) {
-    final isWidgetInZone = provider.isWidgetInZone(renderBox, keyModel.keyCode);
+    final isWidgetInZone = provider.isWidgetInZone(renderBox);
 
     keyModel.highlightKey(isWidgetInZone);
     return keyModel;
