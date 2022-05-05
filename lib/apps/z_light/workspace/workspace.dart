@@ -84,9 +84,9 @@ class _WorkspaceState extends State<Workspace> {
     });
   }
 
-  _keysSelection() {
-    context.read<KeySelectorProvider>().toggleKeySelector(true);
-  }
+  // _keysSelection() {
+  //   context.read<KeySelectorProvider>().toggleKeySelector(true);
+  // }
 
   // _selectDraggable() {
   //   context.read<KeySelectorProvider>().toggleKeySelector(false);

@@ -30,7 +30,9 @@ class WorkspaceProvider with ChangeNotifier {
   }
 
   bool get isDragModeClick => _keyDragMode == WORKSPACE_DRAG_MODE.click;
+
   bool get isDragModeResizable => _keyDragMode == WORKSPACE_DRAG_MODE.resizable;
+
   bool get isDragModeZone => _keyDragMode == WORKSPACE_DRAG_MODE.zone;
 
   /// [getMode] returns the current mode of the [Workspace].
