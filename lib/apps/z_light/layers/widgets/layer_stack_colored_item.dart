@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/apps/z_light/layers/widgets/stateful_resizable.dart';
+import 'package:hpx/models/layers/layer_item_model.dart';
+import 'package:hpx/providers/apps/zlightspace_providers/keyboard/keys_provider.dart';
 import 'package:hpx/providers/apps/zlightspace_providers/layers_provider/layers.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../models/layers/layer_item_model.dart';
 import 'colored_resizable.dart';
 
 class LayerStackColoredItem extends StatefulWidget {
@@ -18,46 +18,70 @@ class LayerStackColoredItem extends StatefulWidget {
 class _LayerStackColoredItemState extends State<LayerStackColoredItem> {
   double dragWidgetSize = 0;
 
+  List<Widget> _widgetPaints(){
+    List<Widget> zones = [];
+    for (var item in widget.layerItemModel.controller.zoneToPaint) {
+      if(widget.layerItemModel.visibleOnStack){
+        zones.add(
+          Positioned(
+            top: item['position'].dy,
+            left: item['position'].dx,
+            child: Opacity(
+              opacity: 1,
+              child: Container(
+                height: item['size'].height,
+                width: item['size'].width,
+                color: widget.layerItemModel.paintColor,
+              ),
+            ),
+          ),
+        );
+      }
+      
+    }
+    return zones;
+  }
+
   @override
-  Widget build(BuildContext context) {
-    
-    return Consumer<LayersProvider>(builder: (context, _value, child) {
-      return Container(
-        color: Colors.transparent,
-        child: ColoredResizable(          
-          dragWidgetHeight: dragWidgetSize,
-          dragWidgetWidth: dragWidgetSize,
-          controller: widget.layerItemModel.controller,
-          dragWidget: Container(
-            child: Center(
-              child: Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      color: (widget.layerItemModel.visible)
-                          ? Colors.white
-                          : Colors.transparent,
-                    ),
+  Widget build(BuildContext context) {    
+    return Stack(
+      children: _widgetPaints() + [
+        Consumer<LayersProvider>(builder: (context, _value, child) {
+          return Container(
+            color: Colors.transparent,
+            child: ColoredResizable(
+              keysToWatch: context.watch<KeysProvider>().keysTowatch,
+              dragWidgetHeight: dragWidgetSize,
+              dragWidgetWidth: dragWidgetSize,
+              controller: widget.layerItemModel.controller,
+              dragWidget: Container(
+                child: Center(
+                  child: Column(
+                    children: [
+                      Container(
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          color: Colors.transparent,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
+                decoration: const BoxDecoration(
+                  shape: BoxShape.rectangle,
+                ),
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.transparent,
+                  ),
+                ),
               ),
             ),
-            decoration: const BoxDecoration(
-              shape: BoxShape.rectangle,
-            ),
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: (widget.layerItemModel.visible)
-                    ? Colors.white
-                    : Colors.transparent,
-              ),
-            ),
-          ),
-        ),
-      );
-    });
+          );
+        }),
+      ],
+    );
   }
 }

@@ -17,7 +17,6 @@ class ZoneSelectorProvider with ChangeNotifier{
 
 
   void updatePosition(){
-    print("Position updated");
     zoneToPaint.clear();
     notifyListeners();
   }

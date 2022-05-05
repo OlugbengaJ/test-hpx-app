@@ -74,7 +74,6 @@ class _WrapperState extends State<Wrapper> {
     }
   }
 
-  void _getSize(Size size) {}
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +84,7 @@ class _WrapperState extends State<Wrapper> {
           title: Row(
             children: [
               SizedBox(
-                width: 300,
+                width: 400,
                 child: Row(
                   children: [
                     Expanded(
@@ -140,7 +139,7 @@ class _WrapperState extends State<Wrapper> {
             Column(
               children: [
                 Container(
-                  margin: const EdgeInsets.only(top: 2, right: 30),
+                  margin: EdgeInsets.only(top: 2, right: 30),
                   child: SizedBox(
                     width: 300,
                     child: PickerDropdown(
@@ -174,7 +173,6 @@ class _WrapperState extends State<Wrapper> {
                         Consumer<KeysProvider>(builder: (_, provider, child) {
                           return provider.keySelectorDisplayed
                               ? ZoneSelector(
-                                  getSize: _getSize,
                                   widgetsKeys: provider.keysTowatch,
                                 )
                               : Container();

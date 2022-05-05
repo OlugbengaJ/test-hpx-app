@@ -16,7 +16,7 @@ List<Color> colors = const [
 
 class LayersProvider extends ChangeNotifier {
   final areaHeight = Get.height * 0.70;
-    final areaWidth = Get.width * 0.70;
+  final areaWidth = Get.width * 0.70;
   final List<LayerItemModel> _layeritems = [
   ];
   final List<LayerItemModel> _stackedLayeritems = []; // Used to display the staked layers
@@ -35,6 +35,10 @@ class LayersProvider extends ChangeNotifier {
 
   void toggleHideStackedLayers(bool show){
     hideStackedLayers = show;
+  }
+
+  void updateView(){
+    notifyListeners();
   }
 
 
@@ -71,8 +75,7 @@ class LayersProvider extends ChangeNotifier {
     stackedLayeritems.clear();
     List<LayerItemModel> reversedList = layeritems.reversed.toList();
     for (var item in reversedList) {
-      stackedLayeritems.insert(0, item);
-      
+      stackedLayeritems.add(item);
     }
     notifyListeners();
   }
@@ -181,7 +184,7 @@ class LayersProvider extends ChangeNotifier {
     }
     final item = _layeritems.removeAt(oldIndex);
     _layeritems.insert(newIndex, item);
-    //rearranegStack();
+    rearranegStack();
     notifyListeners();
   }
 
