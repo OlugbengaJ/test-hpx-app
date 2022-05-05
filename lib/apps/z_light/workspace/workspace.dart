@@ -88,9 +88,9 @@ class _WorkspaceState extends State<Workspace> {
     context.read<KeySelectorProvider>().toggleKeySelector(true);
   }
 
-  _selectDraggable() {
-    context.read<KeySelectorProvider>().toggleKeySelector(false);
-  }
+  // _selectDraggable() {
+  //   context.read<KeySelectorProvider>().toggleKeySelector(false);
+  // }
 
   /// zoomOut decreases the zoomValue only up to the zoomOut threshold
   /// preventing scenario where content is completely not visible.

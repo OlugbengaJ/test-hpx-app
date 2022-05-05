@@ -12,7 +12,6 @@ import 'package:hpx/providers/keyboard/keys_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/components/zone_selector/zone_selector.dart';
-import 'package:hpx/widgets/components/zone_selector/zone_selector_provider.dart';
 import 'package:hpx/widgets/layouts/three_columns.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
