@@ -37,7 +37,6 @@ class _ToolModesState extends State<ToolModes> {
         effects: [],
         currentColor: [],
         value: _defaultPreset.value);
-    // TODO: implement initState
     super.initState();
   }
 
