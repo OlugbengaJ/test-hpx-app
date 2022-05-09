@@ -22,6 +22,8 @@ jobs:
   displayName: 'Build Andriod'
   pool:
     vmImage: 'macOS-latest'
+  workspace:
+      clean: all
 
   steps:
   - task: FlutterInstall@0
@@ -36,13 +38,13 @@ jobs:
     inputs:
       sourceFolder: '$(Build.SourcesDirectory)/build/app/outputs/flutter-apk'
       contents: 'app.apk'
-      targetFolder: '$(build.artifactStagingDirectory)'
+      targetFolder: '$(Build.ArtifactStagingDirectory)'
   
   - task: PublishBuildArtifacts@1
     condition: or(and(succeeded(), eq(variables.BranchSource, variables.isDevelopment)), and(succeeded(), eq(variables.BranchSource, variables.isQA)))
     inputs: 
       pathToPublish: '$(Build.ArtifactStagingDirectory)' 
-      artifactName: APK
+      artifactName: APK_$(Build.BuildNumber)
       #publishLocation: 'Container' # Options: container, filePath
       # targetPath: $(Build.Repository.LocalPath)/build/app/outputs/flutter-apk/app.apk
       # artifactType: pipeline
@@ -55,6 +57,8 @@ jobs:
   displayName: 'WEB'
   pool:
     vmImage: 'macOS-latest'
+  workspace:
+      clean: all
 
   steps:
   - task: FlutterInstall@0
@@ -68,13 +72,13 @@ jobs:
     condition: or(and(succeeded(), eq(variables.BranchSource, variables.isDevelopment)), and(succeeded(), eq(variables.BranchSource, variables.isQA)))
     inputs:
       sourceFolder: '$(Build.SourcesDirectory)/build/web'
-      targetFolder: '$(build.artifactStagingDirectory)'
+      targetFolder: '$(Build.ArtifactStagingDirectory)'
   
   - task: PublishBuildArtifacts@1
     condition: or(and(succeeded(), eq(variables.BranchSource, variables.isDevelopment)), and(succeeded(), eq(variables.BranchSource, variables.isQA)))
     inputs: 
       pathToPublish: '$(Build.ArtifactStagingDirectory)' 
-      artifactName: WEB
+      artifactName: WEB_$(Build.BuildNumber)
       #publishLocation: 'Container' # Options: container, filePath
       # targetPath: $(Build.Repository.LocalPath)/build/app/outputs/flutter-apk/app.apk
       # artifactType: pipeline
@@ -87,6 +91,8 @@ jobs:
   displayName: 'Windows'
   pool:
     vmImage: 'windows-latest'
+  workspace:
+      clean: all
 
   steps:
   - task: FlutterInstall@0
@@ -100,13 +106,13 @@ jobs:
     condition: or(and(succeeded(), eq(variables.BranchSource, variables.isDevelopment)), and(succeeded(), eq(variables.BranchSource, variables.isQA)))
     inputs:
       sourceFolder: '$(Build.SourcesDirectory)/build/windows/runner/Release'
-      targetFolder: '$(build.artifactStagingDirectory)'
+      targetFolder: '$(Build.ArtifactStagingDirectory)'
   
   - task: PublishBuildArtifacts@1
     condition: or(and(succeeded(), eq(variables.BranchSource, variables.isDevelopment)), and(succeeded(), eq(variables.BranchSource, variables.isQA)))
     inputs: 
       pathToPublish: '$(Build.ArtifactStagingDirectory)' 
-      artifactName: Windows
+      artifactName: Windows_$(Build.BuildNumber)
 
 
 
@@ -116,6 +122,8 @@ jobs:
   displayName: 'Linux'
   pool:
     vmImage: 'ubuntu-latest'
+  workspace:
+      clean: all
 
   steps:
   - task: FlutterInstall@0
@@ -141,10 +149,10 @@ jobs:
     condition: or(and(succeeded(), eq(variables.BranchSource, variables.isDevelopment)), and(succeeded(), eq(variables.BranchSource, variables.isQA)))
     inputs:
       sourceFolder: '$(Build.SourcesDirectory)/build/linux/x64/release/bundle'
-      targetFolder: '$(build.artifactStagingDirectory)'
+      targetFolder: '$(Build.ArtifactStagingDirectory)'
   
   - task: PublishBuildArtifacts@1
     condition: or(and(succeeded(), eq(variables.BranchSource, variables.isDevelopment)), and(succeeded(), eq(variables.BranchSource, variables.isQA)))
     inputs: 
       pathToPublish: '$(Build.ArtifactStagingDirectory)' 
-      artifactName: Linux
+      artifactName: Linux_$(Build.BuildNumber)

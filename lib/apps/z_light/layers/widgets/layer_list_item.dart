@@ -36,19 +36,16 @@ class _LayerListItemState extends State<LayerListItem> {
   _toggleLayer(provider) {
     LayerItemModel layerItemModel = widget.layerItemModel;
     provider.toggleVisibility(
-        LayerItemModel(
-            id: layerItemModel.id,
-            layerText: layerItemModel.layerText,
-            visible: !layerItemModel.visible,
-            controller: layerItemModel.controller),
-        widget.layerIndex);
+      LayerItemModel(id: layerItemModel.id, layerText: layerItemModel.layerText, visible: !layerItemModel.visible,
+        controller: layerItemModel.controller),
+        widget.layerIndex
+    );
   }
 
   _toggleEditing(value) {
     setState(() {
       _editing = !_editing;
-      _layerNameController = TextEditingController(
-          text: value.getItem(widget.layerIndex).layerText);
+      _layerNameController = TextEditingController(text: value.getItem(widget.layerIndex).layerText);
     });
   }
 
@@ -60,12 +57,7 @@ class _LayerListItemState extends State<LayerListItem> {
     setState(() {
       _editing = !_editing;
     });
-    provider.update(
-        LayerItemModel(
-            id: widget.layerItemModel.id,
-            layerText: value,
-            controller: widget.layerItemModel.controller),
-        widget.layerIndex);
+    provider.update(LayerItemModel(id: widget.layerItemModel.id, layerText: value, controller: widget.layerItemModel.controller), widget.layerIndex);    
   }
 
   @override
@@ -73,7 +65,7 @@ class _LayerListItemState extends State<LayerListItem> {
     return Consumer<LayersProvider>(
       builder: (context, _value, child) {
         return Container(
-          height: 30,
+          height: 40,
           margin: const EdgeInsets.only(bottom: 2),
           child: InkWell(
             onHover: _onHover,
@@ -85,21 +77,21 @@ class _LayerListItemState extends State<LayerListItem> {
               padding: const EdgeInsets.all(2),
               color: Colors.black12,
               child: SizedBox(
-                height: 25,
+                height: 35,
                 child: Row(
                   children: [
                     InkWell(
-                        onTap: () => _toggleLayer(_value),
-                        child: Tooltip(
-                          message: "Toogle visibility",
-                          child: Icon(
-                            (_value.getItem(widget.layerIndex).visible)
-                                ? Ionicons.eye
-                                : Ionicons.eye_off,
+                      onTap: () => _toggleLayer(_value),
+                      child:Tooltip(
+                        message: "Toogle visibility",
+                        child: Icon(
+                            (_value.getItem(widget.layerIndex).visible)?
+                            Ionicons.eye: Ionicons.eye_off,
                             size: _iconSize,
                             color: widget.layerItemModel.listDisplayColor,
                           ),
-                        )),
+                      )
+                      ),
                     const SizedBox(
                       width: 2,
                     ),
@@ -116,7 +108,7 @@ class _LayerListItemState extends State<LayerListItem> {
                               ),
                               (_editing)
                                   ? Container(
-                                      height: 20,
+                                      height: 30,
                                       constraints: const BoxConstraints(
                                         maxWidth: 80,
                                       ),
@@ -124,28 +116,26 @@ class _LayerListItemState extends State<LayerListItem> {
                                         controller: _layerNameController,
                                         autofocus: true,
                                         style: const TextStyle(
-                                          fontSize: 12,
+                                          fontSize: 16,
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                         decoration: const InputDecoration(
                                             focusColor: Colors.white,
                                             border: OutlineInputBorder(),
                                             contentPadding: EdgeInsets.all(8)),
-                                        onFieldSubmitted: (value) =>
-                                            _onSubmit(value, _value),
+                                        onFieldSubmitted: (value) => _onSubmit(value, _value),
                                       ),
                                     )
                                   : Expanded(
                                       child: Consumer<LayersProvider>(
                                         builder: (context, value, child) {
-                                          return Text(
-                                            value
-                                                .getItem(widget.layerIndex)
-                                                .layerText,
+                                          return 
+                                          Text(value.getItem(widget.layerIndex).layerText,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
-                                                color: widget.layerItemModel
-                                                    .listDisplayColor),
+                                              fontSize: 16,
+                                              color: widget.layerItemModel.listDisplayColor
+                                            ),
                                           );
                                         },
                                       ),
@@ -162,29 +152,24 @@ class _LayerListItemState extends State<LayerListItem> {
                                           children: [
                                             Tooltip(
                                               message: "Duplicate",
-                                              child: InkWell(
+                                              child: InkWell(                                            
                                                 child: Icon(
                                                   Ionicons.copy,
                                                   size: _iconSize,
-                                                  color: widget.layerItemModel
-                                                      .listDisplayColor,
+                                                  color: widget.layerItemModel.listDisplayColor,
                                                 ),
-                                                onTap: () => value.duplicate(
-                                                    widget.layerItemModel,
-                                                    widget.layerIndex),
+                                                onTap: () => value.duplicate(widget.layerItemModel, widget.layerIndex),
                                               ),
                                             ),
                                             Tooltip(
                                               message: "Edit",
-                                              child: InkWell(
+                                              child: InkWell(                                            
                                                 child: Icon(
                                                   Ionicons.create,
                                                   size: _iconSize,
-                                                  color: widget.layerItemModel
-                                                      .listDisplayColor,
+                                                  color: widget.layerItemModel.listDisplayColor,
                                                 ),
-                                                onTap: () =>
-                                                    _toggleEditing(value),
+                                                onTap: () => _toggleEditing(value),
                                               ),
                                             ),
                                             Tooltip(
@@ -193,11 +178,10 @@ class _LayerListItemState extends State<LayerListItem> {
                                                 child: Icon(
                                                   Ionicons.trash,
                                                   size: _iconSize,
-                                                  color: widget.layerItemModel
-                                                      .listDisplayColor,
+                                                  color: widget.layerItemModel.listDisplayColor,
                                                 ),
-                                                onTap: () => value.removeItem(
-                                                    widget.layerIndex),
+                                                onTap: () => value
+                                                    .removeItem(widget.layerIndex),
                                               ),
                                             ),
                                           ],

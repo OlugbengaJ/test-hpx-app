@@ -14,8 +14,11 @@ import 'package:hpx/models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
+import 'package:provider/provider.dart';
 
 class ToolModes extends StatefulWidget {
+  const ToolModes({Key? key}) : super(key: key);
+
   @override
   State<ToolModes> createState() => _ToolModesState();
 }
@@ -24,23 +27,30 @@ class _ToolModesState extends State<ToolModes> {
   Widget? preset;
   final PickerModel _defaultPreset =
       PickerModel(title: 'Mood', value: 'mood', enabled: true);
-  final _modeProvider = ModeProvider();
 
-  changeComponent(PickerModel pickerChoice) {
-    _modeProvider.setCurrentMode(ToolsModeModel(
-        name: pickerChoice.title,
+  @override
+  void initState() {
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
+    modeProvider.currentMode = ToolsModeModel(
+        name: _defaultPreset.title,
         effects: [],
         currentColor: [],
-        value: pickerChoice.value));
+        value: _defaultPreset.value);
+    // TODO: implement initState
+    super.initState();
+  }
+
+  changeComponent(PickerModel pickerChoice) {
     switch (pickerChoice.value) {
       case "shortcut":
-        return ShortcutColorsPreset();
+        return const ShortcutColorsPreset();
       case "mood":
-        return MoodPreset();
+        return const MoodPreset();
       case "colorsproduction":
         return const ColorProductionPreset();
       case "audiovisualizer":
-        return AudioVisualPreset();
+        return const AudioVisualPreset();
       case "wave":
         return WavePreset();
       case "colorcycle":
@@ -62,30 +72,36 @@ class _ToolModesState extends State<ToolModes> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.zero,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text("Tools & Effects", textAlign: TextAlign.left, style: h5Style),
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.45,
-            child: PickerDropdown(
-              onChange: (PickerModel? returnValue) {
-                setState(() {
-                  preset = changeComponent(returnValue!);
-                });
-              },
-              pickerHintText: "Picker a tool or effect mode ....",
-              pickerList: _modeProvider.getPickerModes('mood'),
-              defaultPicker: _defaultPreset,
+    return Consumer<ModeProvider>(
+      builder: (context, _modeProvider, child) => Container(
+        margin: const EdgeInsets.only(right: 10.0, top: 20.0, bottom: 30.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text("Tools & Effects", textAlign: TextAlign.left, style: h4Style),
+            SizedBox(
+                width: MediaQuery.of(context).size.width * 0.45,
+                child: PickerDropdown(
+                  onChange: (PickerModel? returnValue) {
+                    _modeProvider.setCurrentMode(ToolsModeModel(
+                        name: returnValue!.title,
+                        effects: [],
+                        currentColor: [],
+                        value: returnValue.value));
+                    setState(() {
+                      preset = changeComponent(returnValue);
+                    });
+                  },
+                  pickerHintText: "Picker a tool or effect mode ....",
+                  pickerList: _modeProvider.getPickerModes('mood'),
+                  defaultPicker: _defaultPreset,
+                )),
+            Container(
+              margin: const EdgeInsets.only(top: 0.0, bottom: 20.0),
+              child: preset ?? changeComponent(_defaultPreset),
             ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 0.0, bottom: 20.0),
-            child: preset ?? changeComponent(_defaultPreset),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

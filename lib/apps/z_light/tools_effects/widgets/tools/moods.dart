@@ -3,6 +3,8 @@ import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/widgets/theme.dart';
 
 class MoodPreset extends StatefulWidget {
+  const MoodPreset({Key? key}) : super(key: key);
+
   @override
   State<MoodPreset> createState() => _MoodPresetState();
 }

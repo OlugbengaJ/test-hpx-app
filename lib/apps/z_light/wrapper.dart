@@ -62,8 +62,6 @@ class _WrapperState extends State<Wrapper> {
     // context.read<ZoneSelectorProvider>().updatePosition();
   }
 
-  void _getSize(Size size) {}
-
   @override
   Widget build(BuildContext context) {
     final workspaceProvider = Provider.of<WorkspaceProvider>(context);
@@ -143,10 +141,7 @@ class _WrapperState extends State<Wrapper> {
             ),
             Consumer<KeySelectorProvider>(builder: (_, provider, child) {
               return provider.keySelectorDisplayed
-                  ? ZoneSelector(
-                      getSize: _getSize,
-                      widgetsKeys: provider.keysTowatch,
-                    )
+                  ? ZoneSelector(widgetsKeys: provider.keysTowatch)
                   : Container();
             }),
           ]),

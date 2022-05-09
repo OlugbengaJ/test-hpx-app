@@ -23,7 +23,8 @@ class _LayersState extends State<Layers> {
   final areaHeight = Get.height * 0.70;
   final areaWidth = Get.width * 0.70;
 
-  _addLayer(provider) {
+  _addLayer() {
+    var provider = context.read<LayersProvider>();
     int id = 1; // For first element;
     if (provider.layeritems.isNotEmpty) {
       provider.layeritems.forEach((element) {
@@ -79,7 +80,7 @@ class _LayersState extends State<Layers> {
                     ],
                   ),
                 ),
-                onPressed: () => _addLayer(provider),
+                onPressed: () => _addLayer(),
                 style: textBtnStyleWhite,
               ),
             ),
@@ -89,22 +90,24 @@ class _LayersState extends State<Layers> {
                 margin: const EdgeInsets.only(top: 8.0),
                 color: Colors.black12,
                 height: screenDimension(context).height,
-                child: ReorderableListView.builder(
-                  buildDefaultDragHandles: true,
-                  padding: const EdgeInsets.all(2),
-                  itemCount: provider.length,
-                  scrollController: ScrollController(keepScrollOffset: false),
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      key: Key("$index"),
-                      child: LayerListItem(
-                        layerIndex: index,
-                        layerItemModel: provider.getItem(index),
-                      ),
-                    );
-                  },
-                  onReorder: provider.reorder,
-                )),
+                child: Consumer<LayersProvider>(builder: (_, provider, child) {
+                  return ReorderableListView.builder(
+                    buildDefaultDragHandles: true,
+                    padding: const EdgeInsets.all(2),
+                    itemCount: provider.length,
+                    scrollController: ScrollController(keepScrollOffset: false),
+                    itemBuilder: (BuildContext context, int index) {
+                      return Container(
+                        key: Key("$index"),
+                        child: LayerListItem(
+                          layerIndex: index,
+                          layerItemModel: provider.getItem(index),
+                        ),
+                      );
+                    },
+                    onReorder: provider.reorder,
+                  );
+                })),
           )
         ],
       );

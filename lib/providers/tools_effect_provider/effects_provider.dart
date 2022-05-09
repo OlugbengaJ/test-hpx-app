@@ -1,17 +1,54 @@
+import 'package:flutter/material.dart';
 import 'package:hpx/models/tools_effect/effects_model.dart';
-import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 
-class EffectProvider {
+class EffectProvider extends ChangeNotifier {
   EffectsModel? currentEffect;
-  final _modeProvider = ModeProvider();
 
   void setCurrentEffect(EffectsModel data) {
     currentEffect = data;
-    _modeProvider.currentMode?.effects = [currentEffect];
+    notifyListeners();
   }
 
   void setEffectSliderValue(double returnValue, String type) {}
 
-  void saveModeInformation() {}
-  void getModeInformation() {}
+  void waveEffect(
+    double speed,
+    double direction,
+  ) {}
+
+  void colorCycleEffect(double speed) {}
+
+  void breathingEffect(double speed) {}
+
+  void blinkingEffect(double speed) {}
+
+  void interactiveEffect(double speed, double size) {}
+
+  void audioVisualizerEffect() {}
+
+  void ambientEffect(double imageQuality, double perSecondUpdates) {}
+
+  processEfect(String effect) {
+    switch (effect) {
+      case "audiovisualizer":
+        audioVisualizerEffect();
+        break;
+      case "wave":
+        break;
+      case "colorcycle":
+        break;
+      case "breathing":
+        break;
+      case "blinking":
+        break;
+      case "interactive":
+        break;
+      case "image":
+        break;
+      case "ambient":
+        break;
+      default:
+        break;
+    }
+  }
 }

@@ -36,6 +36,10 @@ class LayersProvider extends ChangeNotifier {
     hideStackedLayers = show;
   }
 
+  void updateView() {
+    notifyListeners();
+  }
+
   int getTheBiggestID() {
     int id = 1;
     for (var item in _layeritems) {
@@ -66,7 +70,7 @@ class LayersProvider extends ChangeNotifier {
     stackedLayeritems.clear();
     List<LayerItemModel> reversedList = layeritems.reversed.toList();
     for (var item in reversedList) {
-      stackedLayeritems.insert(0, item);
+      stackedLayeritems.add(item);
     }
     notifyListeners();
   }
@@ -168,7 +172,7 @@ class LayersProvider extends ChangeNotifier {
     }
     final item = _layeritems.removeAt(oldIndex);
     _layeritems.insert(newIndex, item);
-    //rearranegStack();
+    rearranegStack();
     notifyListeners();
   }
 

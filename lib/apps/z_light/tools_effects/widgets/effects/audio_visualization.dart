@@ -3,16 +3,17 @@ import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
+import 'package:provider/provider.dart';
 
 class AudioVisualPreset extends StatefulWidget {
+  const AudioVisualPreset({Key? key}) : super(key: key);
+
   @override
   State<AudioVisualPreset> createState() => _AudioVisualPresetState();
 }
 
 class _AudioVisualPresetState extends State<AudioVisualPreset> {
   String activatedButton = "Solid";
-  final _modeProvider = ModeProvider();
-  final _colorPickerProvider = ColorPickerProvider();
   final PickerModel _defaultPicker = PickerModel(
       title: 'Power Bars',
       enabled: true,
@@ -20,7 +21,17 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
       icon: Icons.power_input_outlined);
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
+    ColorPickerProvider _colorPickerProvider =
+        Provider.of<ColorPickerProvider>(context, listen: false);
     return Container(
         margin: const EdgeInsets.only(top: 20, bottom: 30.0),
         child: Column(
@@ -35,7 +46,7 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
                       });
                     },
                     defaultPicker: _defaultPicker,
-                    pickerList: _modeProvider.getPickerModes('audiolist'))),
+                    pickerList: modeProvider.getPickerModes('audiolist'))),
             Container(margin: const EdgeInsets.only(top: 30.0)),
             Divider(
               color: Colors.grey.shade800,
