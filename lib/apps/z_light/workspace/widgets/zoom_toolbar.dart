@@ -1,15 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hpx/widgets/components/round_button.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/round_button.dart';
 
 class ZoomToolbar extends StatelessWidget {
-  ZoomToolbar({Key? key, required this.zoomIndex, required this.onChange})
-      : super(key: key);
+  /// [ZoomToolbar] displays the zoom controls at the bottom of the screen.
+  const ZoomToolbar({
+    Key? key,
+    required this.zoomTextController,
+    required this.zoomInHandler,
+    required this.zoomExpandHandler,
+    required this.zoomOutHandler,
+    required this.zoomCollapseHandler,
+    required this.zoomEndHandler,
+  }) : super(key: key);
 
-  final Function(double zoomValue) onChange;
-  final double _buttonSize = 24;
-  double zoomIndex;
+  final TextEditingController zoomTextController;
+  final VoidCallback zoomInHandler;
+  final VoidCallback zoomExpandHandler;
+  final VoidCallback zoomOutHandler;
+  final VoidCallback zoomCollapseHandler;
+  final VoidCallback zoomEndHandler;
+
+  final double buttonSize = 24;
 
   @override
   Widget build(BuildContext context) {
@@ -23,64 +35,88 @@ class ZoomToolbar extends StatelessWidget {
         ),
       ),
       child: SizedBox(
-        width: 340,
-        height: 50,
+        width: 200,
+        height: 40,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            RoundButton(
-              iconData: Icons.add,
-              size: _buttonSize,
-              onPressed: () {
-                zoomIndex += 0.01;
-                onChange(zoomIndex);
-              },
-            ),
-            Container(
-              constraints: const BoxConstraints(maxWidth: 48, maxHeight: 24),
-              child: TextField(
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.zero),
-                      borderSide: BorderSide.none),
-                  fillColor: Colors.black,
-                  filled: true,
-                  contentPadding: EdgeInsets.all(0),
+            Flexible(
+              flex: 1,
+              fit: FlexFit.tight,
+              child: Tooltip(
+                message: 'Zoom In',
+                triggerMode: TooltipTriggerMode.tap,
+                child: RoundButton(
+                  icon: Icons.add_circle_rounded,
+                  size: buttonSize,
+                  onTapDown: zoomInHandler,
+                  onTapUp: zoomEndHandler,
                 ),
-                textAlign: TextAlign.center,
               ),
             ),
-            RoundButton(
-              iconData: Icons.remove,
-              size: _buttonSize,
-              onPressed: () {
-                zoomIndex -= 0.01;
-                onChange(zoomIndex);
-              },
-            ),
-            Container(margin: const EdgeInsets.only(right: 20.0)),
-            TextButton(
-              style: TextButton.styleFrom(
-                  primary: Colors.white, backgroundColor: Colors.transparent),
-              child: const Icon(
-                Ionicons.scan_outline,
-                size: 30.0,
-                color: Colors.grey,
+            Flexible(
+              flex: 2,
+              fit: FlexFit.tight,
+              child: Container(
+                constraints: const BoxConstraints(maxWidth: 48, maxHeight: 24),
+                child: TextField(
+                  controller: zoomTextController,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.zero),
+                        borderSide: BorderSide.none),
+                    fillColor: Theme.of(context).primaryColor,
+                    filled: true,
+                    contentPadding: const EdgeInsets.all(0),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
-              onPressed: null,
             ),
-            TextButton(
-              style: TextButton.styleFrom(
-                  primary: Colors.white, backgroundColor: Colors.transparent),
-              child: const Icon(
-                Ionicons.expand_outline,
-                size: 30.0,
-                color: Colors.grey,
+            Flexible(
+              flex: 1,
+              fit: FlexFit.tight,
+              child: Tooltip(
+                message: 'Zoom Out',
+                triggerMode: TooltipTriggerMode.tap,
+                child: RoundButton(
+                  icon: Icons.remove_circle_rounded,
+                  size: buttonSize,
+                  onTapDown: zoomOutHandler,
+                  onTapUp: zoomEndHandler,
+                ),
               ),
-              onPressed: null,
-            )
+            ),
+            Flexible(
+              flex: 1,
+              fit: FlexFit.tight,
+              child: Tooltip(
+                message: 'Collapse',
+                triggerMode: TooltipTriggerMode.tap,
+                child: RoundButton(
+                  icon: Icons.center_focus_strong_sharp,
+                  size: buttonSize,
+                  onTapDown: zoomCollapseHandler,
+                  onTapUp: zoomEndHandler,
+                ),
+              ),
+            ),
+            Flexible(
+              flex: 1,
+              fit: FlexFit.tight,
+              child: Tooltip(
+                message: 'Expand',
+                triggerMode: TooltipTriggerMode.tap,
+                child: RoundButton(
+                  icon: Icons.fullscreen_sharp,
+                  size: buttonSize + 6, // adjust the icon size to match
+                  onTapDown: zoomExpandHandler,
+                  onTapUp: zoomEndHandler,
+                ),
+              ),
+            ),
           ],
         ),
       ),

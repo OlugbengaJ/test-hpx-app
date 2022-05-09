@@ -1,98 +1,252 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack.dart';
-import 'package:hpx/providers/apps/zlightspace_providers/keyboard/keys_provider.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:provider/provider.dart';
-
-import '../layers/widgets/layer_stack_item.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/round_button.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/zoom_toolbar.dart';
+import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/widgets/theme.dart';
+import 'package:provider/provider.dart';
 
 class Workspace extends StatefulWidget {
-  const Workspace({Key? key, required this.layers, required this.currentIndex})
-      : super(key: key);
+  const Workspace({Key? key, required this.layers}) : super(key: key);
 
   final List<LayerStackItem> layers;
-  final int currentIndex;
 
   @override
   State<Workspace> createState() => _WorkspaceState();
 }
 
 class _WorkspaceState extends State<Workspace> {
-  double zoomValue = 1.0;
+  final _zoomTextCtrl = TextEditingController(text: '100');
+  final double _zoomInThreshold = 400;
+  final double _zoomOutThreshold = 60;
+  double _zoomValue = 100;
+  double _zoomScale = 1;
+
+  Timer _timer = Timer.periodic(Duration.zero, ((t) {}));
+  final _duration = const Duration(milliseconds: 50);
+
+  final double _buttonSize = 32.0;
+
+  /// [_zoomTextChanged] ensure user enters only digits
+  /// that are within the acceptable zoom threshold.
+  void _zoomTextChanged() {
+    double? value = double.tryParse(_zoomTextCtrl.text);
+
+    if (value != null) {
+      if (value >= _zoomOutThreshold && value <= _zoomInThreshold) {
+        setState(() {
+          _zoomValue = value;
+          _zoomScale = _zoomValue / 100;
+        });
+      }
+    }
+  }
+
+  /// [_zoomEnd] terminates continuous zoom
+  ///
+  /// timer is canceled to stop zooming by the duration specified
+  void _zoomEnd() {
+    _timer.cancel();
+  }
+
+  /// [_updateZoom] sets the zoom text (without fractions) and zoom scale.
+  void _updateZoom() {
+    _zoomTextCtrl.text = '${_zoomValue.ceil()}';
+  }
+
+  /// [_zoomIn] increases the zoomValue only up to the zoomIn threshold
+  /// preventing scenario where content is unnecessarily large.
+  void _zoomIn() {
+    _timer = Timer.periodic(_duration, (t) {
+      if (_zoomValue == _zoomInThreshold) {
+        _timer.cancel();
+        return;
+      }
+
+      setState(() {
+        _zoomValue += 1;
+        _updateZoom();
+      });
+    });
+  }
+
+  /// [_zoomExpand] sets the zoomValue to half the zoomIn threshold.
+  void _zoomExpand() {
+    setState(() {
+      _zoomValue = _zoomInThreshold / 2;
+      _updateZoom();
+    });
+  }
+
+  // _keysSelection() {
+  //   context.read<KeySelectorProvider>().toggleKeySelector(true);
+  // }
+
+  // _selectDraggable() {
+  //   context.read<KeySelectorProvider>().toggleKeySelector(false);
+  // }
+
+  /// zoomOut decreases the zoomValue only up to the zoomOut threshold
+  /// preventing scenario where content is completely not visible.
+  void _zoomOut() {
+    _timer = Timer.periodic(_duration, (t) {
+      if (_zoomValue == _zoomOutThreshold) {
+        _timer.cancel();
+        return;
+      }
+
+      setState(() {
+        _zoomValue -= 1;
+        _updateZoom();
+      });
+    });
+  }
+
+  /// zoomCollapse sets the zoomValue to the zoomOut threshold.
+  void _zoomCollapse() {
+    setState(() {
+      _zoomValue = _zoomOutThreshold;
+      _updateZoom();
+    });
+  }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+
+    // Start listening to changes.
+    _zoomTextCtrl.addListener(_zoomTextChanged);
   }
 
-  _keysSelection() {
-    context.read<KeysProvider>().toggleKeySelector(true);
-  }
-
-  _selectDraggable() {
-    context.read<KeysProvider>().toggleKeySelector(false);
+  @override
+  void dispose() {
+    _timer.cancel();
+    _zoomTextCtrl.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final workspaceProvider = Provider.of<WorkspaceProvider>(context);
+
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SizedBox(
-            child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: const EdgeInsets.only(top: 20.0, left: 10.0),
-              child: Text(
-                'Zone Selection',
-                textAlign: TextAlign.left,
-                style: h4Style,
-              ),
-            ),
-            Container(margin: const EdgeInsets.only(top: 5.0)),
-            SizedBox(
-              width: 200,
-              height: 50,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    style: TextButton.styleFrom(
-                        primary: Colors.white,
-                        backgroundColor: Colors.transparent,
-                        textStyle: h3Style),
-                    child: const Center(
-                      child: Icon(MdiIcons.selectAll),
+        /// Workspace area must be constrained to avoid width/height overflow
+        /// i.e. unconstrained error, and ultimately unexpected view behavior.
+        ///
+        /// Setting width/height with double.infinity is not recommended,
+        /// instead we want to keep the view constrained and have excessive
+        /// sub-widgets cliped only to the view.
+        Consumer<WorkspaceProvider>(
+          builder: (context, provider, child) => (provider.isLightingView)
+              ? ConstrainedBox(
+                  constraints: const BoxConstraints(
+                    maxHeight: 75,
+                  ),
+                  child: Container(
+                    margin: const EdgeInsets.only(
+                        left: 15, top: 10, right: 15, bottom: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Text('Zone Selection', style: h5Style),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(right: 20),
+                              child: RoundButton(
+                                onTapDown: () {
+                                  // _keysSelection,
+                                  provider.toggleDragMode(
+                                      WORKSPACE_DRAG_MODE.resizable);
+                                },
+                                onTapUp: () {},
+                                size: _buttonSize,
+                                icon: Icons.select_all,
+                                iconColor: provider.isDragModeResizable
+                                    ? Theme.of(context).colorScheme.primary
+                                    : null,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 20),
+                              child: RoundButton(
+                                onTapDown: () {
+                                  //_selectDraggable,
+                                  provider
+                                      .toggleDragMode(WORKSPACE_DRAG_MODE.zone);
+                                },
+                                size: _buttonSize,
+                                icon: Icons.highlight_alt,
+                                iconColor: provider.isDragModeZone
+                                    ? Theme.of(context).colorScheme.primary
+                                    : null,
+                              ),
+                            ),
+                            RoundButton(
+                              onTapDown: () {
+                                provider
+                                    .toggleDragMode(WORKSPACE_DRAG_MODE.click);
+                              },
+                              size: _buttonSize,
+                              icon: Icons.mouse,
+                              iconColor: provider.isDragModeClick
+                                  ? Theme.of(context).colorScheme.primary
+                                  : null,
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    onPressed: _keysSelection,
                   ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                        primary: Colors.white,
-                        backgroundColor: Colors.transparent,
-                        textStyle: h3Style),
-                    child: const Center(child: Icon(MdiIcons.selectDrag)),
-                    onPressed: _selectDraggable,
+                )
+              : ConstrainedBox(
+                  constraints: const BoxConstraints(maxHeight: 0),
+                  child: Container(),
+                ),
+        ),
+        Consumer<WorkspaceProvider>(
+          builder: (context, value, child) => (value.isStripNotify)
+              ? Container(
+                  color: Colors.yellow,
+                  padding: const EdgeInsets.all(5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.all(0),
+                        child: Text(
+                          value.stripNotificationText,
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColorDark,
+                          ),
+                        ),
+                      ),
+                      Tooltip(
+                        message: 'Close',
+                        child: RoundButton(
+                          onTapDown: () {
+                            value.toggleStripNotification();
+                          },
+                          onTapUp: () {},
+                          size: 24,
+                          icon: Icons.close,
+                          iconColor: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    ],
                   ),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                        primary: Colors.white,
-                        backgroundColor: Colors.transparent,
-                        textStyle: h3Style),
-                    child: const Center(child: Icon(MdiIcons.mouse)),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
-            ),
-          ],
-        )),
+                )
+              : Container(),
+        ),
         Expanded(
           child: Container(
             decoration: const BoxDecoration(
@@ -101,35 +255,58 @@ class _WorkspaceState extends State<Workspace> {
                 repeat: ImageRepeat.repeat,
               ),
             ),
-            child: Stack(
-              alignment: Alignment.bottomLeft,
-              fit: StackFit.expand,
-              children: [
-                const Keyboard(zoomScale: 1.4),
-                Transform.scale(
-                    scale: zoomValue,
-                    child: LayersStack(
-                      layers: widget.layers,
-                      currentIndex: widget.currentIndex,
-                    )),
-                Positioned(
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent,
+              onPanDown: (details) => workspaceProvider.onPanDown(details),
+              onPanUpdate: (details) => workspaceProvider.onPanUpdate(details),
+              onPanEnd: (details) => workspaceProvider.onPanEnd(details),
+              onPanCancel: () => workspaceProvider.onPanClear(),
+              child: Stack(
+                alignment: Alignment.bottomLeft,
+                fit: StackFit.expand,
+                children: [
+                  // Keyboard widget takes a zoom scale which is applied to all keys.
+                  // This ensures seamless zooming of the entire keyboard.
+                  Keyboard(zoomScale: _zoomScale),
+                  LayersStack(
+                    layers: widget.layers,
+                  ),
+                  if (workspaceProvider.isPanning)
+                    Consumer<WorkspaceProvider>(
+                      builder: (context, value, child) => Positioned(
+                        left: value.leftZonePosition,
+                        top: value.topZonePosition,
+                        child: Container(
+                          margin: EdgeInsets.zero,
+                          height: value.zoneHeight,
+                          width: value.zoneWidth,
+                          decoration: BoxDecoration(
+                            color: Colors.blue.withOpacity(0.4),
+                          ),
+                        ),
+                      ),
+                    ),
+                  Positioned(
                     bottom: 0,
                     left: 0,
                     right: 0,
                     child: Center(
                       child: ZoomToolbar(
-                          zoomIndex: zoomValue,
-                          onChange: (double zoom) {
-                            setState(() {
-                              zoomValue = zoom;
-                              print(zoomValue);
-                            });
-                          }),
-                    )),
-              ],
+                        zoomTextController: _zoomTextCtrl,
+                        zoomInHandler: _zoomIn,
+                        zoomExpandHandler: _zoomExpand,
+                        zoomOutHandler: _zoomOut,
+                        zoomCollapseHandler: _zoomCollapse,
+                        zoomEndHandler: _zoomEnd,
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
-        ),
+          // ],
+        )
       ],
     );
   }

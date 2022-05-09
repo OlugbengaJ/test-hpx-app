@@ -1,45 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/providers/workspace_provider.dart';
+import 'package:provider/provider.dart';
 
 class ThreeColumns extends StatefulWidget {
   const ThreeColumns({
     Key? key,
-    required this.left,
+    required this.leftChild,
     this.leftFlex = 2,
-    required this.center,
-    this.centerFlex = 8,
-    required this.right,
+    required this.centerChild,
+    this.centerFlex = 5,
+    required this.rightChild,
     this.rightFlex = 2,
   }) : super(key: key);
 
-  final Widget left;
+  final Widget leftChild;
   final int leftFlex;
-  final Widget center;
+  final Widget centerChild;
   final int centerFlex;
-  final Widget right;
+  final Widget rightChild;
   final int rightFlex;
 
   @override
   State<ThreeColumns> createState() => _ThreeColumnsState();
 }
 
+/// Widget consumes a WorkspaceProvider only at regions that need to change on view selection.
+///
+/// Avoid wrapping the entire return widget with Consumer as that will reinitialize
+/// the center widget causing unexpected behavior e.g. the zoom state is lost.
 class _ThreeColumnsState extends State<ThreeColumns> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Expanded(
-          flex: widget.leftFlex,
-          child: widget.left,
+        Consumer<WorkspaceProvider>(
+          builder: (context, value, child) => value.isLightingView
+              ? Expanded(
+                  flex: widget.leftFlex,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: widget.leftChild,
+                  ),
+                )
+              : const SizedBox(width: 0, child: null),
         ),
-        Container(margin: const EdgeInsets.only(right: 10.0)),
+        // Center widget does not consume WorkspaceProvider to prevent recreating
         Expanded(
           flex: widget.centerFlex,
-          child: widget.center,
+          child: widget.centerChild,
         ),
-        Container(margin: const EdgeInsets.only(right: 20.0)),
-        Expanded(
-          flex: widget.rightFlex,
-          child: widget.right,
+        Consumer<WorkspaceProvider>(
+          builder: (context, value, child) => value.isLightingView
+              ? Expanded(
+                  flex: widget.rightFlex,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: widget.rightChild,
+                  ),
+                )
+              : const SizedBox(width: 0, child: null),
         ),
       ],
     );

@@ -6,8 +6,8 @@ import 'drag_distance.dart';
 
 
 class ColoredResizable extends StatefulWidget {
-  const ColoredResizable({ 
-    Key? key ,
+  const ColoredResizable({
+    Key? key,
     required this.child,
     required this.controller,
     required this.dragWidget,
@@ -33,7 +33,6 @@ class _ColoredResizableState extends State<ColoredResizable> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
       controller = widget.controller;
@@ -45,8 +44,7 @@ class _ColoredResizableState extends State<ColoredResizable> {
     return GetBuilder<ResizableWidgetController>(
       global: false,
       init: widget.controller,
-      builder: (controller)
-       {
+      builder: (controller) {
         return Stack(
           children: <Widget>[
             Positioned(
@@ -141,7 +139,7 @@ class _ColoredResizableState extends State<ColoredResizable> {
                         ),
                       ),
                     ),
-                    
+
                     // center right
                     Align(
                       alignment: Alignment.centerRight,

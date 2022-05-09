@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/layers/layer_item_model.dart';
-import 'package:hpx/providers/apps/zlightspace_providers/layers_provider/layers.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 

@@ -1,153 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard_key.dart';
+import 'package:hpx/providers/keys_provider.dart';
+import 'package:provider/provider.dart';
 
 class KeyboardRowShift extends StatelessWidget {
+  /// [KeyboardRowShift] displays keys in the shift key row i.e. left shift to right shift.
+  ///
+  /// Actual keys are drawn by [KeyboardKey].
   const KeyboardRowShift({Key? key, required this.zoomScale}) : super(key: key);
 
   final double zoomScale;
 
   @override
   Widget build(BuildContext context) {
-    const double _keyRadius = 0.001594051;
-    const double _lShiftKeyWidth = 0.09361081;
-    const double _rShiftKeyWidth = 0.1142209;
-    const double _keyWidth = 0.03914955;
-    const double _keyHeight = 0.1312806;
     double _zoomedPadding = 2.0 * zoomScale;
+
+    final keysProvider = Provider.of<KeysProvider>(context);
+    final rowKeys = keysProvider.getKeyInRow(4);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key Left Shift triggered'),
-            keyText: 'Shift',
-            keyWidth: _lShiftKeyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key Z triggered'),
-            keyText: 'Z',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key X triggered'),
-            keyText: 'X',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key C triggered'),
-            keyText: 'C',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key V triggered'),
-            keyText: 'V',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key B triggered'),
-            keyText: 'B',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key N triggered'),
-            keyText: 'N',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key M triggered'),
-            keyText: 'M',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key , triggered'),
-            keyText: ', <',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key period . triggered'),
-            keyText: '. >',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key / triggered'),
-            keyText: '/ ?',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key Right Shift triggered'),
-            keyText: 'Shift',
-            keyWidth: _rShiftKeyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
+        ...rowKeys.map(
+          (keyModel) => Padding(
+            padding: EdgeInsets.all(_zoomedPadding),
+
+            // use ChangeNotifierProvider.value() when using child values of Provider.of()
+            // as notifier; otherwise you encounter errors with ChangeNotifierProvider(create)
+            // when flutter rebuilds the widget tree
+            child: ChangeNotifierProvider.value(
+              value: keyModel,
+              builder: (context, child) => KeyboardKey(
+                onTapHandler: () {
+                  debugPrint('\r\n key ${keyModel.keyCode} triggered');
+                },
+                zoomScale: zoomScale,
+              ),
+            ),
           ),
         ),
       ],

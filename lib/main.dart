@@ -1,37 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/apps/z_light/wrapper.dart';
-import 'package:hpx/providers/apps/zlightspace_providers/layers_provider/layers.dart';
-import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/color_picker_provider.dart';
-import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/effects_provider.dart';
-import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/mode_provider.dart';
+import 'package:hpx/providers/keyboard/keys_provider.dart';
+import 'package:hpx/providers/keys_provider.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
+import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
+import 'package:hpx/providers/workspace_provider.dart';
+import 'package:hpx/widgets/components/zone_selector/zone_selector_provider.dart';
+import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
-import 'providers/apps/zlightspace_providers/keyboard/keys_provider.dart';
-import 'widgets/components/zone_selector/zone_selector_provider.dart';
-import "widgets/theme.dart";
 
-void main() => runApp(MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (_) => LayersProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => ColorPickerProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => ModeProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => EffectProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => ZoneSelectorProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => KeysProvider(),
-        ),
-      ],
-      child: const MyApp(),
-    ));
+void main() => runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => LayersProvider()),
+          ChangeNotifierProvider(create: (_) => ColorPickerProvider()),
+          ChangeNotifierProvider(create: (_) => ModeProvider()),
+          ChangeNotifierProvider(create: (_) => EffectProvider()),
+          ChangeNotifierProvider(create: (_) => ZoneSelectorProvider()),
+          ChangeNotifierProvider(create: (context) => KeySelectorProvider()),
+          ChangeNotifierProvider(create: (context) => KeysProvider()),
+          ChangeNotifierProvider(create: (context) => WorkspaceProvider()),
+        ],
+        child: const MyApp(),
+      ),
+    );
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -40,6 +35,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      scaffoldMessengerKey: scaffoldKey,
       darkTheme: darkTheme.copyWith(
         sliderTheme: SliderTheme.of(context).copyWith(
           thumbColor: Colors.white,

@@ -16,7 +16,6 @@ class ZoneSelector extends StatelessWidget {
     this.color = Colors.blue,
     this.borderColor = Colors.transparent,
     this.opacity = 0.2,
-    
   }) : super(key: key);
   final bool showBorderOnMouseMoving;
   final bool paintOnMouseMoving;
@@ -39,8 +38,7 @@ class ZoneSelector extends StatelessWidget {
 
   _onPanStart(BuildContext context, DragStartDetails details, provider){ // Set the begining point the top, the bottom, the left, the right to 0.0
     RenderBox box = context.findRenderObject() as RenderBox;
-    
-    
+
     Offset localOffset = box.globalToLocal(details.globalPosition);
     double dx = localOffset.dx;
     double dy = localOffset.dy;
@@ -51,7 +49,6 @@ class ZoneSelector extends StatelessWidget {
     provider.setPaddings(topPadding, lefPadding);
 
     provider.setStartingPoint(dx, dy);
-
   }
  
   _onPanUpdate(BuildContext context, DragUpdateDetails details, provider){
@@ -60,7 +57,6 @@ class ZoneSelector extends StatelessWidget {
     double dx = localOffset.dx;
     double dy = localOffset.dy;
     provider.startMoving(dx, dy);
-    
   }
 
   _onPanEnd(BuildContext context, DragEndDetails details, provider){
@@ -133,7 +129,6 @@ class ZoneSelector extends StatelessWidget {
                 ),
               ),
             ),
-
             Stack(
               children: _getHighlightedZone(provider),
             )

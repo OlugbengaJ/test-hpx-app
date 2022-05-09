@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 
+/// [KeyCustomPainter] is a reference to a custom key layout.
+///
+/// Although it is not imported anywhere in the project, it was written as
+/// an initial proof of concept which served as a guide to the current code
+/// setup for the keyboard rendering.
 class KeyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    // debugPrint('h ${size.height}, w ${size.width}');
     // var rect = ui.Offset.zero & size;
     // canvas.clipRect(rect);
 
-    // Paint paint_0_stroke = Paint()
+    // Paint paint0Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = size.width * 0.0009211208;
-    // paint_0_stroke.color = Color.fromARGB(255, 22, 180, 62).withOpacity(1);
-    // paint_0_stroke.strokeCap = StrokeCap.round;
+    // paint0Stroke.color = Color.fromARGB(255, 22, 180, 62).withOpacity(1);
+    // paint0Stroke.strokeCap = StrokeCap.round;
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.002653339, size.height * -0.04052338,
@@ -20,10 +24,10 @@ class KeyCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.007771956),
     //         topLeft: Radius.circular(size.width * 0.007771956),
     //         topRight: Radius.circular(size.width * 0.007771956)),
-    //     paint_0_stroke);
+    //     paint0Stroke);
 
-    // Paint paint_0_fill = Paint()..style = PaintingStyle.fill;
-    // paint_0_fill.color = Color.fromARGB(255, 76, 22, 163).withOpacity(1);
+    // Paint paint0_fill = Paint()..style = PaintingStyle.fill;
+    // paint0_fill.color = Color.fromARGB(255, 76, 22, 163).withOpacity(1);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.002653339, size.height * -0.04052338,
@@ -32,13 +36,13 @@ class KeyCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.007771956),
     //         topLeft: Radius.circular(size.width * 0.007771956),
     //         topRight: Radius.circular(size.width * 0.007771956)),
-    //     paint_0_fill);
+    //     paint0_fill);
 
-    Paint paint_1_stroke = Paint()
+    Paint paint1Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009211208;
-    paint_1_stroke.color = Color.fromARGB(255, 201, 89, 89).withOpacity(1);
-    paint_1_stroke.strokeCap = StrokeCap.round;
+    paint1Stroke.color = const Color.fromARGB(255, 201, 89, 89).withOpacity(1);
+    paint1Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.01795162, size.height * 1.303479,
@@ -47,13 +51,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_1_stroke);
+        paint1Stroke);
 
-    Paint paint_2_stroke = Paint()
+    Paint paint2Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_2_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_2_stroke.strokeCap = StrokeCap.round;
+    paint2Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint2Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.1043067, size.height * 1.303479,
@@ -62,13 +66,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_2_stroke);
+        paint2Stroke);
 
-    Paint paint_3_stroke = Paint()
+    Paint paint3Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_3_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_3_stroke.strokeCap = StrokeCap.round;
+    paint3Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint3Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.1474861, size.height * 1.303479,
@@ -77,13 +81,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_3_stroke);
+        paint3Stroke);
 
-    Paint paint_4_stroke = Paint()
+    Paint paint4Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_4_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_4_stroke.strokeCap = StrokeCap.round;
+    paint4Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint4Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.1906656, size.height * 1.303479,
@@ -92,13 +96,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_4_stroke);
+        paint4Stroke);
 
-    Paint paint_5_stroke = Paint()
+    Paint paint5Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_5_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_5_stroke.strokeCap = StrokeCap.round;
+    paint5Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint5Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2338450, size.height * 1.303479,
@@ -107,13 +111,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_5_stroke);
+        paint5Stroke);
 
-    Paint paint_6_stroke = Paint()
+    Paint paint6Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_6_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_6_stroke.strokeCap = StrokeCap.round;
+    paint6Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint6Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2986056, size.height * 1.303479,
@@ -122,13 +126,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_6_stroke);
+        paint6Stroke);
 
-    Paint paint_7_stroke = Paint()
+    Paint paint7Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_7_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_7_stroke.strokeCap = StrokeCap.round;
+    paint7Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint7Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3417850, size.height * 1.303479,
@@ -137,13 +141,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_7_stroke);
+        paint7Stroke);
 
-    Paint paint_8_stroke = Paint()
+    Paint paint8Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_8_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_8_stroke.strokeCap = StrokeCap.round;
+    paint8Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint8Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3849645, size.height * 1.303479,
@@ -152,13 +156,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_8_stroke);
+        paint8Stroke);
 
-    Paint paint_9_stroke = Paint()
+    Paint paint9Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_9_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_9_stroke.strokeCap = StrokeCap.round;
+    paint9Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint9Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4281439, size.height * 1.303479,
@@ -167,13 +171,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_9_stroke);
+        paint9Stroke);
 
-    Paint paint_10_stroke = Paint()
+    Paint paint10Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_10_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_10_stroke.strokeCap = StrokeCap.round;
+    paint10Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint10Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4929045, size.height * 1.303479,
@@ -182,13 +186,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_10_stroke);
+        paint10Stroke);
 
-    Paint paint_11_stroke = Paint()
+    Paint paint11Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_11_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_11_stroke.strokeCap = StrokeCap.round;
+    paint11Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint11Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5360839, size.height * 1.303479,
@@ -197,13 +201,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_11_stroke);
+        paint11Stroke);
 
-    Paint paint_12_stroke = Paint()
+    Paint paint12Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_12_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_12_stroke.strokeCap = StrokeCap.round;
+    paint12Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint12Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5792634, size.height * 1.303479,
@@ -212,13 +216,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_12_stroke);
+        paint12Stroke);
 
-    Paint paint_13_stroke = Paint()
+    Paint paint13Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_13_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_13_stroke.strokeCap = StrokeCap.round;
+    paint13Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint13Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.6224429, size.height * 1.303479,
@@ -227,13 +231,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_13_stroke);
+        paint13Stroke);
 
-    Paint paint_14_stroke = Paint()
+    Paint paint14Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_14_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_14_stroke.strokeCap = StrokeCap.round;
+    paint14Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint14Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.01795162, size.height * 1.486105,
@@ -242,13 +246,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_14_stroke);
+        paint14Stroke);
 
-    Paint paint_15_stroke = Paint()
+    Paint paint15Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_15_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_15_stroke.strokeCap = StrokeCap.round;
+    paint15Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint15Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.06113107, size.height * 1.486105,
@@ -257,13 +261,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_15_stroke);
+        paint15Stroke);
 
-    Paint paint_16_stroke = Paint()
+    Paint paint16Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_16_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_16_stroke.strokeCap = StrokeCap.round;
+    paint16Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint16Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.1043105, size.height * 1.486105,
@@ -272,13 +276,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_16_stroke);
+        paint16Stroke);
 
-    Paint paint_17_stroke = Paint()
+    Paint paint17Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_17_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_17_stroke.strokeCap = StrokeCap.round;
+    paint17Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint17Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.1474900, size.height * 1.486105,
@@ -287,13 +291,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_17_stroke);
+        paint17Stroke);
 
-    Paint paint_18_stroke = Paint()
+    Paint paint18Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_18_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_18_stroke.strokeCap = StrokeCap.round;
+    paint18Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint18Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.1906694, size.height * 1.486105,
@@ -302,13 +306,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_18_stroke);
+        paint18Stroke);
 
-    Paint paint_19_stroke = Paint()
+    Paint paint19Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_19_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_19_stroke.strokeCap = StrokeCap.round;
+    paint19Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint19Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2338489, size.height * 1.486105,
@@ -317,13 +321,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_19_stroke);
+        paint19Stroke);
 
-    Paint paint_20_stroke = Paint()
+    Paint paint20Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_20_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_20_stroke.strokeCap = StrokeCap.round;
+    paint20Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint20Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2770283, size.height * 1.486105,
@@ -332,13 +336,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_20_stroke);
+        paint20Stroke);
 
-    Paint paint_21_stroke = Paint()
+    Paint paint21Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_21_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_21_stroke.strokeCap = StrokeCap.round;
+    paint21Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint21Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3202078, size.height * 1.486105,
@@ -347,13 +351,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_21_stroke);
+        paint21Stroke);
 
-    Paint paint_22_stroke = Paint()
+    Paint paint22Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_22_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_22_stroke.strokeCap = StrokeCap.round;
+    paint22Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint22Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3633872, size.height * 1.486105,
@@ -362,13 +366,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_22_stroke);
+        paint22Stroke);
 
-    Paint paint_23_stroke = Paint()
+    Paint paint23Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_23_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_23_stroke.strokeCap = StrokeCap.round;
+    paint23Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint23Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4065667, size.height * 1.486105,
@@ -377,13 +381,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_23_stroke);
+        paint23Stroke);
 
-    Paint paint_24_stroke = Paint()
+    Paint paint24Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_24_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_24_stroke.strokeCap = StrokeCap.round;
+    paint24Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint24Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4497461, size.height * 1.486105,
@@ -392,13 +396,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_24_stroke);
+        paint24Stroke);
 
-    Paint paint_25_stroke = Paint()
+    Paint paint25Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_25_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_25_stroke.strokeCap = StrokeCap.round;
+    paint25Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint25Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4929256, size.height * 1.486105,
@@ -407,13 +411,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_25_stroke);
+        paint25Stroke);
 
-    Paint paint_26_stroke = Paint()
+    Paint paint26Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_26_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_26_stroke.strokeCap = StrokeCap.round;
+    paint26Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint26Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5361051, size.height * 1.486105,
@@ -422,13 +426,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_26_stroke);
+        paint26Stroke);
 
-    Paint paint_27_stroke = Paint()
+    Paint paint27Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_27_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_27_stroke.strokeCap = StrokeCap.round;
+    paint27Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint27Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5792851, size.height * 1.486105,
@@ -437,13 +441,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_27_stroke);
+        paint27Stroke);
 
-    Paint paint_28_stroke = Paint()
+    Paint paint28Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_28_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_28_stroke.strokeCap = StrokeCap.round;
+    paint28Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint28Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.01795162, size.height * 1.630892,
@@ -452,13 +456,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_28_stroke);
+        paint28Stroke);
 
-    Paint paint_29_stroke = Paint()
+    Paint paint29Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_29_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_29_stroke.strokeCap = StrokeCap.round;
+    paint29Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint29Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.08335119, size.height * 1.630892,
@@ -467,13 +471,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_29_stroke);
+        paint29Stroke);
 
-    Paint paint_30_stroke = Paint()
+    Paint paint30Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_30_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_30_stroke.strokeCap = StrokeCap.round;
+    paint30Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint30Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.1265306, size.height * 1.630892,
@@ -482,13 +486,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_30_stroke);
+        paint30Stroke);
 
-    Paint paint_31_stroke = Paint()
+    Paint paint31Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_31_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_31_stroke.strokeCap = StrokeCap.round;
+    paint31Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint31Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.1697101, size.height * 1.630892,
@@ -497,13 +501,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_31_stroke);
+        paint31Stroke);
 
-    Paint paint_32_stroke = Paint()
+    Paint paint32Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_32_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_32_stroke.strokeCap = StrokeCap.round;
+    paint32Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint32Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2128895, size.height * 1.630892,
@@ -512,13 +516,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_32_stroke);
+        paint32Stroke);
 
-    Paint paint_33_stroke = Paint()
+    Paint paint33Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_33_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_33_stroke.strokeCap = StrokeCap.round;
+    paint33Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint33Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2560690, size.height * 1.630892,
@@ -527,13 +531,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_33_stroke);
+        paint33Stroke);
 
-    Paint paint_34_stroke = Paint()
+    Paint paint34Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_34_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_34_stroke.strokeCap = StrokeCap.round;
+    paint34Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint34Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2992485, size.height * 1.630892,
@@ -542,13 +546,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_34_stroke);
+        paint34Stroke);
 
-    Paint paint_35_stroke = Paint()
+    Paint paint35Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_35_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_35_stroke.strokeCap = StrokeCap.round;
+    paint35Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint35Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3424279, size.height * 1.630892,
@@ -557,13 +561,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_35_stroke);
+        paint35Stroke);
 
-    Paint paint_36_stroke = Paint()
+    Paint paint36Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_36_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_36_stroke.strokeCap = StrokeCap.round;
+    paint36Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint36Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3856074, size.height * 1.630892,
@@ -572,13 +576,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_36_stroke);
+        paint36Stroke);
 
-    Paint paint_37_stroke = Paint()
+    Paint paint37Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_37_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_37_stroke.strokeCap = StrokeCap.round;
+    paint37Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint37Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4287868, size.height * 1.630892,
@@ -587,13 +591,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_37_stroke);
+        paint37Stroke);
 
-    Paint paint_38_stroke = Paint()
+    Paint paint38Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_38_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_38_stroke.strokeCap = StrokeCap.round;
+    paint38Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint38Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4719663, size.height * 1.630892,
@@ -602,13 +606,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_38_stroke);
+        paint38Stroke);
 
-    Paint paint_39_stroke = Paint()
+    Paint paint39Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_39_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_39_stroke.strokeCap = StrokeCap.round;
+    paint39Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint39Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5151457, size.height * 1.630892,
@@ -617,13 +621,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_39_stroke);
+        paint39Stroke);
 
-    Paint paint_40_stroke = Paint()
+    Paint paint40Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_40_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_40_stroke.strokeCap = StrokeCap.round;
+    paint40Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint40Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5583258, size.height * 1.630892,
@@ -632,13 +636,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_40_stroke);
+        paint40Stroke);
 
-    Paint paint_41_stroke = Paint()
+    Paint paint41Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_41_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_41_stroke.strokeCap = StrokeCap.round;
+    paint41Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint41Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.6015046, size.height * 1.630892,
@@ -647,13 +651,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_41_stroke);
+        paint41Stroke);
 
-    Paint paint_42_stroke = Paint()
+    Paint paint42Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_42_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_42_stroke.strokeCap = StrokeCap.round;
+    paint42Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint42Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.01795162, size.height * 1.775680,
@@ -662,13 +666,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_42_stroke);
+        paint42Stroke);
 
-    Paint paint_43_stroke = Paint()
+    Paint paint43Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_43_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_43_stroke.strokeCap = StrokeCap.round;
+    paint43Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint43Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.09400165, size.height * 1.775680,
@@ -677,13 +681,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_43_stroke);
+        paint43Stroke);
 
-    Paint paint_44_stroke = Paint()
+    Paint paint44Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_44_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_44_stroke.strokeCap = StrokeCap.round;
+    paint44Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint44Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.1371811, size.height * 1.775680,
@@ -692,13 +696,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_44_stroke);
+        paint44Stroke);
 
-    Paint paint_45_stroke = Paint()
+    Paint paint45Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_45_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_45_stroke.strokeCap = StrokeCap.round;
+    paint45Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint45Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.1803606, size.height * 1.775680,
@@ -707,13 +711,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_45_stroke);
+        paint45Stroke);
 
-    Paint paint_46_stroke = Paint()
+    Paint paint46Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_46_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_46_stroke.strokeCap = StrokeCap.round;
+    paint46Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint46Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2235400, size.height * 1.775680,
@@ -722,13 +726,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_46_stroke);
+        paint46Stroke);
 
-    Paint paint_47_stroke = Paint()
+    Paint paint47Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_47_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_47_stroke.strokeCap = StrokeCap.round;
+    paint47Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint47Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2667195, size.height * 1.775680,
@@ -737,13 +741,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_47_stroke);
+        paint47Stroke);
 
-    Paint paint_48_stroke = Paint()
+    Paint paint48Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_48_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_48_stroke.strokeCap = StrokeCap.round;
+    paint48Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint48Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3098989, size.height * 1.775680,
@@ -752,13 +756,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_48_stroke);
+        paint48Stroke);
 
-    Paint paint_49_stroke = Paint()
+    Paint paint49Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_49_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_49_stroke.strokeCap = StrokeCap.round;
+    paint49Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint49Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3530784, size.height * 1.775680,
@@ -767,13 +771,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_49_stroke);
+        paint49Stroke);
 
-    Paint paint_50_stroke = Paint()
+    Paint paint50Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_50_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_50_stroke.strokeCap = StrokeCap.round;
+    paint50Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint50Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3962578, size.height * 1.775680,
@@ -782,13 +786,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_50_stroke);
+        paint50Stroke);
 
-    Paint paint_51_stroke = Paint()
+    Paint paint51Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_51_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_51_stroke.strokeCap = StrokeCap.round;
+    paint51Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint51Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4394379, size.height * 1.775680,
@@ -797,13 +801,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_51_stroke);
+        paint51Stroke);
 
-    Paint paint_52_stroke = Paint()
+    Paint paint52Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_52_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_52_stroke.strokeCap = StrokeCap.round;
+    paint52Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint52Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4826174, size.height * 1.775680,
@@ -812,13 +816,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_52_stroke);
+        paint52Stroke);
 
-    Paint paint_53_stroke = Paint()
+    Paint paint53Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_53_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_53_stroke.strokeCap = StrokeCap.round;
+    paint53Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint53Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5257968, size.height * 1.775680,
@@ -827,13 +831,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_53_stroke);
+        paint53Stroke);
 
-    Paint paint_54_stroke = Paint()
+    Paint paint54Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191898;
-    paint_54_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_54_stroke.strokeCap = StrokeCap.round;
+    paint54Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint54Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5689763, size.height * 1.775680,
@@ -842,13 +846,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_54_stroke);
+        paint54Stroke);
 
-    Paint paint_55_stroke = Paint()
+    Paint paint55Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191897;
-    paint_55_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_55_stroke.strokeCap = StrokeCap.round;
+    paint55Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint55Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.01795162, size.height * 1.920468,
@@ -857,13 +861,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_55_stroke);
+        paint55Stroke);
 
-    Paint paint_56_stroke = Paint()
+    Paint paint56Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191897;
-    paint_56_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_56_stroke.strokeCap = StrokeCap.round;
+    paint56Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint56Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.1155904, size.height * 1.920468,
@@ -872,13 +876,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_56_stroke);
+        paint56Stroke);
 
-    Paint paint_57_stroke = Paint()
+    Paint paint57Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191897;
-    paint_57_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_57_stroke.strokeCap = StrokeCap.round;
+    paint57Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint57Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.1587699, size.height * 1.920468,
@@ -887,13 +891,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_57_stroke);
+        paint57Stroke);
 
-    Paint paint_58_stroke = Paint()
+    Paint paint58Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191897;
-    paint_58_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_58_stroke.strokeCap = StrokeCap.round;
+    paint58Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint58Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2019493, size.height * 1.920468,
@@ -902,13 +906,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_58_stroke);
+        paint58Stroke);
 
-    Paint paint_59_stroke = Paint()
+    Paint paint59Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191897;
-    paint_59_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_59_stroke.strokeCap = StrokeCap.round;
+    paint59Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint59Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2451288, size.height * 1.920468,
@@ -917,13 +921,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_59_stroke);
+        paint59Stroke);
 
-    Paint paint_60_stroke = Paint()
+    Paint paint60Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191897;
-    paint_60_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_60_stroke.strokeCap = StrokeCap.round;
+    paint60Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint60Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2883082, size.height * 1.920468,
@@ -932,13 +936,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_60_stroke);
+        paint60Stroke);
 
-    Paint paint_61_stroke = Paint()
+    Paint paint61Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191897;
-    paint_61_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_61_stroke.strokeCap = StrokeCap.round;
+    paint61Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint61Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3314877, size.height * 1.920468,
@@ -947,13 +951,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_61_stroke);
+        paint61Stroke);
 
-    Paint paint_62_stroke = Paint()
+    Paint paint62Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191897;
-    paint_62_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_62_stroke.strokeCap = StrokeCap.round;
+    paint62Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint62Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3746671, size.height * 1.920468,
@@ -962,13 +966,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_62_stroke);
+        paint62Stroke);
 
-    Paint paint_63_stroke = Paint()
+    Paint paint63Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191897;
-    paint_63_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_63_stroke.strokeCap = StrokeCap.round;
+    paint63Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint63Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4178466, size.height * 1.920468,
@@ -977,13 +981,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_63_stroke);
+        paint63Stroke);
 
-    Paint paint_64_stroke = Paint()
+    Paint paint64Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191897;
-    paint_64_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_64_stroke.strokeCap = StrokeCap.round;
+    paint64Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint64Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4610267, size.height * 1.920468,
@@ -992,13 +996,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_64_stroke);
+        paint64Stroke);
 
-    Paint paint_65_stroke = Paint()
+    Paint paint65Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191897;
-    paint_65_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_65_stroke.strokeCap = StrokeCap.round;
+    paint65Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint65Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5042061, size.height * 1.920468,
@@ -1007,13 +1011,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_65_stroke);
+        paint65Stroke);
 
-    Paint paint_66_stroke = Paint()
+    Paint paint66Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191897;
-    paint_66_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_66_stroke.strokeCap = StrokeCap.round;
+    paint66Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint66Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5473856, size.height * 1.920468,
@@ -1022,13 +1026,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_66_stroke);
+        paint66Stroke);
 
-    Paint paint_67_stroke = Paint()
+    Paint paint67Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191897;
-    paint_67_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_67_stroke.strokeCap = StrokeCap.round;
+    paint67Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint67Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.01795162, size.height * 2.065255,
@@ -1037,13 +1041,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_67_stroke);
+        paint67Stroke);
 
-    Paint paint_68_stroke = Paint()
+    Paint paint68Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191897;
-    paint_68_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_68_stroke.strokeCap = StrokeCap.round;
+    paint68Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint68Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.06976658, size.height * 2.065255,
@@ -1052,13 +1056,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_68_stroke);
+        paint68Stroke);
 
-    Paint paint_69_stroke = Paint()
+    Paint paint69Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191897;
-    paint_69_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_69_stroke.strokeCap = StrokeCap.round;
+    paint69Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint69Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.1215815, size.height * 2.065255,
@@ -1067,13 +1071,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_69_stroke);
+        paint69Stroke);
 
-    Paint paint_70_stroke = Paint()
+    Paint paint70Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191897;
-    paint_70_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_70_stroke.strokeCap = StrokeCap.round;
+    paint70Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint70Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.1733965, size.height * 2.065255,
@@ -1082,13 +1086,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_70_stroke);
+        paint70Stroke);
 
-    Paint paint_71_stroke = Paint()
+    Paint paint71Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191897;
-    paint_71_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_71_stroke.strokeCap = StrokeCap.round;
+    paint71Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint71Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4583625, size.height * 2.065255,
@@ -1097,13 +1101,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_71_stroke);
+        paint71Stroke);
 
-    Paint paint_72_stroke = Paint()
+    Paint paint72Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191897;
-    paint_72_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_72_stroke.strokeCap = StrokeCap.round;
+    paint72Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint72Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5101774, size.height * 2.065255,
@@ -1112,13 +1116,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_72_stroke);
+        paint72Stroke);
 
-    Paint paint_73_stroke = Paint()
+    Paint paint73Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191897;
-    paint_73_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_73_stroke.strokeCap = StrokeCap.round;
+    paint73Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint73Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5619924, size.height * 2.065255,
@@ -1127,13 +1131,13 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_73_stroke);
+        paint73Stroke);
 
-    Paint paint_74_stroke = Paint()
+    Paint paint74Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191897;
-    paint_74_stroke.color = Color(0xffbababa).withOpacity(1);
-    paint_74_stroke.strokeCap = StrokeCap.round;
+    paint74Stroke.color = const Color(0xffbababa).withOpacity(1);
+    paint74Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.6138054, size.height * 2.065255,
@@ -1142,7 +1146,7 @@ class KeyCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.001594051),
             topLeft: Radius.circular(size.width * 0.001594051),
             topRight: Radius.circular(size.width * 0.001594051)),
-        paint_74_stroke);
+        paint74Stroke);
 
     // Path path_75 = Path();
     // path_75.moveTo(size.width * 0.6784962, size.height * 1.303571);
@@ -2166,18 +2170,18 @@ class KeyCustomPainter extends CustomPainter {
     //     size.height * 2.065305);
     // path_75.close();
 
-    // Paint paint_75_stroke = Paint()
+    // Paint paint75Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = size.width * 0.0009191897;
-    // paint_75_stroke.color = Color.fromARGB(255, 117, 36, 36).withOpacity(1);
-    // paint_75_stroke.strokeCap = StrokeCap.round;
-    // canvas.drawPath(path_75, paint_75_stroke);
+    // paint75Stroke.color = Color.fromARGB(255, 117, 36, 36).withOpacity(1);
+    // paint75Stroke.strokeCap = StrokeCap.round;
+    // canvas.drawPath(path_75, paint75Stroke);
 
-    // Paint paint_76_stroke = Paint()
+    // Paint paint76Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = size.width * 0.0009120650;
-    // paint_76_stroke.color = Color.fromARGB(255, 186, 186, 186).withOpacity(1);
-    // paint_76_stroke.strokeCap = StrokeCap.round;
+    // paint76Stroke.color = Color.fromARGB(255, 186, 186, 186).withOpacity(1);
+    // paint76Stroke.strokeCap = StrokeCap.round;
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.8177198, size.height * 0.01141999,
@@ -2186,7 +2190,7 @@ class KeyCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.001588933),
     //         topLeft: Radius.circular(size.width * 0.001588933),
     //         topRight: Radius.circular(size.width * 0.001588933)),
-    //     paint_76_stroke);
+    //     paint76Stroke);
   }
 
   @override
@@ -2194,4 +2198,3 @@ class KeyCustomPainter extends CustomPainter {
     return true;
   }
 }
-

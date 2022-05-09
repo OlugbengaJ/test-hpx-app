@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class KeyRRectClipper extends CustomClipper<RRect> {
+  /// [KeyRRectClipper] handles the clipping of the keyboard key on canvas.
   const KeyRRectClipper({
     Listenable? reclip,
     required this.zoomScale,

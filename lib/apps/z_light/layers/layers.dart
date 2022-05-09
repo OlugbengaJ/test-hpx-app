@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_list_item.dart';
 import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
 import 'package:hpx/models/layers/layer_item_model.dart';
-import 'package:hpx/providers/apps/zlightspace_providers/layers_provider/layers.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/utils/common.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:ionicons/ionicons.dart';

@@ -1,164 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard_key.dart';
+import 'package:hpx/providers/keys_provider.dart';
+import 'package:provider/provider.dart';
 
 class KeyboardRowCaps extends StatelessWidget {
+  /// [KeyboardRowCaps] displays keys in the caps key row i.e. caps to enter.
+  ///
+  /// Actual keys are drawn by [KeyboardKey].
   const KeyboardRowCaps({Key? key, required this.zoomScale}) : super(key: key);
 
   final double zoomScale;
 
   @override
   Widget build(BuildContext context) {
-    const double _keyRadius = 0.001594051;
-    const double _capsKeyWidth = 0.07202205;
-    const double _enterKeyWidth = 0.09263212;
-    const double _keyWidth = 0.03914955;
-    const double _keyHeight = 0.1312806;
     double _zoomedPadding = 2.0 * zoomScale;
+
+    final keysProvider = Provider.of<KeysProvider>(context);
+    final rowKeys = keysProvider.getKeyInRow(3);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key Caps Lock triggered'),
-            keyText: 'Caps Lock',
-            keyWidth: _capsKeyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key A triggered'),
-            keyText: 'A',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key S triggered'),
-            keyText: 'S',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key D triggered'),
-            keyText: 'D',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key F triggered'),
-            keyText: 'F',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key G triggered'),
-            keyText: 'G',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key H triggered'),
-            keyText: 'H',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key J triggered'),
-            keyText: 'J',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key K triggered'),
-            keyText: 'K',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key L triggered'),
-            keyText: 'L',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key ; triggered'),
-            keyText: '; :',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key \' triggered'),
-            keyText: '\' "',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key Enter triggered'),
-            keyText: 'Enter',
-            keyWidth: _enterKeyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
+        ...rowKeys.map(
+          (keyModel) => Padding(
+            padding: EdgeInsets.all(_zoomedPadding),
+
+            // use ChangeNotifierProvider.value() when using child values of Provider.of()
+            // as notifier; otherwise you encounter errors with ChangeNotifierProvider(create)
+            // when flutter rebuilds the widget tree
+            child: ChangeNotifierProvider.value(
+              value: keyModel,
+              builder: (context, child) => KeyboardKey(
+                onTapHandler: () {
+                  debugPrint('\r\n key ${keyModel.keyCode} triggered');
+                },
+                zoomScale: zoomScale,
+              ),
+            ),
           ),
         ),
       ],

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hpx/providers/apps/zlightspace_providers/layers_provider/layers.dart';
+import 'package:hpx/apps/z_light/layers/widgets/drag_distance.dart';
+import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
+import 'package:hpx/utils/common.dart';
 import 'package:provider/provider.dart';
-import '../../../../utils/common.dart';
-import 'resizable_widget_controller.dart';
-import 'drag_distance.dart';
 
 class StatefulResizableWidget extends StatefulWidget {
-  const StatefulResizableWidget({ 
-    Key? key ,
+  const StatefulResizableWidget({
+    Key? key,
     required this.child,
     required this.controller,
     required this.dragWidget,
@@ -25,7 +25,8 @@ class StatefulResizableWidget extends StatefulWidget {
   final List<GlobalKey> keysToWatch;
 
   @override
-  State<StatefulResizableWidget> createState() => _StatefulResizableWidgetState();
+  State<StatefulResizableWidget> createState() =>
+      _StatefulResizableWidgetState();
 }
 
 class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
@@ -33,7 +34,6 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
       controller = widget.controller;

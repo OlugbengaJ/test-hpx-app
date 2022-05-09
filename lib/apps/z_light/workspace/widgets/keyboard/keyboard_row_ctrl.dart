@@ -1,166 +1,92 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard_key.dart';
+import 'package:hpx/providers/keys_provider.dart';
+import 'package:provider/provider.dart';
 
 class KeyboardRowCtrl extends StatelessWidget {
+  /// [KeyboardRowCtrl] displays keys in the ctrl row i.e. ctrl to arrow_right.
+  ///
+  /// Actual keys are drawn by [KeyboardKey].
   const KeyboardRowCtrl({Key? key, required this.zoomScale}) : super(key: key);
 
   final double zoomScale;
 
   @override
   Widget build(BuildContext context) {
-    const double _keyRadius = 0.001594051;
-    const double _lCtrlKeyWidth = 0.04778506;
-    const double _rCtrlKeyWidth = 0.04778506;
-    const double _spacebarKeyWidth = 0.2499037;
-    const double _keyWidth = 0.03914955;
-    const double _keyHeight = 0.1312806;
-    const double _arrowKeyHeight = 0.0656403;
-
     double _zoomedPadding = 2.0 * zoomScale;
+
+    final keysProvider = Provider.of<KeysProvider>(context);
+    final rowKeysFiltered = keysProvider.getKeyInRow(5).where((element) =>
+        element.keyCode != 'KEY_ARROW_UP' &&
+        element.keyCode != 'KEY_ARROW_DOWN' &&
+        element.keyCode != 'KEY_ARROW_RIGHT');
+    final rowKeyRight = keysProvider.getKey('KEY_ARROW_RIGHT');
+    final rowKeyUp = keysProvider.getKey('KEY_ARROW_UP');
+    final rowKeyDown = keysProvider.getKey('KEY_ARROW_DOWN');
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key Left Ctrl triggered'),
-            keyText: 'Ctrl',
-            keyWidth: _lCtrlKeyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
+        ...rowKeysFiltered.map(
+          (keyModel) => Padding(
+            padding: EdgeInsets.all(_zoomedPadding),
+
+            // use ChangeNotifierProvider.value() when using child values of Provider.of()
+            // as notifier; otherwise you encounter errors with ChangeNotifierProvider(create)
+            // when flutter rebuilds the widget tree
+            child: ChangeNotifierProvider.value(
+              value: keyModel,
+              builder: (context, child) => KeyboardKey(
+                onTapHandler: () {
+                  debugPrint('\r\n key ${keyModel.keyCode} triggered');
+                },
+                zoomScale: zoomScale,
+              ),
+            ),
           ),
         ),
         Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key Fn triggered'),
-            keyText: 'Fn',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key Win triggered'),
-            keyText: 'Win',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key Left Alt triggered'),
-            keyText: 'Alt',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key Spacebar triggered'),
-            keyWidth: _spacebarKeyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key Right Alt triggered'),
-            keyText: 'Alt',
-            keyWidth: _keyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
-          child: KeyboardKey(
-            onTapHandler: () => debugPrint('\r\n key Right Ctrl triggered'),
-            keyText: 'Ctrl',
-            keyWidth: _rCtrlKeyWidth,
-            keyHeight: _keyHeight,
-            keyRadius: _keyRadius,
-            zoomScale: zoomScale,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
+          padding: EdgeInsets.only(left: _zoomedPadding, right: _zoomedPadding),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Row(
-                children: [
-                  KeyboardKey(
-                    onTapHandler: () =>
-                        debugPrint('\r\n key Page Up triggered'),
-                    keyText: 'P.Up',
-                    keyWidth: _keyWidth,
-                    keyHeight: _arrowKeyHeight,
-                    keyRadius: _keyRadius,
+              Padding(
+                padding: EdgeInsets.only(bottom: _zoomedPadding),
+                child: ChangeNotifierProvider.value(
+                  value: rowKeyUp,
+                  builder: (context, child) => KeyboardKey(
+                    onTapHandler: () {
+                      debugPrint('\r\n key ${rowKeyUp.keyCode} triggered');
+                    },
                     zoomScale: zoomScale,
                   ),
-                  KeyboardKey(
-                    onTapHandler: () => debugPrint('\r\n key Up triggered'),
-                    keyText: '↑',
-                    keyWidth: _keyWidth,
-                    keyHeight: _arrowKeyHeight,
-                    keyRadius: _keyRadius,
-                    zoomScale: zoomScale,
-                  ),
-                  KeyboardKey(
-                    onTapHandler: () =>
-                        debugPrint('\r\n key Page Down triggered'),
-                    keyText: 'P.Down',
-                    keyWidth: _keyWidth,
-                    keyHeight: _arrowKeyHeight,
-                    keyRadius: _keyRadius,
-                    zoomScale: zoomScale,
-                  ),
-                ],
+                ),
               ),
-              Row(
-                children: [
-                  KeyboardKey(
-                    onTapHandler: () => debugPrint('\r\n key Left triggered'),
-                    keyText: '←',
-                    keyWidth: _keyWidth,
-                    keyHeight: _arrowKeyHeight,
-                    keyRadius: _keyRadius,
+              Padding(
+                padding: EdgeInsets.only(top: _zoomedPadding),
+                child: ChangeNotifierProvider.value(
+                  value: rowKeyDown,
+                  builder: (context, child) => KeyboardKey(
+                    onTapHandler: () {
+                      debugPrint('\r\n key ${rowKeyDown.keyCode} triggered');
+                    },
                     zoomScale: zoomScale,
                   ),
-                  KeyboardKey(
-                    onTapHandler: () => debugPrint('\r\n key Down triggered'),
-                    keyText: '↓',
-                    keyWidth: _keyWidth,
-                    keyHeight: _arrowKeyHeight,
-                    keyRadius: _keyRadius,
-                    zoomScale: zoomScale,
-                  ),
-                  KeyboardKey(
-                    onTapHandler: () => debugPrint('\r\n key Right triggered'),
-                    keyText: '→',
-                    keyWidth: _keyWidth,
-                    keyHeight: _arrowKeyHeight,
-                    keyRadius: _keyRadius,
-                    zoomScale: zoomScale,
-                  ),
-                ],
+                ),
               ),
             ],
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(_zoomedPadding),
+          child: ChangeNotifierProvider.value(
+            value: rowKeyRight,
+            builder: (context, child) => KeyboardKey(
+              onTapHandler: () {
+                debugPrint('\r\n key ${rowKeyRight.keyCode} triggered');
+              },
+              zoomScale: zoomScale,
+            ),
           ),
         ),
       ],
