@@ -107,7 +107,7 @@ jobs:
 
         uses: actions/upload-artifact@v3
         with:
-          name: Windows_{{github.run_id}}
+          name: Windows_${{github.run_id}}
           path: |
             build/windows/runner/Release/
 
@@ -146,19 +146,28 @@ jobs:
             build/linux/x64/release/bundle
             linux-installer/
 
-      # - name: send custom slack message 
-      #   if: |
-      #     github.ref == 'refs/heads/development'
-      #   uses: 8398a7/action-slack@v3
-      #   with:
-      #     status: custom
-      #     fields: workflow,job,commit,repo,ref,author,took
-      #     custom_payload: |
-      #       {
-      #         attachments: [{
-      #           color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-      #           text: `${process.env.AS_WORKFLOW} (${process.env.AS_COMMIT}) of ${process.env.AS_REPO}@${process.env.AS_REF} Status: ${{ job.status }} Download Artifact--> https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}`,
-      #         }]
-      #       }
-      #   env: 
-      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+
+
+  Notify:
+    name: Nofify on Slack
+    if: |
+      (github.ref == 'refs/heads/development' || github.ref == 'refs/heads/qa') && 
+      github.event_name == 'push'
+    runs-on: ubuntu-latest
+    needs: [Andriod, WEB, Windows, Linux]
+    steps:
+      - name: send custom slack message 
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          fields: workflow,job,commit,repo,ref,author,took
+          custom_payload: |
+            {
+              attachments: [{
+                color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
+                text: `${process.env.AS_WORKFLOW} (${process.env.AS_COMMIT}) of ${process.env.AS_REPO}@${process.env.AS_REF}\nStatus: ${{ job.status }}\nDownload Artifacts--> https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}`,
+              }]
+            }
+        env: 
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
