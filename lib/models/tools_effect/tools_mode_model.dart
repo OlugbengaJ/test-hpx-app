@@ -1,5 +1,3 @@
-import 'package:hpx/models/tools_effect/color_picker_model.dart';
-
 class ToolsModeModel {
   ToolsModeModel(
       {required this.currentColor,
