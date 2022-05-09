@@ -45,7 +45,7 @@ jobs:
 
         uses: actions/upload-artifact@v3
         with:
-          name: APK_$GITHUB_RUN_ID
+          name: APK_${{github.run_id}}
           path: |
             build/app/outputs/flutter-apk/*.apk
 
@@ -76,7 +76,7 @@ jobs:
 
         uses: actions/upload-artifact@v3
         with:
-          name: WEB_$GITHUB_RUN_ID
+          name: WEB_${{github.run_id}}
           path: |
             build/web/
 
@@ -107,7 +107,7 @@ jobs:
 
         uses: actions/upload-artifact@v3
         with:
-          name: Windows_$GITHUB_RUN_ID
+          name: Windows_{{github.run_id}}
           path: |
             build/windows/runner/Release/
 
@@ -141,7 +141,7 @@ jobs:
 
         uses: actions/upload-artifact@v3
         with:
-          name: Linux_$GITHUB_RUN_ID
+          name: Linux_${{github.run_id}}
           path: |
             build/linux/x64/release/bundle
             linux-installer/
