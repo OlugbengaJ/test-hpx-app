@@ -1,0 +1,163 @@
+name: hpx-pipe-pipeline
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+  push:
+    branches:
+      - development
+      - qa
+
+
+
+
+jobs:
+  Andriod:
+    name: Build Andriod
+    if: | 
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'synchronize'))
+    runs-on: macos-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '2.10.4'
+      - run: flutter pub get
+      #- run: flutter test
+      - run: flutter build apk
+      - run: flutter build appbundle
+
+      - name: Publish Andriod Build
+        if: |
+          contains('
+            refs/heads/development
+            refs/heads/qa
+          ', github.ref)
+
+        uses: actions/upload-artifact@v3
+        with:
+          name: APK_$GITHUB_RUN_ID
+          path: |
+            build/app/outputs/flutter-apk/*.apk
+
+
+
+  WEB:
+    name: Build WEB
+    if: |
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'synchronize'))
+    runs-on: macos-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '2.10.4'
+      - run: flutter pub get
+      #- run: flutter test
+      - run: flutter build web
+
+      - name: Publish WEB Build
+        if: |
+          contains('
+            refs/heads/development
+            refs/heads/qa
+          ', github.ref)
+
+        uses: actions/upload-artifact@v3
+        with:
+          name: WEB_$GITHUB_RUN_ID
+          path: |
+            build/web/
+
+
+
+
+  Windows:
+    name: Build Windows
+    if: |
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'synchronize'))
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'beta'
+      - run: flutter config --enable-windows-desktop
+      - run: flutter build windows
+
+      - name: Publish Windows Build
+        if: |
+          contains('
+            refs/heads/development
+            refs/heads/qa
+          ', github.ref)
+
+        uses: actions/upload-artifact@v3
+        with:
+          name: Windows_$GITHUB_RUN_ID
+          path: |
+            build/windows/runner/Release/
+
+
+
+
+  Linux:
+    name: Build Linux
+    if: |
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'synchronize'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'beta'
+      - run: |
+          sudo apt-get update -y
+          sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+      - run: flutter config --enable-linux-desktop
+      - run: flutter build linux
+
+      - name: Publish Linux Build
+        if: |
+          contains('
+            refs/heads/development
+            refs/heads/qa
+          ', github.ref)
+
+        uses: actions/upload-artifact@v3
+        with:
+          name: Linux_$GITHUB_RUN_ID
+          path: |
+            build/linux/x64/release/bundle
+            linux-installer/
+
+      # - name: send custom slack message 
+      #   if: |
+      #     github.ref == 'refs/heads/development'
+      #   uses: 8398a7/action-slack@v3
+      #   with:
+      #     status: custom
+      #     fields: workflow,job,commit,repo,ref,author,took
+      #     custom_payload: |
+      #       {
+      #         attachments: [{
+      #           color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
+      #           text: `${process.env.AS_WORKFLOW} (${process.env.AS_COMMIT}) of ${process.env.AS_REPO}@${process.env.AS_REF} Status: ${{ job.status }} Download Artifact--> https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}`,
+      #         }]
+      #       }
+      #   env: 
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
