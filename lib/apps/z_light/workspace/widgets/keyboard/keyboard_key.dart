@@ -24,9 +24,11 @@ class KeyboardKey extends StatelessWidget {
   ) {
     final isWidgetInZone = provider.isWidgetInZone(renderBox);
 
-    if (isWidgetInZone == true && provider.isDragModeZone) {
+    if (provider.isDragModeZone) {
       keyModel.selectKey(isWidgetInZone);
-      keyModel.setPathColors(provider.animColors);
+      if (isWidgetInZone == true) {
+        keyModel.setPathColors(provider.animColors);
+      }
     }
 
     if (provider.isDragModeClick &&
