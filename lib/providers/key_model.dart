@@ -33,11 +33,15 @@ class KeyModel with ChangeNotifier {
   final double keyHeight;
   final double keyRadius;
 
-  static const Color _highlightColor = Colors.red;
+  static const Color _highlightColor = Colors.orange;
 
   List<Color> _keyPathColors = [Colors.red, Colors.white];
   List<Color>? _keyPathColorsBefore;
   PaintingStyle? _paintingStyleBefore;
+
+  /// [isSelected] indicates key is selected.
+  bool _isSelected = false;
+  bool get isSelected => _isSelected;
 
   /// [keyPathColors] returns the list of colors for the key
   List<Color> get keyPathColors => [..._keyPathColors];
@@ -47,9 +51,9 @@ class KeyModel with ChangeNotifier {
     _keyPathColors = [...colors];
   }
 
-  /// [highlightKey] indicates if [KeyModel] is under a selected zone
+  /// [selectKey] indicates if [KeyModel] is under a selected zone
   /// or added by clicking the widget.
-  void highlightKey(bool? isHighlighted) {
+  void selectKey(bool? isHighlighted) {
     if (isHighlighted == true) {
       // save previous key settings if null
       if (_keyPathColorsBefore == null) {
@@ -57,10 +61,13 @@ class KeyModel with ChangeNotifier {
         _paintingStyleBefore = paintingStyle;
       }
 
-      // highlight the with
+      // highlight the key
+      _isSelected = true;
       paintingStyle = PaintingStyle.fill;
       _keyPathColors = [_highlightColor];
     } else if (isHighlighted == false) {
+      _isSelected = false;
+
       // highlight not done, so retrieve previous key color and paint style
       if (_keyPathColorsBefore != null && _paintingStyleBefore != null) {
         _keyPathColors = [..._keyPathColorsBefore!];
@@ -69,10 +76,11 @@ class KeyModel with ChangeNotifier {
     }
   }
 
-  /// [resetKeyHighlight] restore [KeyModel] previous settings.
-  void resetKeyHighlight() {
+  /// [unSelectKey] restore [KeyModel] previous settings.
+  void unSelectKey() {
     // restore previous key settings
     if (_keyPathColorsBefore != null) {
+      _isSelected = false;
       _keyPathColors = [..._keyPathColorsBefore!];
       paintingStyle = _paintingStyleBefore!;
     }

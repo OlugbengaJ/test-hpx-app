@@ -75,7 +75,8 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [onPanDown] indicates the the primary mouse is down and pan started.
   void onPanDown(DragDownDetails details) {
-    if (_keyDragMode == WorkspaceDragMode.zone) {
+    if (_keyDragMode == WorkspaceDragMode.zone ||
+        _keyDragMode == WorkspaceDragMode.click) {
       _panDownDetails = details;
       _panUpdateDetails =
           DragUpdateDetails(globalPosition: details.globalPosition);

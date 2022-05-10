@@ -161,7 +161,7 @@ class _WorkspaceState extends State<Workspace> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(right: 20),
+                              padding: const EdgeInsets.only(right: 20.0),
                               child: Tooltip(
                                 message: 'Resizable selector',
                                 child: RoundButton(
@@ -180,7 +180,7 @@ class _WorkspaceState extends State<Workspace> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(right: 20),
+                              padding: const EdgeInsets.only(right: 20.0),
                               child: Tooltip(
                                 message: 'Highlight selector',
                                 child: RoundButton(
@@ -197,18 +197,51 @@ class _WorkspaceState extends State<Workspace> {
                                 ),
                               ),
                             ),
-                            Tooltip(
-                              message: 'Click selector',
-                              child: RoundButton(
-                                onTapDown: () {
-                                  provider
-                                      .toggleDragMode(WorkspaceDragMode.click);
-                                },
-                                size: _buttonSize,
-                                icon: Icons.mouse,
-                                iconColor: provider.isDragModeClick
-                                    ? Theme.of(context).colorScheme.primary
-                                    : null,
+                            Padding(
+                              padding: const EdgeInsets.only(right: 20.0),
+                              child: Tooltip(
+                                message: 'Click selector',
+                                child: RoundButton(
+                                  onTapDown: () {
+                                    provider.toggleDragMode(
+                                        WorkspaceDragMode.click);
+                                  },
+                                  size: _buttonSize,
+                                  icon: Icons.mouse,
+                                  iconColor: provider.isDragModeClick
+                                      ? Theme.of(context).colorScheme.primary
+                                      : null,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 20.0),
+                              child: Container(
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Theme.of(context).primaryColorLight,
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: DropdownButton(
+                                    menuMaxHeight: 400,
+                                    hint: Text(
+                                      'Select by devices...',
+                                      style: pStyle,
+                                    ),
+                                    underline: const SizedBox(),
+                                    items: <String>[]
+                                        .map((e) => DropdownMenuItem(
+                                              value: e,
+                                              child: Text(e, style: pStyle),
+                                            ))
+                                        .toList(),
+                                    onChanged: (o) {},
+                                  ),
+                                ),
                               ),
                             ),
                           ],
