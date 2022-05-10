@@ -4,6 +4,7 @@ import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/keyboard_selector.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/round_button.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/zoom_toolbar.dart';
 import 'package:hpx/providers/workspace_provider.dart';
@@ -77,7 +78,7 @@ class _WorkspaceState extends State<Workspace> {
   /// [_zoomExpand] sets the zoomValue to half the zoomIn threshold.
   void _zoomExpand() {
     setState(() {
-      _zoomValue = _zoomInThreshold / 2;
+      _zoomValue = _zoomInThreshold / 2.66667;
       _updateZoom();
     });
   }
@@ -167,7 +168,7 @@ class _WorkspaceState extends State<Workspace> {
                                   onTapDown: () {
                                     // _keysSelection,
                                     provider.toggleDragMode(
-                                        WORKSPACE_DRAG_MODE.resizable);
+                                        WorkspaceDragMode.resizable);
                                   },
                                   onTapUp: () {},
                                   size: _buttonSize,
@@ -185,8 +186,8 @@ class _WorkspaceState extends State<Workspace> {
                                 child: RoundButton(
                                   onTapDown: () {
                                     //_selectDraggable,
-                                    provider.toggleDragMode(
-                                        WORKSPACE_DRAG_MODE.zone);
+                                    provider
+                                        .toggleDragMode(WorkspaceDragMode.zone);
                                   },
                                   size: _buttonSize,
                                   icon: Icons.highlight_alt,
@@ -200,8 +201,8 @@ class _WorkspaceState extends State<Workspace> {
                               message: 'Click selector',
                               child: RoundButton(
                                 onTapDown: () {
-                                  provider.toggleDragMode(
-                                      WORKSPACE_DRAG_MODE.click);
+                                  provider
+                                      .toggleDragMode(WorkspaceDragMode.click);
                                 },
                                 size: _buttonSize,
                                 icon: Icons.mouse,
@@ -264,7 +265,7 @@ class _WorkspaceState extends State<Workspace> {
               ),
             ),
             child: GestureDetector(
-              behavior: HitTestBehavior.translucent,
+              behavior: HitTestBehavior.opaque,
               onPanDown: (details) => workspaceProvider.onPanDown(details),
               onPanUpdate: (details) => workspaceProvider.onPanUpdate(details),
               onPanEnd: (details) => workspaceProvider.onPanEnd(details),
@@ -275,25 +276,22 @@ class _WorkspaceState extends State<Workspace> {
                 children: [
                   // Keyboard widget takes a zoom scale which is applied to all keys.
                   // This ensures seamless zooming of the entire keyboard.
-                  Keyboard(zoomScale: _zoomScale),
+                  Align(
+                    alignment: Alignment.center,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      primary: false,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        primary: false,
+                        child: Keyboard(zoomScale: _zoomScale),
+                      ),
+                    ),
+                  ),
                   LayersStack(
                     layers: widget.layers,
                   ),
-                  if (workspaceProvider.isPanning)
-                    Consumer<WorkspaceProvider>(
-                      builder: (context, value, child) => Positioned(
-                        left: value.leftZonePosition,
-                        top: value.topZonePosition,
-                        child: Container(
-                          margin: EdgeInsets.zero,
-                          height: value.zoneHeight,
-                          width: value.zoneWidth,
-                          decoration: BoxDecoration(
-                            color: Colors.blue.withOpacity(0.4),
-                          ),
-                        ),
-                      ),
-                    ),
+                  if (workspaceProvider.isPanning) const KeyboardSelector(),
                   Positioned(
                     bottom: 0,
                     left: 0,
@@ -313,7 +311,6 @@ class _WorkspaceState extends State<Workspace> {
               ),
             ),
           ),
-          // ],
         )
       ],
     );

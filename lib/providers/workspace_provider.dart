@@ -17,34 +17,34 @@ class WorkspaceProvider with ChangeNotifier {
   String get stripNotificationText => _stripNotificationText ?? '';
 
   /// [_workspaceView] determines if the lighting options is displayed.
-  WORKSPACE_VIEW _workspaceView = WORKSPACE_VIEW.workspace;
+  WorkspaceView _workspaceView = WorkspaceView.workspace;
 
   /// [getWorkspaceView] returns the current view.
-  WORKSPACE_VIEW get getWorkspaceView => _workspaceView;
+  WorkspaceView get getWorkspaceView => _workspaceView;
 
-  bool get isLightingView => _workspaceView == WORKSPACE_VIEW.lighting;
-  bool get isWorkspaceView => _workspaceView == WORKSPACE_VIEW.workspace;
+  bool get isLightingView => _workspaceView == WorkspaceView.lighting;
+  bool get isWorkspaceView => _workspaceView == WorkspaceView.workspace;
 
   /// [toggleView] is used to switch views within the app.
-  void toggleView(WORKSPACE_VIEW view) {
+  void toggleView(WorkspaceView view) {
     _workspaceView = view;
 
     notifyListeners();
   }
 
-  bool get isDragModeClick => _keyDragMode == WORKSPACE_DRAG_MODE.click;
+  bool get isDragModeClick => _keyDragMode == WorkspaceDragMode.click;
 
-  bool get isDragModeResizable => _keyDragMode == WORKSPACE_DRAG_MODE.resizable;
+  bool get isDragModeResizable => _keyDragMode == WorkspaceDragMode.resizable;
 
-  bool get isDragModeZone => _keyDragMode == WORKSPACE_DRAG_MODE.zone;
+  bool get isDragModeZone => _keyDragMode == WorkspaceDragMode.zone;
 
-  /// [getMode] returns the current mode of the [Workspace].
-  WORKSPACE_DRAG_MODE? get getMode => _keyDragMode;
+  /// [getKeyDragMode] returns the current mode of the [Workspace].
+  WorkspaceDragMode? get getKeyDragMode => _keyDragMode;
 
   /// Selection mode is used in zone selection, resizable, or click mode.
   ///
   /// [toggleDragMode] changes the current mode.
-  void toggleDragMode(WORKSPACE_DRAG_MODE mode) {
+  void toggleDragMode(WorkspaceDragMode mode) {
     if (_keyDragMode == mode) {
       // reset selection mode
       _keyDragMode = null;
@@ -68,14 +68,14 @@ class WorkspaceProvider with ChangeNotifier {
 
   DragDownDetails? _panDownDetails;
   DragUpdateDetails? _panUpdateDetails;
-  WORKSPACE_DRAG_MODE? _keyDragMode;
+  WorkspaceDragMode? _keyDragMode;
 
   bool _isPanning = false;
   bool get isPanning => _isPanning;
 
   /// [onPanDown] indicates the the primary mouse is down and pan started.
   void onPanDown(DragDownDetails details) {
-    if (_keyDragMode == WORKSPACE_DRAG_MODE.zone) {
+    if (_keyDragMode == WorkspaceDragMode.zone) {
       _panDownDetails = details;
       _panUpdateDetails =
           DragUpdateDetails(globalPosition: details.globalPosition);

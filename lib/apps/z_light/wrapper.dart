@@ -26,7 +26,7 @@ class Wrapper extends StatefulWidget {
 class _WrapperState extends State<Wrapper> {
   final List<LayerListItem> _layersListItems = [];
   final List<LayerStackItem> _layersStackItems = [];
-  WORKSPACE_VIEW currentView = WORKSPACE_VIEW.workspace;
+  WorkspaceView currentView = WorkspaceView.workspace;
   final _modeProvider = ModeProvider();
   final PickerModel _defaultPreset = PickerModel(
       title: 'Default', enabled: true, value: 'default', icon: Icons.dashboard);
@@ -57,7 +57,7 @@ class _WrapperState extends State<Wrapper> {
     });
   }
 
-  _changeView(WORKSPACE_VIEW view) {
+  _changeView(WorkspaceView view) {
     context.read<KeySelectorProvider>().clearKeys();
     // context.read<ZoneSelectorProvider>().updatePosition();
   }
@@ -83,8 +83,8 @@ class _WrapperState extends State<Wrapper> {
                   textStyle: h4Style),
               child: const Text('Workspace'),
               onPressed: () {
-                workspaceProvider.toggleView(WORKSPACE_VIEW.workspace);
-                _changeView(WORKSPACE_VIEW.workspace);
+                workspaceProvider.toggleView(WorkspaceView.workspace);
+                _changeView(WorkspaceView.workspace);
               },
             ),
             TextButton(
@@ -97,8 +97,8 @@ class _WrapperState extends State<Wrapper> {
                   textStyle: h4Style),
               child: const Text('Lighting Options'),
               onPressed: () {
-                workspaceProvider.toggleView(WORKSPACE_VIEW.lighting);
-                _changeView(WORKSPACE_VIEW.lighting);
+                workspaceProvider.toggleView(WorkspaceView.lighting);
+                _changeView(WorkspaceView.lighting);
               },
             ),
           ],

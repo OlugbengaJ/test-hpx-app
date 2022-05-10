@@ -1,11 +1,11 @@
-/// AppConstants allows to define app related string literals
-/// as enum types for consistency and code readability.
-enum WORKSPACE_VIEW {
+/// [WorkspaceView] indicates the view that's activated.
+enum WorkspaceView {
   workspace,
   lighting,
 }
 
-enum WORKSPACE_DRAG_MODE {
+/// [WorkspaceDragMode] indicates the mode of selection
+enum WorkspaceDragMode {
   // click to select a widget
   click,
   // resizable handles to select an area
