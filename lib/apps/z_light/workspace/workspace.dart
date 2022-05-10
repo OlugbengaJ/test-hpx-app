@@ -145,11 +145,10 @@ class _WorkspaceState extends State<Workspace> {
           builder: (context, provider, child) => (provider.isLightingView)
               ? ConstrainedBox(
                   constraints: const BoxConstraints(
-                    maxHeight: 75,
+                    maxHeight: 85,
                   ),
                   child: Container(
-                    margin: const EdgeInsets.only(
-                        left: 15, top: 10, right: 15, bottom: 10),
+                    margin: const EdgeInsets.all(15.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -162,45 +161,54 @@ class _WorkspaceState extends State<Workspace> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(right: 20),
-                              child: RoundButton(
-                                onTapDown: () {
-                                  // _keysSelection,
-                                  provider.toggleDragMode(
-                                      WORKSPACE_DRAG_MODE.resizable);
-                                },
-                                onTapUp: () {},
-                                size: _buttonSize,
-                                icon: Icons.select_all,
-                                iconColor: provider.isDragModeResizable
-                                    ? Theme.of(context).colorScheme.primary
-                                    : null,
+                              child: Tooltip(
+                                message: 'Resizable selector',
+                                child: RoundButton(
+                                  onTapDown: () {
+                                    // _keysSelection,
+                                    provider.toggleDragMode(
+                                        WORKSPACE_DRAG_MODE.resizable);
+                                  },
+                                  onTapUp: () {},
+                                  size: _buttonSize,
+                                  icon: Icons.select_all,
+                                  iconColor: provider.isDragModeResizable
+                                      ? Theme.of(context).colorScheme.primary
+                                      : null,
+                                ),
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(right: 20),
+                              child: Tooltip(
+                                message: 'Highlight selector',
+                                child: RoundButton(
+                                  onTapDown: () {
+                                    //_selectDraggable,
+                                    provider.toggleDragMode(
+                                        WORKSPACE_DRAG_MODE.zone);
+                                  },
+                                  size: _buttonSize,
+                                  icon: Icons.highlight_alt,
+                                  iconColor: provider.isDragModeZone
+                                      ? Theme.of(context).colorScheme.primary
+                                      : null,
+                                ),
+                              ),
+                            ),
+                            Tooltip(
+                              message: 'Click selector',
                               child: RoundButton(
                                 onTapDown: () {
-                                  //_selectDraggable,
-                                  provider
-                                      .toggleDragMode(WORKSPACE_DRAG_MODE.zone);
+                                  provider.toggleDragMode(
+                                      WORKSPACE_DRAG_MODE.click);
                                 },
                                 size: _buttonSize,
-                                icon: Icons.highlight_alt,
-                                iconColor: provider.isDragModeZone
+                                icon: Icons.mouse,
+                                iconColor: provider.isDragModeClick
                                     ? Theme.of(context).colorScheme.primary
                                     : null,
                               ),
-                            ),
-                            RoundButton(
-                              onTapDown: () {
-                                provider
-                                    .toggleDragMode(WORKSPACE_DRAG_MODE.click);
-                              },
-                              size: _buttonSize,
-                              icon: Icons.mouse,
-                              iconColor: provider.isDragModeClick
-                                  ? Theme.of(context).colorScheme.primary
-                                  : null,
                             ),
                           ],
                         ),

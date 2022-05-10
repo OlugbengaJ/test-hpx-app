@@ -51,65 +51,70 @@ class _LayersState extends State<Layers> {
   @override
   Widget build(BuildContext context) {
     return Consumer<LayersProvider>(builder: (context, provider, child) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            margin: EdgeInsets.zero,
-            child: Text("Layers", style: h5Style),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 8.0),
-            child: Tooltip(
-              message: "Add a new Layer",
-              child: TextButton(
-                child: SizedBox(
-                  height: 40,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Ionicons.add),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          "Create New Layer",
-                          style: TextStyle(color: Colors.black),
+      return Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+              margin: EdgeInsets.zero,
+              child: Text("Layers", style: h5Style),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 8.0),
+              child: Tooltip(
+                message: "Add a new Layer",
+                child: TextButton(
+                  child: SizedBox(
+                    height: 40,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(Ionicons.add),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            "Create New Layer",
+                            style: TextStyle(color: Colors.black),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
+                  onPressed: () => _addLayer(),
+                  style: textBtnStyleWhite,
                 ),
-                onPressed: () => _addLayer(),
-                style: textBtnStyleWhite,
               ),
             ),
-          ),
-          Expanded(
-            child: Container(
-                margin: const EdgeInsets.only(top: 8.0),
-                color: Colors.black12,
-                height: screenDimension(context).height,
-                child: Consumer<LayersProvider>(builder: (_, provider, child) {
-                  return ReorderableListView.builder(
-                    buildDefaultDragHandles: true,
-                    padding: const EdgeInsets.all(2),
-                    itemCount: provider.length,
-                    scrollController: ScrollController(keepScrollOffset: false),
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        key: Key("$index"),
-                        child: LayerListItem(
-                          layerIndex: index,
-                          layerItemModel: provider.getItem(index),
-                        ),
-                      );
-                    },
-                    onReorder: provider.reorder,
-                  );
-                })),
-          )
-        ],
+            Expanded(
+              child: Container(
+                  margin: const EdgeInsets.only(top: 8.0),
+                  color: Colors.black12,
+                  height: screenDimension(context).height,
+                  child:
+                      Consumer<LayersProvider>(builder: (_, provider, child) {
+                    return ReorderableListView.builder(
+                      buildDefaultDragHandles: true,
+                      padding: const EdgeInsets.all(2),
+                      itemCount: provider.length,
+                      scrollController:
+                          ScrollController(keepScrollOffset: false),
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          key: Key("$index"),
+                          child: LayerListItem(
+                            layerIndex: index,
+                            layerItemModel: provider.getItem(index),
+                          ),
+                        );
+                      },
+                      onReorder: provider.reorder,
+                    );
+                  })),
+            )
+          ],
+        ),
       );
     });
   }

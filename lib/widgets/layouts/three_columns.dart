@@ -38,10 +38,7 @@ class _ThreeColumnsState extends State<ThreeColumns> {
           builder: (context, value, child) => value.isLightingView
               ? Expanded(
                   flex: widget.leftFlex,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: widget.leftChild,
-                  ),
+                  child: widget.leftChild,
                 )
               : const SizedBox(width: 0, child: null),
         ),
@@ -54,10 +51,7 @@ class _ThreeColumnsState extends State<ThreeColumns> {
           builder: (context, value, child) => value.isLightingView
               ? Expanded(
                   flex: widget.rightFlex,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: widget.rightChild,
-                  ),
+                  child: widget.rightChild,
                 )
               : const SizedBox(width: 0, child: null),
         ),
