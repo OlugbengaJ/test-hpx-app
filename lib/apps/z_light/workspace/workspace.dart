@@ -78,7 +78,7 @@ class _WorkspaceState extends State<Workspace> {
   /// [_zoomExpand] sets the zoomValue to half the zoomIn threshold.
   void _zoomExpand() {
     setState(() {
-      _zoomValue = _zoomInThreshold / 2.66667;
+      _zoomValue = _zoomInThreshold / 3.1;
       _updateZoom();
     });
   }
