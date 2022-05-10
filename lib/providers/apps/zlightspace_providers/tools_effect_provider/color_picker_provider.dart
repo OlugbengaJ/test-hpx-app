@@ -1,7 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:hpx/models/tools_effect/color_picker_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/color_picker_model.dart';
+import 'package:hpx/utils/KeyboardController.dart';
 import 'package:hpx/widgets/components/color_picker.dart';
 
 // waves lists
@@ -84,6 +85,7 @@ List<ColorPickerWidgetModel> blinkingList = [
     action: '',
     width: 30.0,
     height: 30.0,
+    canEdit: true,
     name: "",
     colorCode: [Colors.red.shade900],
     setRandom: true,
@@ -93,6 +95,7 @@ List<ColorPickerWidgetModel> blinkingList = [
     action: '',
     width: 30.0,
     height: 30.0,
+    canEdit: true,
     name: "",
     colorCode: [Colors.yellow.shade900],
     setRandom: true,
@@ -215,6 +218,12 @@ class ColorPickerProvider extends ChangeNotifier {
   void setCurrentPickerWidget(ColorPickerWidgetModel data) {
     currentColor = data;
     notifyListeners();
+  }
+
+  void setKeyBoardColor(Color color) {
+    KeyboardController.lightUpAllKeys(
+        red: color.red, green: color.green, blue: color.blue);
+    // print(rgbColor);
   }
 
   List<Widget> generateColorPickerWidget(List<ColorPickerWidgetModel> list) {

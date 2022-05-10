@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/key_rrect.dart';
-import 'package:hpx/providers/key_model.dart';
-import 'package:hpx/providers/workspace_provider.dart';
+import 'package:hpx/models/apps/zlightspace_models/workspace_models/key_model.dart';
+import 'package:hpx/providers/apps/zlightspace_providers/workspace_providers/workspace_provider.dart';
 import 'package:provider/provider.dart';
 
 class KeyboardKey extends StatelessWidget {

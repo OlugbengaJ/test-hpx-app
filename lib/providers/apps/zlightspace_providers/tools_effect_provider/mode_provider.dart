@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/color_picker_provider.dart';
+import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/effects_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:ionicons/ionicons.dart';
 
@@ -92,9 +94,12 @@ List<PickerModel> moodList = [
 class ModeProvider extends ChangeNotifier {
   ToolsModeModel currentMode =
       ToolsModeModel(currentColor: [], effects: [], name: "");
+  EffectProvider effectProvider = EffectProvider();
+  ColorPickerProvider colorPickerProvider = ColorPickerProvider();
 
   void setCurrentMode(ToolsModeModel data) {
     currentMode = data;
+    processEfect(data);
     notifyListeners();
   }
 
@@ -119,5 +124,35 @@ class ModeProvider extends ChangeNotifier {
 
   getModeInformation() {
     return currentMode;
+  }
+
+  processEfect(ToolsModeModel data) {
+    effectProvider.setCurrentEffect(data.effects);
+    switch (data.value) {
+      case "audiovisualizer":
+        effectProvider.audioVisualizerEffect();
+        break;
+      case "wave":
+        break;
+      case "colorcycle":
+        break;
+      case "breathing":
+        effectProvider.breathingEffect(0.0, [], data.currentColor);
+        break;
+      case "blinking":
+        effectProvider.blinkingEffect(0.0, [], data.currentColor);
+        break;
+      case "interactive":
+        break;
+      case "image":
+        break;
+      case "ambient":
+        break;
+      default:
+        data.currentColor.forEach((currentColor) {
+          colorPickerProvider.setKeyBoardColor(currentColor);
+        });
+        break;
+    }
   }
 }

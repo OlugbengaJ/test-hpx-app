@@ -6,7 +6,7 @@ import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/round_button.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/zoom_toolbar.dart';
-import 'package:hpx/providers/workspace_provider.dart';
+import 'package:hpx/providers/apps/zlightspace_providers/workspace_providers/workspace_provider.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 

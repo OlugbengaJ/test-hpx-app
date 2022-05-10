@@ -8,12 +8,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
-import 'package:hpx/models/layers/layer_item_model.dart';
-import 'package:hpx/providers/layers_provider/layers.dart';
-
+import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
+import 'package:hpx/providers/apps/zlightspace_providers/layers_provider/layers.dart';
 
 void main() {
-
   final areaHeight = Get.height * 0.70;
   final areaWidth = Get.width * 0.70;
 
@@ -27,12 +25,14 @@ void main() {
     minHeight: 50,
   );
 
-  LayerItemModel itemModel = LayerItemModel(id: 1, layerText: "layerText", controller: controller);
-  LayerItemModel itemModel2 = LayerItemModel(id: 2, layerText: "layerText 2", controller: controller);
+  LayerItemModel itemModel =
+      LayerItemModel(id: 1, layerText: "layerText", controller: controller);
+  LayerItemModel itemModel2 =
+      LayerItemModel(id: 2, layerText: "layerText 2", controller: controller);
   LayersProvider provider = LayersProvider();
 
   /// Create layer, using the [LayersProvider] and [LayerItemModel]. Keep track of all layers available
-  /// 
+  ///
   /// A layer is added to the [layeritems] and inserted into the [stackedLayeritems]
   test('Create layers', () {
     // Add one layer so length should be 1
@@ -46,35 +46,21 @@ void main() {
     expect(provider.stackedLayeritems.length, 2);
 
     // When adding a layer, the layer is added to the layeritems but inserted into the stackedLayeritems
-    expect(provider.layeritems.last, provider.stackedLayeritems.first); // layeritems.first == stackedLayeritems.lasts
-
+    expect(
+        provider.layeritems.last,
+        provider.stackedLayeritems
+            .first); // layeritems.first == stackedLayeritems.lasts
   });
-
 
   /// Rearrange layers, using the LayersProvider. Keep track of all layers available
-  test('Update layer', (){
-    
-  });
-  
+  test('Update layer', () {});
 
   /// Delete layers, using the LayersProvider. Keep track of all layers available
-  test('Delete layers', (){
-    
-  });
-  
+  test('Delete layers', () {});
 
-  
   /// Duplicate layers, using the LayersProvider. Keep track of all layers available
-  test('Duplicate layers', (){
-    
-  });
-  
-  
+  test('Duplicate layers', () {});
+
   /// Rearrange layers, using the LayersProvider. Keep track of all layers available
-  test('Rearrange layer', (){
-    
-  });
-
-
-
+  test('Rearrange layer', () {});
 }

@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/layers/widgets/stateful_resizable.dart';
-import 'package:hpx/models/layers/layer_item_model.dart';
-import 'package:hpx/providers/keyboard/keys_provider.dart';
-import 'package:hpx/providers/layers_provider/layers.dart';
+import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
+import 'package:hpx/providers/apps/zlightspace_providers/layers_provider/layers.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../models/layers/layer_item_model.dart';
-
 class LayerStackItem extends StatefulWidget {
-  const LayerStackItem(
-      {Key? key, required this.layerItemModel})
+  const LayerStackItem({Key? key, required this.layerItemModel})
       : super(key: key);
   final LayerItemModel layerItemModel;
 
@@ -19,10 +15,6 @@ class LayerStackItem extends StatefulWidget {
 
 class _LayerStackItemState extends State<LayerStackItem> {
   double dragWidgetSize = 50;
-
-  
-  
-
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +37,7 @@ class _LayerStackItemState extends State<LayerStackItem> {
                   width: 5,
                   decoration: const BoxDecoration(
                     shape: BoxShape.rectangle,
-                    color:Colors.white,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -56,9 +48,7 @@ class _LayerStackItemState extends State<LayerStackItem> {
             ),
             child: Container(
               decoration: BoxDecoration(
-                border: Border.all(
-                  color:  Colors.white
-                ),
+                border: Border.all(color: Colors.white),
               ),
             ),
           ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/providers/workspace_provider.dart';
+import 'package:hpx/providers/apps/zlightspace_providers/workspace_providers/workspace_provider.dart';
 import 'package:provider/provider.dart';
 
 class ThreeColumns extends StatefulWidget {
@@ -8,7 +8,7 @@ class ThreeColumns extends StatefulWidget {
     required this.leftChild,
     this.leftFlex = 2,
     required this.centerChild,
-    this.centerFlex = 5,
+    this.centerFlex = 7,
     required this.rightChild,
     this.rightFlex = 2,
   }) : super(key: key);

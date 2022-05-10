@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/providers/key_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/workspace_models/key_model.dart';
 
 class KeysProvider with ChangeNotifier {
   final List<KeyModel> _keys = [

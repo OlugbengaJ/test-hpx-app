@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
-import 'package:hpx/models/layers/layer_item_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 
 List<Color> colors = const [
   Colors.blue,
@@ -16,9 +16,9 @@ List<Color> colors = const [
 class LayersProvider extends ChangeNotifier {
   final areaHeight = Get.height * 0.70;
   final areaWidth = Get.width * 0.70;
-  final List<LayerItemModel> _layeritems = [
-  ];
-  final List<LayerItemModel> _stackedLayeritems = []; // Used to display the staked layers
+  final List<LayerItemModel> _layeritems = [];
+  final List<LayerItemModel> _stackedLayeritems =
+      []; // Used to display the staked layers
   bool hideStackedLayers = false;
 
   int _index = 0;
@@ -36,10 +36,9 @@ class LayersProvider extends ChangeNotifier {
     hideStackedLayers = show;
   }
 
-  void updateView(){
+  void updateView() {
     notifyListeners();
   }
-
 
   int getTheBiggestID() {
     int id = 1;
