@@ -10,6 +10,7 @@ import 'package:hpx/apps/z_light/tools_effects/widgets/effects/wave.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/tools/color_production.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/tools/moods.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/tools/shortcut_colors.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
@@ -34,7 +35,7 @@ class _ToolModesState extends State<ToolModes> {
         Provider.of<ModeProvider>(context, listen: false);
     modeProvider.currentMode = ToolsModeModel(
         name: _defaultPreset.title,
-        effects: [],
+        effects: EffectsModel(effectName: _defaultPreset.value),
         currentColor: [],
         value: _defaultPreset.value);
     // TODO: implement initState
@@ -86,7 +87,8 @@ class _ToolModesState extends State<ToolModes> {
                       onChange: (PickerModel? returnValue) {
                         _modeProvider.setCurrentMode(ToolsModeModel(
                             name: returnValue!.title,
-                            effects: [],
+                            effects: EffectsModel(
+                                effectName: _modeProvider.currentMode.value),
                             currentColor: [],
                             value: returnValue.value));
                         setState(() {

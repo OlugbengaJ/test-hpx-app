@@ -150,31 +150,31 @@ List<ColorPickerWidgetModel> moodCustomList = [
     action: 'Edit',
     name: "Custom 1",
     canEdit: true,
-    colorCode: [Colors.transparent],
+    colorCode: [Colors.grey.shade900],
   ),
   ColorPickerWidgetModel(
     action: 'Edit',
     name: "Custom 2",
     canEdit: true,
-    colorCode: [Colors.transparent],
+    colorCode: [Colors.grey.shade900],
   ),
   ColorPickerWidgetModel(
     action: 'Edit',
     canEdit: true,
     name: "Custom 3",
-    colorCode: [Colors.transparent],
+    colorCode: [Colors.grey.shade900],
   ),
   ColorPickerWidgetModel(
     action: 'Edit',
     canEdit: true,
     name: "Custom 4",
-    colorCode: [Colors.transparent],
+    colorCode: [Colors.grey.shade900],
   ),
   ColorPickerWidgetModel(
     action: 'Edit',
     canEdit: true,
     name: "Custom 5",
-    colorCode: [Colors.transparent],
+    colorCode: [Colors.grey.shade900],
   ),
 ];
 
@@ -199,7 +199,7 @@ List<ColorPickerWidgetModel> audioVisualSolidList = [
       width: 30.0,
       height: 30.0,
       name: "",
-      colorCode: [Colors.transparent])
+      colorCode: [Colors.grey.shade900])
 ];
 List<ColorPickerWidgetModel> audioVisualGradientList = [
   ColorPickerWidgetModel(label: "", action: 'Edit', name: "", colorCode: [
