@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack_colored_item.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
-import 'package:hpx/providers/apps/zlightspace_providers/layers_provider/layers.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:provider/provider.dart';
 
 class LayersStack extends StatefulWidget {

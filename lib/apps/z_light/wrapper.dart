@@ -7,9 +7,9 @@ import 'package:hpx/apps/z_light/layers/widgets/layer_list_item.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
 import 'package:hpx/apps/z_light/tools_effects/tools_effects_wrapper.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
-import 'package:hpx/providers/apps/zlightspace_providers/keyboard/keys_selected_provider.dart';
-import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/mode_provider.dart';
-import 'package:hpx/providers/apps/zlightspace_providers/workspace_providers/workspace_provider.dart';
+import 'package:hpx/providers/workspace_provider.dart';
+import 'package:hpx/providers/keyboard/keys_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/components/zone_selector/zone_selector.dart';
 import 'package:hpx/widgets/layouts/three_columns.dart';
@@ -26,7 +26,7 @@ class Wrapper extends StatefulWidget {
 class _WrapperState extends State<Wrapper> {
   final List<LayerListItem> _layersListItems = [];
   final List<LayerStackItem> _layersStackItems = [];
-  WORKSPACE_VIEW currentView = WORKSPACE_VIEW.workspace;
+  WorkspaceView currentView = WorkspaceView.workspace;
   final _modeProvider = ModeProvider();
   final PickerModel _defaultPreset = PickerModel(
       title: 'Default', enabled: true, value: 'default', icon: Icons.dashboard);
@@ -57,7 +57,7 @@ class _WrapperState extends State<Wrapper> {
     });
   }
 
-  _changeView(WORKSPACE_VIEW view) {
+  _changeView(WorkspaceView view) {
     context.read<KeySelectorProvider>().clearKeys();
     // context.read<ZoneSelectorProvider>().updatePosition();
   }
@@ -83,8 +83,8 @@ class _WrapperState extends State<Wrapper> {
                   textStyle: h4Style),
               child: const Text('Workspace'),
               onPressed: () {
-                workspaceProvider.toggleView(WORKSPACE_VIEW.workspace);
-                _changeView(WORKSPACE_VIEW.workspace);
+                workspaceProvider.toggleView(WorkspaceView.workspace);
+                _changeView(WorkspaceView.workspace);
               },
             ),
             TextButton(
@@ -97,8 +97,8 @@ class _WrapperState extends State<Wrapper> {
                   textStyle: h4Style),
               child: const Text('Lighting Options'),
               onPressed: () {
-                workspaceProvider.toggleView(WORKSPACE_VIEW.lighting);
-                _changeView(WORKSPACE_VIEW.lighting);
+                workspaceProvider.toggleView(WorkspaceView.lighting);
+                _changeView(WorkspaceView.lighting);
               },
             ),
           ],

@@ -11,8 +11,11 @@ class ToolsEffectsWrapper extends StatefulWidget {
 class _ToolsEffectsWrapperState extends State<ToolsEffectsWrapper> {
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [ToolModes()],
+    return Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: ListView(
+        children: [ToolModes()],
+      ),
     );
   }
 }

@@ -12,7 +12,7 @@ import 'package:hpx/apps/z_light/tools_effects/widgets/tools/moods.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/tools/shortcut_colors.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
-import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/mode_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +38,6 @@ class _ToolModesState extends State<ToolModes> {
         effects: EffectsModel(effectName: _defaultPreset.value),
         currentColor: [],
         value: _defaultPreset.value);
-    // TODO: implement initState
     super.initState();
   }
 
@@ -74,36 +73,38 @@ class _ToolModesState extends State<ToolModes> {
   @override
   Widget build(BuildContext context) {
     return Consumer<ModeProvider>(
-        builder: (context, _modeProvider, child) => Container(
-            margin: const EdgeInsets.only(right: 10.0, top: 20.0, bottom: 30.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text("Tools & Effects",
-                    textAlign: TextAlign.left, style: h4Style),
-                SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.45,
-                    child: PickerDropdown(
-                      onChange: (PickerModel? returnValue) {
-                        _modeProvider.setCurrentMode(ToolsModeModel(
-                            name: returnValue!.title,
-                            effects: EffectsModel(
-                                effectName: _modeProvider.currentMode.value),
-                            currentColor: [],
-                            value: returnValue.value));
-                        setState(() {
-                          preset = changeComponent(returnValue);
-                        });
-                      },
-                      pickerHintText: "Picker a tool or effect mode ....",
-                      pickerList: _modeProvider.getPickerModes('mood'),
-                      defaultPicker: _defaultPreset,
-                    )),
-                Container(
-                  margin: const EdgeInsets.only(top: 0.0, bottom: 20.0),
-                  child: preset ?? changeComponent(_defaultPreset),
-                ),
-              ],
-            )));
+      builder: (context, _modeProvider, child) => Container(
+        margin: EdgeInsets.zero,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text("Tools & Effects", textAlign: TextAlign.left, style: h5Style),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.45,
+              child: PickerDropdown(
+                onChange: (PickerModel? returnValue) {
+                  _modeProvider.setCurrentMode(ToolsModeModel(
+                      name: returnValue!.title,
+                      effects: EffectsModel(
+                          effectName: _modeProvider.currentMode.value),
+                      currentColor: [],
+                      value: returnValue.value));
+                  setState(() {
+                    preset = changeComponent(returnValue);
+                  });
+                },
+                pickerHintText: "Picker a tool or effect mode ....",
+                pickerList: _modeProvider.getPickerModes('mood'),
+                defaultPicker: _defaultPreset,
+              ),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 0.0, bottom: 20.0),
+              child: preset ?? changeComponent(_defaultPreset),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
