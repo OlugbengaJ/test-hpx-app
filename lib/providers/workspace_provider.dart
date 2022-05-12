@@ -3,18 +3,25 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 
 /// [WorkspaceProvider] handles the workspace events
 /// e.g. display certain widgets based on certain events.
 class WorkspaceProvider with ChangeNotifier {
   bool _isStripNotify = false;
+  bool _isModalNotify = false;
 
   /// [isStripNotify] indicates if the strip notifcation should be displayed.
   bool get isStripNotify => _isStripNotify;
+  bool get isModalNotify => _isModalNotify;
 
   /// [stripNotificationText] indicates text used by the strip notifcation.
   String? _stripNotificationText;
   String get stripNotificationText => _stripNotificationText ?? '';
+
+  /// [modalWidgets] indicates widgets used by the modal notifcation.
+  List<Widget>? _modalWidgets;
+  List<Widget> get modalWidgets => _modalWidgets ?? [];
 
   /// [_workspaceView] determines if the lighting options is displayed.
   WorkspaceView _workspaceView = WorkspaceView.workspace;
@@ -31,6 +38,11 @@ class WorkspaceProvider with ChangeNotifier {
 
     notifyListeners();
   }
+
+  /// [_layersProvider] grants access to [LayersProvider] resizable widget
+  LayersProvider? _layersProvider;
+  LayersProvider? get getLayersProvider => _layersProvider;
+  void setLayersProvider(LayersProvider? v) => _layersProvider = v;
 
   bool get isDragModeClick => _keyDragMode == WorkspaceDragMode.click;
 
@@ -52,6 +64,10 @@ class WorkspaceProvider with ChangeNotifier {
       _keyDragMode = mode;
     }
 
+    if (_layersProvider != null) {
+      _layersProvider!.toggleHideStackedLayers(!isDragModeResizable);
+    }
+
     notifyListeners();
   }
 
@@ -59,9 +75,21 @@ class WorkspaceProvider with ChangeNotifier {
   ///
   /// The Strip notification shows up right under the Zone Selection and is
   /// intended to display very limited information.
-  void toggleStripNotification([String? value]) {
-    _isStripNotify = !(value == null || value.isEmpty);
-    _stripNotificationText = value;
+  /// Passing empty [message] hides the modal.
+  void toggleStripNotification([String? message]) {
+    _isStripNotify = !(message == null || message.isEmpty);
+    _stripNotificationText = message;
+
+    notifyListeners();
+  }
+
+  /// [toggleModal] is used to hide or show a modal notification.
+  ///
+  /// The modal notification shows up right at the center of the screen.
+  /// Passing empty [children] hides the modal.
+  void toggleModal([List<Widget>? children]) {
+    _isModalNotify = !(children == null || children.isEmpty);
+    _modalWidgets = children;
 
     notifyListeners();
   }
@@ -83,6 +111,9 @@ class WorkspaceProvider with ChangeNotifier {
             DragUpdateDetails(globalPosition: details.globalPosition);
         _isPanning = true;
 
+        notifyListeners();
+        break;
+      case WorkspaceDragMode.resizable:
         notifyListeners();
         break;
       default:
@@ -169,21 +200,57 @@ class WorkspaceProvider with ChangeNotifier {
         .abs();
   }
 
-  /// [isWidgetInZone] checks a widget intersects with the zone selection
-  bool? isWidgetInZone(RenderBox? box) {
-    if (box == null || _panUpdateDetails == null || !_isPanning) return null;
+  /// [_panNotAllowed] checks if [object] exists and mouse is panning.
+  bool _panNotAllowed(Object? object) {
+    return (object == null || _panUpdateDetails == null || !_isPanning);
+  }
 
-    // prevent keys from being highlighted in click mode.
-    if (_keyDragMode == WorkspaceDragMode.click &&
-        _panDownDetails!.globalPosition != _panUpdateDetails!.globalPosition) {
-      return null;
+  /// [_rectFromPanDetails] returns a Rect
+  /// from [_panDownDetails] and [_panUpdateDetails].
+  Rect get _rectFromPanDetails => Rect.fromPoints(
+      _panDownDetails!.globalPosition, _panUpdateDetails!.globalPosition);
+
+  /// [isWidgetInZone] checks a widget intersects with the zone selection
+  bool? isWidgetInZone(RenderBox? box, {RenderBox? box2}) {
+    final Rect selectorRect;
+
+    switch (_keyDragMode) {
+      case WorkspaceDragMode.click:
+        // prevent keys from being highlighted in click mode.
+        if (_panNotAllowed(box) ||
+            _panDownDetails!.globalPosition !=
+                _panUpdateDetails!.globalPosition) {
+          return null;
+        }
+
+        selectorRect = _rectFromPanDetails;
+        break;
+      case WorkspaceDragMode.zone:
+        if (_panNotAllowed(box)) return null;
+
+        selectorRect = _rectFromPanDetails;
+        break;
+      case WorkspaceDragMode.resizable:
+        if (_layersProvider == null || _layersProvider!.length <= 0) {
+          return null;
+        }
+
+        // calculate rect based on resizable widget offsets.
+        final layerModel = _layersProvider!.getItem(_layersProvider!.index);
+        box2 = layerModel.controller.draggableKey.currentContext
+            ?.findRenderObject() as RenderBox?;
+
+        if (box2 == null) return null;
+        selectorRect = box2.localToGlobal(Offset.zero) & box2.size;
+
+        break;
+
+      default:
+        return null;
     }
 
-    final boxRect = box.localToGlobal(Offset.zero) & box.size;
-    final selRect = Rect.fromPoints(
-        _panDownDetails!.globalPosition, _panUpdateDetails!.globalPosition);
-
-    final rectIntersect = selRect.intersect(boxRect);
+    final Rect boxRect = box!.localToGlobal(Offset.zero) & box.size;
+    final rectIntersect = selectorRect.intersect(boxRect);
 
     return (rectIntersect.width >= 0 && rectIntersect.height >= 0);
   }

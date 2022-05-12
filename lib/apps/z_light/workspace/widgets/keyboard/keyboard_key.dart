@@ -51,9 +51,9 @@ KeyModel _updateKeyInfo(
 ) {
   final isWidgetInZone = provider.isWidgetInZone(renderBox);
 
-  if (provider.isDragModeZone) {
+  if (provider.isDragModeZone || provider.isDragModeResizable) {
     keyModel.selectKey(isWidgetInZone);
-    if (isWidgetInZone == true) {
+    if (isWidgetInZone == true && provider.isDragModeZone) {
       keyModel.setPathColors(provider.animColors);
     }
   }

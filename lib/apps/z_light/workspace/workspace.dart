@@ -7,6 +7,7 @@ import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard_selector.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/round_button.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/zoom_toolbar.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
@@ -83,14 +84,6 @@ class _WorkspaceState extends State<Workspace> {
     });
   }
 
-  // _keysSelection() {
-  //   context.read<KeySelectorProvider>().toggleKeySelector(true);
-  // }
-
-  // _selectDraggable() {
-  //   context.read<KeySelectorProvider>().toggleKeySelector(false);
-  // }
-
   /// zoomOut decreases the zoomValue only up to the zoomOut threshold
   /// preventing scenario where content is completely not visible.
   void _zoomOut() {
@@ -166,7 +159,6 @@ class _WorkspaceState extends State<Workspace> {
                                 message: 'Resizable selector',
                                 child: RoundButton(
                                   onTapDown: () {
-                                    // _keysSelection,
                                     provider.toggleDragMode(
                                         WorkspaceDragMode.resizable);
                                   },
@@ -185,7 +177,6 @@ class _WorkspaceState extends State<Workspace> {
                                 message: 'Highlight selector',
                                 child: RoundButton(
                                   onTapDown: () {
-                                    //_selectDraggable,
                                     provider
                                         .toggleDragMode(WorkspaceDragMode.zone);
                                   },
@@ -297,51 +288,60 @@ class _WorkspaceState extends State<Workspace> {
                 repeat: ImageRepeat.repeat,
               ),
             ),
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onPanDown: (details) => workspaceProvider.onPanDown(details),
-              onPanUpdate: (details) => workspaceProvider.onPanUpdate(details),
-              onPanEnd: (details) => workspaceProvider.onPanEnd(details),
-              onPanCancel: () => workspaceProvider.onPanClear(),
-              child: Stack(
-                alignment: Alignment.bottomLeft,
-                fit: StackFit.expand,
-                children: [
-                  // Keyboard widget takes a zoom scale which is applied to all keys.
-                  // This ensures seamless zooming of the entire keyboard.
-                  Align(
-                    alignment: Alignment.center,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      primary: false,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        primary: false,
-                        child: Keyboard(zoomScale: _zoomScale),
+            child: Consumer<LayersProvider>(
+              builder: (context, layersProvider, child) {
+                return GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onPanDown: (details) {
+                    workspaceProvider.onPanDown(details);
+                    // initialize the layers provider
+                    workspaceProvider.setLayersProvider(layersProvider);
+                  },
+                  onPanUpdate: (details) =>
+                      workspaceProvider.onPanUpdate(details),
+                  onPanEnd: (details) => workspaceProvider.onPanEnd(details),
+                  onPanCancel: () => workspaceProvider.onPanClear(),
+                  child: Stack(
+                    alignment: Alignment.bottomLeft,
+                    fit: StackFit.expand,
+                    children: [
+                      // Keyboard widget takes a zoom scale which is applied to all keys.
+                      // This ensures seamless zooming of the entire keyboard.
+                      Align(
+                        alignment: Alignment.center,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          primary: false,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            primary: false,
+                            child: Keyboard(zoomScale: _zoomScale),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  LayersStack(
-                    layers: widget.layers,
-                  ),
-                  if (workspaceProvider.isPanning) const KeyboardSelector(),
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: Center(
-                      child: ZoomToolbar(
-                        zoomTextController: _zoomTextCtrl,
-                        zoomInHandler: _zoomIn,
-                        zoomExpandHandler: _zoomExpand,
-                        zoomOutHandler: _zoomOut,
-                        zoomCollapseHandler: _zoomCollapse,
-                        zoomEndHandler: _zoomEnd,
+                      LayersStack(
+                        layers: widget.layers,
                       ),
-                    ),
-                  )
-                ],
-              ),
+                      if (workspaceProvider.isPanning) const KeyboardSelector(),
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Center(
+                          child: ZoomToolbar(
+                            zoomTextController: _zoomTextCtrl,
+                            zoomInHandler: _zoomIn,
+                            zoomExpandHandler: _zoomExpand,
+                            zoomOutHandler: _zoomOut,
+                            zoomCollapseHandler: _zoomCollapse,
+                            zoomEndHandler: _zoomEnd,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              },
             ),
           ),
         )
