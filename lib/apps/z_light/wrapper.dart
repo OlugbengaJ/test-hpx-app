@@ -112,23 +112,40 @@ class _WrapperState extends State<Wrapper> {
               style: h5Style,
             ),
           ),
-          Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.only(top: 2, right: 30),
-                child: SizedBox(
-                  width: 300,
-                  child: PickerDropdown(
-                    onChange: (PickerModel? returnValue) {
-                      setState(() {});
-                    },
-                    defaultPicker: _defaultPreset,
-                    pickerHintText: "Select a Profile ...",
-                    pickerList: _modeProvider.getPickerModes('profile'),
-                  ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              width: 180,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Theme.of(context).primaryColorLight,
+                  width: 1,
                 ),
               ),
-            ],
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: DropdownButton(
+                  value: _modeProvider.getPickerModes('profile').first,
+                  menuMaxHeight: 400,
+                  alignment: Alignment.bottomRight,
+                  hint: Text(
+                    'Select profile...',
+                    style: pStyle,
+                  ),
+                  underline: const SizedBox(),
+                  items: _modeProvider
+                      .getPickerModes('profile')
+                      .map((e) => DropdownMenuItem(
+                            enabled: e.enabled,
+                            value: e,
+                            child: GetProfileList(profile: e),
+                          ))
+                      .toList(),
+                  onChanged: (o) {},
+                  isExpanded: true,
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -148,6 +165,34 @@ class _WrapperState extends State<Wrapper> {
           rightChild: const ToolsEffectsWrapper(),
         ),
       ),
+    );
+  }
+}
+
+// TODO: should be removed from mode provider into a Profile Provider
+// TODO: Delete; added here just for test and must be refactored properly.
+class GetProfileList extends StatelessWidget {
+  const GetProfileList({
+    Key? key,
+    required this.profile,
+  }) : super(key: key);
+
+  final PickerModel profile;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        if (profile.enabled) Icon(profile.icon, size: 16),
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Text(
+            profile.title,
+            style: pStyle,
+          ),
+        ),
+      ],
     );
   }
 }
