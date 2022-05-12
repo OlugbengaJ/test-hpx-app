@@ -11,7 +11,6 @@ import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/providers/keyboard/keys_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
-import 'package:hpx/widgets/components/zone_selector/zone_selector.dart';
 import 'package:hpx/widgets/layouts/three_columns.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
@@ -26,7 +25,6 @@ class Wrapper extends StatefulWidget {
 class _WrapperState extends State<Wrapper> {
   final List<LayerListItem> _layersListItems = [];
   final List<LayerStackItem> _layersStackItems = [];
-  WorkspaceView currentView = WorkspaceView.workspace;
   final _modeProvider = ModeProvider();
   final PickerModel _defaultPreset = PickerModel(
       title: 'Default', enabled: true, value: 'default', icon: Icons.dashboard);
@@ -152,16 +150,13 @@ class _WrapperState extends State<Wrapper> {
       body: SafeArea(
         child: ThreeColumns(
           leftChild: Layers(onReorder: _updateLayers, layers: _layersListItems),
-          centerChild: Stack(children: [
-            Workspace(
-              layers: _layersStackItems,
-            ),
-            Consumer<KeySelectorProvider>(builder: (_, provider, child) {
-              return provider.keySelectorDisplayed
-                  ? ZoneSelector(widgetsKeys: provider.keysTowatch)
-                  : Container();
-            }),
-          ]),
+          centerChild: Stack(
+            children: [
+              Workspace(
+                layers: _layersStackItems,
+              ),
+            ],
+          ),
           rightChild: const ToolsEffectsWrapper(),
         ),
       ),
