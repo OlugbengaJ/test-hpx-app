@@ -66,9 +66,9 @@ class WorkspaceProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  WorkspaceDragMode? _keyDragMode;
   DragDownDetails? _panDownDetails;
   DragUpdateDetails? _panUpdateDetails;
-  WorkspaceDragMode? _keyDragMode;
 
   bool _isPanning = false;
   bool get isPanning => _isPanning;
@@ -103,7 +103,7 @@ class WorkspaceProvider with ChangeNotifier {
   }
 
   /// [onPanClear] resets variables used to indicate pan in progress.
-  onPanClear() {
+  void onPanClear() {
     _isPanning = false;
     _panDownDetails = null;
     _panUpdateDetails = null;
@@ -113,6 +113,9 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [leftZonePosition] calculates the left of the zone selection highlight.
   double? get leftZonePosition {
+    // disable highlight in zone mode
+    if (!isDragModeZone) return _panDownDetails!.localPosition.dx;
+
     if (_panDownDetails == null || _panUpdateDetails == null) return null;
 
     if (_panUpdateDetails!.localPosition.dx >
@@ -126,6 +129,9 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [topZonePosition] calculates the top of the zone selection highlight.
   double? get topZonePosition {
+    // disable highlight in zone mode
+    if (!isDragModeZone) return _panDownDetails!.localPosition.dx;
+
     if (_panDownDetails == null || _panUpdateDetails == null) return null;
 
     if (_panUpdateDetails!.localPosition.dy >
@@ -142,7 +148,8 @@ class WorkspaceProvider with ChangeNotifier {
     if (_panDownDetails == null ||
         _panUpdateDetails == null ||
         _panDownDetails!.globalPosition.dy ==
-            _panUpdateDetails!.globalPosition.dy) return 0.0;
+            _panUpdateDetails!.globalPosition.dy ||
+        !isDragModeZone) return 0.0;
 
     return (_panUpdateDetails!.localPosition.dy -
             _panDownDetails!.localPosition.dy)
@@ -154,7 +161,8 @@ class WorkspaceProvider with ChangeNotifier {
     if (_panDownDetails == null ||
         _panUpdateDetails == null ||
         _panDownDetails!.globalPosition.dx ==
-            _panUpdateDetails!.globalPosition.dx) return 0.0;
+            _panUpdateDetails!.globalPosition.dx ||
+        !isDragModeZone) return 0.0;
 
     return (_panUpdateDetails!.localPosition.dx -
             _panDownDetails!.localPosition.dx)
@@ -164,6 +172,12 @@ class WorkspaceProvider with ChangeNotifier {
   /// [isWidgetInZone] checks a widget intersects with the zone selection
   bool? isWidgetInZone(RenderBox? box) {
     if (box == null || _panUpdateDetails == null || !_isPanning) return null;
+
+    // prevent keys from being highlighted in click mode.
+    if (_keyDragMode == WorkspaceDragMode.click &&
+        _panDownDetails!.globalPosition != _panUpdateDetails!.globalPosition) {
+      return null;
+    }
 
     final boxRect = box.localToGlobal(Offset.zero) & box.size;
     final selRect = Rect.fromPoints(
