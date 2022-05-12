@@ -17,33 +17,6 @@ class KeyboardKey extends StatelessWidget {
   final VoidCallback? onTapHandler;
   final double zoomScale;
 
-  KeyModel _updateKeyInfo(
-    WorkspaceProvider provider,
-    KeyModel keyModel,
-    RenderBox? renderBox,
-  ) {
-    final isWidgetInZone = provider.isWidgetInZone(renderBox);
-
-    if (provider.isDragModeZone) {
-      keyModel.selectKey(isWidgetInZone);
-      if (isWidgetInZone == true) {
-        keyModel.setPathColors(provider.animColors);
-      }
-    }
-
-    if (provider.isDragModeClick &&
-        isWidgetInZone == true &&
-        !keyModel.isSelected) {
-      keyModel.selectKey(isWidgetInZone);
-    } else if (provider.isDragModeClick &&
-        isWidgetInZone == true &&
-        keyModel.isSelected) {
-      keyModel.unSelectKey();
-    }
-
-    return keyModel;
-  }
-
   @override
   Widget build(BuildContext context) {
     // Gets access to the widget's position (offset) in the widget tree.
@@ -69,4 +42,31 @@ class KeyboardKey extends StatelessWidget {
       ],
     );
   }
+}
+
+KeyModel _updateKeyInfo(
+  WorkspaceProvider provider,
+  KeyModel keyModel,
+  RenderBox? renderBox,
+) {
+  final isWidgetInZone = provider.isWidgetInZone(renderBox);
+
+  if (provider.isDragModeZone) {
+    keyModel.selectKey(isWidgetInZone);
+    if (isWidgetInZone == true) {
+      keyModel.setPathColors(provider.animColors);
+    }
+  }
+
+  if (provider.isDragModeClick &&
+      isWidgetInZone == true &&
+      !keyModel.isSelected) {
+    keyModel.selectKey(isWidgetInZone);
+  } else if (provider.isDragModeClick &&
+      isWidgetInZone == true &&
+      keyModel.isSelected) {
+    keyModel.unSelectKey();
+  }
+
+  return keyModel;
 }

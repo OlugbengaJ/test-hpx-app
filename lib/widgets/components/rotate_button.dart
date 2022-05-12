@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 class RotateButton extends StatefulWidget {
-  const RotateButton({Key? key, required this.onChange}) : super(key: key);
+  RotateButton({Key? key, required this.onChange}) : super(key: key);
 
   final Function(double? angle) onChange;
+  double? value = 0.00;
 
   @override
   _RotateButtonState createState() => _RotateButtonState();

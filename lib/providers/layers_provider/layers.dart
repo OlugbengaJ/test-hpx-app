@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
-import 'package:hpx/models/layers/layer_item_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 
 List<Color> colors = const [
   Colors.blue,

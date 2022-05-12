@@ -15,16 +15,22 @@ class LayersStack extends StatefulWidget {
 class _LayersStackState extends State<LayersStack> {
   _getStackColoredLayers(provider) {
     List<Widget> layers = [];
-    provider.stackedLayeritems.forEach(
-        (layer) => {layers.add(LayerStackColoredItem(layerItemModel: layer))});
+    provider.stackedLayeritems.forEach((layer) => {
+          layers.add(LayerStackColoredItem(
+            layerItemModel: layer,
+          ))
+        });
 
     return layers;
   }
 
   _getStackedLayers(provider) {
     List<Widget> layers = [];
-    provider.stackedLayeritems.forEach(
-        (layer) => {layers.add(LayerStackItem(layerItemModel: layer))});
+    provider.stackedLayeritems.forEach((layer) => {
+          layers.add(LayerStackItem(
+            layerItemModel: layer,
+          ))
+        });
 
     return layers;
   }

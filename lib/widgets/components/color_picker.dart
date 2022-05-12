@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:hpx/models/tools_effect/color_picker_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/color_picker_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
@@ -56,6 +58,8 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
   void changeColor(BuildContext context, Color selectedColor) {
     ModeProvider modeProvider =
         Provider.of<ModeProvider>(context, listen: false);
+    EffectProvider effectProvider =
+        Provider.of<EffectProvider>(context, listen: false);
     ColorPickerProvider colorPickerProviderInstance =
         Provider.of<ColorPickerProvider>(context, listen: false);
     setState(() {
@@ -68,7 +72,11 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
       canEdit: widget.picker,
       colorCode: currentColors,
     ));
-    modeProvider.currentMode.currentColor = currentColors;
+    modeProvider.setCurrentMode(ToolsModeModel(
+        currentColor: currentColors,
+        value: modeProvider.currentMode.value,
+        effects: modeProvider.currentMode.effects,
+        name: modeProvider.currentMode.name));
     generatePreviewBox(true);
   }
 
@@ -382,9 +390,7 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                     focusColor: Colors.transparent,
                     hoverColor: Colors.transparent,
                     onTap: () {
-                      (widget.picker == null || widget.picker == false)
-                          ? ''
-                          : selectcolor(context);
+                      (widget.picker == false) ? '' : selectcolor(context);
                     },
                     child: Row(children: [
                       Expanded(

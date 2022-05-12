@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/layers/widgets/stateful_resizable.dart';
-import 'package:hpx/models/layers/layer_item_model.dart';
-import 'package:hpx/providers/keyboard/keys_provider.dart';
+import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +27,8 @@ class _LayerStackItemState extends State<LayerStackItem> {
             dragWidgetHeight: dragWidgetSize,
             dragWidgetWidth: dragWidgetSize,
             controller: widget.layerItemModel.controller,
-            keysToWatch: context.watch<KeySelectorProvider>().keysTowatch,
+            // keysToWatch: context.watch<KeySelectorProvider>().keysTowatch,
+            keysToWatch: [],
             dragWidget: Container(
               height: 50,
               width: 50,

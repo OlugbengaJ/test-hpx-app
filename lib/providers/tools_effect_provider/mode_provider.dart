@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/color_picker_provider.dart';
+import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/effects_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:ionicons/ionicons.dart';
 
+// default varaible for the profile dropdown picker
 List<PickerModel> profileList = [
   PickerModel(
       title: 'Default', enabled: true, value: 'default', icon: Icons.dashboard),
@@ -13,20 +17,24 @@ List<PickerModel> profileList = [
       icon: Icons.calculate),
 ];
 
+// default varaible for the audio visual dropdown picker
 List<PickerModel> audioVisualList = [
   PickerModel(title: 'Power Bars', enabled: true, value: 'powerbar'),
   PickerModel(title: 'Wave form', enabled: true, value: 'waveform')
 ];
 
+// default varaible for the ambient screen dropdown picker
 List<PickerModel> ambientScreenList = [
   PickerModel(title: 'Entire Screen', enabled: true, value: 'entire_screen'),
   PickerModel(title: 'Foreground App', enabled: true, value: 'foreground_app'),
 ];
 
+// default varaible for the interactive dropdown picker
 List<PickerModel> interactiveList = [
   PickerModel(title: 'Key Wave', enabled: true, value: 'key_wave'),
 ];
 
+// default varaible for the ambient display dropdown picker
 List<PickerModel> ambientDisplayList = [
   PickerModel(
       // title: 'Display 1: X:0, Y:0, W:3840, H:2400',
@@ -35,6 +43,7 @@ List<PickerModel> ambientDisplayList = [
       value: 'display_1'),
 ];
 
+// default varaible for the mode dropdown picker
 List<PickerModel> moodList = [
   PickerModel(
     title: 'Tools',
@@ -89,9 +98,12 @@ List<PickerModel> moodList = [
       icon: Icons.layers_outlined),
 ];
 
+// Mode provider to manage the current colors or effects of a mode been selected
 class ModeProvider extends ChangeNotifier {
   ToolsModeModel currentMode =
-      ToolsModeModel(currentColor: [], effects: [], name: "");
+      ToolsModeModel(currentColor: [], effects: EffectsModel(), name: "");
+  EffectProvider effectProvider = EffectProvider();
+  ColorPickerProvider colorPickerProvider = ColorPickerProvider();
 
   void setCurrentMode(ToolsModeModel data) {
     currentMode = data;
@@ -117,6 +129,7 @@ class ModeProvider extends ChangeNotifier {
     }
   }
 
+  // get current mode information
   getModeInformation() {
     return currentMode;
   }

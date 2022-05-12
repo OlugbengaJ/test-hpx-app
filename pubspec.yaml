@@ -30,9 +30,9 @@ dependencies:
   flutter:
     sdk: flutter
   mongo_dart: ^0.7.4+1
-  sqflite: ^2.0.2+1
   path: ^1.8.0
   path_provider: ^2.0.9
+  process_run: ^0.12.3+2
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -74,6 +74,8 @@ flutter:
     - assets/images/logo_black.png
     - assets/images/logo_blue.png
     - assets/images/backdrop.png
+    # - assets/python/main.py
+    # - assets/python/keyboard.py
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
