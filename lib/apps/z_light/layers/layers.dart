@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_list_item.dart';
 import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
-import 'package:hpx/providers/apps/zlightspace_providers/layers_provider/layers.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/utils/common.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:ionicons/ionicons.dart';
@@ -52,72 +52,76 @@ class _LayersState extends State<Layers> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(2),
-          margin: const EdgeInsets.only(
-              left: 8.0, right: 8.0, top: 20.0, bottom: 10.0),
-          child: Text(
-            "Layers",
-            style: h4Style,
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(left: 8.0, right: 8.0),
-          child: Tooltip(
-            message: "Add a new Layer",
-            child: TextButton(
-              child: SizedBox(
-                height: 40,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Ionicons.add),
-                    Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        "Create New Layer",
-                        style: TextStyle(color: Colors.black),
+    return Consumer<LayersProvider>(
+      builder: (context, provider, child) {
+        return Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                margin: EdgeInsets.zero,
+                child: Text("Layers", style: h5Style),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 8.0),
+                child: Tooltip(
+                  message: "Add a new Layer",
+                  child: TextButton(
+                    onPressed: () => _addLayer(),
+                    style: textBtnStyleWhite,
+                    child: SizedBox(
+                      height: 40,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(Ionicons.add),
+                          Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              "Create New Layer",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
+                  ),
                 ),
               ),
-              onPressed: () => _addLayer(),
-              style: textBtnStyleWhite,
-            ),
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(top: 8.0),
+                  color: Colors.black12,
+                  height: screenDimension(context).height,
+                  child: Consumer<LayersProvider>(
+                    builder: (_, provider, child) {
+                      return ReorderableListView.builder(
+                        buildDefaultDragHandles: true,
+                        padding: const EdgeInsets.all(2),
+                        itemCount: provider.length,
+                        scrollController:
+                            ScrollController(keepScrollOffset: false),
+                        itemBuilder: (BuildContext context, int index) {
+                          return Container(
+                            key: Key("$index"),
+                            child: LayerListItem(
+                              layerIndex: index,
+                              layerItemModel: provider.getItem(index),
+                            ),
+                          );
+                        },
+                        onReorder: provider.reorder,
+                      );
+                    },
+                  ),
+                ),
+              )
+            ],
           ),
-        ),
-        Expanded(
-          child: Container(
-              margin: const EdgeInsets.all(8),
-              padding: const EdgeInsets.all(1),
-              color: Colors.black12,
-              height: screenDimension(context).height,
-              child: Consumer<LayersProvider>(builder: (_, provider, child) {
-                return ReorderableListView.builder(
-                  buildDefaultDragHandles: true,
-                  padding: const EdgeInsets.all(2),
-                  itemCount: provider.length,
-                  scrollController: ScrollController(keepScrollOffset: false),
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      key: Key("$index"),
-                      child: LayerListItem(
-                        layerIndex: index,
-                        layerItemModel: provider.getItem(index),
-                      ),
-                    );
-                  },
-                  onReorder: provider.reorder,
-                );
-              })),
-        )
-      ],
+        );
+      },
     );
-    ;
   }
 }

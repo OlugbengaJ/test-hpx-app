@@ -74,8 +74,8 @@ flutter:
     - assets/images/logo_black.png
     - assets/images/logo_blue.png
     - assets/images/backdrop.png
-    - assets/python/main.py
-    - assets/python/keyboard.py
+    # - assets/python/main.py
+    # - assets/python/keyboard.py
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

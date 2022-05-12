@@ -1,13 +1,10 @@
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:hpx/widgets/components/zone_selector/zone_selector_provider.dart';
 import 'package:provider/provider.dart';
 
 class ZoneSelector extends StatelessWidget {
-  ZoneSelector({ Key? key,
+  ZoneSelector({
+    Key? key,
     required this.widgetsKeys,
     this.showBorderOnMouseMoving = false,
     this.paintOnMouseMoving = true,
@@ -26,17 +23,16 @@ class ZoneSelector extends StatelessWidget {
   final double opacity;
   final List<GlobalKey> widgetsKeys;
 
-  GlobalKey selectorWidegtKey = GlobalKey();  
+  GlobalKey selectorWidegtKey = GlobalKey();
 
-  _paintWidgets(provider){
-    
-    for(var key in widgetsKeys){
+  _paintWidgets(provider) {
+    for (var key in widgetsKeys) {
       provider.paintColor(key);
     }
-
   }
 
-  _onPanStart(BuildContext context, DragStartDetails details, provider){ // Set the begining point the top, the bottom, the left, the right to 0.0
+  _onPanStart(BuildContext context, DragStartDetails details, provider) {
+    // Set the begining point the top, the bottom, the left, the right to 0.0
     RenderBox box = context.findRenderObject() as RenderBox;
 
     Offset localOffset = box.globalToLocal(details.globalPosition);
@@ -50,8 +46,8 @@ class ZoneSelector extends StatelessWidget {
 
     provider.setStartingPoint(dx, dy);
   }
- 
-  _onPanUpdate(BuildContext context, DragUpdateDetails details, provider){
+
+  _onPanUpdate(BuildContext context, DragUpdateDetails details, provider) {
     RenderBox box = context.findRenderObject() as RenderBox;
     Offset localOffset = box.globalToLocal(details.globalPosition);
     double dx = localOffset.dx;
@@ -59,18 +55,18 @@ class ZoneSelector extends StatelessWidget {
     provider.startMoving(dx, dy);
   }
 
-  _onPanEnd(BuildContext context, DragEndDetails details, provider){
+  _onPanEnd(BuildContext context, DragEndDetails details, provider) {
     provider.stopMoving(); // Call to set boxSize
-    _paintWidgets(provider);    
+    _paintWidgets(provider);
   }
 
-  _onTapUp(BuildContext context, TapUpDetails details, provider){
+  _onTapUp(BuildContext context, TapUpDetails details, provider) {
     RenderBox box = context.findRenderObject() as RenderBox;
     Offset localOffset = box.globalToLocal(details.globalPosition);
     provider.onTap(localOffset.dx, localOffset.dy);
   }
 
-  _getHighlightedZone(ZoneSelectorProvider provider){
+  _getHighlightedZone(ZoneSelectorProvider provider) {
     List<Widget> zones = [];
     for (var item in provider.zoneToPaint) {
       zones.add(
@@ -102,9 +98,10 @@ class ZoneSelector extends StatelessWidget {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onPanStart: (details) => _onPanStart(context, details, provider),
-              onPanUpdate: (details) => _onPanUpdate(context, details, provider),
+              onPanUpdate: (details) =>
+                  _onPanUpdate(context, details, provider),
               onPanEnd: (details) => _onPanEnd(context, details, provider),
-              onTapUp: (details)=> _onTapUp(context, details, provider),
+              onTapUp: (details) => _onTapUp(context, details, provider),
             ),
             Positioned(
               key: provider.selectorKey,
@@ -112,16 +109,16 @@ class ZoneSelector extends StatelessWidget {
               left: provider.startingPoint.dx,
               child: Container(
                 decoration: BoxDecoration(
-                  border: Border.all(
-                    color: borderColor,
-                  )
-                ),
+                    border: Border.all(
+                  color: borderColor,
+                )),
                 child: Opacity(
                   opacity: opacity,
                   child: GestureDetector(
-                    onTapUp: (details)=> _onTapUp(context, details, provider),
+                    onTapUp: (details) => _onTapUp(context, details, provider),
                     child: Container(
-                      color: provider.zoneSelecting? color: Colors.transparent,
+                      color:
+                          provider.zoneSelecting ? color : Colors.transparent,
                       height: provider.height,
                       width: provider.width,
                     ),
@@ -132,7 +129,6 @@ class ZoneSelector extends StatelessWidget {
             Stack(
               children: _getHighlightedZone(provider),
             )
-            
           ],
         );
       },

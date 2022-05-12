@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/key_rrect_clipper.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/key_rrect_painter.dart';
-import 'package:hpx/models/apps/zlightspace_models/workspace_models/key_model.dart';
+import 'package:hpx/providers/key_model.dart';
 
 class KeyRRect extends StatelessWidget {
   /// [KeyRRect] returns a wrapped custom paint implementation for each key.

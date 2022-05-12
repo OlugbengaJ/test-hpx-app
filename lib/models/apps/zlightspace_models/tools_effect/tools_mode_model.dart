@@ -1,3 +1,5 @@
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
+
 class ToolsModeModel {
   ToolsModeModel(
       {required this.currentColor,
@@ -8,5 +10,5 @@ class ToolsModeModel {
   final String name;
   final String? value;
   late final List<dynamic> currentColor;
-  late final List<dynamic> effects;
+  late final EffectsModel effects;
 }

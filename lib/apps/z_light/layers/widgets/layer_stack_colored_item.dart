@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/layers/widgets/colored_resizable.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
-import 'package:hpx/providers/apps/zlightspace_providers/layers_provider/layers.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:provider/provider.dart';
 
 class LayerStackColoredItem extends StatefulWidget {
@@ -48,6 +48,7 @@ class _LayerStackColoredItemState extends State<LayerStackColoredItem> {
               return Container(
                 color: Colors.transparent,
                 child: ColoredResizable(
+                  // keysToWatch: context.watch<KeySelectorProvider>().keysTowatch,
                   keysToWatch: [],
                   dragWidgetHeight: dragWidgetSize,
                   dragWidgetWidth: dragWidgetSize,

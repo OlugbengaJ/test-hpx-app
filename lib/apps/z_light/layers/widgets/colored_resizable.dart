@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hpx/apps/z_light/layers/widgets/drag_distance.dart';
+import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
 import 'package:hpx/utils/common.dart';
-import 'resizable_widget_controller.dart';
-import 'drag_distance.dart';
-
 
 class ColoredResizable extends StatefulWidget {
   const ColoredResizable({
@@ -72,7 +71,7 @@ class _ColoredResizableState extends State<ColoredResizable> {
                           child: Opacity(
                             opacity: 0.2,
                             child: Container(
-                              key:  controller.draggableKey,
+                              key: controller.draggableKey,
                               color: Colors.transparent,
                               child: SizedBox(
                                 height: screenDimension(context).height,
@@ -82,8 +81,7 @@ class _ColoredResizableState extends State<ColoredResizable> {
                             ),
                           ),
                           onDrag: controller.onCenterDrag,
-                          onDragEnd: (DragEndDetails details){
-                          },
+                          onDragEnd: (DragEndDetails details) {},
                         ),
                       ),
                     ),
@@ -95,8 +93,7 @@ class _ColoredResizableState extends State<ColoredResizable> {
                         child: DragDistance(
                           child: widget.dragWidget,
                           onDrag: controller.onTopLeftDrag,
-                          onDragEnd: (DragEndDetails details){
-                          },
+                          onDragEnd: (DragEndDetails details) {},
                         ),
                       ),
                     ),
@@ -108,8 +105,7 @@ class _ColoredResizableState extends State<ColoredResizable> {
                         child: DragDistance(
                           child: widget.dragWidget,
                           onDrag: controller.onTopCenterDrag,
-                          onDragEnd: (DragEndDetails details){
-                          },
+                          onDragEnd: (DragEndDetails details) {},
                         ),
                       ),
                     ),
@@ -121,8 +117,7 @@ class _ColoredResizableState extends State<ColoredResizable> {
                         child: DragDistance(
                           child: widget.dragWidget,
                           onDrag: controller.onTopRightDrag,
-                          onDragEnd: (DragEndDetails details){
-                          },
+                          onDragEnd: (DragEndDetails details) {},
                         ),
                       ),
                     ),
@@ -134,8 +129,7 @@ class _ColoredResizableState extends State<ColoredResizable> {
                         child: DragDistance(
                           child: widget.dragWidget,
                           onDrag: controller.onCenterLeftDrag,
-                          onDragEnd: (DragEndDetails details){
-                          },
+                          onDragEnd: (DragEndDetails details) {},
                         ),
                       ),
                     ),
@@ -148,8 +142,7 @@ class _ColoredResizableState extends State<ColoredResizable> {
                         child: DragDistance(
                           child: widget.dragWidget,
                           onDrag: controller.onCenterRightDrag,
-                          onDragEnd: (DragEndDetails details){
-                          },
+                          onDragEnd: (DragEndDetails details) {},
                         ),
                       ),
                     ),
@@ -161,8 +154,7 @@ class _ColoredResizableState extends State<ColoredResizable> {
                         child: DragDistance(
                           child: widget.dragWidget,
                           onDrag: controller.onBottomLeftDrag,
-                          onDragEnd: (DragEndDetails details){
-                          },
+                          onDragEnd: (DragEndDetails details) {},
                         ),
                       ),
                     ),
@@ -174,8 +166,7 @@ class _ColoredResizableState extends State<ColoredResizable> {
                         child: DragDistance(
                           child: widget.dragWidget,
                           onDrag: controller.onBottomCenterDrag,
-                          onDragEnd: (DragEndDetails details){
-                          },
+                          onDragEnd: (DragEndDetails details) {},
                         ),
                       ),
                     ),
@@ -187,8 +178,7 @@ class _ColoredResizableState extends State<ColoredResizable> {
                         child: DragDistance(
                           child: widget.dragWidget,
                           onDrag: controller.onBottomRightDrag,
-                          onDragEnd: (DragEndDetails details){
-                          },
+                          onDragEnd: (DragEndDetails details) {},
                         ),
                       ),
                     ),
