@@ -8,7 +8,7 @@ class ThreeColumns extends StatefulWidget {
     required this.leftChild,
     this.leftFlex = 2,
     required this.centerChild,
-    this.centerFlex = 5,
+    this.centerFlex = 8,
     required this.rightChild,
     this.rightFlex = 2,
   }) : super(key: key);

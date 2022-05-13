@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 class RotateButton extends StatefulWidget {
-  RotateButton({Key? key, required this.onChange}) : super(key: key);
+  RotateButton({Key? key, required this.onChange, required this.value})
+      : super(key: key);
 
   final Function(double? angle) onChange;
-  double? value = 0.00;
+  double value;
 
   @override
   _RotateButtonState createState() => _RotateButtonState();
@@ -19,7 +20,7 @@ class _RotateButtonState extends State<RotateButton> {
       alignment: Alignment.center,
       children: [
         Transform.rotate(
-          angle: angle,
+          angle: widget.value,
           alignment: Alignment.center,
           child: GestureDetector(
             onPanUpdate: (details) => setState(() {

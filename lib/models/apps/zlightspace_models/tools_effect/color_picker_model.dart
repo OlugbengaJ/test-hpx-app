@@ -12,7 +12,7 @@ class ColorPickerWidgetModel {
       this.height = 20.0,
       required this.colorCode,
       this.pickerType = "solid",
-      this.colorDirection = "none"});
+      this.gradient = "linear"});
 
   String name;
   final String? action;
@@ -25,5 +25,5 @@ class ColorPickerWidgetModel {
   late final List<Color> colorCode;
   // picker = 'solid' || 'gradient'
   final String? pickerType;
-  String? colorDirection;
+  String? gradient;
 }

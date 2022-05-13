@@ -18,7 +18,7 @@ class WavePreset extends StatefulWidget {
 class _WavePresetState extends State<WavePreset> {
   String activatedButton = "DEFAULT";
   TextEditingController degreeController = TextEditingController();
-  final _colorPickerProvider = ColorPickerProvider();
+  bool isRotate = false;
 
   @override
   void initState() {
@@ -50,6 +50,7 @@ class _WavePresetState extends State<WavePreset> {
     ModeProvider _modeProvider =
         Provider.of<ModeProvider>(context, listen: false);
     setState(() {
+      isRotate = true;
       degreeController.text = (returnValue! < 0
               ? (360 - (0 - returnValue) * (180 / pi))
               : returnValue * (180 / pi))
@@ -84,6 +85,8 @@ class _WavePresetState extends State<WavePreset> {
   Widget build(BuildContext context) {
     EffectProvider effectsProvider =
         Provider.of<EffectProvider>(context, listen: false);
+    ColorPickerProvider colorpickerProvider =
+        Provider.of<ColorPickerProvider>(context, listen: false);
     return Container(
         margin: const EdgeInsets.only(top: 20, bottom: 30.0),
         child: Column(
@@ -146,7 +149,7 @@ class _WavePresetState extends State<WavePreset> {
                     children: [
                       Wrap(
                           children:
-                              _colorPickerProvider.generateColorPickerWidget(
+                              colorpickerProvider.generateColorPickerWidget(
                                   activatedButton == 'DEFAULT'
                                       ? waveDefaultsList
                                       : waveCustomList))
@@ -194,9 +197,13 @@ class _WavePresetState extends State<WavePreset> {
                 children: [
                   Expanded(
                       flex: 2,
-                      child: RotateButton(onChange: (double? returnValue) {
-                        _setDegreeValue(returnValue);
-                      })),
+                      child: Transform.rotate(
+                          angle: 1.6,
+                          child: RotateButton(
+                              value: double.parse(degreeController.text) % 360,
+                              onChange: (double? returnValue) {
+                                _setDegreeValue(returnValue);
+                              }))),
                   Expanded(
                       child: Column(
                     children: [
@@ -207,6 +214,13 @@ class _WavePresetState extends State<WavePreset> {
                           width: 200,
                           height: 30,
                           child: TextField(
+                            onSubmitted: (value) {
+                              setState(() {
+                                if (isRotate == false) {
+                                  degreeController.text = value;
+                                }
+                              });
+                            },
                             style: const TextStyle(fontSize: 14),
                             controller: degreeController,
                             obscureText: false,
