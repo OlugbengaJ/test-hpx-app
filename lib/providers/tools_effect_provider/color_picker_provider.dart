@@ -8,35 +8,47 @@ import 'package:hpx/widgets/components/color_picker.dart';
 // waves lists
 List<ColorPickerWidgetModel> waveDefaultsList = [
   ColorPickerWidgetModel(
-      name: "Galaxy",
-      colorCode: [
-        Colors.red.shade900,
-        Colors.yellow,
-        Colors.green,
-        Colors.blue,
-        Colors.purple,
-        Colors.red
-      ],
-      colorDirection: ""),
+    name: "Galaxy",
+    colorCode: [
+      Colors.red.shade900,
+      Colors.yellow,
+      Colors.green,
+      Colors.blue,
+      Colors.purple,
+      Colors.red
+    ],
+  ),
   ColorPickerWidgetModel(
       name: "Ocean",
-      colorCode: [Colors.lightBlue],
-      colorDirection: "",
+      colorCode: [
+        Colors.blue,
+        Colors.blue.shade900,
+        Colors.purple,
+        Colors.blue.shade100
+      ],
       hasBorder: false),
   ColorPickerWidgetModel(
       name: "Jungle",
-      colorCode: [Colors.greenAccent],
-      colorDirection: "none",
+      colorCode: [
+        Colors.green,
+        Colors.green.shade200,
+        Colors.blue,
+        Colors.orange,
+        Colors.green.shade900
+      ],
       hasBorder: false),
   ColorPickerWidgetModel(
       name: "Volcano",
-      colorCode: [Colors.deepOrange],
-      colorDirection: "none",
+      colorCode: [Colors.deepOrange, Colors.red, Colors.brown, Colors.orange],
       hasBorder: false),
   ColorPickerWidgetModel(
       name: "OMEN",
-      colorCode: [Colors.purple],
-      colorDirection: "none",
+      colorCode: [
+        Colors.purple,
+        Colors.red,
+        Colors.orange,
+        Colors.purple.shade100
+      ],
       hasBorder: false)
 ];
 List<ColorPickerWidgetModel> waveCustomList = [
@@ -52,7 +64,6 @@ List<ColorPickerWidgetModel> waveCustomList = [
       Colors.purple,
       Colors.red
     ],
-    colorDirection: "",
   )
 ];
 
@@ -63,6 +74,7 @@ List<ColorPickerWidgetModel> breathingList = [
     action: '',
     width: 30.0,
     height: 30.0,
+    canEdit: true,
     name: "",
     colorCode: [Colors.red.shade900],
     setRandom: true,
@@ -72,6 +84,7 @@ List<ColorPickerWidgetModel> breathingList = [
     action: '',
     width: 30.0,
     height: 30.0,
+    canEdit: true,
     name: "",
     colorCode: [Colors.yellow.shade900],
     setRandom: true,
@@ -108,7 +121,6 @@ List<ColorPickerWidgetModel> colorProductionList = [
     action: '',
     name: "Netural (D65 White Point)",
     colorCode: [Colors.yellow],
-    colorDirection: "",
   )
 ];
 
@@ -180,6 +192,7 @@ List<ColorPickerWidgetModel> moodCustomList = [
 
 List<ColorPickerWidgetModel> audioVisualSolidList = [
   ColorPickerWidgetModel(
+      canEdit: true,
       label: "Primary Color",
       action: '',
       width: 30.0,
@@ -187,6 +200,7 @@ List<ColorPickerWidgetModel> audioVisualSolidList = [
       name: "",
       colorCode: [Colors.red.shade900]),
   ColorPickerWidgetModel(
+      canEdit: true,
       label: "Secondary Color",
       action: '',
       width: 30.0,
@@ -194,6 +208,7 @@ List<ColorPickerWidgetModel> audioVisualSolidList = [
       name: "",
       colorCode: [Colors.yellow.shade900]),
   ColorPickerWidgetModel(
+      canEdit: true,
       label: "Background Color",
       action: '',
       width: 30.0,
@@ -230,17 +245,16 @@ class ColorPickerProvider extends ChangeNotifier {
     List<Widget> generatedUI = [];
     for (ColorPickerWidgetModel element in list) {
       generatedUI.add(ColorPickerWidget(
-        color: element.colorCode.first,
-        colors: element.colorCode,
-        title: element.name,
-        width: element.width,
-        height: element.height,
-        label: element.label,
-        hasBorder: element.hasBorder,
-        leftTitle: element.action!,
-        setRandom: element.setRandom,
-        picker: element.canEdit,
-      ));
+          color: element.colorCode.first,
+          colors: element.colorCode,
+          title: element.name,
+          width: element.width,
+          height: element.height,
+          label: element.label,
+          hasBorder: element.hasBorder,
+          leftTitle: element.action!,
+          setRandom: element.setRandom,
+          picker: element.canEdit));
     }
     return generatedUI;
   }
