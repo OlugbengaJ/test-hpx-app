@@ -130,6 +130,7 @@ class LayersProvider extends ChangeNotifier {
     final item = _layeritems[index];
     item.listDisplayColor = Colors.white;
     _layeritems[index] = item;
+    print(item.mode.name);
 
     for (var i = 0; i < _stackedLayeritems.length; i++) {
       if (_stackedLayeritems[i].id == _layeritems[index].id) {
