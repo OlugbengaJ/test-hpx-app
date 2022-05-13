@@ -11,6 +11,7 @@ import 'package:hpx/apps/z_light/workspace/widgets/round_button.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/zoom_toolbar.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/workspace_provider.dart';
+import 'package:hpx/utils/comparer.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -221,33 +222,28 @@ class _WorkspaceState extends State<Workspace> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(4.0),
                                   child: DropdownButton(
+                                    value: devices().first,
                                     menuMaxHeight: 400,
                                     hint: Text(
                                       'Select by devices...',
                                       style: pStyle,
                                     ),
                                     underline: const SizedBox(),
-                                    items: [
-                                      {'name': 'Z Book', 'enabled': true},
-                                      {'name': 'Pavilion ', 'enabled': false},
-                                      {'name': 'HP Elitebook', 'enabled': false}
-                                    ]
+                                    items: devices()
                                         .map(
                                           (e) => DropdownMenuItem(
-                                            enabled: e['enabled'] as bool,
                                             value: e,
                                             child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.start,
                                               children: [
                                                 Checkbox(
-                                                  value: e['enabled'] as bool,
-                                                  onChanged: (e) {},
+                                                  value: e.enabled,
+                                                  onChanged: (x) {},
                                                 ),
-                                                Text(e['name'] as String),
+                                                Text(e.name),
                                               ],
                                             ),
-                                            // Text(e, style: pStyle),
                                           ),
                                         )
                                         .toList(),
@@ -346,4 +342,19 @@ class _WorkspaceState extends State<Workspace> {
       ],
     );
   }
+}
+
+class Device extends Comparer {
+  final String name;
+  final bool enabled;
+
+  Device(this.name, this.enabled) : super(name);
+}
+
+List<Device> devices() {
+  return [
+    Device('Z Book', true),
+    Device('Pavilion', false),
+    Device('Elitebook', false),
+  ];
 }
