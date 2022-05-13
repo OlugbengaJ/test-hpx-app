@@ -221,37 +221,33 @@ class _WorkspaceState extends State<Workspace> {
                                 // TODO: select by devices
                                 child: Padding(
                                   padding: const EdgeInsets.all(4.0),
-                                  child: DropdownButton(
-                                    value: devices().first,
-                                    menuMaxHeight: 400,
-                                    hint: Text(
-                                      'Select by devices...',
-                                      style: pStyle,
-                                    ),
-                                    underline: const SizedBox(),
-                                    items: devices()
-                                        .map(
-                                          (e) => DropdownMenuItem(
-                                            value: e,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Checkbox(
-                                                  activeColor: Theme.of(context)
-                                                      .colorScheme
-                                                      .primary,
-                                                  value: e.enabled,
-                                                  onChanged: (x) {},
-                                                ),
-                                                Text(e.name),
-                                              ],
+                                  child: DropDownWorkspace(
+                                      initialValue: devices().first,
+                                      items: devices()
+                                          .map(
+                                            (e) => DropdownMenuItem(
+                                              value: e,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Checkbox(
+                                                    activeColor:
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .primary,
+                                                    value: e.enabled,
+                                                    onChanged: (x) {
+                                                      e.enabled = true;
+                                                    },
+                                                  ),
+                                                  Text(e.name),
+                                                ],
+                                              ),
                                             ),
-                                          ),
-                                        )
-                                        .toList(),
-                                    onChanged: (o) {},
-                                  ),
+                                          )
+                                          .toList(),
+                                      hint: 'Select by devices...'),
                                 ),
                               ),
                             ),
@@ -347,9 +343,34 @@ class _WorkspaceState extends State<Workspace> {
   }
 }
 
+class DropDownWorkspace extends StatelessWidget {
+  const DropDownWorkspace({
+    Key? key,
+    this.initialValue,
+    required this.items,
+    required this.hint,
+  }) : super(key: key);
+
+  final Object? initialValue;
+  final List<DropdownMenuItem<Object>>? items;
+  final String hint;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton(
+      value: initialValue,
+      menuMaxHeight: 400.0,
+      hint: Text(hint, style: pStyle),
+      underline: const SizedBox(),
+      items: items,
+      onChanged: (o) {},
+    );
+  }
+}
+
 class Device extends Comparer {
   final String name;
-  final bool enabled;
+  bool enabled;
 
   Device(this.name, this.enabled) : super(name);
 }
