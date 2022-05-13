@@ -26,6 +26,15 @@ class _LayersState extends State<Layers> {
   final areaHeight = Get.height * 0.70;
   final areaWidth = Get.width * 0.70;
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      _addLayer();
+    });
+  }
+
+
   _addLayer() {
     ModeProvider modeProvider = context.read<ModeProvider>();
     var provider = context.read<LayersProvider>();
@@ -40,7 +49,7 @@ class _LayersState extends State<Layers> {
     }
     provider.add(LayerItemModel(
         id: id,
-        layerText: modeProvider.getModeInformation().name.toString(),
+        layerText: modeProvider.getModeInformation().name,
         mode: modeProvider.getModeInformation(),
         controller: ResizableWidgetController(
           initialPosition: Offset(areaWidth / 2, areaHeight / 2),
@@ -55,6 +64,7 @@ class _LayersState extends State<Layers> {
 
   @override
   Widget build(BuildContext context) {
+    //_addLayer();
     return Consumer<LayersProvider>(
       builder: (context, provider, child) {
         return Padding(

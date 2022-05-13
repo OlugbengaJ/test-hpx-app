@@ -117,6 +117,7 @@ class LayersProvider extends ChangeNotifier {
     final item = _layeritems[index];
     item.listDisplayColor = Colors.white;
     _layeritems[index] = item;
+
     for (var i = 0; i < _stackedLayeritems.length; i++) {
       if (_stackedLayeritems[i].id == _layeritems[index].id) {
         _index = i;
@@ -177,24 +178,15 @@ class LayersProvider extends ChangeNotifier {
   }
 
   void removeItem(int index) {
-    final item = _layeritems[index];
-    int stackedIndex = 0;
+    if(length>1){
+      final item = _layeritems[index];
+    
+      _layeritems.remove(item);
+      _stackedLayeritems.remove(item);
 
-    for (var i = 0; i < _layeritems.length; i++) {
-      if (_stackedLayeritems[i].id == _layeritems[index].id) {
-        stackedIndex = i;
-        break;
+      if (_layeritems.isNotEmpty) {
+        changeIndex(0);
       }
-    }
-
-    item.visibleOnStack = false;
-    _stackedLayeritems[stackedIndex] = item;
-    _layeritems.remove(item);
-
-    if (_layeritems.isNotEmpty) {
-      changeIndex(0);
-    } else {
-      stackedLayeritems.clear();
     }
 
     notifyListeners();
