@@ -19,12 +19,16 @@ class StripNotification extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            margin: const EdgeInsets.all(0),
-            child: Text(
-              message,
-              style: TextStyle(
-                color: Theme.of(context).primaryColorDark,
+          Expanded(
+            flex: 1,
+            child: Container(
+              margin: const EdgeInsets.all(0),
+              child: Text(
+                message,
+                softWrap: true,
+                style: TextStyle(
+                  color: Theme.of(context).primaryColorDark,
+                ),
               ),
             ),
           ),

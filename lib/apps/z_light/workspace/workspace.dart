@@ -240,10 +240,10 @@ class _WorkspaceState extends State<Workspace> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.start,
                                               children: [
-                                                // Checkbox(
-                                                //   value: e['enabled'] as bool,
-                                                //   onChanged: (e) {},
-                                                // ),
+                                                Checkbox(
+                                                  value: e['enabled'] as bool,
+                                                  onChanged: (e) {},
+                                                ),
                                                 Text(e['name'] as String),
                                               ],
                                             ),
