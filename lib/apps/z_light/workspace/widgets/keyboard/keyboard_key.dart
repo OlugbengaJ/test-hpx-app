@@ -32,7 +32,7 @@ class KeyboardKey extends StatelessWidget {
               return InkWell(
                 // onTap: onTapHandler,
                 onTap: () => workspaceProvider.toggleStripNotification(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eu velit sit amet odio ultrices fringilla at a lectus. Donec non condimentum nibh. Ut feugiat vehicula lorem vitae dictum.'),
+                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eu velit sit amet odio ultrices fringilla at a lectus.'),
                 // onTap: () => workspaceProvider.toggleModal([
                 //   const Text('yes we got something going'),
                 // ]),
