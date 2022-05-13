@@ -241,7 +241,10 @@ class _WorkspaceState extends State<Workspace> {
                                                       e.enabled = true;
                                                     },
                                                   ),
-                                                  Text(e.name),
+                                                  Text(
+                                                    e.name,
+                                                    style: pStyle,
+                                                  ),
                                                 ],
                                               ),
                                             ),
