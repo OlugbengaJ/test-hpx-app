@@ -22,7 +22,7 @@ class KeyboardKey extends StatelessWidget {
   Widget build(BuildContext context) {
     // Gets access to the widget's position (offset) in the widget tree.
     final box = context.findRenderObject() as RenderBox?;
-    final modeProvider = Provider.of<ModeProvider>(context, listen: false);
+    final modeProvider = Provider.of<ModeProvider>(context);
 
     return Stack(
       children: [
@@ -31,11 +31,11 @@ class KeyboardKey extends StatelessWidget {
             builder: (context, workspaceProvider, child) {
               return InkWell(
                 // onTap: onTapHandler,
-                onTap: () => workspaceProvider.toggleStripNotification(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eu velit sit amet odio ultrices fringilla at a lectus.'),
-                // onTap: () => workspaceProvider.toggleModal([
-                //   const Text('yes we got something going'),
-                // ]),
+                // onTap: () => workspaceProvider.toggleStripNotification(
+                //     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eu velit sit amet odio ultrices fringilla at a lectus.'),
+                onTap: () => workspaceProvider.toggleModal([
+                  const Text('yes we got something going'),
+                ]),
 
                 // listens to key changes and allows updating this key instance
                 child: Consumer<KeyModel>(

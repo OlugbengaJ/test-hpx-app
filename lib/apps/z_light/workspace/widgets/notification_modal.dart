@@ -30,7 +30,7 @@ class ModalNotification extends StatelessWidget {
             border: Border.all(
               width: 1,
             ),
-            color: Colors.white.withOpacity(0.6),
+            color: Theme.of(context).primaryColor,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +44,7 @@ class ModalNotification extends StatelessWidget {
                     onTapUp: () {},
                     size: 24,
                     icon: Icons.close,
-                    iconColor: Theme.of(context).primaryColor,
+                    iconColor: Theme.of(context).primaryColorLight,
                   ),
                 ),
               ),
