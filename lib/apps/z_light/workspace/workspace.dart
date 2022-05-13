@@ -217,6 +217,7 @@ class _WorkspaceState extends State<Workspace> {
                                     width: 1,
                                   ),
                                 ),
+                                // TODO: select by devices
                                 child: Padding(
                                   padding: const EdgeInsets.all(4.0),
                                   child: DropdownButton(
@@ -226,11 +227,29 @@ class _WorkspaceState extends State<Workspace> {
                                       style: pStyle,
                                     ),
                                     underline: const SizedBox(),
-                                    items: <String>[]
-                                        .map((e) => DropdownMenuItem(
-                                              value: e,
-                                              child: Text(e, style: pStyle),
-                                            ))
+                                    items: [
+                                      {'name': 'Z Book', 'enabled': true},
+                                      {'name': 'Pavilion ', 'enabled': false},
+                                      {'name': 'HP Elitebook', 'enabled': false}
+                                    ]
+                                        .map(
+                                          (e) => DropdownMenuItem(
+                                            enabled: e['enabled'] as bool,
+                                            value: e['name'] as String,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Checkbox(
+                                                  value: e['enabled'] as bool,
+                                                  onChanged: (e) {},
+                                                ),
+                                                Text(e['name'] as String),
+                                              ],
+                                            ),
+                                            // Text(e, style: pStyle),
+                                          ),
+                                        )
                                         .toList(),
                                     onChanged: (o) {},
                                   ),
