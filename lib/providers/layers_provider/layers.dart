@@ -17,8 +17,7 @@ class LayersProvider extends ChangeNotifier {
   final areaHeight = Get.height * 0.70;
   final areaWidth = Get.width * 0.70;
   final List<LayerItemModel> _layeritems = [];
-  final List<LayerItemModel> _stackedLayeritems =
-      []; // Used to display the staked layers
+  final List<LayerItemModel> _stackedLayeritems = []; // Used to display the staked layers
   bool hideStackedLayers = false;
 
   int _index = 0;
@@ -100,6 +99,7 @@ class LayersProvider extends ChangeNotifier {
     LayerItemModel duplicatedItem = LayerItemModel(
         id: getTheBiggestID(),
         layerText: "Copy ${item.layerText}",
+        mode: item.mode,
         controller: controller);
 
     _layeritems.insert(index + 1, duplicatedItem);

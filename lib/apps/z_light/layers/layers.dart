@@ -4,6 +4,7 @@ import 'package:hpx/apps/z_light/layers/widgets/layer_list_item.dart';
 import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
+import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/utils/common.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:ionicons/ionicons.dart';
@@ -26,6 +27,7 @@ class _LayersState extends State<Layers> {
   final areaWidth = Get.width * 0.70;
 
   _addLayer() {
+    ModeProvider modeProvider = context.read<ModeProvider>();
     var provider = context.read<LayersProvider>();
     int id = 1; // For first element;
     if (provider.layeritems.isNotEmpty) {
@@ -38,7 +40,8 @@ class _LayersState extends State<Layers> {
     }
     provider.add(LayerItemModel(
         id: id,
-        layerText: 'New layer Value ' + id.toString(),
+        layerText: modeProvider.getModeInformation().name.toString(),
+        mode: modeProvider.getModeInformation(),
         controller: ResizableWidgetController(
           initialPosition: Offset(areaWidth / 2, areaHeight / 2),
           areaHeight: areaHeight,

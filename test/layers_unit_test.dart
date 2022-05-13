@@ -9,6 +9,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 
 void main() {
@@ -25,10 +27,14 @@ void main() {
     minHeight: 50,
   );
 
+
+  ToolsModeModel currentMode = ToolsModeModel(currentColor: [], effects: EffectsModel(), name: "");
+
+
   LayerItemModel itemModel =
-      LayerItemModel(id: 1, layerText: "layerText", controller: controller);
+      LayerItemModel(id: 1, layerText: "layerText", controller: controller, mode: currentMode);
   LayerItemModel itemModel2 =
-      LayerItemModel(id: 2, layerText: "layerText 2", controller: controller);
+      LayerItemModel(id: 2, layerText: "layerText 2", controller: controller, mode: currentMode);
   LayersProvider provider = LayersProvider();
 
   /// Create layer, using the [LayersProvider] and [LayerItemModel]. Keep track of all layers available
