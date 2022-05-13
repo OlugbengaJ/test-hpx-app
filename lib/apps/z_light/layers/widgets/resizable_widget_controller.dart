@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 class ResizableWidgetController extends GetxController {
   ResizableWidgetController({
     required this.initialPosition ,
+    required this.layerID ,
     this.areaHeight = 500,
     this.areaWidth = 500,
     this.height = 500,
@@ -13,6 +14,7 @@ class ResizableWidgetController extends GetxController {
     this.showDragWidgets = true,
   });
 
+  final int layerID;
   final Offset initialPosition;
   final double areaHeight;
   final double areaWidth;

@@ -19,6 +19,7 @@ void main() {
 
   ResizableWidgetController controller = ResizableWidgetController(
     initialPosition: Offset(areaWidth / 2, areaHeight / 2),
+    layerID: 0,
     areaHeight: areaHeight,
     areaWidth: areaWidth,
     height: areaHeight / 2,

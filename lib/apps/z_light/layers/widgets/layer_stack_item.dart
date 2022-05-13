@@ -18,7 +18,7 @@ class _LayerStackItemState extends State<LayerStackItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LayersProvider>(builder: (context, _value, child) {
+    return Consumer<LayersProvider>(builder: (context, provider, child) {
       return Visibility(
         visible: widget.layerItemModel.visibleOnStack,
         child: Container(
@@ -26,7 +26,8 @@ class _LayerStackItemState extends State<LayerStackItem> {
           child: StatefulResizableWidget(
             dragWidgetHeight: dragWidgetSize,
             dragWidgetWidth: dragWidgetSize,
-            controller: widget.layerItemModel.controller,
+            //controller: widget.layerItemModel.controller,
+            controller: provider.getController(widget.layerItemModel.id),
             // keysToWatch: context.watch<KeySelectorProvider>().keysTowatch,
             keysToWatch: [],
             dragWidget: Container(

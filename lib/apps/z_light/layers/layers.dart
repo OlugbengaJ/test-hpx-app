@@ -47,19 +47,33 @@ class _LayersState extends State<Layers> {
       });
       id = id + 1;
     }
+    ResizableWidgetController controller = ResizableWidgetController(
+      initialPosition: Offset(areaWidth / 2, areaHeight / 2),
+      layerID: id,
+      areaHeight: areaHeight,
+      areaWidth: areaWidth,
+      height: areaHeight / 2,
+      width: areaWidth / 2,
+      minWidth: 50,
+      minHeight: 50,
+    );
+    
     provider.add(LayerItemModel(
-        id: id,
-        layerText: modeProvider.getModeInformation().name,
-        mode: modeProvider.getModeInformation(),
-        controller: ResizableWidgetController(
-          initialPosition: Offset(areaWidth / 2, areaHeight / 2),
-          areaHeight: areaHeight,
-          areaWidth: areaWidth,
-          height: areaHeight / 2,
-          width: areaWidth / 2,
-          minWidth: 50,
-          minHeight: 50,
-        )));
+      id: id,
+      layerText: modeProvider.getModeInformation().name,
+      mode: modeProvider.getModeInformation(),
+      controller: ResizableWidgetController(
+        initialPosition: Offset(areaWidth / 2, areaHeight / 2),
+        layerID: id,
+        areaHeight: areaHeight,
+        areaWidth: areaWidth,
+        height: areaHeight / 2,
+        width: areaWidth / 2,
+        minWidth: 50,
+        minHeight: 50,
+      )
+    ));
+    provider.addController(controller);
   }
 
   @override

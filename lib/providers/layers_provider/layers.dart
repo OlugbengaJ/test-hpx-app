@@ -18,6 +18,8 @@ class LayersProvider extends ChangeNotifier {
   final areaWidth = Get.width * 0.70;
   final List<LayerItemModel> _layeritems = [];
   final List<LayerItemModel> _stackedLayeritems = []; // Used to display the staked layers
+  final List<ResizableWidgetController> _layersControllers = [];
+
   bool hideStackedLayers = false;
 
   int _index = 0;
@@ -37,6 +39,14 @@ class LayersProvider extends ChangeNotifier {
 
   void updateView() {
     notifyListeners();
+  }
+
+  ResizableWidgetController getController(int id){
+    return _layersControllers.where((controller) => controller.layerID==id).toList()[0];
+  }
+
+  addController(controller){
+    _layersControllers.add(controller);
   }
 
   int getTheBiggestID() {
@@ -81,6 +91,7 @@ class LayersProvider extends ChangeNotifier {
 
     ResizableWidgetController controller = ResizableWidgetController(
       initialPosition: item.controller.initialPosition,
+      layerID: getTheBiggestID(),
       areaHeight: item.controller.areaHeight,
       areaWidth: item.controller.areaWidth,
       height: item.controller.height,
@@ -104,6 +115,7 @@ class LayersProvider extends ChangeNotifier {
 
     _layeritems.insert(index + 1, duplicatedItem);
     _stackedLayeritems.add(duplicatedItem);
+    _layersControllers.add(controller);
 
     _index = _stackedLayeritems.length - 1;
 
