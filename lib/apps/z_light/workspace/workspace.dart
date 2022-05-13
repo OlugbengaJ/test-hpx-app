@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack.dart';
@@ -262,11 +261,11 @@ class _WorkspaceState extends State<Workspace> {
         //         )
         //       : Container(),
         // ),
-        if (workspaceProvider.isModalNotify)
-          ModalNotification(
-            children: workspaceProvider.modalWidgets,
-            closeHandler: workspaceProvider.toggleModal,
-          ),
+        // if (workspaceProvider.isModalNotify)
+        //   ModalNotification(
+        //     children: workspaceProvider.modalWidgets,
+        //     closeHandler: workspaceProvider.toggleModal,
+        //   ),
         Expanded(
           child: Container(
             decoration: const BoxDecoration(
@@ -310,6 +309,12 @@ class _WorkspaceState extends State<Workspace> {
                         layers: widget.layers,
                       ),
                       if (workspaceProvider.isPanning) const KeyboardSelector(),
+
+                      if (workspaceProvider.isModalNotify)
+                        ModalNotification(
+                          children: workspaceProvider.modalWidgets,
+                          closeHandler: workspaceProvider.toggleModal,
+                        ),
                       Positioned(
                         bottom: 0,
                         left: 0,

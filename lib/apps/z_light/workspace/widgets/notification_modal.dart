@@ -14,28 +14,44 @@ class ModalNotification extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Tooltip(
-              message: 'Close',
-              child: Align(
+        Container(
+          margin: EdgeInsets.zero,
+          padding: const EdgeInsets.all(15.0),
+          width: 400,
+          height: 400,
+          // constraints: BoxConstraints(maxHeight: maxHeight, maxWidth: maxWidth),
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: 1,
+            ),
+            color: Colors.white.withOpacity(0.6),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Align(
                 alignment: Alignment.centerRight,
-                child: RoundButton(
-                  onTapDown: closeHandler,
-                  onTapUp: () {},
-                  size: 24,
-                  icon: Icons.close,
-                  iconColor: Theme.of(context).primaryColor,
+                child: Tooltip(
+                  message: 'Close',
+                  child: RoundButton(
+                    onTapDown: closeHandler,
+                    onTapUp: () {},
+                    size: 24,
+                    icon: Icons.close,
+                    iconColor: Theme.of(context).primaryColor,
+                  ),
                 ),
               ),
-            ),
-          ],
+              ...children,
+            ],
+          ),
         ),
-        ...children,
       ],
     );
+    //   ],
+    // );
   }
 }
