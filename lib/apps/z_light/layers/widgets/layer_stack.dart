@@ -40,16 +40,16 @@ class _LayersStackState extends State<LayersStack> {
     return Consumer<LayersProvider>(
       builder: (context, value, child) {
         return (value.hideStackedLayers)
-            ? Container()
-            : Stack(
-                children: _getStackColoredLayers(value) +
-                    [
-                      IndexedStack(
-                        index: value.index,
-                        children: _getStackedLayers(value),
-                      ),
-                    ],
-              );
+        ? Container()
+        : Stack(
+          children: _getStackColoredLayers(value) +
+          [
+            IndexedStack(
+              index: value.index,
+              children: _getStackedLayers(value),
+            ),
+          ],
+        );
       },
     );
   }

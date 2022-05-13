@@ -3,29 +3,24 @@ import 'package:get/get.dart';
 import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 
-List<Color> colors = const [
-  Colors.blue,
-  Colors.green,
-  Colors.yellow,
-  Color.fromARGB(255, 14, 13, 11),
-  Color.fromARGB(255, 94, 85, 9),
-  Colors.yellow,
-  Colors.yellow,
-];
+
 
 class LayersProvider extends ChangeNotifier {
   final areaHeight = Get.height * 0.70;
   final areaWidth = Get.width * 0.70;
   final List<LayerItemModel> _layeritems = [];
-  final List<LayerItemModel> _stackedLayeritems =
-      []; // Used to display the staked layers
+  final List<LayerItemModel> _sublayers = [];
+  final List<LayerItemModel> _stackedLayeritems = []; // Used to display the staked layers
+  final List<ResizableWidgetController> _layersControllers = [];
+
   bool hideStackedLayers = false;
 
   int _index = 0;
   int get length => _layeritems.length;
   int get index => _index;
 
-  List<LayerItemModel> get layeritems => _layeritems;
+  List<LayerItemModel> get layeritems => _layeritems; // Should return only mainlayers
+  List<LayerItemModel> get sublayerItems => _sublayers; // Should return only sublayers
   List<LayerItemModel> get stackedLayeritems => _stackedLayeritems;
 
   LayerItemModel getItem(int index) {
@@ -40,6 +35,16 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  ResizableWidgetController getController(int id){
+    var controller = _layersControllers.where((controller) => controller.layerID==id).toList()[0];
+    return _layersControllers.where((controller) => controller.layerID==id).toList()[0];
+  }
+
+  addController(controller){
+    _layersControllers.add(controller);
+    notifyListeners();
+  }
+
   int getTheBiggestID() {
     int id = 1;
     for (var item in _layeritems) {
@@ -49,13 +54,32 @@ class LayersProvider extends ChangeNotifier {
     }
     return id + 1;
   }
+  int getTheBiggestSUbID() {
+    int id = 1;
+    for (var item in _sublayers) {
+      if (id <= item.id) {
+        id = item.id;
+      }
+    }
+    return id + 1;
+  }
+
+  List<LayerItemModel> getSublayers(int id){
+    List<LayerItemModel> layers = [];
+    for(var item in sublayerItems){
+      if(item.parentID==id){
+        layers.add(item);
+      }
+    }
+    return layers;
+  }
 
   void add(LayerItemModel item) {
     for (var element in _layeritems) {
       element.listDisplayColor = Colors.grey;
     }
 
-    item.paintColor = colors[item.id - 1];
+    //item.paintColor = colors[item.id - 1];
 
     _layeritems.insert(0, item);
     _stackedLayeritems.add(item);
@@ -75,13 +99,11 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void duplicate(LayerItemModel item, index) {
-    for (var element in _layeritems) {
-      element.listDisplayColor = Colors.grey;
-    }
 
+  void duplicate(LayerItemModel item, int index, {bool sublayer=false}) {
     ResizableWidgetController controller = ResizableWidgetController(
       initialPosition: item.controller.initialPosition,
+      layerID: getTheBiggestID(),
       areaHeight: item.controller.areaHeight,
       areaWidth: item.controller.areaWidth,
       height: item.controller.height,
@@ -98,15 +120,29 @@ class LayersProvider extends ChangeNotifier {
     controller.width = item.controller.width;
 
     LayerItemModel duplicatedItem = LayerItemModel(
-        id: getTheBiggestID(),
-        layerText: "Copy ${item.layerText}",
-        controller: controller);
+      id: (sublayer)? getTheBiggestSUbID(): getTheBiggestID(),
+      layerText: "Copy ${item.layerText}",
+      mode: item.mode,
+      isSublayer: sublayer,
+      controller: controller
+    );
 
-    _layeritems.insert(index + 1, duplicatedItem);
-    _stackedLayeritems.add(duplicatedItem);
-
-    _index = _stackedLayeritems.length - 1;
-
+    if(sublayer){
+      item.hasSublayer = true;
+      duplicatedItem.layerText = "Sublayer";
+      duplicatedItem.parentID = item.id;
+      _sublayers.insert(0, duplicatedItem);
+      _layeritems[index] = item;
+    }
+    else{
+      for (var element in _layeritems) {
+        element.listDisplayColor = Colors.grey;
+      }
+      _layeritems.insert(index + 1, duplicatedItem);
+      _stackedLayeritems.add(duplicatedItem);
+      _layersControllers.add(controller);
+      _index = _stackedLayeritems.length - 1;
+    }
     notifyListeners();
   }
 
@@ -117,6 +153,7 @@ class LayersProvider extends ChangeNotifier {
     final item = _layeritems[index];
     item.listDisplayColor = Colors.white;
     _layeritems[index] = item;
+
     for (var i = 0; i < _stackedLayeritems.length; i++) {
       if (_stackedLayeritems[i].id == _layeritems[index].id) {
         _index = i;
@@ -128,18 +165,26 @@ class LayersProvider extends ChangeNotifier {
 
   void update(LayerItemModel item, int index) {
     int toEdit = _layeritems[index].id;
-    int stackedIndex = 0; // The stack index is different from the list index
+      int stackedIndex = 0; // The stack index is different from the list index
 
-    _layeritems[index] = item;
+      _layeritems[index] = item;
 
-    for (var i = 0; i < _layeritems.length; i++) {
-      if (_stackedLayeritems[i].id == toEdit) {
-        stackedIndex = i;
+      for (var i = 0; i < _layeritems.length; i++) {
+        if (_stackedLayeritems[i].id == toEdit) {
+          stackedIndex = i;
+        }
+      }
+      _stackedLayeritems[stackedIndex] = item;
+
+    notifyListeners();
+  }
+
+  void updateSublayer(LayerItemModel item, String value) {
+    for (var subItem in sublayerItems) {
+      if(item.id==subItem.id){
+        subItem.layerText = value;
       }
     }
-
-    _stackedLayeritems[stackedIndex] = item;
-
     notifyListeners();
   }
 
@@ -172,29 +217,28 @@ class LayersProvider extends ChangeNotifier {
     }
     final item = _layeritems.removeAt(oldIndex);
     _layeritems.insert(newIndex, item);
-    rearranegStack();
+    //rearranegStack();
     notifyListeners();
   }
 
   void removeItem(int index) {
-    final item = _layeritems[index];
-    int stackedIndex = 0;
+    if(length>1){
+      final item = _layeritems[index];
+    
+      _layeritems.remove(item);
+      _stackedLayeritems.remove(item);
 
-    for (var i = 0; i < _layeritems.length; i++) {
-      if (_stackedLayeritems[i].id == _layeritems[index].id) {
-        stackedIndex = i;
-        break;
+      if (_layeritems.isNotEmpty) {
+        changeIndex(0);
       }
     }
 
-    item.visibleOnStack = false;
-    _stackedLayeritems[stackedIndex] = item;
-    _layeritems.remove(item);
+    notifyListeners();
+  }
 
-    if (_layeritems.isNotEmpty) {
-      changeIndex(0);
-    } else {
-      stackedLayeritems.clear();
+  void removeSubItem(item) {
+    if(sublayerItems.length>1){
+      sublayerItems.remove(item);
     }
 
     notifyListeners();

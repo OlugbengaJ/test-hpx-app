@@ -44,7 +44,7 @@ class _LayerStackColoredItemState extends State<LayerStackColoredItem> {
     return Stack(
       children: _widgetPaints() +
           [
-            Consumer<LayersProvider>(builder: (context, _value, child) {
+            Consumer<LayersProvider>(builder: (context, provider, child) {
               return Container(
                 color: Colors.transparent,
                 child: ColoredResizable(
@@ -52,7 +52,8 @@ class _LayerStackColoredItemState extends State<LayerStackColoredItem> {
                   keysToWatch: [],
                   dragWidgetHeight: dragWidgetSize,
                   dragWidgetWidth: dragWidgetSize,
-                  controller: widget.layerItemModel.controller,
+                  //controller: widget.layerItemModel.controller,
+                  controller: provider.getController(widget.layerItemModel.id),
                   dragWidget: Container(
                     child: Center(
                       child: Column(
