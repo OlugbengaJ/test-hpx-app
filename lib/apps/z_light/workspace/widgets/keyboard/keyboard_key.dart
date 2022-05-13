@@ -30,10 +30,11 @@ class KeyboardKey extends StatelessWidget {
           child: Consumer<WorkspaceProvider>(
             builder: (context, workspaceProvider, child) {
               return InkWell(
-                // onTap: onTapHandler,
-                onTap: () => workspaceProvider.toggleModal([
-                  const Text('yes we got something going'),
-                ]),
+                onTap: onTapHandler,
+                // onTap: () => workspaceProvider.toggleStripNotification('yes'),
+                // onTap: () => workspaceProvider.toggleModal([
+                //   const Text('yes we got something going'),
+                // ]),
 
                 // listens to key changes and allows updating this key instance
                 child: Consumer<KeyModel>(
@@ -64,7 +65,6 @@ KeyModel _updateKeyInfo(
   List<Color> colors = [Colors.orange];
 
   if (currentMode.currentColor.runtimeType.toString() == 'List<Color>') {
-    debugPrint('${keyModel.keyCode} ${currentMode.currentColor}');
     colors = currentMode.currentColor as List<Color>;
   }
 

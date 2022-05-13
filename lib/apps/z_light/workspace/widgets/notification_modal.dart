@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/round_button.dart';
 
 class ModalNotification extends StatelessWidget {
+  /// [ModalNotification] display a modal at the center of the screen.
+  ///
+  /// [closeHandler] is a callback funtion required to close the window.
   const ModalNotification({
     Key? key,
     required this.children,
@@ -45,6 +48,7 @@ class ModalNotification extends StatelessWidget {
                   ),
                 ),
               ),
+              // stack up child widgets
               ...children,
             ],
           ),

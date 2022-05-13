@@ -253,19 +253,6 @@ class _WorkspaceState extends State<Workspace> {
             message: workspaceProvider.stripNotificationText,
             closeHandler: workspaceProvider.toggleStripNotification,
           ),
-        // Consumer<WorkspaceProvider>(
-        //   builder: (context, value, child) => (value.isStripNotify)
-        //       ? StripNotification(
-        //           message: value.stripNotificationText,
-        //           tapDownHandler: value.toggleStripNotification,
-        //         )
-        //       : Container(),
-        // ),
-        // if (workspaceProvider.isModalNotify)
-        //   ModalNotification(
-        //     children: workspaceProvider.modalWidgets,
-        //     closeHandler: workspaceProvider.toggleModal,
-        //   ),
         Expanded(
           child: Container(
             decoration: const BoxDecoration(
