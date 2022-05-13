@@ -28,7 +28,6 @@ class _LayerStackItemState extends State<LayerStackItem> {
             dragWidgetWidth: dragWidgetSize,
             //controller: widget.layerItemModel.controller,
             controller: provider.getController(widget.layerItemModel.id),
-            // keysToWatch: context.watch<KeySelectorProvider>().keysTowatch,
             keysToWatch: [],
             dragWidget: Container(
               height: 50,

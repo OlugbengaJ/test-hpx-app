@@ -47,6 +47,7 @@ class LayersProvider extends ChangeNotifier {
 
   addController(controller){
     _layersControllers.add(controller);
+    notifyListeners();
   }
 
   int getTheBiggestID() {
