@@ -154,8 +154,8 @@ class _WrapperState extends State<Wrapper> {
   }
 }
 
-// TODO: should be removed from mode provider into a Profile Provider
-// TODO: Delete; added here just for test and must be refactored properly.
+// TODO: Profile should be removed from mode provider into a Profile Provider
+// TODO: delete; added here just for test and must be refactored properly.
 class GetProfileList extends StatelessWidget {
   const GetProfileList({
     Key? key,
