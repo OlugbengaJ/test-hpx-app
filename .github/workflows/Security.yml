@@ -3,13 +3,13 @@ on:
   push:
     # Only the default branch is supported.
     branches:
-    - main
+    - development
   schedule:
     # Weekly on Saturdays.
     - cron:  '30 1 * * 6'
   #pull_request:
     # All branches are supported.
-  #  branches: [main]
+  #  branches: [development]
 
 permissions: read-all
 
