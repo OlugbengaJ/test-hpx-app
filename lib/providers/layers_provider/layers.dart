@@ -26,7 +26,7 @@ class LayersProvider extends ChangeNotifier {
   int get length => _layeritems.length;
   int get index => _index;
 
-  List<LayerItemModel> get layeritems => _layeritems;
+  List<LayerItemModel> get layeritems => _layeritems.where((item) => item.isSublayer==false).toList(); // Should return only mainlayers
   List<LayerItemModel> get stackedLayeritems => _stackedLayeritems;
 
   LayerItemModel getItem(int index) {
@@ -58,6 +58,10 @@ class LayersProvider extends ChangeNotifier {
       }
     }
     return id + 1;
+  }
+
+  List<LayerItemModel> getSublayers(int id){
+    return _layeritems.where((item) => item.isSublayer && item.parentID==id).toList();
   }
 
   void add(LayerItemModel item) {
@@ -116,7 +120,11 @@ class LayersProvider extends ChangeNotifier {
       controller: controller
     );
 
-    print(duplicatedItem.isSublayer);
+    if(sublayer){
+      item.hasSublayer = true;
+      _layeritems[index] = item;
+    }
+
 
     _layeritems.insert(index + 1, duplicatedItem);
     _stackedLayeritems.add(duplicatedItem);
@@ -191,7 +199,7 @@ class LayersProvider extends ChangeNotifier {
     }
     final item = _layeritems.removeAt(oldIndex);
     _layeritems.insert(newIndex, item);
-    rearranegStack();
+    //rearranegStack();
     notifyListeners();
   }
 

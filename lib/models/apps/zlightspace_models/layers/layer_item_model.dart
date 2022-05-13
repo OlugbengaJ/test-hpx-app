@@ -13,6 +13,7 @@ class LayerItemModel {
     this.visible = true,
     this.visibleOnStack = true,
     this.isSublayer = false,
+    this.hasSublayer = false,
     required this.controller,
     this.listDisplayColor = defaultColor,
     this.paintColor = defaultPaintColor,
@@ -23,6 +24,7 @@ class LayerItemModel {
   final String layerText;
   final bool visible;
   final bool isSublayer;
+  bool hasSublayer;
   bool visibleOnStack;
   ResizableWidgetController controller;
   Color listDisplayColor;

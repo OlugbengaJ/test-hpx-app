@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_list_item.dart';
 import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
-import 'package:hpx/apps/z_light/layers/widgets/sublayer_item.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
@@ -125,14 +124,9 @@ class _LayersState extends State<Layers> {
                         itemBuilder: (BuildContext context, int index) {
                           return Container(
                             key: Key("$index"),
-                            child: 
-                            (!provider.getItem(index).isSublayer)?
-                            LayerListItem(
+                            child: LayerListItem(
                               layerIndex: index,
                               layerItemModel: provider.getItem(index),
-                            ):SublayerItem(
-                              layerIndex: index,
-                              layerItemModel: provider.getItem(index)
                             ),
                           );
                         },
