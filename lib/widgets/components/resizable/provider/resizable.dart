@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// Keys to watch by the ZoneSelector and the resizable widgets
-class ResizableProvider extends ChangeNotifier{
+class ResizableProvider extends ChangeNotifier {
   GlobalKey draggableKey = GlobalKey();
   Offset initialPosition = Offset.zero;
   late double areaHeight = 500;
@@ -18,11 +18,11 @@ class ResizableProvider extends ChangeNotifier{
 
   bool showDragWidgets = true;
 
-   List<Map<String, dynamic>> zoneToPaint = [];
+  List<Map<String, dynamic>> zoneToPaint = [];
 
   double leftPadding = 0.0;
 
-  double  topPadding = 0.0;
+  double topPadding = 0.0;
 
   initialize() {
     initialPosition = Offset(areaWidth / 2, areaHeight / 2);
@@ -49,48 +49,44 @@ class ResizableProvider extends ChangeNotifier{
       right = newRight;
       left = newLeft;
     }
-
   }
-
-  
 
   void toggleShowDragWigets() {
     showDragWidgets = !showDragWidgets;
   }
 
-
-  paintColor(GlobalKey widgetKey){
-    RenderBox selectorBox = draggableKey.currentContext?.findRenderObject() as RenderBox;
+  paintColor(GlobalKey widgetKey) {
+    RenderBox selectorBox =
+        draggableKey.currentContext?.findRenderObject() as RenderBox;
     final selectorPosition = selectorBox.localToGlobal(Offset.zero);
 
     RenderBox box = widgetKey.currentContext?.findRenderObject() as RenderBox;
     final boxSize = box.size;
-    
+
     var position = box.localToGlobal(Offset.zero);
-    final selectorBoxSize = selectorBox.size;      
+    final selectorBoxSize = selectorBox.size;
 
-    final collide = (
-      position.dx < selectorPosition.dx + selectorBoxSize.width && 
-      position.dx + boxSize.width > selectorPosition.dx &&
-      position.dy < selectorPosition.dy + selectorBoxSize.height &&
-      position.dy + boxSize.height > selectorPosition.dy
-    );
+    final collide =
+        (position.dx < selectorPosition.dx + selectorBoxSize.width &&
+            position.dx + boxSize.width > selectorPosition.dx &&
+            position.dy < selectorPosition.dy + selectorBoxSize.height &&
+            position.dy + boxSize.height > selectorPosition.dy);
 
-
-    if(collide){
-      print("Collide\n");
-      zoneToPaint.add(
-        {
-          "size": box.size,
-          "position": Offset(position.dx - leftPadding, position.dy - topPadding),
-        }
-      );
+    if (collide) {
+      zoneToPaint.add({
+        "size": box.size,
+        "position": Offset(position.dx - leftPadding, position.dy - topPadding),
+      });
     }
     notifyListeners();
   }
 
-  void setSize({double? newTop,  double? newLeft,double? newRight, double? newBottom,}) {
-
+  void setSize({
+    double? newTop,
+    double? newLeft,
+    double? newRight,
+    double? newBottom,
+  }) {
     newTop = newTop ?? top;
     newLeft = newLeft ?? left;
     newRight = newRight ?? right;
@@ -104,11 +100,16 @@ class ResizableProvider extends ChangeNotifier{
     );
 
     notifyListeners();
-
   }
 
-  void quantify({ required final double newTop, required final double newLeft, required final double newRight, required final double newBottom,}) {
-    calculateWidgetSize(top: newTop, left: newLeft, bottom: newBottom, right: newRight);
+  void quantify({
+    required final double newTop,
+    required final double newLeft,
+    required final double newRight,
+    required final double newBottom,
+  }) {
+    calculateWidgetSize(
+        top: newTop, left: newLeft, bottom: newBottom, right: newRight);
     if (checkTopBotMaxSize(newTop, newBottom)) {
       top = newTop;
       bottom = newBottom;
@@ -120,10 +121,16 @@ class ResizableProvider extends ChangeNotifier{
     calculateWidgetSize(bottom: bottom, left: left, right: right, top: top);
   }
 
-  bool checkTopBotMaxSize(final double newTop, final double newBottom) =>  (newTop >= 0 && newBottom >= 0) && (height <= minHeight);
-  bool checkLeftRightMaxSize(final double newLeft, final double newRight) => (newLeft >= 0 && newRight >= 0) && (width <= minWidth);
+  bool checkTopBotMaxSize(final double newTop, final double newBottom) =>
+      (newTop >= 0 && newBottom >= 0) && (height <= minHeight);
+  bool checkLeftRightMaxSize(final double newLeft, final double newRight) =>
+      (newLeft >= 0 && newRight >= 0) && (width <= minWidth);
 
-  void calculateWidgetSize({ required final double top, required final double left, required final double bottom, required final double right,
+  void calculateWidgetSize({
+    required final double top,
+    required final double left,
+    required final double bottom,
+    required final double right,
   }) {
     width = areaWidth - (left + right);
     height = areaHeight - (top + bottom);
@@ -138,9 +145,7 @@ class ResizableProvider extends ChangeNotifier{
   }
 
   void onTopCenterDrag(dx, dy) {
-    setSize(
-      newTop: top + dy
-    );
+    setSize(newTop: top + dy);
   }
 
   void onTopRightDrag(dx, dy) {
@@ -186,10 +191,10 @@ class ResizableProvider extends ChangeNotifier{
     );
   }
 
-  void onDragEnd(keysToWatch){
-    zoneToPaint.clear(); 
+  void onDragEnd(keysToWatch) {
+    zoneToPaint.clear();
     for (var key in keysToWatch) {
       paintColor(key);
-    }    
+    }
   }
 }

@@ -40,9 +40,11 @@ ButtonStyle textBtnStyle = ButtonStyle(
 );
 
 ButtonStyle textBtnStyleWhite = ButtonStyle(
-    foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-    backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-        RoundedRectangleBorder(
+  foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+  backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+    const RoundedRectangleBorder(
       borderRadius: BorderRadius.zero,
-    )));
+    ),
+  ),
+);
