@@ -85,12 +85,24 @@ class _LayerListItemState extends State<LayerListItem> {
         widget.layerIndex);
   }
 
+  List<Widget> _sublayers(provider){
+    List<Widget> layers = [];
+    if(widget.layerItemModel.hasSublayer){
+      int index = 0;
+      for(var item in provider.getSublayers(widget.layerItemModel.id)){
+        layers.add(SublayerItem(layerIndex: index, layerItemModel: item));
+        index ++;
+      }
+    }
+    return layers;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<LayersProvider>(
       builder: (context, _value, child) {
         return Column(
-          children: [
+          children: <Widget> [
             Container(
               height: 40,
               margin: const EdgeInsets.only(bottom: 2),
@@ -181,7 +193,7 @@ class _LayerListItemState extends State<LayerListItem> {
                                                   CrossAxisAlignment.end,
                                               children: [
                                                 Tooltip(
-                                                  message: "Duplicate",
+                                                  message: (widget.layerItemModel.layerText=="Shortcut Colors")? "Add sublayer" :"Duplicate",
                                                   child: InkWell(
                                                     child: Icon(
                                                       Ionicons.copy,
@@ -234,23 +246,7 @@ class _LayerListItemState extends State<LayerListItem> {
                 ),
               ),
             ),
-            (widget.layerItemModel.hasSublayer)?
-            Container(
-              height: 200,
-              child: Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(2),
-                  itemCount: _value.length,                  
-                  itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      key: Key("$index"),
-                      child: Text("OK"),
-                    );
-                  },
-                ),
-              ),
-            ):Container()
-          ],
+          ] + _sublayers(_value),
         );
       },
     );

@@ -20,8 +20,8 @@ class LayerItemModel {
     required this.mode
   });
   final int id;
-  final int parentID;
-  final String layerText;
+  int parentID;
+  String layerText;
   final bool visible;
   final bool isSublayer;
   bool hasSublayer;

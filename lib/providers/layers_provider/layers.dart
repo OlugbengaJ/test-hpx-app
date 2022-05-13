@@ -3,20 +3,13 @@ import 'package:get/get.dart';
 import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 
-List<Color> colors = const [
-  Colors.blue,
-  Colors.green,
-  Colors.yellow,
-  Color.fromARGB(255, 14, 13, 11),
-  Color.fromARGB(255, 94, 85, 9),
-  Colors.yellow,
-  Colors.yellow,
-];
+
 
 class LayersProvider extends ChangeNotifier {
   final areaHeight = Get.height * 0.70;
   final areaWidth = Get.width * 0.70;
   final List<LayerItemModel> _layeritems = [];
+  final List<LayerItemModel> _sublayers = [];
   final List<LayerItemModel> _stackedLayeritems = []; // Used to display the staked layers
   final List<ResizableWidgetController> _layersControllers = [];
 
@@ -26,7 +19,8 @@ class LayersProvider extends ChangeNotifier {
   int get length => _layeritems.length;
   int get index => _index;
 
-  List<LayerItemModel> get layeritems => _layeritems.where((item) => item.isSublayer==false).toList(); // Should return only mainlayers
+  List<LayerItemModel> get layeritems => _layeritems; // Should return only mainlayers
+  List<LayerItemModel> get sublayerItems => _sublayers; // Should return only sublayers
   List<LayerItemModel> get stackedLayeritems => _stackedLayeritems;
 
   LayerItemModel getItem(int index) {
@@ -42,6 +36,7 @@ class LayersProvider extends ChangeNotifier {
   }
 
   ResizableWidgetController getController(int id){
+    var controller = _layersControllers.where((controller) => controller.layerID==id).toList()[0];
     return _layersControllers.where((controller) => controller.layerID==id).toList()[0];
   }
 
@@ -61,7 +56,15 @@ class LayersProvider extends ChangeNotifier {
   }
 
   List<LayerItemModel> getSublayers(int id){
-    return _layeritems.where((item) => item.isSublayer && item.parentID==id).toList();
+    List<LayerItemModel> layers = [];
+    for(var item in sublayerItems){
+      print(item.parentID);
+      if(item.parentID==id){
+        layers.add(item);
+      }
+    }
+    print(layers);
+    return layers;
   }
 
   void add(LayerItemModel item) {
@@ -69,7 +72,7 @@ class LayersProvider extends ChangeNotifier {
       element.listDisplayColor = Colors.grey;
     }
 
-    item.paintColor = colors[item.id - 1];
+    //item.paintColor = colors[item.id - 1];
 
     _layeritems.insert(0, item);
     _stackedLayeritems.add(item);
@@ -89,11 +92,8 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void duplicate(LayerItemModel item, int index, {bool sublayer=false}) {
-    for (var element in _layeritems) {
-      element.listDisplayColor = Colors.grey;
-    }
 
+  void duplicate(LayerItemModel item, int index, {bool sublayer=false}) {
     ResizableWidgetController controller = ResizableWidgetController(
       initialPosition: item.controller.initialPosition,
       layerID: getTheBiggestID(),
@@ -122,16 +122,20 @@ class LayersProvider extends ChangeNotifier {
 
     if(sublayer){
       item.hasSublayer = true;
+      duplicatedItem.layerText = "Sublayer";
+      duplicatedItem.parentID = item.id;
+      _sublayers.insert(0, duplicatedItem);
       _layeritems[index] = item;
     }
-
-
-    _layeritems.insert(index + 1, duplicatedItem);
-    _stackedLayeritems.add(duplicatedItem);
-    _layersControllers.add(controller);
-
-    _index = _stackedLayeritems.length - 1;
-
+    else{
+      for (var element in _layeritems) {
+        element.listDisplayColor = Colors.grey;
+      }
+      _layeritems.insert(index + 1, duplicatedItem);
+      _stackedLayeritems.add(duplicatedItem);
+      _layersControllers.add(controller);
+      _index = _stackedLayeritems.length - 1;
+    }
     notifyListeners();
   }
 
@@ -142,7 +146,7 @@ class LayersProvider extends ChangeNotifier {
     final item = _layeritems[index];
     item.listDisplayColor = Colors.white;
     _layeritems[index] = item;
-    print(item.mode.name);
+    print(item.isSublayer);
 
     for (var i = 0; i < _stackedLayeritems.length; i++) {
       if (_stackedLayeritems[i].id == _layeritems[index].id) {
@@ -164,7 +168,6 @@ class LayersProvider extends ChangeNotifier {
         stackedIndex = i;
       }
     }
-
     _stackedLayeritems[stackedIndex] = item;
 
     notifyListeners();
