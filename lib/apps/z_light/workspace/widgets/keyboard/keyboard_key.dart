@@ -22,7 +22,7 @@ class KeyboardKey extends StatelessWidget {
   Widget build(BuildContext context) {
     // Gets access to the widget's position (offset) in the widget tree.
     final box = context.findRenderObject() as RenderBox?;
-    final modeProvider = Provider.of<ModeProvider>(context);
+    final modeProvider = Provider.of<ModeProvider>(context, listen: false);
 
     return Stack(
       children: [

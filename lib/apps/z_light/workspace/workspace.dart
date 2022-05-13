@@ -235,15 +235,15 @@ class _WorkspaceState extends State<Workspace> {
                                         .map(
                                           (e) => DropdownMenuItem(
                                             enabled: e['enabled'] as bool,
-                                            value: e['name'] as String,
+                                            value: e,
                                             child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.start,
                                               children: [
-                                                Checkbox(
-                                                  value: e['enabled'] as bool,
-                                                  onChanged: (e) {},
-                                                ),
+                                                // Checkbox(
+                                                //   value: e['enabled'] as bool,
+                                                //   onChanged: (e) {},
+                                                // ),
                                                 Text(e['name'] as String),
                                               ],
                                             ),
