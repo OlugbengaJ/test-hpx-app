@@ -238,6 +238,9 @@ class _WorkspaceState extends State<Workspace> {
                                                   MainAxisAlignment.start,
                                               children: [
                                                 Checkbox(
+                                                  activeColor: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
                                                   value: e.enabled,
                                                   onChanged: (x) {},
                                                 ),
