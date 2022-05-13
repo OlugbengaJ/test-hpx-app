@@ -124,7 +124,7 @@ class LayersProvider extends ChangeNotifier {
       item.hasSublayer = true;
       duplicatedItem.layerText = "Sublayer";
       duplicatedItem.parentID = item.id;
-      _sublayers.insert(0, duplicatedItem);
+      _sublayers.add(duplicatedItem);
       _layeritems[index] = item;
     }
     else{
@@ -146,7 +146,6 @@ class LayersProvider extends ChangeNotifier {
     final item = _layeritems[index];
     item.listDisplayColor = Colors.white;
     _layeritems[index] = item;
-    print(item.isSublayer);
 
     for (var i = 0; i < _stackedLayeritems.length; i++) {
       if (_stackedLayeritems[i].id == _layeritems[index].id) {
@@ -158,17 +157,21 @@ class LayersProvider extends ChangeNotifier {
   }
 
   void update(LayerItemModel item, int index) {
-    int toEdit = _layeritems[index].id;
-    int stackedIndex = 0; // The stack index is different from the list index
+    if(!item.isSublayer){
+      int toEdit = _layeritems[index].id;
+      int stackedIndex = 0; // The stack index is different from the list index
 
-    _layeritems[index] = item;
+      _layeritems[index] = item;
 
-    for (var i = 0; i < _layeritems.length; i++) {
-      if (_stackedLayeritems[i].id == toEdit) {
-        stackedIndex = i;
+      for (var i = 0; i < _layeritems.length; i++) {
+        if (_stackedLayeritems[i].id == toEdit) {
+          stackedIndex = i;
+        }
       }
+      _stackedLayeritems[stackedIndex] = item;
+    }else{
+
     }
-    _stackedLayeritems[stackedIndex] = item;
 
     notifyListeners();
   }

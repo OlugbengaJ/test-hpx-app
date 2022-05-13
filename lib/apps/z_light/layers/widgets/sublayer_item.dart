@@ -96,9 +96,7 @@ class _SublayerItemState extends State<SublayerItem> {
                         child: Tooltip(
                           message: "Toogle visibility",
                           child: Icon(
-                            (_value.getItem(widget.layerIndex).visible)
-                                ? Ionicons.eye
-                                : Ionicons.eye_off,
+                            Ionicons.eye,
                             size: _iconSize,
                             color: widget.layerItemModel.listDisplayColor,
                           ),
@@ -136,10 +134,7 @@ class _SublayerItemState extends State<SublayerItem> {
                                   : Expanded(
                                       child: Consumer<LayersProvider>(
                                         builder: (context, value, child) {
-                                          return Text(
-                                            value
-                                                .getItem(widget.layerIndex)
-                                                .layerText,
+                                          return Text(widget.layerItemModel.layerText,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                                 fontSize: 16,
