@@ -30,12 +30,7 @@ class KeyboardKey extends StatelessWidget {
           child: Consumer<WorkspaceProvider>(
             builder: (context, workspaceProvider, child) {
               return InkWell(
-                // onTap: onTapHandler,
-                // onTap: () => workspaceProvider.toggleStripNotification(
-                //     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eu velit sit amet odio ultrices fringilla at a lectus.'),
-                onTap: () => workspaceProvider.toggleModal([
-                  const Text('yes we got something going'),
-                ]),
+                onTap: onTapHandler,
 
                 // listens to key changes and allows updating this key instance
                 child: Consumer<KeyModel>(
