@@ -60,7 +60,6 @@ class DBManager {
                 //toolId: item['toolId'],
                 name: item['name'],
                 colorCode: item['colorCode'],
-                colorDirection: item['colorDirection'],
                 hasBorder: item['hasBorder'])))
         });
     return _listOfItems;
