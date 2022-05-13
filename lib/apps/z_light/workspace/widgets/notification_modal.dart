@@ -7,11 +7,18 @@ class ModalNotification extends StatelessWidget {
   /// [closeHandler] is a callback funtion required to close the window.
   const ModalNotification({
     Key? key,
+    this.color,
     required this.children,
     required this.closeHandler,
   }) : super(key: key);
 
+  /// [color] sets the background color.
+  final Color? color;
+
+  /// [children] are widgets that will be added to the modal stack.
   final List<Widget> children;
+
+  /// [closeHandler] closes the notification modal.
   final VoidCallback closeHandler;
 
   @override
@@ -30,7 +37,7 @@ class ModalNotification extends StatelessWidget {
             border: Border.all(
               width: 1,
             ),
-            color: Theme.of(context).primaryColor,
+            color: color ?? Theme.of(context).primaryColor,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

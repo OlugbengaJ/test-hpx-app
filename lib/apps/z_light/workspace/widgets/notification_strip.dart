@@ -9,8 +9,13 @@ class StripNotification extends StatelessWidget {
     required this.closeHandler,
   }) : super(key: key);
 
+  /// [color] sets the background color.
   final Color? color;
+
+  /// [message] to be displayed in the notification.
   final String message;
+
+  /// [closeHandler] closes the notification modal.
   final void Function() closeHandler;
 
   @override
