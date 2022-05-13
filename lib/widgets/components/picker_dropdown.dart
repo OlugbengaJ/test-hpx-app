@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
+import 'package:hpx/utils/comparer.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
-class PickerModel {
+class PickerModel extends Comparer {
   final String title;
   final String? value;
   final bool enabled;
   final IconData? icon;
   PickerModel(
-      {required this.title, this.value, required this.enabled, this.icon});
-
-  @override
-  bool operator ==(Object other) =>
-      other is PickerModel && other.value == value;
-
-  @override
-  int get hashCode => value.hashCode;
+      {required this.title, this.value, required this.enabled, this.icon})
+      : super(value);
 }
 
 class PickerDropdown extends StatefulWidget {
