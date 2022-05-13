@@ -4,17 +4,19 @@ import 'package:hpx/apps/z_light/workspace/widgets/round_button.dart';
 class StripNotification extends StatelessWidget {
   const StripNotification({
     Key? key,
+    this.color,
     required this.message,
     required this.closeHandler,
   }) : super(key: key);
 
+  final Color? color;
   final String message;
   final void Function() closeHandler;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.yellow,
+      color: color ?? Colors.yellow,
       padding: const EdgeInsets.all(5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
