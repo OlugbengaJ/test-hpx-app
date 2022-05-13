@@ -53,6 +53,10 @@ class _LayerListItemState extends State<LayerListItem> {
     });
   }
 
+  _deleteLayer(provider){
+    provider.removeItem(widget.layerIndex);
+  }
+
   _onTap(provider) {
     provider.changeIndex(widget.layerIndex);
   }
@@ -192,6 +196,7 @@ class _LayerListItemState extends State<LayerListItem> {
                                             ),
                                             Tooltip(
                                               message: "Delete",
+                                              preferBelow: false,
                                               child: InkWell(
                                                 child: Icon(
                                                   Ionicons.trash,
@@ -199,8 +204,7 @@ class _LayerListItemState extends State<LayerListItem> {
                                                   color: widget.layerItemModel
                                                       .listDisplayColor,
                                                 ),
-                                                onTap: () => value.removeItem(
-                                                    widget.layerIndex),
+                                                onTap: () => _deleteLayer(value),
                                               ),
                                             ),
                                           ],
