@@ -54,16 +54,23 @@ class LayersProvider extends ChangeNotifier {
     }
     return id + 1;
   }
+  int getTheBiggestSUbID() {
+    int id = 1;
+    for (var item in _sublayers) {
+      if (id <= item.id) {
+        id = item.id;
+      }
+    }
+    return id + 1;
+  }
 
   List<LayerItemModel> getSublayers(int id){
     List<LayerItemModel> layers = [];
     for(var item in sublayerItems){
-      print(item.parentID);
       if(item.parentID==id){
         layers.add(item);
       }
     }
-    print(layers);
     return layers;
   }
 
@@ -113,7 +120,7 @@ class LayersProvider extends ChangeNotifier {
     controller.width = item.controller.width;
 
     LayerItemModel duplicatedItem = LayerItemModel(
-      id: getTheBiggestID(),
+      id: (sublayer)? getTheBiggestSUbID(): getTheBiggestID(),
       layerText: "Copy ${item.layerText}",
       mode: item.mode,
       isSublayer: sublayer,
@@ -124,7 +131,7 @@ class LayersProvider extends ChangeNotifier {
       item.hasSublayer = true;
       duplicatedItem.layerText = "Sublayer";
       duplicatedItem.parentID = item.id;
-      _sublayers.add(duplicatedItem);
+      _sublayers.insert(0, duplicatedItem);
       _layeritems[index] = item;
     }
     else{
@@ -157,8 +164,7 @@ class LayersProvider extends ChangeNotifier {
   }
 
   void update(LayerItemModel item, int index) {
-    if(!item.isSublayer){
-      int toEdit = _layeritems[index].id;
+    int toEdit = _layeritems[index].id;
       int stackedIndex = 0; // The stack index is different from the list index
 
       _layeritems[index] = item;
@@ -169,10 +175,16 @@ class LayersProvider extends ChangeNotifier {
         }
       }
       _stackedLayeritems[stackedIndex] = item;
-    }else{
 
+    notifyListeners();
+  }
+
+  void updateSublayer(LayerItemModel item, String value) {
+    for (var subItem in sublayerItems) {
+      if(item.id==subItem.id){
+        subItem.layerText = value;
+      }
     }
-
     notifyListeners();
   }
 
@@ -219,6 +231,14 @@ class LayersProvider extends ChangeNotifier {
       if (_layeritems.isNotEmpty) {
         changeIndex(0);
       }
+    }
+
+    notifyListeners();
+  }
+
+  void removeSubItem(item) {
+    if(sublayerItems.length>1){
+      sublayerItems.remove(item);
     }
 
     notifyListeners();

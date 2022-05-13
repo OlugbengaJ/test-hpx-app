@@ -46,12 +46,12 @@ class _SublayerItemState extends State<SublayerItem> {
     setState(() {
       _editing = !_editing;
       _layerNameController = TextEditingController(
-          text: value.getItem(widget.layerIndex).layerText);
+          text: widget.layerItemModel.layerText);
     });
   }
 
   _deleteLayer(provider){
-    provider.removeItem(widget.layerIndex);
+    provider.removeSubItem(widget.layerItemModel);
   }
 
   _onTap(provider) {
@@ -62,13 +62,7 @@ class _SublayerItemState extends State<SublayerItem> {
     setState(() {
       _editing = !_editing;
     });
-    provider.update(
-        LayerItemModel(
-            id: widget.layerItemModel.id,
-            mode: widget.layerItemModel.mode,
-            layerText: value,
-            controller: widget.layerItemModel.controller),
-        widget.layerIndex);
+    provider.updateSublayer(widget.layerItemModel, value);
   }
 
   @override
@@ -85,7 +79,7 @@ class _SublayerItemState extends State<SublayerItem> {
             highlightColor: Colors.transparent,
             onTap: () => _onTap(_value),
             child: Container(
-              padding: const EdgeInsets.only(top:2, bottom: 2, right: 2, left: 50),
+              padding: const EdgeInsets.only(top:2, bottom: 2, right: 2, left: 30),
               color: Colors.black12,
               child: SizedBox(
                 height: 35,
@@ -134,7 +128,8 @@ class _SublayerItemState extends State<SublayerItem> {
                                   : Expanded(
                                       child: Consumer<LayersProvider>(
                                         builder: (context, value, child) {
-                                          return Text(widget.layerItemModel.layerText,
+                                          return Text(
+                                            widget.layerItemModel.layerText,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
                                                 fontSize: 16,
