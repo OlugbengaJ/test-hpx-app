@@ -4,19 +4,16 @@ import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 
-class LayerListItem extends StatefulWidget {
-  const LayerListItem(
-      {Key? key, required this.layerIndex, required this.layerItemModel})
-      : super(key: key);
-
+class SublayerItem extends StatefulWidget {
+  const SublayerItem({ Key? key, required this.layerIndex, required this.layerItemModel }) : super(key: key);
   final int layerIndex;
   final LayerItemModel layerItemModel;
 
   @override
-  State<LayerListItem> createState() => _LayerListItemState();
+  State<SublayerItem> createState() => _SublayerItemState();
 }
 
-class _LayerListItemState extends State<LayerListItem> {
+class _SublayerItemState extends State<SublayerItem> {
   bool _showActions = false;
   bool _editing = false;
   final double _iconSize = 16;
@@ -43,16 +40,6 @@ class _LayerListItemState extends State<LayerListItem> {
             visible: !layerItemModel.visible,
             controller: layerItemModel.controller),
         widget.layerIndex);
-  }
-
-
-  _duplicate(provider){
-    if(widget.layerItemModel.mode.name=="Shortcut Colors"){
-      provider.duplicate(widget.layerItemModel, widget.layerIndex, sublayer: true);
-    }else{
-      provider.duplicate(widget.layerItemModel, widget.layerIndex);
-    }
-    
   }
 
   _toggleEditing(value) {
@@ -98,7 +85,7 @@ class _LayerListItemState extends State<LayerListItem> {
             highlightColor: Colors.transparent,
             onTap: () => _onTap(_value),
             child: Container(
-              padding: const EdgeInsets.all(2),
+              padding: const EdgeInsets.only(top:2, bottom: 2, right: 2, left: 50),
               color: Colors.black12,
               child: SizedBox(
                 height: 35,
@@ -124,12 +111,7 @@ class _LayerListItemState extends State<LayerListItem> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Row(
-                            children: [
-                              Icon(
-                                Ionicons.image,
-                                color: widget.layerItemModel.listDisplayColor,
-                                size: _iconSize,
-                              ),
+                            children: [                              
                               (_editing)
                                   ? Container(
                                       height: 30,
@@ -176,19 +158,7 @@ class _LayerListItemState extends State<LayerListItem> {
                                         child: Row(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.end,
-                                          children: [
-                                            Tooltip(
-                                              message: "Duplicate",
-                                              child: InkWell(
-                                                child: Icon(
-                                                  Ionicons.copy,
-                                                  size: _iconSize,
-                                                  color: widget.layerItemModel
-                                                      .listDisplayColor,
-                                                ),
-                                                onTap: () => _duplicate(value),
-                                              ),
-                                            ),
+                                          children: [                                            
                                             Tooltip(
                                               message: "Edit",
                                               child: InkWell(

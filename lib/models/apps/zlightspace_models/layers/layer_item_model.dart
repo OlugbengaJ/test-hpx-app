@@ -6,19 +6,23 @@ const Color defaultColor = Colors.white;
 const Color defaultPaintColor = Colors.white;
 
 class LayerItemModel {
-  LayerItemModel(
-      {required this.id,
-      required this.layerText,
-      this.visible = true,
-      this.visibleOnStack = true,
-      required this.controller,
-      this.listDisplayColor = defaultColor,
-      this.paintColor = defaultPaintColor,
-      required this.mode
-      });
+  LayerItemModel({
+    required this.id,
+    this.parentID = 0,
+    required this.layerText,
+    this.visible = true,
+    this.visibleOnStack = true,
+    this.isSublayer = false,
+    required this.controller,
+    this.listDisplayColor = defaultColor,
+    this.paintColor = defaultPaintColor,
+    required this.mode
+  });
   final int id;
+  final int parentID;
   final String layerText;
   final bool visible;
+  final bool isSublayer;
   bool visibleOnStack;
   ResizableWidgetController controller;
   Color listDisplayColor;

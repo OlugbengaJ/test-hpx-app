@@ -85,7 +85,7 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void duplicate(LayerItemModel item, index) {
+  void duplicate(LayerItemModel item, int index, {bool sublayer=false}) {
     for (var element in _layeritems) {
       element.listDisplayColor = Colors.grey;
     }
@@ -109,10 +109,14 @@ class LayersProvider extends ChangeNotifier {
     controller.width = item.controller.width;
 
     LayerItemModel duplicatedItem = LayerItemModel(
-        id: getTheBiggestID(),
-        layerText: "Copy ${item.layerText}",
-        mode: item.mode,
-        controller: controller);
+      id: getTheBiggestID(),
+      layerText: "Copy ${item.layerText}",
+      mode: item.mode,
+      isSublayer: sublayer,
+      controller: controller
+    );
+
+    print(duplicatedItem.isSublayer);
 
     _layeritems.insert(index + 1, duplicatedItem);
     _stackedLayeritems.add(duplicatedItem);
