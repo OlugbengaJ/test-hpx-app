@@ -70,7 +70,7 @@ class _WrapperState extends State<Wrapper> {
                       ? Colors.white
                       : Colors.grey,
                   backgroundColor: Colors.transparent,
-                  textStyle: h4Style),
+                  textStyle: h5Style),
               child: const Text('Workspace'),
               onPressed: () {
                 workspaceProvider.toggleView(WorkspaceView.workspace);
@@ -83,7 +83,7 @@ class _WrapperState extends State<Wrapper> {
                       ? Colors.white
                       : Colors.grey,
                   backgroundColor: Colors.transparent,
-                  textStyle: h4Style),
+                  textStyle: h5Style),
               child: const Text('Lighting Options'),
               onPressed: () {
                 workspaceProvider.toggleView(WorkspaceView.lighting);
