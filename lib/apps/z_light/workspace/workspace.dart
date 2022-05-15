@@ -221,7 +221,7 @@ class _WorkspaceState extends State<Workspace> {
                                 // TODO: select by devices
                                 child: Padding(
                                   padding: const EdgeInsets.all(4.0),
-                                  child: DropDownWorkspace(
+                                  child: DropDownDevices(
                                       initialValue: devices().first,
                                       items: devices()
                                           .map(
@@ -241,7 +241,10 @@ class _WorkspaceState extends State<Workspace> {
                                                       e.enabled = true;
                                                     },
                                                   ),
-                                                  Text(e.name),
+                                                  Text(
+                                                    e.name,
+                                                    style: pStyle,
+                                                  ),
                                                 ],
                                               ),
                                             ),
@@ -343,8 +346,8 @@ class _WorkspaceState extends State<Workspace> {
   }
 }
 
-class DropDownWorkspace extends StatelessWidget {
-  const DropDownWorkspace({
+class DropDownDevices extends StatelessWidget {
+  const DropDownDevices({
     Key? key,
     this.initialValue,
     required this.items,
