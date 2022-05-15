@@ -8,7 +8,6 @@ import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
 import 'package:hpx/apps/z_light/tools_effects/tools_effects_wrapper.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
 import 'package:hpx/providers/workspace_provider.dart';
-import 'package:hpx/providers/keyboard/keys_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/layouts/three_columns.dart';
@@ -26,8 +25,6 @@ class _WrapperState extends State<Wrapper> {
   final List<LayerListItem> _layersListItems = [];
   final List<LayerStackItem> _layersStackItems = [];
   final _modeProvider = ModeProvider();
-  final PickerModel _defaultPreset = PickerModel(
-      title: 'Default', enabled: true, value: 'default', icon: Icons.dashboard);
 
   @override
   void initState() {
@@ -55,11 +52,6 @@ class _WrapperState extends State<Wrapper> {
     });
   }
 
-  _changeView(WorkspaceView view) {
-    context.read<KeySelectorProvider>().clearKeys();
-    // context.read<ZoneSelectorProvider>().updatePosition();
-  }
-
   @override
   Widget build(BuildContext context) {
     final workspaceProvider = Provider.of<WorkspaceProvider>(context);
@@ -82,7 +74,6 @@ class _WrapperState extends State<Wrapper> {
               child: const Text('Workspace'),
               onPressed: () {
                 workspaceProvider.toggleView(WorkspaceView.workspace);
-                _changeView(WorkspaceView.workspace);
               },
             ),
             TextButton(
@@ -96,7 +87,6 @@ class _WrapperState extends State<Wrapper> {
               child: const Text('Lighting Options'),
               onPressed: () {
                 workspaceProvider.toggleView(WorkspaceView.lighting);
-                _changeView(WorkspaceView.lighting);
               },
             ),
           ],

@@ -5,10 +5,13 @@ import 'package:hpx/apps/z_light/layers/widgets/layer_stack.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard_selector.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/notification_modal.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/notification_strip.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/round_button.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/zoom_toolbar.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/workspace_provider.dart';
+import 'package:hpx/utils/comparer.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -215,23 +218,36 @@ class _WorkspaceState extends State<Workspace> {
                                     width: 1,
                                   ),
                                 ),
+                                // TODO: select by devices
                                 child: Padding(
                                   padding: const EdgeInsets.all(4.0),
-                                  child: DropdownButton(
-                                    menuMaxHeight: 400,
-                                    hint: Text(
-                                      'Select by devices...',
-                                      style: pStyle,
-                                    ),
-                                    underline: const SizedBox(),
-                                    items: <String>[]
-                                        .map((e) => DropdownMenuItem(
+                                  child: DropDownWorkspace(
+                                      initialValue: devices().first,
+                                      items: devices()
+                                          .map(
+                                            (e) => DropdownMenuItem(
                                               value: e,
-                                              child: Text(e, style: pStyle),
-                                            ))
-                                        .toList(),
-                                    onChanged: (o) {},
-                                  ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  Checkbox(
+                                                    activeColor:
+                                                        Theme.of(context)
+                                                            .colorScheme
+                                                            .primary,
+                                                    value: e.enabled,
+                                                    onChanged: (x) {
+                                                      e.enabled = true;
+                                                    },
+                                                  ),
+                                                  Text(e.name),
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                          .toList(),
+                                      hint: 'Select by devices...'),
                                 ),
                               ),
                             ),
@@ -246,40 +262,11 @@ class _WorkspaceState extends State<Workspace> {
                   child: Container(),
                 ),
         ),
-        Consumer<WorkspaceProvider>(
-          builder: (context, value, child) => (value.isStripNotify)
-              ? Container(
-                  color: Colors.yellow,
-                  padding: const EdgeInsets.all(5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.all(0),
-                        child: Text(
-                          value.stripNotificationText,
-                          style: TextStyle(
-                            color: Theme.of(context).primaryColorDark,
-                          ),
-                        ),
-                      ),
-                      Tooltip(
-                        message: 'Close',
-                        child: RoundButton(
-                          onTapDown: () {
-                            value.toggleStripNotification();
-                          },
-                          onTapUp: () {},
-                          size: 24,
-                          icon: Icons.close,
-                          iconColor: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              : Container(),
-        ),
+        if (workspaceProvider.isStripNotify)
+          StripNotification(
+            message: workspaceProvider.stripNotificationText,
+            closeHandler: workspaceProvider.toggleStripNotification,
+          ),
         Expanded(
           child: Container(
             decoration: const BoxDecoration(
@@ -323,6 +310,12 @@ class _WorkspaceState extends State<Workspace> {
                         layers: widget.layers,
                       ),
                       if (workspaceProvider.isPanning) const KeyboardSelector(),
+
+                      if (workspaceProvider.isModalNotify)
+                        ModalNotification(
+                          children: workspaceProvider.modalWidgets,
+                          closeHandler: workspaceProvider.toggleModal,
+                        ),
                       Positioned(
                         bottom: 0,
                         left: 0,
@@ -348,4 +341,44 @@ class _WorkspaceState extends State<Workspace> {
       ],
     );
   }
+}
+
+class DropDownWorkspace extends StatelessWidget {
+  const DropDownWorkspace({
+    Key? key,
+    this.initialValue,
+    required this.items,
+    required this.hint,
+  }) : super(key: key);
+
+  final Object? initialValue;
+  final List<DropdownMenuItem<Object>>? items;
+  final String hint;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton(
+      value: initialValue,
+      menuMaxHeight: 400.0,
+      hint: Text(hint, style: pStyle),
+      underline: const SizedBox(),
+      items: items,
+      onChanged: (o) {},
+    );
+  }
+}
+
+class Device extends Comparer {
+  final String name;
+  bool enabled;
+
+  Device(this.name, this.enabled) : super(name);
+}
+
+List<Device> devices() {
+  return [
+    Device('Z Book', true),
+    Device('Pavilion', false),
+    Device('Elitebook', false),
+  ];
 }
