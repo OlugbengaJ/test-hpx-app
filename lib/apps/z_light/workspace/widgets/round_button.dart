@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class RoundButton extends StatelessWidget {
-  /// RoundButton provides a customizable button that accepts icon
+  /// [RoundButton] provides a customizable button that accepts icon
   /// and color which keeps the entire app consistent.
   const RoundButton({
     Key? key,
