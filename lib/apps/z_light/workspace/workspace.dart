@@ -37,9 +37,9 @@ class _WorkspaceState extends State<Workspace> {
 
   final double _buttonSize = 32.0;
 
-  /// [_zoomTextChanged] ensure user enters only digits
+  /// [zoomTextChanged] ensure user enters only digits
   /// that are within the acceptable zoom threshold.
-  void _zoomTextChanged() {
+  void zoomTextChanged() {
     double? value = double.tryParse(_zoomTextCtrl.text);
 
     if (value != null) {
@@ -52,21 +52,21 @@ class _WorkspaceState extends State<Workspace> {
     }
   }
 
-  /// [_zoomEnd] terminates continuous zoom
+  /// [zoomEnd] terminates continuous zoom
   ///
   /// timer is canceled to stop zooming by the duration specified
-  void _zoomEnd() {
+  void zoomEnd() {
     _timer.cancel();
   }
 
-  /// [_updateZoom] sets the zoom text (without fractions) and zoom scale.
-  void _updateZoom() {
+  /// [updateZoom] sets the zoom text (without fractions) and zoom scale.
+  void updateZoom() {
     _zoomTextCtrl.text = '${_zoomValue.ceil()}';
   }
 
-  /// [_zoomIn] increases the zoomValue only up to the zoomIn threshold
+  /// [zoomIn] increases the zoomValue only up to the zoomIn threshold
   /// preventing scenario where content is unnecessarily large.
-  void _zoomIn() {
+  void zoomIn() {
     _timer = Timer.periodic(_duration, (t) {
       if (_zoomValue == _zoomInThreshold) {
         _timer.cancel();
@@ -75,22 +75,22 @@ class _WorkspaceState extends State<Workspace> {
 
       setState(() {
         _zoomValue += 1;
-        _updateZoom();
+        updateZoom();
       });
     });
   }
 
-  /// [_zoomExpand] sets the zoomValue to half the zoomIn threshold.
-  void _zoomExpand() {
+  /// [zoomExpand] sets the zoomValue to half the zoomIn threshold.
+  void zoomExpand() {
     setState(() {
       _zoomValue = _zoomInThreshold / 3.1;
-      _updateZoom();
+      updateZoom();
     });
   }
 
-  /// zoomOut decreases the zoomValue only up to the zoomOut threshold
+  /// [zoomOut] decreases the zoomValue only up to the zoomOut threshold
   /// preventing scenario where content is completely not visible.
-  void _zoomOut() {
+  void zoomOut() {
     _timer = Timer.periodic(_duration, (t) {
       if (_zoomValue == _zoomOutThreshold) {
         _timer.cancel();
@@ -99,16 +99,16 @@ class _WorkspaceState extends State<Workspace> {
 
       setState(() {
         _zoomValue -= 1;
-        _updateZoom();
+        updateZoom();
       });
     });
   }
 
-  /// zoomCollapse sets the zoomValue to the zoomOut threshold.
-  void _zoomCollapse() {
+  /// [zoomCollapse] sets the zoomValue to the zoomOut threshold.
+  void zoomCollapse() {
     setState(() {
       _zoomValue = _zoomOutThreshold;
-      _updateZoom();
+      updateZoom();
     });
   }
 
@@ -117,7 +117,7 @@ class _WorkspaceState extends State<Workspace> {
     super.initState();
 
     // Start listening to changes.
-    _zoomTextCtrl.addListener(_zoomTextChanged);
+    _zoomTextCtrl.addListener(zoomTextChanged);
   }
 
   @override
@@ -327,11 +327,11 @@ class _WorkspaceState extends State<Workspace> {
                         child: Center(
                           child: ZoomToolbar(
                             zoomTextController: _zoomTextCtrl,
-                            zoomInHandler: _zoomIn,
-                            zoomExpandHandler: _zoomExpand,
-                            zoomOutHandler: _zoomOut,
-                            zoomCollapseHandler: _zoomCollapse,
-                            zoomEndHandler: _zoomEnd,
+                            zoomInHandler: zoomIn,
+                            zoomExpandHandler: zoomExpand,
+                            zoomOutHandler: zoomOut,
+                            zoomCollapseHandler: zoomCollapse,
+                            zoomEndHandler: zoomEnd,
                           ),
                         ),
                       )
