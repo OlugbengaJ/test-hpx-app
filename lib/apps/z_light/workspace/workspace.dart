@@ -12,6 +12,7 @@ import 'package:hpx/apps/z_light/workspace/widgets/zoom_toolbar.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/utils/comparer.dart';
+import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -274,7 +275,7 @@ class _WorkspaceState extends State<Workspace> {
           child: Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/backdrop.png"),
+                image: AssetImage(Constants.backdropImage),
                 repeat: ImageRepeat.repeat,
               ),
             ),
