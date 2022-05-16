@@ -316,8 +316,8 @@ class _WorkspaceState extends State<Workspace> {
 
                       if (workspaceProvider.isModalNotify)
                         ModalNotification(
-                          children: workspaceProvider.modalWidgets,
                           closeHandler: workspaceProvider.toggleModal,
+                          children: workspaceProvider.modalWidgets,
                         ),
                       Positioned(
                         bottom: 0,

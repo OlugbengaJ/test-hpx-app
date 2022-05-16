@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.hp" "\0"
-            VALUE "FileDescription", "hpx" "\0"
+            VALUE "FileDescription", "hpxapp" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "hpx" "\0"
+            VALUE "InternalName", "hpxapp" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2022 com.hp. All rights reserved." "\0"
-            VALUE "OriginalFilename", "hpx.exe" "\0"
-            VALUE "ProductName", "hpx" "\0"
+            VALUE "OriginalFilename", "hpxapp.exe" "\0"
+            VALUE "ProductName", "hpxapp" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

@@ -21,12 +21,12 @@ class KeyRRect extends StatelessWidget {
     ///
     /// _zoomedWidth and _zoomedHeight define the canvas width and height
     /// based on the key width, height, and a zoom scale.
-    const double _width = 800;
-    final double _zoomedWidth = _width * keyModel.keyWidth * zoomScale;
-    final double _zoomedHeight = _width * keyModel.keyHeight * zoomScale;
+    const double width = 800;
+    final double zoomedWidth = width * keyModel.keyWidth * zoomScale;
+    final double zoomedHeight = width * keyModel.keyHeight * zoomScale;
 
     return CustomPaint(
-      size: Size(_zoomedWidth, _zoomedHeight * 0.298212833898266),
+      size: Size(zoomedWidth, zoomedHeight * 0.298212833898266),
       painter: KeyRRectPainter(
         paintingStyle: keyModel.paintingStyle,
         keyText: keyModel.keyText,
