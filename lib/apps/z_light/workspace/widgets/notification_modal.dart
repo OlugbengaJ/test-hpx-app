@@ -32,7 +32,6 @@ class ModalNotification extends StatelessWidget {
           padding: const EdgeInsets.all(15.0),
           width: 400,
           height: 400,
-          // constraints: BoxConstraints(maxHeight: maxHeight, maxWidth: maxWidth),
           decoration: BoxDecoration(
             border: Border.all(
               width: 1,
@@ -56,13 +55,25 @@ class ModalNotification extends StatelessWidget {
                 ),
               ),
               // stack up child widgets
-              ...children,
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.zero,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    primary: false,
+                    padding: EdgeInsets.zero,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: children,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
       ],
     );
-    //   ],
-    // );
   }
 }
