@@ -34,7 +34,7 @@ class _LayerListItemState extends State<LayerListItem> {
     });
   }
 
-  _toggleLayer(provider) {
+  _toggleLayer(LayersProvider provider) {
     LayerItemModel layerItemModel = widget.layerItemModel;
     provider.toggleVisibility(
         LayerItemModel(
@@ -47,7 +47,7 @@ class _LayerListItemState extends State<LayerListItem> {
   }
 
 
-  _duplicate(provider){
+  _duplicate(LayersProvider provider){
     if(widget.layerItemModel.mode.name=="Shortcut Colors"){
       provider.duplicate(widget.layerItemModel, widget.layerIndex, sublayer: true);
     }else{
@@ -56,7 +56,7 @@ class _LayerListItemState extends State<LayerListItem> {
     
   }
 
-  _toggleEditing(value) {
+  _toggleEditing(LayersProvider value) {
     setState(() {
       _editing = !_editing;
       _layerNameController = TextEditingController(
@@ -64,28 +64,28 @@ class _LayerListItemState extends State<LayerListItem> {
     });
   }
 
-  _deleteLayer(provider){
+  _deleteLayer(LayersProvider provider){
     provider.removeItem(widget.layerIndex);
   }
 
-  _onTap(provider) {
+  _onTap(LayersProvider provider) {
     provider.changeIndex(widget.layerIndex);
   }
 
-  _onSubmit(value, provider) {
+  _onSubmit(value, LayersProvider provider) {
     setState(() {
       _editing = !_editing;
     });
     provider.update(
         LayerItemModel(
-            id: widget.layerItemModel.id,
-            mode: widget.layerItemModel.mode,
-            layerText: value,
-            controller: widget.layerItemModel.controller),
+          id: widget.layerItemModel.id,
+          mode: widget.layerItemModel.mode,
+          layerText: value,
+          controller: widget.layerItemModel.controller),
         widget.layerIndex);
   }
 
-  List<Widget> _sublayers(provider){
+  List<Widget> _sublayers(LayersProvider provider){
     List<Widget> layers = [];
     if(widget.layerItemModel.hasSublayer){
       int index = 0;
@@ -218,7 +218,28 @@ class _LayerListItemState extends State<LayerListItem> {
                                                   ),
                                                 ),
                                                 Tooltip(
-                                                  message: "Delete",
+                                                  //message: "Delete",
+                                                  triggerMode: TooltipTriggerMode.tap,
+                                                  showDuration: Duration(seconds: 2),
+                                                  padding: EdgeInsets.zero,
+                                                  richMessage: WidgetSpan(
+                                                    alignment: PlaceholderAlignment.baseline,
+                                                    baseline: TextBaseline.alphabetic,
+                                                    child: Container(
+                                                      color: Colors.black,
+                                                      constraints: const BoxConstraints(minWidth: 100),
+                                                      child: const SizedBox(
+                                                        height: 100,
+                                                        child: Text(
+                                                          "Delete",
+                                                          style: TextStyle(
+                                                            backgroundColor: Colors.black,
+                                                          )
+                                                          ,
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ),
                                                   preferBelow: false,
                                                   child: InkWell(
                                                     child: Icon(
