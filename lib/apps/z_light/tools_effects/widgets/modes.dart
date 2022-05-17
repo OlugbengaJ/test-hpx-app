@@ -80,12 +80,12 @@ class _ToolModesState extends State<ToolModes> {
   Widget build(BuildContext context) {
     return Consumer<ModeProvider>(
         builder: (context, _modeProvider, child) => Container(
-            margin: EdgeInsets.zero,
+            margin: const EdgeInsets.only(right: 10.0, top: 20.0, bottom: 30.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text("Tools & Effects",
-                    textAlign: TextAlign.left, style: h5Style),
+                    textAlign: TextAlign.left, style: h4Style),
                 SizedBox(
                     width: MediaQuery.of(context).size.width * 0.45,
                     child: PickerDropdown(
