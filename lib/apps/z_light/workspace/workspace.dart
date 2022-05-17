@@ -131,6 +131,9 @@ class _WorkspaceState extends State<Workspace> {
   Widget build(BuildContext context) {
     final workspaceProvider = Provider.of<WorkspaceProvider>(context);
 
+    // initialize layers provider
+    workspaceProvider.setLayersProvider(Provider.of<LayersProvider>(context));
+
     return Column(
       children: [
         /// Workspace area must be constrained to avoid width/height overflow
@@ -279,66 +282,59 @@ class _WorkspaceState extends State<Workspace> {
                 repeat: ImageRepeat.repeat,
               ),
             ),
-            child: Consumer<LayersProvider>(
-              builder: (context, layersProvider, child) {
-                return GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onPanDown: (details) {
-                    workspaceProvider.onPanDown(details);
-                    // initialize the layers provider
-                    workspaceProvider.setLayersProvider(layersProvider);
-                  },
-                  onPanUpdate: (details) =>
-                      workspaceProvider.onPanUpdate(details),
-                  onPanEnd: (details) => workspaceProvider.onPanEnd(details),
-                  onPanCancel: () => workspaceProvider.onPanClear(),
-                  child: Stack(
-                    alignment: Alignment.bottomLeft,
-                    fit: StackFit.expand,
-                    children: [
-                      // Keyboard widget takes a zoom scale which is applied to all keys.
-                      // This ensures seamless zooming of the entire keyboard.
-                      Align(
-                        alignment: Alignment.center,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          primary: false,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            primary: false,
-                            child: Keyboard(zoomScale: _zoomScale),
-                          ),
-                        ),
-                      ),
-                      LayersStack(
-                        layers: widget.layers,
-                      ),
-                      if (workspaceProvider.isPanning) const KeyboardSelector(),
-
-                      if (workspaceProvider.isModalNotify)
-                        ModalNotification(
-                          closeHandler: workspaceProvider.toggleModal,
-                          children: workspaceProvider.modalWidgets,
-                        ),
-                      Positioned(
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Center(
-                          child: ZoomToolbar(
-                            zoomTextController: _zoomTextCtrl,
-                            zoomInHandler: zoomIn,
-                            zoomExpandHandler: zoomExpand,
-                            zoomOutHandler: zoomOut,
-                            zoomCollapseHandler: zoomCollapse,
-                            zoomEndHandler: zoomEnd,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                );
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onPanDown: (details) {
+                workspaceProvider.onPanDown(details);
               },
+              onPanUpdate: (details) => workspaceProvider.onPanUpdate(details),
+              onPanEnd: (details) => workspaceProvider.onPanEnd(details),
+              onPanCancel: () => workspaceProvider.onPanClear(),
+              child: Stack(
+                alignment: Alignment.bottomLeft,
+                fit: StackFit.expand,
+                children: [
+                  // Keyboard widget takes a zoom scale which is applied to all keys.
+                  // This ensures seamless zooming of the entire keyboard.
+                  Align(
+                    alignment: Alignment.center,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      primary: false,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        primary: false,
+                        child: Keyboard(zoomScale: _zoomScale),
+                      ),
+                    ),
+                  ),
+                  LayersStack(
+                    layers: widget.layers,
+                  ),
+                  if (workspaceProvider.isPanning) const KeyboardSelector(),
+
+                  if (workspaceProvider.isModalNotify)
+                    ModalNotification(
+                      closeHandler: workspaceProvider.toggleModal,
+                      children: workspaceProvider.modalWidgets,
+                    ),
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: ZoomToolbar(
+                        zoomTextController: _zoomTextCtrl,
+                        zoomInHandler: zoomIn,
+                        zoomExpandHandler: zoomExpand,
+                        zoomOutHandler: zoomOut,
+                        zoomCollapseHandler: zoomCollapse,
+                        zoomEndHandler: zoomEnd,
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         )

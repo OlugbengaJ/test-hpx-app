@@ -61,7 +61,7 @@ List<PickerModel> moodList = [
       icon: Icons.shortcut),
   PickerModel(title: 'Mood', enabled: true, value: 'mood', icon: Icons.mood),
   PickerModel(
-      title: 'Colors Production',
+      title: 'Color Production',
       enabled: true,
       value: 'colorsproduction',
       icon: Icons.production_quantity_limits),

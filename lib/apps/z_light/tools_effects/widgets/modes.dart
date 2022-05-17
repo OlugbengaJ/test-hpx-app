@@ -79,36 +79,37 @@ class _ToolModesState extends State<ToolModes> {
   @override
   Widget build(BuildContext context) {
     return Consumer<ModeProvider>(
-        builder: (context, _modeProvider, child) => Container(
-            margin: EdgeInsets.zero,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text("Tools & Effects",
-                    textAlign: TextAlign.left, style: h5Style),
-                SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.45,
-                    child: PickerDropdown(
-                      onChange: (PickerModel? returnValue) {
-                        _modeProvider.setCurrentMode(ToolsModeModel(
-                            name: returnValue!.title,
-                            effects: EffectsModel(
-                                effectName: _modeProvider.currentMode.value),
-                            currentColor: [],
-                            value: returnValue.value));
-                        setState(() {
-                          preset = changeComponent(returnValue);
-                        });
-                      },
-                      pickerHintText: "Picker a tool or effect mode ....",
-                      pickerList: _modeProvider.getPickerModes('mood'),
-                      defaultPicker: _defaultPreset,
-                    )),
-                Container(
-                  margin: const EdgeInsets.only(top: 0.0, bottom: 20.0),
-                  child: preset ?? changeComponent(_defaultPreset),
-                ),
-              ],
-            )));
+      builder: (context, modeProvider, child) => Container(
+        margin: EdgeInsets.zero,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text("Tools & Effects", textAlign: TextAlign.left, style: h5Style),
+            SizedBox(
+                width: MediaQuery.of(context).size.width * 0.45,
+                child: PickerDropdown(
+                  onChange: (PickerModel? returnValue) {
+                    modeProvider.setCurrentMode(ToolsModeModel(
+                        name: returnValue!.title,
+                        effects: EffectsModel(
+                            effectName: modeProvider.currentMode.value),
+                        currentColor: [],
+                        value: returnValue.value));
+                    setState(() {
+                      preset = changeComponent(returnValue);
+                    });
+                  },
+                  pickerHintText: "Picker a tool or effect mode ....",
+                  pickerList: modeProvider.getPickerModes('mood'),
+                  defaultPicker: _defaultPreset,
+                )),
+            Container(
+              margin: const EdgeInsets.only(top: 0.0, bottom: 20.0),
+              child: preset ?? changeComponent(_defaultPreset),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

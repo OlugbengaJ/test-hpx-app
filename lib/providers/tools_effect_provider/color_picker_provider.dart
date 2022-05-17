@@ -229,6 +229,31 @@ List<ColorPickerWidgetModel> audioVisualGradientList = [
 
 class ColorPickerProvider extends ChangeNotifier {
   ColorPickerWidgetModel? currentColor;
+  List<Color> lastColors = [];
+  List<List<Color>> presetColors = [
+    [
+      Colors.red,
+      Colors.orange.shade700,
+      Colors.orange,
+      Colors.yellow.shade700,
+      Colors.yellow,
+      Colors.yellow.shade200,
+      Colors.green.shade700,
+      Colors.green,
+      Colors.green.shade200
+    ],
+    [
+      Colors.white,
+      Colors.pink.shade700,
+      Colors.pink,
+      Colors.purple,
+      Colors.purple.shade700,
+      Colors.indigo.shade700,
+      Colors.blue.shade900,
+      Colors.blue.shade200,
+      Colors.green.shade100
+    ]
+  ];
 
   void setCurrentPickerWidget(ColorPickerWidgetModel data) {
     currentColor = data;
