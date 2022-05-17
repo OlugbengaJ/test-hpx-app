@@ -24,7 +24,7 @@ class WorkspaceProvider with ChangeNotifier {
   List<Widget> get modalWidgets => _modalWidgets ?? [];
 
   /// [_workspaceView] determines if the lighting options is displayed.
-  WorkspaceView _workspaceView = WorkspaceView.workspace;
+  WorkspaceView _workspaceView = WorkspaceView.lighting;
 
   /// [getWorkspaceView] returns the current view.
   WorkspaceView get getWorkspaceView => _workspaceView;
