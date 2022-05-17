@@ -67,6 +67,44 @@ jobs:
       #- run: flutter test
       - run: flutter build web
 
+      - name: Deploy to DEV Netlify
+        if: |
+          contains('
+            refs/heads/development
+          ', github.ref)
+        uses: nwtgck/actions-netlify@v1.2
+        with:
+          publish-dir: './build/web'
+          production-branch: development
+          github-token: ${{ secrets.MY_GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions_${{github.run_id}}"
+          enable-pull-request-comment: false
+          enable-commit-comment: true
+          overwrites-pull-request-comment: true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.DEV_NETLIFY_SITE_ID }}
+        timeout-minutes: 1
+      
+      - name: Deploy to QA Netlify
+        if: |
+          contains('
+            refs/heads/qa
+          ', github.ref)
+        uses: nwtgck/actions-netlify@v1.2
+        with:
+          publish-dir: './build/web'
+          production-branch: qa
+          github-token: ${{ secrets.MY_GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions_${{github.run_id}}"
+          enable-pull-request-comment: false
+          enable-commit-comment: true
+          overwrites-pull-request-comment: true
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.QA_NETLIFY_SITE_ID }}
+        timeout-minutes: 1
+
       - name: Publish WEB Build
         if: |
           contains('
@@ -123,6 +161,7 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
+
       - uses: subosito/flutter-action@v2
         with:
           channel: 'beta'
@@ -144,7 +183,7 @@ jobs:
           name: Linux_${{github.run_id}}
           path: |
             build/linux/x64/release/bundle
-            linux-installer/
+            linux-dependencies/
 
 
 
@@ -152,7 +191,7 @@ jobs:
   Notify:
     name: Nofify on Slack
     if: |
-      (github.ref == 'refs/heads/development' || github.ref == 'refs/heads/qa') && 
+      github.ref == 'refs/heads/qa' && 
       github.event_name == 'push'
     runs-on: ubuntu-latest
     needs: [Andriod, WEB, Windows, Linux]
