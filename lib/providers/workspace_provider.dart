@@ -74,12 +74,6 @@ class WorkspaceProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // void _clearSelection() {
-  //   _isPanning = true;
-  //   _panDownDetails = DragDownDetails(globalPosition: const Offset(0, 0));
-  //   _panUpdateDetails = DragUpdateDetails(globalPosition: const Offset(0, 0));
-  // }
-
   /// [toggleStripNotification] is used to hide or show a notification.
   ///
   /// The Strip notification shows up right under the Zone Selection and is
