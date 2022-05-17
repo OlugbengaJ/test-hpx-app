@@ -29,7 +29,7 @@ class _LayersState extends State<Layers> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       initialLayer();
     });
   }
