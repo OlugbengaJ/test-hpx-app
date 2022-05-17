@@ -10,7 +10,7 @@ class Comparer {
   ///    Device(this.name, this.enabled) : super(name);
   ///  }
   /// ```
-  /// From example, Devices are compared based on name.
+  /// From example, Device classes are compared based on name.
   /// To compare based on a field of type class, endure the class extends comparer.
   const Comparer(this.v);
 
