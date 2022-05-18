@@ -226,35 +226,13 @@ class _WorkspaceState extends State<Workspace> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(4.0),
                                   child: DropDownDevices(
-                                      initialValue: devices().first,
-                                      items: devices()
-                                          .map(
-                                            (e) => DropdownMenuItem(
-                                              value: e,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  Checkbox(
-                                                    activeColor:
-                                                        Theme.of(context)
-                                                            .colorScheme
-                                                            .primary,
-                                                    value: e.enabled,
-                                                    onChanged: (x) {
-                                                      e.enabled = true;
-                                                    },
-                                                  ),
-                                                  Text(
-                                                    e.name,
-                                                    style: pStyle,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                          .toList(),
-                                      hint: 'Select by devices...'),
+                                    initialValue: devices().first,
+                                    items: getDropdownMenuItems(
+                                      Theme.of(context).colorScheme.primary,
+                                      devices(),
+                                    ),
+                                    hint: 'Select by devices...',
+                                  ),
                                 ),
                               ),
                             ),
@@ -369,16 +347,71 @@ class DropDownDevices extends StatelessWidget {
 }
 
 class Device extends Comparer {
-  final String name;
-  bool enabled;
+  Device(this.name, this.enabled, {this.devices}) : super(name);
 
-  Device(this.name, this.enabled) : super(name);
+  final String name;
+  late final List<Device>? devices;
+  bool enabled;
 }
 
 List<Device> devices() {
   return [
-    Device('Z Book', true),
-    Device('Pavilion', false),
-    Device('Elitebook', false),
+    Device('All devices', false),
+    Device('OMEN devices', false),
+    Device('Z by HP device', true, devices: [Device('ZBook Studio G9', true)]),
+    Device('Other devices', false),
   ];
+}
+
+/// [getDropdownMenuItems] returns a list of [Device] dropdown menu items.
+///
+/// Recursively adds sub items as well.
+List<DropdownMenuItem<Device>>? getDropdownMenuItems(
+    Color activeColor, List<Device>? devices,
+    [int index = 0]) {
+  if (devices == null) return null;
+
+  List<DropdownMenuItem<Device>> c = [];
+
+  for (var element in devices) {
+    c.add(dropdownMenuItem(element, activeColor, index));
+    if (element.devices != null && element.devices!.isNotEmpty) {
+      final g = getDropdownMenuItems(activeColor, element.devices, index + 1);
+
+      // add sub menu items if they exist
+      if (g != null) c.addAll(g);
+    }
+  }
+
+  return c;
+}
+
+DropdownMenuItem<Device> dropdownMenuItem(Device e, Color activeColor,
+    [index = 0]) {
+  const double paddingLeft = 20;
+
+  return DropdownMenuItem(
+    value: e,
+    child: Padding(
+      padding: EdgeInsets.only(left: paddingLeft * index),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Checkbox(
+            activeColor: activeColor,
+            value: e.enabled,
+            onChanged: (x) {
+              e.enabled = true;
+            },
+          ),
+          Text(
+            e.name,
+            style: pStyle,
+          ),
+          if (e.devices != null && e.devices!.isNotEmpty)
+            const Icon(Icons.arrow_drop_down)
+        ],
+      ),
+    ),
+  );
 }
