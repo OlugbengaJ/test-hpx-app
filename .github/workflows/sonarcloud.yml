@@ -6,6 +6,10 @@ on:
       - development
   pull_request:
       types: [opened, synchronize, reopened]
+
+permissions:  
+  contents: read
+  
 name: Sonar Scanner
 jobs:
   sonarcloud:
