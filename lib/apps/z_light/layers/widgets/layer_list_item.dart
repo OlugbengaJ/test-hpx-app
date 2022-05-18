@@ -198,8 +198,7 @@ class _LayerListItemState extends State<LayerListItem> {
                                       ? Consumer<LayersProvider>(
                                           builder: (context, value, child) {
                                           return Container(
-                                            margin:
-                                                const EdgeInsets.only(right: 26),
+                                            //margin: const EdgeInsets.only(right: 26),
                                             child: Row(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.end,
@@ -311,6 +310,24 @@ class _LayerListItemState extends State<LayerListItem> {
                                                   ),
                                                   preferBelow: false,
                                                   child: Container(),
+                                                ),
+
+                                                Tooltip(
+                                                  message: "Rearrange",
+                                                  child: ReorderableDragStartListener(
+                                                    index: widget.layerIndex,
+                                                    child: GestureDetector(
+                                                      child: InkWell(
+                                                        child: Icon(
+                                                          Ionicons.list,
+                                                          size: _iconSize,
+                                                          color: widget.layerItemModel
+                                                              .listDisplayColor,
+                                                        ),
+                                                        onTap: () => {},
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
                                                 
                                               ],

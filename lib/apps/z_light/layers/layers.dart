@@ -123,7 +123,7 @@ class _LayersState extends State<Layers> {
                   child: Consumer<LayersProvider>(
                     builder: (_, provider, child) {
                       return ReorderableListView.builder(
-                        buildDefaultDragHandles: true,
+                        buildDefaultDragHandles: false,
                         padding: const EdgeInsets.all(2),
                         itemCount: provider.length,
                         scrollController:
