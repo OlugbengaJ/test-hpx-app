@@ -26,7 +26,6 @@ class _ImagePresetState extends State<ImagePreset> {
       final bytes = File(file.path!).readAsBytesSync();
       setState(() {
         filePath = Image.memory(bytes).image;
-        // filePath = "data:image/png;base64," + base64Encode(bytes);
       });
     } else {
       // User canceled the picker

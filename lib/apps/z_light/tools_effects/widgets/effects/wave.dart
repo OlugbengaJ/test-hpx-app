@@ -29,21 +29,6 @@ class _WavePresetState extends State<WavePreset> {
     super.initState();
   }
 
-  Future setDefaultColors(BuildContext context) async {
-    await Future.delayed(Duration(seconds: 1));
-    ModeProvider modeProvider =
-        Provider.of<ModeProvider>(context, listen: false);
-    List<Color> currentColors = [];
-    waveCustomList.forEach((element) {
-      currentColors.add(element.colorCode[0]);
-    });
-    modeProvider.setCurrentMode(ToolsModeModel(
-        currentColor: currentColors,
-        value: modeProvider.currentMode.value,
-        effects: modeProvider.currentMode.effects,
-        name: modeProvider.currentMode.name));
-  }
-
   void _setDegreeValue(double? returnValue) {
     EffectProvider effectsProvider =
         Provider.of<EffectProvider>(context, listen: false);

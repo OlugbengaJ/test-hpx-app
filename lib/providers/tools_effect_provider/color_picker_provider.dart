@@ -6,6 +6,68 @@ import 'package:hpx/utils/KeyboardController.dart';
 import 'package:hpx/widgets/components/color_picker.dart';
 
 // waves lists
+List<ColorPickerWidgetModel> colorcycleDefaultsList = [
+  ColorPickerWidgetModel(
+    name: "Galaxy",
+    colorCode: [
+      Colors.red.shade900,
+      Colors.yellow,
+      Colors.green,
+      Colors.blue,
+      Colors.purple,
+      Colors.red
+    ],
+  ),
+  ColorPickerWidgetModel(
+      name: "Ocean",
+      colorCode: [
+        Colors.blue,
+        Colors.blue.shade900,
+        Colors.purple,
+        Colors.blue.shade100
+      ],
+      hasBorder: false),
+  ColorPickerWidgetModel(
+      name: "Jungle",
+      colorCode: [
+        Colors.green,
+        Colors.green.shade200,
+        Colors.blue,
+        Colors.orange,
+        Colors.green.shade900
+      ],
+      hasBorder: false),
+  ColorPickerWidgetModel(
+      name: "Volcano",
+      colorCode: [Colors.deepOrange, Colors.red, Colors.brown, Colors.orange],
+      hasBorder: false),
+  ColorPickerWidgetModel(
+      name: "OMEN",
+      colorCode: [
+        Colors.purple,
+        Colors.red,
+        Colors.orange,
+        Colors.purple.shade100
+      ],
+      hasBorder: false)
+];
+List<ColorPickerWidgetModel> colorcycleCustomList = [
+  ColorPickerWidgetModel(
+    action: 'Edit',
+    name: "",
+    canEdit: true,
+    colorCode: [
+      Colors.red.shade900,
+      Colors.yellow,
+      Colors.green,
+      Colors.blue,
+      Colors.purple,
+      Colors.red
+    ],
+  )
+];
+
+// waves lists
 List<ColorPickerWidgetModel> waveDefaultsList = [
   ColorPickerWidgetModel(
     name: "Galaxy",
@@ -89,6 +151,36 @@ List<ColorPickerWidgetModel> breathingList = [
     colorCode: [Colors.yellow.shade900],
     setRandom: true,
   )
+];
+
+// interactive lists
+List<ColorPickerWidgetModel> interactiveColorList = [
+  ColorPickerWidgetModel(
+    label: "Primary Color",
+    action: '',
+    width: 30.0,
+    height: 30.0,
+    canEdit: true,
+    name: "",
+    colorCode: [Colors.red.shade900],
+    setRandom: true,
+  ),
+  ColorPickerWidgetModel(
+    label: "Secondary Color",
+    action: '',
+    width: 30.0,
+    height: 30.0,
+    canEdit: true,
+    name: "",
+    colorCode: [Colors.yellow.shade900],
+    setRandom: true,
+  ),
+  // ColorPickerWidgetModel(
+  //   action: 'Edit',
+  //   canEdit: true,
+  //   name: "Custom 4",
+  //   colorCode: [Colors.grey.shade900],
+  // )
 ];
 
 // blinking lists
@@ -214,7 +306,7 @@ List<ColorPickerWidgetModel> audioVisualSolidList = [
       width: 30.0,
       height: 30.0,
       name: "",
-      colorCode: [Colors.grey.shade900])
+      colorCode: [Colors.transparent])
 ];
 List<ColorPickerWidgetModel> audioVisualGradientList = [
   ColorPickerWidgetModel(label: "", action: 'Edit', name: "", colorCode: [

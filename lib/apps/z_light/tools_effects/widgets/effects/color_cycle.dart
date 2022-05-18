@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/providers/apps/zlightspace_providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/widgets/theme.dart';
+import 'package:provider/provider.dart';
 
 class ColorCyclePreset extends StatefulWidget {
+  const ColorCyclePreset({Key? key}) : super(key: key);
+
   @override
-  State<ColorCyclePreset> createState() => _WavePresetState();
+  State<ColorCyclePreset> createState() => _ColorCycleState();
 }
 
-class _WavePresetState extends State<ColorCyclePreset> {
+class _ColorCycleState extends State<ColorCyclePreset> {
   String activatedButton = "DEFAULT";
   double _currentSliderValue = 0.0;
-  final double _currentAngleValue = 0.0;
   TextEditingController degreeController = TextEditingController();
   final _colorPickerProvider = ColorPickerProvider();
 
@@ -86,8 +89,8 @@ class _WavePresetState extends State<ColorCyclePreset> {
                           children:
                               _colorPickerProvider.generateColorPickerWidget(
                                   activatedButton == 'DEFAULT'
-                                      ? waveDefaultsList
-                                      : waveCustomList))
+                                      ? colorcycleDefaultsList
+                                      : colorcycleCustomList))
                     ])),
             Container(margin: const EdgeInsets.only(bottom: 10.0)),
             Divider(

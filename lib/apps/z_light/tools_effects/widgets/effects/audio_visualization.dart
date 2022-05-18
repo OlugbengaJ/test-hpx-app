@@ -21,12 +21,6 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
       icon: Icons.power_input_outlined);
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     ModeProvider modeProvider =
         Provider.of<ModeProvider>(context, listen: false);

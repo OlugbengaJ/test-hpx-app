@@ -17,28 +17,6 @@ class BlinkingPreset extends StatefulWidget {
 class _BlinkingPresetState extends State<BlinkingPreset> {
   TextEditingController degreeController = TextEditingController();
 
-  @override
-  void initState() {
-    setDefaultColors(context);
-    // TODO: implement initState
-    super.initState();
-  }
-
-  Future setDefaultColors(BuildContext context) async {
-    await Future.delayed(Duration(seconds: 1));
-    ModeProvider modeProvider =
-        Provider.of<ModeProvider>(context, listen: false);
-    List<Color> currentColors = [];
-    blinkingList.forEach((element) {
-      currentColors.add(element.colorCode[0]);
-    });
-    modeProvider.setCurrentMode(ToolsModeModel(
-        currentColor: currentColors,
-        value: modeProvider.currentMode.value,
-        effects: modeProvider.currentMode.effects,
-        name: modeProvider.currentMode.name));
-  }
-
   void _setSliderValue(double returnValue) {
     ModeProvider _modeProvider =
         Provider.of<ModeProvider>(context, listen: false);

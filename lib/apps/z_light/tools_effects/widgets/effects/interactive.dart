@@ -34,7 +34,7 @@ class _InteractivePresetState extends State<InteractivePreset> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.only(top: 20, bottom: 20.0),
+        margin: const EdgeInsets.only(top: 10, bottom: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -56,7 +56,8 @@ class _InteractivePresetState extends State<InteractivePreset> {
             ),
             Container(margin: const EdgeInsets.only(bottom: 10.0)),
             Wrap(
-              children: _toolsProvider.generateColorPickerWidget(breathingList),
+              children: _toolsProvider
+                  .generateColorPickerWidget(interactiveColorList),
             ),
             Container(margin: const EdgeInsets.only(bottom: 50.0)),
             Divider(
