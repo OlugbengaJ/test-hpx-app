@@ -29,11 +29,10 @@ class _LayersState extends State<Layers> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _addLayer();
     });
   }
-
 
   _addLayer() {
     ModeProvider modeProvider = context.read<ModeProvider>();
@@ -57,13 +56,12 @@ class _LayersState extends State<Layers> {
       minWidth: 50,
       minHeight: 50,
     );
-    
+
     provider.add(LayerItemModel(
-      id: id,
-      layerText: modeProvider.getModeInformation().name,
-      mode: modeProvider.getModeInformation(),
-      controller: controller
-    ));
+        id: id,
+        layerText: modeProvider.getModeInformation().name,
+        mode: modeProvider.getModeInformation(),
+        controller: controller));
     provider.addController(controller);
   }
 
