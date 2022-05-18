@@ -70,7 +70,7 @@ class _WrapperState extends State<Wrapper> {
                       ? Colors.white
                       : Colors.grey,
                   backgroundColor: Colors.transparent,
-                  textStyle: h4Style),
+                  textStyle: h5Style),
               child: const Text('Workspace'),
               onPressed: () {
                 workspaceProvider.toggleView(WorkspaceView.workspace);
@@ -83,7 +83,7 @@ class _WrapperState extends State<Wrapper> {
                       ? Colors.white
                       : Colors.grey,
                   backgroundColor: Colors.transparent,
-                  textStyle: h4Style),
+                  textStyle: h5Style),
               child: const Text('Lighting Options'),
               onPressed: () {
                 workspaceProvider.toggleView(WorkspaceView.lighting);
@@ -154,8 +154,8 @@ class _WrapperState extends State<Wrapper> {
   }
 }
 
-// TODO: should be removed from mode provider into a Profile Provider
-// TODO: Delete; added here just for test and must be refactored properly.
+// TODO: Profile should be removed from mode provider into a Profile Provider
+// TODO: delete; added here just for test and must be refactored properly.
 class GetProfileList extends StatelessWidget {
   const GetProfileList({
     Key? key,

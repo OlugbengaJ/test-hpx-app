@@ -8,8 +8,6 @@ import 'package:hpx/widgets/colors.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
-List<Color> lastColors = [Colors.black];
-
 class ColorPickerWidget extends StatefulWidget {
   ColorPickerWidget(
       {Key? key,
@@ -31,7 +29,7 @@ class ColorPickerWidget extends StatefulWidget {
   List<Color> colors;
   bool? picker;
   final bool? setRandom;
-  final bool? hasBorder;
+  bool? hasBorder;
   final double? width;
   final String? label;
   final double? height;
@@ -49,30 +47,6 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
   bool _value = false;
   bool isFocused = false;
   TextEditingController colorController = TextEditingController();
-  List<List<Color>> presetColors = [
-    [
-      Colors.red,
-      Colors.orange.shade700,
-      Colors.orange,
-      Colors.yellow.shade700,
-      Colors.yellow,
-      Colors.yellow.shade200,
-      Colors.green.shade700,
-      Colors.green,
-      Colors.green.shade200
-    ],
-    [
-      Colors.white,
-      Colors.pink.shade700,
-      Colors.pink,
-      Colors.purple,
-      Colors.purple.shade700,
-      Colors.indigo.shade700,
-      Colors.blue.shade900,
-      Colors.blue.shade200,
-      Colors.green.shade100
-    ]
-  ];
 
   @override
   void initState() {
@@ -130,20 +104,26 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
   }
 
   void setCurrentColor(Color selectedColor) {
+    ColorPickerProvider colorPickerProviderInstance =
+        Provider.of<ColorPickerProvider>(context, listen: false);
     setState(() {
-      lastColors.add(currentColor!);
+      colorPickerProviderInstance.lastColors.add(currentColor!);
     });
   }
 
   void closeDialog(BuildContext context) {
+    ColorPickerProvider colorPickerProviderInstance =
+        Provider.of<ColorPickerProvider>(context, listen: false);
     setState(() {
       widget.colors = currentColors;
-      lastColors.add(currentColor!);
+      colorPickerProviderInstance.lastColors.add(currentColor!);
     });
     Navigator.of(context).pop();
   }
 
   void selectcolor(BuildContext context) {
+    ColorPickerProvider colorPickerProviderInstance =
+        Provider.of<ColorPickerProvider>(context, listen: false);
     currentColor = widget.color;
     showDialog(
         context: context,
@@ -167,7 +147,7 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                           margin:
                               const EdgeInsets.only(top: 10.0, bottom: 10.0),
                           width: (widget.colors.length > 1) ? 250 : 30,
-                          height: 25,
+                          height: 20,
                           decoration: generatePreviewBox(true),
                         )
                       ],
@@ -251,12 +231,14 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                     width: 250,
                     child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: generatePresetBox(9, presetColors[0]))),
+                        children: generatePresetBox(
+                            9, colorPickerProviderInstance.presetColors[0]))),
                 SizedBox(
                     width: 250,
                     child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: generatePresetBox(9, presetColors[1]))),
+                        children: generatePresetBox(
+                            9, colorPickerProviderInstance.presetColors[1]))),
                 Container(margin: const EdgeInsets.only(bottom: 10.0)),
                 Text("Current", textAlign: TextAlign.left, style: labelStyle),
                 Container(margin: const EdgeInsets.only(top: 7.0)),
@@ -381,9 +363,13 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
           focusColor: Colors.transparent,
           hoverColor: Colors.transparent,
           onTap: () {
-            isHover = false;
+            setState(() {
+              isHover = false;
+              widget.hasBorder = true;
+            });
             widget.color = element;
             colorPosition = i;
+            changeColor(element);
             (widget.picker == null || widget.picker == false)
                 ? ''
                 : selectcolor(context);
@@ -445,8 +431,10 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                     focusColor: Colors.transparent,
                     hoverColor: Colors.transparent,
                     onTap: () {
-                      isHover = false;
-                      isFocused = true;
+                      setState(() {
+                        isHover = false;
+                        widget.hasBorder = true;
+                      });
                       (widget.picker == false) ? '' : selectcolor(context);
                     },
                     onHover: (bool hover) {

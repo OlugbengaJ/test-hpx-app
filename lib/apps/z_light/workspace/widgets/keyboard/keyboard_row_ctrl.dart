@@ -13,7 +13,7 @@ class KeyboardRowCtrl extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double _zoomedPadding = 2.0 * zoomScale;
+    double zoomedPadding = 2.0 * zoomScale;
 
     final keysProvider = Provider.of<KeysProvider>(context);
     final rowKeysFiltered = keysProvider.getKeyInRow(5).where((element) =>
@@ -29,7 +29,7 @@ class KeyboardRowCtrl extends StatelessWidget {
       children: [
         ...rowKeysFiltered.map(
           (keyModel) => Padding(
-            padding: EdgeInsets.all(_zoomedPadding),
+            padding: EdgeInsets.all(zoomedPadding),
 
             // use ChangeNotifierProvider.value() when using child values of Provider.of()
             // as notifier; otherwise you encounter errors with ChangeNotifierProvider(create)
@@ -46,12 +46,12 @@ class KeyboardRowCtrl extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(left: _zoomedPadding, right: _zoomedPadding),
+          padding: EdgeInsets.only(left: zoomedPadding, right: zoomedPadding),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Padding(
-                padding: EdgeInsets.only(bottom: _zoomedPadding),
+                padding: EdgeInsets.only(bottom: zoomedPadding),
                 child: ChangeNotifierProvider.value(
                   value: rowKeyUp,
                   builder: (context, child) => KeyboardKey(
@@ -63,7 +63,7 @@ class KeyboardRowCtrl extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: _zoomedPadding),
+                padding: EdgeInsets.only(top: zoomedPadding),
                 child: ChangeNotifierProvider.value(
                   value: rowKeyDown,
                   builder: (context, child) => KeyboardKey(
@@ -78,7 +78,7 @@ class KeyboardRowCtrl extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsets.all(_zoomedPadding),
+          padding: EdgeInsets.all(zoomedPadding),
           child: ChangeNotifierProvider.value(
             value: rowKeyRight,
             builder: (context, child) => KeyboardKey(

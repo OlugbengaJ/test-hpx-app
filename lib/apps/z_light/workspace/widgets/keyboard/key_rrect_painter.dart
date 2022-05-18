@@ -28,12 +28,12 @@ class KeyRRectPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    const double _defaultStrokeWidth = 50;
-    final int _pathColorsLength = keyPathColors.length;
+    const double defaultStrokeWidth = 50;
+    final int pathColorsLength = keyPathColors.length;
 
     final Paint paint = Paint()
       ..style = paintingStyle
-      ..strokeWidth = _defaultStrokeWidth * zoomScale * 0.009211208
+      ..strokeWidth = defaultStrokeWidth * zoomScale * 0.009211208
       ..strokeCap = StrokeCap.round;
 
     /// use Paint.shader when multiple colors supplied, else set the color.
@@ -43,7 +43,7 @@ class KeyRRectPainter extends CustomPainter {
         size.width,
         keyPathColors,
         keyPathColors.map((element) {
-          return keyPathColors.indexOf(element) / (_pathColorsLength - 1);
+          return keyPathColors.indexOf(element) / (pathColorsLength - 1);
         }).toList(),
       );
     } else {

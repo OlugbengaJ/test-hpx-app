@@ -64,13 +64,12 @@ class _LayersState extends State<Layers> {
       minWidth: 50,
       minHeight: 50,
     );
-    
+
     provider.add(LayerItemModel(
-      id: id,
-      layerText: modeProvider.getModeInformation().name,
-      mode: modeProvider.getModeInformation(),
-      controller: controller
-    ));
+        id: id,
+        layerText: modeProvider.getModeInformation().name,
+        mode: modeProvider.getModeInformation(),
+        controller: controller));
     provider.addController(controller);
   }
 
