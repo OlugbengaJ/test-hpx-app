@@ -14,7 +14,7 @@ class EffectsModel {
   double? updatePerSecond;
   double? imageQuality;
   String? effectType;
-  String? effectName;
+  dynamic? effectName;
 }
 
 // class SpeedModel {

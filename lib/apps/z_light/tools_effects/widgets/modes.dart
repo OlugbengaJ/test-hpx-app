@@ -29,7 +29,7 @@ class ToolModes extends StatefulWidget {
 class _ToolModesState extends State<ToolModes> {
   Widget? preset;
   final PickerModel _defaultPreset =
-      PickerModel(title: 'Mood', value: 'mood', enabled: true);
+      PickerModel(title: 'Mood', value: EnumModes.mood, enabled: true);
 
   @override
   void initState() {
@@ -48,48 +48,48 @@ class _ToolModesState extends State<ToolModes> {
     List<Color> currentColors = [];
     setState(() {
       switch (pickerChoice!.value) {
-        case "shortcut":
+        case EnumModes.shortcut:
           // workProvider.toggleModal([List<Widget>? children]);
           currentColors.add(Colors.transparent);
           preset = const ShortcutColorsPreset();
           break;
-        case "mood":
+        case EnumModes.mood:
           currentColors = moodThemesList.first.colorCode;
           preset = const MoodPreset();
           break;
-        case "colorsproduction":
+        case EnumModes.colorproduction:
           currentColors = colorProductionList.first.colorCode;
           preset = const ColorProductionPreset();
           break;
-        case "audiovisualizer":
+        case EnumModes.audiovisualizer:
           audioVisualSolidList.forEach((element) {
             currentColors.add(element.colorCode[0]);
           });
           preset = const AudioVisualPreset();
           break;
-        case "wave":
+        case EnumModes.wave:
           currentColors = waveCustomList.first.colorCode;
           preset = WavePreset();
           break;
-        case "colorcycle":
+        case EnumModes.colorcycle:
           colorcycleDefaultsList.first.colorCode.forEach((element) {
             currentColors.add(element);
           });
           preset = const ColorCyclePreset();
           break;
-        case "breathing":
+        case EnumModes.breathing:
           breathingList.forEach((element) {
             currentColors.add(element.colorCode[0]);
           });
           preset = const BreathingPreset();
           break;
-        case "blinking":
+        case EnumModes.blinking:
           blinkingList.forEach((element) {
             currentColors.add(element.colorCode[0]);
           });
           preset = const BlinkingPreset();
           break;
-        case "interactive":
+        case EnumModes.interactive:
           interactiveColorList.forEach((element) {
             currentColors.add(element.colorCode[0]);
           });
@@ -97,11 +97,11 @@ class _ToolModesState extends State<ToolModes> {
               "Interactive effect will only work with your keyboard. Please assign the keys thatare used for triggering the effect. Hold down the Ctrl key for multiple selection");
           preset = const InteractivePreset();
           break;
-        case "image":
+        case EnumModes.image:
           currentColors.add(Colors.transparent);
           preset = const ImagePreset();
           break;
-        case "ambient":
+        case EnumModes.ambient:
           currentColors.add(Colors.transparent);
           preset = const AmbeintPreset();
           break;
@@ -120,6 +120,7 @@ class _ToolModesState extends State<ToolModes> {
     modeProvider.setCurrentMode(ToolsModeModel(
         currentColor: currentColorList,
         value: returnValue!.value,
+        icon: returnValue.icon,
         effects: EffectsModel(effectName: returnValue.value),
         name: returnValue.title));
   }

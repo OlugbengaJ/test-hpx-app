@@ -6,16 +6,38 @@ class ToolsModeModel {
       {required this.currentColor,
       required this.effects,
       required this.name,
-      this.modeType = "layer",
+      this.modeType = EnumModeType.layers,
       this.icon,
       this.subMode = false,
       this.value});
 
   final String name;
-  String? modeType;
+  EnumModeType? modeType;
   bool? subMode;
-  Icon? icon;
-  final String? value;
+  IconData? icon;
+  final dynamic? value;
   late final List<dynamic> currentColor;
   late final EffectsModel effects;
 }
+
+enum EnumModes {
+  mood,
+  shortcut,
+  colorproduction,
+  audiovisualizer,
+  wave,
+  colorcycle,
+  breathing,
+  blinking,
+  interactive,
+  image,
+  ambient,
+}
+
+enum AudioVisualEnum { powerbar, waveform }
+enum InteractiveEnum { keywave, keyfade, keywavefilled, keywaverainbow }
+enum AmbientEnum { entirescreen, foregroundapp }
+enum AmbientDisplayEnum { display1 }
+enum EnumModeType { layers, sublayer }
+
+enum ProfileEnum { defaultprofile, calculator }
