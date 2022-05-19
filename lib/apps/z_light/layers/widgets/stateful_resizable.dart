@@ -40,6 +40,7 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
   Widget build(BuildContext context) {
     return Consumer<LayersProvider>(builder: (_, provider, child) {
       return GetBuilder<ResizableWidgetController>(
+        id: widget.controller.layerID,
         global: false,
         init: widget.controller,
         builder: (controller) {
@@ -68,6 +69,7 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                           cursor: SystemMouseCursors.move,
                           child: DragDistance(
                             child: Container(
+                              key: controller.draggableKey,
                               color: Colors.transparent,
                               height: screenDimension(context).height - widget.dragWidgetHeight,
                               width: screenDimension(context).width - widget.dragWidgetWidth,
@@ -85,12 +87,12 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                         alignment: Alignment.topLeft,
                         child: MouseRegion(
                           cursor: SystemMouseCursors.resizeUpLeft,
-                          child: DragDistance(
-                            child: widget.dragWidget,
+                          child: DragDistance(                           
                             onDrag: controller.onTopLeftDrag,
                             onDragEnd: (DragEndDetails details) {
                               _onDragEnd(provider);
                             },
+                            child: widget.dragWidget,
                           ),
                         ),
                       ),
@@ -99,12 +101,12 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                         alignment: Alignment.topCenter,
                         child: MouseRegion(
                           cursor: SystemMouseCursors.resizeUp,
-                          child: DragDistance(
-                            child: widget.dragWidget,
+                          child: DragDistance(                            
                             onDrag: controller.onTopCenterDrag,
                             onDragEnd: (DragEndDetails details) {
                               _onDragEnd(provider);
                             },
+                            child: widget.dragWidget,
                           ),
                         ),
                       ),

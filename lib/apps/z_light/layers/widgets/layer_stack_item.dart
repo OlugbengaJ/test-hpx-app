@@ -14,7 +14,7 @@ class LayerStackItem extends StatefulWidget {
 }
 
 class _LayerStackItemState extends State<LayerStackItem> {
-  double dragWidgetSize = 50;
+  double dragWidgetSize = 5;
 
   @override
   Widget build(BuildContext context) {
@@ -30,21 +30,11 @@ class _LayerStackItemState extends State<LayerStackItem> {
             controller: provider.getController(widget.layerItemModel.id),
             keysToWatch: [],
             dragWidget: Container(
-              height: 50,
-              width: 50,
-              child: Center(
-                child: Container(
-                  height: 5,
-                  width: 5,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+              height: dragWidgetSize,
+              width: dragWidgetSize,              
               decoration: const BoxDecoration(
                 shape: BoxShape.rectangle,
-                color: Colors.transparent,
+                color: Colors.white,
               ),
             ),
             child: Container(

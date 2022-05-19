@@ -12,6 +12,7 @@ class LayersProvider extends ChangeNotifier {
   final List<LayerItemModel> _sublayers = [];
   final List<LayerItemModel> _stackedLayeritems = []; // Used to display the staked layers
   final List<ResizableWidgetController> _layersControllers = [];
+  final List<ResizableWidgetController> _editingLayer = [];
 
   bool hideStackedLayers = false;
   bool deleteLayerTooltip = false;
@@ -23,9 +24,19 @@ class LayersProvider extends ChangeNotifier {
   List<LayerItemModel> get layeritems => _layeritems; // Should return only mainlayers
   List<LayerItemModel> get sublayerItems => _sublayers; // Should return only sublayers
   List<LayerItemModel> get stackedLayeritems => _stackedLayeritems;
+  List<LayerItemModel> get editingLayer => _stackedLayeritems;
 
   LayerItemModel getItem(int index) {
     return _layeritems[index];
+  }
+
+  LayerItemModel getEditingLayer() {
+    if(length>1){
+      return _layeritems[index];
+    }else{
+      return _layeritems[0];
+    }
+    
   }
 
   void toggleHideStackedLayers(bool show) {
@@ -36,7 +47,6 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  
 
   ResizableWidgetController getController(int id){
     var controller = _layersControllers.where((controller) => controller.layerID==id).toList()[0];
@@ -57,6 +67,7 @@ class LayersProvider extends ChangeNotifier {
     }
     return id + 1;
   }
+
   int getTheBiggestSUbID() {
     int id = 1;
     for (var item in _sublayers) {
@@ -89,6 +100,7 @@ class LayersProvider extends ChangeNotifier {
 
     _index = _stackedLayeritems.length - 1;
 
+    getEditingLayer();
     notifyListeners();
   }
 
@@ -229,7 +241,7 @@ class LayersProvider extends ChangeNotifier {
       final item = _layeritems[index];
     
       _layeritems.remove(item);
-      _stackedLayeritems.remove(item);
+      //_stackedLayeritems.remove(item);
 
       if (_layeritems.isNotEmpty) {
         changeIndex(0);
@@ -246,4 +258,6 @@ class LayersProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+
+
 }

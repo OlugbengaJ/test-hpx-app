@@ -53,11 +53,12 @@ class _LayerStackColoredItemState extends State<LayerStackColoredItem> {
                   dragWidgetWidth: dragWidgetSize,
                   controller: provider.getController(widget.layerItemModel.id),
                   dragWidget: Container(
+                    height: 5,
                     child: Center(
                       child: Column(
                         children: [
                           Container(
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                               shape: BoxShape.rectangle,
                               color: Colors.transparent,
                             ),
@@ -72,7 +73,7 @@ class _LayerStackColoredItemState extends State<LayerStackColoredItem> {
                   child: Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Colors.transparent,
+                        color: Colors.white,
                       ),
                     ),
                   ),

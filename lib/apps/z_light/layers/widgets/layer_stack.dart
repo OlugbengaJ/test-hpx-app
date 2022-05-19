@@ -13,24 +13,24 @@ class LayersStack extends StatefulWidget {
 }
 
 class _LayersStackState extends State<LayersStack> {
-  _getStackColoredLayers(provider) {
+  List<Widget> _getStackColoredLayers(LayersProvider provider) {
     List<Widget> layers = [];
-    provider.stackedLayeritems.forEach((layer) => {
-          layers.add(LayerStackColoredItem(
-            layerItemModel: layer,
-          ))
-        });
+    // for (var layer in provider.stackedLayeritems) {
+    //   layers.add(LayerStackColoredItem(
+    //     layerItemModel: layer,
+    //   ));
+    // }
 
     return layers;
   }
 
-  _getStackedLayers(provider) {
+  List<Widget> _getStackedLayers(LayersProvider provider) {
     List<Widget> layers = [];
-    provider.stackedLayeritems.forEach((layer) => {
-          layers.add(LayerStackItem(
-            layerItemModel: layer,
-          ))
-        });
+    for (var layer in provider.stackedLayeritems) {
+      layers.add(LayerStackItem(
+        layerItemModel: layer,
+      ));
+    }
 
     return layers;
   }
@@ -40,15 +40,19 @@ class _LayersStackState extends State<LayersStack> {
     return Consumer<LayersProvider>(
       builder: (context, value, child) {
         return 
-        (value.hideStackedLayers)? Container(): Stack(
-          children: _getStackColoredLayers(value) +
-          [
-            IndexedStack(
-              index: value.index,
-              children: _getStackedLayers(value),
-            ),
-          ],
+        (value.hideStackedLayers)? Container(): IndexedStack(
+          index: value.index,
+          children: _getStackedLayers(value),
         );
+        // Stack(
+        //   children: _getStackColoredLayers(value) +
+        //   [
+        //     IndexedStack(
+        //       index: value.index,
+        //       children: _getStackedLayers(value),
+        //     ),
+        //   ],
+        // );
       },
     );
   }

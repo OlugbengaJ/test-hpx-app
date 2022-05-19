@@ -73,7 +73,7 @@ class ResizableWidgetController extends GetxController {
 
   void toggleShowDragWigets() {
     showDragWidgets = !showDragWidgets;
-    update();
+    update([layerID,]);
   }
 
   paintColor(GlobalKey widgetKey){
@@ -102,7 +102,7 @@ class ResizableWidgetController extends GetxController {
         }
       );
     }
-    update();
+    update([layerID,]);
   }
 
   void setSize({double? newTop,  double? newLeft,double? newRight, double? newBottom,}) {
@@ -119,7 +119,7 @@ class ResizableWidgetController extends GetxController {
       newBottom: newBottom,
     );
 
-    update();
+    update([layerID,]);
   }
 
   void quantify({ required final double newTop, required final double newLeft, required final double newRight, required final double newBottom,}) {
@@ -204,11 +204,11 @@ class ResizableWidgetController extends GetxController {
 
   void onDragEnd(keysToWatch, provider){
     zoneToPaint.clear(); 
-    for (var key in keysToWatch) {
-      paintColor(key);
-    }
+    // for (var key in keysToWatch) {
+    //   paintColor(key);
+    // }
 
-    update();
+    update([layerID,]);
     provider.updateView();
   }
 

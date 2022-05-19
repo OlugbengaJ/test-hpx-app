@@ -40,6 +40,7 @@ class _ColoredResizableState extends State<ColoredResizable> {
     return
     Consumer<LayersProvider>(builder: (_, provider, child) {
       return GetBuilder<ResizableWidgetController>(
+        id: widget.controller.layerID,
         global: false,
         init: widget.controller,
         builder: (controller) {
@@ -69,8 +70,7 @@ class _ColoredResizableState extends State<ColoredResizable> {
                           child: DragDistance(
                             child: Opacity(
                               opacity: 0.2,
-                              child: Container(
-                                key: controller.draggableKey,
+                              child: Container(                                
                                 color: Colors.transparent,
                                 child: SizedBox(
                                   height: screenDimension(context).height,
