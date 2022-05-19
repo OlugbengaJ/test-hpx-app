@@ -11,7 +11,6 @@ class LayersProvider extends ChangeNotifier {
   final List<LayerItemModel> _layeritems = [];
   final List<LayerItemModel> _sublayers = [];
   final List<LayerItemModel> _stackedLayeritems = []; // Used to display the staked layers
-  final List<ResizableWidgetController> _layersControllers = [];
 
   bool hideStackedLayers = false;
   bool deleteLayerTooltip = false;
@@ -24,6 +23,10 @@ class LayersProvider extends ChangeNotifier {
   List<LayerItemModel> get sublayerItems => _sublayers; // Should return only sublayers
   List<LayerItemModel> get stackedLayeritems => _stackedLayeritems;
   List<LayerItemModel> get editingLayer => _stackedLayeritems;
+
+  ResizableWidgetController controller = ResizableWidgetController(
+    initialPosition: Offset(areaWidth / 2, areaHeight / 2),
+  );
 
   LayerItemModel getItem(int index) {
     return _layeritems[index];
@@ -55,20 +58,10 @@ class LayersProvider extends ChangeNotifier {
     item.bottom = newBottom;
     item.left = newLeft;
     item.right = newRight;
-    
+    _layeritems[index] = item;
     notifyListeners();
   }
 
-
-  ResizableWidgetController getController(int id){
-    var controller = _layersControllers.where((controller) => controller.layerID==id).toList()[0];
-    return _layersControllers.where((controller) => controller.layerID==id).toList()[0];
-  }
-
-  addController(controller){
-    _layersControllers.add(controller);
-    notifyListeners();
-  }
 
   int getTheBiggestID() {
     int id = 1;
@@ -128,30 +121,13 @@ class LayersProvider extends ChangeNotifier {
 
 
   void duplicate(LayerItemModel item, int index, {bool sublayer=false}) {
-    ResizableWidgetController controller = ResizableWidgetController(
-      initialPosition: item.controller.initialPosition,
-      layerID: getTheBiggestID(),
-      areaHeight: item.controller.areaHeight,
-      areaWidth: item.controller.areaWidth,
-      height: item.controller.height,
-      width: item.controller.width,
-      minWidth: item.controller.minWidth,
-      minHeight: item.controller.minHeight,
-    );
-
-    controller.bottom = item.controller.bottom;
-    controller.top = item.controller.top;
-    controller.left = item.controller.left;
-    controller.right = item.controller.right;
-    controller.height = item.controller.height;
-    controller.width = item.controller.width;
+    
 
     LayerItemModel duplicatedItem = LayerItemModel(
       id: (sublayer)? getTheBiggestSUbID(): getTheBiggestID(),
       layerText: "Copy ${item.layerText}",
       mode: item.mode,
       isSublayer: sublayer,
-      controller: controller
     );
 
     if(sublayer){
@@ -167,7 +143,6 @@ class LayersProvider extends ChangeNotifier {
       }
       _layeritems.insert(index + 1, duplicatedItem);
       _stackedLayeritems.add(duplicatedItem);
-      _layersControllers.add(controller);
       _index = _stackedLayeritems.length - 1;
     }
     notifyListeners();

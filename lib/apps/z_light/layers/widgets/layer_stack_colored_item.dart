@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hpx/apps/z_light/layers/widgets/colored_resizable.dart';
+import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:provider/provider.dart';
@@ -15,10 +17,20 @@ class LayerStackColoredItem extends StatefulWidget {
 
 class _LayerStackColoredItemState extends State<LayerStackColoredItem> {
   double dragWidgetSize = 0;
+  final areaHeight = Get.height * 0.70;
+  final areaWidth = Get.width * 0.70;
+
+  final controller = Get.put(
+    ResizableWidgetController(
+      initialPosition: Offset(areaWidth / 2, areaHeight / 2),
+      minWidth: 50,
+      minHeight: 50,
+    ),
+  );
 
   List<Widget> _widgetPaints() {
     List<Widget> zones = [];
-    for (var item in widget.layerItemModel.controller.zoneToPaint) {
+    for (var item in []) {
       if (widget.layerItemModel.visibleOnStack) {
         zones.add(
           Positioned(

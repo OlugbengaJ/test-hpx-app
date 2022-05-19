@@ -49,7 +49,7 @@ class _LayerListItemState extends State<LayerListItem> {
             layerText: layerItemModel.layerText,
             mode: layerItemModel.mode,
             visible: !layerItemModel.visible,
-            controller: layerItemModel.controller),
+          ),
         widget.layerIndex);
   }
 
@@ -89,12 +89,12 @@ class _LayerListItemState extends State<LayerListItem> {
       _editing = !_editing;
     });
     provider.update(
-        LayerItemModel(
-          id: widget.layerItemModel.id,
-          mode: widget.layerItemModel.mode,
-          layerText: value,
-          controller: widget.layerItemModel.controller),
-        widget.layerIndex);
+      LayerItemModel(
+        id: widget.layerItemModel.id,
+        mode: widget.layerItemModel.mode,
+        layerText: value,
+      ),
+      widget.layerIndex);
   }
 
   List<Widget> _sublayers(LayersProvider provider){

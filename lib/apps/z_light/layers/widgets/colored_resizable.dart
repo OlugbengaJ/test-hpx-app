@@ -40,7 +40,6 @@ class _ColoredResizableState extends State<ColoredResizable> {
     return
     Consumer<LayersProvider>(builder: (_, provider, child) {
       return GetBuilder<ResizableWidgetController>(
-        id: widget.controller.layerID,
         global: false,
         init: widget.controller,
         builder: (controller) {

@@ -15,7 +15,6 @@ class LayerItemModel {
     this.visibleOnStack = true,
     this.isSublayer = false,
     this.hasSublayer = false,
-    required this.controller,
     this.listDisplayColor = defaultColor,
     this.paintColor = defaultPaintColor,
     required this.mode
@@ -27,7 +26,6 @@ class LayerItemModel {
   final bool isSublayer;
   bool hasSublayer;
   bool visibleOnStack;
-  ResizableWidgetController controller;
   Color listDisplayColor;
   Color paintColor;
   ToolsModeModel mode;
