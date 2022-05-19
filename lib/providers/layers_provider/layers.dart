@@ -12,7 +12,6 @@ class LayersProvider extends ChangeNotifier {
   final List<LayerItemModel> _sublayers = [];
   final List<LayerItemModel> _stackedLayeritems = []; // Used to display the staked layers
   final List<ResizableWidgetController> _layersControllers = [];
-  final List<ResizableWidgetController> _editingLayer = [];
 
   bool hideStackedLayers = false;
   bool deleteLayerTooltip = false;
@@ -30,13 +29,20 @@ class LayersProvider extends ChangeNotifier {
     return _layeritems[index];
   }
 
+  void setKeys(keys){
+    LayerItemModel item = _layeritems[index];
+    item.setKeys(keys);
+    layeritems[index] = item;
+
+    notifyListeners();
+  }
+
   LayerItemModel getEditingLayer() {
     if(length>1){
       return _layeritems[index];
     }else{
       return _layeritems[0];
-    }
-    
+    }    
   }
 
   void toggleHideStackedLayers(bool show) {
@@ -241,7 +247,12 @@ class LayersProvider extends ChangeNotifier {
       final item = _layeritems[index];
     
       _layeritems.remove(item);
-      //_stackedLayeritems.remove(item);
+      
+
+      stackedLayeritems.clear();
+      for (var item in layeritems) {
+        _stackedLayeritems.add(item);
+      }
 
       if (_layeritems.isNotEmpty) {
         changeIndex(0);

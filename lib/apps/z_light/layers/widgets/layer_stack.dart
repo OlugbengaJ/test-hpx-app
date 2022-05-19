@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/apps/z_light/layers/widgets/layer_stack_colored_item.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:provider/provider.dart';
@@ -13,17 +12,6 @@ class LayersStack extends StatefulWidget {
 }
 
 class _LayersStackState extends State<LayersStack> {
-  List<Widget> _getStackColoredLayers(LayersProvider provider) {
-    List<Widget> layers = [];
-    // for (var layer in provider.stackedLayeritems) {
-    //   layers.add(LayerStackColoredItem(
-    //     layerItemModel: layer,
-    //   ));
-    // }
-
-    return layers;
-  }
-
   List<Widget> _getStackedLayers(LayersProvider provider) {
     List<Widget> layers = [];
     for (var layer in provider.stackedLayeritems) {
@@ -40,19 +28,11 @@ class _LayersStackState extends State<LayersStack> {
     return Consumer<LayersProvider>(
       builder: (context, value, child) {
         return 
-        (value.hideStackedLayers)? Container(): IndexedStack(
+        (value.hideStackedLayers)? Container(): 
+        IndexedStack(
           index: value.index,
           children: _getStackedLayers(value),
         );
-        // Stack(
-        //   children: _getStackColoredLayers(value) +
-        //   [
-        //     IndexedStack(
-        //       index: value.index,
-        //       children: _getStackedLayers(value),
-        //     ),
-        //   ],
-        // );
       },
     );
   }

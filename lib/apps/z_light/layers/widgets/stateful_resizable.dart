@@ -67,7 +67,11 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                         alignment: Alignment.center,
                         child: MouseRegion(
                           cursor: SystemMouseCursors.move,
-                          child: DragDistance(
+                          child: DragDistance(                            
+                            onDrag: controller.onCenterDrag,
+                            onDragEnd: (DragEndDetails details) {
+                              _onDragEnd(provider);
+                            },
                             child: Container(
                               key: controller.draggableKey,
                               color: Colors.transparent,
@@ -75,10 +79,6 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                               width: screenDimension(context).width - widget.dragWidgetWidth,
                               //child: dragWidget
                             ),
-                            onDrag: controller.onCenterDrag,
-                            onDragEnd: (DragEndDetails details) {
-                              _onDragEnd(provider);
-                            },
                           ),
                         ),
                       ),
@@ -115,12 +115,12 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                         alignment: Alignment.topRight,
                         child: MouseRegion(
                           cursor: SystemMouseCursors.resizeUpRight,
-                          child: DragDistance(
-                            child: widget.dragWidget,
+                          child: DragDistance(                            
                             onDrag: controller.onTopRightDrag,
                             onDragEnd: (DragEndDetails details) {
                               _onDragEnd(provider);
                             },
+                            child: widget.dragWidget,
                           ),
                         ),
                       ),
@@ -129,12 +129,12 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                         alignment: Alignment.centerLeft,
                         child: MouseRegion(
                           cursor: SystemMouseCursors.resizeLeft,
-                          child: DragDistance(
-                            child: widget.dragWidget,
+                          child: DragDistance(                            
                             onDrag: controller.onCenterLeftDrag,
                             onDragEnd: (DragEndDetails details) {
                               _onDragEnd(provider);
                             },
+                            child: widget.dragWidget,
                           ),
                         ),
                       ),
@@ -145,11 +145,11 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                         child: MouseRegion(
                           cursor: SystemMouseCursors.resizeRight,
                           child: DragDistance(
-                            child: widget.dragWidget,
                             onDrag: controller.onCenterRightDrag,
                             onDragEnd: (DragEndDetails details) {
                               _onDragEnd(provider);
                             },
+                            child: widget.dragWidget,
                           ),
                         ),
                       ),
@@ -159,11 +159,11 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                         child: MouseRegion(
                           cursor: SystemMouseCursors.resizeDownLeft,
                           child: DragDistance(
-                            child: widget.dragWidget,
                             onDrag: controller.onBottomLeftDrag,
                             onDragEnd: (DragEndDetails details) {
                               _onDragEnd(provider);
                             },
+                            child: widget.dragWidget,
                           ),
                         ),
                       ),
@@ -173,11 +173,11 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                         child: MouseRegion(
                           cursor: SystemMouseCursors.resizeDown,
                           child: DragDistance(
-                            child: widget.dragWidget,
                             onDrag: controller.onBottomCenterDrag,
                             onDragEnd: (DragEndDetails details) {
                               _onDragEnd(provider);
                             },
+                            child: widget.dragWidget,
                           ),
                         ),
                       ),
@@ -187,11 +187,11 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                         child: MouseRegion(
                           cursor: SystemMouseCursors.resizeDownRight,
                           child: DragDistance(
-                            child: widget.dragWidget,
                             onDrag: controller.onBottomRightDrag,
                             onDragEnd: (DragEndDetails details) {
                               _onDragEnd(provider);
                             },
+                            child: widget.dragWidget,
                           ),
                         ),
                       ),
