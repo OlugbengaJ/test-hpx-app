@@ -49,7 +49,13 @@ class LayersProvider extends ChangeNotifier {
     hideStackedLayers = show;
   }
 
-  void updateView() {
+  void updateView(double newTop, double newBottom, double newLeft, double newRight) {
+    var item = layeritems[index];
+    item.top = newTop;
+    item.bottom = newBottom;
+    item.left = newLeft;
+    item.right = newRight;
+    
     notifyListeners();
   }
 

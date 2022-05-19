@@ -38,5 +38,10 @@ class LayerItemModel {
     _keys = [...keys];
   }
 
+  double top = 0.0;
+  double bottom = 0.0;
+  double left = 0.0;
+  double right = 0.0;
+
   
 }

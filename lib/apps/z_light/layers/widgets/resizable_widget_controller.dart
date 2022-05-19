@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 
 class ResizableWidgetController extends GetxController {
   ResizableWidgetController({
@@ -73,36 +74,7 @@ class ResizableWidgetController extends GetxController {
 
   void toggleShowDragWigets() {
     showDragWidgets = !showDragWidgets;
-    update([layerID,]);
-  }
-
-  paintColor(GlobalKey widgetKey){
-    RenderBox selectorBox = draggableKey.currentContext?.findRenderObject() as RenderBox;
-    final selectorPosition = selectorBox.localToGlobal(Offset.zero);
-
-    RenderBox box = widgetKey.currentContext?.findRenderObject() as RenderBox;
-    final boxSize = box.size;
-    
-    var position = box.localToGlobal(Offset.zero);
-    final selectorBoxSize = selectorBox.size;      
-
-    final collide = (
-      position.dx < selectorPosition.dx + selectorBoxSize.width && 
-      position.dx + boxSize.width > selectorPosition.dx &&
-      position.dy < selectorPosition.dy + selectorBoxSize.height &&
-      position.dy + boxSize.height > selectorPosition.dy
-    );
-
-
-    if(collide){
-      zoneToPaint.add(
-        {
-          "size": box.size,
-          "position": Offset(position.dx - leftPadding, position.dy - topPadding),
-        }
-      );
-    }
-    update([layerID,]);
+    update();
   }
 
   void setSize({double? newTop,  double? newLeft,double? newRight, double? newBottom,}) {
@@ -119,12 +91,11 @@ class ResizableWidgetController extends GetxController {
       newBottom: newBottom,
     );
 
-    update([layerID,]);
+    update();
   }
 
   void quantify({ required final double newTop, required final double newLeft, required final double newRight, required final double newBottom,}) {
-    calculateWidgetSize(
-        top: newTop, left: newLeft, bottom: newBottom, right: newRight);
+    calculateWidgetSize(top: newTop, left: newLeft, bottom: newBottom, right: newRight);
     if (checkTopBotMaxSize(newTop, newBottom)) {
       top = newTop;
       bottom = newBottom;
@@ -202,14 +173,9 @@ class ResizableWidgetController extends GetxController {
     );
   }
 
-  void onDragEnd(keysToWatch, provider){
-    zoneToPaint.clear(); 
-    // for (var key in keysToWatch) {
-    //   paintColor(key);
-    // }
-
-    update([layerID,]);
-    provider.updateView();
+  void onDragEnd(keysToWatch,LayersProvider provider){
+    update();
+    provider.updateView(top, bottom, left, right);
   }
 
 }
