@@ -9,6 +9,7 @@ const Color defaultPaintColor = Colors.white;
 class LayerItemModel {
   LayerItemModel({
     required this.id,
+    required this.controller,
     this.parentID = 0,
     required this.layerText,
     this.visible = true,
@@ -30,6 +31,8 @@ class LayerItemModel {
   Color paintColor;
   ToolsModeModel mode;
   List<KeyModel> _keys = [];
+  ResizableWidgetController controller;
+
 
   List<KeyModel> get keys => _keys;
   void setKeys(List<KeyModel> keys) {

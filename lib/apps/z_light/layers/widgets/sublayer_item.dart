@@ -30,15 +30,16 @@ class _SublayerItemState extends State<SublayerItem> {
     });
   }
 
-  _toggleLayer(provider) {
+  _toggleLayer(LayersProvider provider) {
     LayerItemModel layerItemModel = widget.layerItemModel;
     provider.toggleVisibility(
         LayerItemModel(
-            id: layerItemModel.id,
-            layerText: layerItemModel.layerText,
-            mode: layerItemModel.mode,
-            visible: !layerItemModel.visible,
-            ),
+          id: layerItemModel.id,
+          layerText: layerItemModel.layerText,
+          mode: layerItemModel.mode,
+          visible: !layerItemModel.visible,
+          controller: widget.layerItemModel.controller
+        ),
         widget.layerIndex);
   }
 

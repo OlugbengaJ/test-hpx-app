@@ -40,6 +40,7 @@ class _LayersState extends State<Layers> {
       _addLayer();
     }
   }
+  
 
 
   _addLayer() {
@@ -54,6 +55,7 @@ class _LayersState extends State<Layers> {
       }
       id = id + 1;
     }
+
     ResizableWidgetController controller = ResizableWidgetController(
       initialPosition: Offset(areaWidth / 2, areaHeight / 2),
       areaHeight: areaHeight,
@@ -68,8 +70,12 @@ class _LayersState extends State<Layers> {
       id: id,
       layerText: modeProvider.getModeInformation().name,
       mode: modeProvider.getModeInformation(),
+      controller: controller
       )
     );
+
+    
+
   }
 
   @override

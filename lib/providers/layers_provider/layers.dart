@@ -24,12 +24,15 @@ class LayersProvider extends ChangeNotifier {
   List<LayerItemModel> get stackedLayeritems => _stackedLayeritems;
   List<LayerItemModel> get editingLayer => _stackedLayeritems;
 
-  ResizableWidgetController controller = ResizableWidgetController(
-    initialPosition: Offset(areaWidth / 2, areaHeight / 2),
-  );
+  
 
   LayerItemModel getItem(int index) {
     return _layeritems[index];
+  }
+
+  setController(ResizableWidgetController controller){
+    controller = controller;
+    notifyListeners();
   }
 
   void setKeys(keys){
@@ -123,11 +126,29 @@ class LayersProvider extends ChangeNotifier {
   void duplicate(LayerItemModel item, int index, {bool sublayer=false}) {
     
 
+    ResizableWidgetController controller = ResizableWidgetController(
+      initialPosition: item.controller.initialPosition,
+      areaHeight: item.controller.areaHeight,
+      areaWidth: item.controller.areaWidth,
+      height: item.controller.height,
+      width: item.controller.width,
+      minWidth: item.controller.minWidth,
+      minHeight: item.controller.minHeight,
+    );
+
+    controller.bottom = item.controller.bottom;
+    controller.top = item.controller.top;
+    controller.left = item.controller.left;
+    controller.right = item.controller.right;
+    controller.height = item.controller.height;
+    controller.width = item.controller.width;
+
     LayerItemModel duplicatedItem = LayerItemModel(
       id: (sublayer)? getTheBiggestSUbID(): getTheBiggestID(),
       layerText: "Copy ${item.layerText}",
       mode: item.mode,
       isSublayer: sublayer,
+      controller: controller
     );
 
     if(sublayer){

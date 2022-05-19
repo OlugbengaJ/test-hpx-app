@@ -49,6 +49,7 @@ class _LayerListItemState extends State<LayerListItem> {
             layerText: layerItemModel.layerText,
             mode: layerItemModel.mode,
             visible: !layerItemModel.visible,
+            controller: widget.layerItemModel.controller
           ),
         widget.layerIndex);
   }
@@ -93,6 +94,7 @@ class _LayerListItemState extends State<LayerListItem> {
         id: widget.layerItemModel.id,
         mode: widget.layerItemModel.mode,
         layerText: value,
+        controller: widget.layerItemModel.controller
       ),
       widget.layerIndex);
   }

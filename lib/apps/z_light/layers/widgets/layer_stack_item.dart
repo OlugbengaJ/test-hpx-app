@@ -26,9 +26,7 @@ class _LayerStackItemState extends State<LayerStackItem> {
           child: StatefulResizableWidget(
             dragWidgetHeight: dragWidgetSize,
             dragWidgetWidth: dragWidgetSize,
-            //controller: widget.layerItemModel.controller,
-            controller: provider.getController(widget.layerItemModel.id),
-            keysToWatch: [],
+            controller: widget.layerItemModel.controller,
             dragWidget: Container(
               height: dragWidgetSize,
               width: dragWidgetSize,              

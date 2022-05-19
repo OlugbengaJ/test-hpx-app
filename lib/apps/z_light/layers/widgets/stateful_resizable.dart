@@ -14,7 +14,6 @@ class StatefulResizableWidget extends StatefulWidget {
     required this.dragWidget,
     required this.dragWidgetHeight,
     required this.dragWidgetWidth,
-    required this.keysToWatch,
   }) : super(key: key);
 
   final ResizableWidgetController controller;
@@ -22,7 +21,6 @@ class StatefulResizableWidget extends StatefulWidget {
   final Widget dragWidget;
   final double dragWidgetHeight;
   final double dragWidgetWidth;
-  final List<GlobalKey> keysToWatch;
 
   @override
   State<StatefulResizableWidget> createState() =>
@@ -33,7 +31,7 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
 
 
   _onDragEnd(provider) {
-    widget.controller.onDragEnd(widget.keysToWatch, provider);
+    widget.controller.onDragEnd(provider);
   }
 
   @override

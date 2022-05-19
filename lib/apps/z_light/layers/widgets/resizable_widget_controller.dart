@@ -38,6 +38,7 @@ class ResizableWidgetController extends GetxController {
 
   @override
   void onInit() {
+    Offset initialPosition = Offset(areaWidth / 2, areaHeight / 2);
     double newTop = initialPosition.dy - height / 2;
     double newBottom = areaHeight - height - newTop;
     double newLeft = initialPosition.dx - (width / 2);
@@ -171,7 +172,7 @@ class ResizableWidgetController extends GetxController {
     );
   }
 
-  void onDragEnd(keysToWatch,LayersProvider provider){
+  void onDragEnd(LayersProvider provider){
     update();
     provider.updateView(top, bottom, left, right);
   }
