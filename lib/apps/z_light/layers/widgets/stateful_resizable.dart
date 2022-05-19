@@ -30,18 +30,10 @@ class StatefulResizableWidget extends StatefulWidget {
 }
 
 class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
-  late ResizableWidgetController controller;
 
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      controller = widget.controller;
-    });
-  }
 
   _onDragEnd(provider) {
-    //controller.onDragEnd(widget.keysToWatch, provider);
+    widget.controller.onDragEnd(widget.keysToWatch, provider);
   }
 
   @override
@@ -77,10 +69,8 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                           child: DragDistance(
                             child: Container(
                               color: Colors.transparent,
-                              height: screenDimension(context).height -
-                                  widget.dragWidgetHeight,
-                              width: screenDimension(context).width -
-                                  widget.dragWidgetWidth,
+                              height: screenDimension(context).height - widget.dragWidgetHeight,
+                              width: screenDimension(context).width - widget.dragWidgetWidth,
                               //child: dragWidget
                             ),
                             onDrag: controller.onCenterDrag,

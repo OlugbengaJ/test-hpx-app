@@ -66,10 +66,11 @@ class _LayersState extends State<Layers> {
     );
 
     provider.add(LayerItemModel(
-        id: id,
-        layerText: modeProvider.getModeInformation().name,
-        mode: modeProvider.getModeInformation(),
-        controller: controller));
+      id: id,
+      layerText: modeProvider.getModeInformation().name,
+      mode: modeProvider.getModeInformation(),
+      controller: controller)
+    );
     provider.addController(controller);
   }
 
