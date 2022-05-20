@@ -7,13 +7,18 @@ class DropDown extends StatelessWidget {
   const DropDown({
     Key? key,
     this.enabled = true,
+    this.height = 30.0,
     required this.hint,
     this.hintStyle,
     this.initialValue,
+    this.isExpanded = false,
     required this.items,
     this.menuMaxHeight = 400.0,
     required this.onChangedHandler,
   }) : super(key: key);
+
+  /// [height] of the dropdown button.
+  final double? height;
 
   /// [hint] is a placeholder String that is displayed
   /// when dropdown is disabled or has no value.
@@ -21,6 +26,8 @@ class DropDown extends StatelessWidget {
 
   /// [hintStyle] is style to use for the [hint].
   final TextStyle? hintStyle;
+
+  final bool isExpanded;
 
   /// [items] children of the dropdown button that user can select.
   final List<DropdownMenuItem<Object>>? items;
@@ -38,13 +45,26 @@ class DropDown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton(
-      value: initialValue,
-      menuMaxHeight: menuMaxHeight,
-      hint: Text(hint, style: hintStyle),
-      underline: const SizedBox(),
-      items: items,
-      onChanged: enabled ? onChangedHandler : null,
+    return Container(
+      height: height,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Theme.of(context).primaryColorLight,
+          width: 1,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(3.0),
+        child: DropdownButton(
+          value: initialValue,
+          menuMaxHeight: menuMaxHeight,
+          hint: Text(hint, style: hintStyle),
+          underline: const SizedBox(),
+          items: items,
+          isExpanded: isExpanded,
+          onChanged: enabled ? onChangedHandler : null,
+        ),
+      ),
     );
   }
 }

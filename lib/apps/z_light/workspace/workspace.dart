@@ -215,28 +215,15 @@ class _WorkspaceState extends State<Workspace> {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(right: 20.0),
-                              child: Container(
-                                height: 30,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Theme.of(context).primaryColorLight,
-                                    width: 1,
-                                  ),
+                              child: DropDown(
+                                enabled: workspaceProvider.isDragModeClick,
+                                hint: 'Select by devices...',
+                                hintStyle: pStyle,
+                                items: getDropdownMenuItems(
+                                  Theme.of(context).colorScheme.primary,
+                                  devices(),
                                 ),
-                                // TODO: select by devices
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: DropDown(
-                                    enabled: workspaceProvider.isDragModeClick,
-                                    hint: 'Select by devices...',
-                                    hintStyle: pStyle,
-                                    items: getDropdownMenuItems(
-                                      Theme.of(context).colorScheme.primary,
-                                      devices(),
-                                    ),
-                                    onChangedHandler: (o) {},
-                                  ),
-                                ),
+                                onChangedHandler: (o) {},
                               ),
                             ),
                           ],
