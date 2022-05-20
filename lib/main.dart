@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/globals.dart';
+import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/apps/z_light/wrapper.dart';
 import 'package:hpx/providers/keyboard/keys_provider.dart';
 import 'package:hpx/providers/keys_provider.dart';
@@ -12,7 +13,6 @@ import 'package:hpx/widgets/components/zone_selector/zone_selector_provider.dart
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
-import 'apps/z_light/layers/resizable/provider/resizable.dart';
 
 void main() => runApp(
       MultiProvider(
