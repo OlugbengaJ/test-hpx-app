@@ -65,7 +65,7 @@ class _LayersState extends State<Layers> {
     provider.add(
       LayerItemModel(
         id: id,
-        layerText: modeProvider.getModeInformation().name,
+        layerText: "Mood",
         mode: modeProvider.getModeInformation(),
         top: context.read<ResizableProvider>().top,
         bottom: context.read<ResizableProvider>().bottom,
