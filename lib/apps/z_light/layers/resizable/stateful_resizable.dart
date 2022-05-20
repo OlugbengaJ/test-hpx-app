@@ -1,65 +1,70 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hpx/apps/z_light/layers/widgets/drag_distance.dart';
-import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
-import 'package:hpx/utils/common.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
+import 'package:provider/provider.dart';
+import 'provider/resizable.dart';
+import 'drag_distance.dart';
 
-class ColoredResizable extends StatefulWidget {
-  const ColoredResizable({
-    Key? key,
+class StatefulResizableWidget extends StatefulWidget {
+  const StatefulResizableWidget({ 
+    Key? key ,
     required this.child,
-    required this.controller,
     required this.dragWidget,
     required this.dragWidgetHeight,
     required this.dragWidgetWidth,
-    required this.keysToWatch,
   }) : super(key: key);
 
-  final ResizableWidgetController controller;
   final Widget child;
   final Widget dragWidget;
   final double dragWidgetHeight;
   final double dragWidgetWidth;
 
-  final List<GlobalKey> keysToWatch;
-
   @override
-  State<ColoredResizable> createState() => _ColoredResizableState();
+  State<StatefulResizableWidget> createState() => _StatefulResizableWidgetState();
 }
 
-class _ColoredResizableState extends State<ColoredResizable> {
-  late ResizableWidgetController controller;
-
+class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
+  
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    setState(() {
-      controller = widget.controller;
-    });
+    final areaHeight = Get.height * 0.70;
+    final areaWidth = Get.width * 0.70;
+
+    context.read<ResizableProvider>().initialize(
+      Offset(areaWidth / 2, areaHeight / 2),
+    );
   }
+
+
+  _onDragEnd(provider){
+    LayersProvider layersProvider = context.read<LayersProvider>();
+    provider.onDragEnd(layersProvider);
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ResizableWidgetController>(
-      global: false,
-      init: widget.controller,
-      builder: (controller) {
+    return Consumer<ResizableProvider>(
+      builder: (_, provider, child)
+       {
         return Stack(
           children: <Widget>[
             Positioned(
-              top: controller.top,
-              left: controller.left,
-              bottom: controller.bottom,
-              right: controller.right,
+              top: provider.top,
+              left: provider.left,
+              bottom: provider.bottom,
+              right: provider.right,
               child: widget.child,
             ),
             Positioned(
-              top: controller.top - widget.dragWidgetHeight / 2,
-              left: controller.left - widget.dragWidgetWidth / 2,
-              bottom: controller.bottom - widget.dragWidgetHeight / 2,
-              right: controller.right - widget.dragWidgetWidth / 2,
+              top: provider.top - widget.dragWidgetHeight / 2,
+              left: provider.left - widget.dragWidgetWidth / 2,
+              bottom: provider.bottom - widget.dragWidgetHeight / 2,
+              right: provider.right - widget.dragWidgetWidth / 2,
               child: Visibility(
-                visible: controller.showDragWidgets,
+                visible: provider.showDragWidgets,
                 child: Stack(
                   children: [
                     // center: given full height an full width so the whole center can be selected and dragged
@@ -68,20 +73,17 @@ class _ColoredResizableState extends State<ColoredResizable> {
                       child: MouseRegion(
                         cursor: SystemMouseCursors.move,
                         child: DragDistance(
-                          child: Opacity(
-                            opacity: 0.2,
-                            child: Container(
-                              key: controller.draggableKey,
-                              color: Colors.transparent,
-                              child: SizedBox(
-                                height: screenDimension(context).height,
-                                width: screenDimension(context).width,
-                                //child: dragWidget
-                              ),
-                            ),
+                          onDrag: provider.onCenterDrag,
+                          onDragEnd: (DragEndDetails details){
+                            _onDragEnd(provider);
+                          },
+                          child: Container(
+                            key:  provider.draggableKey,
+                            color: Colors.transparent,
+                            height: MediaQuery.of(context).size.height,
+                            width: MediaQuery.of(context).size.width,
+                            //child: dragWidget
                           ),
-                          onDrag: controller.onCenterDrag,
-                          onDragEnd: (DragEndDetails details) {},
                         ),
                       ),
                     ),
@@ -92,8 +94,10 @@ class _ColoredResizableState extends State<ColoredResizable> {
                         cursor: SystemMouseCursors.resizeUpLeft,
                         child: DragDistance(
                           child: widget.dragWidget,
-                          onDrag: controller.onTopLeftDrag,
-                          onDragEnd: (DragEndDetails details) {},
+                          onDrag: provider.onTopLeftDrag,
+                          onDragEnd: (DragEndDetails details){
+                            _onDragEnd(provider);
+                          },
                         ),
                       ),
                     ),
@@ -104,8 +108,10 @@ class _ColoredResizableState extends State<ColoredResizable> {
                         cursor: SystemMouseCursors.resizeUp,
                         child: DragDistance(
                           child: widget.dragWidget,
-                          onDrag: controller.onTopCenterDrag,
-                          onDragEnd: (DragEndDetails details) {},
+                          onDrag: provider.onTopCenterDrag,
+                          onDragEnd: (DragEndDetails details){
+                            _onDragEnd(provider);
+                          },
                         ),
                       ),
                     ),
@@ -116,8 +122,10 @@ class _ColoredResizableState extends State<ColoredResizable> {
                         cursor: SystemMouseCursors.resizeUpRight,
                         child: DragDistance(
                           child: widget.dragWidget,
-                          onDrag: controller.onTopRightDrag,
-                          onDragEnd: (DragEndDetails details) {},
+                          onDrag: provider.onTopRightDrag,
+                          onDragEnd: (DragEndDetails details){
+                            _onDragEnd(provider);
+                          },
                         ),
                       ),
                     ),
@@ -128,12 +136,14 @@ class _ColoredResizableState extends State<ColoredResizable> {
                         cursor: SystemMouseCursors.resizeLeft,
                         child: DragDistance(
                           child: widget.dragWidget,
-                          onDrag: controller.onCenterLeftDrag,
-                          onDragEnd: (DragEndDetails details) {},
+                          onDrag: provider.onCenterLeftDrag,
+                          onDragEnd: (DragEndDetails details){
+                            _onDragEnd(provider);
+                          },
                         ),
                       ),
                     ),
-
+                    
                     // center right
                     Align(
                       alignment: Alignment.centerRight,
@@ -141,8 +151,10 @@ class _ColoredResizableState extends State<ColoredResizable> {
                         cursor: SystemMouseCursors.resizeRight,
                         child: DragDistance(
                           child: widget.dragWidget,
-                          onDrag: controller.onCenterRightDrag,
-                          onDragEnd: (DragEndDetails details) {},
+                          onDrag: provider.onCenterRightDrag,
+                          onDragEnd: (DragEndDetails details){
+                            _onDragEnd(provider);
+                          },
                         ),
                       ),
                     ),
@@ -153,8 +165,10 @@ class _ColoredResizableState extends State<ColoredResizable> {
                         cursor: SystemMouseCursors.resizeDownLeft,
                         child: DragDistance(
                           child: widget.dragWidget,
-                          onDrag: controller.onBottomLeftDrag,
-                          onDragEnd: (DragEndDetails details) {},
+                          onDrag: provider.onBottomLeftDrag,
+                          onDragEnd: (DragEndDetails details){
+                            _onDragEnd(provider);
+                          },
                         ),
                       ),
                     ),
@@ -165,8 +179,10 @@ class _ColoredResizableState extends State<ColoredResizable> {
                         cursor: SystemMouseCursors.resizeDown,
                         child: DragDistance(
                           child: widget.dragWidget,
-                          onDrag: controller.onBottomCenterDrag,
-                          onDragEnd: (DragEndDetails details) {},
+                          onDrag: provider.onBottomCenterDrag,
+                          onDragEnd: (DragEndDetails details){
+                            _onDragEnd(provider);
+                          },
                         ),
                       ),
                     ),
@@ -177,8 +193,10 @@ class _ColoredResizableState extends State<ColoredResizable> {
                         cursor: SystemMouseCursors.resizeDownRight,
                         child: DragDistance(
                           child: widget.dragWidget,
-                          onDrag: controller.onBottomRightDrag,
-                          onDragEnd: (DragEndDetails details) {},
+                          onDrag: provider.onBottomRightDrag,
+                          onDragEnd: (DragEndDetails details){
+                            _onDragEnd(provider);
+                          },
                         ),
                       ),
                     ),

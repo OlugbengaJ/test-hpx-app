@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/layers/layers.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_list_item.dart';
-import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
 import 'package:hpx/apps/z_light/tools_effects/tools_effects_wrapper.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
 import 'package:hpx/providers/workspace_provider.dart';
@@ -23,7 +22,7 @@ class Wrapper extends StatefulWidget {
 
 class _WrapperState extends State<Wrapper> {
   final List<LayerListItem> _layersListItems = [];
-  final List<LayerStackItem> _layersStackItems = [];
+  //final List<LayerStackItem> _layersStackItems = [];
   final _modeProvider = ModeProvider();
 
   @override
@@ -142,9 +141,7 @@ class _WrapperState extends State<Wrapper> {
           leftChild: Layers(onReorder: _updateLayers, layers: _layersListItems),
           centerChild: Stack(
             children: [
-              Workspace(
-                layers: _layersStackItems,
-              ),
+              Workspace(),
             ],
           ),
           rightChild: const ToolsEffectsWrapper(),
