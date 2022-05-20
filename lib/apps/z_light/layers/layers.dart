@@ -51,7 +51,6 @@ class _LayersState extends State<Layers> {
     );
 
     ModeProvider modeProvider = context.read<ModeProvider>();
-    print(modeProvider.getModeInformation().name);
     var provider = context.read<LayersProvider>();
     int id = 1; // For first element;
     if (provider.layeritems.isNotEmpty) {
