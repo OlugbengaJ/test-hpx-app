@@ -27,11 +27,11 @@ class Workspace extends StatefulWidget {
 }
 
 class _WorkspaceState extends State<Workspace> {
-  final _zoomTextCtrl = TextEditingController(text: '100');
-  final double _zoomInThreshold = 400;
+  final _zoomTextCtrl = TextEditingController(text: '60');
+  final double _zoomInThreshold = 250;
   final double _zoomOutThreshold = 60;
-  double _zoomValue = 100;
-  double _zoomScale = 1;
+  double _zoomValue = 60;
+  double _zoomScale = 0.6;
 
   Timer _timer = Timer.periodic(Duration.zero, ((t) {}));
   final _duration = const Duration(milliseconds: 50);
@@ -47,7 +47,7 @@ class _WorkspaceState extends State<Workspace> {
       if (value >= _zoomOutThreshold && value <= _zoomInThreshold) {
         setState(() {
           _zoomValue = value;
-          _zoomScale = _zoomValue / 100;
+          _zoomScale = _zoomValue / (60 / 0.6);
         });
       }
     }
@@ -266,11 +266,11 @@ class _WorkspaceState extends State<Workspace> {
                     alignment: Alignment.center,
                     child: Container(
                       margin: EdgeInsets.zero,
-                      width: 400 * _zoomScale,
-                      height: 400 * _zoomScale,
+                      // width: 720 * _zoomScale,
+                      height: 720 * _zoomScale,
                       child: const Image(
                         image: AssetImage(Constants.laptopg9Image),
-                        fit: BoxFit.contain,
+                        // fit: BoxFit.none,
                       ),
                     ),
                   ),
@@ -284,6 +284,7 @@ class _WorkspaceState extends State<Workspace> {
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         primary: false,
+                        padding: const EdgeInsets.only(top: 52.0),
                         child: Keyboard(zoomScale: _zoomScale),
                       ),
                     ),

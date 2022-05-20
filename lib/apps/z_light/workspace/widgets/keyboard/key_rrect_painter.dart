@@ -1,5 +1,6 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:hpx/providers/key_model.dart';
 
 class KeyRRectPainter extends CustomPainter {
   /// [KeyRRectPainter] Extends a custom painter to paint a key.
@@ -7,47 +8,38 @@ class KeyRRectPainter extends CustomPainter {
   /// The painter uses the clipper to draw actual object on the canvas.
   const KeyRRectPainter({
     Listenable? repaint,
-    this.keyText,
-    this.keyTextColor,
-    this.keyTextDirection,
-    required this.paintingStyle,
-    required this.keyPathColors,
+    required this.keyModel,
     required this.clipper,
     required this.zoomScale,
   }) : super(repaint: repaint);
 
   final CustomClipper<RRect> clipper;
-
-  final String? keyText;
-  final Color? keyTextColor;
-  final TextDirection? keyTextDirection;
-  final List<Color> keyPathColors;
-
+  final KeyModel keyModel;
   final double zoomScale;
-  final PaintingStyle paintingStyle;
 
   @override
   void paint(Canvas canvas, Size size) {
     const double defaultStrokeWidth = 50;
-    final int pathColorsLength = keyPathColors.length;
+    final int pathColorsLength = keyModel.keyPathColors.length;
 
     final Paint paint = Paint()
-      ..style = paintingStyle
+      ..style = keyModel.paintingStyle
       ..strokeWidth = defaultStrokeWidth * zoomScale * 0.009211208
       ..strokeCap = StrokeCap.round;
 
     /// use Paint.shader when multiple colors supplied, else set the color.
-    if (keyPathColors.length > 1) {
+    if (keyModel.keyPathColors.length > 1) {
       paint.shader = ui.Gradient.radial(
         Offset.zero,
         size.width,
-        keyPathColors,
-        keyPathColors.map((element) {
-          return keyPathColors.indexOf(element) / (pathColorsLength - 1);
+        keyModel.keyPathColors,
+        keyModel.keyPathColors.map((element) {
+          return keyModel.keyPathColors.indexOf(element) /
+              (pathColorsLength - 1);
         }).toList(),
       );
     } else {
-      Color keyPathColor = keyPathColors.first;
+      Color keyPathColor = keyModel.keyPathColors.first;
       paint
         ..color = keyPathColor.withOpacity(1)
         ..colorFilter = ColorFilter.mode(keyPathColor, BlendMode.luminosity);
@@ -59,22 +51,29 @@ class KeyRRectPainter extends CustomPainter {
     ///
     /// However this was disabled because the left and bottom
     /// of the key looked thiner than the top and right.
+
     // canvas.clipRRect(rrect);
     canvas.drawRRect(rrect, paint);
+
+    #region;
+    // multiple layer
+    paint.color = Colors.green.withOpacity(1);
+    canvas.drawRRect(rrect, paint);
+    #endregion;
 
     /// TextPainter draws the text on the key as long as text is not empty.
     ///
     /// The text should be painted after the key to ensure it's displayed.
-    if (keyText != null && keyText!.isNotEmpty) {
+    if (keyModel.keyText != null && keyModel.keyText!.isNotEmpty) {
       final TextPainter textPainter = TextPainter(
         text: TextSpan(
-          text: keyText,
+          text: keyModel.keyText,
           style: TextStyle(
-            color: keyTextColor,
+            color: keyModel.keyTextColor,
             fontSize: .3 * size.height,
           ),
         ),
-        textDirection: keyTextDirection,
+        textDirection: keyModel.keyTextDirection,
         locale: const Locale.fromSubtags(languageCode: 'en'),
       );
 

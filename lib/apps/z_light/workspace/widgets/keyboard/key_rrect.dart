@@ -28,11 +28,7 @@ class KeyRRect extends StatelessWidget {
     return CustomPaint(
       size: Size(zoomedWidth, zoomedHeight * 0.298212833898266),
       painter: KeyRRectPainter(
-        paintingStyle: keyModel.paintingStyle,
-        keyText: keyModel.keyText,
-        keyTextColor: keyModel.keyTextColor,
-        keyTextDirection: keyModel.keyTextDirection,
-        keyPathColors: keyModel.keyPathColors,
+        keyModel: keyModel,
         zoomScale: zoomScale,
         clipper: KeyRRectClipper(
           keyLeft: keyModel.keyLeft * zoomScale,
