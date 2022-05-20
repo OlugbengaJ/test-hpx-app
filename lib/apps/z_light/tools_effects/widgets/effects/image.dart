@@ -22,10 +22,8 @@ class _ImagePresetState extends State<ImagePreset> {
     );
     if (result != null) {
       PlatformFile file = result.files.first;
-
-      final bytes = File(file.path!).readAsBytesSync();
       setState(() {
-        filePath = Image.memory(bytes).image;
+        filePath = Image.memory(File(file.path!).readAsBytesSync()).image;
       });
     } else {
       // User canceled the picker

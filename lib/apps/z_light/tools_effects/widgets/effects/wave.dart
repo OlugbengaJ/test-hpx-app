@@ -17,21 +17,30 @@ class WavePreset extends StatefulWidget {
 }
 
 class _WavePresetState extends State<WavePreset> {
+  /// variable used to hold the button values for the activated or focused wave sub modoe
   String activatedButton = "DEFAULT";
+
+  /// variable for managing degree input been set to the for the knob and input field
   TextEditingController degreeController = TextEditingController();
+
+  /// this variable checks if the degree knob should rotate or not
   bool isRotate = false;
 
+  //// this function sets the default effect degree value to the degree knob
   @override
   void initState() {
     EffectProvider effectsProvider =
         Provider.of<EffectProvider>(context, listen: false);
+
+    /// sets the state for the degree text controller
     setState(() {
       degreeController.text =
-          effectsProvider.currentEffect!.degree!.toStringAsFixed(2);
+          effectsProvider.currentEffect!.degree!.toStringAsFixed(0);
     });
     super.initState();
   }
 
+  /// this functions updates the degree values and sets the current effect state
   void _setDegreeValue(double? returnValue) {
     EffectProvider effectsProvider =
         Provider.of<EffectProvider>(context, listen: false);
@@ -42,7 +51,7 @@ class _WavePresetState extends State<WavePreset> {
       degreeController.text = (returnValue! < 0
               ? (360 - (0 - returnValue) * (180 / pi))
               : returnValue * (180 / pi))
-          .toStringAsFixed(2);
+          .toStringAsFixed(0);
 
       effectsProvider.setCurrentEffect(EffectsModel(
           effectName: modeProvider.currentMode.value,
@@ -198,12 +207,14 @@ class _WavePresetState extends State<WavePreset> {
                           height: 30,
                           child: TextField(
                             onSubmitted: (String? value) {
-                              print(value);
-                              // setState(() {
-                              //   if (isRotate == false) {
-                              //     degreeController.text = value;
-                              //   }
-                              // });
+                              // print(value);
+                              setState(() {
+                                if (isRotate == false) {
+                                  // var returnValue = double.parse(value!);
+                                  degreeController.text = value!;
+                                  _setDegreeValue(double.parse(value));
+                                }
+                              });
                             },
                             style: const TextStyle(fontSize: 14),
                             controller: degreeController,

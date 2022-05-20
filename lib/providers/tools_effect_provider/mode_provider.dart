@@ -16,6 +16,7 @@ import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
+import 'package:hpx/widgets/theme.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 
@@ -173,10 +174,14 @@ class ModeProvider extends ChangeNotifier {
     // default variable for settin tools and effects widget in this function
     Widget? preset;
 
+    /// initialize the workspace provider to use to send notification accross the workspace
+    WorkspaceProvider workProvider =
+        Provider.of<WorkspaceProvider>(context, listen: false);
+
     // switch case design to switch and set the values for each mode been selected based on the enum value set by the mode
     switch (pickerChoice!.value) {
       case EnumModes.shortcut:
-        // workProvider.toggleModal([List<Widget>? children]);
+        workProvider.toggleModal([Text("Hello World", style: h2Style)]);
         currentColors.add(Colors.transparent);
         preset = const ShortcutColorsPreset();
         break;
@@ -221,10 +226,6 @@ class ModeProvider extends ChangeNotifier {
         preset = const BlinkingPreset();
         break;
       case EnumModes.interactive:
-
-        /// initialize the workspace provider to use to send notification accross the workspace
-        WorkspaceProvider workProvider =
-            Provider.of<WorkspaceProvider>(context, listen: false);
         ////  set an notification message for interactive mode
         workProvider.toggleStripNotification(
             "Interactive effect will only work with your keyboard. Please assign the keys thatare used for triggering the effect. Hold down the Ctrl key for multiple selection");
@@ -247,19 +248,21 @@ class ModeProvider extends ChangeNotifier {
         break;
     }
 
-    setCurrentMode(ToolsModeModel(
-        currentColor: currentColors,
-        value: pickerChoice.value,
-        icon: pickerChoice.icon,
-        effects: effects,
-        name: pickerChoice.title));
-
+    //// set the current effects to the effects provider
     EffectProvider effectsProvider =
         Provider.of<EffectProvider>(context, listen: false);
     effectsProvider.setCurrentEffect(EffectsModel(
         effectName: effects.effectName,
         degree: effects.degree,
         speed: effects.speed));
+
+    //// set the current mode to the mode been selected and change to and apply all current colors and effects
+    setCurrentMode(ToolsModeModel(
+        currentColor: currentColors,
+        value: pickerChoice.value,
+        icon: pickerChoice.icon,
+        effects: effectsProvider.currentEffect!,
+        name: pickerChoice.title));
     return preset;
   }
 
