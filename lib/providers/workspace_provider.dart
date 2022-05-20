@@ -254,7 +254,7 @@ class WorkspaceProvider with ChangeNotifier {
         }
 
         // calculate rect based on resizable widget offsets.
-        final layerModel = _layersProvider!.getItem(_layersProvider!.index);
+        final layerModel = _layersProvider!.getItem(_layersProvider!.listIndex);
 
         box2 = _resizableProvider!.draggableKey.currentContext
             ?.findRenderObject() as RenderBox?;

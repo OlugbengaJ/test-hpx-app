@@ -74,11 +74,6 @@ class _LayerListItemState extends State<LayerListItem> {
 
   _deleteLayer(LayersProvider provider){
     provider.removeItem(widget.layerIndex);
-    // final dynamic tooltip = deleteKey.currentState;
-    // tooltip?.ensureTooltipVisible();
-    // setState(() {
-    //   _showDeleteTooltip = true;
-    // });
   }
 
   _onTap(LayersProvider provider) {
@@ -91,13 +86,7 @@ class _LayerListItemState extends State<LayerListItem> {
     setState(() {
       _editing = !_editing;
     });
-    provider.update(
-      LayerItemModel(
-        id: widget.layerItemModel.id,
-        mode: widget.layerItemModel.mode,
-        layerText: value,
-      ),
-      widget.layerIndex);
+    provider.update(widget.layerItemModel.id, value);
   }
 
   List<Widget> _sublayers(LayersProvider provider){

@@ -14,10 +14,8 @@ class LayersProvider extends ChangeNotifier {
   bool hideStackedLayers = false;
   bool deleteLayerTooltip = false;
 
-  int _index = 0;
   int _listIndex = 0;
   int get length => _layeritems.length;
-  int get index => _index;
   int get listIndex => _listIndex;
 
   List<LayerItemModel> get layeritems => _layeritems; // Should return only mainlayers
@@ -29,21 +27,21 @@ class LayersProvider extends ChangeNotifier {
   }
 
 
-  void setKeys(keys){
-    LayerItemModel item = _layeritems[index];
-    item.setKeys(keys);
-    layeritems[index] = item;
+  // void setKeys(keys){
+  //   LayerItemModel item = _layeritems[index];
+  //   item.setKeys(keys);
+  //   layeritems[index] = item;
 
-    notifyListeners();
-  }
+  //   notifyListeners();
+  // }
 
-  LayerItemModel getEditingLayer() {
-    if(length>1){
-      return _layeritems[index];
-    }else{
-      return _layeritems[0];
-    }    
-  }
+  // LayerItemModel getEditingLayer() {
+  //   if(length>1){
+  //     return _layeritems[index];
+  //   }else{
+  //     return _layeritems[0];
+  //   }    
+  // }
 
   void toggleHideStackedLayers(bool show) {
     hideStackedLayers = show;
@@ -148,11 +146,13 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void update(LayerItemModel item, int index) {
-    int toEdit = _layeritems[index].id;
 
-      _layeritems[index] = item;
-
+  // Update the layerText using its ID
+  void update(int id, String text) {
+    LayerItemModel item = layeritems.singleWhere((item) => item.id==id);
+    item.layerText = text;
+    int editingIndex = layeritems.indexWhere((item) => item.id==id);
+    _layeritems[editingIndex] = item;
     notifyListeners();
   }
 
