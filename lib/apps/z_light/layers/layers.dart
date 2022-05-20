@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_list_item.dart';
-import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
@@ -44,6 +44,11 @@ class _LayersState extends State<Layers> {
 
 
   _addLayer() {
+
+    context.read<ResizableProvider>().initialize(
+      Offset(areaWidth / 2, areaHeight / 2),
+    );
+
     ModeProvider modeProvider = context.read<ModeProvider>();
     var provider = context.read<LayersProvider>();
     int id = 1; // For first element;
@@ -56,22 +61,11 @@ class _LayersState extends State<Layers> {
       id = id + 1;
     }
 
-    ResizableWidgetController controller = ResizableWidgetController(
-      initialPosition: Offset(areaWidth / 2, areaHeight / 2),
-      areaHeight: areaHeight,
-      areaWidth: areaWidth,
-      height: areaHeight / 2,
-      width: areaWidth / 2,
-      minWidth: 50,
-      minHeight: 50,
-    );
-
     provider.add(
       LayerItemModel(
       id: id,
       layerText: modeProvider.getModeInformation().name,
       mode: modeProvider.getModeInformation(),
-      controller: controller
       )
     );
 

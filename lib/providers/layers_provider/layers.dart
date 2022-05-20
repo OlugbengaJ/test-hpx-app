@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
-import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 
 
@@ -11,7 +10,6 @@ class LayersProvider extends ChangeNotifier {
   final areaWidth = Get.width * 0.70;
   final List<LayerItemModel> _layeritems = [];
   final List<LayerItemModel> _sublayers = [];
-  final List<LayerItemModel> _stackedLayeritems = []; // Used to display the staked layers
 
   bool hideStackedLayers = false;
   bool deleteLayerTooltip = false;
@@ -24,9 +22,6 @@ class LayersProvider extends ChangeNotifier {
 
   List<LayerItemModel> get layeritems => _layeritems; // Should return only mainlayers
   List<LayerItemModel> get sublayerItems => _sublayers; // Should return only sublayers
-  List<LayerItemModel> get stackedLayeritems => _stackedLayeritems;
-  List<LayerItemModel> get editingLayer => _stackedLayeritems;
-
   
 
   LayerItemModel getItem(int i) {
@@ -104,21 +99,8 @@ class LayersProvider extends ChangeNotifier {
     //item.paintColor = colors[item.id - 1];
 
     _layeritems.insert(0, item);
-    _stackedLayeritems.add(item);
 
-    _index = _stackedLayeritems.length - 1;
 
-    getEditingLayer();
-    notifyListeners();
-  }
-
-  void rearranegStack() {
-    // Not working properly
-    stackedLayeritems.clear();
-    List<LayerItemModel> reversedList = layeritems.reversed.toList();
-    for (var item in reversedList) {
-      stackedLayeritems.add(item);
-    }
     notifyListeners();
   }
 
@@ -126,29 +108,11 @@ class LayersProvider extends ChangeNotifier {
   void duplicate(LayerItemModel item, int index, {bool sublayer=false}) {
     
 
-    ResizableWidgetController controller = ResizableWidgetController(
-      initialPosition: item.controller.initialPosition,
-      areaHeight: item.controller.areaHeight,
-      areaWidth: item.controller.areaWidth,
-      height: item.controller.height,
-      width: item.controller.width,
-      minWidth: item.controller.minWidth,
-      minHeight: item.controller.minHeight,
-    );
-
-    controller.bottom = item.controller.bottom;
-    controller.top = item.controller.top;
-    controller.left = item.controller.left;
-    controller.right = item.controller.right;
-    controller.height = item.controller.height;
-    controller.width = item.controller.width;
-
     LayerItemModel duplicatedItem = LayerItemModel(
       id: (sublayer)? getTheBiggestSUbID(): getTheBiggestID(),
       layerText: "Copy ${item.layerText}",
       mode: item.mode,
       isSublayer: sublayer,
-      controller: controller
     );
 
     if(sublayer){
@@ -163,8 +127,7 @@ class LayersProvider extends ChangeNotifier {
         element.listDisplayColor = Colors.grey;
       }
       _layeritems.insert(index + 1, duplicatedItem);
-      _stackedLayeritems.add(duplicatedItem);
-      _index = _stackedLayeritems.length - 1;
+      
     }
     notifyListeners();
   }
@@ -177,17 +140,9 @@ class LayersProvider extends ChangeNotifier {
 
     _listIndex = index;
     
-
     final item = _layeritems[_listIndex];
     item.listDisplayColor = Colors.white;
     _layeritems[_listIndex] = item;
-
-    for (var i = 0; i < _stackedLayeritems.length; i++) {
-      if (_stackedLayeritems[i].id == _layeritems[index].id) {
-        _index = i;
-        break;
-      }
-    }
 
 
     notifyListeners();
@@ -195,16 +150,8 @@ class LayersProvider extends ChangeNotifier {
 
   void update(LayerItemModel item, int index) {
     int toEdit = _layeritems[index].id;
-      int stackedIndex = 0; // The stack index is different from the list index
 
       _layeritems[index] = item;
-
-      for (var i = 0; i < _layeritems.length; i++) {
-        if (_stackedLayeritems[i].id == toEdit) {
-          stackedIndex = i;
-        }
-      }
-      _stackedLayeritems[stackedIndex] = item;
 
     notifyListeners();
   }
@@ -230,14 +177,7 @@ class LayersProvider extends ChangeNotifier {
 
     _layeritems[index] = item;
 
-    for (var i = 0; i < _layeritems.length; i++) {
-      if (_stackedLayeritems[i].id == toEdit) {
-        stackedIndex = i;
-        break;
-      }
-    }
-
-    _stackedLayeritems[stackedIndex] = item;
+    
     notifyListeners();
   }
 
@@ -247,7 +187,6 @@ class LayersProvider extends ChangeNotifier {
     }
     final item = _layeritems.removeAt(oldIndex);
     _layeritems.insert(newIndex, item);
-    //rearranegStack();
     notifyListeners();
   }
 
@@ -258,10 +197,7 @@ class LayersProvider extends ChangeNotifier {
       _layeritems.remove(item);
       
 
-      stackedLayeritems.clear();
-      for (var item in layeritems) {
-        _stackedLayeritems.add(item);
-      }
+      
 
       if (_layeritems.isNotEmpty) {
         changeIndex(0);

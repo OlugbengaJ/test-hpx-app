@@ -1,4 +1,3 @@
-import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/key_model.dart';
@@ -9,7 +8,6 @@ const Color defaultPaintColor = Colors.white;
 class LayerItemModel {
   LayerItemModel({
     required this.id,
-    required this.controller,
     this.parentID = 0,
     required this.layerText,
     this.visible = true,
@@ -31,7 +29,6 @@ class LayerItemModel {
   Color paintColor;
   ToolsModeModel mode;
   List<KeyModel> _keys = [];
-  ResizableWidgetController controller;
 
 
   List<KeyModel> get keys => _keys;

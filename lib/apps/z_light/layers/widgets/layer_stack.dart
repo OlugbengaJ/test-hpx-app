@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/layers/resizable/stateful_resizable.dart';
-import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:provider/provider.dart';
 
 class LayersStack extends StatefulWidget {
-  const LayersStack({Key? key, required this.layers}) : super(key: key);
-  final List<LayerStackItem> layers;
+  const LayersStack({Key? key}) : super(key: key);
 
   @override
   State<LayersStack> createState() => _LayersStackState();
