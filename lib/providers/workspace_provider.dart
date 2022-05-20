@@ -53,6 +53,7 @@ class WorkspaceProvider with ChangeNotifier {
   /// [getKeyDragMode] returns the current mode of the [Workspace].
   WorkspaceDragMode? get getKeyDragMode => _keyDragMode;
   bool _dragModeChanged = false;
+  bool _isCurrentDeviceSelected = false;
 
   /// Selection mode is used in zone selection, resizable, or click mode.
   ///
@@ -61,11 +62,21 @@ class WorkspaceProvider with ChangeNotifier {
     if (_keyDragMode == mode) {
       // reset selection mode
       _keyDragMode = null;
+      _dragModeChanged = false;
     } else {
       _keyDragMode = mode;
+      _dragModeChanged = true;
     }
-    // drag mode has changed
-    _dragModeChanged = true;
+
+    switch (_keyDragMode) {
+      case WorkspaceDragMode.click:
+        // set to true to enable selection of the entire keys
+        _isCurrentDeviceSelected = true;
+        _dragModeChanged = false;
+        break;
+      default:
+        _isCurrentDeviceSelected = false;
+    }
 
     if (_layersProvider != null) {
       _layersProvider!.toggleHideStackedLayers(!isDragModeResizable);
@@ -110,7 +121,7 @@ class WorkspaceProvider with ChangeNotifier {
     _dragModeChanged = false;
 
     switch (_keyDragMode) {
-      case WorkspaceDragMode.click:
+      // case WorkspaceDragMode.click:
       case WorkspaceDragMode.zone:
         _panDownDetails = details;
         _panUpdateDetails =
@@ -222,6 +233,7 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [isWidgetInZone] checks a widget intersects with the zone selection
   bool? isWidgetInZone(RenderBox? box, {RenderBox? box2}) {
+    debugPrint('$_dragModeChanged, $_keyDragMode');
     // drag mode has changed, unselect box
     if (_dragModeChanged) return false;
 
@@ -229,15 +241,16 @@ class WorkspaceProvider with ChangeNotifier {
 
     switch (_keyDragMode) {
       case WorkspaceDragMode.click:
-        // prevent keys from being highlighted in click mode.
-        if (_panNotAllowed(box) ||
-            _panDownDetails!.globalPosition !=
-                _panUpdateDetails!.globalPosition) {
-          return null;
-        }
+        return _isCurrentDeviceSelected ? true : null;
+      // // prevent keys from being highlighted in click mode.
+      // if (_panNotAllowed(box) ||
+      //     _panDownDetails!.globalPosition !=
+      //         _panUpdateDetails!.globalPosition) {
+      //   return null;
+      // }
 
-        selectorRect = _rectFromPanDetails;
-        break;
+      // selectorRect = _rectFromPanDetails;
+      // break;
       case WorkspaceDragMode.zone:
         if (_panNotAllowed(box)) return null;
 

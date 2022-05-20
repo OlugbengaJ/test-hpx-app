@@ -104,13 +104,8 @@ class _WrapperState extends State<Wrapper> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
+              margin: EdgeInsets.zero,
               width: 180,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Theme.of(context).primaryColorLight,
-                  width: 1,
-                ),
-              ),
               child: DropDown(
                 hint: 'Select profile...',
                 hintStyle: pStyle,
@@ -127,29 +122,6 @@ class _WrapperState extends State<Wrapper> {
                 ],
                 onChangedHandler: (o) {},
               ),
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: DropdownButton(
-              //     value: _modeProvider.getPickerModes('profile').first,
-              //     menuMaxHeight: 400,
-              //     alignment: Alignment.bottomRight,
-              //     hint: Text(
-              //       'Select profile...',
-              //       style: pStyle,
-              //     ),
-              //     underline: const SizedBox(),
-              //     items: _modeProvider
-              //         .getPickerModes('profile')
-              //         .map((e) => DropdownMenuItem(
-              //               enabled: e.enabled,
-              //               value: e,
-              //               child: GetProfileList(profile: e),
-              //             ))
-              //         .toList(),
-              //     onChanged: (o) {},
-              //     isExpanded: true,
-              //   ),
-              // ),
             ),
           ),
         ],

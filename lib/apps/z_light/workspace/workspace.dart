@@ -262,6 +262,18 @@ class _WorkspaceState extends State<Workspace> {
                 alignment: Alignment.bottomLeft,
                 fit: StackFit.expand,
                 children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      margin: EdgeInsets.zero,
+                      width: 400 * _zoomScale,
+                      height: 400 * _zoomScale,
+                      child: const Image(
+                        image: AssetImage(Constants.laptopg9Image),
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
                   // Keyboard widget takes a zoom scale which is applied to all keys.
                   // This ensures seamless zooming of the entire keyboard.
                   Align(
