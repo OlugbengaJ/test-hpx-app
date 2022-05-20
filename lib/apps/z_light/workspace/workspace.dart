@@ -13,6 +13,7 @@ import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/utils/comparer.dart';
 import 'package:hpx/utils/constants.dart';
+import 'package:hpx/widgets/components/dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -225,12 +226,15 @@ class _WorkspaceState extends State<Workspace> {
                                 // TODO: select by devices
                                 child: Padding(
                                   padding: const EdgeInsets.all(4.0),
-                                  child: DropDownDevices(
+                                  child: DropDown(
+                                    enabled: workspaceProvider.isDragModeClick,
+                                    hint: 'Select by devices...',
+                                    hintStyle: pStyle,
                                     items: getDropdownMenuItems(
                                       Theme.of(context).colorScheme.primary,
                                       devices(),
                                     ),
-                                    hint: 'Select by devices...',
+                                    onChangedHandler: (o) {},
                                   ),
                                 ),
                               ),
@@ -320,32 +324,10 @@ class _WorkspaceState extends State<Workspace> {
   }
 }
 
-class DropDownDevices extends StatelessWidget {
-  const DropDownDevices({
-    Key? key,
-    this.initialValue,
-    required this.items,
-    required this.hint,
-  }) : super(key: key);
-
-  final Object? initialValue;
-  final List<DropdownMenuItem<Object>>? items;
-  final String hint;
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButton(
-      value: initialValue,
-      menuMaxHeight: 400.0,
-      hint: Text(hint, style: pStyle),
-      underline: const SizedBox(),
-      items: items,
-      onChanged: (o) {},
-    );
-  }
-}
-
 class Device extends Comparer {
+  /// [Device] is a type of HP supported device.
+  ///
+  /// It is used in the zone selection to allow users to select devices.
   Device(this.name, this.enabled, {this.devices}) : super(name);
 
   final String name;
@@ -353,6 +335,9 @@ class Device extends Comparer {
   bool enabled;
 }
 
+// TODO: this may need to be refactored and retrieved from storage or an API.
+
+/// [devices] returns the list of supported devices and their sub devices.
 List<Device> devices() {
   return [
     Device('All devices', false),
