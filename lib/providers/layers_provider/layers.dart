@@ -14,6 +14,7 @@ class LayersProvider extends ChangeNotifier {
   final List<ResizableWidgetController> _layersControllers = [];
 
   bool hideStackedLayers = false;
+  bool deleteLayerTooltip = false;
 
   int _index = 0;
   int get length => _layeritems.length;
@@ -34,6 +35,8 @@ class LayersProvider extends ChangeNotifier {
   void updateView() {
     notifyListeners();
   }
+
+  
 
   ResizableWidgetController getController(int id){
     var controller = _layersControllers.where((controller) => controller.layerID==id).toList()[0];

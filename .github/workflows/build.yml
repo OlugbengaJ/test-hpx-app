@@ -6,17 +6,26 @@ on:
       - development
   pull_request:
       types: [opened, synchronize, reopened]
+
+permissions:  
+  contents: read
+  
 name: Sonar Scanner
 jobs:
   sonarcloud:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - name: Harden Runner
+      uses: step-security/harden-runner@248ae51c2e8cc9622ecf50685c8bf7150c6e8813
+      with:
+        egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
+
+    - uses: actions/checkout@d171c3b028d844f2bf14e9fdec0c58114451e4bf
       with:
         # Disabling shallow clone is recommended for improving relevancy of reporting
         fetch-depth: 0
     - name: SonarCloud Scan
-      uses: sonarsource/sonarcloud-github-action@master
+      uses: sonarsource/sonarcloud-github-action@25b0be1ad1c39388799624b0d0914282bc36ac8e
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

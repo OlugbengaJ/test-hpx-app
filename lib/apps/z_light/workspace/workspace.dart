@@ -12,6 +12,7 @@ import 'package:hpx/apps/z_light/workspace/widgets/zoom_toolbar.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/utils/comparer.dart';
+import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -36,9 +37,9 @@ class _WorkspaceState extends State<Workspace> {
 
   final double _buttonSize = 32.0;
 
-  /// [_zoomTextChanged] ensure user enters only digits
+  /// [zoomTextChanged] ensure user enters only digits
   /// that are within the acceptable zoom threshold.
-  void _zoomTextChanged() {
+  void zoomTextChanged() {
     double? value = double.tryParse(_zoomTextCtrl.text);
 
     if (value != null) {
@@ -51,21 +52,21 @@ class _WorkspaceState extends State<Workspace> {
     }
   }
 
-  /// [_zoomEnd] terminates continuous zoom
+  /// [zoomEnd] terminates continuous zoom
   ///
   /// timer is canceled to stop zooming by the duration specified
-  void _zoomEnd() {
+  void zoomEnd() {
     _timer.cancel();
   }
 
-  /// [_updateZoom] sets the zoom text (without fractions) and zoom scale.
-  void _updateZoom() {
+  /// [updateZoom] sets the zoom text (without fractions) and zoom scale.
+  void updateZoom() {
     _zoomTextCtrl.text = '${_zoomValue.ceil()}';
   }
 
-  /// [_zoomIn] increases the zoomValue only up to the zoomIn threshold
+  /// [zoomIn] increases the zoomValue only up to the zoomIn threshold
   /// preventing scenario where content is unnecessarily large.
-  void _zoomIn() {
+  void zoomIn() {
     _timer = Timer.periodic(_duration, (t) {
       if (_zoomValue == _zoomInThreshold) {
         _timer.cancel();
@@ -74,22 +75,22 @@ class _WorkspaceState extends State<Workspace> {
 
       setState(() {
         _zoomValue += 1;
-        _updateZoom();
+        updateZoom();
       });
     });
   }
 
-  /// [_zoomExpand] sets the zoomValue to half the zoomIn threshold.
-  void _zoomExpand() {
+  /// [zoomExpand] sets the zoomValue to half the zoomIn threshold.
+  void zoomExpand() {
     setState(() {
       _zoomValue = _zoomInThreshold / 3.1;
-      _updateZoom();
+      updateZoom();
     });
   }
 
-  /// zoomOut decreases the zoomValue only up to the zoomOut threshold
+  /// [zoomOut] decreases the zoomValue only up to the zoomOut threshold
   /// preventing scenario where content is completely not visible.
-  void _zoomOut() {
+  void zoomOut() {
     _timer = Timer.periodic(_duration, (t) {
       if (_zoomValue == _zoomOutThreshold) {
         _timer.cancel();
@@ -98,16 +99,16 @@ class _WorkspaceState extends State<Workspace> {
 
       setState(() {
         _zoomValue -= 1;
-        _updateZoom();
+        updateZoom();
       });
     });
   }
 
-  /// zoomCollapse sets the zoomValue to the zoomOut threshold.
-  void _zoomCollapse() {
+  /// [zoomCollapse] sets the zoomValue to the zoomOut threshold.
+  void zoomCollapse() {
     setState(() {
       _zoomValue = _zoomOutThreshold;
-      _updateZoom();
+      updateZoom();
     });
   }
 
@@ -116,7 +117,7 @@ class _WorkspaceState extends State<Workspace> {
     super.initState();
 
     // Start listening to changes.
-    _zoomTextCtrl.addListener(_zoomTextChanged);
+    _zoomTextCtrl.addListener(zoomTextChanged);
   }
 
   @override
@@ -129,6 +130,9 @@ class _WorkspaceState extends State<Workspace> {
   @override
   Widget build(BuildContext context) {
     final workspaceProvider = Provider.of<WorkspaceProvider>(context);
+
+    // initialize layers provider
+    workspaceProvider.setLayersProvider(Provider.of<LayersProvider>(context));
 
     return Column(
       children: [
@@ -274,70 +278,63 @@ class _WorkspaceState extends State<Workspace> {
           child: Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage("assets/images/backdrop.png"),
+                image: AssetImage(Constants.backdropImage),
                 repeat: ImageRepeat.repeat,
               ),
             ),
-            child: Consumer<LayersProvider>(
-              builder: (context, layersProvider, child) {
-                return GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onPanDown: (details) {
-                    workspaceProvider.onPanDown(details);
-                    // initialize the layers provider
-                    workspaceProvider.setLayersProvider(layersProvider);
-                  },
-                  onPanUpdate: (details) =>
-                      workspaceProvider.onPanUpdate(details),
-                  onPanEnd: (details) => workspaceProvider.onPanEnd(details),
-                  onPanCancel: () => workspaceProvider.onPanClear(),
-                  child: Stack(
-                    alignment: Alignment.bottomLeft,
-                    fit: StackFit.expand,
-                    children: [
-                      // Keyboard widget takes a zoom scale which is applied to all keys.
-                      // This ensures seamless zooming of the entire keyboard.
-                      Align(
-                        alignment: Alignment.center,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          primary: false,
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            primary: false,
-                            child: Keyboard(zoomScale: _zoomScale),
-                          ),
-                        ),
-                      ),
-                      LayersStack(
-                        layers: widget.layers,
-                      ),
-                      if (workspaceProvider.isPanning) const KeyboardSelector(),
-
-                      if (workspaceProvider.isModalNotify)
-                        ModalNotification(
-                          children: workspaceProvider.modalWidgets,
-                          closeHandler: workspaceProvider.toggleModal,
-                        ),
-                      Positioned(
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Center(
-                          child: ZoomToolbar(
-                            zoomTextController: _zoomTextCtrl,
-                            zoomInHandler: _zoomIn,
-                            zoomExpandHandler: _zoomExpand,
-                            zoomOutHandler: _zoomOut,
-                            zoomCollapseHandler: _zoomCollapse,
-                            zoomEndHandler: _zoomEnd,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                );
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onPanDown: (details) {
+                workspaceProvider.onPanDown(details);
               },
+              onPanUpdate: (details) => workspaceProvider.onPanUpdate(details),
+              onPanEnd: (details) => workspaceProvider.onPanEnd(details),
+              onPanCancel: () => workspaceProvider.onPanClear(),
+              child: Stack(
+                alignment: Alignment.bottomLeft,
+                fit: StackFit.expand,
+                children: [
+                  // Keyboard widget takes a zoom scale which is applied to all keys.
+                  // This ensures seamless zooming of the entire keyboard.
+                  Align(
+                    alignment: Alignment.center,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      primary: false,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        primary: false,
+                        child: Keyboard(zoomScale: _zoomScale),
+                      ),
+                    ),
+                  ),
+                  LayersStack(
+                    layers: widget.layers,
+                  ),
+                  if (workspaceProvider.isPanning) const KeyboardSelector(),
+
+                  if (workspaceProvider.isModalNotify)
+                    ModalNotification(
+                      closeHandler: workspaceProvider.toggleModal,
+                      children: workspaceProvider.modalWidgets,
+                    ),
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: ZoomToolbar(
+                        zoomTextController: _zoomTextCtrl,
+                        zoomInHandler: zoomIn,
+                        zoomExpandHandler: zoomExpand,
+                        zoomOutHandler: zoomOut,
+                        zoomCollapseHandler: zoomCollapse,
+                        zoomEndHandler: zoomEnd,
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         )

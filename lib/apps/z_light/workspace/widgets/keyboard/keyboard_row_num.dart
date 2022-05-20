@@ -13,7 +13,7 @@ class KeyboardRowNum extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double _zoomedPadding = 2.0 * zoomScale;
+    double zoomedPadding = 2.0 * zoomScale;
 
     final keysProvider = Provider.of<KeysProvider>(context);
     final rowKeys = keysProvider.getKeyInRow(1);
@@ -23,7 +23,7 @@ class KeyboardRowNum extends StatelessWidget {
       children: [
         ...rowKeys.map(
           (keyModel) => Padding(
-            padding: EdgeInsets.all(_zoomedPadding),
+            padding: EdgeInsets.all(zoomedPadding),
 
             // use ChangeNotifierProvider.value() when using child values of Provider.of()
             // as notifier; otherwise you encounter errors with ChangeNotifierProvider(create)

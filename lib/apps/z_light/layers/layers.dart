@@ -29,9 +29,16 @@ class _LayersState extends State<Layers> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      _addLayer();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      initialLayer();
     });
+  }
+
+  void initialLayer(){
+    LayersProvider provider = context.read<LayersProvider>();
+    if(provider.length<1){
+      _addLayer();
+    }
   }
 
 
@@ -40,11 +47,11 @@ class _LayersState extends State<Layers> {
     var provider = context.read<LayersProvider>();
     int id = 1; // For first element;
     if (provider.layeritems.isNotEmpty) {
-      provider.layeritems.forEach((element) {
+      for (var element in provider.layeritems ) {
         if (element.id > id) {
           id = element.id;
         }
-      });
+      }
       id = id + 1;
     }
     ResizableWidgetController controller = ResizableWidgetController(
@@ -57,13 +64,12 @@ class _LayersState extends State<Layers> {
       minWidth: 50,
       minHeight: 50,
     );
-    
+
     provider.add(LayerItemModel(
-      id: id,
-      layerText: modeProvider.getModeInformation().name,
-      mode: modeProvider.getModeInformation(),
-      controller: controller
-    ));
+        id: id,
+        layerText: modeProvider.getModeInformation().name,
+        mode: modeProvider.getModeInformation(),
+        controller: controller));
     provider.addController(controller);
   }
 
@@ -116,7 +122,7 @@ class _LayersState extends State<Layers> {
                   child: Consumer<LayersProvider>(
                     builder: (_, provider, child) {
                       return ReorderableListView.builder(
-                        buildDefaultDragHandles: true,
+                        buildDefaultDragHandles: false,
                         padding: const EdgeInsets.all(2),
                         itemCount: provider.length,
                         scrollController:

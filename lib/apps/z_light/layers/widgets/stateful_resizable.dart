@@ -41,7 +41,7 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
   }
 
   _onDragEnd(provider) {
-    controller.onDragEnd(widget.keysToWatch, provider);
+    //controller.onDragEnd(widget.keysToWatch, provider);
   }
 
   @override

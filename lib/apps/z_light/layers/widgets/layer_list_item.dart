@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/layers/widgets/sublayer_item.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
@@ -19,9 +20,11 @@ class LayerListItem extends StatefulWidget {
 
 class _LayerListItemState extends State<LayerListItem> {
   bool _showActions = false;
+  bool _showDeleteTooltip = false;
   bool _editing = false;
   final double _iconSize = 16;
   TextEditingController _layerNameController = TextEditingController(text: "");
+  GlobalKey deleteKey = GlobalKey<State<Tooltip>>();
 
   @override
   void initState() {
@@ -29,12 +32,16 @@ class _LayerListItemState extends State<LayerListItem> {
   }
 
   _onHover(isHovering) {
-    setState(() {
-      _showActions = isHovering;
-    });
+    if(!_showDeleteTooltip){
+      setState(() {
+        _showActions = isHovering;
+      });
+    }
+    
   }
 
-  _toggleLayer(provider) {
+
+  _toggleLayer(LayersProvider provider) {
     LayerItemModel layerItemModel = widget.layerItemModel;
     provider.toggleVisibility(
         LayerItemModel(
@@ -47,7 +54,7 @@ class _LayerListItemState extends State<LayerListItem> {
   }
 
 
-  _duplicate(provider){
+  _duplicate(LayersProvider provider){
     if(widget.layerItemModel.mode.name=="Shortcut Colors"){
       provider.duplicate(widget.layerItemModel, widget.layerIndex, sublayer: true);
     }else{
@@ -56,7 +63,7 @@ class _LayerListItemState extends State<LayerListItem> {
     
   }
 
-  _toggleEditing(value) {
+  _toggleEditing(LayersProvider value) {
     setState(() {
       _editing = !_editing;
       _layerNameController = TextEditingController(
@@ -64,28 +71,33 @@ class _LayerListItemState extends State<LayerListItem> {
     });
   }
 
-  _deleteLayer(provider){
+  _deleteLayer(LayersProvider provider){
     provider.removeItem(widget.layerIndex);
+    // final dynamic tooltip = deleteKey.currentState;
+    // tooltip?.ensureTooltipVisible();
+    // setState(() {
+    //   _showDeleteTooltip = true;
+    // });
   }
 
-  _onTap(provider) {
+  _onTap(LayersProvider provider) {
     provider.changeIndex(widget.layerIndex);
   }
 
-  _onSubmit(value, provider) {
+  _onSubmit(value, LayersProvider provider) {
     setState(() {
       _editing = !_editing;
     });
     provider.update(
         LayerItemModel(
-            id: widget.layerItemModel.id,
-            mode: widget.layerItemModel.mode,
-            layerText: value,
-            controller: widget.layerItemModel.controller),
+          id: widget.layerItemModel.id,
+          mode: widget.layerItemModel.mode,
+          layerText: value,
+          controller: widget.layerItemModel.controller),
         widget.layerIndex);
   }
 
-  List<Widget> _sublayers(provider){
+  List<Widget> _sublayers(LayersProvider provider){
     List<Widget> layers = [];
     if(widget.layerItemModel.hasSublayer){
       int index = 0;
@@ -121,7 +133,7 @@ class _LayerListItemState extends State<LayerListItem> {
                       children: [
                         InkWell(
                             onTap: () => _toggleLayer(_value),
-                            child: Tooltip(
+                            child: Tooltip(                              
                               message: "Toogle visibility",
                               child: Icon(
                                 (_value.getItem(widget.layerIndex).visible)
@@ -182,12 +194,11 @@ class _LayerListItemState extends State<LayerListItem> {
                                             },
                                           ),
                                         ),
-                                  (_showActions)
+                                  (_showActions || _showDeleteTooltip)
                                       ? Consumer<LayersProvider>(
                                           builder: (context, value, child) {
                                           return Container(
-                                            margin:
-                                                const EdgeInsets.only(right: 26),
+                                            //margin: const EdgeInsets.only(right: 26),
                                             child: Row(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.end,
@@ -217,9 +228,7 @@ class _LayerListItemState extends State<LayerListItem> {
                                                         _toggleEditing(value),
                                                   ),
                                                 ),
-                                                Tooltip(
-                                                  message: "Delete",
-                                                  preferBelow: false,
+                                                GestureDetector(
                                                   child: InkWell(
                                                     child: Icon(
                                                       Ionicons.trash,
@@ -230,6 +239,97 @@ class _LayerListItemState extends State<LayerListItem> {
                                                     onTap: () => _deleteLayer(value),
                                                   ),
                                                 ),
+                                                
+                                                Tooltip(
+                                                  key: deleteKey,
+                                                  showDuration: const Duration(seconds: 2),
+                                                  padding: EdgeInsets.zero,
+                                                  richMessage: TextSpan(
+                                                    children: [
+                                                      WidgetSpan(
+                                                        alignment: PlaceholderAlignment.baseline,
+                                                        baseline: TextBaseline.alphabetic,
+                                                        child: Container(
+                                                          color: Colors.black,
+                                                          constraints: const BoxConstraints(maxWidth: 150),
+                                                          child: Column(
+                                                            children: [
+                                                              Container(
+                                                                padding: const EdgeInsets.all(4),
+                                                                child: const Center(
+                                                                  child: Text(
+                                                                    "Delete this layer",
+                                                                    style: TextStyle(
+                                                                      backgroundColor: Colors.black,
+                                                                    )
+                                                                    ,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Container(
+                                                                padding: const EdgeInsets.all(4),
+                                                                child: Row(
+                                                                  children: [
+                                                                  Expanded(
+                                                                    child: Column(
+                                                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                                      children: [
+                                                                        GestureDetector(
+                                                                          child: const Text("Cancel"),                                                                          
+                                                                          onTap: () {
+                                                                            print("OK");
+                                                                          }
+                                                                        )
+                                                                      ])
+                                                                    ),
+                                                                    Expanded(
+                                                                      child: Column(
+                                                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                                                        children: [
+                                                                          TextButton(
+                                                                            child: const Text("Got It"),
+                                                                            style: TextButton.styleFrom(
+                                                                              primary: Colors.black,
+                                                                              backgroundColor: Colors.white,
+                                                                            ),
+                                                                            onPressed: () {
+                                                                              
+                                                                            }
+                                                                          )
+                                                                        ]
+                                                                      )
+                                                                    ),
+                                                                ]),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        )
+                                                      ),
+                                                      
+                                                    ]
+                                                  ),
+                                                  preferBelow: false,
+                                                  child: Container(),
+                                                ),
+
+                                                Tooltip(
+                                                  message: "Rearrange",
+                                                  child: ReorderableDragStartListener(
+                                                    index: widget.layerIndex,
+                                                    child: GestureDetector(
+                                                      child: InkWell(
+                                                        child: Icon(
+                                                          Ionicons.list,
+                                                          size: _iconSize,
+                                                          color: widget.layerItemModel
+                                                              .listDisplayColor,
+                                                        ),
+                                                        onTap: () => {},
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                
                                               ],
                                             ),
                                           );

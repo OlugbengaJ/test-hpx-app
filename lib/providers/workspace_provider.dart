@@ -24,7 +24,7 @@ class WorkspaceProvider with ChangeNotifier {
   List<Widget> get modalWidgets => _modalWidgets ?? [];
 
   /// [_workspaceView] determines if the lighting options is displayed.
-  WorkspaceView _workspaceView = WorkspaceView.workspace;
+  WorkspaceView _workspaceView = WorkspaceView.lighting;
 
   /// [getWorkspaceView] returns the current view.
   WorkspaceView get getWorkspaceView => _workspaceView;
@@ -52,6 +52,7 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [getKeyDragMode] returns the current mode of the [Workspace].
   WorkspaceDragMode? get getKeyDragMode => _keyDragMode;
+  bool _dragModeChanged = false;
 
   /// Selection mode is used in zone selection, resizable, or click mode.
   ///
@@ -63,6 +64,8 @@ class WorkspaceProvider with ChangeNotifier {
     } else {
       _keyDragMode = mode;
     }
+    // drag mode has changed
+    _dragModeChanged = true;
 
     if (_layersProvider != null) {
       _layersProvider!.toggleHideStackedLayers(!isDragModeResizable);
@@ -103,6 +106,9 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [onPanDown] indicates the the primary mouse is down and pan started.
   void onPanDown(DragDownDetails details) {
+    // drag mode has changed, clear selection
+    _dragModeChanged = false;
+
     switch (_keyDragMode) {
       case WorkspaceDragMode.click:
       case WorkspaceDragMode.zone:
@@ -144,6 +150,8 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [leftZonePosition] calculates the left of the zone selection highlight.
   double? get leftZonePosition {
+    if (_panDownDetails == null) return null;
+
     // disable highlight in zone mode
     if (!isDragModeZone) return _panDownDetails!.localPosition.dx;
 
@@ -160,6 +168,8 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [topZonePosition] calculates the top of the zone selection highlight.
   double? get topZonePosition {
+    if (_panDownDetails == null) return null;
+
     // disable highlight in zone mode
     if (!isDragModeZone) return _panDownDetails!.localPosition.dx;
 
@@ -212,6 +222,9 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [isWidgetInZone] checks a widget intersects with the zone selection
   bool? isWidgetInZone(RenderBox? box, {RenderBox? box2}) {
+    // drag mode has changed, unselect box
+    if (_dragModeChanged) return false;
+
     final Rect selectorRect;
 
     switch (_keyDragMode) {

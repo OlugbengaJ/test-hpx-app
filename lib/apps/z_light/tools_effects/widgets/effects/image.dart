@@ -1,8 +1,8 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/theme.dart';
 
 class ImagePreset extends StatefulWidget {
@@ -13,7 +13,7 @@ class ImagePreset extends StatefulWidget {
 }
 
 class _ImagePresetState extends State<ImagePreset> {
-  dynamic filePath = AssetImage("assets/images/backdrop.png");
+  dynamic filePath = const AssetImage(Constants.backdropImage);
 
   void _showPhotoLibrary() async {
     final result = await FilePicker.platform.pickFiles(
@@ -35,32 +35,34 @@ class _ImagePresetState extends State<ImagePreset> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.only(top: 20, bottom: 20.0),
-        child: Row(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Container(
-                    height: 170,
-                    width: MediaQuery.of(context).size.width * 0.14,
-                    decoration: BoxDecoration(
-                      image:
-                          DecorationImage(image: filePath, fit: BoxFit.cover),
-                    )),
-                Container(margin: const EdgeInsets.only(top: 5.0)),
-                InkWell(
-                    highlightColor: Colors.transparent,
-                    focusColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    onTap: () {
-                      _showPhotoLibrary();
-                    },
-                    child: Text("Browse",
-                        style: labelStyle, textAlign: TextAlign.right))
-              ],
-            ),
-          ],
-        ));
+      margin: const EdgeInsets.only(top: 20, bottom: 20.0),
+      child: Row(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Container(
+                height: 170,
+                width: MediaQuery.of(context).size.width * 0.14,
+                decoration: BoxDecoration(
+                  image: DecorationImage(image: filePath, fit: BoxFit.cover),
+                ),
+              ),
+              Container(margin: const EdgeInsets.only(top: 5.0)),
+              InkWell(
+                highlightColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                onTap: () {
+                  _showPhotoLibrary();
+                },
+                child: Text("Browse",
+                    style: labelStyle, textAlign: TextAlign.right),
+              )
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
