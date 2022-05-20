@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/widgets/theme.dart';
-import 'package:provider/provider.dart';
 
 class ColorCyclePreset extends StatefulWidget {
   const ColorCyclePreset({Key? key}) : super(key: key);

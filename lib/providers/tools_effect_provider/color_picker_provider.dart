@@ -2,10 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/color_picker_model.dart';
-import 'package:hpx/utils/KeyboardController.dart';
 import 'package:hpx/widgets/components/color_picker.dart';
 
-// waves lists
+// colorcycle pickermodel lists
 List<ColorPickerWidgetModel> colorcycleDefaultsList = [
   ColorPickerWidgetModel(
     name: "Galaxy",
@@ -67,7 +66,7 @@ List<ColorPickerWidgetModel> colorcycleCustomList = [
   )
 ];
 
-// waves lists
+// waves mode pickermodel lists
 List<ColorPickerWidgetModel> waveDefaultsList = [
   ColorPickerWidgetModel(
     name: "Galaxy",
@@ -129,7 +128,7 @@ List<ColorPickerWidgetModel> waveCustomList = [
   )
 ];
 
-// breathing lists
+// breathing pickermodel lists
 List<ColorPickerWidgetModel> breathingList = [
   ColorPickerWidgetModel(
     label: "Primary Color",
@@ -153,7 +152,7 @@ List<ColorPickerWidgetModel> breathingList = [
   )
 ];
 
-// interactive lists
+// interactive pickermodel lists
 List<ColorPickerWidgetModel> interactiveColorList = [
   ColorPickerWidgetModel(
     label: "Primary Color",
@@ -183,7 +182,7 @@ List<ColorPickerWidgetModel> interactiveColorList = [
   // )
 ];
 
-// blinking lists
+// blinking pickermodel lists
 List<ColorPickerWidgetModel> blinkingList = [
   ColorPickerWidgetModel(
     label: "Primary Color",
@@ -207,7 +206,7 @@ List<ColorPickerWidgetModel> blinkingList = [
   )
 ];
 
-// color production lists
+// color production pickermodel lists
 List<ColorPickerWidgetModel> colorProductionList = [
   ColorPickerWidgetModel(
     action: '',
@@ -216,7 +215,7 @@ List<ColorPickerWidgetModel> colorProductionList = [
   )
 ];
 
-// mood lists
+// mood pickermodel lists
 List<ColorPickerWidgetModel> moodThemesList = [
   ColorPickerWidgetModel(
     action: '',
@@ -319,9 +318,15 @@ List<ColorPickerWidgetModel> audioVisualGradientList = [
   ])
 ];
 
+//// color picker provider class to handle the color picker generate ui functions, and set the current color
 class ColorPickerProvider extends ChangeNotifier {
   ColorPickerWidgetModel? currentColor;
+
+  /// current color
   List<Color> lastColors = [];
+
+  ///  last color selected colors
+  /// preset colors for differnet color modes
   List<List<Color>> presetColors = [
     [
       Colors.red,
@@ -347,22 +352,23 @@ class ColorPickerProvider extends ChangeNotifier {
     ]
   ];
 
+  // function to set the current color and notify the provider listener
   void setCurrentPickerWidget(ColorPickerWidgetModel data) {
     currentColor = data;
     notifyListeners();
   }
 
-  void setKeyBoardColor(Color color) {
-    KeyboardController.lightUpAllKeys(
-        red: color.red, green: color.green, blue: color.blue);
-    // print(rgbColor);
-  }
-
+  // function to generate the color picker widget based on the various picker model been passed as an argument
   List<Widget> generateColorPickerWidget(List<ColorPickerWidgetModel> list) {
     List<Widget> generatedUI = [];
     for (ColorPickerWidgetModel element in list) {
+      /// loop through the color pickermodel list
       generatedUI.add(ColorPickerWidget(
+
+          /// add new model to the list in based on values anargument been passed
           color: element.colorCode.first,
+
+          /// get the first element color of the colorcode list been used
           colors: element.colorCode,
           title: element.name,
           width: element.width,
@@ -373,9 +379,12 @@ class ColorPickerProvider extends ChangeNotifier {
           setRandom: element.setRandom,
           picker: element.canEdit));
     }
+
+    /// return the list of generate color picker model
     return generatedUI;
   }
 
+  /// function to generate random colors
   generateRandomColor() {
     return Color(0xffffffff & Random().nextInt(0xffffffff));
   }

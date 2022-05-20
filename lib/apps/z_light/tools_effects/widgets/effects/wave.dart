@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
-import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
@@ -11,6 +10,8 @@ import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
 class WavePreset extends StatefulWidget {
+  const WavePreset({Key? key}) : super(key: key);
+
   @override
   State<WavePreset> createState() => _WavePresetState();
 }
@@ -24,15 +25,17 @@ class _WavePresetState extends State<WavePreset> {
   void initState() {
     EffectProvider effectsProvider =
         Provider.of<EffectProvider>(context, listen: false);
-    degreeController.text =
-        effectsProvider.currentEffect.degree!.toStringAsFixed(2);
+    setState(() {
+      degreeController.text =
+          effectsProvider.currentEffect!.degree!.toStringAsFixed(2);
+    });
     super.initState();
   }
 
   void _setDegreeValue(double? returnValue) {
     EffectProvider effectsProvider =
         Provider.of<EffectProvider>(context, listen: false);
-    ModeProvider _modeProvider =
+    ModeProvider modeProvider =
         Provider.of<ModeProvider>(context, listen: false);
     setState(() {
       isRotate = true;
@@ -42,27 +45,22 @@ class _WavePresetState extends State<WavePreset> {
           .toStringAsFixed(2);
 
       effectsProvider.setCurrentEffect(EffectsModel(
-          effectName: _modeProvider.currentMode.value,
+          effectName: modeProvider.currentMode.value,
           degree: returnValue < 0
               ? (360 - (0 - returnValue) * (180 / pi))
               : returnValue * (180 / pi),
-          speed: effectsProvider.currentEffect.speed));
+          speed: effectsProvider.currentEffect?.speed));
     });
   }
 
   void _setSliderValue(double returnValue) {
-    ModeProvider _modeProvider =
-        Provider.of<ModeProvider>(context, listen: false);
     EffectProvider effectsProvider =
         Provider.of<EffectProvider>(context, listen: false);
     setState(() {
-      effectsProvider.defaultWaveEffectValues.speed =
-          returnValue.floorToDouble();
-
       effectsProvider.setCurrentEffect(EffectsModel(
-          effectName: _modeProvider.currentMode.value,
-          degree: effectsProvider.currentEffect.degree,
-          speed: returnValue));
+          effectName: effectsProvider.currentEffect?.effectName,
+          degree: effectsProvider.currentEffect?.degree,
+          speed: returnValue.floorToDouble()));
     });
   }
 
@@ -94,7 +92,7 @@ class _WavePresetState extends State<WavePreset> {
                             color: (activatedButton == 'CUSTOM')
                                 ? Colors.black
                                 : Colors.white,
-                            child: Text('DEFAULT'),
+                            child: const Text('DEFAULT'),
                             onPressed: () {
                               setState(() {
                                 activatedButton = "DEFAULT";
@@ -115,7 +113,7 @@ class _WavePresetState extends State<WavePreset> {
                             color: (activatedButton != 'CUSTOM')
                                 ? Colors.black
                                 : Colors.white,
-                            child: Text('CUSTOM'),
+                            child: const Text('CUSTOM'),
                             onPressed: () {
                               setState(() {
                                 activatedButton = "CUSTOM";
@@ -148,11 +146,11 @@ class _WavePresetState extends State<WavePreset> {
             Text("Speed", textAlign: TextAlign.left, style: labelStyle),
             Container(margin: const EdgeInsets.only(bottom: 10.0)),
             Slider(
-              value: effectsProvider.defaultWaveEffectValues.speed!.toDouble(),
+              value: effectsProvider.currentEffect!.speed!.toDouble(),
               max: 100,
               min: 0,
               divisions: 100,
-              label: effectsProvider.defaultWaveEffectValues.speed.toString(),
+              label: effectsProvider.currentEffect!.speed.toString(),
               onChanged: (double value) {
                 _setSliderValue(value);
               },
@@ -199,12 +197,13 @@ class _WavePresetState extends State<WavePreset> {
                           width: 200,
                           height: 30,
                           child: TextField(
-                            onSubmitted: (value) {
-                              setState(() {
-                                if (isRotate == false) {
-                                  degreeController.text = value;
-                                }
-                              });
+                            onSubmitted: (String? value) {
+                              print(value);
+                              // setState(() {
+                              //   if (isRotate == false) {
+                              //     degreeController.text = value;
+                              //   }
+                              // });
                             },
                             style: const TextStyle(fontSize: 14),
                             controller: degreeController,
