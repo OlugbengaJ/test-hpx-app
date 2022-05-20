@@ -39,9 +39,8 @@ class _LayersStackState extends State<LayersStack> {
   Widget build(BuildContext context) {
     return Consumer<LayersProvider>(
       builder: (context, value, child) {
-        return (value.hideStackedLayers)
-        ? Container()
-        : Stack(
+        return 
+        (value.hideStackedLayers)? Container(): Stack(
           children: _getStackColoredLayers(value) +
           [
             IndexedStack(
