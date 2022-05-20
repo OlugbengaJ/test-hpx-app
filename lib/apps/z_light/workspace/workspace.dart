@@ -226,7 +226,6 @@ class _WorkspaceState extends State<Workspace> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(4.0),
                                   child: DropDownDevices(
-                                    initialValue: devices().first,
                                     items: getDropdownMenuItems(
                                       Theme.of(context).colorScheme.primary,
                                       devices(),
