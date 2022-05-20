@@ -12,10 +12,13 @@ import 'package:hpx/widgets/components/zone_selector/zone_selector_provider.dart
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
+import 'apps/z_light/layers/resizable/provider/resizable.dart';
+
 void main() => runApp(
       MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => LayersProvider()),
+          ChangeNotifierProvider(create: (_) => ResizableProvider()),
           ChangeNotifierProvider(create: (_) => ColorPickerProvider()),
           ChangeNotifierProvider(create: (_) => ModeProvider()),
           ChangeNotifierProvider(create: (_) => EffectProvider()),

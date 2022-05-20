@@ -1,44 +1,32 @@
-import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 
-class ResizableWidgetController extends GetxController {
-  ResizableWidgetController({
-    required this.initialPosition ,
-    this.areaHeight = 500,
-    this.areaWidth = 500,
-    this.height = 500,
-    this.width = 500,
-    this.minWidth = 0.0,
-    this.minHeight = 0.0,
-    this.showDragWidgets = true,
-  });
+/// Keys to watch by the ZoneSelector and the resizable widgets
+class ResizableProvider extends ChangeNotifier {
+  GlobalKey draggableKey = GlobalKey();
+  Offset initialPosition = Offset.zero;
+  late double areaHeight = 500;
+  late double areaWidth = 500;
+  late double minWidth = 0.0;
+  late double minHeight = 0.0;
 
-  final Offset initialPosition;
-  double areaHeight;
-  double areaWidth;
-  double minWidth;
-  double minHeight;
-
-  late double height;
-  late double width;
-
+  late double height = 0.0;
+  late double width = 0.0;
   double top = 0.0;
   double left = 0.0;
   double bottom = 0.0;
   double right = 0.0;
 
-  bool showDragWidgets;
+  bool showDragWidgets = true;
 
-  RxList zoneToPaint = <Map<String, dynamic>>[].obs;
-  GlobalKey draggableKey = GlobalKey();
+  List<Map<String, dynamic>> zoneToPaint = [];
 
-  double topPadding = 0.0;
   double leftPadding = 0.0;
 
-  @override
-  void onInit() {
-    Offset initialPosition = Offset(areaWidth / 2, areaHeight / 2);
+  double topPadding = 0.0;
+
+  initialize(Offset initOffset) {
+    initialPosition = Offset(areaWidth / 2, areaHeight / 2);
     double newTop = initialPosition.dy - height / 2;
     double newBottom = areaHeight - height - newTop;
     double newLeft = initialPosition.dx - (width / 2);
@@ -62,22 +50,18 @@ class ResizableWidgetController extends GetxController {
       right = newRight;
       left = newLeft;
     }
-
-    leftPadding = newLeft ;
-    topPadding = newTop;
-
-    super.onInit();
   }
-
-  
 
   void toggleShowDragWigets() {
     showDragWidgets = !showDragWidgets;
-    update();
   }
 
-  void setSize({double? newTop,  double? newLeft,double? newRight, double? newBottom,}) {
-
+  void setSize({
+    double? newTop,
+    double? newLeft,
+    double? newRight,
+    double? newBottom,
+  }) {
     newTop = newTop ?? top;
     newLeft = newLeft ?? left;
     newRight = newRight ?? right;
@@ -90,11 +74,17 @@ class ResizableWidgetController extends GetxController {
       newBottom: newBottom,
     );
 
-    update();
+    notifyListeners();
   }
 
-  void quantify({ required final double newTop, required final double newLeft, required final double newRight, required final double newBottom,}) {
-    calculateWidgetSize(top: newTop, left: newLeft, bottom: newBottom, right: newRight);
+  void quantify({
+    required final double newTop,
+    required final double newLeft,
+    required final double newRight,
+    required final double newBottom,
+  }) {
+    calculateWidgetSize(
+        top: newTop, left: newLeft, bottom: newBottom, right: newRight);
     if (checkTopBotMaxSize(newTop, newBottom)) {
       top = newTop;
       bottom = newBottom;
@@ -106,10 +96,16 @@ class ResizableWidgetController extends GetxController {
     calculateWidgetSize(bottom: bottom, left: left, right: right, top: top);
   }
 
-  bool checkTopBotMaxSize(final double newTop, final double newBottom) =>  (newTop >= 0 && newBottom >= 0) && (height >= minHeight);
-  bool checkLeftRightMaxSize(final double newLeft, final double newRight) => (newLeft >= 0 && newRight >= 0) && (width >= minWidth);
+  bool checkTopBotMaxSize(final double newTop, final double newBottom) =>
+      (newTop >= 0 && newBottom >= 0) && (height <= minHeight);
+  bool checkLeftRightMaxSize(final double newLeft, final double newRight) =>
+      (newLeft >= 0 && newRight >= 0) && (width <= minWidth);
 
-  void calculateWidgetSize({ required final double top, required final double left, required final double bottom, required final double right,
+  void calculateWidgetSize({
+    required final double top,
+    required final double left,
+    required final double bottom,
+    required final double right,
   }) {
     width = areaWidth - (left + right);
     height = areaHeight - (top + bottom);
@@ -124,9 +120,7 @@ class ResizableWidgetController extends GetxController {
   }
 
   void onTopCenterDrag(dx, dy) {
-    setSize(
-      newTop: top + dy
-    );
+    setSize(newTop: top + dy);
   }
 
   void onTopRightDrag(dx, dy) {
@@ -174,23 +168,6 @@ class ResizableWidgetController extends GetxController {
 
   void onDragEnd(LayersProvider provider){
     provider.updateView(top, bottom, left, right);
-    update();
-    
+    notifyListeners();    
   }
-
-  void onSwitchIndex({double? newTop,  double? newLeft,double? newRight, double? newBottom,}) {
-    newTop = newTop ?? top;
-    newLeft = newLeft ?? left;
-    newRight = newRight ?? right;
-    newBottom = newBottom ?? bottom;
-
-    setSize(
-      newTop: newTop,
-      newLeft: newLeft,
-      newRight: newRight,
-      newBottom: newBottom,
-    );
-    update();
-  }
-
 }

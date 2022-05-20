@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/apps/z_light/layers/widgets/sublayer_item.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
@@ -83,6 +84,8 @@ class _LayerListItemState extends State<LayerListItem> {
 
   _onTap(LayersProvider provider) {
     provider.changeIndex(widget.layerIndex);
+    ResizableProvider resizableProvider = context.read<ResizableProvider>();
+    provider.setResizablePosition(resizableProvider);
   }
 
   _onSubmit(value, LayersProvider provider) {

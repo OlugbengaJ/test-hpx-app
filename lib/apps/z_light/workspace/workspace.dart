@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
+import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
@@ -133,6 +134,7 @@ class _WorkspaceState extends State<Workspace> {
 
     // initialize layers provider
     workspaceProvider.setLayersProvider(Provider.of<LayersProvider>(context));
+    workspaceProvider.setResizableProvider(Provider.of<ResizableProvider>(context));
 
     return Column(
       children: [

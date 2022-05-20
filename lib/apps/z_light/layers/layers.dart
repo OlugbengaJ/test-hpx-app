@@ -66,7 +66,8 @@ class _LayersState extends State<Layers> {
       minHeight: 50,
     );
 
-    provider.add(LayerItemModel(
+    provider.add(
+      LayerItemModel(
       id: id,
       layerText: modeProvider.getModeInformation().name,
       mode: modeProvider.getModeInformation(),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 
@@ -16,8 +17,10 @@ class LayersProvider extends ChangeNotifier {
   bool deleteLayerTooltip = false;
 
   int _index = 0;
+  int _listIndex = 0;
   int get length => _layeritems.length;
   int get index => _index;
+  int get listIndex => _listIndex;
 
   List<LayerItemModel> get layeritems => _layeritems; // Should return only mainlayers
   List<LayerItemModel> get sublayerItems => _sublayers; // Should return only sublayers
@@ -26,14 +29,10 @@ class LayersProvider extends ChangeNotifier {
 
   
 
-  LayerItemModel getItem(int index) {
-    return _layeritems[index];
+  LayerItemModel getItem(int i) {
+    return _layeritems[i];
   }
 
-  setController(ResizableWidgetController controller){
-    controller = controller;
-    notifyListeners();
-  }
 
   void setKeys(keys){
     LayerItemModel item = _layeritems[index];
@@ -56,12 +55,13 @@ class LayersProvider extends ChangeNotifier {
   }
 
   void updateView(double newTop, double newBottom, double newLeft, double newRight) {
-    var item = layeritems[index];
+    var item = layeritems[listIndex];
     item.top = newTop;
     item.bottom = newBottom;
     item.left = newLeft;
     item.right = newRight;
-    _layeritems[index] = item;
+    _layeritems[listIndex] = item;
+    
     notifyListeners();
   }
 
@@ -173,9 +173,14 @@ class LayersProvider extends ChangeNotifier {
     for (var element in _layeritems) {
       element.listDisplayColor = Colors.grey;
     }
-    final item = _layeritems[index];
+    
+
+    _listIndex = index;
+    
+
+    final item = _layeritems[_listIndex];
     item.listDisplayColor = Colors.white;
-    _layeritems[index] = item;
+    _layeritems[_listIndex] = item;
 
     for (var i = 0; i < _stackedLayeritems.length; i++) {
       if (_stackedLayeritems[i].id == _layeritems[index].id) {
@@ -183,6 +188,8 @@ class LayersProvider extends ChangeNotifier {
         break;
       }
     }
+
+
     notifyListeners();
   }
 
@@ -273,4 +280,15 @@ class LayersProvider extends ChangeNotifier {
   }
 
 
+  void setResizablePosition(ResizableProvider provider){
+    final item = _layeritems[_listIndex];
+    provider.setSize(
+      newBottom: item.bottom,
+      newLeft: item.left,
+      newRight: item.right,
+      newTop: item.top,
+    );
+
+    notifyListeners();
+  }
 }

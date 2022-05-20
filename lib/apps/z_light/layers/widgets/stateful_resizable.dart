@@ -32,6 +32,7 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
 
   _onDragEnd(provider) {
     widget.controller.onDragEnd(provider);
+    
   }
 
   @override
