@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
@@ -17,14 +18,8 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
   final PickerModel _defaultPicker = PickerModel(
       title: 'Power Bars',
       enabled: true,
-      value: 'powerbar',
+      value: AudioVisualEnum.powerbar,
       icon: Icons.power_input_outlined);
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

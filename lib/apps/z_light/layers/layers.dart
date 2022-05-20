@@ -34,20 +34,19 @@ class _LayersState extends State<Layers> {
     });
   }
 
-  void initialLayer(){
+  void initialLayer() {
     LayersProvider provider = context.read<LayersProvider>();
-    if(provider.length<1){
+    if (provider.length < 1) {
       _addLayer();
     }
   }
-
 
   _addLayer() {
     ModeProvider modeProvider = context.read<ModeProvider>();
     var provider = context.read<LayersProvider>();
     int id = 1; // For first element;
     if (provider.layeritems.isNotEmpty) {
-      for (var element in provider.layeritems ) {
+      for (var element in provider.layeritems) {
         if (element.id > id) {
           id = element.id;
         }
