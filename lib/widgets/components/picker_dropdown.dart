@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 class PickerModel extends Comparer {
   final String title;
-  final String? value;
+  final Enum? value;
   final bool enabled;
   final IconData? icon;
   PickerModel(

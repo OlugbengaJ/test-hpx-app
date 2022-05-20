@@ -14,6 +14,7 @@ class LayersProvider extends ChangeNotifier {
 
   /// [hideStackedLayers] use to show or hide the stack layers for resizable widget
   bool hideStackedLayers = false;
+  bool deleteLayerTooltip = false;
 
 
   /// [listIndex] use to the actual selected layer's index

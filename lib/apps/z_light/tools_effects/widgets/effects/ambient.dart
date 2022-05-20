@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
@@ -15,12 +16,12 @@ class _AmbeintPresetState extends State<AmbeintPreset> {
   double _imageSliderValue = 50.0;
   double _updatesSliderValue = 40.0;
   final PickerModel _defaultScreenPicker = PickerModel(
-      title: 'Entire Screen', enabled: true, value: 'entire_screen');
+      title: 'Entire Screen', enabled: true, value: AmbientEnum.entirescreen);
   final PickerModel _defaultDisplayPicker = PickerModel(
       // title: 'Display 1: X:0, Y:0, W:3840, H:2400',
       title: 'Display 1',
       enabled: true,
-      value: 'display_1');
+      value: AmbientDisplayEnum.display1);
 
   void _setSliderValue(double returnValue, String type) {
     setState(() {
