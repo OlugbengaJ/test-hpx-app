@@ -16,7 +16,11 @@ class LayerItemModel {
     this.hasSublayer = false,
     this.listDisplayColor = defaultColor,
     this.paintColor = defaultPaintColor,
-    required this.mode
+    required this.mode,
+    top = 0,
+    bottom = 0,
+    left = 0,
+    right = 0,
   });
   final int id;
   int parentID;

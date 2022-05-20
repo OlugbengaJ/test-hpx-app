@@ -4,6 +4,7 @@ import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 
 
+///[LayersProvider] handle 
 
 class LayersProvider extends ChangeNotifier {
   final areaHeight = Get.height * 0.70;
@@ -11,9 +12,11 @@ class LayersProvider extends ChangeNotifier {
   final List<LayerItemModel> _layeritems = [];
   final List<LayerItemModel> _sublayers = [];
 
+  /// [hideStackedLayers] use to show or hide the stack layers for resizable widget
   bool hideStackedLayers = false;
-  bool deleteLayerTooltip = false;
 
+
+  /// [listIndex] use to the actual selected layer's index
   int _listIndex = 0;
   int get length => _layeritems.length;
   int get listIndex => _listIndex;
@@ -21,7 +24,8 @@ class LayersProvider extends ChangeNotifier {
   List<LayerItemModel> get layeritems => _layeritems; // Should return only mainlayers
   List<LayerItemModel> get sublayerItems => _sublayers; // Should return only sublayers
   
-
+  /// [getItem] retrieve the layer using the index.
+  /// This is to get the layer's informations
   LayerItemModel getItem(int i) {
     return _layeritems[i];
   }
@@ -43,17 +47,22 @@ class LayersProvider extends ChangeNotifier {
   //   }    
   // }
 
+
+  /// [toggleHideStackedLayers] toggle hide or show of the resizable
   void toggleHideStackedLayers(bool show) {
     hideStackedLayers = show;
   }
 
+
+  /// [updateView] use to update the item position when the resizable-draggable stop dragging
+  /// This method is called from the [ResizableProvider]
   void updateView(double newTop, double newBottom, double newLeft, double newRight) {
     var item = layeritems[listIndex];
     item.top = newTop;
     item.bottom = newBottom;
     item.left = newLeft;
     item.right = newRight;
-    _layeritems[listIndex] = item;
+    _layeritems[listIndex] = item; 
     
     notifyListeners();
   }
@@ -94,18 +103,14 @@ class LayersProvider extends ChangeNotifier {
       element.listDisplayColor = Colors.grey;
     }
 
-    //item.paintColor = colors[item.id - 1];
-
     _layeritems.insert(0, item);
 
 
     notifyListeners();
   }
 
-
+  /// [duplicate] uses to duplicate the layer
   void duplicate(LayerItemModel item, int index, {bool sublayer=false}) {
-    
-
     LayerItemModel duplicatedItem = LayerItemModel(
       id: (sublayer)? getTheBiggestSUbID(): getTheBiggestID(),
       layerText: "Copy ${item.layerText}",
@@ -130,6 +135,8 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+
+  /// [changeIndex] set index when tap on the layer in the [_layeritems]
   void changeIndex(int index) {
     for (var element in _layeritems) {
       element.listDisplayColor = Colors.grey;
@@ -218,12 +225,16 @@ class LayersProvider extends ChangeNotifier {
 
   void setResizablePosition(ResizableProvider provider){
     final item = _layeritems[_listIndex];
-    provider.setSize(
-      newBottom: item.bottom,
-      newLeft: item.left,
-      newRight: item.right,
-      newTop: item.top,
-    );
+    
+    if(item.top!=0){
+        provider.setSize(
+        newBottom: item.bottom,
+        newLeft: item.left,
+        newRight: item.right,
+        newTop: item.top,
+      );
+    }
+    
 
     notifyListeners();
   }

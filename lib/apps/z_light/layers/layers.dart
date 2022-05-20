@@ -10,8 +10,7 @@ import 'package:hpx/widgets/theme.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 
-/// Layers Widget to manipulate list layers and draggable layers
-///
+/// Layers Widget to manipulate list layers
 class Layers extends StatefulWidget {
   const Layers({Key? key, required this.layers, required this.onReorder})
       : super(key: key);
@@ -34,6 +33,8 @@ class _LayersState extends State<Layers> {
     });
   }
 
+
+  /// [initialLayer] add a default layer to the workspace if there no layer available
   void initialLayer(){
     LayersProvider provider = context.read<LayersProvider>();
     if(provider.length<1){
@@ -42,9 +43,9 @@ class _LayersState extends State<Layers> {
   }
   
 
-
+  /// [_addLayer] used to add a layer to the available list
+  /// use the [ModeProvider] the set the newly created layer name
   _addLayer() {
-
     context.read<ResizableProvider>().initialize(
       Offset(areaWidth / 2, areaHeight / 2),
     );
@@ -63,15 +64,17 @@ class _LayersState extends State<Layers> {
 
     provider.add(
       LayerItemModel(
-      id: id,
-      layerText: modeProvider.getModeInformation().name,
-      mode: modeProvider.getModeInformation(),
+        id: id,
+        layerText: modeProvider.getModeInformation().name,
+        mode: modeProvider.getModeInformation(),
+        top: context.read<ResizableProvider>().top,
+        bottom: context.read<ResizableProvider>().bottom,
+        left: context.read<ResizableProvider>().left,
+        right: context.read<ResizableProvider>().right,
       )
     );
-
-    
-
   }
+
 
   @override
   Widget build(BuildContext context) {
