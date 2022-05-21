@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 
 class ResizableWidgetController extends GetxController {
   ResizableWidgetController({
     required this.initialPosition ,
-    required this.layerID ,
     this.areaHeight = 500,
     this.areaWidth = 500,
     this.height = 500,
@@ -14,12 +14,11 @@ class ResizableWidgetController extends GetxController {
     this.showDragWidgets = true,
   });
 
-  final int layerID;
   final Offset initialPosition;
-  final double areaHeight;
-  final double areaWidth;
-  final double minWidth;
-  final double minHeight;
+  double areaHeight;
+  double areaWidth;
+  double minWidth;
+  double minHeight;
 
   late double height;
   late double width;
@@ -39,6 +38,7 @@ class ResizableWidgetController extends GetxController {
 
   @override
   void onInit() {
+    Offset initialPosition = Offset(areaWidth / 2, areaHeight / 2);
     double newTop = initialPosition.dy - height / 2;
     double newBottom = areaHeight - height - newTop;
     double newLeft = initialPosition.dx - (width / 2);
@@ -76,35 +76,6 @@ class ResizableWidgetController extends GetxController {
     update();
   }
 
-  paintColor(GlobalKey widgetKey){
-    RenderBox selectorBox = draggableKey.currentContext?.findRenderObject() as RenderBox;
-    final selectorPosition = selectorBox.localToGlobal(Offset.zero);
-
-    RenderBox box = widgetKey.currentContext?.findRenderObject() as RenderBox;
-    final boxSize = box.size;
-    
-    var position = box.localToGlobal(Offset.zero);
-    final selectorBoxSize = selectorBox.size;      
-
-    final collide = (
-      position.dx < selectorPosition.dx + selectorBoxSize.width && 
-      position.dx + boxSize.width > selectorPosition.dx &&
-      position.dy < selectorPosition.dy + selectorBoxSize.height &&
-      position.dy + boxSize.height > selectorPosition.dy
-    );
-
-
-    if(collide){
-      zoneToPaint.add(
-        {
-          "size": box.size,
-          "position": Offset(position.dx - leftPadding, position.dy - topPadding),
-        }
-      );
-    }
-    update();
-  }
-
   void setSize({double? newTop,  double? newLeft,double? newRight, double? newBottom,}) {
 
     newTop = newTop ?? top;
@@ -123,8 +94,7 @@ class ResizableWidgetController extends GetxController {
   }
 
   void quantify({ required final double newTop, required final double newLeft, required final double newRight, required final double newBottom,}) {
-    calculateWidgetSize(
-        top: newTop, left: newLeft, bottom: newBottom, right: newRight);
+    calculateWidgetSize(top: newTop, left: newLeft, bottom: newBottom, right: newRight);
     if (checkTopBotMaxSize(newTop, newBottom)) {
       top = newTop;
       bottom = newBottom;
@@ -202,14 +172,25 @@ class ResizableWidgetController extends GetxController {
     );
   }
 
-  void onDragEnd(keysToWatch, provider){
-    zoneToPaint.clear(); 
-    for (var key in keysToWatch) {
-      paintColor(key);
-    }
-
+  void onDragEnd(LayersProvider provider){
+    provider.updateView(top, bottom, left, right);
     update();
-    provider.updateView();
+    
+  }
+
+  void onSwitchIndex({double? newTop,  double? newLeft,double? newRight, double? newBottom,}) {
+    newTop = newTop ?? top;
+    newLeft = newLeft ?? left;
+    newRight = newRight ?? right;
+    newBottom = newBottom ?? bottom;
+
+    setSize(
+      newTop: newTop,
+      newLeft: newLeft,
+      newRight: newRight,
+      newBottom: newBottom,
+    );
+    update();
   }
 
 }

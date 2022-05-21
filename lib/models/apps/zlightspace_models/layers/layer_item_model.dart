@@ -1,6 +1,6 @@
-import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/providers/key_model.dart';
 
 const Color defaultColor = Colors.white;
 const Color defaultPaintColor = Colors.white;
@@ -14,10 +14,13 @@ class LayerItemModel {
     this.visibleOnStack = true,
     this.isSublayer = false,
     this.hasSublayer = false,
-    required this.controller,
     this.listDisplayColor = defaultColor,
     this.paintColor = defaultPaintColor,
-    required this.mode
+    required this.mode,
+    top = 0,
+    bottom = 0,
+    left = 0,
+    right = 0,
   });
   final int id;
   int parentID;
@@ -26,8 +29,21 @@ class LayerItemModel {
   final bool isSublayer;
   bool hasSublayer;
   bool visibleOnStack;
-  ResizableWidgetController controller;
   Color listDisplayColor;
   Color paintColor;
   ToolsModeModel mode;
+  List<KeyModel> _keys = [];
+
+
+  List<KeyModel> get keys => _keys;
+  void setKeys(List<KeyModel> keys) {
+    _keys = [...keys];
+  }
+
+  double top = 0.0;
+  double bottom = 0.0;
+  double left = 0.0;
+  double right = 0.0;
+
+  
 }
