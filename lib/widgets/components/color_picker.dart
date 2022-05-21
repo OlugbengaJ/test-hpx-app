@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/color_picker_model.dart';
@@ -40,6 +42,7 @@ class ColorPickerWidget extends StatefulWidget {
 
 class _ColorPickerWidgetState extends State<ColorPickerWidget> {
   BoxDecoration? previewBox;
+  Timer? time;
   Color? currentColor;
   List<Color> currentColors = [];
   int colorPosition = 0;
@@ -65,50 +68,45 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
     setState(() {
       currentColors[colorPosition] =
           widget.color = currentColor = selectedColor;
-      colorPickerProviderInstance.setCurrentPickerWidget(ColorPickerWidgetModel(
-        action: widget.title,
-        name: widget.title,
-        canEdit: widget.picker,
-        colorCode: currentColors,
-      ));
-      modeProvider.setCurrentMode(ToolsModeModel(
-          currentColor: currentColors,
-          value: modeProvider.currentMode.value,
-          effects: modeProvider.currentMode.effects,
-          name: modeProvider.currentMode.name));
+      setCurrentColor(currentColors[colorPosition]);
       generatePreviewBox(true);
     });
   }
 
-  void changeColorRandom() {
-    ModeProvider modeProvider =
-        Provider.of<ModeProvider>(context, listen: false);
+  void changeColorRandom(bool timer) {
     ColorPickerProvider colorPickerProviderInstance =
         Provider.of<ColorPickerProvider>(context, listen: false);
-    setState(() {
-      currentColors[colorPosition] =
-          currentColor = colorPickerProviderInstance.generateRandomColor();
-      colorPickerProviderInstance.setCurrentPickerWidget(ColorPickerWidgetModel(
-        action: widget.title,
-        name: widget.title,
-        canEdit: widget.picker,
-        colorCode: currentColors,
-      ));
-      modeProvider.setCurrentMode(ToolsModeModel(
-          currentColor: currentColors,
-          value: modeProvider.currentMode.value,
-          effects: modeProvider.currentMode.effects,
-          name: modeProvider.currentMode.name));
-      generatePreviewBox(true);
-    });
+    if (timer == true) {
+      time = Timer.periodic(new Duration(seconds: 1), (timer) {
+        currentColors[colorPosition] =
+            colorPickerProviderInstance.generateRandomColor();
+        // print(colorPosition);
+        setCurrentColor(currentColors[colorPosition]);
+      });
+    } else {
+      time!.cancel();
+      currentColors = widget.colors;
+    }
+    generatePreviewBox(true);
   }
 
   void setCurrentColor(Color selectedColor) {
     ColorPickerProvider colorPickerProviderInstance =
         Provider.of<ColorPickerProvider>(context, listen: false);
-    setState(() {
-      colorPickerProviderInstance.lastColors.add(currentColor!);
-    });
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
+    colorPickerProviderInstance.lastColors.add(selectedColor);
+    colorPickerProviderInstance.setCurrentPickerWidget(ColorPickerWidgetModel(
+      action: widget.title,
+      name: widget.title,
+      canEdit: widget.picker,
+      colorCode: currentColors,
+    ));
+    modeProvider.setCurrentMode(ToolsModeModel(
+        currentColor: currentColors,
+        value: modeProvider.currentMode.value,
+        effects: modeProvider.currentMode.effects,
+        name: modeProvider.currentMode.name));
   }
 
   void closeDialog(BuildContext context) {
@@ -334,7 +332,7 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                         ? 2
                         : 1,
                 color: (isFocused)
-                    ? Colors.grey.shade400
+                    ? Colors.white
                     : (!isHover && widget.hasBorder == false)
                         ? Colors.grey.shade700
                         : Colors.grey.shade400))
@@ -347,7 +345,7 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                         ? 2
                         : 1,
                 color: (isFocused)
-                    ? Colors.grey.shade400
+                    ? Colors.white
                     : (!isHover && widget.hasBorder == false)
                         ? Colors.grey.shade700
                         : Colors.grey.shade400));
@@ -433,6 +431,7 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                     onTap: () {
                       setState(() {
                         isHover = false;
+                        isFocused = true;
                         widget.hasBorder = true;
                       });
                       (widget.picker == false) ? '' : selectcolor(context);
@@ -479,13 +478,11 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                                 value: _value,
                                 onChanged: (bool? value) {
                                   setState(() {
+                                    colorPosition = widget.colorIndex!;
                                     _value = value!;
+                                    widget.hasBorder = (!_value) ? true : false;
                                     widget.picker = (!_value) ? true : false;
-                                    (!_value)
-                                        ? () {
-                                            // widget.color = lastColors.first;
-                                          }
-                                        : changeColorRandom();
+                                    changeColorRandom((!_value) ? false : true);
                                   });
                                 },
                               )
