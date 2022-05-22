@@ -16,10 +16,10 @@ class KeyRRect extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /// _width is used as a default canvas size factor whose value
+    /// [width] is used as a default canvas size factor whose value
     /// is determined from the scale of the original artwork (SVG) file.
     ///
-    /// _zoomedWidth and _zoomedHeight define the canvas width and height
+    /// zoomedWidth and zoomedHeight define the canvas width and height
     /// based on the key width, height, and a zoom scale.
     const double width = 800;
     final double zoomedWidth = width * keyModel.keyWidth * zoomScale;
