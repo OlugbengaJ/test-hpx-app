@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/models/apps/zlightspace_models/workspace_models/key_code.dart';
 
 class KeyModel with ChangeNotifier {
   KeyModel({
@@ -17,29 +18,8 @@ class KeyModel with ChangeNotifier {
   /// keyRow = 2 means the key in on the second row.
   final int keyRow;
 
-  /// [keyCode] is fixed for each key regarless of language or text.
-  final String keyCode;
-
-  /// [_chips] holds multiple layers of the key
-  /// e.g. a key could have a base color, layers with unique colors and IDs,
-  /// and a text or icon layer.
-  ///
-  /// Each layer of the chip will be rendered from first to last.
-  final List<KeyPaintChip> _chips = [KeyPaintRect()];
-
-  /// [chips] returns the children of [_chips] as a new list.
-  List<KeyPaintChip> get chips => [..._chips];
-
-  /// [addChipText] adds a text layer to chips.
-  void addChipText(String keyText,
-      {Color? color, TextDirection? textDirection}) {
-    final text = KeyPaintText(textValue: keyText);
-
-    if (color != null) text.color = color;
-    if (textDirection != null) text.direction = textDirection;
-
-    _chips.add(text);
-  }
+  /// [keyCode] uniquely identifies a key and is fixed regarless of language.
+  final KeyCode keyCode;
 
   final double keyLeft;
   final double keyTop;
@@ -49,53 +29,100 @@ class KeyModel with ChangeNotifier {
 
   static const Color _highlightColor = Colors.orange;
 
-  /// [isSelected] indicates key is selected.
+  /// [_isSelected] indicates key is selected.
   bool _isSelected = false;
   bool get isSelected => _isSelected;
 
-  /// [getChip] returns a chip with matching [id].
-  KeyPaintChip? getChip(int id) {
-    try {
-      return _chips.firstWhere((element) => element.id == 2);
-    }
-    // chip not found, return null.
-    on StateError {
-      return null;
+  /// [_chips] holds multiple layers of a key
+  /// e.g. a key could have only 1 base color, multiple layers with unique keys,
+  /// and only 1 overlay (text or icon layer).
+  ///
+  /// Each layer of the chip will be rendered from first to last and by default,
+  /// a chip is initialized with a [KeyPaintRect] base.
+  final Map<String, KeyPaintChip> _chips = {
+    ChipKey.base.toString(): KeyPaintRect(),
+  };
+
+  /// [chips] returns the values of [_chips] as a new list.
+  List<KeyPaintChip> get chips => [..._chips.values];
+
+  /// [addChipIcon] adds an icon layer to chips.
+  void addChipIcon(
+    List<KeyIconPath>? iconPath, {
+    Color? color,
+  }) {
+    final icon = KeyPaintIcon(pathsValue: iconPath);
+
+    if (color != null) icon.color = color;
+
+    addChip(ChipKey.overlay.toString(), icon);
+  }
+
+  /// [addChipText] adds a text layer to chips.
+  void addChipText(
+    String keyText, {
+    Color? color,
+    TextDirection? textDirection,
+  }) {
+    final text = KeyPaintText(textValue: keyText);
+
+    if (color != null) text.color = color;
+    if (textDirection != null) text.direction = textDirection;
+
+    addChip(ChipKey.overlay.toString(), text);
+  }
+
+  /// [addChip] adds a new chip under an overlay.
+  void addChip(String chipKey, KeyPaintChip? chip) {
+    if (chip != null) {
+      final overlay = getChip(ChipKey.overlay.toString());
+
+      removeChip(ChipKey.overlay.toString());
+      _chips.putIfAbsent(chipKey, () => chip);
+
+      // add existing overlay on top of the chips.
+      if (overlay != null) {
+        _chips.putIfAbsent(ChipKey.overlay.toString(), () => overlay);
+      }
     }
   }
 
-  /// [addOrUpdateChip] adds or updates the state of a chip in [chips].
-  void addOrUpdateChip(int id) {
-    KeyPaintChip? chip = getChip(id);
+  /// [getChip] returns a chip with matching [chipKey].
+  KeyPaintChip? getChip(String chipKey) {
+    return _chips[chipKey];
+  }
+
+  /// [updateChip] updates the state of a chip in [chips].
+  ///
+  /// Adds a new chip layer if the chip with [chipKey] does not exist.
+  void updateChip(String chipKey) {
+    KeyPaintChip? chip = getChip(chipKey);
 
     if (chip == null) {
-      chip = KeyPaintRect()..id = id;
-
-      // TODO: refactor to use map with keys
-      int index = _chips.indexWhere((element) => element.isOverlay);
-      if (index == -1) index = _chips.length; // index is last in list.
-      _chips.insert(index, chip);
+      // add a new chip.
+      chip = KeyPaintRect();
+      addChip(chipKey, chip);
     }
 
     chip.color = _highlightColor;
   }
 
-  /// [removeChip] deletes chip layer that matches [id].
-  void removeChip(int id) {
-    _chips.removeWhere((element) => element.id == id);
+  /// [removeChip] deletes chip layer whose key matches [chipKey].
+  void removeChip(String chipKey) {
+    _chips.removeWhere((key, value) => key == chipKey);
   }
 
   /// [selectKey] highlights [KeyModel] under a selected zone.
   void selectKey(bool? isHighlighted, int id) {
+    // highlight the chip with keys matching id
     if (isHighlighted == true) {
-      // highlight the key i.e. inject a new chip with specific id
       _isSelected = true;
-      addOrUpdateChip(id);
-      debugPrint('$keyCode ${chips.length}');
-    } else if (isHighlighted == false) {
-      // remove chip with specific id
+      updateChip(id.toString());
+    }
+    // remove chip with specific id
+    else if (isHighlighted == false) {
       _isSelected = false;
-      removeChip(id);
+      removeChip(id.toString());
     }
   }
 
@@ -107,10 +134,53 @@ class KeyModel with ChangeNotifier {
   // }
 }
 
+enum ChipKey {
+  /// [base] is intended to be the first layer in the chips collection.
+  base,
+
+  /// [overlay] is the topmost layer in the chips collection.
+  overlay,
+}
+
 mixin KeyPaintChip {
-  int? id;
   late Color color;
   late bool isOverlay;
+}
+
+class KeyIconCubic {
+  const KeyIconCubic(this.x1, this.y1, this.x2, this.y2, this.x3, this.y3);
+  final double x1;
+  final double y1;
+  final double x2;
+  final double y2;
+  final double x3;
+  final double y3;
+}
+
+class KeyIconLine {
+  const KeyIconLine(this.x1, this.y1);
+  final double x1;
+  final double y1;
+}
+
+class KeyIconPath {
+  late double x;
+  late double y;
+  late List<KeyIconLine> keyIconLines;
+}
+
+class KeyPaintIcon with KeyPaintChip {
+  /// [KeyPaintIcon] intended to draw icon on a canvas.
+  KeyPaintIcon({
+    Color pathColor = Colors.white,
+    List<KeyIconPath>? pathsValue,
+  }) {
+    color = pathColor;
+    paths = pathsValue;
+    isOverlay = true;
+  }
+
+  List<KeyIconPath>? paths;
 }
 
 class KeyPaintText with KeyPaintChip {

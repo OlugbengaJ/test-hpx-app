@@ -55,14 +55,20 @@ class KeyRRectPainter extends CustomPainter {
     // // canvas.clipRRect(rrect);
     // canvas.drawRRect(rrect, paint);
 
-    // #region;
-    // // multiple layer
-    // paint.color = Colors.green.withOpacity(1);
-    // canvas.drawRRect(rrect, paint);
-    // #endregion;
-
     for (var element in keyModel.chips) {
       switch (element.runtimeType) {
+        case KeyPaintIcon:
+          final iconPaint = element as KeyPaintIcon;
+          if (iconPaint.paths != null) {
+            final paint = Paint()..color = iconPaint.color;
+            _clipCanvasToCenter(canvas, size);
+
+            for (var e in iconPaint.paths!) {
+              final path = _getIconPainter(e, size, zoomScale);
+              canvas.drawPath(path, paint);
+            }
+          }
+          break;
         case KeyPaintText:
           final textPaint =
               _getTextPainter(element as KeyPaintText, .3 * size.height);
@@ -86,6 +92,36 @@ class KeyRRectPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
   }
+}
+
+void _clipCanvasToCenter(Canvas canvas, Size size) {
+  Path p = Path();
+  p.moveTo(size.width * 0.2, size.height * 0.2);
+
+  // create the square path to clip
+  p.lineTo(size.width * 0.2, size.height * 0.2);
+  p.lineTo(size.width * 0.2, size.height * 0.8);
+  p.lineTo(size.width * 0.8, size.height * 0.8);
+  p.lineTo(size.width * 0.8, size.height * 0.2);
+
+  canvas.clipPath(p);
+}
+
+Path _getIconPainter(KeyIconPath keyIconPath, Size size, double zoomScale) {
+  final path = Path();
+  path.moveTo(
+    keyIconPath.x * size.width,
+    keyIconPath.y * size.height,
+  );
+
+  for (var keyIconCubic in keyIconPath.keyIconLines) {
+    path.lineTo(
+      keyIconCubic.x1 * size.width,
+      keyIconCubic.y1 * size.height,
+    );
+  }
+
+  return path;
 }
 
 /// [_getTextPainter] returns a [TextPainter] which draws a text on the key.

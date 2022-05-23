@@ -44,6 +44,8 @@ class WorkspaceProvider with ChangeNotifier {
   LayersProvider? get getLayersProvider => _layersProvider;
   void setLayersProvider(LayersProvider? v) => _layersProvider = v;
 
+  WorkspaceDragMode? _keyDragMode = WorkspaceDragMode.resizable;
+
   bool get isDragModeClick => _keyDragMode == WorkspaceDragMode.click;
 
   bool get isDragModeResizable => _keyDragMode == WorkspaceDragMode.resizable;
@@ -108,7 +110,6 @@ class WorkspaceProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  WorkspaceDragMode? _keyDragMode;
   DragDownDetails? _panDownDetails;
   DragUpdateDetails? _panUpdateDetails;
 
@@ -233,7 +234,6 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [isWidgetInZone] checks a widget intersects with the zone selection
   bool? isWidgetInZone(RenderBox? box, {RenderBox? box2}) {
-    debugPrint('$_dragModeChanged, $_keyDragMode');
     // drag mode has changed, unselect box
     if (_dragModeChanged) return false;
 
@@ -278,6 +278,10 @@ class WorkspaceProvider with ChangeNotifier {
     final Rect boxRect = box!.localToGlobal(Offset.zero) & box.size;
     final rectIntersect = selectorRect.intersect(boxRect);
 
+    // debugPrint('$_dragModeChanged, $_keyDragMode');
+    // if (k.contains('kEsc')) {
+    //   debugPrint('$k $rectIntersect');
+    // }
     return (rectIntersect.width >= 0 && rectIntersect.height >= 0);
   }
 

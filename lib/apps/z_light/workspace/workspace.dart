@@ -28,7 +28,7 @@ class Workspace extends StatefulWidget {
 
 class _WorkspaceState extends State<Workspace> {
   final _zoomTextCtrl = TextEditingController(text: '60');
-  final double _zoomInThreshold = 400;
+  final double _zoomInThreshold = 250;
   final double _zoomOutThreshold = 60;
   double _zoomValue = 60;
   double _zoomScale = 0.6;
@@ -164,6 +164,23 @@ class _WorkspaceState extends State<Workspace> {
                             Padding(
                               padding: const EdgeInsets.only(right: 20.0),
                               child: Tooltip(
+                                message: 'Highlight selector',
+                                child: RoundButton(
+                                  onTapDown: () {
+                                    provider
+                                        .toggleDragMode(WorkspaceDragMode.zone);
+                                  },
+                                  size: _buttonSize,
+                                  icon: Icons.highlight_alt,
+                                  iconColor: provider.isDragModeZone
+                                      ? Theme.of(context).colorScheme.primary
+                                      : null,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 20.0),
+                              child: Tooltip(
                                 message: 'Resizable selector',
                                 child: RoundButton(
                                   onTapDown: () {
@@ -174,23 +191,6 @@ class _WorkspaceState extends State<Workspace> {
                                   size: _buttonSize,
                                   icon: Icons.select_all,
                                   iconColor: provider.isDragModeResizable
-                                      ? Theme.of(context).colorScheme.primary
-                                      : null,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 20.0),
-                              child: Tooltip(
-                                message: 'Highlight selector',
-                                child: RoundButton(
-                                  onTapDown: () {
-                                    provider
-                                        .toggleDragMode(WorkspaceDragMode.zone);
-                                  },
-                                  size: _buttonSize,
-                                  icon: Icons.highlight_alt,
-                                  iconColor: provider.isDragModeZone
                                       ? Theme.of(context).colorScheme.primary
                                       : null,
                                 ),
@@ -250,72 +250,64 @@ class _WorkspaceState extends State<Workspace> {
                 repeat: ImageRepeat.repeat,
               ),
             ),
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onPanDown: (details) {
-                workspaceProvider.onPanDown(details);
-              },
-              onPanUpdate: (details) => workspaceProvider.onPanUpdate(details),
-              onPanEnd: (details) => workspaceProvider.onPanEnd(details),
-              onPanCancel: () => workspaceProvider.onPanClear(),
-              child: Stack(
-                alignment: Alignment.bottomLeft,
-                fit: StackFit.expand,
-                children: [
-                  Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      margin: EdgeInsets.zero,
-                      // width: 720 * _zoomScale,
-                      height: 720 * _zoomScale,
-                      child: const Image(
-                        image: AssetImage(Constants.laptopg9Image),
-                        // fit: BoxFit.none,
+            child: Stack(
+              children: [
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onPanDown: (details) {
+                    workspaceProvider.onPanDown(details);
+                  },
+                  onPanUpdate: (details) =>
+                      workspaceProvider.onPanUpdate(details),
+                  onPanEnd: (details) => workspaceProvider.onPanEnd(details),
+                  onPanCancel: () => workspaceProvider.onPanClear(),
+                  child: Stack(
+                    alignment: Alignment.bottomLeft,
+                    fit: StackFit.expand,
+                    children: [
+                      // Keyboard widget takes a zoom scale which is applied to all keys.
+                      // This ensures seamless zooming of the entire keyboard.
+                      Align(
+                        alignment: Alignment.center,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          primary: false,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            primary: false,
+                            child: Keyboard(zoomScale: _zoomScale),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  // Keyboard widget takes a zoom scale which is applied to all keys.
-                  // This ensures seamless zooming of the entire keyboard.
-                  Align(
-                    alignment: Alignment.center,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      primary: false,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        primary: false,
-                        padding: const EdgeInsets.only(top: 52.0),
-                        child: Keyboard(zoomScale: _zoomScale),
+                      LayersStack(
+                        layers: widget.layers,
                       ),
-                    ),
-                  ),
-                  LayersStack(
-                    layers: widget.layers,
-                  ),
-                  if (workspaceProvider.isPanning) const KeyboardSelector(),
+                      if (workspaceProvider.isPanning) const KeyboardSelector(),
 
-                  if (workspaceProvider.isModalNotify)
-                    ModalNotification(
-                      closeHandler: workspaceProvider.toggleModal,
-                      children: workspaceProvider.modalWidgets,
+                      if (workspaceProvider.isModalNotify)
+                        ModalNotification(
+                          closeHandler: workspaceProvider.toggleModal,
+                          children: workspaceProvider.modalWidgets,
+                        ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: ZoomToolbar(
+                      zoomTextController: _zoomTextCtrl,
+                      zoomInHandler: zoomIn,
+                      zoomExpandHandler: zoomExpand,
+                      zoomOutHandler: zoomOut,
+                      zoomCollapseHandler: zoomCollapse,
+                      zoomEndHandler: zoomEnd,
                     ),
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: Center(
-                      child: ZoomToolbar(
-                        zoomTextController: _zoomTextCtrl,
-                        zoomInHandler: zoomIn,
-                        zoomExpandHandler: zoomExpand,
-                        zoomOutHandler: zoomOut,
-                        zoomCollapseHandler: zoomCollapse,
-                        zoomEndHandler: zoomEnd,
-                      ),
-                    ),
-                  )
-                ],
-              ),
+                  ),
+                ),
+              ],
             ),
           ),
         )
