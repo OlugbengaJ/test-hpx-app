@@ -478,7 +478,7 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                                 value: _value,
                                 onChanged: (bool? value) {
                                   setState(() {
-                                    colorPosition = widget.colorIndex!;
+                                    // colorPosition = widget.colorIndex!;
                                     _value = value!;
                                     widget.hasBorder = (!_value) ? true : false;
                                     widget.picker = (!_value) ? true : false;
