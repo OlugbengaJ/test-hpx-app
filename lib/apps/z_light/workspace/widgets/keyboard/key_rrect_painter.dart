@@ -19,9 +19,6 @@ class KeyRRectPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // const double defaultStrokeWidth = 50;
-    // final int pathColorsLength = keyModel.keyPathColors.length;
-
     // final Paint paint = Paint()
     //   ..style = keyModel.paintingStyle
     //   ..strokeWidth = defaultStrokeWidth * zoomScale * 0.009211208
@@ -45,23 +42,13 @@ class KeyRRectPainter extends CustomPainter {
     //     ..colorFilter = ColorFilter.mode(keyPathColor, BlendMode.luminosity);
     // }
 
-    // RRect rrect = clipper.getClip(size).shift(Offset.zero);
-
-    // /// canvas.clipRRect(rrect) can be called for a more aggressive clip.
-    // ///
-    // /// However this was disabled because the left and bottom
-    // /// of the key looked thiner than the top and right.
-
-    // // canvas.clipRRect(rrect);
-    // canvas.drawRRect(rrect, paint);
-
     for (var element in keyModel.chips) {
       switch (element.runtimeType) {
         case KeyPaintIcon:
           final iconPaint = element as KeyPaintIcon;
           if (iconPaint.paths != null) {
             final paint = Paint()..color = iconPaint.color;
-            _clipCanvasToCenter(canvas, size);
+            _canvasClipCenter(canvas, size);
 
             for (var e in iconPaint.paths!) {
               final path = _getIconPainter(e, size, zoomScale);
@@ -94,7 +81,8 @@ class KeyRRectPainter extends CustomPainter {
   }
 }
 
-void _clipCanvasToCenter(Canvas canvas, Size size) {
+/// [_canvasClipCenter] clips the canvas to center with a padding illusion.
+void _canvasClipCenter(Canvas canvas, Size size) {
   Path p = Path();
   p.moveTo(size.width * 0.2, size.height * 0.2);
 
@@ -107,6 +95,7 @@ void _clipCanvasToCenter(Canvas canvas, Size size) {
   canvas.clipPath(p);
 }
 
+/// [_getIconPainter] returns a [Path] of an icon to be drawn on canvas.
 Path _getIconPainter(KeyIconPath keyIconPath, Size size, double zoomScale) {
   final path = Path();
   path.moveTo(
