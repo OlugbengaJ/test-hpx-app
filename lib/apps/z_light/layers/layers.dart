@@ -71,6 +71,7 @@ class _LayersState extends State<Layers> {
         bottom: context.read<ResizableProvider>().bottom,
         left: context.read<ResizableProvider>().left,
         right: context.read<ResizableProvider>().right,
+        icon: (provider.length>0)?modeProvider.getModeInformation().icon: Icons.mood
       )
     );
   }

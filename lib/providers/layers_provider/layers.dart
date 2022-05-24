@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 
@@ -7,8 +6,6 @@ import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart'
 ///[LayersProvider] handle 
 
 class LayersProvider extends ChangeNotifier {
-  final areaHeight = Get.height * 0.70;
-  final areaWidth = Get.width * 0.70;
   final List<LayerItemModel> _layeritems = [];
   final List<LayerItemModel> _sublayers = [];
 
@@ -35,6 +32,12 @@ class LayersProvider extends ChangeNotifier {
   /// [toggleHideStackedLayers] toggle hide or show of the resizable
   void toggleHideStackedLayers(bool show) {
     hideStackedLayers = show;
+  }
+
+
+  void toolsEffectsUpdated(){
+    print("Tools Effects updated");
+    notifyListeners();
   }
 
 

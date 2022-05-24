@@ -150,7 +150,7 @@ class _LayerListItemState extends State<LayerListItem> {
                               Row(
                                 children: [
                                   Icon(
-                                    Ionicons.image,
+                                    widget.layerItemModel.icon,
                                     color: widget.layerItemModel.listDisplayColor,
                                     size: _iconSize,
                                   ),
