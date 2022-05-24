@@ -28,7 +28,7 @@ class Workspace extends StatefulWidget {
 
 class _WorkspaceState extends State<Workspace> {
   final _zoomTextCtrl = TextEditingController(text: '60');
-  final double _zoomInThreshold = 250;
+  final double _zoomInThreshold = 145;
   final double _zoomOutThreshold = 60;
   double _zoomValue = 60;
   double _zoomScale = 0.6;
@@ -84,7 +84,7 @@ class _WorkspaceState extends State<Workspace> {
   /// [zoomExpand] sets the zoomValue to half the zoomIn threshold.
   void zoomExpand() {
     setState(() {
-      _zoomValue = _zoomInThreshold / 3.1;
+      _zoomValue = _zoomInThreshold / 1.5; // / 3.1;
       updateZoom();
     });
   }
