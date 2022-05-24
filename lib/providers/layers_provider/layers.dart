@@ -32,23 +32,6 @@ class LayersProvider extends ChangeNotifier {
   }
 
 
-  // void setKeys(keys){
-  //   LayerItemModel item = _layeritems[index];
-  //   item.setKeys(keys);
-  //   layeritems[index] = item;
-
-  //   notifyListeners();
-  // }
-
-  // LayerItemModel getEditingLayer() {
-  //   if(length>1){
-  //     return _layeritems[index];
-  //   }else{
-  //     return _layeritems[0];
-  //   }    
-  // }
-
-
   /// [toggleHideStackedLayers] toggle hide or show of the resizable
   void toggleHideStackedLayers(bool show) {
     hideStackedLayers = show;
@@ -174,9 +157,6 @@ class LayersProvider extends ChangeNotifier {
   }
 
   void toggleVisibility(LayerItemModel item, int index) {
-    int toEdit = _layeritems[index].id;
-    int stackedIndex = 0; // The stack index is different from the list index
-
     item.listDisplayColor = Colors.grey;
 
     if (item.visible) {
@@ -203,9 +183,6 @@ class LayersProvider extends ChangeNotifier {
       final item = _layeritems[index];
     
       _layeritems.remove(item);
-      
-
-      
 
       if (_layeritems.isNotEmpty) {
         changeIndex(0);
@@ -235,6 +212,7 @@ class LayersProvider extends ChangeNotifier {
         newTop: item.top,
       );
     }
+    provider.setSize();
     
 
     notifyListeners();
