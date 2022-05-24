@@ -3,14 +3,13 @@ import 'package:get/get.dart';
 import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 
-
-
 class LayersProvider extends ChangeNotifier {
   final areaHeight = Get.height * 0.70;
   final areaWidth = Get.width * 0.70;
   final List<LayerItemModel> _layeritems = [];
   final List<LayerItemModel> _sublayers = [];
-  final List<LayerItemModel> _stackedLayeritems = []; // Used to display the staked layers
+  final List<LayerItemModel> _stackedLayeritems =
+      []; // Used to display the staked layers
   final List<ResizableWidgetController> _layersControllers = [];
 
   bool hideStackedLayers = false;
@@ -19,8 +18,10 @@ class LayersProvider extends ChangeNotifier {
   int get length => _layeritems.length;
   int get index => _index;
 
-  List<LayerItemModel> get layeritems => _layeritems; // Should return only mainlayers
-  List<LayerItemModel> get sublayerItems => _sublayers; // Should return only sublayers
+  List<LayerItemModel> get layeritems =>
+      _layeritems; // Should return only mainlayers
+  List<LayerItemModel> get sublayerItems =>
+      _sublayers; // Should return only sublayers
   List<LayerItemModel> get stackedLayeritems => _stackedLayeritems;
 
   LayerItemModel getItem(int index) {
@@ -35,12 +36,16 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  ResizableWidgetController getController(int id){
-    var controller = _layersControllers.where((controller) => controller.layerID==id).toList()[0];
-    return _layersControllers.where((controller) => controller.layerID==id).toList()[0];
+  ResizableWidgetController getController(int id) {
+    var controller = _layersControllers
+        .where((controller) => controller.layerID == id)
+        .toList()[0];
+    return _layersControllers
+        .where((controller) => controller.layerID == id)
+        .toList()[0];
   }
 
-  addController(controller){
+  addController(controller) {
     _layersControllers.add(controller);
     notifyListeners();
   }
@@ -54,6 +59,7 @@ class LayersProvider extends ChangeNotifier {
     }
     return id + 1;
   }
+
   int getTheBiggestSUbID() {
     int id = 1;
     for (var item in _sublayers) {
@@ -64,10 +70,10 @@ class LayersProvider extends ChangeNotifier {
     return id + 1;
   }
 
-  List<LayerItemModel> getSublayers(int id){
+  List<LayerItemModel> getSublayers(int id) {
     List<LayerItemModel> layers = [];
-    for(var item in sublayerItems){
-      if(item.parentID==id){
+    for (var item in sublayerItems) {
+      if (item.parentID == id) {
         layers.add(item);
       }
     }
@@ -99,8 +105,7 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-  void duplicate(LayerItemModel item, int index, {bool sublayer=false}) {
+  void duplicate(LayerItemModel item, int index, {bool sublayer = false}) {
     ResizableWidgetController controller = ResizableWidgetController(
       initialPosition: item.controller.initialPosition,
       layerID: getTheBiggestID(),
@@ -120,21 +125,19 @@ class LayersProvider extends ChangeNotifier {
     controller.width = item.controller.width;
 
     LayerItemModel duplicatedItem = LayerItemModel(
-      id: (sublayer)? getTheBiggestSUbID(): getTheBiggestID(),
-      layerText: "Copy ${item.layerText}",
-      mode: item.mode,
-      isSublayer: sublayer,
-      controller: controller
-    );
+        id: (sublayer) ? getTheBiggestSUbID() : getTheBiggestID(),
+        layerText: "Copy ${item.layerText}",
+        mode: item.mode,
+        isSublayer: sublayer,
+        controller: controller);
 
-    if(sublayer){
+    if (sublayer) {
       item.hasSublayer = true;
       duplicatedItem.layerText = "Sublayer";
       duplicatedItem.parentID = item.id;
       _sublayers.insert(0, duplicatedItem);
       _layeritems[index] = item;
-    }
-    else{
+    } else {
       for (var element in _layeritems) {
         element.listDisplayColor = Colors.grey;
       }
@@ -165,23 +168,23 @@ class LayersProvider extends ChangeNotifier {
 
   void update(LayerItemModel item, int index) {
     int toEdit = _layeritems[index].id;
-      int stackedIndex = 0; // The stack index is different from the list index
+    int stackedIndex = 0; // The stack index is different from the list index
 
-      _layeritems[index] = item;
+    _layeritems[index] = item;
 
-      for (var i = 0; i < _layeritems.length; i++) {
-        if (_stackedLayeritems[i].id == toEdit) {
-          stackedIndex = i;
-        }
+    for (var i = 0; i < _layeritems.length; i++) {
+      if (_stackedLayeritems[i].id == toEdit) {
+        stackedIndex = i;
       }
-      _stackedLayeritems[stackedIndex] = item;
+    }
+    _stackedLayeritems[stackedIndex] = item;
 
     notifyListeners();
   }
 
   void updateSublayer(LayerItemModel item, String value) {
     for (var subItem in sublayerItems) {
-      if(item.id==subItem.id){
+      if (item.id == subItem.id) {
         subItem.layerText = value;
       }
     }
@@ -222,9 +225,9 @@ class LayersProvider extends ChangeNotifier {
   }
 
   void removeItem(int index) {
-    if(length>1){
+    if (length > 1) {
       final item = _layeritems[index];
-    
+
       _layeritems.remove(item);
       _stackedLayeritems.remove(item);
 
@@ -237,7 +240,7 @@ class LayersProvider extends ChangeNotifier {
   }
 
   void removeSubItem(item) {
-    if(sublayerItems.length>1){
+    if (sublayerItems.length > 1) {
       sublayerItems.remove(item);
     }
 

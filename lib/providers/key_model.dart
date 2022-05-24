@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/key_code.dart';
 
@@ -27,7 +29,7 @@ class KeyModel with ChangeNotifier {
   final double keyHeight;
   final double keyRadius;
 
-  static const Color _highlightColor = Colors.orange;
+  static final Color _highlightColor = colorRandom; //Colors.orange;
 
   /// [_isSelected] indicates key is selected.
   bool _isSelected = false;
@@ -95,13 +97,17 @@ class KeyModel with ChangeNotifier {
   /// [updateChip] updates the state of a chip in [chips].
   ///
   /// Adds a new chip layer if the chip with [chipKey] does not exist.
-  void updateChip(String chipKey) {
+  void updateChip(String chipKey, {double? opacity}) {
     KeyPaintChip? chip = getChip(chipKey);
 
     if (chip == null) {
       // add a new chip.
       chip = KeyPaintRect();
       addChip(chipKey, chip);
+    }
+
+    if (chip.runtimeType == KeyPaintRect) {
+      (chip as KeyPaintRect).opacity = opacity!;
     }
 
     chip.color = _highlightColor;
@@ -113,16 +119,20 @@ class KeyModel with ChangeNotifier {
   }
 
   /// [selectKey] highlights [KeyModel] under a selected zone.
-  void selectKey(bool? isHighlighted, int id) {
+  void selectKey(bool? isWidgetInZone, int id, bool isVisible) {
     // highlight the chip with keys matching id
-    if (isHighlighted == true) {
+    if (isWidgetInZone == true) {
       _isSelected = true;
-      updateChip(id.toString());
+      updateChip(id.toString(), opacity: isVisible ? 1.0 : 0.0);
     }
     // remove chip with specific id
-    else if (isHighlighted == false) {
+    else if (isWidgetInZone == false) {
       _isSelected = false;
       removeChip(id.toString());
+    }
+    // update selected chip opacity
+    else if (isSelected) {
+      updateChip(id.toString(), opacity: isVisible ? 1.0 : 0.0);
     }
   }
 
@@ -225,3 +235,5 @@ class KeyPaintRect with KeyPaintChip {
   late StrokeJoin strokeJoin;
   late double strokeWidthFactor;
 }
+
+Color get colorRandom => Color(0xffffffff & Random().nextInt(0xffffffff));

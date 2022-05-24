@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
@@ -262,13 +260,14 @@ class WorkspaceProvider with ChangeNotifier {
         }
 
         // calculate rect based on resizable widget offsets.
-        final layerModel = _layersProvider!.getItem(_layersProvider!.index);
+        final layerModel =
+            _layersProvider!.stackedLayeritems[_layersProvider!.index];
         box2 = layerModel.controller.draggableKey.currentContext
             ?.findRenderObject() as RenderBox?;
 
         if (box2 == null) return null;
-        selectorRect = box2.localToGlobal(Offset.zero) & box2.size;
 
+        selectorRect = box2.localToGlobal(Offset.zero) & box2.size;
         break;
 
       default:
@@ -282,12 +281,11 @@ class WorkspaceProvider with ChangeNotifier {
     // if (k.contains('kEsc')) {
     //   debugPrint('$k $rectIntersect');
     // }
+
+    // include 0 for scenarios where a button is clicked.
     return (rectIntersect.width >= 0 && rectIntersect.height >= 0);
   }
 
   // TODO: this is a debug implementation and must be refactored for production.
   // send random color to animate
-  List<Color> get animColors => [colorRandom];
 }
-
-Color get colorRandom => Color(0xffffffff & Random().nextInt(0xffffffff));

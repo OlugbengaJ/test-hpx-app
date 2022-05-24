@@ -22,7 +22,7 @@ class KeyboardKey extends StatelessWidget {
   Widget build(BuildContext context) {
     // Gets access to the widget's position (offset) in the widget tree.
     final box = context.findRenderObject() as RenderBox?;
-    final layerProvider = Provider.of<LayersProvider>(context);
+    final layersProvider = Provider.of<LayersProvider>(context);
 
     return Stack(
       children: [
@@ -36,7 +36,7 @@ class KeyboardKey extends StatelessWidget {
                 child: Consumer<KeyModel>(
                   builder: (context, keyModel, child) => KeyRRect(
                     keyModel: _updateKeyInfo(
-                        workspaceProvider, layerProvider, keyModel, box),
+                        workspaceProvider, layersProvider, keyModel, box),
                     zoomScale: zoomScale,
                   ),
                 ),
@@ -51,7 +51,7 @@ class KeyboardKey extends StatelessWidget {
 
 KeyModel _updateKeyInfo(
   WorkspaceProvider provider,
-  LayersProvider layerProvider,
+  LayersProvider layersProvider,
   KeyModel keyModel,
   RenderBox? renderBox,
 ) {
@@ -72,8 +72,13 @@ KeyModel _updateKeyInfo(
   //   //   //(provider.animColors);
   //   // }
   // }
-
-  keyModel.selectKey(isWidgetInZone, layerProvider.index);
+  final layerIndex = layersProvider.index;
+  bool layerVisible = false;
+  if (layersProvider.layeritems.isNotEmpty) {
+    final layer = layersProvider.layeritems[layerIndex];
+    layerVisible = layer.visible;
+  }
+  keyModel.selectKey(isWidgetInZone, layerIndex, layerVisible);
   // if (provider.isDragModeClick &&
   //     isWidgetInZone == true &&
   //     !keyModel.isSelected) {
