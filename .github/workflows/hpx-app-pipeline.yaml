@@ -10,11 +10,6 @@ on:
       - development
       - qa
 
-
-permissions:  
-  contents: read
-
-
 jobs:
   Andriod:
     name: Build Andriod

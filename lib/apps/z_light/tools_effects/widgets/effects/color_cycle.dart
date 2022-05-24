@@ -45,7 +45,7 @@ class _ColorCycleState extends State<ColorCyclePreset> {
                             color: (activatedButton == 'CUSTOM')
                                 ? Colors.black
                                 : Colors.white,
-                            child: Text('DEFAULT'),
+                            child: const Text('DEFAULT'),
                             onPressed: () {
                               setState(() {
                                 activatedButton = "DEFAULT";
@@ -66,7 +66,7 @@ class _ColorCycleState extends State<ColorCyclePreset> {
                             color: (activatedButton != 'CUSTOM')
                                 ? Colors.black
                                 : Colors.white,
-                            child: Text('CUSTOM'),
+                            child: const Text('CUSTOM'),
                             onPressed: () {
                               setState(() {
                                 activatedButton = "CUSTOM";
