@@ -270,4 +270,11 @@ class ModeProvider extends ChangeNotifier {
   getModeInformation() {
     return currentMode;
   }
+
+  // change the mode type for the current mode between sublayer and layer based on the value passed
+  setModeType(bool isSubLayer) {
+    currentMode.modeType =
+        (isSubLayer == true) ? EnumModeType.sublayer : EnumModeType.layers;
+    notifyListeners();
+  }
 }

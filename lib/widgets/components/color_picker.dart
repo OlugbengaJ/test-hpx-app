@@ -207,7 +207,7 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                                     margin: const EdgeInsets.only(
                                         top: 10, bottom: 10),
                                     width: 50,
-                                    height: 30,
+                                    height: 20,
                                     decoration: BoxDecoration(
                                         border: Border.all(
                                             width: 0.5,
