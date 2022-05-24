@@ -6,7 +6,7 @@ class ResizableProvider extends ChangeNotifier {
   GlobalKey draggableKey = GlobalKey();
   Offset initialPosition = Offset.zero;
   late double areaHeight = 500;
-  late double areaWidth = 500;
+  late double areaWidth = 700;
   late double minWidth = 0.0;
   late double minHeight = 0.0;
 
@@ -83,8 +83,7 @@ class ResizableProvider extends ChangeNotifier {
     required final double newRight,
     required final double newBottom,
   }) {
-    calculateWidgetSize(
-        top: newTop, left: newLeft, bottom: newBottom, right: newRight);
+    calculateWidgetSize( top: newTop, left: newLeft, bottom: newBottom, right: newRight);
     if (checkTopBotMaxSize(newTop, newBottom)) {
       top = newTop;
       bottom = newBottom;
@@ -96,10 +95,8 @@ class ResizableProvider extends ChangeNotifier {
     calculateWidgetSize(bottom: bottom, left: left, right: right, top: top);
   }
 
-  bool checkTopBotMaxSize(final double newTop, final double newBottom) =>
-      (newTop >= 0 && newBottom >= 0) && (height <= minHeight);
-  bool checkLeftRightMaxSize(final double newLeft, final double newRight) =>
-      (newLeft >= 0 && newRight >= 0) && (width <= minWidth);
+  bool checkTopBotMaxSize(final double newTop, final double newBottom) =>(newTop >= 0 && newBottom >= 0) && (height <= minHeight);
+  bool checkLeftRightMaxSize(final double newLeft, final double newRight) =>  (newLeft >= 0 && newRight >= 0) && (width <= minWidth);
 
   void calculateWidgetSize({
     required final double top,
@@ -125,6 +122,7 @@ class ResizableProvider extends ChangeNotifier {
 
   void onTopRightDrag(dx, dy) {
     var mid = (dx - dy) / 2;
+    
     setSize(
       newTop: top - mid,
       newRight: right - mid,

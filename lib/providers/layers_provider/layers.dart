@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
+import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 
 
 ///[LayersProvider] handle 
@@ -97,7 +98,7 @@ class LayersProvider extends ChangeNotifier {
   }
 
   /// [duplicate] uses to duplicate the layer
-  void duplicate(LayerItemModel item, int index, {bool sublayer=false}) {
+  void duplicate(LayerItemModel item, int index, ModeProvider modeProvider,{bool sublayer=false}) {
     LayerItemModel duplicatedItem = LayerItemModel(
       id: (sublayer)? getTheBiggestSUbID(): getTheBiggestID(),
       layerText: "Copy ${item.layerText}",
@@ -106,6 +107,7 @@ class LayersProvider extends ChangeNotifier {
     );
 
     if(sublayer){
+      
       item.hasSublayer = true;
       duplicatedItem.layerText = "Sublayer";
       duplicatedItem.parentID = item.id;

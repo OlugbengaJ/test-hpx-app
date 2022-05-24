@@ -4,6 +4,7 @@ import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/apps/z_light/layers/widgets/sublayer_item.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
+import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 
@@ -56,10 +57,11 @@ class _LayerListItemState extends State<LayerListItem> {
 
 
   _duplicate(LayersProvider provider){
+    ModeProvider modeProvider = context.read<ModeProvider>();
     if(widget.layerItemModel.mode.name=="Shortcut Colors"){
-      provider.duplicate(widget.layerItemModel, widget.layerIndex, sublayer: true);
+      provider.duplicate(widget.layerItemModel, widget.layerIndex, modeProvider, sublayer: true);
     }else{
-      provider.duplicate(widget.layerItemModel, widget.layerIndex);
+      provider.duplicate(widget.layerItemModel, widget.layerIndex, modeProvider);
     }
     
   }

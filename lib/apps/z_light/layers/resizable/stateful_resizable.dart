@@ -38,7 +38,7 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
   }
 
 
-  _onDragEnd(provider){
+  _onDragEnd(ResizableProvider provider){
     LayersProvider layersProvider = context.read<LayersProvider>();
     provider.onDragEnd(layersProvider);
   }
@@ -92,12 +92,12 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                       alignment: Alignment.topLeft,
                       child: MouseRegion(
                         cursor: SystemMouseCursors.resizeUpLeft,
-                        child: DragDistance(
-                          child: widget.dragWidget,
+                        child: DragDistance(                          
                           onDrag: provider.onTopLeftDrag,
                           onDragEnd: (DragEndDetails details){
                             _onDragEnd(provider);
                           },
+                          child: widget.dragWidget,
                         ),
                       ),
                     ),
@@ -106,12 +106,12 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                       alignment: Alignment.topCenter,
                       child: MouseRegion(
                         cursor: SystemMouseCursors.resizeUp,
-                        child: DragDistance(
-                          child: widget.dragWidget,
+                        child: DragDistance(                          
                           onDrag: provider.onTopCenterDrag,
                           onDragEnd: (DragEndDetails details){
                             _onDragEnd(provider);
                           },
+                          child: widget.dragWidget,
                         ),
                       ),
                     ),
@@ -120,12 +120,12 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                       alignment: Alignment.topRight,
                       child: MouseRegion(
                         cursor: SystemMouseCursors.resizeUpRight,
-                        child: DragDistance(
-                          child: widget.dragWidget,
+                        child: DragDistance(                          
                           onDrag: provider.onTopRightDrag,
                           onDragEnd: (DragEndDetails details){
                             _onDragEnd(provider);
                           },
+                          child: widget.dragWidget,
                         ),
                       ),
                     ),
@@ -134,12 +134,12 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                       alignment: Alignment.centerLeft,
                       child: MouseRegion(
                         cursor: SystemMouseCursors.resizeLeft,
-                        child: DragDistance(
-                          child: widget.dragWidget,
+                        child: DragDistance(                          
                           onDrag: provider.onCenterLeftDrag,
                           onDragEnd: (DragEndDetails details){
                             _onDragEnd(provider);
                           },
+                          child: widget.dragWidget,
                         ),
                       ),
                     ),
@@ -149,12 +149,12 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                       alignment: Alignment.centerRight,
                       child: MouseRegion(
                         cursor: SystemMouseCursors.resizeRight,
-                        child: DragDistance(
-                          child: widget.dragWidget,
+                        child: DragDistance(                          
                           onDrag: provider.onCenterRightDrag,
                           onDragEnd: (DragEndDetails details){
                             _onDragEnd(provider);
                           },
+                          child: widget.dragWidget,
                         ),
                       ),
                     ),
@@ -163,12 +163,12 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                       alignment: Alignment.bottomLeft,
                       child: MouseRegion(
                         cursor: SystemMouseCursors.resizeDownLeft,
-                        child: DragDistance(
-                          child: widget.dragWidget,
+                        child: DragDistance(                          
                           onDrag: provider.onBottomLeftDrag,
                           onDragEnd: (DragEndDetails details){
                             _onDragEnd(provider);
                           },
+                          child: widget.dragWidget,
                         ),
                       ),
                     ),
@@ -177,12 +177,12 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                       alignment: Alignment.bottomCenter,
                       child: MouseRegion(
                         cursor: SystemMouseCursors.resizeDown,
-                        child: DragDistance(
-                          child: widget.dragWidget,
+                        child: DragDistance(                          
                           onDrag: provider.onBottomCenterDrag,
                           onDragEnd: (DragEndDetails details){
                             _onDragEnd(provider);
                           },
+                          child: widget.dragWidget,
                         ),
                       ),
                     ),
@@ -191,12 +191,12 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                       alignment: Alignment.bottomRight,
                       child: MouseRegion(
                         cursor: SystemMouseCursors.resizeDownRight,
-                        child: DragDistance(
-                          child: widget.dragWidget,
+                        child: DragDistance(                          
                           onDrag: provider.onBottomRightDrag,
                           onDragEnd: (DragEndDetails details){
                             _onDragEnd(provider);
                           },
+                          child: widget.dragWidget,
                         ),
                       ),
                     ),
