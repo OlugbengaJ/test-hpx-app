@@ -133,10 +133,15 @@ List<PickerModel> moodList = [
 
 // Mode provider to manage the current colors or effects of a mode been selected
 class ModeProvider extends ChangeNotifier {
-  ToolsModeModel currentMode =
-      ToolsModeModel(currentColor: [], effects: EffectsModel(), name: "");
-  EffectProvider effectProvider = EffectProvider();
-  ColorPickerProvider colorPickerProvider = ColorPickerProvider();
+  ToolsModeModel currentMode = ToolsModeModel(
+      currentColor: [],
+      effects: EffectsModel(),
+      name: "Mood",
+      value: EnumModes.mood,
+      modeType: EnumModeType.layers,
+      icon: Icons.mood);
+  // EffectProvider effectProvider = EffectProvider();
+  // ColorPickerProvider colorPickerProvider = ColorPickerProvider();
 
   /// function set the current mode information to the provider mode variable
   void setCurrentMode(ToolsModeModel data) {

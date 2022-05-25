@@ -95,7 +95,6 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
         Provider.of<ColorPickerProvider>(context, listen: false);
     ModeProvider modeProvider =
         Provider.of<ModeProvider>(context, listen: false);
-    colorPickerProviderInstance.lastColors.add(selectedColor);
     colorPickerProviderInstance.setCurrentPickerWidget(ColorPickerWidgetModel(
       action: widget.title,
       name: widget.title,
@@ -200,7 +199,7 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Current",
+                                  Text("Recent",
                                       textAlign: TextAlign.left,
                                       style: labelStyle),
                                   Container(
@@ -244,7 +243,10 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                     width: 250,
                     child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: generatePresetBox(9, []))),
+                        children: generatePresetBox(
+                            9,
+                            colorPickerProviderInstance.lastColors.reversed
+                                .toList()))),
                 SizedBox(
                     width: 250,
                     child: Row(
