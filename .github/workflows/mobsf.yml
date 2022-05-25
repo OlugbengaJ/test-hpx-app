@@ -7,11 +7,11 @@ name: MobSF
 
 on:
   push:
-    branches: [ development ]
+    branches: [ development, qa ]
   pull_request:
     branches: [ development ]  
   schedule:
-    - cron: '35 3 * * 0'
+    - cron: '18 2 * * 5'
 
 permissions:
   contents: read

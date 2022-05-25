@@ -104,7 +104,9 @@ class _PickerDropdownState extends State<PickerDropdown> {
                           ),
                     Text(
                       value.title,
-                      style: value.enabled == true ? const TextStyle() : labelStyle,
+                      style: value.enabled == true
+                          ? const TextStyle()
+                          : labelStyle,
                     ),
                   ],
                 ),
