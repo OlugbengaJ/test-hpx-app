@@ -348,6 +348,15 @@ class ColorPickerProvider extends ChangeNotifier {
     Colors.transparent,
     Colors.transparent,
     Colors.transparent,
+    Colors.transparent,
+    Colors.transparent,
+    Colors.transparent,
+    Colors.transparent,
+    Colors.transparent,
+    Colors.transparent,
+    Colors.transparent,
+    Colors.transparent,
+    Colors.transparent,
     Colors.transparent
   ];
 
