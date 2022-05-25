@@ -27,6 +27,7 @@ class KeyboardKey extends StatelessWidget {
     return Stack(
       children: [
         Material(
+          color: Colors.transparent,
           child: Consumer<WorkspaceProvider>(
             builder: (context, workspaceProvider, child) {
               return InkWell(
@@ -74,8 +75,8 @@ KeyModel _updateKeyInfo(
   // }
   final layerIndex = layersProvider.index;
   bool layerVisible = false;
-  if (layersProvider.layeritems.isNotEmpty) {
-    final layer = layersProvider.layeritems[layerIndex];
+  if (layersProvider.stackedLayeritems.isNotEmpty) {
+    final layer = layersProvider.stackedLayeritems[layerIndex];
     layerVisible = layer.visible;
   }
   keyModel.selectKey(isWidgetInZone, layerIndex, layerVisible);

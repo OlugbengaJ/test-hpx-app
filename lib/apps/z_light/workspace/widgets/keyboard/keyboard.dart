@@ -18,15 +18,18 @@ class Keyboard extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Container(
-          margin: EdgeInsets.zero,
-          height: 720 * zoomScale,
-          child: const Image(
-            image: AssetImage(Constants.laptopg9Image),
+        Padding(
+          padding: const EdgeInsets.all(50.0),
+          child: SizedBox(
+            width: Constants.zoomFactor * zoomScale * 1.01,
+            child: Image.asset(
+              Constants.laptopg9Image,
+              fit: BoxFit.contain,
+            ),
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: 86.0 * zoomScale),
+          padding: EdgeInsets.only(top: 30.0 * zoomScale),
           child: Column(
             children: [
               KeyboardRowFn(zoomScale: zoomScale),

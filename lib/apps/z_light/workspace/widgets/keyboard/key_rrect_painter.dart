@@ -1,4 +1,3 @@
-// import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:hpx/providers/key_model.dart';
 
@@ -64,10 +63,22 @@ class KeyRRectPainter extends CustomPainter {
           textPaint.paint(canvas, Offset(3 * zoomScale, 1 * zoomScale));
           break;
         case KeyPaintRect:
-          final rectPaint = _getRectPainter(element as KeyPaintRect, zoomScale);
+          final keyPaintRect = element as KeyPaintRect;
+          final rectPaint = _getRectPainter(keyPaintRect, zoomScale);
           RRect rrect = clipper.getClip(size).shift(Offset.zero);
 
-          canvas.clipRRect(rrect);
+          if (keyPaintRect.showOutline) {
+            // display outline stroke around the key to indicate selection.
+            Paint paintStroke = Paint()
+              ..color = element.color.withOpacity(0.16)
+              ..style = PaintingStyle.stroke
+              ..blendMode = BlendMode.color
+              ..strokeWidth = 5 * zoomScale;
+
+            canvas.drawRRect(rrect, paintStroke);
+          }
+
+          // canvas.clipRRect(rrect);
           canvas.drawRRect(rrect, rectPaint);
           break;
         default:
@@ -134,5 +145,6 @@ Paint _getRectPainter(KeyPaintRect keyPaintRect, zoomScale) {
     ..color = keyPaintRect.color.withOpacity(keyPaintRect.opacity)
     ..style = keyPaintRect.paintingStyle
     ..strokeWidth = keyPaintRect.strokeWidthFactor * zoomScale * 0.009211208
-    ..strokeCap = keyPaintRect.strokeCap;
+    ..strokeCap = keyPaintRect.strokeCap
+    ..strokeJoin = keyPaintRect.strokeJoin;
 }

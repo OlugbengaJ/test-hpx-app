@@ -97,7 +97,7 @@ class KeyModel with ChangeNotifier {
   /// [updateChip] updates the state of a chip in [chips].
   ///
   /// Adds a new chip layer if the chip with [chipKey] does not exist.
-  void updateChip(String chipKey, {double? opacity}) {
+  void updateChip(String chipKey, {double? opacity, bool showOutline = false}) {
     KeyPaintChip? chip = getChip(chipKey);
 
     if (chip == null) {
@@ -107,7 +107,9 @@ class KeyModel with ChangeNotifier {
     }
 
     if (chip.runtimeType == KeyPaintRect) {
-      (chip as KeyPaintRect).opacity = opacity!;
+      (chip as KeyPaintRect)
+        ..opacity = opacity!
+        ..showOutline = showOutline;
     }
 
     chip.color = _highlightColor;
@@ -123,7 +125,8 @@ class KeyModel with ChangeNotifier {
     // highlight the chip with keys matching id
     if (isWidgetInZone == true) {
       _isSelected = true;
-      updateChip(id.toString(), opacity: isVisible ? 1.0 : 0.0);
+      updateChip(id.toString(),
+          opacity: isVisible ? 1.0 : 0.0, showOutline: true);
     }
     // remove chip with specific id
     else if (isWidgetInZone == false) {
@@ -132,7 +135,8 @@ class KeyModel with ChangeNotifier {
     }
     // update selected chip opacity
     else if (isSelected) {
-      updateChip(id.toString(), opacity: isVisible ? 1.0 : 0.0);
+      updateChip(id.toString(),
+          opacity: isVisible ? 1.0 : 0.0, showOutline: true);
     }
   }
 
@@ -221,6 +225,7 @@ class KeyPaintRect with KeyPaintChip {
     double rectStrokeWidthFactor = 50,
   }) {
     isOverlay = false;
+    showOutline = false;
     color = rectColor;
     opacity = rectOpacity;
     paintingStyle = rectPaintingStyle;
@@ -229,6 +234,7 @@ class KeyPaintRect with KeyPaintChip {
     strokeWidthFactor = rectStrokeWidthFactor;
   }
 
+  late bool showOutline;
   late double opacity;
   late PaintingStyle paintingStyle;
   late StrokeCap strokeCap;
