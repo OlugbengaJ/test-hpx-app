@@ -70,7 +70,7 @@ class KeyRRectPainter extends CustomPainter {
           if (keyPaintRect.showOutline) {
             // display outline stroke around the key to indicate selection.
             Paint paintStroke = Paint()
-              ..color = element.color.withOpacity(0.6)
+              ..color = element.color.withOpacity(0.4)
               ..style = PaintingStyle.stroke
               ..blendMode = BlendMode.color
               ..strokeWidth = 5 * zoomScale;
