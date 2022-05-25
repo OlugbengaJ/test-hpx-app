@@ -27,6 +27,12 @@ class ResizableProvider extends ChangeNotifier {
     initialPosition = Offset(areaWidth / 2, areaHeight / 2);
     height = areaHeight / 2;
     width = areaWidth / 2;
+    print(height);
+
+    print(areaHeight);
+    print(calculateSizeFromLocal().height);
+
+    
 
     double newTop = initialPosition.dy - height / 2;
     double newBottom = areaHeight - height - newTop;
@@ -60,7 +66,6 @@ class ResizableProvider extends ChangeNotifier {
 
   Size calculateSizeFromLocal(){
     RenderBox box = draggableKey.currentContext?.findRenderObject() as RenderBox;
-
     final boxSize = box.size;
     return boxSize;
   }
@@ -110,9 +115,7 @@ class ResizableProvider extends ChangeNotifier {
   void calculateWidgetSize({required final double top, required final double left, required final double bottom, required final double right,}) {    
     width = areaWidth - (left + right);
     height = areaHeight - (top + bottom);
-    print(width);
     notifyListeners();
-    print("Height: $height");
     calculateSizeFromLocal();
   }
 
