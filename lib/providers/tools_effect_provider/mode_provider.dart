@@ -135,7 +135,7 @@ List<PickerModel> moodList = [
 class ModeProvider extends ChangeNotifier {
   ToolsModeModel currentMode = ToolsModeModel(
       currentColor: moodThemesList.first.colorCode,
-      effects: EffectsModel(effectName: EnumModes.values),
+      effects: EffectsModel(effectName: EnumModes.mood),
       name: "Mood",
       value: EnumModes.mood,
       modeType: EnumModeType.layers,
