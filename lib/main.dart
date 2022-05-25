@@ -7,7 +7,6 @@ import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
-import 'package:hpx/widgets/components/zone_selector/zone_selector_provider.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +17,6 @@ void main() => runApp(
           ChangeNotifierProvider(create: (_) => ColorPickerProvider()),
           ChangeNotifierProvider(create: (_) => ModeProvider()),
           ChangeNotifierProvider(create: (_) => EffectProvider()),
-          ChangeNotifierProvider(create: (_) => ZoneSelectorProvider()),
           ChangeNotifierProvider(create: (context) => KeysProvider()),
           ChangeNotifierProvider(create: (context) => WorkspaceProvider()),
         ],
