@@ -73,10 +73,10 @@ KeyModel _updateKeyInfo(
   //   //   //(provider.animColors);
   //   // }
   // }
-  final layerIndex = layersProvider.index;
+  final layerIndex = layersProvider.listIndex;
   bool layerVisible = false;
-  if (layersProvider.stackedLayeritems.isNotEmpty) {
-    final layer = layersProvider.stackedLayeritems[layerIndex];
+  if (layersProvider.layeritems.isNotEmpty) {
+    final layer = layersProvider.layeritems[layerIndex];
     layerVisible = layer.visible;
   }
   keyModel.selectKey(isWidgetInZone, layerIndex, layerVisible);

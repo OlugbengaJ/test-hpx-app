@@ -270,7 +270,7 @@ class WorkspaceProvider with ChangeNotifier {
         // final layerModel =
         //     _layersProvider!.stackedLayeritems[_layersProvider!.index];
         // box2 = layerModel.controller.draggableKey.currentContext
-        final layerModel = _layersProvider!.getItem(_layersProvider!.listIndex);
+        // final layerModel = _layersProvider!.getItem(_layersProvider!.listIndex);
 
         box2 = _resizableProvider!.draggableKey.currentContext
             ?.findRenderObject() as RenderBox?;

@@ -10,10 +10,10 @@ import 'package:flutter/material.dart';
 class RPSCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    Paint paint_0_stroke = Paint()
+    Paint paint0Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint_0_stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint0Stroke.color = Colors.grey.withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.1755919, size.height * 0.4169526,
@@ -22,10 +22,10 @@ class RPSCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.003100338),
             topLeft: Radius.circular(size.width * 0.003100338),
             topRight: Radius.circular(size.width * 0.003100338)),
-        paint_0_stroke);
+        paint0Stroke);
 
-    Paint paint_0_fill = Paint()..style = PaintingStyle.fill;
-    paint_0_fill.color = Colors.black.withOpacity(1.0);
+    Paint paint0Fill = Paint()..style = PaintingStyle.fill;
+    paint0Fill.color = Colors.black.withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.1755919, size.height * 0.4169526,
@@ -34,7 +34,7 @@ class RPSCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.003100338),
             topLeft: Radius.circular(size.width * 0.003100338),
             topRight: Radius.circular(size.width * 0.003100338)),
-        paint_0_fill);
+        paint0Fill);
 
     Path path_1 = Path();
     path_1.moveTo(size.width * 0.1920924, size.height * 0.4307838);
@@ -76,14 +76,14 @@ class RPSCustomPainter extends CustomPainter {
     path_1.lineTo(size.width * 0.1920924, size.height * 0.4307838);
     path_1.close();
 
-    Paint paint_1_fill = Paint()..style = PaintingStyle.fill;
-    paint_1_fill.color = Colors.white.withOpacity(1.0);
-    canvas.drawPath(path_1, paint_1_fill);
+    Paint paint1Fill = Paint()..style = PaintingStyle.fill;
+    paint1Fill.color = Colors.white.withOpacity(1.0);
+    canvas.drawPath(path_1, paint1Fill);
 
-    Paint paint_2_stroke = Paint()
+    Paint paint2Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint_2_stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint2Stroke.color = Colors.grey.withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.1755919, size.height * 0.4684283,
@@ -92,10 +92,10 @@ class RPSCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.003100338),
             topLeft: Radius.circular(size.width * 0.003100338),
             topRight: Radius.circular(size.width * 0.003100338)),
-        paint_2_stroke);
+        paint2Stroke);
 
-    Paint paint_2_fill = Paint()..style = PaintingStyle.fill;
-    paint_2_fill.color = Colors.black.withOpacity(1.0);
+    Paint paint2Fill = Paint()..style = PaintingStyle.fill;
+    paint2Fill.color = Colors.black.withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.1755919, size.height * 0.4684283,
@@ -104,7 +104,7 @@ class RPSCustomPainter extends CustomPainter {
             bottomLeft: Radius.circular(size.width * 0.003100338),
             topLeft: Radius.circular(size.width * 0.003100338),
             topRight: Radius.circular(size.width * 0.003100338)),
-        paint_2_fill);
+        paint2Fill);
 
     Path path_3 = Path();
     path_3.moveTo(size.width * 0.1941939, size.height * 0.4947014);
@@ -309,14 +309,14 @@ class RPSCustomPainter extends CustomPainter {
         size.height * 0.4949623);
     path_3.close();
 
-    Paint paint_3_fill = Paint()..style = PaintingStyle.fill;
-    paint_3_fill.color = Colors.white.withOpacity(1.0);
-    canvas.drawPath(path_3, paint_3_fill);
+    Paint paint3Fill = Paint()..style = PaintingStyle.fill;
+    paint3Fill.color = Colors.white.withOpacity(1.0);
+    canvas.drawPath(path_3, paint3Fill);
 
-    // Paint paint_4_stroke = Paint()
+    // Paint paint4Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_4_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint4Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.1755919, size.height * 0.5205903,
@@ -325,10 +325,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_4_stroke);
+    //     paint4Stroke);
 
-    // Paint paint_4_fill = Paint()..style = PaintingStyle.fill;
-    // paint_4_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint4Fill = Paint()..style = PaintingStyle.fill;
+    // paint4Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.1755919, size.height * 0.5205903,
@@ -337,7 +337,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_4_fill);
+    //     paint4Fill);
 
     // Path path_5 = Path();
     // path_5.moveTo(size.width * 0.1856370, size.height * 0.5485518);
@@ -788,14 +788,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_5.lineTo(size.width * 0.2333833, size.height * 0.5412903);
     // path_5.close();
 
-    // Paint paint_5_fill = Paint()..style = PaintingStyle.fill;
-    // paint_5_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_5, paint_5_fill);
+    // Paint paint5Fill = Paint()..style = PaintingStyle.fill;
+    // paint5Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_5, paint5Fill);
 
-    // Paint paint_6_stroke = Paint()
+    // Paint paint6Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_6_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint6Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.1755919, size.height * 0.5720659,
@@ -804,10 +804,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_6_stroke);
+    //     paint6Stroke);
 
-    // Paint paint_6_fill = Paint()..style = PaintingStyle.fill;
-    // paint_6_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint6Fill = Paint()..style = PaintingStyle.fill;
+    // paint6Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.1755919, size.height * 0.5720659,
@@ -816,40 +816,40 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_6_fill);
+    //     paint6Fill);
 
     // Path path_7 = Path();
     // path_7.moveTo(size.width * 0.2373563, size.height * 0.5940769);
     // path_7.lineTo(size.width * 0.2339346, size.height * 0.5899108);
     // path_7.lineTo(size.width * 0.2305130, size.height * 0.5940769);
 
-    // Paint paint_7_stroke = Paint()
+    // Paint paint7Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = size.width * 0.0008455468;
-    // paint_7_stroke.color = Colors.white.withOpacity(1.0);
-    // paint_7_stroke.strokeCap = StrokeCap.round;
-    // paint_7_stroke.strokeJoin = StrokeJoin.round;
-    // canvas.drawPath(path_7, paint_7_stroke);
+    // paint7Stroke.color = Colors.white.withOpacity(1.0);
+    // paint7Stroke.strokeCap = StrokeCap.round;
+    // paint7Stroke.strokeJoin = StrokeJoin.round;
+    // canvas.drawPath(path_7, paint7Stroke);
 
-    // Paint paint_7_fill = Paint()..style = PaintingStyle.fill;
-    // paint_7_fill.color = Color(0xff000000).withOpacity(1.0);
-    // canvas.drawPath(path_7, paint_7_fill);
+    // Paint paint7Fill = Paint()..style = PaintingStyle.fill;
+    // paint7Fill.color = Color(0xff000000).withOpacity(1.0);
+    // canvas.drawPath(path_7, paint7Fill);
 
     // Path path_8 = Path();
     // path_8.moveTo(size.width * 0.2339346, size.height * 0.6015786);
     // path_8.lineTo(size.width * 0.2339346, size.height * 0.5900275);
 
-    // Paint paint_8_stroke = Paint()
+    // Paint paint8Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = size.width * 0.0008455468;
-    // paint_8_stroke.color = Colors.white.withOpacity(1.0);
-    // paint_8_stroke.strokeCap = StrokeCap.round;
-    // paint_8_stroke.strokeJoin = StrokeJoin.round;
-    // canvas.drawPath(path_8, paint_8_stroke);
+    // paint8Stroke.color = Colors.white.withOpacity(1.0);
+    // paint8Stroke.strokeCap = StrokeCap.round;
+    // paint8Stroke.strokeJoin = StrokeJoin.round;
+    // canvas.drawPath(path_8, paint8Stroke);
 
-    // Paint paint_8_fill = Paint()..style = PaintingStyle.fill;
-    // paint_8_fill.color = Color(0xff000000).withOpacity(1.0);
-    // canvas.drawPath(path_8, paint_8_fill);
+    // Paint paint8Fill = Paint()..style = PaintingStyle.fill;
+    // paint8Fill.color = Color(0xff000000).withOpacity(1.0);
+    // canvas.drawPath(path_8, paint8Fill);
 
     // Path path_9 = Path();
     // path_9.moveTo(size.width * 0.2013303, size.height * 0.6000275);
@@ -1099,14 +1099,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_9.lineTo(size.width * 0.2216280, size.height * 0.5983391);
     // path_9.close();
 
-    // Paint paint_9_fill = Paint()..style = PaintingStyle.fill;
-    // paint_9_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_9, paint_9_fill);
+    // Paint paint9Fill = Paint()..style = PaintingStyle.fill;
+    // paint9Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_9, paint9Fill);
 
-    // Paint paint_10_stroke = Paint()
+    // Paint paint10Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_10_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint10Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2122322, size.height * 0.4169526,
@@ -1115,10 +1115,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_10_stroke);
+    //     paint10Stroke);
 
-    // Paint paint_10_fill = Paint()..style = PaintingStyle.fill;
-    // paint_10_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint10Fill = Paint()..style = PaintingStyle.fill;
+    // paint10Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2122322, size.height * 0.4169526,
@@ -1127,7 +1127,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_10_fill);
+    //     paint10Fill);
 
     // Path path_11 = Path();
     // path_11.moveTo(size.width * 0.2309696, size.height * 0.4447495);
@@ -1140,14 +1140,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_11.lineTo(size.width * 0.2309696, size.height * 0.4447495);
     // path_11.close();
 
-    // Paint paint_11_fill = Paint()..style = PaintingStyle.fill;
-    // paint_11_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_11, paint_11_fill);
+    // Paint paint11Fill = Paint()..style = PaintingStyle.fill;
+    // paint11Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_11, paint11Fill);
 
-    // Paint paint_12_stroke = Paint()
+    // Paint paint12Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_12_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint12Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2274521, size.height * 0.4684283,
@@ -1156,10 +1156,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_12_stroke);
+    //     paint12Stroke);
 
-    // Paint paint_12_fill = Paint()..style = PaintingStyle.fill;
-    // paint_12_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint12Fill = Paint()..style = PaintingStyle.fill;
+    // paint12Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2274521, size.height * 0.4684283,
@@ -1168,7 +1168,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_12_fill);
+    //     paint12Fill);
 
     // Path path_13 = Path();
     // path_13.moveTo(size.width * 0.2527170, size.height * 0.4915031);
@@ -1252,14 +1252,14 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.4948250);
     // path_13.close();
 
-    // Paint paint_13_fill = Paint()..style = PaintingStyle.fill;
-    // paint_13_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_13, paint_13_fill);
+    // Paint paint13Fill = Paint()..style = PaintingStyle.fill;
+    // paint13Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_13, paint13Fill);
 
-    // Paint paint_14_stroke = Paint()
+    // Paint paint14Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_14_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint14Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2432356, size.height * 0.5205903,
@@ -1268,10 +1268,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_14_stroke);
+    //     paint14Stroke);
 
-    // Paint paint_14_fill = Paint()..style = PaintingStyle.fill;
-    // paint_14_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint14Fill = Paint()..style = PaintingStyle.fill;
+    // paint14Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2432356, size.height * 0.5205903,
@@ -1280,7 +1280,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_14_fill);
+    //     paint14Fill);
 
     // Path path_15 = Path();
     // path_15.moveTo(size.width * 0.2665614, size.height * 0.5483871);
@@ -1299,14 +1299,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_15.lineTo(size.width * 0.2627396, size.height * 0.5452025);
     // path_15.close();
 
-    // Paint paint_15_fill = Paint()..style = PaintingStyle.fill;
-    // paint_15_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_15, paint_15_fill);
+    // Paint paint15Fill = Paint()..style = PaintingStyle.fill;
+    // paint15Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_15, paint15Fill);
 
-    // Paint paint_16_stroke = Paint()
+    // Paint paint16Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_16_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint16Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2669109, size.height * 0.5720659,
@@ -1315,10 +1315,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_16_stroke);
+    //     paint16Stroke);
 
-    // Paint paint_16_fill = Paint()..style = PaintingStyle.fill;
-    // paint_16_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint16Fill = Paint()..style = PaintingStyle.fill;
+    // paint16Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2669109, size.height * 0.5720659,
@@ -1327,7 +1327,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_16_fill);
+    //     paint16Fill);
 
     // Path path_17 = Path();
     // path_17.moveTo(size.width * 0.2841150, size.height * 0.5998627);
@@ -1343,14 +1343,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_17.lineTo(size.width * 0.2841150, size.height * 0.5998627);
     // path_17.close();
 
-    // Paint paint_17_fill = Paint()..style = PaintingStyle.fill;
-    // paint_17_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_17, paint_17_fill);
+    // Paint paint17Fill = Paint()..style = PaintingStyle.fill;
+    // paint17Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_17, paint17Fill);
 
-    // Paint paint_18_stroke = Paint()
+    // Paint paint18Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_18_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint18Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.1755919, size.height * 0.6228552,
@@ -1359,10 +1359,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_18_stroke);
+    //     paint18Stroke);
 
-    // Paint paint_18_fill = Paint()..style = PaintingStyle.fill;
-    // paint_18_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint18Fill = Paint()..style = PaintingStyle.fill;
+    // paint18Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.1755919, size.height * 0.6228552,
@@ -1371,7 +1371,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_18_fill);
+    //     paint18Fill);
 
     // Path path_19 = Path();
     // path_19.moveTo(size.width * 0.1918377, size.height * 0.6508167);
@@ -1505,14 +1505,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_19.lineTo(size.width * 0.2040699, size.height * 0.6506520);
     // path_19.close();
 
-    // Paint paint_19_fill = Paint()..style = PaintingStyle.fill;
-    // paint_19_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_19, paint_19_fill);
+    // Paint paint19Fill = Paint()..style = PaintingStyle.fill;
+    // paint19Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_19, paint19Fill);
 
-    // Paint paint_20_stroke = Paint()
+    // Paint paint20Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_20_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint20Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2573281, size.height * 0.4169526,
@@ -1521,10 +1521,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_20_stroke);
+    //     paint20Stroke);
 
-    // Paint paint_20_fill = Paint()..style = PaintingStyle.fill;
-    // paint_20_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint20Fill = Paint()..style = PaintingStyle.fill;
+    // paint20Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2573281, size.height * 0.4169526,
@@ -1533,7 +1533,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_20_fill);
+    //     paint20Fill);
 
     // Path path_21 = Path();
     // path_21.moveTo(size.width * 0.2744645, size.height * 0.4447495);
@@ -1588,14 +1588,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_21.lineTo(size.width * 0.2744645, size.height * 0.4447495);
     // path_21.close();
 
-    // Paint paint_21_fill = Paint()..style = PaintingStyle.fill;
-    // paint_21_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_21, paint_21_fill);
+    // Paint paint21Fill = Paint()..style = PaintingStyle.fill;
+    // paint21Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_21, paint21Fill);
 
-    // Paint paint_22_stroke = Paint()
+    // Paint paint22Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_22_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint22Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2725479, size.height * 0.4684283,
@@ -1604,10 +1604,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_22_stroke);
+    //     paint22Stroke);
 
-    // Paint paint_22_fill = Paint()..style = PaintingStyle.fill;
-    // paint_22_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint22Fill = Paint()..style = PaintingStyle.fill;
+    // paint22Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2725479, size.height * 0.4684283,
@@ -1616,7 +1616,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_22_fill);
+    //     paint22Fill);
 
     // Path path_23 = Path();
     // path_23.moveTo(size.width * 0.2919166, size.height * 0.4962251);
@@ -1635,14 +1635,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_23.lineTo(size.width * 0.2919166, size.height * 0.4962251);
     // path_23.close();
 
-    // Paint paint_23_fill = Paint()..style = PaintingStyle.fill;
-    // paint_23_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_23, paint_23_fill);
+    // Paint paint23Fill = Paint()..style = PaintingStyle.fill;
+    // paint23Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_23, paint23Fill);
 
-    // Paint paint_24_stroke = Paint()
+    // Paint paint24Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_24_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint24Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2883315, size.height * 0.5205903,
@@ -1651,10 +1651,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_24_stroke);
+    //     paint24Stroke);
 
-    // Paint paint_24_fill = Paint()..style = PaintingStyle.fill;
-    // paint_24_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint24Fill = Paint()..style = PaintingStyle.fill;
+    // paint24Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2883315, size.height * 0.5205903,
@@ -1663,7 +1663,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_24_fill);
+    //     paint24Fill);
 
     // Path path_25 = Path();
     // path_25.moveTo(size.width * 0.3086246, size.height * 0.5485381);
@@ -1755,14 +1755,14 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.5485381);
     // path_25.close();
 
-    // Paint paint_25_fill = Paint()..style = PaintingStyle.fill;
-    // paint_25_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_25, paint_25_fill);
+    // Paint paint25Fill = Paint()..style = PaintingStyle.fill;
+    // paint25Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_25, paint25Fill);
 
-    // Paint paint_26_stroke = Paint()
+    // Paint paint26Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_26_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint26Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3120068, size.height * 0.5720659,
@@ -1771,10 +1771,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_26_stroke);
+    //     paint26Stroke);
 
-    // Paint paint_26_fill = Paint()..style = PaintingStyle.fill;
-    // paint_26_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint26Fill = Paint()..style = PaintingStyle.fill;
+    // paint26Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3120068, size.height * 0.5720659,
@@ -1783,7 +1783,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_26_fill);
+    //     paint26Fill);
 
     // Path path_27 = Path();
     // path_27.moveTo(size.width * 0.3363247, size.height * 0.5904324);
@@ -1801,14 +1801,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_27.lineTo(size.width * 0.3363247, size.height * 0.5904324);
     // path_27.close();
 
-    // Paint paint_27_fill = Paint()..style = PaintingStyle.fill;
-    // paint_27_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_27, paint_27_fill);
+    // Paint paint27Fill = Paint()..style = PaintingStyle.fill;
+    // paint27Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_27, paint27Fill);
 
-    // Paint paint_28_stroke = Paint()
+    // Paint paint28Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_28_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint28Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2223788, size.height * 0.6228552,
@@ -1817,10 +1817,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_28_stroke);
+    //     paint28Stroke);
 
-    // Paint paint_28_fill = Paint()..style = PaintingStyle.fill;
-    // paint_28_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint28Fill = Paint()..style = PaintingStyle.fill;
+    // paint28Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2223788, size.height * 0.6228552,
@@ -1829,7 +1829,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_28_fill);
+    //     paint28Fill);
 
     // Path path_29 = Path();
     // path_29.moveTo(size.width * 0.2403946, size.height * 0.6429650);
@@ -1913,14 +1913,14 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.6433905);
     // path_29.close();
 
-    // Paint paint_29_fill = Paint()..style = PaintingStyle.fill;
-    // paint_29_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_29, paint_29_fill);
+    // Paint paint29Fill = Paint()..style = PaintingStyle.fill;
+    // paint29Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_29, paint29Fill);
 
-    // Paint paint_30_stroke = Paint()
+    // Paint paint30Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_30_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint30Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3024239, size.height * 0.4169526,
@@ -1929,10 +1929,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_30_stroke);
+    //     paint30Stroke);
 
-    // Paint paint_30_fill = Paint()..style = PaintingStyle.fill;
-    // paint_30_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint30Fill = Paint()..style = PaintingStyle.fill;
+    // paint30Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3024239, size.height * 0.4169526,
@@ -1941,7 +1941,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_30_fill);
+    //     paint30Fill);
 
     // Path path_31 = Path();
     // path_31.moveTo(size.width * 0.3224126, size.height * 0.4449142);
@@ -2036,14 +2036,14 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.4449142);
     // path_31.close();
 
-    // Paint paint_31_fill = Paint()..style = PaintingStyle.fill;
-    // paint_31_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_31, paint_31_fill);
+    // Paint paint31Fill = Paint()..style = PaintingStyle.fill;
+    // paint31Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_31, paint31Fill);
 
-    // Paint paint_32_stroke = Paint()
+    // Paint paint32Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_32_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint32Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3176437, size.height * 0.4684283,
@@ -2052,10 +2052,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_32_stroke);
+    //     paint32Stroke);
 
-    // Paint paint_32_fill = Paint()..style = PaintingStyle.fill;
-    // paint_32_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint32Fill = Paint()..style = PaintingStyle.fill;
+    // paint32Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3176437, size.height * 0.4684283,
@@ -2064,7 +2064,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_32_fill);
+    //     paint32Fill);
 
     // Path path_33 = Path();
     // path_33.moveTo(size.width * 0.3409019, size.height * 0.4883596);
@@ -2082,14 +2082,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_33.lineTo(size.width * 0.3409019, size.height * 0.4883596);
     // path_33.close();
 
-    // Paint paint_33_fill = Paint()..style = PaintingStyle.fill;
-    // paint_33_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_33, paint_33_fill);
+    // Paint paint33Fill = Paint()..style = PaintingStyle.fill;
+    // paint33Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_33, paint33Fill);
 
-    // Paint paint_34_stroke = Paint()
+    // Paint paint34Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_34_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint34Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3334273, size.height * 0.5205903,
@@ -2098,10 +2098,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_34_stroke);
+    //     paint34Stroke);
 
-    // Paint paint_34_fill = Paint()..style = PaintingStyle.fill;
-    // paint_34_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint34Fill = Paint()..style = PaintingStyle.fill;
+    // paint34Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3334273, size.height * 0.5205903,
@@ -2110,7 +2110,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_34_fill);
+    //     paint34Fill);
 
     // Path path_35 = Path();
     // path_35.moveTo(size.width * 0.3509583, size.height * 0.5483871);
@@ -2152,14 +2152,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_35.lineTo(size.width * 0.3523675, size.height * 0.5468360);
     // path_35.close();
 
-    // Paint paint_35_fill = Paint()..style = PaintingStyle.fill;
-    // paint_35_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_35, paint_35_fill);
+    // Paint paint35Fill = Paint()..style = PaintingStyle.fill;
+    // paint35Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_35, paint35Fill);
 
-    // Paint paint_36_stroke = Paint()
+    // Paint paint36Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_36_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint36Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3571026, size.height * 0.5720659,
@@ -2168,10 +2168,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_36_stroke);
+    //     paint36Stroke);
 
-    // Paint paint_36_fill = Paint()..style = PaintingStyle.fill;
-    // paint_36_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint36Fill = Paint()..style = PaintingStyle.fill;
+    // paint36Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3571026, size.height * 0.5720659,
@@ -2180,7 +2180,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_36_fill);
+    //     paint36Fill);
 
     // Path path_37 = Path();
     // path_37.moveTo(size.width * 0.3783089, size.height * 0.6000275);
@@ -2244,14 +2244,14 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.6000275);
     // path_37.close();
 
-    // Paint paint_37_fill = Paint()..style = PaintingStyle.fill;
-    // paint_37_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_37, paint_37_fill);
+    // Paint paint37Fill = Paint()..style = PaintingStyle.fill;
+    // paint37Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_37, paint37Fill);
 
-    // Paint paint_38_stroke = Paint()
+    // Paint paint38Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_38_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint38Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2702931, size.height * 0.6262869,
@@ -2260,10 +2260,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_38_stroke);
+    //     paint38Stroke);
 
-    // Paint paint_38_fill = Paint()..style = PaintingStyle.fill;
-    // paint_38_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint38Fill = Paint()..style = PaintingStyle.fill;
+    // paint38Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2702931, size.height * 0.6262869,
@@ -2272,7 +2272,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_38_fill);
+    //     paint38Fill);
 
     // Path path_39 = Path();
     // path_39.moveTo(size.width * 0.2882959, size.height * 0.6407522);
@@ -2282,9 +2282,9 @@ class RPSCustomPainter extends CustomPainter {
     // path_39.lineTo(size.width * 0.2882959, size.height * 0.6407522);
     // path_39.close();
 
-    // Paint paint_39_fill = Paint()..style = PaintingStyle.fill;
-    // paint_39_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_39, paint_39_fill);
+    // Paint paint39Fill = Paint()..style = PaintingStyle.fill;
+    // paint39Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_39, paint39Fill);
 
     // Path path_40 = Path();
     // path_40.moveTo(size.width * 0.2976325, size.height * 0.6396706);
@@ -2294,9 +2294,9 @@ class RPSCustomPainter extends CustomPainter {
     // path_40.lineTo(size.width * 0.2976325, size.height * 0.6396706);
     // path_40.close();
 
-    // Paint paint_40_fill = Paint()..style = PaintingStyle.fill;
-    // paint_40_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_40, paint_40_fill);
+    // Paint paint40Fill = Paint()..style = PaintingStyle.fill;
+    // paint40Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_40, paint40Fill);
 
     // Path path_41 = Path();
     // path_41.moveTo(size.width * 0.2882959, size.height * 0.6488634);
@@ -2306,9 +2306,9 @@ class RPSCustomPainter extends CustomPainter {
     // path_41.lineTo(size.width * 0.2882959, size.height * 0.6488634);
     // path_41.close();
 
-    // Paint paint_41_fill = Paint()..style = PaintingStyle.fill;
-    // paint_41_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_41, paint_41_fill);
+    // Paint paint41Fill = Paint()..style = PaintingStyle.fill;
+    // paint41Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_41, paint41Fill);
 
     // Path path_42 = Path();
     // path_42.moveTo(size.width * 0.2976325, size.height * 0.6488634);
@@ -2318,14 +2318,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_42.lineTo(size.width * 0.2976325, size.height * 0.6488634);
     // path_42.close();
 
-    // Paint paint_42_fill = Paint()..style = PaintingStyle.fill;
-    // paint_42_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_42, paint_42_fill);
+    // Paint paint42Fill = Paint()..style = PaintingStyle.fill;
+    // paint42Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_42, paint42Fill);
 
-    // Paint paint_43_stroke = Paint()
+    // Paint paint43Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_43_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint43Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3475197, size.height * 0.4169526,
@@ -2334,10 +2334,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_43_stroke);
+    //     paint43Stroke);
 
-    // Paint paint_43_fill = Paint()..style = PaintingStyle.fill;
-    // paint_43_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint43Fill = Paint()..style = PaintingStyle.fill;
+    // paint43Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3475197, size.height * 0.4169526,
@@ -2346,7 +2346,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_43_fill);
+    //     paint43Fill);
 
     // Path path_44 = Path();
     // path_44.moveTo(size.width * 0.3684442, size.height * 0.4447495);
@@ -2368,14 +2368,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_44.lineTo(size.width * 0.3659865, size.height * 0.4412354);
     // path_44.close();
 
-    // Paint paint_44_fill = Paint()..style = PaintingStyle.fill;
-    // paint_44_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_44, paint_44_fill);
+    // Paint paint44Fill = Paint()..style = PaintingStyle.fill;
+    // paint44Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_44, paint44Fill);
 
-    // Paint paint_45_stroke = Paint()
+    // Paint paint45Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_45_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint45Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3627396, size.height * 0.4684283,
@@ -2384,10 +2384,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_45_stroke);
+    //     paint45Stroke);
 
-    // Paint paint_45_fill = Paint()..style = PaintingStyle.fill;
-    // paint_45_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint45Fill = Paint()..style = PaintingStyle.fill;
+    // paint45Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3627396, size.height * 0.4684283,
@@ -2396,7 +2396,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_45_fill);
+    //     paint45Fill);
 
     // Path path_46 = Path();
     // path_46.moveTo(size.width * 0.3865051, size.height * 0.4962251);
@@ -2443,14 +2443,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_46.lineTo(size.width * 0.3815784, size.height * 0.4883734);
     // path_46.close();
 
-    // Paint paint_46_fill = Paint()..style = PaintingStyle.fill;
-    // paint_46_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_46, paint_46_fill);
+    // Paint paint46Fill = Paint()..style = PaintingStyle.fill;
+    // paint46Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_46, paint46Fill);
 
-    // Paint paint_47_stroke = Paint()
+    // Paint paint47Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_47_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint47Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3785231, size.height * 0.5205903,
@@ -2459,10 +2459,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_47_stroke);
+    //     paint47Stroke);
 
-    // Paint paint_47_fill = Paint()..style = PaintingStyle.fill;
-    // paint_47_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint47Fill = Paint()..style = PaintingStyle.fill;
+    // paint47Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3785231, size.height * 0.5205903,
@@ -2471,7 +2471,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_47_fill);
+    //     paint47Fill);
 
     // Path path_48 = Path();
     // path_48.moveTo(size.width * 0.4017813, size.height * 0.5405216);
@@ -2487,14 +2487,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_48.lineTo(size.width * 0.4017813, size.height * 0.5405216);
     // path_48.close();
 
-    // Paint paint_48_fill = Paint()..style = PaintingStyle.fill;
-    // paint_48_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_48, paint_48_fill);
+    // Paint paint48Fill = Paint()..style = PaintingStyle.fill;
+    // paint48Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_48, paint48Fill);
 
-    // Paint paint_49_stroke = Paint()
+    // Paint paint49Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_49_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint49Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4021984, size.height * 0.5720659,
@@ -2503,10 +2503,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_49_stroke);
+    //     paint49Stroke);
 
-    // Paint paint_49_fill = Paint()..style = PaintingStyle.fill;
-    // paint_49_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint49Fill = Paint()..style = PaintingStyle.fill;
+    // paint49Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4021984, size.height * 0.5720659,
@@ -2515,7 +2515,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_49_fill);
+    //     paint49Fill);
 
     // Path path_50 = Path();
     // path_50.moveTo(size.width * 0.4255242, size.height * 0.5904324);
@@ -2528,14 +2528,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_50.lineTo(size.width * 0.4255242, size.height * 0.5904324);
     // path_50.close();
 
-    // Paint paint_50_fill = Paint()..style = PaintingStyle.fill;
-    // paint_50_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_50, paint_50_fill);
+    // Paint paint50Fill = Paint()..style = PaintingStyle.fill;
+    // paint50Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_50, paint50Fill);
 
-    // Paint paint_51_stroke = Paint()
+    // Paint paint51Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_51_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint51Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3125705, size.height * 0.6228552,
@@ -2544,10 +2544,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_51_stroke);
+    //     paint51Stroke);
 
-    // Paint paint_51_fill = Paint()..style = PaintingStyle.fill;
-    // paint_51_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint51Fill = Paint()..style = PaintingStyle.fill;
+    // paint51Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3125705, size.height * 0.6228552,
@@ -2556,7 +2556,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_51_fill);
+    //     paint51Fill);
 
     // Path path_52 = Path();
     // path_52.moveTo(size.width * 0.3296731, size.height * 0.6433905);
@@ -2702,14 +2702,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_52.lineTo(size.width * 0.3394696, size.height * 0.6491283);
     // path_52.close();
 
-    // Paint paint_52_fill = Paint()..style = PaintingStyle.fill;
-    // paint_52_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_52, paint_52_fill);
+    // Paint paint52Fill = Paint()..style = PaintingStyle.fill;
+    // paint52Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_52, paint52Fill);
 
-    // Paint paint_53_stroke = Paint()
+    // Paint paint53Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_53_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint53Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3576663, size.height * 0.6228552,
@@ -2718,10 +2718,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_53_stroke);
+    //     paint53Stroke);
 
-    // Paint paint_53_fill = Paint()..style = PaintingStyle.fill;
-    // paint_53_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint53Fill = Paint()..style = PaintingStyle.fill;
+    // paint53Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3576663, size.height * 0.6228552,
@@ -2730,12 +2730,12 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_53_fill);
+    //     paint53Fill);
 
-    // Paint paint_54_stroke = Paint()
+    // Paint paint54Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_54_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint54Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3926156, size.height * 0.4169526,
@@ -2744,10 +2744,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_54_stroke);
+    //     paint54Stroke);
 
-    // Paint paint_54_fill = Paint()..style = PaintingStyle.fill;
-    // paint_54_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint54Fill = Paint()..style = PaintingStyle.fill;
+    // paint54Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3926156, size.height * 0.4169526,
@@ -2756,7 +2756,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_54_fill);
+    //     paint54Fill);
 
     // Path path_55 = Path();
     // path_55.moveTo(size.width * 0.4126268, size.height * 0.4449142);
@@ -2825,14 +2825,14 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.4449142);
     // path_55.close();
 
-    // Paint paint_55_fill = Paint()..style = PaintingStyle.fill;
-    // paint_55_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_55, paint_55_fill);
+    // Paint paint55Fill = Paint()..style = PaintingStyle.fill;
+    // paint55Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_55, paint55Fill);
 
-    // Paint paint_56_stroke = Paint()
+    // Paint paint56Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_56_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint56Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4078354, size.height * 0.4684283,
@@ -2841,10 +2841,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_56_stroke);
+    //     paint56Stroke);
 
-    // Paint paint_56_fill = Paint()..style = PaintingStyle.fill;
-    // paint_56_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint56Fill = Paint()..style = PaintingStyle.fill;
+    // paint56Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4078354, size.height * 0.4684283,
@@ -2853,7 +2853,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_56_fill);
+    //     paint56Fill);
 
     // Path path_57 = Path();
     // path_57.moveTo(size.width * 0.4273506, size.height * 0.4962251);
@@ -2867,14 +2867,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_57.lineTo(size.width * 0.4273506, size.height * 0.4962251);
     // path_57.close();
 
-    // Paint paint_57_fill = Paint()..style = PaintingStyle.fill;
-    // paint_57_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_57, paint_57_fill);
+    // Paint paint57Fill = Paint()..style = PaintingStyle.fill;
+    // paint57Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_57, paint57Fill);
 
-    // Paint paint_58_stroke = Paint()
+    // Paint paint58Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_58_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint58Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4236189, size.height * 0.5205903,
@@ -2883,10 +2883,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_58_stroke);
+    //     paint58Stroke);
 
-    // Paint paint_58_fill = Paint()..style = PaintingStyle.fill;
-    // paint_58_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint58Fill = Paint()..style = PaintingStyle.fill;
+    // paint58Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4236189, size.height * 0.5205903,
@@ -2895,7 +2895,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_58_fill);
+    //     paint58Fill);
 
     // Path path_59 = Path();
     // path_59.moveTo(size.width * 0.4446223, size.height * 0.5445985);
@@ -2963,14 +2963,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_59.lineTo(size.width * 0.4446223, size.height * 0.5445985);
     // path_59.close();
 
-    // Paint paint_59_fill = Paint()..style = PaintingStyle.fill;
-    // paint_59_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_59, paint_59_fill);
+    // Paint paint59Fill = Paint()..style = PaintingStyle.fill;
+    // paint59Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_59, paint59Fill);
 
-    // Paint paint_60_stroke = Paint()
+    // Paint paint60Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_60_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint60Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4472943, size.height * 0.5720659,
@@ -2979,10 +2979,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_60_stroke);
+    //     paint60Stroke);
 
-    // Paint paint_60_fill = Paint()..style = PaintingStyle.fill;
-    // paint_60_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint60Fill = Paint()..style = PaintingStyle.fill;
+    // paint60Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4472943, size.height * 0.5720659,
@@ -2991,7 +2991,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_60_fill);
+    //     paint60Fill);
 
     // Path path_61 = Path();
     // path_61.moveTo(size.width * 0.4648253, size.height * 0.5998627);
@@ -3066,14 +3066,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_61.lineTo(size.width * 0.4662232, size.height * 0.5983802);
     // path_61.close();
 
-    // Paint paint_61_fill = Paint()..style = PaintingStyle.fill;
-    // paint_61_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_61, paint_61_fill);
+    // Paint paint61Fill = Paint()..style = PaintingStyle.fill;
+    // paint61Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_61, paint61Fill);
 
-    // Paint paint_62_stroke = Paint()
+    // Paint paint62Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_62_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint62Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4377114, size.height * 0.4169526,
@@ -3082,10 +3082,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_62_stroke);
+    //     paint62Stroke);
 
-    // Paint paint_62_fill = Paint()..style = PaintingStyle.fill;
-    // paint_62_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint62Fill = Paint()..style = PaintingStyle.fill;
+    // paint62Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4377114, size.height * 0.4169526,
@@ -3094,7 +3094,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_62_fill);
+    //     paint62Fill);
 
     // Path path_63 = Path();
     // path_63.moveTo(size.width * 0.4583427, size.height * 0.4387234);
@@ -3187,14 +3187,14 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.4434592);
     // path_63.close();
 
-    // Paint paint_63_fill = Paint()..style = PaintingStyle.fill;
-    // paint_63_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_63, paint_63_fill);
+    // Paint paint63Fill = Paint()..style = PaintingStyle.fill;
+    // paint63Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_63, paint63Fill);
 
-    // Paint paint_64_stroke = Paint()
+    // Paint paint64Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_64_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint64Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4529312, size.height * 0.4684283,
@@ -3203,10 +3203,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_64_stroke);
+    //     paint64Stroke);
 
-    // Paint paint_64_fill = Paint()..style = PaintingStyle.fill;
-    // paint_64_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint64Fill = Paint()..style = PaintingStyle.fill;
+    // paint64Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4529312, size.height * 0.4684283,
@@ -3215,7 +3215,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_64_fill);
+    //     paint64Fill);
 
     // Path path_65 = Path();
     // path_65.moveTo(size.width * 0.4727170, size.height * 0.4962251);
@@ -3230,14 +3230,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_65.lineTo(size.width * 0.4727170, size.height * 0.4962251);
     // path_65.close();
 
-    // Paint paint_65_fill = Paint()..style = PaintingStyle.fill;
-    // paint_65_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_65, paint_65_fill);
+    // Paint paint65Fill = Paint()..style = PaintingStyle.fill;
+    // paint65Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_65, paint65Fill);
 
-    // Paint paint_66_stroke = Paint()
+    // Paint paint66Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_66_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint66Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4687148, size.height * 0.5205903,
@@ -3246,10 +3246,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_66_stroke);
+    //     paint66Stroke);
 
-    // Paint paint_66_fill = Paint()..style = PaintingStyle.fill;
-    // paint_66_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint66Fill = Paint()..style = PaintingStyle.fill;
+    // paint66Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4687148, size.height * 0.5205903,
@@ -3258,7 +3258,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_66_fill);
+    //     paint66Fill);
 
     // Path path_67 = Path();
     // path_67.moveTo(size.width * 0.4914205, size.height * 0.5389568);
@@ -3276,14 +3276,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_67.lineTo(size.width * 0.4914205, size.height * 0.5389568);
     // path_67.close();
 
-    // Paint paint_67_fill = Paint()..style = PaintingStyle.fill;
-    // paint_67_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_67, paint_67_fill);
+    // Paint paint67Fill = Paint()..style = PaintingStyle.fill;
+    // paint67Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_67, paint67Fill);
 
-    // Paint paint_68_stroke = Paint()
+    // Paint paint68Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_68_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint68Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4923901, size.height * 0.5720659,
@@ -3292,10 +3292,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_68_stroke);
+    //     paint68Stroke);
 
-    // Paint paint_68_fill = Paint()..style = PaintingStyle.fill;
-    // paint_68_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint68Fill = Paint()..style = PaintingStyle.fill;
+    // paint68Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4923901, size.height * 0.5720659,
@@ -3304,7 +3304,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_68_fill);
+    //     paint68Fill);
 
     // Path path_69 = Path();
     // path_69.moveTo(size.width * 0.5099211, size.height * 0.5998627);
@@ -3320,14 +3320,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_69.lineTo(size.width * 0.5099211, size.height * 0.5998627);
     // path_69.close();
 
-    // Paint paint_69_fill = Paint()..style = PaintingStyle.fill;
-    // paint_69_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_69, paint_69_fill);
+    // Paint paint69Fill = Paint()..style = PaintingStyle.fill;
+    // paint69Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_69, paint69Fill);
 
-    // Paint paint_70_stroke = Paint()
+    // Paint paint70Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_70_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint70Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4828072, size.height * 0.4169526,
@@ -3336,10 +3336,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_70_stroke);
+    //     paint70Stroke);
 
-    // Paint paint_70_fill = Paint()..style = PaintingStyle.fill;
-    // paint_70_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint70Fill = Paint()..style = PaintingStyle.fill;
+    // paint70Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4828072, size.height * 0.4169526,
@@ -3348,7 +3348,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_70_fill);
+    //     paint70Fill);
 
     // Path path_71 = Path();
     // path_71.moveTo(size.width * 0.5008117, size.height * 0.4447495);
@@ -3361,14 +3361,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_71.lineTo(size.width * 0.5008117, size.height * 0.4447495);
     // path_71.close();
 
-    // Paint paint_71_fill = Paint()..style = PaintingStyle.fill;
-    // paint_71_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_71, paint_71_fill);
+    // Paint paint71Fill = Paint()..style = PaintingStyle.fill;
+    // paint71Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_71, paint71Fill);
 
-    // Paint paint_72_stroke = Paint()
+    // Paint paint72Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_72_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint72Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4980271, size.height * 0.4684283,
@@ -3377,10 +3377,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_72_stroke);
+    //     paint72Stroke);
 
-    // Paint paint_72_fill = Paint()..style = PaintingStyle.fill;
-    // paint_72_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint72Fill = Paint()..style = PaintingStyle.fill;
+    // paint72Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4980271, size.height * 0.4684283,
@@ -3389,7 +3389,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_72_fill);
+    //     paint72Fill);
 
     // Path path_73 = Path();
     // path_73.moveTo(size.width * 0.5188952, size.height * 0.4963898);
@@ -3429,14 +3429,14 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.4963898);
     // path_73.close();
 
-    // Paint paint_73_fill = Paint()..style = PaintingStyle.fill;
-    // paint_73_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_73, paint_73_fill);
+    // Paint paint73Fill = Paint()..style = PaintingStyle.fill;
+    // paint73Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_73, paint73Fill);
 
-    // Paint paint_74_stroke = Paint()
+    // Paint paint74Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_74_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint74Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5138106, size.height * 0.5205903,
@@ -3445,10 +3445,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_74_stroke);
+    //     paint74Stroke);
 
-    // Paint paint_74_fill = Paint()..style = PaintingStyle.fill;
-    // paint_74_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint74Fill = Paint()..style = PaintingStyle.fill;
+    // paint74Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5138106, size.height * 0.5205903,
@@ -3457,7 +3457,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_74_fill);
+    //     paint74Fill);
 
     // Path path_75 = Path();
     // path_75.moveTo(size.width * 0.5331567, size.height * 0.5485518);
@@ -3495,14 +3495,14 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.5485518);
     // path_75.close();
 
-    // Paint paint_75_fill = Paint()..style = PaintingStyle.fill;
-    // paint_75_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_75, paint_75_fill);
+    // Paint paint75Fill = Paint()..style = PaintingStyle.fill;
+    // paint75Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_75, paint75Fill);
 
-    // Paint paint_76_stroke = Paint()
+    // Paint paint76Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_76_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint76Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5374859, size.height * 0.5720659,
@@ -3511,10 +3511,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_76_stroke);
+    //     paint76Stroke);
 
-    // Paint paint_76_fill = Paint()..style = PaintingStyle.fill;
-    // paint_76_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint76Fill = Paint()..style = PaintingStyle.fill;
+    // paint76Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5374859, size.height * 0.5720659,
@@ -3523,7 +3523,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_76_fill);
+    //     paint76Fill);
 
     // Path path_77 = Path();
     // path_77.moveTo(size.width * 0.5550169, size.height * 0.5998627);
@@ -3541,14 +3541,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_77.lineTo(size.width * 0.5550169, size.height * 0.5998627);
     // path_77.close();
 
-    // Paint paint_77_fill = Paint()..style = PaintingStyle.fill;
-    // paint_77_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_77, paint_77_fill);
+    // Paint paint77Fill = Paint()..style = PaintingStyle.fill;
+    // paint77Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_77, paint77Fill);
 
-    // Paint paint_78_stroke = Paint()
+    // Paint paint78Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_78_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint78Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5279030, size.height * 0.4169526,
@@ -3557,10 +3557,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_78_stroke);
+    //     paint78Stroke);
 
-    // Paint paint_78_fill = Paint()..style = PaintingStyle.fill;
-    // paint_78_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint78Fill = Paint()..style = PaintingStyle.fill;
+    // paint78Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5279030, size.height * 0.4169526,
@@ -3569,7 +3569,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_78_fill);
+    //     paint78Fill);
 
     // Path path_79 = Path();
     // path_79.moveTo(size.width * 0.5480158, size.height * 0.4449142);
@@ -3691,14 +3691,14 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.4434454);
     // path_79.close();
 
-    // Paint paint_79_fill = Paint()..style = PaintingStyle.fill;
-    // paint_79_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_79, paint_79_fill);
+    // Paint paint79Fill = Paint()..style = PaintingStyle.fill;
+    // paint79Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_79, paint79Fill);
 
-    // Paint paint_80_stroke = Paint()
+    // Paint paint80Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_80_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint80Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5431229, size.height * 0.4684283,
@@ -3707,10 +3707,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_80_stroke);
+    //     paint80Stroke);
 
-    // Paint paint_80_fill = Paint()..style = PaintingStyle.fill;
-    // paint_80_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint80Fill = Paint()..style = PaintingStyle.fill;
+    // paint80Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5431229, size.height * 0.4684283,
@@ -3719,7 +3719,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_80_fill);
+    //     paint80Fill);
 
     // Path path_81 = Path();
     // path_81.moveTo(size.width * 0.5633935, size.height * 0.4962251);
@@ -3729,14 +3729,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_81.lineTo(size.width * 0.5633935, size.height * 0.4962251);
     // path_81.close();
 
-    // Paint paint_81_fill = Paint()..style = PaintingStyle.fill;
-    // paint_81_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_81, paint_81_fill);
+    // Paint paint81Fill = Paint()..style = PaintingStyle.fill;
+    // paint81Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_81, paint81Fill);
 
-    // Paint paint_82_stroke = Paint()
+    // Paint paint82Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_82_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint82Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5589064, size.height * 0.5205903,
@@ -3745,10 +3745,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_82_stroke);
+    //     paint82Stroke);
 
-    // Paint paint_82_fill = Paint()..style = PaintingStyle.fill;
-    // paint_82_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint82Fill = Paint()..style = PaintingStyle.fill;
+    // paint82Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5589064, size.height * 0.5205903,
@@ -3757,7 +3757,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_82_fill);
+    //     paint82Fill);
 
     // Path path_83 = Path();
     // path_83.moveTo(size.width * 0.5776663, size.height * 0.5468222);
@@ -3769,14 +3769,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_83.lineTo(size.width * 0.5776663, size.height * 0.5468222);
     // path_83.close();
 
-    // Paint paint_83_fill = Paint()..style = PaintingStyle.fill;
-    // paint_83_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_83, paint_83_fill);
+    // Paint paint83Fill = Paint()..style = PaintingStyle.fill;
+    // paint83Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_83, paint83Fill);
 
-    // Paint paint_84_stroke = Paint()
+    // Paint paint84Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_84_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint84Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5825817, size.height * 0.5720659,
@@ -3785,10 +3785,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_84_stroke);
+    //     paint84Stroke);
 
-    // Paint paint_84_fill = Paint()..style = PaintingStyle.fill;
-    // paint_84_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint84Fill = Paint()..style = PaintingStyle.fill;
+    // paint84Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5825817, size.height * 0.5720659,
@@ -3797,7 +3797,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_84_fill);
+    //     paint84Fill);
 
     // Path path_85 = Path();
     // path_85.moveTo(size.width * 0.6006652, size.height * 0.6018119);
@@ -3839,14 +3839,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_85.lineTo(size.width * 0.6006652, size.height * 0.6018119);
     // path_85.close();
 
-    // Paint paint_85_fill = Paint()..style = PaintingStyle.fill;
-    // paint_85_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_85, paint_85_fill);
+    // Paint paint85Fill = Paint()..style = PaintingStyle.fill;
+    // paint85Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_85, paint85Fill);
 
-    // Paint paint_86_stroke = Paint()
+    // Paint paint86Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_86_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint86Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5837091, size.height * 0.6228552,
@@ -3855,10 +3855,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_86_stroke);
+    //     paint86Stroke);
 
-    // Paint paint_86_fill = Paint()..style = PaintingStyle.fill;
-    // paint_86_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint86Fill = Paint()..style = PaintingStyle.fill;
+    // paint86Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5837091, size.height * 0.6228552,
@@ -3867,7 +3867,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_86_fill);
+    //     paint86Fill);
 
     // Path path_87 = Path();
     // path_87.moveTo(size.width * 0.6008117, size.height * 0.6433905);
@@ -4013,14 +4013,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_87.lineTo(size.width * 0.6106088, size.height * 0.6491283);
     // path_87.close();
 
-    // Paint paint_87_fill = Paint()..style = PaintingStyle.fill;
-    // paint_87_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_87, paint_87_fill);
+    // Paint paint87Fill = Paint()..style = PaintingStyle.fill;
+    // paint87Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_87, paint87Fill);
 
-    // Paint paint_88_stroke = Paint()
+    // Paint paint88Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_88_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint88Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5729989, size.height * 0.4169526,
@@ -4029,10 +4029,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_88_stroke);
+    //     paint88Stroke);
 
-    // Paint paint_88_fill = Paint()..style = PaintingStyle.fill;
-    // paint_88_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint88Fill = Paint()..style = PaintingStyle.fill;
+    // paint88Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5729989, size.height * 0.4169526,
@@ -4041,7 +4041,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_88_fill);
+    //     paint88Fill);
 
     // Path path_89 = Path();
     // path_89.moveTo(size.width * 0.5930778, size.height * 0.4351544);
@@ -4134,14 +4134,14 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.4399451);
     // path_89.close();
 
-    // Paint paint_89_fill = Paint()..style = PaintingStyle.fill;
-    // paint_89_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_89, paint_89_fill);
+    // Paint paint89Fill = Paint()..style = PaintingStyle.fill;
+    // paint89Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_89, paint89Fill);
 
-    // Paint paint_90_stroke = Paint()
+    // Paint paint90Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_90_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint90Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5882187, size.height * 0.4684283,
@@ -4150,10 +4150,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_90_stroke);
+    //     paint90Stroke);
 
-    // Paint paint_90_fill = Paint()..style = PaintingStyle.fill;
-    // paint_90_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint90Fill = Paint()..style = PaintingStyle.fill;
+    // paint90Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5882187, size.height * 0.4684283,
@@ -4162,7 +4162,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_90_fill);
+    //     paint90Fill);
 
     // Path path_91 = Path();
     // path_91.moveTo(size.width * 0.6088613, size.height * 0.4963898);
@@ -4226,14 +4226,14 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.4948250);
     // path_91.close();
 
-    // Paint paint_91_fill = Paint()..style = PaintingStyle.fill;
-    // paint_91_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_91, paint_91_fill);
+    // Paint paint91Fill = Paint()..style = PaintingStyle.fill;
+    // paint91Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_91, paint91Fill);
 
-    // Paint paint_92_stroke = Paint()
+    // Paint paint92Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_92_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint92Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6040023, size.height * 0.5205903,
@@ -4242,10 +4242,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_92_stroke);
+    //     paint92Stroke);
 
-    // Paint paint_92_fill = Paint()..style = PaintingStyle.fill;
-    // paint_92_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint92Fill = Paint()..style = PaintingStyle.fill;
+    // paint92Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6040023, size.height * 0.5205903,
@@ -4254,7 +4254,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_92_fill);
+    //     paint92Fill);
 
     // Path path_93 = Path();
     // path_93.moveTo(size.width * 0.6227396, size.height * 0.5483871);
@@ -4267,14 +4267,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_93.lineTo(size.width * 0.6227396, size.height * 0.5483871);
     // path_93.close();
 
-    // Paint paint_93_fill = Paint()..style = PaintingStyle.fill;
-    // paint_93_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_93, paint_93_fill);
+    // Paint paint93Fill = Paint()..style = PaintingStyle.fill;
+    // paint93Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_93, paint93Fill);
 
-    // Paint paint_94_stroke = Paint()
+    // Paint paint94Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_94_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint94Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6276776, size.height * 0.5720659,
@@ -4283,10 +4283,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_94_stroke);
+    //     paint94Stroke);
 
-    // Paint paint_94_fill = Paint()..style = PaintingStyle.fill;
-    // paint_94_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint94Fill = Paint()..style = PaintingStyle.fill;
+    // paint94Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6276776, size.height * 0.5720659,
@@ -4295,7 +4295,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_94_fill);
+    //     paint94Fill);
 
     // Path path_95 = Path();
     // path_95.moveTo(size.width * 0.6458963, size.height * 0.6000275);
@@ -4329,14 +4329,14 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.6000275);
     // path_95.close();
 
-    // Paint paint_95_fill = Paint()..style = PaintingStyle.fill;
-    // paint_95_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_95, paint_95_fill);
+    // Paint paint95Fill = Paint()..style = PaintingStyle.fill;
+    // paint95Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_95, paint95Fill);
 
-    // Paint paint_96_stroke = Paint()
+    // Paint paint96Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_96_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint96Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6288050, size.height * 0.6228552,
@@ -4345,10 +4345,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_96_stroke);
+    //     paint96Stroke);
 
-    // Paint paint_96_fill = Paint()..style = PaintingStyle.fill;
-    // paint_96_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint96Fill = Paint()..style = PaintingStyle.fill;
+    // paint96Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6288050, size.height * 0.6228552,
@@ -4357,7 +4357,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_96_fill);
+    //     paint96Fill);
 
     // Path path_97 = Path();
     // path_97.moveTo(size.width * 0.6444870, size.height * 0.6508167);
@@ -4491,14 +4491,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_97.lineTo(size.width * 0.6567193, size.height * 0.6506520);
     // path_97.close();
 
-    // Paint paint_97_fill = Paint()..style = PaintingStyle.fill;
-    // paint_97_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_97, paint_97_fill);
+    // Paint paint97Fill = Paint()..style = PaintingStyle.fill;
+    // paint97Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_97, paint97Fill);
 
-    // Paint paint_98_stroke = Paint()
+    // Paint paint98Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_98_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint98Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6180947, size.height * 0.4169526,
@@ -4507,10 +4507,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_98_stroke);
+    //     paint98Stroke);
 
-    // Paint paint_98_fill = Paint()..style = PaintingStyle.fill;
-    // paint_98_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint98Fill = Paint()..style = PaintingStyle.fill;
+    // paint98Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6180947, size.height * 0.4169526,
@@ -4519,7 +4519,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_98_fill);
+    //     paint98Fill);
 
     // Path path_99 = Path();
     // path_99.moveTo(size.width * 0.6386809, size.height * 0.4449142);
@@ -4583,14 +4583,14 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.4433493);
     // path_99.close();
 
-    // Paint paint_99_fill = Paint()..style = PaintingStyle.fill;
-    // paint_99_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_99, paint_99_fill);
+    // Paint paint99Fill = Paint()..style = PaintingStyle.fill;
+    // paint99Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_99, paint99Fill);
 
-    // Paint paint_100_stroke = Paint()
+    // Paint paint100Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_100_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint100Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6333145, size.height * 0.4684283,
@@ -4599,10 +4599,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_100_stroke);
+    //     paint100Stroke);
 
-    // Paint paint_100_fill = Paint()..style = PaintingStyle.fill;
-    // paint_100_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint100Fill = Paint()..style = PaintingStyle.fill;
+    // paint100Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6333145, size.height * 0.4684283,
@@ -4611,7 +4611,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_100_fill);
+    //     paint100Fill);
 
     // Path path_101 = Path();
     // path_101.moveTo(size.width * 0.6513078, size.height * 0.4962251);
@@ -4655,14 +4655,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_101.lineTo(size.width * 0.6527170, size.height * 0.4914756);
     // path_101.close();
 
-    // Paint paint_101_fill = Paint()..style = PaintingStyle.fill;
-    // paint_101_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_101, paint_101_fill);
+    // Paint paint101Fill = Paint()..style = PaintingStyle.fill;
+    // paint101Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_101, paint101Fill);
 
-    // Paint paint_102_stroke = Paint()
+    // Paint paint102Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_102_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint102Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6490981, size.height * 0.5205903,
@@ -4671,10 +4671,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_102_stroke);
+    //     paint102Stroke);
 
-    // Paint paint_102_fill = Paint()..style = PaintingStyle.fill;
-    // paint_102_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint102Fill = Paint()..style = PaintingStyle.fill;
+    // paint102Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6490981, size.height * 0.5205903,
@@ -4683,7 +4683,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_102_fill);
+    //     paint102Fill);
 
     // Path path_103 = Path();
     // path_103.moveTo(size.width * 0.6678354, size.height * 0.5483871);
@@ -4696,14 +4696,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_103.lineTo(size.width * 0.6678354, size.height * 0.5483871);
     // path_103.close();
 
-    // Paint paint_103_fill = Paint()..style = PaintingStyle.fill;
-    // paint_103_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_103, paint_103_fill);
+    // Paint paint103Fill = Paint()..style = PaintingStyle.fill;
+    // paint103Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_103, paint103Fill);
 
-    // Paint paint_104_stroke = Paint()
+    // Paint paint104Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_104_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint104Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6727734, size.height * 0.5720659,
@@ -4712,10 +4712,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_104_stroke);
+    //     paint104Stroke);
 
-    // Paint paint_104_fill = Paint()..style = PaintingStyle.fill;
-    // paint_104_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint104Fill = Paint()..style = PaintingStyle.fill;
+    // paint104Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6727734, size.height * 0.5720659,
@@ -4724,7 +4724,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_104_fill);
+    //     paint104Fill);
 
     // Path path_105 = Path();
     // path_105.moveTo(size.width * 0.6891657, size.height * 0.6008785);
@@ -4734,14 +4734,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_105.lineTo(size.width * 0.6891657, size.height * 0.6008785);
     // path_105.close();
 
-    // Paint paint_105_fill = Paint()..style = PaintingStyle.fill;
-    // paint_105_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_105, paint_105_fill);
+    // Paint paint105Fill = Paint()..style = PaintingStyle.fill;
+    // paint105Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_105, paint105Fill);
 
-    // Paint paint_106_stroke = Paint()
+    // Paint paint106Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_106_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint106Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6739008, size.height * 0.6228552,
@@ -4750,10 +4750,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_106_stroke);
+    //     paint106Stroke);
 
-    // Paint paint_106_fill = Paint()..style = PaintingStyle.fill;
-    // paint_106_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint106Fill = Paint()..style = PaintingStyle.fill;
+    // paint106Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6739008, size.height * 0.6228552,
@@ -4762,7 +4762,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_106_fill);
+    //     paint106Fill);
 
     // Path path_107 = Path();
     // path_107.moveTo(size.width * 0.6963698, size.height * 0.6494990);
@@ -4775,14 +4775,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_107.lineTo(size.width * 0.6963698, size.height * 0.6494990);
     // path_107.close();
 
-    // Paint paint_107_fill = Paint()..style = PaintingStyle.fill;
-    // paint_107_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_107, paint_107_fill);
+    // Paint paint107Fill = Paint()..style = PaintingStyle.fill;
+    // paint107Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_107, paint107Fill);
 
-    // Paint paint_108_stroke = Paint()
+    // Paint paint108Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_108_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint108Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7860767, size.height * 0.6228552,
@@ -4791,10 +4791,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_108_stroke);
+    //     paint108Stroke);
 
-    // Paint paint_108_fill = Paint()..style = PaintingStyle.fill;
-    // paint_108_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint108Fill = Paint()..style = PaintingStyle.fill;
+    // paint108Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7860767, size.height * 0.6228552,
@@ -4803,7 +4803,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_108_fill);
+    //     paint108Fill);
 
     // Path path_109 = Path();
     // path_109.moveTo(size.width * 0.8035175, size.height * 0.6494990);
@@ -4816,14 +4816,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_109.lineTo(size.width * 0.8035175, size.height * 0.6494990);
     // path_109.close();
 
-    // Paint paint_109_fill = Paint()..style = PaintingStyle.fill;
-    // paint_109_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_109, paint_109_fill);
+    // Paint paint109Fill = Paint()..style = PaintingStyle.fill;
+    // paint109Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_109, paint109Fill);
 
-    // Paint paint_110_stroke = Paint()
+    // Paint paint110Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_110_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint110Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7178692, size.height * 0.6228552,
@@ -4832,10 +4832,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_110_stroke);
+    //     paint110Stroke);
 
-    // Paint paint_110_fill = Paint()..style = PaintingStyle.fill;
-    // paint_110_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint110Fill = Paint()..style = PaintingStyle.fill;
+    // paint110Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7178692, size.height * 0.6228552,
@@ -4844,7 +4844,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_110_fill);
+    //     paint110Fill);
 
     // Path path_111 = Path();
     // path_111.moveTo(size.width * 0.7478467, size.height * 0.6371723);
@@ -4857,14 +4857,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_111.lineTo(size.width * 0.7478467, size.height * 0.6371723);
     // path_111.close();
 
-    // Paint paint_111_fill = Paint()..style = PaintingStyle.fill;
-    // paint_111_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_111, paint_111_fill);
+    // Paint paint111Fill = Paint()..style = PaintingStyle.fill;
+    // paint111Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_111, paint111Fill);
 
-    // Paint paint_112_stroke = Paint()
+    // Paint paint112Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_112_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint112Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7184329, size.height * 0.6489362,
@@ -4873,10 +4873,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_112_stroke);
+    //     paint112Stroke);
 
-    // Paint paint_112_fill = Paint()..style = PaintingStyle.fill;
-    // paint_112_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint112Fill = Paint()..style = PaintingStyle.fill;
+    // paint112Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7184329, size.height * 0.6489362,
@@ -4885,7 +4885,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_112_fill);
+    //     paint112Fill);
 
     // Path path_113 = Path();
     // path_113.moveTo(size.width * 0.7532807, size.height * 0.6572684);
@@ -4898,14 +4898,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_113.lineTo(size.width * 0.7532807, size.height * 0.6572684);
     // path_113.close();
 
-    // Paint paint_113_fill = Paint()..style = PaintingStyle.fill;
-    // paint_113_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_113, paint_113_fill);
+    // Paint paint113Fill = Paint()..style = PaintingStyle.fill;
+    // paint113Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_113, paint113Fill);
 
-    // Paint paint_114_stroke = Paint()
+    // Paint paint114Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_114_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint114Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6631905, size.height * 0.4169526,
@@ -4914,10 +4914,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_114_stroke);
+    //     paint114Stroke);
 
-    // Paint paint_114_fill = Paint()..style = PaintingStyle.fill;
-    // paint_114_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint114Fill = Paint()..style = PaintingStyle.fill;
+    // paint114Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6631905, size.height * 0.4169526,
@@ -4926,7 +4926,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_114_fill);
+    //     paint114Fill);
 
     // Path path_115 = Path();
     // path_115.moveTo(size.width * 0.6803720, size.height * 0.4417159);
@@ -4936,14 +4936,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_115.lineTo(size.width * 0.6803720, size.height * 0.4417159);
     // path_115.close();
 
-    // Paint paint_115_fill = Paint()..style = PaintingStyle.fill;
-    // paint_115_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_115, paint_115_fill);
+    // Paint paint115Fill = Paint()..style = PaintingStyle.fill;
+    // paint115Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_115, paint115Fill);
 
-    // Paint paint_116_stroke = Paint()
+    // Paint paint116Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_116_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint116Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6784104, size.height * 0.4684283,
@@ -4952,10 +4952,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_116_stroke);
+    //     paint116Stroke);
 
-    // Paint paint_116_fill = Paint()..style = PaintingStyle.fill;
-    // paint_116_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint116Fill = Paint()..style = PaintingStyle.fill;
+    // paint116Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6784104, size.height * 0.4684283,
@@ -4964,7 +4964,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_116_fill);
+    //     paint116Fill);
 
     // Path path_117 = Path();
     // path_117.moveTo(size.width * 0.6981285, size.height * 0.4980508);
@@ -4978,14 +4978,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_117.lineTo(size.width * 0.6981285, size.height * 0.4980508);
     // path_117.close();
 
-    // Paint paint_117_fill = Paint()..style = PaintingStyle.fill;
-    // paint_117_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_117, paint_117_fill);
+    // Paint paint117Fill = Paint()..style = PaintingStyle.fill;
+    // paint117Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_117, paint117Fill);
 
-    // Paint paint_118_stroke = Paint()
+    // Paint paint118Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_118_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint118Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6941939, size.height * 0.5205903,
@@ -4994,10 +4994,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_118_stroke);
+    //     paint118Stroke);
 
-    // Paint paint_118_fill = Paint()..style = PaintingStyle.fill;
-    // paint_118_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint118Fill = Paint()..style = PaintingStyle.fill;
+    // paint118Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6941939, size.height * 0.5205903,
@@ -5006,7 +5006,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_118_fill);
+    //     paint118Fill);
 
     // Path path_119 = Path();
     // path_119.moveTo(size.width * 0.7129312, size.height * 0.5483871);
@@ -5019,14 +5019,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_119.lineTo(size.width * 0.7129312, size.height * 0.5483871);
     // path_119.close();
 
-    // Paint paint_119_fill = Paint()..style = PaintingStyle.fill;
-    // paint_119_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_119, paint_119_fill);
+    // Paint paint119Fill = Paint()..style = PaintingStyle.fill;
+    // paint119Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_119, paint119Fill);
 
-    // Paint paint_120_stroke = Paint()
+    // Paint paint120Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_120_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint120Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7178692, size.height * 0.5720659,
@@ -5035,10 +5035,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_120_stroke);
+    //     paint120Stroke);
 
-    // Paint paint_120_fill = Paint()..style = PaintingStyle.fill;
-    // paint_120_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint120Fill = Paint()..style = PaintingStyle.fill;
+    // paint120Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7178692, size.height * 0.5720659,
@@ -5047,40 +5047,40 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_120_fill);
+    //     paint120Fill);
 
     // Path path_121 = Path();
     // path_121.moveTo(size.width * 0.7615953, size.height * 0.5940769);
     // path_121.lineTo(size.width * 0.7581736, size.height * 0.5899108);
     // path_121.lineTo(size.width * 0.7547520, size.height * 0.5940769);
 
-    // Paint paint_121_stroke = Paint()
+    // Paint paint121Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = size.width * 0.0008455468;
-    // paint_121_stroke.color = Colors.white.withOpacity(1.0);
-    // paint_121_stroke.strokeCap = StrokeCap.round;
-    // paint_121_stroke.strokeJoin = StrokeJoin.round;
-    // canvas.drawPath(path_121, paint_121_stroke);
+    // paint121Stroke.color = Colors.white.withOpacity(1.0);
+    // paint121Stroke.strokeCap = StrokeCap.round;
+    // paint121Stroke.strokeJoin = StrokeJoin.round;
+    // canvas.drawPath(path_121, paint121Stroke);
 
-    // Paint paint_121_fill = Paint()..style = PaintingStyle.fill;
-    // paint_121_fill.color = Color(0xff000000).withOpacity(1.0);
-    // canvas.drawPath(path_121, paint_121_fill);
+    // Paint paint121Fill = Paint()..style = PaintingStyle.fill;
+    // paint121Fill.color = Color(0xff000000).withOpacity(1.0);
+    // canvas.drawPath(path_121, paint121Fill);
 
     // Path path_122 = Path();
     // path_122.moveTo(size.width * 0.7581736, size.height * 0.6015786);
     // path_122.lineTo(size.width * 0.7581736, size.height * 0.5900275);
 
-    // Paint paint_122_stroke = Paint()
+    // Paint paint122Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = size.width * 0.0008455468;
-    // paint_122_stroke.color = Colors.white.withOpacity(1.0);
-    // paint_122_stroke.strokeCap = StrokeCap.round;
-    // paint_122_stroke.strokeJoin = StrokeJoin.round;
-    // canvas.drawPath(path_122, paint_122_stroke);
+    // paint122Stroke.color = Colors.white.withOpacity(1.0);
+    // paint122Stroke.strokeCap = StrokeCap.round;
+    // paint122Stroke.strokeJoin = StrokeJoin.round;
+    // canvas.drawPath(path_122, paint122Stroke);
 
-    // Paint paint_122_fill = Paint()..style = PaintingStyle.fill;
-    // paint_122_fill.color = Color(0xff000000).withOpacity(1.0);
-    // canvas.drawPath(path_122, paint_122_fill);
+    // Paint paint122Fill = Paint()..style = PaintingStyle.fill;
+    // paint122Fill.color = Color(0xff000000).withOpacity(1.0);
+    // canvas.drawPath(path_122, paint122Fill);
 
     // Path path_123 = Path();
     // path_123.moveTo(size.width * 0.7723563, size.height * 0.6000275);
@@ -5330,14 +5330,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_123.lineTo(size.width * 0.7926550, size.height * 0.5983391);
     // path_123.close();
 
-    // Paint paint_123_fill = Paint()..style = PaintingStyle.fill;
-    // paint_123_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_123, paint_123_fill);
+    // Paint paint123Fill = Paint()..style = PaintingStyle.fill;
+    // paint123Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_123, paint123Fill);
 
-    // Paint paint_124_stroke = Paint()
+    // Paint paint124Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_124_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint124Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7082864, size.height * 0.4169526,
@@ -5346,10 +5346,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_124_stroke);
+    //     paint124Stroke);
 
-    // Paint paint_124_fill = Paint()..style = PaintingStyle.fill;
-    // paint_124_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint124Fill = Paint()..style = PaintingStyle.fill;
+    // paint124Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7082864, size.height * 0.4169526,
@@ -5358,7 +5358,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_124_fill);
+    //     paint124Fill);
 
     // Path path_125 = Path();
     // path_125.moveTo(size.width * 0.7267418, size.height * 0.4392999);
@@ -5374,14 +5374,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_125.lineTo(size.width * 0.7267418, size.height * 0.4424022);
     // path_125.close();
 
-    // Paint paint_125_fill = Paint()..style = PaintingStyle.fill;
-    // paint_125_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_125, paint_125_fill);
+    // Paint paint125Fill = Paint()..style = PaintingStyle.fill;
+    // paint125Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_125, paint125Fill);
 
-    // Paint paint_126_stroke = Paint()
+    // Paint paint126Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_126_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint126Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7235062, size.height * 0.4684283,
@@ -5390,10 +5390,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_126_stroke);
+    //     paint126Stroke);
 
-    // Paint paint_126_fill = Paint()..style = PaintingStyle.fill;
-    // paint_126_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint126Fill = Paint()..style = PaintingStyle.fill;
+    // paint126Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7235062, size.height * 0.4684283,
@@ -5402,7 +5402,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_126_fill);
+    //     paint126Fill);
 
     // Path path_127 = Path();
     // path_127.moveTo(size.width * 0.7406426, size.height * 0.4980508);
@@ -5416,14 +5416,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_127.lineTo(size.width * 0.7406426, size.height * 0.4980508);
     // path_127.close();
 
-    // Paint paint_127_fill = Paint()..style = PaintingStyle.fill;
-    // paint_127_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_127, paint_127_fill);
+    // Paint paint127Fill = Paint()..style = PaintingStyle.fill;
+    // paint127Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_127, paint127Fill);
 
-    // Paint paint_128_stroke = Paint()
+    // Paint paint128Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_128_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint128Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7392897, size.height * 0.5205903,
@@ -5432,10 +5432,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_128_stroke);
+    //     paint128Stroke);
 
-    // Paint paint_128_fill = Paint()..style = PaintingStyle.fill;
-    // paint_128_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint128Fill = Paint()..style = PaintingStyle.fill;
+    // paint128Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7392897, size.height * 0.5205903,
@@ -5444,7 +5444,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_128_fill);
+    //     paint128Fill);
 
     // Path path_129 = Path();
     // path_129.moveTo(size.width * 0.7580271, size.height * 0.5483871);
@@ -5457,14 +5457,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_129.lineTo(size.width * 0.7580271, size.height * 0.5483871);
     // path_129.close();
 
-    // Paint paint_129_fill = Paint()..style = PaintingStyle.fill;
-    // paint_129_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_129, paint_129_fill);
+    // Paint paint129Fill = Paint()..style = PaintingStyle.fill;
+    // paint129Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_129, paint129Fill);
 
-    // Paint paint_130_stroke = Paint()
+    // Paint paint130Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_130_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint130Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7533822, size.height * 0.4169526,
@@ -5473,10 +5473,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_130_stroke);
+    //     paint130Stroke);
 
-    // Paint paint_130_fill = Paint()..style = PaintingStyle.fill;
-    // paint_130_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint130Fill = Paint()..style = PaintingStyle.fill;
+    // paint130Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7533822, size.height * 0.4169526,
@@ -5485,45 +5485,45 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_130_fill);
+    //     paint130Fill);
 
     // Path path_131 = Path();
     // path_131.moveTo(size.width * 0.7883709, size.height * 0.4364653);
     // path_131.lineTo(size.width * 0.7849493, size.height * 0.4406314);
     // path_131.lineTo(size.width * 0.7883709, size.height * 0.4447975);
 
-    // Paint paint_131_stroke = Paint()
+    // Paint paint131Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = size.width * 0.0008455468;
-    // paint_131_stroke.color = Colors.white.withOpacity(1.0);
-    // paint_131_stroke.strokeCap = StrokeCap.round;
-    // paint_131_stroke.strokeJoin = StrokeJoin.round;
-    // canvas.drawPath(path_131, paint_131_stroke);
+    // paint131Stroke.color = Colors.white.withOpacity(1.0);
+    // paint131Stroke.strokeCap = StrokeCap.round;
+    // paint131Stroke.strokeJoin = StrokeJoin.round;
+    // canvas.drawPath(path_131, paint131Stroke);
 
-    // Paint paint_131_fill = Paint()..style = PaintingStyle.fill;
-    // paint_131_fill.color = Color(0xff000000).withOpacity(1.0);
-    // canvas.drawPath(path_131, paint_131_fill);
+    // Paint paint131Fill = Paint()..style = PaintingStyle.fill;
+    // paint131Fill.color = Color(0xff000000).withOpacity(1.0);
+    // canvas.drawPath(path_131, paint131Fill);
 
     // Path path_132 = Path();
     // path_132.moveTo(size.width * 0.7945321, size.height * 0.4406314);
     // path_132.lineTo(size.width * 0.7850451, size.height * 0.4406314);
 
-    // Paint paint_132_stroke = Paint()
+    // Paint paint132Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = size.width * 0.0008455468;
-    // paint_132_stroke.color = Colors.white.withOpacity(1.0);
-    // paint_132_stroke.strokeCap = StrokeCap.round;
-    // paint_132_stroke.strokeJoin = StrokeJoin.round;
-    // canvas.drawPath(path_132, paint_132_stroke);
+    // paint132Stroke.color = Colors.white.withOpacity(1.0);
+    // paint132Stroke.strokeCap = StrokeCap.round;
+    // paint132Stroke.strokeJoin = StrokeJoin.round;
+    // canvas.drawPath(path_132, paint132Stroke);
 
-    // Paint paint_132_fill = Paint()..style = PaintingStyle.fill;
-    // paint_132_fill.color = Color(0xff000000).withOpacity(1.0);
-    // canvas.drawPath(path_132, paint_132_fill);
+    // Paint paint132Fill = Paint()..style = PaintingStyle.fill;
+    // paint132Fill.color = Color(0xff000000).withOpacity(1.0);
+    // canvas.drawPath(path_132, paint132Fill);
 
-    // Paint paint_133_stroke = Paint()
+    // Paint paint133Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_133_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint133Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7680383, size.height * 0.4684283,
@@ -5532,10 +5532,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_133_stroke);
+    //     paint133Stroke);
 
-    // Paint paint_133_fill = Paint()..style = PaintingStyle.fill;
-    // paint_133_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint133Fill = Paint()..style = PaintingStyle.fill;
+    // paint133Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7680383, size.height * 0.4684283,
@@ -5544,7 +5544,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_133_fill);
+    //     paint133Fill);
 
     // Path path_134 = Path();
     // path_134.moveTo(size.width * 0.7986020, size.height * 0.4972409);
@@ -5554,14 +5554,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_134.lineTo(size.width * 0.7986020, size.height * 0.4972409);
     // path_134.close();
 
-    // Paint paint_134_fill = Paint()..style = PaintingStyle.fill;
-    // paint_134_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_134, paint_134_fill);
+    // Paint paint134Fill = Paint()..style = PaintingStyle.fill;
+    // paint134Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_134, paint134Fill);
 
-    // Paint paint_135_stroke = Paint()
+    // Paint paint135Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_135_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint135Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2161781, size.height * 0.3743995,
@@ -5570,10 +5570,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_135_stroke);
+    //     paint135Stroke);
 
-    // Paint paint_135_fill = Paint()..style = PaintingStyle.fill;
-    // paint_135_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint135Fill = Paint()..style = PaintingStyle.fill;
+    // paint135Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2161781, size.height * 0.3743995,
@@ -5582,7 +5582,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_135_fill);
+    //     paint135Fill);
 
     // Path path_136 = Path();
     // path_136.moveTo(size.width * 0.2333788, size.height * 0.3897872);
@@ -5637,14 +5637,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_136.lineTo(size.width * 0.2367689, size.height * 0.3967056);
     // path_136.close();
 
-    // Paint paint_136_fill = Paint()..style = PaintingStyle.fill;
-    // paint_136_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_136, paint_136_fill);
+    // Paint paint136Fill = Paint()..style = PaintingStyle.fill;
+    // paint136Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_136, paint136Fill);
 
-    // Paint paint_137_stroke = Paint()
+    // Paint paint137Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_137_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint137Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2567644, size.height * 0.3743995,
@@ -5653,10 +5653,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_137_stroke);
+    //     paint137Stroke);
 
-    // Paint paint_137_fill = Paint()..style = PaintingStyle.fill;
-    // paint_137_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint137Fill = Paint()..style = PaintingStyle.fill;
+    // paint137Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2567644, size.height * 0.3743995,
@@ -5665,7 +5665,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_137_fill);
+    //     paint137Fill);
 
     // Path path_138 = Path();
     // path_138.moveTo(size.width * 0.2694555, size.height * 0.3897872);
@@ -5762,14 +5762,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_138.lineTo(size.width * 0.2714047, size.height * 0.3967056);
     // path_138.close();
 
-    // Paint paint_138_fill = Paint()..style = PaintingStyle.fill;
-    // paint_138_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_138, paint_138_fill);
+    // Paint paint138Fill = Paint()..style = PaintingStyle.fill;
+    // paint138Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_138, paint138Fill);
 
-    // Paint paint_139_stroke = Paint()
+    // Paint paint139Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_139_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint139Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2979143, size.height * 0.3743995,
@@ -5778,10 +5778,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_139_stroke);
+    //     paint139Stroke);
 
-    // Paint paint_139_fill = Paint()..style = PaintingStyle.fill;
-    // paint_139_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint139Fill = Paint()..style = PaintingStyle.fill;
+    // paint139Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.2979143, size.height * 0.3743995,
@@ -5790,7 +5790,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_139_fill);
+    //     paint139Fill);
 
     // Path path_140 = Path();
     // path_140.moveTo(size.width * 0.3151150, size.height * 0.3897872);
@@ -5927,14 +5927,14 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.3968538);
     // path_140.close();
 
-    // Paint paint_140_fill = Paint()..style = PaintingStyle.fill;
-    // paint_140_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_140, paint_140_fill);
+    // Paint paint140Fill = Paint()..style = PaintingStyle.fill;
+    // paint140Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_140, paint140Fill);
 
-    // Paint paint_141_stroke = Paint()
+    // Paint paint141Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_141_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint141Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3385006, size.height * 0.3743995,
@@ -5943,10 +5943,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_141_stroke);
+    //     paint141Stroke);
 
-    // Paint paint_141_fill = Paint()..style = PaintingStyle.fill;
-    // paint_141_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint141Fill = Paint()..style = PaintingStyle.fill;
+    // paint141Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3385006, size.height * 0.3743995,
@@ -5955,7 +5955,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_141_fill);
+    //     paint141Fill);
 
     // Path path_142 = Path();
     // path_142.moveTo(size.width * 0.3557012, size.height * 0.3897872);
@@ -6019,14 +6019,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_142.lineTo(size.width * 0.3588478, size.height * 0.3935429);
     // path_142.close();
 
-    // Paint paint_142_fill = Paint()..style = PaintingStyle.fill;
-    // paint_142_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_142, paint_142_fill);
+    // Paint paint142Fill = Paint()..style = PaintingStyle.fill;
+    // paint142Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_142, paint142Fill);
 
-    // Paint paint_143_stroke = Paint()
+    // Paint paint143Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_143_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint143Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3790868, size.height * 0.3743995,
@@ -6035,10 +6035,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_143_stroke);
+    //     paint143Stroke);
 
-    // Paint paint_143_fill = Paint()..style = PaintingStyle.fill;
-    // paint_143_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint143Fill = Paint()..style = PaintingStyle.fill;
+    // paint143Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.3790868, size.height * 0.3743995,
@@ -6047,7 +6047,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_143_fill);
+    //     paint143Fill);
 
     // Path path_144 = Path();
     // path_144.moveTo(size.width * 0.3962875, size.height * 0.3897872);
@@ -6158,14 +6158,14 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.3968538);
     // path_144.close();
 
-    // Paint paint_144_fill = Paint()..style = PaintingStyle.fill;
-    // paint_144_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_144, paint_144_fill);
+    // Paint paint144Fill = Paint()..style = PaintingStyle.fill;
+    // paint144Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_144, paint144Fill);
 
-    // Paint paint_145_stroke = Paint()
+    // Paint paint145Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_145_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint145Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4208005, size.height * 0.3743995,
@@ -6174,10 +6174,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_145_stroke);
+    //     paint145Stroke);
 
-    // Paint paint_145_fill = Paint()..style = PaintingStyle.fill;
-    // paint_145_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint145Fill = Paint()..style = PaintingStyle.fill;
+    // paint145Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4208005, size.height * 0.3743995,
@@ -6186,7 +6186,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_145_fill);
+    //     paint145Fill);
 
     // Path path_146 = Path();
     // path_146.moveTo(size.width * 0.4380011, size.height * 0.3897872);
@@ -6321,14 +6321,14 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.3955443);
     // path_146.close();
 
-    // Paint paint_146_fill = Paint()..style = PaintingStyle.fill;
-    // paint_146_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_146, paint_146_fill);
+    // Paint paint146Fill = Paint()..style = PaintingStyle.fill;
+    // paint146Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_146, paint146Fill);
 
-    // Paint paint_147_stroke = Paint()
+    // Paint paint147Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_147_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint147Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4613867, size.height * 0.3743995,
@@ -6337,10 +6337,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_147_stroke);
+    //     paint147Stroke);
 
-    // Paint paint_147_fill = Paint()..style = PaintingStyle.fill;
-    // paint_147_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint147Fill = Paint()..style = PaintingStyle.fill;
+    // paint147Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.4613867, size.height * 0.3743995,
@@ -6349,7 +6349,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_147_fill);
+    //     paint147Fill);
 
     // Path path_148 = Path();
     // path_148.moveTo(size.width * 0.4785874, size.height * 0.3897872);
@@ -6404,14 +6404,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_148.lineTo(size.width * 0.4813179, size.height * 0.3967056);
     // path_148.close();
 
-    // Paint paint_148_fill = Paint()..style = PaintingStyle.fill;
-    // paint_148_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_148, paint_148_fill);
+    // Paint paint148Fill = Paint()..style = PaintingStyle.fill;
+    // paint148Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_148, paint148Fill);
 
-    // Paint paint_149_stroke = Paint()
+    // Paint paint149Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_149_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint149Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5019729, size.height * 0.3743995,
@@ -6420,10 +6420,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_149_stroke);
+    //     paint149Stroke);
 
-    // Paint paint_149_fill = Paint()..style = PaintingStyle.fill;
-    // paint_149_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint149Fill = Paint()..style = PaintingStyle.fill;
+    // paint149Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5019729, size.height * 0.3743995,
@@ -6432,7 +6432,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_149_fill);
+    //     paint149Fill);
 
     // Path path_150 = Path();
     // path_150.moveTo(size.width * 0.5191736, size.height * 0.3897872);
@@ -6596,14 +6596,14 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.3955319);
     // path_150.close();
 
-    // Paint paint_150_fill = Paint()..style = PaintingStyle.fill;
-    // paint_150_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_150, paint_150_fill);
+    // Paint paint150Fill = Paint()..style = PaintingStyle.fill;
+    // paint150Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_150, paint150Fill);
 
-    // Paint paint_151_stroke = Paint()
+    // Paint paint151Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_151_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint151Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5431229, size.height * 0.3743995,
@@ -6612,10 +6612,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_151_stroke);
+    //     paint151Stroke);
 
-    // Paint paint_151_fill = Paint()..style = PaintingStyle.fill;
-    // paint_151_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint151Fill = Paint()..style = PaintingStyle.fill;
+    // paint151Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5431229, size.height * 0.3743995,
@@ -6624,7 +6624,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_151_fill);
+    //     paint151Fill);
 
     // Path path_152 = Path();
     // path_152.moveTo(size.width * 0.5603236, size.height * 0.3897872);
@@ -6759,14 +6759,14 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.3923816);
     // path_152.close();
 
-    // Paint paint_152_fill = Paint()..style = PaintingStyle.fill;
-    // paint_152_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_152, paint_152_fill);
+    // Paint paint152Fill = Paint()..style = PaintingStyle.fill;
+    // paint152Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_152, paint152Fill);
 
-    // Paint paint_153_stroke = Paint()
+    // Paint paint153Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_153_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint153Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5837091, size.height * 0.3743995,
@@ -6775,10 +6775,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_153_stroke);
+    //     paint153Stroke);
 
-    // Paint paint_153_fill = Paint()..style = PaintingStyle.fill;
-    // paint_153_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint153Fill = Paint()..style = PaintingStyle.fill;
+    // paint153Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.5837091, size.height * 0.3743995,
@@ -6787,7 +6787,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_153_fill);
+    //     paint153Fill);
 
     // Path path_154 = Path();
     // path_154.moveTo(size.width * 0.5975254, size.height * 0.3897872);
@@ -6902,14 +6902,14 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.3954454);
     // path_154.close();
 
-    // Paint paint_154_fill = Paint()..style = PaintingStyle.fill;
-    // paint_154_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_154, paint_154_fill);
+    // Paint paint154Fill = Paint()..style = PaintingStyle.fill;
+    // paint154Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_154, paint154Fill);
 
-    // Paint paint_155_stroke = Paint()
+    // Paint paint155Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_155_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint155Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6248591, size.height * 0.3743995,
@@ -6918,10 +6918,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_155_stroke);
+    //     paint155Stroke);
 
-    // Paint paint_155_fill = Paint()..style = PaintingStyle.fill;
-    // paint_155_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint155Fill = Paint()..style = PaintingStyle.fill;
+    // paint155Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6248591, size.height * 0.3743995,
@@ -6930,7 +6930,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_155_fill);
+    //     paint155Fill);
 
     // Path path_156 = Path();
     // path_156.moveTo(size.width * 0.6403664, size.height * 0.3897872);
@@ -6994,14 +6994,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_156.lineTo(size.width * 0.6477508, size.height * 0.3967056);
     // path_156.close();
 
-    // Paint paint_156_fill = Paint()..style = PaintingStyle.fill;
-    // paint_156_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_156, paint_156_fill);
+    // Paint paint156Fill = Paint()..style = PaintingStyle.fill;
+    // paint156Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_156, paint156Fill);
 
-    // Paint paint_157_stroke = Paint()
+    // Paint paint157Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_157_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint157Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6654453, size.height * 0.3743995,
@@ -7010,10 +7010,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_157_stroke);
+    //     paint157Stroke);
 
-    // Paint paint_157_fill = Paint()..style = PaintingStyle.fill;
-    // paint_157_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint157Fill = Paint()..style = PaintingStyle.fill;
+    // paint157Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.6654453, size.height * 0.3743995,
@@ -7022,7 +7022,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_157_fill);
+    //     paint157Fill);
 
     // Path path_158 = Path();
     // path_158.moveTo(size.width * 0.6798253, size.height * 0.3897872);
@@ -7128,14 +7128,14 @@ class RPSCustomPainter extends CustomPainter {
     // path_158.lineTo(size.width * 0.6857723, size.height * 0.3967056);
     // path_158.close();
 
-    // Paint paint_158_fill = Paint()..style = PaintingStyle.fill;
-    // paint_158_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_158, paint_158_fill);
+    // Paint paint158Fill = Paint()..style = PaintingStyle.fill;
+    // paint158Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_158, paint158Fill);
 
-    // Paint paint_159_stroke = Paint()
+    // Paint paint159Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_159_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint159Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7060316, size.height * 0.3743995,
@@ -7144,10 +7144,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_159_stroke);
+    //     paint159Stroke);
 
-    // Paint paint_159_fill = Paint()..style = PaintingStyle.fill;
-    // paint_159_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint159Fill = Paint()..style = PaintingStyle.fill;
+    // paint159Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7060316, size.height * 0.3743995,
@@ -7156,7 +7156,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_159_fill);
+    //     paint159Fill);
 
     // Path path_160 = Path();
     // path_160.moveTo(size.width * 0.7179763, size.height * 0.3968538);
@@ -7383,14 +7383,14 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.3901702);
     // path_160.close();
 
-    // Paint paint_160_fill = Paint()..style = PaintingStyle.fill;
-    // paint_160_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_160, paint_160_fill);
+    // Paint paint160Fill = Paint()..style = PaintingStyle.fill;
+    // paint160Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_160, paint160Fill);
 
-    // Paint paint_161_stroke = Paint()
+    // Paint paint161Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_161_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint161Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7466178, size.height * 0.3743995,
@@ -7399,10 +7399,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_161_stroke);
+    //     paint161Stroke);
 
-    // Paint paint_161_fill = Paint()..style = PaintingStyle.fill;
-    // paint_161_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint161Fill = Paint()..style = PaintingStyle.fill;
+    // paint161Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7466178, size.height * 0.3743995,
@@ -7411,7 +7411,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_161_fill);
+    //     paint161Fill);
 
     // Path path_162 = Path();
     // path_162.moveTo(size.width * 0.7596956, size.height * 0.3901702);
@@ -7517,14 +7517,14 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.3915539);
     // path_162.close();
 
-    // Paint paint_162_fill = Paint()..style = PaintingStyle.fill;
-    // paint_162_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_162, paint_162_fill);
+    // Paint paint162Fill = Paint()..style = PaintingStyle.fill;
+    // paint162Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_162, paint162Fill);
 
-    // Paint paint_163_stroke = Paint()
+    // Paint paint163Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_163_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint163Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7877678, size.height * 0.3743995,
@@ -7533,10 +7533,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_163_stroke);
+    //     paint163Stroke);
 
-    // Paint paint_163_fill = Paint()..style = PaintingStyle.fill;
-    // paint_163_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint163Fill = Paint()..style = PaintingStyle.fill;
+    // paint163Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.7877678, size.height * 0.3743995,
@@ -7545,7 +7545,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_163_fill);
+    //     paint163Fill);
 
     // Path path_164 = Path();
     // path_164.moveTo(size.width * 0.7967080, size.height * 0.3890295);
@@ -7851,14 +7851,14 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.3920824);
     // path_164.close();
 
-    // Paint paint_164_fill = Paint()..style = PaintingStyle.fill;
-    // paint_164_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_164, paint_164_fill);
+    // Paint paint164Fill = Paint()..style = PaintingStyle.fill;
+    // paint164Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_164, paint164Fill);
 
-    // Paint paint_165_stroke = Paint()
+    // Paint paint165Stroke = Paint()
     //   ..style = PaintingStyle.stroke
     //   ..strokeWidth = 2;
-    // paint_165_stroke.color = Color(0xff474747).withOpacity(1.0);
+    // paint165Stroke.color = Color(0xff474747).withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.1755919, size.height * 0.3743995,
@@ -7867,10 +7867,10 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_165_stroke);
+    //     paint165Stroke);
 
-    // Paint paint_165_fill = Paint()..style = PaintingStyle.fill;
-    // paint_165_fill.color = Colors.black.withOpacity(1.0);
+    // Paint paint165Fill = Paint()..style = PaintingStyle.fill;
+    // paint165Fill.color = Colors.black.withOpacity(1.0);
     // canvas.drawRRect(
     //     RRect.fromRectAndCorners(
     //         Rect.fromLTWH(size.width * 0.1755919, size.height * 0.3743995,
@@ -7879,7 +7879,7 @@ class RPSCustomPainter extends CustomPainter {
     //         bottomLeft: Radius.circular(size.width * 0.003100338),
     //         topLeft: Radius.circular(size.width * 0.003100338),
     //         topRight: Radius.circular(size.width * 0.003100338)),
-    //     paint_165_fill);
+    //     paint165Fill);
 
     // Path path_166 = Path();
     // path_166.moveTo(size.width * 0.1891454, size.height * 0.3955196);
@@ -8094,9 +8094,9 @@ class RPSCustomPainter extends CustomPainter {
     //     size.height * 0.3968538);
     // path_166.close();
 
-    // Paint paint_166_fill = Paint()..style = PaintingStyle.fill;
-    // paint_166_fill.color = Colors.white.withOpacity(1.0);
-    // canvas.drawPath(path_166, paint_166_fill);
+    // Paint paint166Fill = Paint()..style = PaintingStyle.fill;
+    // paint166Fill.color = Colors.white.withOpacity(1.0);
+    // canvas.drawPath(path_166, paint166Fill);
   }
 
   @override
