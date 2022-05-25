@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 class PickerModel extends Comparer {
   final String title;
-  final String? value;
+  final Enum? value;
   final bool enabled;
   final IconData? icon;
   PickerModel(
@@ -104,7 +104,9 @@ class _PickerDropdownState extends State<PickerDropdown> {
                           ),
                     Text(
                       value.title,
-                      style: value.enabled == true ? TextStyle() : labelStyle,
+                      style: value.enabled == true
+                          ? const TextStyle()
+                          : labelStyle,
                     ),
                   ],
                 ),

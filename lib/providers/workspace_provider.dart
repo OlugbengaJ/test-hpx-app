@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
+import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 
@@ -39,8 +40,12 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [_layersProvider] grants access to [LayersProvider] resizable widget
   LayersProvider? _layersProvider;
+
+  ResizableProvider? _resizableProvider;
   LayersProvider? get getLayersProvider => _layersProvider;
+
   void setLayersProvider(LayersProvider? v) => _layersProvider = v;
+  void setResizableProvider(ResizableProvider? v) => _resizableProvider = v;
 
   WorkspaceDragMode? _keyDragMode = WorkspaceDragMode.resizable;
 
@@ -77,6 +82,8 @@ class WorkspaceProvider with ChangeNotifier {
       default:
         _isCurrentDeviceSelected = false;
     }
+    // drag mode has changed
+    _dragModeChanged = true;
 
     if (_layersProvider != null) {
       _layersProvider!.toggleHideStackedLayers(!isDragModeResizable);
@@ -260,9 +267,12 @@ class WorkspaceProvider with ChangeNotifier {
         }
 
         // calculate rect based on resizable widget offsets.
-        final layerModel =
-            _layersProvider!.stackedLayeritems[_layersProvider!.index];
-        box2 = layerModel.controller.draggableKey.currentContext
+        // final layerModel =
+        //     _layersProvider!.stackedLayeritems[_layersProvider!.index];
+        // box2 = layerModel.controller.draggableKey.currentContext
+        final layerModel = _layersProvider!.getItem(_layersProvider!.listIndex);
+
+        box2 = _resizableProvider!.draggableKey.currentContext
             ?.findRenderObject() as RenderBox?;
 
         if (box2 == null) return null;

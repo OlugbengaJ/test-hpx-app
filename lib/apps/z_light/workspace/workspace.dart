@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
+import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack.dart';
-import 'package:hpx/apps/z_light/layers/widgets/layer_stack_item.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard_selector.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/notification_modal.dart';
@@ -18,9 +18,9 @@ import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
 class Workspace extends StatefulWidget {
-  const Workspace({Key? key, required this.layers}) : super(key: key);
-
-  final List<LayerStackItem> layers;
+  const Workspace({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<Workspace> createState() => _WorkspaceState();
@@ -134,6 +134,8 @@ class _WorkspaceState extends State<Workspace> {
 
     // initialize layers provider
     workspaceProvider.setLayersProvider(Provider.of<LayersProvider>(context));
+    workspaceProvider
+        .setResizableProvider(Provider.of<ResizableProvider>(context));
 
     return Column(
       children: [
@@ -279,9 +281,7 @@ class _WorkspaceState extends State<Workspace> {
                           ),
                         ),
                       ),
-                      LayersStack(
-                        layers: widget.layers,
-                      ),
+                      const LayersStack(),
                       if (workspaceProvider.isPanning) const KeyboardSelector(),
 
                       if (workspaceProvider.isModalNotify)

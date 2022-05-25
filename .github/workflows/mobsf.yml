@@ -7,11 +7,11 @@ name: MobSF
 
 on:
   push:
-    branches: [ development ]
+    branches: [ development, qa ]
   pull_request:
     branches: [ development ]  
   schedule:
-    - cron: '35 3 * * 0'
+    - cron: '18 2 * * 5'
 
 permissions:
   contents: read
@@ -24,10 +24,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Harden Runner
+        uses: step-security/harden-runner@248ae51c2e8cc9622ecf50685c8bf7150c6e8813
+        with:
+          egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
+
+      - uses: actions/checkout@d0651293c4a5a52e711f25b41b05b2212f385d28
 
       - name: Setup python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@98f2ad02fd48d057ee3b4d4f66525b231c3e52b6
         with:
           python-version: 3.8
 
@@ -37,6 +42,6 @@ jobs:
           args: . --sarif --output results.sarif || true
 
       - name: Upload mobsfscan report
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@3673e4c8e07ab7a92d77d113c680405f5a0003e3
         with:
           sarif_file: results.sarif

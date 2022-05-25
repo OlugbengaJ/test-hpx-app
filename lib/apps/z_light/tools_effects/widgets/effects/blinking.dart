@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
-import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
-import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -17,41 +15,14 @@ class BlinkingPreset extends StatefulWidget {
 class _BlinkingPresetState extends State<BlinkingPreset> {
   TextEditingController degreeController = TextEditingController();
 
-  @override
-  void initState() {
-    setDefaultColors(context);
-    // TODO: implement initState
-    super.initState();
-  }
-
-  Future setDefaultColors(BuildContext context) async {
-    await Future.delayed(Duration(seconds: 1));
-    ModeProvider modeProvider =
-        Provider.of<ModeProvider>(context, listen: false);
-    List<Color> currentColors = [];
-    blinkingList.forEach((element) {
-      currentColors.add(element.colorCode[0]);
-    });
-    modeProvider.setCurrentMode(ToolsModeModel(
-        currentColor: currentColors,
-        value: modeProvider.currentMode.value,
-        effects: modeProvider.currentMode.effects,
-        name: modeProvider.currentMode.name));
-  }
-
   void _setSliderValue(double returnValue) {
-    ModeProvider _modeProvider =
-        Provider.of<ModeProvider>(context, listen: false);
     EffectProvider effectsProvider =
         Provider.of<EffectProvider>(context, listen: false);
     setState(() {
-      effectsProvider.defaultWaveEffectValues.speed =
-          returnValue.floorToDouble();
-
       effectsProvider.setCurrentEffect(EffectsModel(
-          effectName: _modeProvider.currentMode.value,
-          degree: effectsProvider.currentEffect.degree,
-          speed: returnValue));
+          effectName: effectsProvider.currentEffect?.effectName,
+          degree: effectsProvider.currentEffect?.degree,
+          speed: returnValue.floorToDouble()));
     });
   }
 
@@ -78,13 +49,11 @@ class _BlinkingPresetState extends State<BlinkingPreset> {
                 Text("Speed", textAlign: TextAlign.left, style: labelStyle),
                 Container(margin: const EdgeInsets.only(bottom: 10.0)),
                 Slider(
-                  value:
-                      effectsProvider.defaultWaveEffectValues.speed!.toDouble(),
+                  value: effectsProvider.currentEffect!.speed!.toDouble(),
                   max: 100,
                   min: 0,
                   divisions: 100,
-                  label:
-                      effectsProvider.defaultWaveEffectValues.speed!.toString(),
+                  label: effectsProvider.currentEffect!.speed.toString(),
                   onChanged: (double value) {
                     _setSliderValue(value);
                   },

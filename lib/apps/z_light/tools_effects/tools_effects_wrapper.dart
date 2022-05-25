@@ -14,7 +14,7 @@ class _ToolsEffectsWrapperState extends State<ToolsEffectsWrapper> {
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: ListView(
-        children: [ToolModes()],
+        children: const [ToolModes()],
       ),
     );
   }

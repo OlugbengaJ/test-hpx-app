@@ -1,52 +1,68 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hpx/apps/z_light/layers/widgets/resizable_widget_controller.dart';
+import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
+
+///[LayersProvider] handle
 
 class LayersProvider extends ChangeNotifier {
   final areaHeight = Get.height * 0.70;
   final areaWidth = Get.width * 0.70;
   final List<LayerItemModel> _layeritems = [];
   final List<LayerItemModel> _sublayers = [];
-  final List<LayerItemModel> _stackedLayeritems =
-      []; // Used to display the staked layers
-  final List<ResizableWidgetController> _layersControllers = [];
 
+  /// [hideStackedLayers] use to show or hide the stack layers for resizable widget
   bool hideStackedLayers = false;
+  bool deleteLayerTooltip = false;
 
-  int _index = 0;
+  /// [listIndex] use to the actual selected layer's index
+  int _listIndex = 0;
   int get length => _layeritems.length;
-  int get index => _index;
+  int get listIndex => _listIndex;
 
   List<LayerItemModel> get layeritems =>
       _layeritems; // Should return only mainlayers
   List<LayerItemModel> get sublayerItems =>
       _sublayers; // Should return only sublayers
-  List<LayerItemModel> get stackedLayeritems => _stackedLayeritems;
 
-  LayerItemModel getItem(int index) {
-    return _layeritems[index];
+  /// [getItem] retrieve the layer using the index.
+  /// This is to get the layer's informations
+  LayerItemModel getItem(int i) {
+    return _layeritems[i];
   }
 
+  // void setKeys(keys){
+  //   LayerItemModel item = _layeritems[index];
+  //   item.setKeys(keys);
+  //   layeritems[index] = item;
+
+  //   notifyListeners();
+  // }
+
+  // LayerItemModel getEditingLayer() {
+  //   if(length>1){
+  //     return _layeritems[index];
+  //   }else{
+  //     return _layeritems[0];
+  //   }
+  // }
+
+  /// [toggleHideStackedLayers] toggle hide or show of the resizable
   void toggleHideStackedLayers(bool show) {
     hideStackedLayers = show;
   }
 
-  void updateView() {
-    notifyListeners();
-  }
+  /// [updateView] use to update the item position when the resizable-draggable stop dragging
+  /// This method is called from the [ResizableProvider]
+  void updateView(
+      double newTop, double newBottom, double newLeft, double newRight) {
+    var item = layeritems[listIndex];
+    item.top = newTop;
+    item.bottom = newBottom;
+    item.left = newLeft;
+    item.right = newRight;
+    _layeritems[listIndex] = item;
 
-  ResizableWidgetController getController(int id) {
-    var controller = _layersControllers
-        .where((controller) => controller.layerID == id)
-        .toList()[0];
-    return _layersControllers
-        .where((controller) => controller.layerID == id)
-        .toList()[0];
-  }
-
-  addController(controller) {
-    _layersControllers.add(controller);
     notifyListeners();
   }
 
@@ -85,51 +101,19 @@ class LayersProvider extends ChangeNotifier {
       element.listDisplayColor = Colors.grey;
     }
 
-    //item.paintColor = colors[item.id - 1];
-
     _layeritems.insert(0, item);
-    _stackedLayeritems.add(item);
-
-    _index = _stackedLayeritems.length - 1;
 
     notifyListeners();
   }
 
-  void rearranegStack() {
-    // Not working properly
-    stackedLayeritems.clear();
-    List<LayerItemModel> reversedList = layeritems.reversed.toList();
-    for (var item in reversedList) {
-      stackedLayeritems.add(item);
-    }
-    notifyListeners();
-  }
-
+  /// [duplicate] uses to duplicate the layer
   void duplicate(LayerItemModel item, int index, {bool sublayer = false}) {
-    ResizableWidgetController controller = ResizableWidgetController(
-      initialPosition: item.controller.initialPosition,
-      layerID: getTheBiggestID(),
-      areaHeight: item.controller.areaHeight,
-      areaWidth: item.controller.areaWidth,
-      height: item.controller.height,
-      width: item.controller.width,
-      minWidth: item.controller.minWidth,
-      minHeight: item.controller.minHeight,
-    );
-
-    controller.bottom = item.controller.bottom;
-    controller.top = item.controller.top;
-    controller.left = item.controller.left;
-    controller.right = item.controller.right;
-    controller.height = item.controller.height;
-    controller.width = item.controller.width;
-
     LayerItemModel duplicatedItem = LayerItemModel(
-        id: (sublayer) ? getTheBiggestSUbID() : getTheBiggestID(),
-        layerText: "Copy ${item.layerText}",
-        mode: item.mode,
-        isSublayer: sublayer,
-        controller: controller);
+      id: (sublayer) ? getTheBiggestSUbID() : getTheBiggestID(),
+      layerText: "Copy ${item.layerText}",
+      mode: item.mode,
+      isSublayer: sublayer,
+    );
 
     if (sublayer) {
       item.hasSublayer = true;
@@ -142,43 +126,31 @@ class LayersProvider extends ChangeNotifier {
         element.listDisplayColor = Colors.grey;
       }
       _layeritems.insert(index + 1, duplicatedItem);
-      _stackedLayeritems.add(duplicatedItem);
-      _layersControllers.add(controller);
-      _index = _stackedLayeritems.length - 1;
     }
     notifyListeners();
   }
 
+  /// [changeIndex] set index when tap on the layer in the [_layeritems]
   void changeIndex(int index) {
     for (var element in _layeritems) {
       element.listDisplayColor = Colors.grey;
     }
-    final item = _layeritems[index];
-    item.listDisplayColor = Colors.white;
-    _layeritems[index] = item;
 
-    for (var i = 0; i < _stackedLayeritems.length; i++) {
-      if (_stackedLayeritems[i].id == _layeritems[index].id) {
-        _index = i;
-        break;
-      }
-    }
+    _listIndex = index;
+
+    final item = _layeritems[_listIndex];
+    item.listDisplayColor = Colors.white;
+    _layeritems[_listIndex] = item;
+
     notifyListeners();
   }
 
-  void update(LayerItemModel item, int index) {
-    int toEdit = _layeritems[index].id;
-    int stackedIndex = 0; // The stack index is different from the list index
-
-    _layeritems[index] = item;
-
-    for (var i = 0; i < _layeritems.length; i++) {
-      if (_stackedLayeritems[i].id == toEdit) {
-        stackedIndex = i;
-      }
-    }
-    _stackedLayeritems[stackedIndex] = item;
-
+  // Update the layerText using its ID
+  void update(int id, String text) {
+    LayerItemModel item = layeritems.singleWhere((item) => item.id == id);
+    item.layerText = text;
+    int editingIndex = layeritems.indexWhere((item) => item.id == id);
+    _layeritems[editingIndex] = item;
     notifyListeners();
   }
 
@@ -203,14 +175,6 @@ class LayersProvider extends ChangeNotifier {
 
     _layeritems[index] = item;
 
-    for (var i = 0; i < _layeritems.length; i++) {
-      if (_stackedLayeritems[i].id == toEdit) {
-        stackedIndex = i;
-        break;
-      }
-    }
-
-    _stackedLayeritems[stackedIndex] = item;
     notifyListeners();
   }
 
@@ -220,7 +184,6 @@ class LayersProvider extends ChangeNotifier {
     }
     final item = _layeritems.removeAt(oldIndex);
     _layeritems.insert(newIndex, item);
-    //rearranegStack();
     notifyListeners();
   }
 
@@ -229,7 +192,6 @@ class LayersProvider extends ChangeNotifier {
       final item = _layeritems[index];
 
       _layeritems.remove(item);
-      _stackedLayeritems.remove(item);
 
       if (_layeritems.isNotEmpty) {
         changeIndex(0);
@@ -242,6 +204,21 @@ class LayersProvider extends ChangeNotifier {
   void removeSubItem(item) {
     if (sublayerItems.length > 1) {
       sublayerItems.remove(item);
+    }
+
+    notifyListeners();
+  }
+
+  void setResizablePosition(ResizableProvider provider) {
+    final item = _layeritems[_listIndex];
+
+    if (item.top != 0) {
+      provider.setSize(
+        newBottom: item.bottom,
+        newLeft: item.left,
+        newRight: item.right,
+        newTop: item.top,
+      );
     }
 
     notifyListeners();

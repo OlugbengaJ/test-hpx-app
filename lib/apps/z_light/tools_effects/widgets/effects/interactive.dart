@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
@@ -17,8 +18,8 @@ class _InteractivePresetState extends State<InteractivePreset> {
   double _sizeSliderValue = 6.0;
   TextEditingController degreeController = TextEditingController();
   final _modeProvider = ModeProvider();
-  final PickerModel _defaultPicker =
-      PickerModel(title: 'Key Wave', enabled: true, value: 'key_wave');
+  final PickerModel _defaultPicker = PickerModel(
+      title: 'Key Wave', enabled: true, value: InteractiveEnum.keywave);
 
   void _setSliderValue(double returnValue, String type) {
     setState(() {
@@ -34,7 +35,7 @@ class _InteractivePresetState extends State<InteractivePreset> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.only(top: 20, bottom: 20.0),
+        margin: const EdgeInsets.only(top: 10, bottom: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -56,7 +57,8 @@ class _InteractivePresetState extends State<InteractivePreset> {
             ),
             Container(margin: const EdgeInsets.only(bottom: 10.0)),
             Wrap(
-              children: _toolsProvider.generateColorPickerWidget(breathingList),
+              children: _toolsProvider
+                  .generateColorPickerWidget(interactiveColorList),
             ),
             Container(margin: const EdgeInsets.only(bottom: 50.0)),
             Divider(
