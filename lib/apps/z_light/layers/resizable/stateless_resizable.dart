@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:hpx/apps/z_light/layers/resizable/drag_distance.dart';
+import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:provider/provider.dart';
-import 'provider/resizable.dart';
-import 'drag_distance.dart';
 
-class StatefulResizableWidget extends StatefulWidget {
-  const StatefulResizableWidget({ 
+
+class StatelessResizable extends StatelessWidget {
+  const StatelessResizable({ 
     Key? key ,
     required this.child,
     required this.dragWidget,
@@ -19,38 +19,16 @@ class StatefulResizableWidget extends StatefulWidget {
   final double dragWidgetHeight;
   final double dragWidgetWidth;
 
-  @override
-  State<StatefulResizableWidget> createState() => _StatefulResizableWidgetState();
-}
-
-class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
   
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _initialize();
-    });
-    context.read<ResizableProvider>().initialize();
-  }
-
-
-  _initialize(){
-    print(MediaQuery.of(context).size.height);
-  }
-
-
-  _onDragEnd(ResizableProvider provider){
-    LayersProvider layersProvider = context.read<LayersProvider>();
-    provider.onDragEnd(layersProvider);
-  }
-
 
   @override
   Widget build(BuildContext context) {
+    _onDragEnd(ResizableProvider provider){
+      LayersProvider layersProvider = context.read<LayersProvider>();
+      provider.onDragEnd(layersProvider);
+    }
     return Consumer<ResizableProvider>(
-      builder: (_, provider, child)
+      builder: (_, provider, child_)
        {
         return Stack(
           children: <Widget>[
@@ -59,13 +37,13 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
               left: provider.left,
               bottom: provider.bottom,
               right: provider.right,
-              child: widget.child,
+              child: child,
             ),
             Positioned(
-              top: provider.top - widget.dragWidgetHeight / 2,
-              left: provider.left - widget.dragWidgetWidth / 2,
-              bottom: provider.bottom - widget.dragWidgetHeight / 2,
-              right: provider.right - widget.dragWidgetWidth / 2,
+              top: provider.top - dragWidgetHeight / 2,
+              left: provider.left - dragWidgetWidth / 2,
+              bottom: provider.bottom - dragWidgetHeight / 2,
+              right: provider.right - dragWidgetWidth / 2,
               child: Visibility(
                 visible: provider.showDragWidgets,
                 child: Stack(
@@ -100,7 +78,7 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                           onDragEnd: (DragEndDetails details){
                             _onDragEnd(provider);
                           },
-                          child: widget.dragWidget,
+                          child: dragWidget,
                         ),
                       ),
                     ),
@@ -114,7 +92,7 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                           onDragEnd: (DragEndDetails details){
                             _onDragEnd(provider);
                           },
-                          child: widget.dragWidget,
+                          child: dragWidget,
                         ),
                       ),
                     ),
@@ -128,7 +106,7 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                           onDragEnd: (DragEndDetails details){
                             _onDragEnd(provider);
                           },
-                          child: widget.dragWidget,
+                          child: dragWidget,
                         ),
                       ),
                     ),
@@ -142,7 +120,7 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                           onDragEnd: (DragEndDetails details){
                             _onDragEnd(provider);
                           },
-                          child: widget.dragWidget,
+                          child: dragWidget,
                         ),
                       ),
                     ),
@@ -157,7 +135,7 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                           onDragEnd: (DragEndDetails details){
                             _onDragEnd(provider);
                           },
-                          child: widget.dragWidget,
+                          child: dragWidget,
                         ),
                       ),
                     ),
@@ -171,7 +149,7 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                           onDragEnd: (DragEndDetails details){
                             _onDragEnd(provider);
                           },
-                          child: widget.dragWidget,
+                          child: dragWidget,
                         ),
                       ),
                     ),
@@ -185,7 +163,7 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                           onDragEnd: (DragEndDetails details){
                             _onDragEnd(provider);
                           },
-                          child: widget.dragWidget,
+                          child: dragWidget,
                         ),
                       ),
                     ),
@@ -199,7 +177,7 @@ class _StatefulResizableWidgetState extends State<StatefulResizableWidget> {
                           onDragEnd: (DragEndDetails details){
                             _onDragEnd(provider);
                           },
-                          child: widget.dragWidget,
+                          child: dragWidget,
                         ),
                       ),
                     ),

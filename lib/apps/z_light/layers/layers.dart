@@ -46,9 +46,7 @@ class _LayersState extends State<Layers> {
   /// [_addLayer] used to add a layer to the available list
   /// use the [ModeProvider] the set the newly created layer name
   _addLayer() {
-    context.read<ResizableProvider>().initialize(
-      Offset(areaWidth / 2, areaHeight / 2),
-    );
+    context.read<ResizableProvider>().initialize();
 
     ModeProvider modeProvider = context.read<ModeProvider>();
     var provider = context.read<LayersProvider>();

@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 
 /// Keys to watch by the ZoneSelector and the resizable widgets
 class ResizableProvider extends ChangeNotifier {
   GlobalKey draggableKey = GlobalKey();
   Offset initialPosition = Offset.zero;
-  late double areaHeight = 500;
-  late double areaWidth = 700;
-  late double minWidth = 0.0;
-  late double minHeight = 0.0;
+  late double areaHeight = Get.height;
+  late double areaWidth = Get.width;
+  late double minWidth = 20;
+  late double minHeight = 0;
 
   late double height = 0.0;
   late double width = 0.0;
+
   double top = 0.0;
   double left = 0.0;
   double bottom = 0.0;
@@ -19,14 +21,13 @@ class ResizableProvider extends ChangeNotifier {
 
   bool showDragWidgets = true;
 
-  List<Map<String, dynamic>> zoneToPaint = [];
 
-  double leftPadding = 0.0;
 
-  double topPadding = 0.0;
-
-  initialize(Offset initOffset) {
+  initialize() {
     initialPosition = Offset(areaWidth / 2, areaHeight / 2);
+    height = areaHeight / 2;
+    width = areaWidth / 2;
+
     double newTop = initialPosition.dy - height / 2;
     double newBottom = areaHeight - height - newTop;
     double newLeft = initialPosition.dx - (width / 2);
@@ -54,6 +55,14 @@ class ResizableProvider extends ChangeNotifier {
 
   void toggleShowDragWigets() {
     showDragWidgets = !showDragWidgets;
+  }
+
+
+  Size calculateSizeFromLocal(){
+    RenderBox box = draggableKey.currentContext?.findRenderObject() as RenderBox;
+
+    final boxSize = box.size;
+    return boxSize;
   }
 
   void setSize({
@@ -95,17 +104,16 @@ class ResizableProvider extends ChangeNotifier {
     calculateWidgetSize(bottom: bottom, left: left, right: right, top: top);
   }
 
-  bool checkTopBotMaxSize(final double newTop, final double newBottom) =>(newTop >= 0 && newBottom >= 0) && (height <= minHeight);
-  bool checkLeftRightMaxSize(final double newLeft, final double newRight) =>  (newLeft >= 0 && newRight >= 0) && (width <= minWidth);
+  bool checkTopBotMaxSize(final double newTop, final double newBottom) =>(newTop >= 0 && newBottom >= 0) && (height >= minHeight);
+  bool checkLeftRightMaxSize(final double newLeft, final double newRight) =>  (newLeft >= 0 && newRight >= 0) && (width >= minWidth);
 
-  void calculateWidgetSize({
-    required final double top,
-    required final double left,
-    required final double bottom,
-    required final double right,
-  }) {
+  void calculateWidgetSize({required final double top, required final double left, required final double bottom, required final double right,}) {    
     width = areaWidth - (left + right);
     height = areaHeight - (top + bottom);
+    print(width);
+    notifyListeners();
+    print("Height: $height");
+    calculateSizeFromLocal();
   }
 
   void onTopLeftDrag(dx, dy) {
