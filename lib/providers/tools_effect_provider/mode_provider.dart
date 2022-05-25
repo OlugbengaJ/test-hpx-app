@@ -141,6 +141,9 @@ class ModeProvider extends ChangeNotifier {
       modeType: EnumModeType.layers,
       icon: Icons.mood);
 
+  // default variable for settin tools and effects widget in this function
+  Widget preset = Container();
+
   /// function set the current mode information to the provider mode variable
   void setCurrentMode(ToolsModeModel data) {
     currentMode = data;
@@ -169,13 +172,11 @@ class ModeProvider extends ChangeNotifier {
 
   /// function designed to change the tools and effects mode widget and return the chosen widget
   /// also sets the default colors and mode information
-  Widget? changeModeComponent(PickerModel? pickerChoice, BuildContext context) {
+  changeModeComponent(PickerModel? pickerChoice, BuildContext context) {
     // default variable for settin currentcolors in this function
     List<Color> currentColors = [];
     // default variable for settin effects in this function
     EffectsModel effects = EffectsModel(effectName: pickerChoice?.value);
-    // default variable for settin tools and effects widget in this function
-    Widget? preset;
 
     /// initialize the workspace provider to use to send notification accross the workspace
     WorkspaceProvider workProvider =
@@ -268,7 +269,6 @@ class ModeProvider extends ChangeNotifier {
         icon: pickerChoice.icon,
         effects: effectsProvider.currentEffect!,
         name: pickerChoice.title));
-    return preset;
   }
 
   // get current mode information

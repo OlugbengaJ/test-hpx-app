@@ -13,7 +13,6 @@ class ToolModes extends StatefulWidget {
 }
 
 class _ToolModesState extends State<ToolModes> {
-  late Widget preset = Container();
   final PickerModel _defaultPreset =
       PickerModel(title: 'Mood', value: EnumModes.mood, enabled: true);
 
@@ -29,7 +28,7 @@ class _ToolModesState extends State<ToolModes> {
         Provider.of<ModeProvider>(context, listen: false);
     await Future.delayed(Duration(seconds: 0));
     setState(() {
-      preset = modeProvider.changeModeComponent(_defaultPreset, context)!;
+      modeProvider.changeModeComponent(_defaultPreset, context);
     });
   }
 
@@ -47,8 +46,7 @@ class _ToolModesState extends State<ToolModes> {
                 child: PickerDropdown(
                   onChange: (PickerModel? returnValue) {
                     setState(() {
-                      preset = modeProvider.changeModeComponent(
-                          returnValue, context)!;
+                      modeProvider.changeModeComponent(returnValue, context);
                     });
                   },
                   pickerHintText: "Picker a tool or effect mode ....",
@@ -57,7 +55,7 @@ class _ToolModesState extends State<ToolModes> {
                 )),
             Container(
               margin: const EdgeInsets.only(top: 0.0, bottom: 20.0),
-              child: preset,
+              child: modeProvider.preset,
             ),
           ],
         ));
