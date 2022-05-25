@@ -182,7 +182,9 @@ class ModeProvider extends ChangeNotifier {
     switch (pickerChoice!.value) {
       case EnumModes.shortcut:
         workProvider.toggleModal([Text("Hello World", style: h2Style)]);
-        currentColors.add(Colors.transparent);
+        shortcutList.forEach((element) {
+          currentColors.add(element.colorCode[0]);
+        });
         preset = const ShortcutColorsPreset();
         break;
       case EnumModes.mood:
@@ -269,5 +271,12 @@ class ModeProvider extends ChangeNotifier {
   // get current mode information
   getModeInformation() {
     return currentMode;
+  }
+
+  // change the mode type for the current mode between sublayer and layer based on the value passed
+  setModeType(bool isSubLayer) {
+    currentMode.modeType =
+        (isSubLayer == true) ? EnumModeType.sublayer : EnumModeType.layers;
+    notifyListeners();
   }
 }
