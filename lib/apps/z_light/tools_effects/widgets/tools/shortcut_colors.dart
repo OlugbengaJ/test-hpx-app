@@ -22,7 +22,7 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
         Provider.of<ShortcutWidgetProvider>(context, listen: false);
     ColorPickerProvider colorPickerProvider =
         Provider.of<ColorPickerProvider>(context, listen: false);
-    return (modeProvider.currentMode.modeType == EnumModeType.layers)
+    return (modeProvider.currentMode.modeType != EnumModeType.layers)
         ? Container()
         : Container(
             margin: const EdgeInsets.only(top: 30),
