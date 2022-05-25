@@ -136,7 +136,7 @@ class KeyModel with ChangeNotifier {
     // update selected chip opacity
     else if (isSelected) {
       updateChip(id.toString(),
-          opacity: isVisible ? 1.0 : 0.0, showOutline: true);
+          opacity: isVisible ? 1.0 : 0.0, showOutline: false);
     }
   }
 
