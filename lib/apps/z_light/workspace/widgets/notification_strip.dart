@@ -33,6 +33,7 @@ class StripNotification extends StatelessWidget {
               child: Text(
                 message,
                 softWrap: true,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Theme.of(context).primaryColorDark,
                 ),

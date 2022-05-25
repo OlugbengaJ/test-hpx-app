@@ -8,6 +8,7 @@ import 'package:hpx/apps/z_light/tools_effects/tools_effects_wrapper.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
+import 'package:hpx/widgets/components/dropdown.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/layouts/three_columns.dart';
 import 'package:hpx/widgets/theme.dart';
@@ -102,35 +103,23 @@ class _WrapperState extends State<Wrapper> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
+              margin: EdgeInsets.zero,
               width: 180,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Theme.of(context).primaryColorLight,
-                  width: 1,
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: DropdownButton(
-                  value: _modeProvider.getPickerModes('profile').first,
-                  menuMaxHeight: 400,
-                  alignment: Alignment.bottomRight,
-                  hint: Text(
-                    'Select profile...',
-                    style: pStyle,
-                  ),
-                  underline: const SizedBox(),
-                  items: _modeProvider
-                      .getPickerModes('profile')
-                      .map((e) => DropdownMenuItem(
-                            enabled: e.enabled,
-                            value: e,
-                            child: GetProfileList(profile: e),
-                          ))
-                      .toList(),
-                  onChanged: (o) {},
-                  isExpanded: true,
-                ),
+              child: DropDown(
+                hint: 'Select profile...',
+                hintStyle: pStyle,
+                initialValue: _modeProvider.getPickerModes('profile').first,
+                isExpanded: true,
+                items: [
+                  ..._modeProvider.getPickerModes('profile').map(
+                        (e) => DropdownMenuItem(
+                          enabled: e.enabled,
+                          value: e,
+                          child: GetProfileList(profile: e),
+                        ),
+                      )
+                ],
+                onChangedHandler: (o) {},
               ),
             ),
           ),
