@@ -319,14 +319,19 @@ List<ColorPickerWidgetModel> audioVisualSolidList = [
       colorCode: [Colors.transparent])
 ];
 List<ColorPickerWidgetModel> audioVisualGradientList = [
-  ColorPickerWidgetModel(label: "", action: 'Edit', name: "", colorCode: [
-    Colors.red.shade900,
-    Colors.yellow,
-    Colors.green,
-    Colors.blue,
-    Colors.purple,
-    Colors.red
-  ])
+  ColorPickerWidgetModel(
+      canEdit: true,
+      label: "",
+      action: 'Edit',
+      name: "",
+      colorCode: [
+        Colors.red.shade900,
+        Colors.yellow,
+        Colors.green,
+        Colors.blue,
+        Colors.purple,
+        Colors.red
+      ])
 ];
 
 //// color picker provider class to handle the color picker generate ui functions, and set the current color
@@ -334,7 +339,26 @@ class ColorPickerProvider extends ChangeNotifier {
   ColorPickerWidgetModel? currentColor;
 
   /// current color
-  List<Color> lastColors = [];
+  List<Color> lastColors = [
+    Colors.transparent,
+    Colors.transparent,
+    Colors.transparent,
+    Colors.transparent,
+    Colors.transparent,
+    Colors.transparent,
+    Colors.transparent,
+    Colors.transparent,
+    Colors.transparent,
+    Colors.transparent,
+    Colors.transparent,
+    Colors.transparent,
+    Colors.transparent,
+    Colors.transparent,
+    Colors.transparent,
+    Colors.transparent,
+    Colors.transparent,
+    Colors.transparent
+  ];
 
   ///  last color selected colors
   /// preset colors for differnet color modes
