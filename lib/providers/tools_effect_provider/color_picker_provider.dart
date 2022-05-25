@@ -206,6 +206,17 @@ List<ColorPickerWidgetModel> blinkingList = [
   )
 ];
 
+// shortcut pickermodel lists
+List<ColorPickerWidgetModel> shortcutList = [
+  ColorPickerWidgetModel(
+    label: "",
+    action: '',
+    canEdit: true,
+    name: "sublayer",
+    colorCode: [Colors.grey.shade900],
+  )
+];
+
 // color production pickermodel lists
 List<ColorPickerWidgetModel> colorProductionList = [
   ColorPickerWidgetModel(
