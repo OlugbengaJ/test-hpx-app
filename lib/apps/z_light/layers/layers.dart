@@ -35,6 +35,7 @@ class _LayersState extends State<Layers> {
 
   /// [initialLayer] add a default layer to the workspace if there no layer available
   void initialLayer() {
+    ModeProvider modeProvider = context.read<ModeProvider>();
     LayersProvider provider = context.read<LayersProvider>();
     if (provider.length < 1) {
       _addLayer();
@@ -58,6 +59,8 @@ class _LayersState extends State<Layers> {
       id = id + 1;
     }
 
+
+    /// Add a new provider to the layeritems, using the LayersProvider
     provider.add(
       LayerItemModel(
         id: id,

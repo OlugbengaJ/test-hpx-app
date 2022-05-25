@@ -11,8 +11,8 @@ class ResizableProvider extends ChangeNotifier {
   late double minWidth = 50;
   late double minHeight = 50;
 
-  late double height = 0.0;
-  late double width = 0.0;
+  late double height = 500;
+  late double width = 500;
 
   double top = 0.0;
   double left = 0.0;
@@ -105,7 +105,7 @@ class ResizableProvider extends ChangeNotifier {
 
   //bool checkTopBotMaxSize(final double newTop, final double newBottom) =>(newTop >= 0 && newBottom >= 0) && (height >= minHeight);
   bool checkTopBotMaxSize(final double newTop, final double newBottom) =>(newTop >= 0 && newBottom >= 0);
-  bool checkLeftRightMaxSize(final double newLeft, final double newRight) =>  (newLeft >= 0 && newRight >= 0) && (width >= minWidth);
+  bool checkLeftRightMaxSize(final double newLeft, final double newRight) =>  (newLeft >= 0 && newRight >= 0);
 
   void calculateWidgetSize({required final double top, required final double left, required final double bottom, required final double right,}) {    
     width = areaWidth - (left + right);
@@ -114,7 +114,7 @@ class ResizableProvider extends ChangeNotifier {
     calculateSizeFromLocal();
   }
 
-  void onTopLeftDrag(dx, dy) {
+  void onTopLeftDrag(double dx, double dy) {
     var mid = (dx + dy) / 2;
     if(dy<0){
       setSize(
@@ -131,7 +131,7 @@ class ResizableProvider extends ChangeNotifier {
     }    
   }
 
-  void onTopCenterDrag(dx, dy) {
+  void onTopCenterDrag(double dx, double dy) {
     if(dy<0){
       setSize(newTop: top + dy); // 
     }else{
@@ -142,7 +142,7 @@ class ResizableProvider extends ChangeNotifier {
     
   }
 
-  void onTopRightDrag(dx, dy) {
+  void onTopRightDrag(double dx, double dy) {
     var mid = (dx - dy) / 2;
 
     if(dy<0){
@@ -160,7 +160,7 @@ class ResizableProvider extends ChangeNotifier {
     }    
   }
 
-  void onCenterLeftDrag(dx, dy) {
+  void onCenterLeftDrag(double dx, double dy) {
     if(dx<0){
       setSize(newLeft: left + dx);
     }else{
@@ -171,7 +171,7 @@ class ResizableProvider extends ChangeNotifier {
     
   }
 
-  void onCenterDrag(dx, dy) {
+  void onCenterDrag(double dx, double dy) {
     setSize(
       newTop: top + dy,
       newLeft: left + dx,
@@ -180,7 +180,7 @@ class ResizableProvider extends ChangeNotifier {
     );
   }
 
-  void onCenterRightDrag(dx, dy) {
+  void onCenterRightDrag(double dx, double dy) {
     if(dx>0){
       setSize(newRight: right - dx);
     }else{
@@ -190,7 +190,7 @@ class ResizableProvider extends ChangeNotifier {
     }
   }
 
-  void onBottomLeftDrag(dx, dy) {
+  void onBottomLeftDrag(double dx, double dy) {
     var mid = (dy - dx) / 2;
     
     if(dy>0){
@@ -202,7 +202,7 @@ class ResizableProvider extends ChangeNotifier {
     }
   }
 
-  void onBottomCenterDrag(dx, dy) {
+  void onBottomCenterDrag(double dx, double dy) {
     if(dy>0){
       setSize(newBottom: bottom - dy);
     }else{
@@ -212,7 +212,7 @@ class ResizableProvider extends ChangeNotifier {
     }
   }
 
-  void onBottomRightDrag(dx, dy) {
+  void onBottomRightDrag(double dx, double dy) {
     var mid = (dx + dy) / 2;
 
     if(dy>0){

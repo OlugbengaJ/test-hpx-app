@@ -59,9 +59,9 @@ class _LayerListItemState extends State<LayerListItem> {
   _duplicate(LayersProvider provider){
     ModeProvider modeProvider = context.read<ModeProvider>();
     if(widget.layerItemModel.mode.name=="Shortcut Colors"){
-      provider.duplicate(widget.layerItemModel, widget.layerIndex, modeProvider, sublayer: true);
+      provider.duplicateOrCreatSubLayer(widget.layerItemModel, widget.layerIndex, modeProvider, sublayer: true);
     }else{
-      provider.duplicate(widget.layerItemModel, widget.layerIndex, modeProvider);
+      provider.duplicateOrCreatSubLayer(widget.layerItemModel, widget.layerIndex, modeProvider);
     }
     
   }

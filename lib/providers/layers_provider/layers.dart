@@ -9,6 +9,7 @@ import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 class LayersProvider extends ChangeNotifier {
   final List<LayerItemModel> _layeritems = [];
   final List<LayerItemModel> _sublayers = [];
+  ModeProvider? _modeProvider;
 
   /// [hideStackedLayers] use to show or hide the stack layers for resizable widget
   bool hideStackedLayers = false;
@@ -36,8 +37,16 @@ class LayersProvider extends ChangeNotifier {
   }
 
 
+  void setModeProvider(ModeProvider modeProvider){
+    _modeProvider = modeProvider;
+  }
+
+
+  /// listen to any change from the tools and effects so the current layers can be updated
   void toolsEffectsUpdated(){
-    print("Tools Effects updated");
+    LayerItemModel item = getItem(listIndex);
+    item.mode =  _modeProvider!.getModeInformation();
+    _layeritems[listIndex] = item;
     notifyListeners();
   }
 
@@ -87,6 +96,7 @@ class LayersProvider extends ChangeNotifier {
   }
 
   void add(LayerItemModel item) {
+    //print(modeProvider!.currentMode.value);
     for (var element in _layeritems) {
       element.listDisplayColor = Colors.grey;
     }
@@ -97,8 +107,8 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// [duplicate] uses to duplicate the layer
-  void duplicate(LayerItemModel item, int index, ModeProvider modeProvider,{bool sublayer=false}) {
+  /// [duplicateOrCreatSubLayer] uses to duplicate the layer or create a sublayer depending the mode type
+  void duplicateOrCreatSubLayer(LayerItemModel item, int index, ModeProvider modeProvider,{bool sublayer=false}) {
     LayerItemModel duplicatedItem = LayerItemModel(
       id: (sublayer)? getTheBiggestSUbID(): getTheBiggestID(),
       layerText: "Copy ${item.layerText}",
@@ -107,10 +117,11 @@ class LayersProvider extends ChangeNotifier {
     );
 
     if(sublayer){
-      
+      modeProvider.setModeType(true);
       item.hasSublayer = true;
       duplicatedItem.layerText = "Sublayer";
       duplicatedItem.parentID = item.id;
+      duplicatedItem.mode = modeProvider.getModeInformation();
       _sublayers.insert(0, duplicatedItem);
       _layeritems[index] = item;
     }
@@ -137,7 +148,6 @@ class LayersProvider extends ChangeNotifier {
     final item = _layeritems[_listIndex];
     item.listDisplayColor = Colors.white;
     _layeritems[_listIndex] = item;
-
 
     notifyListeners();
   }
