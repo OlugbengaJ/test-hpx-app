@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/utils/constants.dart';
 
 class KeyRRectClipper extends CustomClipper<RRect> {
   /// [KeyRRectClipper] handles the clipping of the keyboard key on canvas.
@@ -17,6 +18,10 @@ class KeyRRectClipper extends CustomClipper<RRect> {
 
   @override
   RRect getClip(Size size) {
+    // fixed radius for all buttons
+    final double radius =
+        0.03914955 * Constants.zoomFactor * zoomScale * keyRadius;
+
     return RRect.fromRectAndCorners(
       Rect.fromLTWH(
         size.width * keyLeft,
@@ -24,10 +29,10 @@ class KeyRRectClipper extends CustomClipper<RRect> {
         size.width,
         size.height,
       ),
-      bottomRight: Radius.circular(zoomScale * size.width * keyRadius),
-      bottomLeft: Radius.circular(zoomScale * size.width * keyRadius),
-      topLeft: Radius.circular(zoomScale * size.width * keyRadius),
-      topRight: Radius.circular(zoomScale * size.width * keyRadius),
+      bottomRight: Radius.circular(radius),
+      bottomLeft: Radius.circular(radius),
+      topLeft: Radius.circular(radius),
+      topRight: Radius.circular(radius),
     );
   }
 
