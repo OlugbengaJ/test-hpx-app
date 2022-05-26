@@ -144,6 +144,10 @@ class ModeProvider extends ChangeNotifier {
   // default variable for settin tools and effects widget in this function
   Widget preset = Container();
 
+  // default variable for settin tools and effects widget in this function
+  PickerModel modePicker =
+      PickerModel(title: 'Mood', value: EnumModes.mood, enabled: true);
+
   /// function set the current mode information to the provider mode variable
   void setCurrentMode(ToolsModeModel data) {
     currentMode = data;
@@ -253,6 +257,8 @@ class ModeProvider extends ChangeNotifier {
         preset = Container();
         break;
     }
+
+    modePicker = pickerChoice;
 
     //// set the current effects to the effects provider
     EffectProvider effectsProvider =
