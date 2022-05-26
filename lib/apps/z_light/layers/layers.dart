@@ -48,6 +48,7 @@ class _LayersState extends State<Layers> {
     context.read<ResizableProvider>().initialize();
 
     ModeProvider modeProvider = context.read<ModeProvider>();
+
     var provider = context.read<LayersProvider>();
     int id = 1; // For first element;
     if (provider.layeritems.isNotEmpty) {
@@ -64,13 +65,13 @@ class _LayersState extends State<Layers> {
     provider.add(
       LayerItemModel(
         id: id,
-        layerText: (provider.length>0)?modeProvider.currentMode.name: "Mood",
-        mode: modeProvider.currentMode,
+        layerText: "Mood",
+        //mode: modeProvider.currentMode,
         top: context.read<ResizableProvider>().top,
         bottom: context.read<ResizableProvider>().bottom,
         left: context.read<ResizableProvider>().left,
         right: context.read<ResizableProvider>().right,
-        icon: (provider.length>0)?modeProvider.getModeInformation().icon: Icons.mood
+        icon: Icons.mood
       )
     );
   }

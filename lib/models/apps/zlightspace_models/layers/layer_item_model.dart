@@ -16,7 +16,6 @@ class LayerItemModel {
     this.hasSublayer = false,
     this.listDisplayColor = defaultColor,
     this.paintColor = defaultPaintColor,
-    required this.mode,
     this.top = 0,
     this.bottom = 0,
     this.left = 0,
@@ -33,7 +32,7 @@ class LayerItemModel {
   bool visibleOnStack;
   Color listDisplayColor;
   Color paintColor;
-  ToolsModeModel mode;
+  ToolsModeModel? mode;
   List<KeyModel> _keys = [];
 
 
