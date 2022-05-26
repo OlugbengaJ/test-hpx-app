@@ -128,22 +128,25 @@ class KeyModel with ChangeNotifier {
     int id,
     bool isVisible, {
     required double animValue,
+    // chip has animation
+    bool isAnimated = false,
   }) {
-    // highlight the chip with keys matching id
+    final opacity = isVisible ? animValue : 0.0;
+
     if (isWidgetInZone == true) {
+      // highlight the chip with keys matching id
+
       _isSelected = true;
-      final opacity = isVisible ? animValue : 0.0;
       updateChip(id.toString(), opacity: opacity, showOutline: true);
-    }
-    // remove chip with specific id
-    else if (isWidgetInZone == false) {
+    } else if (isWidgetInZone == false) {
+      // remove chip with specific id
+
       _isSelected = false;
       removeChip(id.toString());
-    }
-    // update selected chip opacity
-    else if (isSelected) {
-      updateChip(id.toString(),
-          opacity: isVisible ? animValue : 0.0, showOutline: false);
+    } else if (isSelected) {
+      // update selected chip opacity when visibility is disabled.
+
+      updateChip(id.toString(), opacity: opacity, showOutline: false);
     }
   }
 
