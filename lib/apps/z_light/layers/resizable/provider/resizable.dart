@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 
 /// Keys to watch by the ZoneSelector and the resizable widgets
 class ResizableProvider extends ChangeNotifier {
   GlobalKey draggableKey = GlobalKey();
   Offset initialPosition = Offset.zero;
-  late double areaHeight = 500;
-  late double areaWidth = 500;
-  late double minWidth = 0.0;
-  late double minHeight = 0.0;
+  late double areaHeight = Get.height * 0.7;
+  late double areaWidth = Get.width * 0.7;
+  late double minWidth = 50;
+  late double minHeight = 50;
 
-  late double height = 0.0;
-  late double width = 0.0;
+  late double height = 500;
+  late double width = 500;
+
   double top = 0.0;
   double left = 0.0;
   double bottom = 0.0;
@@ -19,14 +21,13 @@ class ResizableProvider extends ChangeNotifier {
 
   bool showDragWidgets = true;
 
-  List<Map<String, dynamic>> zoneToPaint = [];
 
-  double leftPadding = 0.0;
 
-  double topPadding = 0.0;
-
-  initialize(Offset initOffset) {
+  initialize() {
     initialPosition = Offset(areaWidth / 2, areaHeight / 2);
+    height = areaHeight / 2;
+    width = areaWidth / 2;
+
     double newTop = initialPosition.dy - height / 2;
     double newBottom = areaHeight - height - newTop;
     double newLeft = initialPosition.dx - (width / 2);
@@ -56,6 +57,13 @@ class ResizableProvider extends ChangeNotifier {
     showDragWidgets = !showDragWidgets;
   }
 
+
+  Size calculateSizeFromLocal(){
+    RenderBox box = draggableKey.currentContext?.findRenderObject() as RenderBox;
+    final boxSize = box.size;
+    return boxSize;
+  }
+
   void setSize({
     double? newTop,
     double? newLeft,
@@ -83,8 +91,7 @@ class ResizableProvider extends ChangeNotifier {
     required final double newRight,
     required final double newBottom,
   }) {
-    calculateWidgetSize(
-        top: newTop, left: newLeft, bottom: newBottom, right: newRight);
+    calculateWidgetSize( top: newTop, left: newLeft, bottom: newBottom, right: newRight);
     if (checkTopBotMaxSize(newTop, newBottom)) {
       top = newTop;
       bottom = newBottom;
@@ -96,46 +103,75 @@ class ResizableProvider extends ChangeNotifier {
     calculateWidgetSize(bottom: bottom, left: left, right: right, top: top);
   }
 
-  bool checkTopBotMaxSize(final double newTop, final double newBottom) =>
-      (newTop >= 0 && newBottom >= 0) && (height <= minHeight);
-  bool checkLeftRightMaxSize(final double newLeft, final double newRight) =>
-      (newLeft >= 0 && newRight >= 0) && (width <= minWidth);
+  //bool checkTopBotMaxSize(final double newTop, final double newBottom) =>(newTop >= 0 && newBottom >= 0) && (height >= minHeight);
+  bool checkTopBotMaxSize(final double newTop, final double newBottom) =>(newTop >= 0 && newBottom >= 0);
+  bool checkLeftRightMaxSize(final double newLeft, final double newRight) =>  (newLeft >= 0 && newRight >= 0);
 
-  void calculateWidgetSize({
-    required final double top,
-    required final double left,
-    required final double bottom,
-    required final double right,
-  }) {
+  void calculateWidgetSize({required final double top, required final double left, required final double bottom, required final double right,}) {    
     width = areaWidth - (left + right);
     height = areaHeight - (top + bottom);
+    notifyListeners();
+    calculateSizeFromLocal();
   }
 
-  void onTopLeftDrag(dx, dy) {
+  void onTopLeftDrag(double dx, double dy) {
     var mid = (dx + dy) / 2;
-    setSize(
-      newTop: top + mid,
-      newLeft: left + mid,
-    );
+    if(dy<0){
+      setSize(
+        newTop: top + mid,
+        newLeft: left + mid,
+      );
+    }else{
+      if(calculateSizeFromLocal().height>minHeight){
+        setSize(
+          newTop: top + mid,
+          newLeft: left + mid,
+        );
+      }
+    }    
   }
 
-  void onTopCenterDrag(dx, dy) {
-    setSize(newTop: top + dy);
+  void onTopCenterDrag(double dx, double dy) {
+    if(dy<0){
+      setSize(newTop: top + dy); // 
+    }else{
+      if(calculateSizeFromLocal().height>minHeight){
+        setSize(newTop: top + dy);
+      }
+    }
+    
   }
 
-  void onTopRightDrag(dx, dy) {
+  void onTopRightDrag(double dx, double dy) {
     var mid = (dx - dy) / 2;
-    setSize(
-      newTop: top - mid,
-      newRight: right - mid,
-    );
+
+    if(dy<0){
+      setSize(
+        newTop: top - mid,
+        newRight: right - mid,
+      );
+    }else{
+      if(calculateSizeFromLocal().height>minHeight){
+        setSize(
+          newTop: top - mid,
+          newRight: right - mid,
+        );
+      }
+    }    
   }
 
-  void onCenterLeftDrag(dx, dy) {
-    setSize(newLeft: left + dx);
+  void onCenterLeftDrag(double dx, double dy) {
+    if(dx<0){
+      setSize(newLeft: left + dx);
+    }else{
+      if(calculateSizeFromLocal().width>minWidth){
+        setSize(newLeft: left + dx);
+      }
+    }
+    
   }
 
-  void onCenterDrag(dx, dy) {
+  void onCenterDrag(double dx, double dy) {
     setSize(
       newTop: top + dy,
       newLeft: left + dx,
@@ -144,26 +180,54 @@ class ResizableProvider extends ChangeNotifier {
     );
   }
 
-  void onCenterRightDrag(dx, dy) {
-    setSize(newRight: right - dx);
+  void onCenterRightDrag(double dx, double dy) {
+    if(dx>0){
+      setSize(newRight: right - dx);
+    }else{
+      if(calculateSizeFromLocal().width>minWidth){
+        setSize(newRight: right - dx);
+      }
+    }
   }
 
-  void onBottomLeftDrag(dx, dy) {
+  void onBottomLeftDrag(double dx, double dy) {
     var mid = (dy - dx) / 2;
-    setSize(newBottom: bottom - mid, newLeft: left - mid);
+    
+    if(dy>0){
+      setSize(newBottom: bottom - mid, newLeft: left - mid);
+    }else{
+      if(calculateSizeFromLocal().height>minHeight){
+        setSize(newBottom: bottom - mid, newLeft: left - mid);
+      }
+    }
   }
 
-  void onBottomCenterDrag(dx, dy) {
-    setSize(newBottom: bottom - dy);
+  void onBottomCenterDrag(double dx, double dy) {
+    if(dy>0){
+      setSize(newBottom: bottom - dy);
+    }else{
+      if(calculateSizeFromLocal().height>minHeight){
+        setSize(newBottom: bottom - dy);
+      }
+    }
   }
 
-  void onBottomRightDrag(dx, dy) {
+  void onBottomRightDrag(double dx, double dy) {
     var mid = (dx + dy) / 2;
 
-    setSize(
-      newRight: right - mid,
-      newBottom: bottom - mid,
-    );
+    if(dy>0){
+      setSize(
+        newRight: right - mid,
+        newBottom: bottom - mid,
+      );
+    }else{
+      if(calculateSizeFromLocal().height>minHeight){
+        setSize(
+          newRight: right - mid,
+          newBottom: bottom - mid,
+        );
+      }
+    }
   }
 
   void onDragEnd(LayersProvider provider){
