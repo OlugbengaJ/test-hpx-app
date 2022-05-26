@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard_key.dart';
+import 'package:hpx/models/apps/zlightspace_models/workspace_models/key_code.dart';
 import 'package:hpx/providers/keys_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -17,12 +18,12 @@ class KeyboardRowCtrl extends StatelessWidget {
 
     final keysProvider = Provider.of<KeysProvider>(context);
     final rowKeysFiltered = keysProvider.getKeyInRow(5).where((element) =>
-        element.keyCode != 'KEY_ARROW_UP' &&
-        element.keyCode != 'KEY_ARROW_DOWN' &&
-        element.keyCode != 'KEY_ARROW_RIGHT');
-    final rowKeyRight = keysProvider.getKey('KEY_ARROW_RIGHT');
-    final rowKeyUp = keysProvider.getKey('KEY_ARROW_UP');
-    final rowKeyDown = keysProvider.getKey('KEY_ARROW_DOWN');
+        element.keyCode != KeyCode.kArrowUp &&
+        element.keyCode != KeyCode.kArrowDown &&
+        element.keyCode != KeyCode.kArrowRight);
+    final rowKeyRight = keysProvider.getKey(KeyCode.kArrowRight);
+    final rowKeyUp = keysProvider.getKey(KeyCode.kArrowUp);
+    final rowKeyDown = keysProvider.getKey(KeyCode.kArrowDown);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
