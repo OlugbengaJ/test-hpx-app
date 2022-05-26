@@ -79,7 +79,8 @@ KeyModel _updateKeyInfo(
     final layer = layersProvider.layeritems[layerIndex];
     layerVisible = layer.visible;
   }
-  keyModel.selectKey(isWidgetInZone, layerIndex, layerVisible);
+  keyModel.selectKey(isWidgetInZone, layerIndex, layerVisible,
+      animValue: provider.animation.value);
   // if (provider.isDragModeClick &&
   //     isWidgetInZone == true &&
   //     !keyModel.isSelected) {

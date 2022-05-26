@@ -16,6 +16,9 @@ class KeyRRectPainter extends CustomPainter {
   final KeyModel keyModel;
   final double zoomScale;
 
+  static const double opacityFactor = 0.4;
+  static const double fontFactor = 0.3;
+
   @override
   void paint(Canvas canvas, Size size) {
     // final Paint paint = Paint()
@@ -56,11 +59,11 @@ class KeyRRectPainter extends CustomPainter {
           }
           break;
         case KeyPaintText:
-          final textPaint =
-              _getTextPainter(element as KeyPaintText, .3 * size.height);
+          final textPaint = _getTextPainter(
+              element as KeyPaintText, fontFactor * size.height);
 
           textPaint.layout(minWidth: 0, maxWidth: size.width);
-          textPaint.paint(canvas, Offset(3 * zoomScale, 1 * zoomScale));
+          textPaint.paint(canvas, Offset(3 * zoomScale, zoomScale));
           break;
         case KeyPaintRect:
           final keyPaintRect = element as KeyPaintRect;
@@ -70,10 +73,10 @@ class KeyRRectPainter extends CustomPainter {
           if (keyPaintRect.showOutline) {
             // display outline stroke around the key to indicate selection.
             Paint paintStroke = Paint()
-              ..color = element.color.withOpacity(0.4)
-              ..style = PaintingStyle.stroke
               ..blendMode = BlendMode.color
-              ..strokeWidth = 5 * zoomScale;
+              ..color = element.color.withOpacity(opacityFactor)
+              ..strokeWidth = 5 * zoomScale
+              ..style = PaintingStyle.stroke;
 
             canvas.drawRRect(rrect, paintStroke);
           }
@@ -94,14 +97,17 @@ class KeyRRectPainter extends CustomPainter {
 
 /// [_canvasClipCenter] clips the canvas to center with a padding illusion.
 void _canvasClipCenter(Canvas canvas, Size size) {
+  const minPoint = 0.2;
+  const maxPoint = 0.8;
+
   Path p = Path();
-  p.moveTo(size.width * 0.2, size.height * 0.2);
+  p.moveTo(size.width * minPoint, size.height * minPoint);
 
   // create the square path to clip
-  p.lineTo(size.width * 0.2, size.height * 0.2);
-  p.lineTo(size.width * 0.2, size.height * 0.8);
-  p.lineTo(size.width * 0.8, size.height * 0.8);
-  p.lineTo(size.width * 0.8, size.height * 0.2);
+  p.lineTo(size.width * minPoint, size.height * minPoint);
+  p.lineTo(size.width * minPoint, size.height * maxPoint);
+  p.lineTo(size.width * maxPoint, size.height * maxPoint);
+  p.lineTo(size.width * maxPoint, size.height * minPoint);
 
   canvas.clipPath(p);
 }

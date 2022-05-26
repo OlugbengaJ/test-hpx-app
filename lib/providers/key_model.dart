@@ -121,12 +121,19 @@ class KeyModel with ChangeNotifier {
   }
 
   /// [selectKey] highlights [KeyModel] under a selected zone.
-  void selectKey(bool? isWidgetInZone, int id, bool isVisible) {
+  ///
+  /// [animValue] is an animation value which determines behaviour of the key.
+  void selectKey(
+    bool? isWidgetInZone,
+    int id,
+    bool isVisible, {
+    required double animValue,
+  }) {
     // highlight the chip with keys matching id
     if (isWidgetInZone == true) {
       _isSelected = true;
-      updateChip(id.toString(),
-          opacity: isVisible ? 1.0 : 0.0, showOutline: true);
+      final opacity = isVisible ? animValue : 0.0;
+      updateChip(id.toString(), opacity: opacity, showOutline: true);
     }
     // remove chip with specific id
     else if (isWidgetInZone == false) {
@@ -136,7 +143,7 @@ class KeyModel with ChangeNotifier {
     // update selected chip opacity
     else if (isSelected) {
       updateChip(id.toString(),
-          opacity: isVisible ? 1.0 : 0.0, showOutline: false);
+          opacity: isVisible ? animValue : 0.0, showOutline: false);
     }
   }
 
