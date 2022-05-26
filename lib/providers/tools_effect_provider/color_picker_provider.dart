@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/color_picker_model.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/widgets/components/color_picker.dart';
+import 'package:provider/provider.dart';
 
 // colorcycle pickermodel lists
 List<ColorPickerWidgetModel> colorcycleDefaultsList = [
@@ -389,6 +391,9 @@ class ColorPickerProvider extends ChangeNotifier {
 
   // function to set the current color and notify the provider listener
   void setCurrentPickerWidget(ColorPickerWidgetModel data) {
+    // /// initialize the layers provider to use to send notification accross the layers
+    // LayersProvider layerProvider =
+    //     Provider.of<LayersProvider>(context, listen: false);
     currentColor = data;
     notifyListeners();
   }
