@@ -101,6 +101,8 @@ class LayersProvider extends ChangeNotifier {
       element.listDisplayColor = Colors.grey;
     }
 
+    print(item.mode.icon);
+
     _layeritems.insert(0, item);
 
 
