@@ -86,6 +86,7 @@ class WorkspaceProvider with ChangeNotifier {
     _dragModeChanged = true;
 
     if (_layersProvider != null) {
+      // toggle resizable visibility for the active layer.
       _layersProvider!.toggleHideStackedLayers(!isDragModeResizable);
     }
 
