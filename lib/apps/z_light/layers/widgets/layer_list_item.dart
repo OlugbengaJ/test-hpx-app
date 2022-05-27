@@ -45,13 +45,11 @@ class _LayerListItemState extends State<LayerListItem> {
 
   _toggleLayer(LayersProvider provider) {
     LayerItemModel layerItemModel = widget.layerItemModel;
+    layerItemModel.visible = !layerItemModel.visible;
     provider.toggleVisibility(
-        LayerItemModel(
-            id: layerItemModel.id,
-            layerText: layerItemModel.layerText,
-            visible: !layerItemModel.visible,
-          ),
-        widget.layerIndex);
+        layerItemModel,
+        widget.layerIndex
+      );
   }
 
 
@@ -97,8 +95,8 @@ class _LayerListItemState extends State<LayerListItem> {
       PickerModel(
         title: widget.layerItemModel.mode!.name, 
         value: widget.layerItemModel.mode!.value, 
-        enabled: true, icon: 
-        widget.layerItemModel.mode!.icon
+        enabled: true, 
+        icon: widget.layerItemModel.mode!.icon
       ),
       context
     );

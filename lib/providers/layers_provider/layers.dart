@@ -48,6 +48,7 @@ class LayersProvider extends ChangeNotifier {
 
   /// listen to any change from the tools and effects so the current layers can be updated
   void toolsEffectsUpdated(){
+    print("Yeah");
     LayerItemModel item = getItem(listIndex);
     item.mode =  _modeProvider!.getModeInformation();
     _layeritems[listIndex] = item;
@@ -196,6 +197,7 @@ class LayersProvider extends ChangeNotifier {
 
   /// [toggleVisibility] toggle visiblity for a layers
   void toggleVisibility(LayerItemModel item, int index) {
+    print("Toggle visibility");
     item.listDisplayColor = Colors.grey;
 
     if (item.visible) {
