@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/apps/z_light/layers/resizable/stateless_resizable.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +39,17 @@ class _LayersStackState extends State<LayersStack> {
                   border: Border.all(color: Colors.white),
                 ),
               ),
-            ):Container(),
+            )
+            :
+            Consumer<ResizableProvider>(
+              builder: (context, provider, child) {
+                return SizedBox(
+                  height: 0,
+                  width: 0,
+                  key:  provider.draggableKey,
+                );
+              }
+            ),
           ],
         );
       },

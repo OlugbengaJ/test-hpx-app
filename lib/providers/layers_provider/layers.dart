@@ -48,7 +48,6 @@ class LayersProvider extends ChangeNotifier {
 
   /// listen to any change from the tools and effects so the current layers can be updated
   void toolsEffectsUpdated(){
-    print("Yeah");
     LayerItemModel item = getItem(listIndex);
     item.mode =  _modeProvider!.getModeInformation();
     _layeritems[listIndex] = item;
@@ -170,6 +169,7 @@ class LayersProvider extends ChangeNotifier {
     final item = _layeritems[_listIndex];
     item.listDisplayColor = Colors.white;
     _layeritems[_listIndex] = item;
+    print(item.visible);
 
     notifyListeners();
   }
