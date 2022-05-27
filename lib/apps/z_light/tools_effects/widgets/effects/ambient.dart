@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
+import 'package:provider/provider.dart';
 
 class AmbeintPreset extends StatefulWidget {
   const AmbeintPreset({Key? key}) : super(key: key);
@@ -24,6 +26,8 @@ class _AmbeintPresetState extends State<AmbeintPreset> {
       value: AmbientDisplayEnum.display1);
 
   void _setSliderValue(double returnValue, String type) {
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
     setState(() {
       if (type == "image") {
         _imageSliderValue = returnValue;
@@ -31,6 +35,7 @@ class _AmbeintPresetState extends State<AmbeintPreset> {
       if (type == "updates") {
         _updatesSliderValue = returnValue;
       }
+      layerProvider.toolsEffectsUpdated();
     });
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/shortcut_widget_provider.dart';
@@ -74,6 +75,10 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
                   onPressed: () {
                     setState(() {
                       shortcutProvider.addNewCommand('');
+                      // /// initialize the layers provider to use to send notification accross the layers
+                      LayersProvider layerProvider =
+                          Provider.of<LayersProvider>(context, listen: false);
+                      layerProvider.toolsEffectsUpdated();
                     });
                   },
                 )
