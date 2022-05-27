@@ -164,7 +164,6 @@ class KeyModel with ChangeNotifier {
       // KeyboardController.blinkingEffect();
 
       // key selected, highlight the chip with keys matching id
-
       _isSelected = true;
       _updateChip(id.toString(), opacity: opacity, showOutline: true);
     } else if (isWidgetInZone == false) {
