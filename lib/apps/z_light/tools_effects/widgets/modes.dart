@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
@@ -32,6 +33,9 @@ class _ToolModesState extends State<ToolModes> {
   @override
   Widget build(BuildContext context) {
     ModeProvider modeProvider = Provider.of<ModeProvider>(context);
+    // /// initialize the layers provider to use to send notification accross the layers
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
     return Container(
         margin: EdgeInsets.zero,
         child: Column(
@@ -45,6 +49,7 @@ class _ToolModesState extends State<ToolModes> {
                     setState(() {
                       modeProvider.changeModeComponent(returnValue, context);
                     });
+                    layerProvider.toolsEffectsUpdated();
                   },
                   pickerHintText: "Picker a tool or effect mode ....",
                   pickerList: modeProvider.getPickerModes('mood'),
