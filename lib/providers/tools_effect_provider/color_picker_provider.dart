@@ -391,6 +391,9 @@ class ColorPickerProvider extends ChangeNotifier {
 
   // function to set the current color and notify the provider listener
   void setCurrentPickerWidget(ColorPickerWidgetModel data) {
+    // /// initialize the layers provider to use to send notification accross the layers
+    // LayersProvider layerProvider =
+    //     Provider.of<LayersProvider>(context, listen: false);
     currentColor = data;
     notifyListeners();
   }
