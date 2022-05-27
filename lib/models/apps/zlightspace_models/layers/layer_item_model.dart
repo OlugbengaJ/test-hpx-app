@@ -25,7 +25,7 @@ class LayerItemModel {
   final int id;
   int parentID;
   String layerText;
-  final bool visible;
+  bool visible = true;
   final bool isSublayer;
   IconData icon = Icons.mood;
   bool hasSublayer;

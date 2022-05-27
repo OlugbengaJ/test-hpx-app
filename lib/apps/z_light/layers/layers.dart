@@ -37,6 +37,7 @@ class _LayersState extends State<Layers> {
   void initialLayer() {
     ModeProvider modeProvider = context.read<ModeProvider>();
     LayersProvider provider = context.read<LayersProvider>();
+    provider.setModeProvider(modeProvider);
     if (provider.length < 1) {
       _addLayer();
     }
