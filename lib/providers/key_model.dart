@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/key_code.dart';
+import 'package:hpx/utils/KeyboardController.dart';
 
 class KeyModel with ChangeNotifier {
   KeyModel({
@@ -29,7 +30,9 @@ class KeyModel with ChangeNotifier {
   final double keyHeight;
   final double keyRadius;
 
-  static final Color _highlightColor = colorRandom; //Colors.orange;
+  /// [highlightColor] is used to paint the key and must be initialized
+  /// otherwise a default white color is used.
+  late Color highlightColor;
 
   /// [_isSelected] indicates key is selected.
   bool _isSelected = false;
@@ -79,7 +82,7 @@ class KeyModel with ChangeNotifier {
     if (chip != null) {
       final overlay = getChip(ChipKey.overlay.toString());
 
-      removeChip(ChipKey.overlay.toString());
+      _removeChip(ChipKey.overlay.toString());
       _chips.putIfAbsent(chipKey, () => chip);
 
       // add existing overlay on top of the chips.
@@ -94,10 +97,30 @@ class KeyModel with ChangeNotifier {
     return _chips[chipKey];
   }
 
-  /// [updateChip] updates the state of a chip in [chips].
+  /// [_updateChipsExclude] updates chips excluding [chipKey].
+  /// This primarily activates visibility of the chips to a certain degree.
+  void _updateChipsExclude(String chipKey, int chipIndex) {
+    // select KeyPaintRect chips that are neither base nor overlay exluding chipKey.
+    var chipsExcluded = _chips.entries.where((element) =>
+        element.value.runtimeType == KeyPaintRect &&
+        element.key != ChipKey.base.toString() &&
+        element.key != ChipKey.overlay.toString() &&
+        element.key != chipKey);
+
+    for (var element in chipsExcluded) {
+      // final oldChipIndex = chips.indexOf(element.value);
+      // debugPrint('$chipKey $chipIndex ===> ${element.key} $oldChipIndex');
+
+      // update the opacity of the key so it remains visible unless disabled.
+      (element.value as KeyPaintRect).opacity = 0.4;
+    }
+  }
+
+  /// [_updateChip] updates the state of a chip in [chips].
   ///
   /// Adds a new chip layer if the chip with [chipKey] does not exist.
-  void updateChip(String chipKey, {double? opacity, bool showOutline = false}) {
+  void _updateChip(String chipKey,
+      {double? opacity, bool showOutline = false}) {
     KeyPaintChip? chip = getChip(chipKey);
 
     if (chip == null) {
@@ -110,33 +133,48 @@ class KeyModel with ChangeNotifier {
       (chip as KeyPaintRect)
         ..opacity = opacity!
         ..showOutline = showOutline;
+
+      _updateChipsExclude(chipKey, chips.indexOf(chip));
     }
 
-    chip.color = _highlightColor;
+    chip.color = highlightColor;
   }
 
-  /// [removeChip] deletes chip layer whose key matches [chipKey].
-  void removeChip(String chipKey) {
+  /// [_removeChip] deletes chip layer whose key matches [chipKey].
+  void _removeChip(String chipKey) {
     _chips.removeWhere((key, value) => key == chipKey);
   }
 
   /// [selectKey] highlights [KeyModel] under a selected zone.
-  void selectKey(bool? isWidgetInZone, int id, bool isVisible) {
-    // highlight the chip with keys matching id
+  ///
+  /// [animValue] is an animation value which determines behaviour of the key.
+  void selectKey(
+    bool? isWidgetInZone,
+    int id,
+    bool isVisible, {
+    required double animValue,
+    // chip has animation
+    bool isAnimated = false,
+  }) {
+    final opacity = isVisible ? animValue : 0.0;
+
     if (isWidgetInZone == true) {
+      // TODO: note this is an experimental feature and may not behave as expected.
+      // uncomment the line below to test a default blinking effect on a Zbook;
+      // KeyboardController.blinkingEffect();
+
+      // key selected, highlight the chip with keys matching id
       _isSelected = true;
-      updateChip(id.toString(),
-          opacity: isVisible ? 1.0 : 0.0, showOutline: true);
-    }
-    // remove chip with specific id
-    else if (isWidgetInZone == false) {
+      _updateChip(id.toString(), opacity: opacity, showOutline: true);
+    } else if (isWidgetInZone == false) {
+      // key unselected, remove chip with specific id
+
       _isSelected = false;
-      removeChip(id.toString());
-    }
-    // update selected chip opacity
-    else if (isSelected) {
-      updateChip(id.toString(),
-          opacity: isVisible ? 1.0 : 0.0, showOutline: false);
+      _removeChip(id.toString());
+    } else if (isSelected) {
+      // update selected chip opacity when visibility is disabled.
+
+      _updateChip(id.toString(), opacity: opacity, showOutline: false);
     }
   }
 
