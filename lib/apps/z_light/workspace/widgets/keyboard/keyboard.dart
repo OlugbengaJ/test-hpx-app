@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard_row_caps.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard_row_ctrl.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard_row_fn.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard_row_num.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard_row_shift.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard_row_tab.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/keyboard/key_rows/imports.dart';
 import 'package:hpx/utils/constants.dart';
 
 class Keyboard extends StatelessWidget {

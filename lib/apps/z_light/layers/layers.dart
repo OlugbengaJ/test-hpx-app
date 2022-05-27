@@ -36,8 +36,11 @@ class _LayersState extends State<Layers> {
   /// [initialLayer] add a default layer to the workspace if there no layer available
   void initialLayer() {
     ModeProvider modeProvider = context.read<ModeProvider>();
+    ResizableProvider resizableProvider = context.read<ResizableProvider>();
+
     LayersProvider provider = context.read<LayersProvider>();
     provider.setModeProvider(modeProvider);
+    provider.setResizableProvider(resizableProvider);
     if (provider.length < 1) {
       _addLayer();
     }

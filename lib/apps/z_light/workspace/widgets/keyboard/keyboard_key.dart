@@ -15,7 +15,10 @@ class KeyboardKey extends StatelessWidget {
     required this.zoomScale,
   }) : super(key: key);
 
+  /// [onTapHandler] callback function for the key.
   final VoidCallback? onTapHandler;
+
+  /// [zoomScale] is a zoom factor to scale the key size.
   final double zoomScale;
 
   @override
@@ -37,7 +40,11 @@ class KeyboardKey extends StatelessWidget {
                 child: Consumer<KeyModel>(
                   builder: (context, keyModel, child) => KeyRRect(
                     keyModel: _updateKeyInfo(
-                        workspaceProvider, layersProvider, keyModel, box),
+                      workspaceProvider,
+                      layersProvider,
+                      keyModel,
+                      box,
+                    ),
                     zoomScale: zoomScale,
                   ),
                 ),
@@ -50,6 +57,9 @@ class KeyboardKey extends StatelessWidget {
   }
 }
 
+/// [_updateKeyInfo]
+///
+/// Helper function to update the key properties.
 KeyModel _updateKeyInfo(
   WorkspaceProvider provider,
   LayersProvider layersProvider,
@@ -78,8 +88,10 @@ KeyModel _updateKeyInfo(
   if (layersProvider.layeritems.isNotEmpty) {
     final layer = layersProvider.layeritems[layerIndex];
     layerVisible = layer.visible;
+    keyModel.highlightColor = layer.mode?.currentColor.first;
   }
-  keyModel.selectKey(isWidgetInZone, layerIndex, layerVisible);
+  keyModel.selectKey(isWidgetInZone, layerIndex, layerVisible,
+      animValue: provider.animation.value);
   // if (provider.isDragModeClick &&
   //     isWidgetInZone == true &&
   //     !keyModel.isSelected) {
