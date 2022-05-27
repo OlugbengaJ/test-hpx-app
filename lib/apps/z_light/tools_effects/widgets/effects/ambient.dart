@@ -35,6 +35,7 @@ class _AmbeintPresetState extends State<AmbeintPreset> {
       if (type == "updates") {
         _updatesSliderValue = returnValue;
       }
+      layerProvider.toolsEffectsUpdated();
     });
     layerProvider.toolsEffectsUpdated();
   }

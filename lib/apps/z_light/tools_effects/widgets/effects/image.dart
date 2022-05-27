@@ -28,6 +28,7 @@ class _ImagePresetState extends State<ImagePreset> {
       PlatformFile file = result.files.first;
       setState(() {
         filePath = Image.memory(File(file.path!).readAsBytesSync()).image;
+        layerProvider.toolsEffectsUpdated();
       });
     }
     layerProvider.toolsEffectsUpdated();
