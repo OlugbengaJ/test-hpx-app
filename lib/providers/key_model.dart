@@ -29,7 +29,9 @@ class KeyModel with ChangeNotifier {
   final double keyHeight;
   final double keyRadius;
 
-  static final Color _highlightColor = colorRandom; //Colors.orange;
+  /// [highlightColor] is used to paint the key and must be initialized
+  /// otherwise a default white color is used.
+  late Color highlightColor;
 
   /// [_isSelected] indicates key is selected.
   bool _isSelected = false;
@@ -112,7 +114,7 @@ class KeyModel with ChangeNotifier {
         ..showOutline = showOutline;
     }
 
-    chip.color = _highlightColor;
+    chip.color = highlightColor;
   }
 
   /// [removeChip] deletes chip layer whose key matches [chipKey].
@@ -134,12 +136,12 @@ class KeyModel with ChangeNotifier {
     final opacity = isVisible ? animValue : 0.0;
 
     if (isWidgetInZone == true) {
-      // highlight the chip with keys matching id
+      // key selected, highlight the chip with keys matching id
 
       _isSelected = true;
       updateChip(id.toString(), opacity: opacity, showOutline: true);
     } else if (isWidgetInZone == false) {
-      // remove chip with specific id
+      // key unselected, remove chip with specific id
 
       _isSelected = false;
       removeChip(id.toString());
