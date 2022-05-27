@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/key_rrect.dart';
 import 'package:hpx/providers/key_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
-import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +26,6 @@ class KeyboardKey extends StatelessWidget {
     // Gets access to the widget's position (offset) in the widget tree.
     final box = context.findRenderObject() as RenderBox?;
     final layersProvider = Provider.of<LayersProvider>(context);
-    final modeProvider = Provider.of<ModeProvider>(context);
 
     return Stack(
       children: [
@@ -44,7 +42,6 @@ class KeyboardKey extends StatelessWidget {
                     keyModel: _updateKeyInfo(
                       workspaceProvider,
                       layersProvider,
-                      modeProvider,
                       keyModel,
                       box,
                     ),
@@ -66,7 +63,6 @@ class KeyboardKey extends StatelessWidget {
 KeyModel _updateKeyInfo(
   WorkspaceProvider provider,
   LayersProvider layersProvider,
-  ModeProvider modeProvider,
   KeyModel keyModel,
   RenderBox? renderBox,
 ) {
@@ -92,6 +88,7 @@ KeyModel _updateKeyInfo(
   if (layersProvider.layeritems.isNotEmpty) {
     final layer = layersProvider.layeritems[layerIndex];
     layerVisible = layer.visible;
+    keyModel.highlightColor = layer.mode?.currentColor.first;
   }
   keyModel.selectKey(isWidgetInZone, layerIndex, layerVisible,
       animValue: provider.animation.value);
@@ -104,8 +101,6 @@ KeyModel _updateKeyInfo(
   //     keyModel.isSelected) {
   //   keyModel.unSelectKey();
   // }
-
-  keyModel.highlightColor = modeProvider.currentMode.currentColor.first;
 
   return keyModel;
 }

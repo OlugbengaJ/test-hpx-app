@@ -96,6 +96,25 @@ class KeyModel with ChangeNotifier {
     return _chips[chipKey];
   }
 
+  /// [chipsUpdateExclude] updates chips excluding [chipKey].
+  /// This primarily activates visibility of the chips to a certain degree.
+  void chipsUpdateExclude(String chipKey, int chipIndex) {
+    // select KeyPaintRect chips that are neither base nor overlay exluding chipKey.
+    var chipsExcluded = _chips.entries.where((element) =>
+        element.value.runtimeType == KeyPaintRect &&
+        element.key != ChipKey.base.toString() &&
+        element.key != ChipKey.overlay.toString() &&
+        element.key != chipKey);
+
+    for (var element in chipsExcluded) {
+      // final oldChipIndex = chips.indexOf(element.value);
+      // debugPrint('$chipKey $chipIndex ===> ${element.key} $oldChipIndex');
+
+      // update the opacity of the key so it remains visible unless disabled.
+      (element.value as KeyPaintRect).opacity = 0.4;
+    }
+  }
+
   /// [updateChip] updates the state of a chip in [chips].
   ///
   /// Adds a new chip layer if the chip with [chipKey] does not exist.
@@ -112,6 +131,8 @@ class KeyModel with ChangeNotifier {
       (chip as KeyPaintRect)
         ..opacity = opacity!
         ..showOutline = showOutline;
+
+      chipsUpdateExclude(chipKey, chips.indexOf(chip));
     }
 
     chip.color = highlightColor;
