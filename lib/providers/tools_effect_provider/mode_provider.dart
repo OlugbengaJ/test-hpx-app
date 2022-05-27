@@ -190,9 +190,9 @@ class ModeProvider extends ChangeNotifier {
     switch (pickerChoice!.value) {
       case EnumModes.shortcut:
         workProvider.toggleModal([Text("Hello World", style: h2Style)]);
-        shortcutList.forEach((element) {
+        for (var element in shortcutList) {
           currentColors.add(element.colorCode[0]);
-        });
+        }
         preset = const ShortcutColorsPreset();
         break;
       case EnumModes.mood:
@@ -204,9 +204,9 @@ class ModeProvider extends ChangeNotifier {
         preset = const ColorProductionPreset();
         break;
       case EnumModes.audiovisualizer:
-        audioVisualSolidList.forEach((element) {
+        for (var element in audioVisualSolidList) {
           currentColors.add(element.colorCode[0]);
-        });
+        }
         preset = const AudioVisualPreset();
         break;
       case EnumModes.wave:
@@ -216,32 +216,35 @@ class ModeProvider extends ChangeNotifier {
         preset = const WavePreset();
         break;
       case EnumModes.colorcycle:
-        colorcycleDefaultsList.first.colorCode.forEach((element) {
+        for (var element in colorcycleDefaultsList.first.colorCode) {
           currentColors.add(element);
-        });
+        }
+        effects = defaultColorcycleEffectValues;
         preset = const ColorCyclePreset();
         break;
       case EnumModes.breathing:
-        breathingList.forEach((element) {
+        for (var element in breathingList) {
           currentColors.add(element.colorCode[0]);
-        });
+        }
+        effects = defaultBreathingEffectValues;
         preset = const BreathingPreset();
         break;
       case EnumModes.blinking:
         defaultBlinkingEffectValues.effectName = pickerChoice.value;
         effects = defaultBlinkingEffectValues;
-        blinkingList.forEach((element) {
+        for (var element in blinkingList) {
           currentColors.add(element.colorCode[0]);
-        });
+        }
         preset = const BlinkingPreset();
         break;
       case EnumModes.interactive:
         ////  set an notification message for interactive mode
         workProvider.toggleStripNotification(
             "Interactive effect will only work with your keyboard. Please assign the keys thatare used for triggering the effect. Hold down the Ctrl key for multiple selection");
-        interactiveColorList.forEach((element) {
+        for (var element in interactiveColorList) {
           currentColors.add(element.colorCode[0]);
-        });
+        }
+        effects = defaultInteractiveEffectValues;
         preset = const InteractivePreset();
         break;
       case EnumModes.image:
