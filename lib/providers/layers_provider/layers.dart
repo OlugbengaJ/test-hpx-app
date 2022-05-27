@@ -61,6 +61,12 @@ class LayersProvider extends ChangeNotifier {
     item.mode =  _modeProvider!.getModeInformation();
     item.layerText = _modeProvider!.currentMode.name;
     _layeritems[listIndex] = item;
+
+    if(item.mode!.name=="Shortcut Colors"){
+      print("Create a shortcut layer");
+      var subLayers = getSublayers(item.id);
+      print(subLayers);
+    }
     notifyListeners();
   }
 
@@ -158,6 +164,7 @@ class LayersProvider extends ChangeNotifier {
       duplicatedItem.layerText = "Sublayer";
       duplicatedItem.parentID = item.id;
       duplicatedItem.mode = modeProvider.getModeInformation();
+      print(duplicatedItem.mode!.modeType);
       _sublayers.insert(0, duplicatedItem);
       _layeritems[index] = item;
     } else {
@@ -207,7 +214,6 @@ class LayersProvider extends ChangeNotifier {
 
   /// [toggleVisibility] toggle visiblity for a layers
   void toggleVisibility(LayerItemModel item, int index) {
-    print("Toggle visibility");
     item.listDisplayColor = Colors.grey;
     if (item.visible) {
       item.listDisplayColor = Colors.white;
