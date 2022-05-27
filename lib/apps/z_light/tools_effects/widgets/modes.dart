@@ -13,9 +13,6 @@ class ToolModes extends StatefulWidget {
 }
 
 class _ToolModesState extends State<ToolModes> {
-  final PickerModel _defaultPreset =
-      PickerModel(title: 'Mood', value: EnumModes.mood, enabled: true);
-
   @override
   void initState() {
     setDefaultMode();
@@ -28,7 +25,7 @@ class _ToolModesState extends State<ToolModes> {
         Provider.of<ModeProvider>(context, listen: false);
     await Future.delayed(Duration(seconds: 0));
     setState(() {
-      modeProvider.changeModeComponent(_defaultPreset, context);
+      modeProvider.changeModeComponent(modeProvider.modePicker, context);
     });
   }
 
@@ -51,7 +48,7 @@ class _ToolModesState extends State<ToolModes> {
                   },
                   pickerHintText: "Picker a tool or effect mode ....",
                   pickerList: modeProvider.getPickerModes('mood'),
-                  defaultPicker: _defaultPreset,
+                  defaultPicker: modeProvider.modePicker,
                 )),
             Container(
               margin: const EdgeInsets.only(top: 0.0, bottom: 20.0),

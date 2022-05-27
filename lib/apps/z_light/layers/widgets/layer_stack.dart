@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/layers/resizable/stateful_resizable.dart';
+import 'package:hpx/apps/z_light/layers/resizable/stateless_resizable.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +22,7 @@ class _LayersStackState extends State<LayersStack> {
         (value.hideStackedLayers)? Container():
         Stack(
           children: [
-            StatefulResizableWidget(
+            StatelessResizable(
               dragWidgetHeight: dragWidgetSize,
               dragWidgetWidth: dragWidgetSize,
               dragWidget: Container(

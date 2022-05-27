@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 
-///[LayersProvider] handle
+///[LayersProvider] to controle the layers state
 
 class LayersProvider extends ChangeNotifier {
-  final areaHeight = Get.height * 0.70;
-  final areaWidth = Get.width * 0.70;
   final List<LayerItemModel> _layeritems = [];
   final List<LayerItemModel> _sublayers = [];
+  ModeProvider? _modeProvider;
 
   /// [hideStackedLayers] use to show or hide the stack layers for resizable widget
   bool hideStackedLayers = false;
@@ -31,25 +33,21 @@ class LayersProvider extends ChangeNotifier {
     return _layeritems[i];
   }
 
-  // void setKeys(keys){
-  //   LayerItemModel item = _layeritems[index];
-  //   item.setKeys(keys);
-  //   layeritems[index] = item;
-
-  //   notifyListeners();
-  // }
-
-  // LayerItemModel getEditingLayer() {
-  //   if(length>1){
-  //     return _layeritems[index];
-  //   }else{
-  //     return _layeritems[0];
-  //   }
-  // }
-
   /// [toggleHideStackedLayers] toggle hide or show of the resizable
   void toggleHideStackedLayers(bool show) {
     hideStackedLayers = show;
+  }
+
+  void setModeProvider(ModeProvider modeProvider) {
+    _modeProvider = modeProvider;
+  }
+
+  /// listen to any change from the tools and effects so the current layers can be updated
+  void toolsEffectsUpdated() {
+    LayerItemModel item = getItem(listIndex);
+    item.mode = _modeProvider!.getModeInformation();
+    _layeritems[listIndex] = item;
+    notifyListeners();
   }
 
   /// [updateView] use to update the item position when the resizable-draggable stop dragging
@@ -66,6 +64,8 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// [getTheBiggestID] get the layers biggest ID
+  /// When a new layer, its ID is suppose to be unique and the biggest ID in the list.
   int getTheBiggestID() {
     int id = 1;
     for (var item in _layeritems) {
@@ -76,7 +76,9 @@ class LayersProvider extends ChangeNotifier {
     return id + 1;
   }
 
-  int getTheBiggestSUbID() {
+  /// [getTheBiggestSubID] get the sublayers biggest ID
+  /// When a new sublayer, its ID is suppose to be unique and the biggest ID in the list.
+  int getTheBiggestSubID() {
     int id = 1;
     for (var item in _sublayers) {
       if (id <= item.id) {
@@ -86,6 +88,8 @@ class LayersProvider extends ChangeNotifier {
     return id + 1;
   }
 
+  /// [getSublayers], retrieve sublayers for a specific layer using the parentID.
+  /// The function filters through [sublayerItems]
   List<LayerItemModel> getSublayers(int id) {
     List<LayerItemModel> layers = [];
     for (var item in sublayerItems) {
@@ -96,7 +100,19 @@ class LayersProvider extends ChangeNotifier {
     return layers;
   }
 
+  /// Add a new layer. By default new added layers use the mood mode
   void add(LayerItemModel item) {
+    //print(modeProvider!.currentMode.value);
+    ToolsModeModel mode = ToolsModeModel(
+        currentColor: moodThemesList.first.colorCode,
+        effects: EffectsModel(effectName: EnumModes.mood),
+        name: "Mood",
+        value: EnumModes.mood,
+        modeType: EnumModeType.layers,
+        icon: Icons.mood);
+
+    item.mode = mode;
+
     for (var element in _layeritems) {
       element.listDisplayColor = Colors.grey;
     }
@@ -106,19 +122,24 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// [duplicate] uses to duplicate the layer
-  void duplicate(LayerItemModel item, int index, {bool sublayer = false}) {
+  /// [duplicateOrCreatSubLayer] uses to duplicate the layer or create a sublayer depending the mode type
+  void duplicateOrCreatSubLayer(
+      LayerItemModel item, int index, ModeProvider modeProvider,
+      {bool sublayer = false}) {
     LayerItemModel duplicatedItem = LayerItemModel(
-      id: (sublayer) ? getTheBiggestSUbID() : getTheBiggestID(),
+      id: (sublayer) ? getTheBiggestSubID() : getTheBiggestID(),
       layerText: "Copy ${item.layerText}",
-      mode: item.mode,
       isSublayer: sublayer,
     );
 
+    duplicatedItem.mode = item.mode;
+
     if (sublayer) {
+      modeProvider.setModeType(true);
       item.hasSublayer = true;
       duplicatedItem.layerText = "Sublayer";
       duplicatedItem.parentID = item.id;
+      duplicatedItem.mode = modeProvider.getModeInformation();
       _sublayers.insert(0, duplicatedItem);
       _layeritems[index] = item;
     } else {
@@ -145,7 +166,7 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Update the layerText using its ID
+  /// Update the layerText using its ID
   void update(int id, String text) {
     LayerItemModel item = layeritems.singleWhere((item) => item.id == id);
     item.layerText = text;
@@ -154,6 +175,7 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Update a sublayer text
   void updateSublayer(LayerItemModel item, String value) {
     for (var subItem in sublayerItems) {
       if (item.id == subItem.id) {
@@ -163,10 +185,8 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// [toggleVisibility] toggle visiblity for a layers
   void toggleVisibility(LayerItemModel item, int index) {
-    int toEdit = _layeritems[index].id;
-    int stackedIndex = 0; // The stack index is different from the list index
-
     item.listDisplayColor = Colors.grey;
 
     if (item.visible) {
@@ -178,6 +198,7 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// [reorder] is called to rearrange layers
   void reorder(int oldIndex, int newIndex) {
     if (newIndex > oldIndex) {
       newIndex -= 1;
@@ -187,6 +208,7 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// [removeItem] is used to remove a layer from the [layeritems]
   void removeItem(int index) {
     if (length > 1) {
       final item = _layeritems[index];
@@ -201,6 +223,7 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// [removeSubItem] is used to remove a layer from the [sublayerItems]
   void removeSubItem(item) {
     if (sublayerItems.length > 1) {
       sublayerItems.remove(item);
@@ -209,6 +232,8 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// [setResizablePosition] this function call the [ResizableProvider] to set the resizable position anytime the index.
+  /// There is no need to have multiple resizable anymore. Use only one for all the layers
   void setResizablePosition(ResizableProvider provider) {
     final item = _layeritems[_listIndex];
 
@@ -220,6 +245,7 @@ class LayersProvider extends ChangeNotifier {
         newTop: item.top,
       );
     }
+    provider.setSize();
 
     notifyListeners();
   }
