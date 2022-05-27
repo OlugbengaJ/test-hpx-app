@@ -15,6 +15,7 @@ class LayersProvider extends ChangeNotifier {
 
   /// [hideStackedLayers] use to show or hide the stack layers for resizable widget
   bool hideStackedLayers = false;
+  bool isLayerVisible = true;
   bool deleteLayerTooltip = false;
 
   /// [listIndex] use to the actual selected layer's index
@@ -49,6 +50,9 @@ class LayersProvider extends ChangeNotifier {
   void toolsEffectsUpdated(){
     LayerItemModel item = getItem(listIndex);
     item.mode =  _modeProvider!.getModeInformation();
+    item.layerText = _modeProvider!.currentMode.name;
+    print(_modeProvider!.currentMode.icon);
+    print(item.mode!.currentColor);
     _layeritems[listIndex] = item;
     notifyListeners();
   }
@@ -116,7 +120,8 @@ class LayersProvider extends ChangeNotifier {
       name: "Mood",
       value: EnumModes.mood,
       modeType: EnumModeType.layers,
-      icon: Icons.mood);
+      icon: Icons.mood
+    );
     
       item.mode = mode;
 
@@ -167,6 +172,7 @@ class LayersProvider extends ChangeNotifier {
     final item = _layeritems[_listIndex];
     item.listDisplayColor = Colors.white;
     _layeritems[_listIndex] = item;
+    print(item.visible);
 
     notifyListeners();
   }
@@ -194,6 +200,7 @@ class LayersProvider extends ChangeNotifier {
 
   /// [toggleVisibility] toggle visiblity for a layers
   void toggleVisibility(LayerItemModel item, int index) {
+    print("Toggle visibility");
     item.listDisplayColor = Colors.grey;
 
     if (item.visible) {
@@ -247,7 +254,7 @@ class LayersProvider extends ChangeNotifier {
   /// There is no need to have multiple resizable anymore. Use only one for all the layers
   void setResizablePosition(ResizableProvider provider) {
     final item = _layeritems[_listIndex];
-
+    isLayerVisible = item.visible;
     if (item.top != 0) {
       provider.setSize(
         newBottom: item.bottom,
