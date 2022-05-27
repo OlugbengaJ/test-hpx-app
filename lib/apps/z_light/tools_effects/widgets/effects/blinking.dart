@@ -21,13 +21,11 @@ class _BlinkingPresetState extends State<BlinkingPreset> {
         Provider.of<EffectProvider>(context, listen: false);
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
-    setState(() {
-      effectsProvider.setCurrentEffect(EffectsModel(
-          effectName: effectsProvider.currentEffect?.effectName,
-          degree: effectsProvider.currentEffect?.degree,
-          speed: returnValue.floorToDouble()));
-      layerProvider.toolsEffectsUpdated();
-    });
+    effectsProvider.setCurrentEffect(EffectsModel(
+        effectName: effectsProvider.currentEffect?.effectName,
+        degree: effectsProvider.currentEffect?.degree,
+        speed: returnValue.floorToDouble()));
+    layerProvider.toolsEffectsUpdated();
   }
 
   @override
