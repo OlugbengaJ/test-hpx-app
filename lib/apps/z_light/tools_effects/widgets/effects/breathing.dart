@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/widgets/theme.dart';
+import 'package:provider/provider.dart';
 
 class BreathingPreset extends StatefulWidget {
   const BreathingPreset({Key? key}) : super(key: key);
@@ -17,8 +19,11 @@ class _BreathingPresetState extends State<BreathingPreset> {
   final _colorPickerProvider = ColorPickerProvider();
 
   void _setSliderValue(double returnValue) {
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
     setState(() {
       _currentSliderValue = returnValue;
+      layerProvider.toolsEffectsUpdated();
     });
   }
 
