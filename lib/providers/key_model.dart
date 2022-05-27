@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/key_code.dart';
+import 'package:hpx/utils/KeyboardController.dart';
 
 class KeyModel with ChangeNotifier {
   KeyModel({
@@ -158,6 +159,10 @@ class KeyModel with ChangeNotifier {
     final opacity = isVisible ? animValue : 0.0;
 
     if (isWidgetInZone == true) {
+      // TODO: note this is an experimental feature and may not behave as expected.
+      // uncomment the line below to test a default blinking effect on a Zbook;
+      // KeyboardController.blinkingEffect();
+
       // key selected, highlight the chip with keys matching id
 
       _isSelected = true;
