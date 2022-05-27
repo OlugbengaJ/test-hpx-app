@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
+import 'package:provider/provider.dart';
 
 class InteractivePreset extends StatefulWidget {
   const InteractivePreset({Key? key}) : super(key: key);
@@ -22,6 +24,9 @@ class _InteractivePresetState extends State<InteractivePreset> {
       title: 'Key Wave', enabled: true, value: InteractiveEnum.keywave);
 
   void _setSliderValue(double returnValue, String type) {
+    // /// initialize the layers provider to use to send notification accross the layers
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
     setState(() {
       if (type == 'speed') {
         _speedSliderValue = returnValue;
@@ -29,11 +34,14 @@ class _InteractivePresetState extends State<InteractivePreset> {
       if (type == 'size') {
         _sizeSliderValue = returnValue;
       }
+      layerProvider.toolsEffectsUpdated();
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
     return Container(
         margin: const EdgeInsets.only(top: 10, bottom: 20.0),
         child: Column(
@@ -45,6 +53,7 @@ class _InteractivePresetState extends State<InteractivePreset> {
                     onChange: (PickerModel? returnValue) {
                       setState(() {
                         // preset = changeComponent();
+                        layerProvider.toolsEffectsUpdated();
                       });
                     },
                     defaultPicker: _defaultPicker,
