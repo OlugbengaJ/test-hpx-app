@@ -207,6 +207,7 @@ class LayersProvider extends ChangeNotifier {
 
   /// [toggleVisibility] toggle visiblity for a layers
   void toggleVisibility(LayerItemModel item, int index) {
+    print("Toggle visibility");
     item.listDisplayColor = Colors.grey;
     if (item.visible) {
       item.listDisplayColor = Colors.white;
