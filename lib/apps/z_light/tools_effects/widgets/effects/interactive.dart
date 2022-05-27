@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
+import 'package:provider/provider.dart';
 
 class InteractivePreset extends StatefulWidget {
   const InteractivePreset({Key? key}) : super(key: key);
@@ -14,26 +18,34 @@ class InteractivePreset extends StatefulWidget {
 
 class _InteractivePresetState extends State<InteractivePreset> {
   final _toolsProvider = ColorPickerProvider();
-  double _speedSliderValue = 50.0;
-  double _sizeSliderValue = 6.0;
   TextEditingController degreeController = TextEditingController();
   final _modeProvider = ModeProvider();
   final PickerModel _defaultPicker = PickerModel(
       title: 'Key Wave', enabled: true, value: InteractiveEnum.keywave);
 
   void _setSliderValue(double returnValue, String type) {
-    setState(() {
-      if (type == 'speed') {
-        _speedSliderValue = returnValue;
-      }
-      if (type == 'size') {
-        _sizeSliderValue = returnValue;
-      }
-    });
+    EffectProvider effectsProvider =
+        Provider.of<EffectProvider>(context, listen: false);
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
+    effectsProvider.setCurrentEffect(EffectsModel(
+        effectName: effectsProvider.currentEffect?.effectName,
+        degree: effectsProvider.currentEffect?.degree,
+        speed: (type == 'speed')
+            ? returnValue.floorToDouble()
+            : effectsProvider.currentEffect?.speed,
+        size: (type == 'size')
+            ? returnValue.floorToDouble()
+            : effectsProvider.currentEffect?.size));
+    layerProvider.toolsEffectsUpdated();
   }
 
   @override
   Widget build(BuildContext context) {
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
+    EffectProvider effectsProvider =
+        Provider.of<EffectProvider>(context, listen: false);
     return Container(
         margin: const EdgeInsets.only(top: 10, bottom: 20.0),
         child: Column(
@@ -45,6 +57,7 @@ class _InteractivePresetState extends State<InteractivePreset> {
                     onChange: (PickerModel? returnValue) {
                       setState(() {
                         // preset = changeComponent();
+                        layerProvider.toolsEffectsUpdated();
                       });
                     },
                     defaultPicker: _defaultPicker,
@@ -69,11 +82,11 @@ class _InteractivePresetState extends State<InteractivePreset> {
             Text("Speed", textAlign: TextAlign.left, style: labelStyle),
             Container(margin: const EdgeInsets.only(bottom: 10.0)),
             Slider(
-              value: _speedSliderValue,
+              value: effectsProvider.currentEffect!.speed!.toDouble(),
               max: 100,
               min: 0,
               divisions: 100,
-              label: _speedSliderValue.round().toString(),
+              label: effectsProvider.currentEffect!.speed.toString(),
               onChanged: (double value) {
                 _setSliderValue(value, "speed");
               },
@@ -98,11 +111,11 @@ class _InteractivePresetState extends State<InteractivePreset> {
             Text("Size", textAlign: TextAlign.left, style: labelStyle),
             Container(margin: const EdgeInsets.only(bottom: 10.0)),
             Slider(
-              value: _sizeSliderValue,
+              value: effectsProvider.currentEffect!.size!.toDouble(),
               max: 24,
               min: 0,
               divisions: 24,
-              label: _sizeSliderValue.round().toString(),
+              label: effectsProvider.currentEffect!.size.toString(),
               onChanged: (double value) {
                 _setSliderValue(value, "size");
               },

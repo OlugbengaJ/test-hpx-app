@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/key_rrect.dart';
 import 'package:hpx/providers/key_model.dart';
-import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -15,18 +15,22 @@ class KeyboardKey extends StatelessWidget {
     required this.zoomScale,
   }) : super(key: key);
 
+  /// [onTapHandler] callback function for the key.
   final VoidCallback? onTapHandler;
+
+  /// [zoomScale] is a zoom factor to scale the key size.
   final double zoomScale;
 
   @override
   Widget build(BuildContext context) {
     // Gets access to the widget's position (offset) in the widget tree.
     final box = context.findRenderObject() as RenderBox?;
-    final modeProvider = Provider.of<ModeProvider>(context);
+    final layersProvider = Provider.of<LayersProvider>(context);
 
     return Stack(
       children: [
         Material(
+          color: Colors.transparent,
           child: Consumer<WorkspaceProvider>(
             builder: (context, workspaceProvider, child) {
               return InkWell(
@@ -36,7 +40,11 @@ class KeyboardKey extends StatelessWidget {
                 child: Consumer<KeyModel>(
                   builder: (context, keyModel, child) => KeyRRect(
                     keyModel: _updateKeyInfo(
-                        workspaceProvider, modeProvider, keyModel, box),
+                      workspaceProvider,
+                      layersProvider,
+                      keyModel,
+                      box,
+                    ),
                     zoomScale: zoomScale,
                   ),
                 ),
@@ -49,39 +57,50 @@ class KeyboardKey extends StatelessWidget {
   }
 }
 
+/// [_updateKeyInfo]
+///
+/// Helper function to update the key properties.
 KeyModel _updateKeyInfo(
   WorkspaceProvider provider,
-  ModeProvider modeProvider,
+  LayersProvider layersProvider,
   KeyModel keyModel,
   RenderBox? renderBox,
 ) {
   final isWidgetInZone = provider.isWidgetInZone(renderBox);
 
-  final currentMode = modeProvider.currentMode;
-  List<Color> colors = [Colors.orange];
+  // final currentMode = modeProvider.currentMode;
+  // List<Color> colors = [Colors.orange];
 
-  if (currentMode.currentColor.runtimeType.toString() == 'List<Color>') {
-    colors = currentMode.currentColor as List<Color>;
-  }
+  // if (currentMode.currentColor.runtimeType.toString() == 'List<Color>') {
+  //   colors = currentMode.currentColor as List<Color>;
+  // }
 
-  if (provider.isDragModeZone || provider.isDragModeResizable) {
-    keyModel.selectKey(isWidgetInZone);
-    // if (isWidgetInZone == true && provider.isDragModeZone) {
-    if (isWidgetInZone == true) {
-      keyModel.setPathColors(colors);
-      //(provider.animColors);
-    }
+  // if (provider.isDragModeZone || provider.isDragModeResizable) {
+  //   keyModel.selectKey(isWidgetInZone);
+  //   // if (isWidgetInZone == true && provider.isDragModeZone) {
+  //   // if (isWidgetInZone == true) {
+  //   //   // keyModel.setPathColors(colors);
+  //   //   //(provider.animColors);
+  //   // }
+  // }
+  final layerIndex = layersProvider.listIndex;
+  bool layerVisible = false;
+  if (layersProvider.layeritems.isNotEmpty) {
+    final layer = layersProvider.layeritems[layerIndex];
+    layerVisible = layer.visible;
+    keyModel.highlightColor = layer.mode?.currentColor.first;
   }
-
-  if (provider.isDragModeClick &&
-      isWidgetInZone == true &&
-      !keyModel.isSelected) {
-    keyModel.selectKey(isWidgetInZone);
-  } else if (provider.isDragModeClick &&
-      isWidgetInZone == true &&
-      keyModel.isSelected) {
-    keyModel.unSelectKey();
-  }
+  keyModel.selectKey(isWidgetInZone, layerIndex, layerVisible,
+      animValue: provider.animation.value);
+  // if (provider.isDragModeClick &&
+  //     isWidgetInZone == true &&
+  //     !keyModel.isSelected) {
+  //   keyModel.selectKey(isWidgetInZone);
+  // } else if (provider.isDragModeClick &&
+  //     isWidgetInZone == true &&
+  //     keyModel.isSelected) {
+  //   keyModel.unSelectKey();
+  // }
 
   return keyModel;
 }

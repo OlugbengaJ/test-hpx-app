@@ -1,40 +1,43 @@
 import 'dart:async';
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/imports.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/keyboard_selector.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/notification_modal.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/notification_strip.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/round_button.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/zoom_toolbar.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/utils/comparer.dart';
 import 'package:hpx/utils/constants.dart';
+import 'package:hpx/widgets/components/dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
 class Workspace extends StatefulWidget {
-  const Workspace({Key? key,}) : super(key: key);
-
+  const Workspace({Key? key}) : super(key: key);
 
   @override
   State<Workspace> createState() => _WorkspaceState();
 }
 
-class _WorkspaceState extends State<Workspace> {
-  final _zoomTextCtrl = TextEditingController(text: '100');
-  final double _zoomInThreshold = 400;
-  final double _zoomOutThreshold = 60;
-  double _zoomValue = 100;
-  double _zoomScale = 1;
+class _WorkspaceState extends State<Workspace>
+    with SingleTickerProviderStateMixin {
+  // late variables are initialize on initState()
+  late Animation<double> _animation;
+  late AnimationController _controller;
+
+  late TextEditingController _zoomTextCtrl;
+  late double _zoomValue;
+  late double _zoomScale;
+
+  static const double _zoomInThreshold = 250;
+  static const double _zoomOutThreshold = 60;
+  static const Duration _duration = Duration(milliseconds: 50);
+  static const double _buttonSize = 32.0;
 
   Timer _timer = Timer.periodic(Duration.zero, ((t) {}));
-  final _duration = const Duration(milliseconds: 50);
-
-  final double _buttonSize = 32.0;
 
   /// [zoomTextChanged] ensure user enters only digits
   /// that are within the acceptable zoom threshold.
@@ -45,7 +48,7 @@ class _WorkspaceState extends State<Workspace> {
       if (value >= _zoomOutThreshold && value <= _zoomInThreshold) {
         setState(() {
           _zoomValue = value;
-          _zoomScale = _zoomValue / 100;
+          _zoomScale = _zoomValue / (60 / 0.6);
         });
       }
     }
@@ -82,7 +85,7 @@ class _WorkspaceState extends State<Workspace> {
   /// [zoomExpand] sets the zoomValue to half the zoomIn threshold.
   void zoomExpand() {
     setState(() {
-      _zoomValue = _zoomInThreshold / 3.1;
+      _zoomValue = _zoomInThreshold / 1.5; // / 3.1;
       updateZoom();
     });
   }
@@ -111,18 +114,53 @@ class _WorkspaceState extends State<Workspace> {
     });
   }
 
+  void _initAnimation() {
+    const duration = Duration(seconds: 1);
+
+    _controller = AnimationController(vsync: this, duration: duration);
+    final curveAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.linear,
+      reverseCurve: Curves.linear,
+    );
+    _animation = Tween<double>(
+      begin: 0,
+      end: math.sin(math.pi / 2), // max value of 1
+    ).animate(curveAnimation)
+      ..addListener(() {
+        setState(() {});
+      })
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _controller.repeat();
+        }
+        if (status == AnimationStatus.dismissed) {
+          debugPrint('dismissed');
+        }
+      });
+  }
+
   @override
   void initState() {
     super.initState();
 
-    // Start listening to changes.
+    // initialize animation
+    _initAnimation();
+
+    // Initialize zoom value and scale.
+    _zoomValue = 60;
+    _zoomScale = 0.6;
+    _zoomTextCtrl = TextEditingController(text: _zoomValue.ceil().toString());
+
+    //Start listening to changes.
     _zoomTextCtrl.addListener(zoomTextChanged);
   }
 
   @override
   void dispose() {
-    _timer.cancel();
     _zoomTextCtrl.dispose();
+    _controller.dispose();
+    _timer.cancel();
     super.dispose();
   }
 
@@ -130,9 +168,13 @@ class _WorkspaceState extends State<Workspace> {
   Widget build(BuildContext context) {
     final workspaceProvider = Provider.of<WorkspaceProvider>(context);
 
+    // initialize animation controller
+    workspaceProvider.setAnimation(_controller, _animation);
+
     // initialize layers provider
     workspaceProvider.setLayersProvider(Provider.of<LayersProvider>(context));
-    workspaceProvider.setResizableProvider(Provider.of<ResizableProvider>(context));
+    workspaceProvider
+        .setResizableProvider(Provider.of<ResizableProvider>(context));
 
     return Column(
       children: [
@@ -163,6 +205,23 @@ class _WorkspaceState extends State<Workspace> {
                             Padding(
                               padding: const EdgeInsets.only(right: 20.0),
                               child: Tooltip(
+                                message: 'Highlight selector',
+                                child: RoundButton(
+                                  onTapDown: () {
+                                    provider
+                                        .toggleDragMode(WorkspaceDragMode.zone);
+                                  },
+                                  size: _buttonSize,
+                                  icon: Icons.highlight_alt,
+                                  iconColor: provider.isDragModeZone
+                                      ? Theme.of(context).colorScheme.primary
+                                      : null,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 20.0),
+                              child: Tooltip(
                                 message: 'Resizable selector',
                                 child: RoundButton(
                                   onTapDown: () {
@@ -173,23 +232,6 @@ class _WorkspaceState extends State<Workspace> {
                                   size: _buttonSize,
                                   icon: Icons.select_all,
                                   iconColor: provider.isDragModeResizable
-                                      ? Theme.of(context).colorScheme.primary
-                                      : null,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 20.0),
-                              child: Tooltip(
-                                message: 'Highlight selector',
-                                child: RoundButton(
-                                  onTapDown: () {
-                                    provider
-                                        .toggleDragMode(WorkspaceDragMode.zone);
-                                  },
-                                  size: _buttonSize,
-                                  icon: Icons.highlight_alt,
-                                  iconColor: provider.isDragModeZone
                                       ? Theme.of(context).colorScheme.primary
                                       : null,
                                 ),
@@ -214,48 +256,15 @@ class _WorkspaceState extends State<Workspace> {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(right: 20.0),
-                              child: Container(
-                                height: 30,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Theme.of(context).primaryColorLight,
-                                    width: 1,
-                                  ),
+                              child: DropDown(
+                                enabled: workspaceProvider.isDragModeClick,
+                                hint: 'Select by devices...',
+                                hintStyle: pStyle,
+                                items: getDropdownMenuItems(
+                                  Theme.of(context).colorScheme.primary,
+                                  devices(),
                                 ),
-                                // TODO: select by devices
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: DropDownDevices(
-                                      initialValue: devices().first,
-                                      items: devices()
-                                          .map(
-                                            (e) => DropdownMenuItem(
-                                              value: e,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  Checkbox(
-                                                    activeColor:
-                                                        Theme.of(context)
-                                                            .colorScheme
-                                                            .primary,
-                                                    value: e.enabled,
-                                                    onChanged: (x) {
-                                                      e.enabled = true;
-                                                    },
-                                                  ),
-                                                  Text(
-                                                    e.name,
-                                                    style: pStyle,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          )
-                                          .toList(),
-                                      hint: 'Select by devices...'),
-                                ),
+                                onChangedHandler: (o) {},
                               ),
                             ),
                           ],
@@ -282,58 +291,62 @@ class _WorkspaceState extends State<Workspace> {
                 repeat: ImageRepeat.repeat,
               ),
             ),
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onPanDown: (details) {
-                workspaceProvider.onPanDown(details);
-              },
-              onPanUpdate: (details) => workspaceProvider.onPanUpdate(details),
-              onPanEnd: (details) => workspaceProvider.onPanEnd(details),
-              onPanCancel: () => workspaceProvider.onPanClear(),
-              child: Stack(
-                alignment: Alignment.bottomLeft,
-                fit: StackFit.expand,
-                children: [
-                  // Keyboard widget takes a zoom scale which is applied to all keys.
-                  // This ensures seamless zooming of the entire keyboard.
-                  Align(
-                    alignment: Alignment.center,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      primary: false,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        primary: false,
-                        child: Keyboard(zoomScale: _zoomScale),
+            child: Stack(
+              children: [
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onPanDown: (details) {
+                    workspaceProvider.onPanDown(details);
+                  },
+                  onPanUpdate: (details) =>
+                      workspaceProvider.onPanUpdate(details),
+                  onPanEnd: (details) => workspaceProvider.onPanEnd(details),
+                  onPanCancel: () => workspaceProvider.onPanClear(),
+                  child: Stack(
+                    alignment: Alignment.bottomLeft,
+                    fit: StackFit.expand,
+                    children: [
+                      // Keyboard widget takes a zoom scale which is applied to all keys.
+                      // This ensures seamless zooming of the entire keyboard.
+                      Align(
+                        alignment: Alignment.center,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          primary: false,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            primary: false,
+                            child: Keyboard(zoomScale: _zoomScale),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  LayersStack(
-                  ),
-                  if (workspaceProvider.isPanning) const KeyboardSelector(),
+                      const LayersStack(),
+                      if (workspaceProvider.isPanning) const KeyboardSelector(),
 
-                  if (workspaceProvider.isModalNotify)
-                    ModalNotification(
-                      closeHandler: workspaceProvider.toggleModal,
-                      children: workspaceProvider.modalWidgets,
+                      if (workspaceProvider.isModalNotify)
+                        ModalNotification(
+                          closeHandler: workspaceProvider.toggleModal,
+                          children: workspaceProvider.modalWidgets,
+                        ),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: ZoomToolbar(
+                      zoomTextController: _zoomTextCtrl,
+                      zoomInHandler: zoomIn,
+                      zoomExpandHandler: zoomExpand,
+                      zoomOutHandler: zoomOut,
+                      zoomCollapseHandler: zoomCollapse,
+                      zoomEndHandler: zoomEnd,
                     ),
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: Center(
-                      child: ZoomToolbar(
-                        zoomTextController: _zoomTextCtrl,
-                        zoomInHandler: zoomIn,
-                        zoomExpandHandler: zoomExpand,
-                        zoomOutHandler: zoomOut,
-                        zoomCollapseHandler: zoomCollapse,
-                        zoomEndHandler: zoomEnd,
-                      ),
-                    ),
-                  )
-                ],
-              ),
+                  ),
+                ),
+              ],
             ),
           ),
         )
@@ -342,42 +355,78 @@ class _WorkspaceState extends State<Workspace> {
   }
 }
 
-class DropDownDevices extends StatelessWidget {
-  const DropDownDevices({
-    Key? key,
-    this.initialValue,
-    required this.items,
-    required this.hint,
-  }) : super(key: key);
-
-  final Object? initialValue;
-  final List<DropdownMenuItem<Object>>? items;
-  final String hint;
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButton(
-      value: initialValue,
-      menuMaxHeight: 400.0,
-      hint: Text(hint, style: pStyle),
-      underline: const SizedBox(),
-      items: items,
-      onChanged: (o) {},
-    );
-  }
-}
-
 class Device extends Comparer {
-  final String name;
-  bool enabled;
+  /// [Device] is a type of HP supported device.
+  ///
+  /// It is used in the zone selection to allow users to select devices.
+  Device(this.name, this.enabled, {this.devices}) : super(name);
 
-  Device(this.name, this.enabled) : super(name);
+  final String name;
+  late final List<Device>? devices;
+  bool enabled;
 }
 
+// TODO: this may need to be refactored and retrieved from storage or an API.
+
+/// [devices] returns the list of supported devices and their sub devices.
 List<Device> devices() {
   return [
-    Device('Z Book', true),
-    Device('Pavilion', false),
-    Device('Elitebook', false),
+    Device('All devices', false),
+    Device('OMEN devices', false),
+    Device('Z by HP device', true, devices: [Device('ZBook Studio G9', true)]),
+    Device('Other devices', false),
   ];
+}
+
+/// [getDropdownMenuItems] returns a list of [Device] dropdown menu items.
+///
+/// Recursively adds sub items as well.
+List<DropdownMenuItem<Device>>? getDropdownMenuItems(
+    Color activeColor, List<Device>? devices,
+    [int index = 0]) {
+  if (devices == null) return null;
+
+  List<DropdownMenuItem<Device>> c = [];
+
+  for (var element in devices) {
+    c.add(dropdownMenuItem(element, activeColor, index));
+    if (element.devices != null && element.devices!.isNotEmpty) {
+      final g = getDropdownMenuItems(activeColor, element.devices, index + 1);
+
+      // add sub menu items if they exist
+      if (g != null) c.addAll(g);
+    }
+  }
+
+  return c;
+}
+
+DropdownMenuItem<Device> dropdownMenuItem(Device e, Color activeColor,
+    [index = 0]) {
+  const double paddingLeft = 20;
+
+  return DropdownMenuItem(
+    value: e,
+    child: Padding(
+      padding: EdgeInsets.only(left: paddingLeft * index),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Checkbox(
+            activeColor: activeColor,
+            value: e.enabled,
+            onChanged: (x) {
+              e.enabled = true;
+            },
+          ),
+          Text(
+            e.name,
+            style: pStyle,
+          ),
+          if (e.devices != null && e.devices!.isNotEmpty)
+            const Icon(Icons.arrow_drop_down)
+        ],
+      ),
+    ),
+  );
 }
