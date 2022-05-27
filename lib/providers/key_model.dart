@@ -81,7 +81,7 @@ class KeyModel with ChangeNotifier {
     if (chip != null) {
       final overlay = getChip(ChipKey.overlay.toString());
 
-      removeChip(ChipKey.overlay.toString());
+      _removeChip(ChipKey.overlay.toString());
       _chips.putIfAbsent(chipKey, () => chip);
 
       // add existing overlay on top of the chips.
@@ -96,9 +96,9 @@ class KeyModel with ChangeNotifier {
     return _chips[chipKey];
   }
 
-  /// [chipsUpdateExclude] updates chips excluding [chipKey].
+  /// [_updateChipsExclude] updates chips excluding [chipKey].
   /// This primarily activates visibility of the chips to a certain degree.
-  void chipsUpdateExclude(String chipKey, int chipIndex) {
+  void _updateChipsExclude(String chipKey, int chipIndex) {
     // select KeyPaintRect chips that are neither base nor overlay exluding chipKey.
     var chipsExcluded = _chips.entries.where((element) =>
         element.value.runtimeType == KeyPaintRect &&
@@ -115,10 +115,11 @@ class KeyModel with ChangeNotifier {
     }
   }
 
-  /// [updateChip] updates the state of a chip in [chips].
+  /// [_updateChip] updates the state of a chip in [chips].
   ///
   /// Adds a new chip layer if the chip with [chipKey] does not exist.
-  void updateChip(String chipKey, {double? opacity, bool showOutline = false}) {
+  void _updateChip(String chipKey,
+      {double? opacity, bool showOutline = false}) {
     KeyPaintChip? chip = getChip(chipKey);
 
     if (chip == null) {
@@ -132,14 +133,14 @@ class KeyModel with ChangeNotifier {
         ..opacity = opacity!
         ..showOutline = showOutline;
 
-      chipsUpdateExclude(chipKey, chips.indexOf(chip));
+      _updateChipsExclude(chipKey, chips.indexOf(chip));
     }
 
     chip.color = highlightColor;
   }
 
-  /// [removeChip] deletes chip layer whose key matches [chipKey].
-  void removeChip(String chipKey) {
+  /// [_removeChip] deletes chip layer whose key matches [chipKey].
+  void _removeChip(String chipKey) {
     _chips.removeWhere((key, value) => key == chipKey);
   }
 
@@ -160,16 +161,16 @@ class KeyModel with ChangeNotifier {
       // key selected, highlight the chip with keys matching id
 
       _isSelected = true;
-      updateChip(id.toString(), opacity: opacity, showOutline: true);
+      _updateChip(id.toString(), opacity: opacity, showOutline: true);
     } else if (isWidgetInZone == false) {
       // key unselected, remove chip with specific id
 
       _isSelected = false;
-      removeChip(id.toString());
+      _removeChip(id.toString());
     } else if (isSelected) {
       // update selected chip opacity when visibility is disabled.
 
-      updateChip(id.toString(), opacity: opacity, showOutline: false);
+      _updateChip(id.toString(), opacity: opacity, showOutline: false);
     }
   }
 
