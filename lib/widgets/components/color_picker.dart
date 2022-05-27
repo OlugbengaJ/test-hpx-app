@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/color_picker_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/colors.dart';
@@ -95,6 +96,8 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
         Provider.of<ColorPickerProvider>(context, listen: false);
     ModeProvider modeProvider =
         Provider.of<ModeProvider>(context, listen: false);
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
     colorPickerProviderInstance.setCurrentPickerWidget(ColorPickerWidgetModel(
       action: widget.title,
       name: widget.title,
@@ -105,7 +108,9 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
         currentColor: currentColors,
         value: modeProvider.currentMode.value,
         effects: modeProvider.currentMode.effects,
+        icon: modeProvider.currentMode.icon,
         name: modeProvider.currentMode.name));
+    layerProvider.toolsEffectsUpdated();
   }
 
   void closeDialog(BuildContext context) {

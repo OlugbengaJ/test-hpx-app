@@ -10,6 +10,7 @@ class ResizableProvider extends ChangeNotifier {
   late double areaWidth = Get.width * 0.7;
   late double minWidth = 50;
   late double minHeight = 50;
+  
 
   late double height = 500;
   late double width = 500;

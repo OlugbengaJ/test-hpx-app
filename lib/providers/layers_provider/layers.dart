@@ -12,9 +12,11 @@ class LayersProvider extends ChangeNotifier {
   final List<LayerItemModel> _layeritems = [];
   final List<LayerItemModel> _sublayers = [];
   ModeProvider? _modeProvider;
+  ResizableProvider? _resizableProvider;
 
-  /// [hideStackedLayers] use to show or hide the stack layers for resizable widget
-  bool hideStackedLayers = false;
+  /// [hideDraggable] use to show or hide the stack layers for resizable widget
+  bool hideDraggable = false;
+  bool isLayerVisible = true;
   bool deleteLayerTooltip = false;
 
   /// [listIndex] use to the actual selected layer's index
@@ -35,17 +37,25 @@ class LayersProvider extends ChangeNotifier {
 
   /// [toggleHideStackedLayers] toggle hide or show of the resizable
   void toggleHideStackedLayers(bool show) {
-    hideStackedLayers = show;
+    hideDraggable = show;
+    notifyListeners();
   }
 
+  /// [setModeProvider] to set the mode provider to use on layers
   void setModeProvider(ModeProvider modeProvider) {
     _modeProvider = modeProvider;
+  }
+
+  /// [setResizableProvider] to set the mode provider to use on layers
+  void setResizableProvider(ResizableProvider resizableProvider) {
+    _resizableProvider = resizableProvider;
   }
 
   /// listen to any change from the tools and effects so the current layers can be updated
   void toolsEffectsUpdated() {
     LayerItemModel item = getItem(listIndex);
     item.mode = _modeProvider!.getModeInformation();
+    item.layerText = _modeProvider!.currentMode.name;
     _layeritems[listIndex] = item;
     notifyListeners();
   }
@@ -102,7 +112,6 @@ class LayersProvider extends ChangeNotifier {
 
   /// Add a new layer. By default new added layers use the mood mode
   void add(LayerItemModel item) {
-    //print(modeProvider!.currentMode.value);
     ToolsModeModel mode = ToolsModeModel(
         currentColor: moodThemesList.first.colorCode,
         effects: EffectsModel(effectName: EnumModes.mood),
@@ -116,6 +125,8 @@ class LayersProvider extends ChangeNotifier {
     for (var element in _layeritems) {
       element.listDisplayColor = Colors.grey;
     }
+
+    toggleHideStackedLayers(!item.visible);
 
     _layeritems.insert(0, item);
 
@@ -162,7 +173,7 @@ class LayersProvider extends ChangeNotifier {
     final item = _layeritems[_listIndex];
     item.listDisplayColor = Colors.white;
     _layeritems[_listIndex] = item;
-
+    toggleHideStackedLayers(!item.visible);
     notifyListeners();
   }
 
@@ -187,14 +198,15 @@ class LayersProvider extends ChangeNotifier {
 
   /// [toggleVisibility] toggle visiblity for a layers
   void toggleVisibility(LayerItemModel item, int index) {
+    print("Toggle visibility");
     item.listDisplayColor = Colors.grey;
-
     if (item.visible) {
       item.listDisplayColor = Colors.white;
     }
 
     _layeritems[index] = item;
 
+    toggleHideStackedLayers(!item.visible);
     notifyListeners();
   }
 
@@ -236,7 +248,7 @@ class LayersProvider extends ChangeNotifier {
   /// There is no need to have multiple resizable anymore. Use only one for all the layers
   void setResizablePosition(ResizableProvider provider) {
     final item = _layeritems[_listIndex];
-
+    isLayerVisible = item.visible;
     if (item.top != 0) {
       provider.setSize(
         newBottom: item.bottom,
