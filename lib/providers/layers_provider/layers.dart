@@ -50,6 +50,9 @@ class LayersProvider extends ChangeNotifier {
   void toolsEffectsUpdated(){
     LayerItemModel item = getItem(listIndex);
     item.mode =  _modeProvider!.getModeInformation();
+    item.layerText = _modeProvider!.currentMode.name;
+    print(_modeProvider!.currentMode.icon);
+    print(item.mode!.currentColor);
     _layeritems[listIndex] = item;
     notifyListeners();
   }

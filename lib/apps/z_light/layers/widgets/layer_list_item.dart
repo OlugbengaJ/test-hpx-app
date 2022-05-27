@@ -171,7 +171,7 @@ class _LayerListItemState extends State<LayerListItem> {
                               Row(
                                 children: [
                                   Icon(
-                                    widget.layerItemModel.icon,
+                                    widget.layerItemModel.mode!.icon,
                                     color: widget.layerItemModel.listDisplayColor,
                                     size: _iconSize,
                                   ),
@@ -222,7 +222,7 @@ class _LayerListItemState extends State<LayerListItem> {
                                                   CrossAxisAlignment.end,
                                               children: [
                                                 Tooltip(
-                                                  message: (widget.layerItemModel.layerText=="Shortcut Colors")? "Add sublayer" :"Duplicate",
+                                                  message: (widget.layerItemModel.mode!.name=="Shortcut Colors")? "Add sublayer" :"Duplicate",
                                                   child: InkWell(
                                                     child: Icon(
                                                       Ionicons.copy,
