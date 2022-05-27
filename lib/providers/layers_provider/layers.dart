@@ -12,6 +12,7 @@ class LayersProvider extends ChangeNotifier {
   final List<LayerItemModel> _layeritems = [];
   final List<LayerItemModel> _sublayers = [];
   ModeProvider? _modeProvider;
+  ResizableProvider? _resizableProvider;
 
   /// [hideStackedLayers] use to show or hide the stack layers for resizable widget
   bool hideStackedLayers = false;
@@ -38,11 +39,19 @@ class LayersProvider extends ChangeNotifier {
   /// [toggleHideStackedLayers] toggle hide or show of the resizable
   void toggleHideStackedLayers(bool show) {
     hideStackedLayers = show;
+    notifyListeners();
   }
 
 
+
+  /// [setModeProvider] to set the mode provider to use on layers
   void setModeProvider(ModeProvider modeProvider){
     _modeProvider = modeProvider;
+  }
+
+  /// [setResizableProvider] to set the mode provider to use on layers
+  void setResizableProvider(ResizableProvider resizableProvider){
+    _resizableProvider = resizableProvider;
   }
 
 
@@ -51,8 +60,6 @@ class LayersProvider extends ChangeNotifier {
     LayerItemModel item = getItem(listIndex);
     item.mode =  _modeProvider!.getModeInformation();
     item.layerText = _modeProvider!.currentMode.name;
-    print(_modeProvider!.currentMode.icon);
-    print(item.mode!.currentColor);
     _layeritems[listIndex] = item;
     notifyListeners();
   }
@@ -172,7 +179,6 @@ class LayersProvider extends ChangeNotifier {
     final item = _layeritems[_listIndex];
     item.listDisplayColor = Colors.white;
     _layeritems[_listIndex] = item;
-    print(item.visible);
 
     notifyListeners();
   }
@@ -200,7 +206,6 @@ class LayersProvider extends ChangeNotifier {
 
   /// [toggleVisibility] toggle visiblity for a layers
   void toggleVisibility(LayerItemModel item, int index) {
-    print("Toggle visibility");
     item.listDisplayColor = Colors.grey;
 
     if (item.visible) {
@@ -208,7 +213,7 @@ class LayersProvider extends ChangeNotifier {
     }
 
     _layeritems[index] = item;
-
+    toggleHideStackedLayers(!item.visible);
     notifyListeners();
   }
 

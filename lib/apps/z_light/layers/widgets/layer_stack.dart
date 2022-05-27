@@ -19,7 +19,16 @@ class _LayersStackState extends State<LayersStack> {
     return Consumer<LayersProvider>(
       builder: (context, value, child) {
         return 
-        (value.hideStackedLayers)? Container():
+        (value.hideStackedLayers)? 
+        Consumer<ResizableProvider>(
+          builder: (context, provider, child) {
+            return SizedBox(
+              height: 0,
+              width: 0,
+              key:  provider.draggableKey,
+            );
+          }
+        ):
         Stack(
           children: [
             (value.isLayerVisible)?
