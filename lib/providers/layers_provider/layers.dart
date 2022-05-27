@@ -14,8 +14,8 @@ class LayersProvider extends ChangeNotifier {
   ModeProvider? _modeProvider;
   ResizableProvider? _resizableProvider;
 
-  /// [hideStackedLayers] use to show or hide the stack layers for resizable widget
-  bool hideStackedLayers = false;
+  /// [hideDraggable] use to show or hide the stack layers for resizable widget
+  bool hideDraggable = false;
   bool isLayerVisible = true;
   bool deleteLayerTooltip = false;
 
@@ -38,7 +38,7 @@ class LayersProvider extends ChangeNotifier {
 
   /// [toggleHideStackedLayers] toggle hide or show of the resizable
   void toggleHideStackedLayers(bool show) {
-    hideStackedLayers = show;
+    hideDraggable = show;
     notifyListeners();
   }
 
@@ -120,7 +120,6 @@ class LayersProvider extends ChangeNotifier {
 
   /// Add a new layer. By default new added layers use the mood mode
   void add(LayerItemModel item) {
-    //print(modeProvider!.currentMode.value);
     ToolsModeModel mode = ToolsModeModel(
       currentColor: moodThemesList.first.colorCode,
       effects: EffectsModel(effectName: EnumModes.mood),
@@ -130,11 +129,13 @@ class LayersProvider extends ChangeNotifier {
       icon: Icons.mood
     );
     
-      item.mode = mode;
+    item.mode = mode;
 
     for (var element in _layeritems) {
       element.listDisplayColor = Colors.grey;
     }
+
+    toggleHideStackedLayers(!item.visible);
 
     _layeritems.insert(0, item);
 
@@ -179,7 +180,7 @@ class LayersProvider extends ChangeNotifier {
     final item = _layeritems[_listIndex];
     item.listDisplayColor = Colors.white;
     _layeritems[_listIndex] = item;
-
+    toggleHideStackedLayers(!item.visible);
     notifyListeners();
   }
 
@@ -207,12 +208,12 @@ class LayersProvider extends ChangeNotifier {
   /// [toggleVisibility] toggle visiblity for a layers
   void toggleVisibility(LayerItemModel item, int index) {
     item.listDisplayColor = Colors.grey;
-
     if (item.visible) {
       item.listDisplayColor = Colors.white;
     }
 
     _layeritems[index] = item;
+
     toggleHideStackedLayers(!item.visible);
     notifyListeners();
   }
