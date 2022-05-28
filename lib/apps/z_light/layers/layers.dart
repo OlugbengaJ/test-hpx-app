@@ -35,13 +35,7 @@ class _LayersState extends State<Layers> {
 
   /// [initialLayer] add a default layer to the workspace if there no layer available
   void initialLayer() {
-    ModeProvider modeProvider = context.read<ModeProvider>();
-    ResizableProvider resizableProvider = context.read<ResizableProvider>();
-
     LayersProvider provider = context.read<LayersProvider>();
-    provider.setModeProvider(modeProvider);
-    provider.setResizableProvider(resizableProvider);
-
     if (provider.length < 1) {
       _addLayer();
     }
@@ -50,12 +44,11 @@ class _LayersState extends State<Layers> {
   /// [_addLayer] used to add a layer to the available list
   /// use the [ModeProvider] the set the newly created layer name
   _addLayer() {
-
-    context.read<ResizableProvider>().initialize();
-
+    context.read<ResizableProvider>().initialize(
+          Offset(areaWidth / 2, areaHeight / 2),
+        );
 
     ModeProvider modeProvider = context.read<ModeProvider>();
-
     var provider = context.read<LayersProvider>();
     int id = 1; // For first element;
     if (provider.layeritems.isNotEmpty) {
@@ -67,22 +60,17 @@ class _LayersState extends State<Layers> {
       id = id + 1;
     }
 
-
-
-    /// Add a new provider to the layeritems, using the LayersProvider
-    provider.add(
-      LayerItemModel(
-        id: id,
-        layerText: "Mood",
-        //mode: modeProvider.currentMode,
-        top: context.read<ResizableProvider>().top,
-        bottom: context.read<ResizableProvider>().bottom,
-        left: context.read<ResizableProvider>().left,
-        right: context.read<ResizableProvider>().right,
-        icon: Icons.mood
-      )
-    );
-
+    provider.add(LayerItemModel(
+      id: id,
+      layerText: (provider.length > 0)
+          ? modeProvider.getModeInformation().name
+          : "Mood",
+      mode: modeProvider.getModeInformation(),
+      top: context.read<ResizableProvider>().top,
+      bottom: context.read<ResizableProvider>().bottom,
+      left: context.read<ResizableProvider>().left,
+      right: context.read<ResizableProvider>().right,
+    ));
   }
 
   @override

@@ -37,6 +37,8 @@ class _PickerDropdownState extends State<PickerDropdown> {
 
   @override
   void initState() {
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
     super.initState();
     setState(() {
       currentPickerValue = widget.defaultPicker;
@@ -60,7 +62,7 @@ class _PickerDropdownState extends State<PickerDropdown> {
         child: DropdownButton<PickerModel>(
           menuMaxHeight: 400,
           focusColor: Colors.transparent,
-          value: widget.defaultPicker ?? currentPickerValue,
+          value: currentPickerValue,
           dropdownColor: Colors.grey.shade900,
           hint: SizedBox(
             child: Row(
@@ -76,6 +78,7 @@ class _PickerDropdownState extends State<PickerDropdown> {
           elevation: 2,
           alignment: AlignmentDirectional.bottomStart,
           onChanged: (PickerModel? newValue) {
+            // print(modeProvider.currentMode?.value);
             setState(() {
               currentPickerValue = newValue;
               widget.onChange(newValue);

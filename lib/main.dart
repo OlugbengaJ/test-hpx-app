@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/apps/z_light/wrapper.dart';
+import 'package:hpx/providers/keyboard/keys_provider.dart';
 import 'package:hpx/providers/keys_provider.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
@@ -9,6 +10,7 @@ import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/shortcut_widget_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
+import 'package:hpx/widgets/components/zone_selector/zone_selector_provider.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +23,8 @@ void main() => runApp(
           ChangeNotifierProvider(create: (_) => ModeProvider()),
           ChangeNotifierProvider(create: (_) => ShortcutWidgetProvider()),
           ChangeNotifierProvider(create: (_) => EffectProvider()),
+          ChangeNotifierProvider(create: (_) => ZoneSelectorProvider()),
+          ChangeNotifierProvider(create: (context) => KeySelectorProvider()),
           ChangeNotifierProvider(create: (context) => KeysProvider()),
           ChangeNotifierProvider(create: (context) => WorkspaceProvider()),
         ],

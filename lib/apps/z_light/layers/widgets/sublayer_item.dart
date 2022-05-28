@@ -36,6 +36,7 @@ class _SublayerItemState extends State<SublayerItem> {
         LayerItemModel(
           id: layerItemModel.id,
           layerText: layerItemModel.layerText,
+          mode: layerItemModel.mode,
           visible: !layerItemModel.visible,
         ),
         widget.layerIndex);

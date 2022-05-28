@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
-import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
@@ -14,6 +13,10 @@ class ToolModes extends StatefulWidget {
 }
 
 class _ToolModesState extends State<ToolModes> {
+  late Widget preset = Container();
+  final PickerModel _defaultPreset =
+      PickerModel(title: 'Mood', value: EnumModes.mood, enabled: true);
+
   @override
   void initState() {
     setDefaultMode();
@@ -26,16 +29,13 @@ class _ToolModesState extends State<ToolModes> {
         Provider.of<ModeProvider>(context, listen: false);
     await Future.delayed(Duration(seconds: 0));
     setState(() {
-      modeProvider.changeModeComponent(modeProvider.modePicker, context);
+      preset = modeProvider.changeModeComponent(_defaultPreset, context)!;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     ModeProvider modeProvider = Provider.of<ModeProvider>(context);
-    // /// initialize the layers provider to use to send notification accross the layers
-    LayersProvider layerProvider =
-        Provider.of<LayersProvider>(context, listen: false);
     return Container(
         margin: EdgeInsets.zero,
         child: Column(
@@ -47,17 +47,17 @@ class _ToolModesState extends State<ToolModes> {
                 child: PickerDropdown(
                   onChange: (PickerModel? returnValue) {
                     setState(() {
-                      modeProvider.changeModeComponent(returnValue, context);
+                      preset = modeProvider.changeModeComponent(
+                          returnValue, context)!;
                     });
-                    layerProvider.toolsEffectsUpdated();
                   },
                   pickerHintText: "Picker a tool or effect mode ....",
                   pickerList: modeProvider.getPickerModes('mood'),
-                  defaultPicker: modeProvider.modePicker,
+                  defaultPicker: _defaultPreset,
                 )),
             Container(
               margin: const EdgeInsets.only(top: 0.0, bottom: 20.0),
-              child: modeProvider.preset,
+              child: preset,
             ),
           ],
         ));

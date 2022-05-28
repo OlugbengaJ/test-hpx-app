@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
-import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
 import 'package:hpx/widgets/theme.dart';
@@ -19,13 +18,12 @@ class _BlinkingPresetState extends State<BlinkingPreset> {
   void _setSliderValue(double returnValue) {
     EffectProvider effectsProvider =
         Provider.of<EffectProvider>(context, listen: false);
-    LayersProvider layerProvider =
-        Provider.of<LayersProvider>(context, listen: false);
-    effectsProvider.setCurrentEffect(EffectsModel(
-        effectName: effectsProvider.currentEffect?.effectName,
-        degree: effectsProvider.currentEffect?.degree,
-        speed: returnValue.floorToDouble()));
-    layerProvider.toolsEffectsUpdated();
+    setState(() {
+      effectsProvider.setCurrentEffect(EffectsModel(
+          effectName: effectsProvider.currentEffect?.effectName,
+          degree: effectsProvider.currentEffect?.degree,
+          speed: returnValue.floorToDouble()));
+    });
   }
 
   @override

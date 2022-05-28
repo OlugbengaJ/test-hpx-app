@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
-import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
-import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
 import 'package:hpx/widgets/theme.dart';
-import 'package:provider/provider.dart';
 
 class ColorCyclePreset extends StatefulWidget {
   const ColorCyclePreset({Key? key}) : super(key: key);
@@ -15,25 +11,18 @@ class ColorCyclePreset extends StatefulWidget {
 
 class _ColorCycleState extends State<ColorCyclePreset> {
   String activatedButton = "DEFAULT";
+  double _currentSliderValue = 0.0;
   TextEditingController degreeController = TextEditingController();
   final _colorPickerProvider = ColorPickerProvider();
 
   void _setSliderValue(double returnValue) {
-    EffectProvider effectsProvider =
-        Provider.of<EffectProvider>(context, listen: false);
-    LayersProvider layerProvider =
-        Provider.of<LayersProvider>(context, listen: false);
-    effectsProvider.setCurrentEffect(EffectsModel(
-        effectName: effectsProvider.currentEffect?.effectName,
-        degree: effectsProvider.currentEffect?.degree,
-        speed: returnValue.floorToDouble()));
-    layerProvider.toolsEffectsUpdated();
+    setState(() {
+      _currentSliderValue = returnValue;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    EffectProvider effectsProvider =
-        Provider.of<EffectProvider>(context, listen: false);
     return Container(
         margin: const EdgeInsets.only(top: 20, bottom: 30.0),
         child: Column(
@@ -110,11 +99,11 @@ class _ColorCycleState extends State<ColorCyclePreset> {
             Text("Speed", textAlign: TextAlign.left, style: labelStyle),
             Container(margin: const EdgeInsets.only(bottom: 10.0)),
             Slider(
-              value: effectsProvider.currentEffect!.speed!.toDouble(),
+              value: _currentSliderValue,
               max: 100,
               min: 0,
               divisions: 100,
-              label: effectsProvider.currentEffect!.speed.toString(),
+              label: _currentSliderValue.round().toString(),
               onChanged: (double value) {
                 _setSliderValue(value);
               },

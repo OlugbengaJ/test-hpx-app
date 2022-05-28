@@ -2,10 +2,8 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/theme.dart';
-import 'package:provider/provider.dart';
 
 class ImagePreset extends StatefulWidget {
   const ImagePreset({Key? key}) : super(key: key);
@@ -18,8 +16,6 @@ class _ImagePresetState extends State<ImagePreset> {
   dynamic filePath = const AssetImage(Constants.backdropImage);
 
   void _showPhotoLibrary() async {
-    LayersProvider layerProvider =
-        Provider.of<LayersProvider>(context, listen: false);
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['jpg', 'png', 'jpeg', 'ico'],
@@ -29,8 +25,9 @@ class _ImagePresetState extends State<ImagePreset> {
       setState(() {
         filePath = Image.memory(File(file.path!).readAsBytesSync()).image;
       });
+    } else {
+      // User canceled the picker
     }
-    layerProvider.toolsEffectsUpdated();
   }
 
   @override

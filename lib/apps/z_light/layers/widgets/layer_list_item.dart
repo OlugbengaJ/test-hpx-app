@@ -1,10 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/apps/z_light/layers/widgets/sublayer_item.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
-import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
-import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 
@@ -45,28 +44,26 @@ class _LayerListItemState extends State<LayerListItem> {
 
   _toggleLayer(LayersProvider provider) {
     LayerItemModel layerItemModel = widget.layerItemModel;
-    layerItemModel.visible = !layerItemModel.visible;
     provider.toggleVisibility(
-        layerItemModel,
-        widget.layerIndex
-      );
+        LayerItemModel(
+            id: layerItemModel.id,
+            layerText: layerItemModel.layerText,
+            mode: layerItemModel.mode,
+            visible: !layerItemModel.visible,
+          ),
+        widget.layerIndex);
   }
 
 
-  /// Duplicate a layer or create a sublayer dependinf the layer's mode.
-  /// Only create sublayers for Shortcut Colors
-  _duplicateOrCreatSubLayer(LayersProvider provider){
-    ModeProvider modeProvider = context.read<ModeProvider>();
-    if(widget.layerItemModel.mode!.name=="Shortcut Colors"){
-      provider.duplicateOrCreatSubLayer(widget.layerItemModel, widget.layerIndex, modeProvider, sublayer: true);
+  _duplicate(LayersProvider provider){
+    if(widget.layerItemModel.mode.name=="Shortcut Colors"){
+      provider.duplicate(widget.layerItemModel, widget.layerIndex, sublayer: true);
     }else{
-      provider.duplicateOrCreatSubLayer(widget.layerItemModel, widget.layerIndex, modeProvider);
+      provider.duplicate(widget.layerItemModel, widget.layerIndex);
     }
     
   }
-  
 
-  /// Use to edit the layer's text
   _toggleEditing(LayersProvider value) {
     setState(() {
       _editing = !_editing;
@@ -75,8 +72,6 @@ class _LayerListItemState extends State<LayerListItem> {
     });
   }
 
-
-  /// Use to delete a layer from the list
   _deleteLayer(LayersProvider provider){
     provider.removeItem(widget.layerIndex);
     // final dynamic tooltip = deleteKey.currentState;
@@ -86,26 +81,12 @@ class _LayerListItemState extends State<LayerListItem> {
     // });
   }
 
-
-  // Tap on a layer to select it
   _onTap(LayersProvider provider) {
     provider.changeIndex(widget.layerIndex);
-    ModeProvider modeProvider = context.read<ModeProvider>();
-    modeProvider.changeModeComponent(
-      PickerModel(
-        title: widget.layerItemModel.mode!.name, 
-        value: widget.layerItemModel.mode!.value, 
-        enabled: true, 
-        icon: widget.layerItemModel.mode!.icon
-      ),
-      context
-    );
     ResizableProvider resizableProvider = context.read<ResizableProvider>();
     provider.setResizablePosition(resizableProvider);
   }
 
-
-  /// Save the layer's new text
   _onSubmit(value, LayersProvider provider) {
     setState(() {
       _editing = !_editing;
@@ -113,8 +94,6 @@ class _LayerListItemState extends State<LayerListItem> {
     provider.update(widget.layerItemModel.id, value);
   }
 
-
-  /// Widget method to list sublayers
   List<Widget> _sublayers(LayersProvider provider){
     List<Widget> layers = [];
     if(widget.layerItemModel.hasSublayer){
@@ -171,7 +150,7 @@ class _LayerListItemState extends State<LayerListItem> {
                               Row(
                                 children: [
                                   Icon(
-                                    widget.layerItemModel.mode!.icon,
+                                    Ionicons.image,
                                     color: widget.layerItemModel.listDisplayColor,
                                     size: _iconSize,
                                   ),
@@ -222,7 +201,7 @@ class _LayerListItemState extends State<LayerListItem> {
                                                   CrossAxisAlignment.end,
                                               children: [
                                                 Tooltip(
-                                                  message: (widget.layerItemModel.mode!.name=="Shortcut Colors")? "Add sublayer" :"Duplicate",
+                                                  message: (widget.layerItemModel.layerText=="Shortcut Colors")? "Add sublayer" :"Duplicate",
                                                   child: InkWell(
                                                     child: Icon(
                                                       Ionicons.copy,
@@ -230,7 +209,7 @@ class _LayerListItemState extends State<LayerListItem> {
                                                       color: widget.layerItemModel
                                                           .listDisplayColor,
                                                     ),
-                                                    onTap: () => _duplicateOrCreatSubLayer(value),
+                                                    onTap: () => _duplicate(value),
                                                   ),
                                                 ),
                                                 Tooltip(

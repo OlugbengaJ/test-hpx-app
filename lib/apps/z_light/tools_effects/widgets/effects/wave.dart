@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
-import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
@@ -47,9 +46,6 @@ class _WavePresetState extends State<WavePreset> {
         Provider.of<EffectProvider>(context, listen: false);
     ModeProvider modeProvider =
         Provider.of<ModeProvider>(context, listen: false);
-    // /// initialize the layers provider to use to send notification accross the layers
-    LayersProvider layerProvider =
-        Provider.of<LayersProvider>(context, listen: false);
     setState(() {
       isRotate = true;
       degreeController.text = (returnValue! < 0
@@ -63,22 +59,17 @@ class _WavePresetState extends State<WavePreset> {
               ? (360 - (0 - returnValue) * (180 / pi))
               : returnValue * (180 / pi),
           speed: effectsProvider.currentEffect?.speed));
-      layerProvider.toolsEffectsUpdated();
     });
   }
 
   void _setSliderValue(double returnValue) {
     EffectProvider effectsProvider =
         Provider.of<EffectProvider>(context, listen: false);
-    // /// initialize the layers provider to use to send notification accross the layers
-    LayersProvider layerProvider =
-        Provider.of<LayersProvider>(context, listen: false);
     setState(() {
       effectsProvider.setCurrentEffect(EffectsModel(
           effectName: effectsProvider.currentEffect?.effectName,
           degree: effectsProvider.currentEffect?.degree,
           speed: returnValue.floorToDouble()));
-      layerProvider.toolsEffectsUpdated();
     });
   }
 
