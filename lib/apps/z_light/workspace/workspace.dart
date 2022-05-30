@@ -134,9 +134,7 @@ class _WorkspaceState extends State<Workspace>
         if (status == AnimationStatus.completed) {
           _controller.repeat();
         }
-        if (status == AnimationStatus.dismissed) {
-          debugPrint('dismissed');
-        }
+        if (status == AnimationStatus.dismissed) {}
       });
   }
 

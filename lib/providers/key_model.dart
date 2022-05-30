@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/key_code.dart';
-import 'package:hpx/utils/KeyboardController.dart';
 
 class KeyModel with ChangeNotifier {
   KeyModel({
@@ -30,9 +30,9 @@ class KeyModel with ChangeNotifier {
   final double keyHeight;
   final double keyRadius;
 
-  /// [highlightColor] is used to paint the key and must be initialized
+  /// [toolsModeModel] is used to paint the key and must be initialized
   /// otherwise a default white color is used.
-  late Color highlightColor;
+  late ToolsModeModel? toolsModeModel;
 
   /// [_isSelected] indicates key is selected.
   bool _isSelected = false;
@@ -49,7 +49,10 @@ class KeyModel with ChangeNotifier {
   };
 
   /// [chips] returns the values of [_chips] as a new list.
-  List<KeyPaintChip> get chips => [..._chips.values];
+  Map<String, KeyPaintChip> get chips => _chips;
+
+  /// [chipsValues] returns the values of [_chips] as a new list.
+  List<KeyPaintChip> get chipsValues => [..._chips.values];
 
   /// [addChipIcon] adds an icon layer to chips.
   void addChipIcon(
@@ -113,10 +116,11 @@ class KeyModel with ChangeNotifier {
 
       // update the opacity of the key so it remains visible unless disabled.
       (element.value as KeyPaintRect).opacity = 0.4;
+      //chipIndex > oldChipIndex ? 0.4 : 1;
     }
   }
 
-  /// [_updateChip] updates the state of a chip in [chips].
+  /// [_updateChip] updates the state of a chip in [chipsValues].
   ///
   /// Adds a new chip layer if the chip with [chipKey] does not exist.
   void _updateChip(String chipKey,
@@ -134,10 +138,10 @@ class KeyModel with ChangeNotifier {
         ..opacity = opacity!
         ..showOutline = showOutline;
 
-      _updateChipsExclude(chipKey, chips.indexOf(chip));
+      _updateChipsExclude(chipKey, chipsValues.indexOf(chip));
     }
 
-    chip.color = highlightColor;
+    chip.color = toolsModeModel?.currentColor.first;
   }
 
   /// [_removeChip] deletes chip layer whose key matches [chipKey].
@@ -147,16 +151,16 @@ class KeyModel with ChangeNotifier {
 
   /// [selectKey] highlights [KeyModel] under a selected zone.
   ///
-  /// [animValue] is an animation value which determines behaviour of the key.
+  /// [opacity] is an animation value which determines behaviour of the key.
   void selectKey(
     bool? isWidgetInZone,
     int id,
     bool isVisible, {
-    required double animValue,
+    required double opacity,
     // chip has animation
     bool isAnimated = false,
   }) {
-    final opacity = isVisible ? animValue : 0.0;
+    final _opacity = isVisible ? opacity : 0.0;
 
     if (isWidgetInZone == true) {
       // TODO: note this is an experimental feature and may not behave as expected.
@@ -165,7 +169,7 @@ class KeyModel with ChangeNotifier {
 
       // key selected, highlight the chip with keys matching id
       _isSelected = true;
-      _updateChip(id.toString(), opacity: opacity, showOutline: true);
+      _updateChip(id.toString(), opacity: _opacity, showOutline: true);
     } else if (isWidgetInZone == false) {
       // key unselected, remove chip with specific id
 
@@ -174,7 +178,7 @@ class KeyModel with ChangeNotifier {
     } else if (isSelected) {
       // update selected chip opacity when visibility is disabled.
 
-      _updateChip(id.toString(), opacity: opacity, showOutline: false);
+      _updateChip(id.toString(), opacity: _opacity, showOutline: false);
     }
   }
 
