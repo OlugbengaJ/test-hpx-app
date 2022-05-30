@@ -133,10 +133,20 @@ List<PickerModel> moodList = [
 
 // Mode provider to manage the current colors or effects of a mode been selected
 class ModeProvider extends ChangeNotifier {
-  ToolsModeModel currentMode =
-      ToolsModeModel(currentColor: [], effects: EffectsModel(), name: "");
-  EffectProvider effectProvider = EffectProvider();
-  ColorPickerProvider colorPickerProvider = ColorPickerProvider();
+  ToolsModeModel currentMode = ToolsModeModel(
+      currentColor: moodThemesList.first.colorCode,
+      effects: EffectsModel(effectName: EnumModes.mood),
+      name: "Mood",
+      value: EnumModes.mood,
+      modeType: EnumModeType.layers,
+      icon: Icons.mood);
+
+  // default variable for settin tools and effects widget in this function
+  Widget preset = Container();
+
+  // default variable for settin tools and effects widget in this function
+  PickerModel modePicker =
+      PickerModel(title: 'Mood', value: EnumModes.mood, enabled: true);
 
   /// function set the current mode information to the provider mode variable
   void setCurrentMode(ToolsModeModel data) {
@@ -166,13 +176,11 @@ class ModeProvider extends ChangeNotifier {
 
   /// function designed to change the tools and effects mode widget and return the chosen widget
   /// also sets the default colors and mode information
-  Widget? changeModeComponent(PickerModel? pickerChoice, BuildContext context) {
+  changeModeComponent(PickerModel? pickerChoice, BuildContext context) {
     // default variable for settin currentcolors in this function
     List<Color> currentColors = [];
     // default variable for settin effects in this function
     EffectsModel effects = EffectsModel(effectName: pickerChoice?.value);
-    // default variable for settin tools and effects widget in this function
-    Widget? preset;
 
     /// initialize the workspace provider to use to send notification accross the workspace
     WorkspaceProvider workProvider =
@@ -182,9 +190,10 @@ class ModeProvider extends ChangeNotifier {
     switch (pickerChoice!.value) {
       case EnumModes.shortcut:
         workProvider.toggleModal([Text("Hello World", style: h2Style)]);
-        shortcutList.forEach((element) {
+        for (var element in shortcutList) {
           currentColors.add(element.colorCode[0]);
-        });
+        }
+
         preset = const ShortcutColorsPreset();
         break;
       case EnumModes.mood:
@@ -196,9 +205,9 @@ class ModeProvider extends ChangeNotifier {
         preset = const ColorProductionPreset();
         break;
       case EnumModes.audiovisualizer:
-        audioVisualSolidList.forEach((element) {
+        for (var element in audioVisualSolidList) {
           currentColors.add(element.colorCode[0]);
-        });
+        }
         preset = const AudioVisualPreset();
         break;
       case EnumModes.wave:
@@ -208,32 +217,35 @@ class ModeProvider extends ChangeNotifier {
         preset = const WavePreset();
         break;
       case EnumModes.colorcycle:
-        colorcycleDefaultsList.first.colorCode.forEach((element) {
+        for (var element in colorcycleDefaultsList.first.colorCode) {
           currentColors.add(element);
-        });
+        }
+        effects = defaultColorcycleEffectValues;
         preset = const ColorCyclePreset();
         break;
       case EnumModes.breathing:
-        breathingList.forEach((element) {
+        for (var element in breathingList) {
           currentColors.add(element.colorCode[0]);
-        });
+        }
+        effects = defaultBreathingEffectValues;
         preset = const BreathingPreset();
         break;
       case EnumModes.blinking:
         defaultBlinkingEffectValues.effectName = pickerChoice.value;
         effects = defaultBlinkingEffectValues;
-        blinkingList.forEach((element) {
+        for (var element in blinkingList) {
           currentColors.add(element.colorCode[0]);
-        });
+        }
         preset = const BlinkingPreset();
         break;
       case EnumModes.interactive:
         ////  set an notification message for interactive mode
         workProvider.toggleStripNotification(
             "Interactive effect will only work with your keyboard. Please assign the keys thatare used for triggering the effect. Hold down the Ctrl key for multiple selection");
-        interactiveColorList.forEach((element) {
+        for (var element in interactiveColorList) {
           currentColors.add(element.colorCode[0]);
-        });
+        }
+        effects = defaultInteractiveEffectValues;
         preset = const InteractivePreset();
         break;
       case EnumModes.image:
@@ -250,6 +262,8 @@ class ModeProvider extends ChangeNotifier {
         break;
     }
 
+    modePicker = pickerChoice;
+
     //// set the current effects to the effects provider
     EffectProvider effectsProvider =
         Provider.of<EffectProvider>(context, listen: false);
@@ -265,7 +279,6 @@ class ModeProvider extends ChangeNotifier {
         icon: pickerChoice.icon,
         effects: effectsProvider.currentEffect!,
         name: pickerChoice.title));
-    return preset;
   }
 
   // get current mode information

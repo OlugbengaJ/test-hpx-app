@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
@@ -42,12 +40,28 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [_layersProvider] grants access to [LayersProvider] resizable widget
   LayersProvider? _layersProvider;
-  
+
+  /// Animation controls
+  /// should contain a list of animations for different layers.
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  Animation<double> get animation => _animation;
+
+  void setAnimation(
+      AnimationController controller, Animation<double> animation) {
+    _controller = controller;
+    _animation = animation;
+    _controller.forward();
+  }
+
   ResizableProvider? _resizableProvider;
   LayersProvider? get getLayersProvider => _layersProvider;
 
   void setLayersProvider(LayersProvider? v) => _layersProvider = v;
   void setResizableProvider(ResizableProvider? v) => _resizableProvider = v;
+
+  WorkspaceDragMode? _keyDragMode = WorkspaceDragMode.resizable;
 
   bool get isDragModeClick => _keyDragMode == WorkspaceDragMode.click;
 
@@ -58,6 +72,7 @@ class WorkspaceProvider with ChangeNotifier {
   /// [getKeyDragMode] returns the current mode of the [Workspace].
   WorkspaceDragMode? get getKeyDragMode => _keyDragMode;
   bool _dragModeChanged = false;
+  bool _isCurrentDeviceSelected = false;
 
   /// Selection mode is used in zone selection, resizable, or click mode.
   ///
@@ -66,13 +81,26 @@ class WorkspaceProvider with ChangeNotifier {
     if (_keyDragMode == mode) {
       // reset selection mode
       _keyDragMode = null;
+      _dragModeChanged = false;
     } else {
       _keyDragMode = mode;
+      _dragModeChanged = true;
+    }
+
+    switch (_keyDragMode) {
+      case WorkspaceDragMode.click:
+        // set to true to enable selection of the entire keys
+        _isCurrentDeviceSelected = true;
+        _dragModeChanged = false;
+        break;
+      default:
+        _isCurrentDeviceSelected = false;
     }
     // drag mode has changed
     _dragModeChanged = true;
 
     if (_layersProvider != null) {
+      // toggle resizable visibility for the active layer.
       _layersProvider!.toggleHideStackedLayers(!isDragModeResizable);
     }
 
@@ -102,7 +130,6 @@ class WorkspaceProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  WorkspaceDragMode? _keyDragMode;
   DragDownDetails? _panDownDetails;
   DragUpdateDetails? _panUpdateDetails;
 
@@ -115,7 +142,7 @@ class WorkspaceProvider with ChangeNotifier {
     _dragModeChanged = false;
 
     switch (_keyDragMode) {
-      case WorkspaceDragMode.click:
+      // case WorkspaceDragMode.click:
       case WorkspaceDragMode.zone:
         _panDownDetails = details;
         _panUpdateDetails =
@@ -234,15 +261,16 @@ class WorkspaceProvider with ChangeNotifier {
 
     switch (_keyDragMode) {
       case WorkspaceDragMode.click:
-        // prevent keys from being highlighted in click mode.
-        if (_panNotAllowed(box) ||
-            _panDownDetails!.globalPosition !=
-                _panUpdateDetails!.globalPosition) {
-          return null;
-        }
+        return _isCurrentDeviceSelected ? true : null;
+      // // prevent keys from being highlighted in click mode.
+      // if (_panNotAllowed(box) ||
+      //     _panDownDetails!.globalPosition !=
+      //         _panUpdateDetails!.globalPosition) {
+      //   return null;
+      // }
 
-        selectorRect = _rectFromPanDetails;
-        break;
+      // selectorRect = _rectFromPanDetails;
+      // break;
       case WorkspaceDragMode.zone:
         if (_panNotAllowed(box)) return null;
 
@@ -254,14 +282,17 @@ class WorkspaceProvider with ChangeNotifier {
         }
 
         // calculate rect based on resizable widget offsets.
-        final layerModel = _layersProvider!.getItem(_layersProvider!.listIndex);
+        // final layerModel =
+        //     _layersProvider!.stackedLayeritems[_layersProvider!.index];
+        // box2 = layerModel.controller.draggableKey.currentContext
+        // final layerModel = _layersProvider!.getItem(_layersProvider!.listIndex);
 
         box2 = _resizableProvider!.draggableKey.currentContext
             ?.findRenderObject() as RenderBox?;
 
         if (box2 == null) return null;
-        selectorRect = box2.localToGlobal(Offset.zero) & box2.size;
 
+        selectorRect = box2.localToGlobal(Offset.zero) & box2.size;
         break;
 
       default:
@@ -271,12 +302,15 @@ class WorkspaceProvider with ChangeNotifier {
     final Rect boxRect = box!.localToGlobal(Offset.zero) & box.size;
     final rectIntersect = selectorRect.intersect(boxRect);
 
+    // debugPrint('$_dragModeChanged, $_keyDragMode');
+    // if (k.contains('kEsc')) {
+    //   debugPrint('$k $rectIntersect');
+    // }
+
+    // include 0 for scenarios where a button is clicked.
     return (rectIntersect.width >= 0 && rectIntersect.height >= 0);
   }
 
   // TODO: this is a debug implementation and must be refactored for production.
   // send random color to animate
-  List<Color> get animColors => [colorRandom];
 }
-
-Color get colorRandom => Color(0xffffffff & Random().nextInt(0xffffffff));

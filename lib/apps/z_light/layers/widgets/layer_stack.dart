@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/apps/z_light/layers/resizable/stateful_resizable.dart';
+import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
+import 'package:hpx/apps/z_light/layers/resizable/stateless_resizable.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:provider/provider.dart';
 
@@ -18,10 +19,20 @@ class _LayersStackState extends State<LayersStack> {
     return Consumer<LayersProvider>(
       builder: (context, value, child) {
         return 
-        (value.hideStackedLayers)? Container():
+        (value.hideDraggable)? 
+        Consumer<ResizableProvider>(
+          builder: (context, provider, child) {
+            return SizedBox(
+              height: 0,
+              width: 0,
+              key:  provider.draggableKey,
+            );
+          }
+        ):
         Stack(
           children: [
-            StatefulResizableWidget(
+            (value.isLayerVisible)?
+            StatelessResizable(
               dragWidgetHeight: dragWidgetSize,
               dragWidgetWidth: dragWidgetSize,
               dragWidget: Container(
@@ -37,6 +48,16 @@ class _LayersStackState extends State<LayersStack> {
                   border: Border.all(color: Colors.white),
                 ),
               ),
+            )
+            :
+            Consumer<ResizableProvider>(
+              builder: (context, provider, child) {
+                return SizedBox(
+                  height: 0,
+                  width: 0,
+                  key:  provider.draggableKey,
+                );
+              }
             ),
           ],
         );

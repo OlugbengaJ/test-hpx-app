@@ -16,22 +16,23 @@ class LayerItemModel {
     this.hasSublayer = false,
     this.listDisplayColor = defaultColor,
     this.paintColor = defaultPaintColor,
-    required this.mode,
-    top = 0,
-    bottom = 0,
-    left = 0,
-    right = 0,
+    this.top = 0,
+    this.bottom = 0,
+    this.left = 0,
+    this.right = 0,
+    this.icon = Icons.mood
   });
   final int id;
   int parentID;
   String layerText;
-  final bool visible;
+  bool visible = true;
   final bool isSublayer;
+  IconData icon = Icons.mood;
   bool hasSublayer;
   bool visibleOnStack;
   Color listDisplayColor;
   Color paintColor;
-  ToolsModeModel mode;
+  ToolsModeModel? mode;
   List<KeyModel> _keys = [];
 
 
