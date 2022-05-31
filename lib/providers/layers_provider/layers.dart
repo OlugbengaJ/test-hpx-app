@@ -48,7 +48,7 @@ class LayersProvider extends ChangeNotifier {
     _modeProvider = modeProvider;
   }
 
-  /// [setResizableProvider] to set the mode provider to use on layers
+  /// [setResizableProvider] to set the resizable provider to use on layers
   void setResizableProvider(ResizableProvider resizableProvider){
     _resizableProvider = resizableProvider;
   }
@@ -62,9 +62,12 @@ class LayersProvider extends ChangeNotifier {
     _layeritems[listIndex] = item;
 
     if(item.mode!.name=="Shortcut Colors"){
-      print("Create a shortcut layer");
+      debugPrint("Create a shortcut layer");
       var subLayers = getSublayers(item.id);
-      print(subLayers);
+      debugPrint('$subLayers');
+    }
+    for (var i = 0; i < length; i++) {
+      debugPrint('${layeritems[i].mode?.currentColor.first}');
     }
     notifyListeners();
   }
@@ -163,7 +166,6 @@ class LayersProvider extends ChangeNotifier {
       duplicatedItem.layerText = "Sublayer";
       duplicatedItem.parentID = item.id;
       duplicatedItem.mode = modeProvider.getModeInformation();
-      print(duplicatedItem.mode!.modeType);
       _sublayers.insert(0, duplicatedItem);
       _layeritems[index] = item;
     } else {
