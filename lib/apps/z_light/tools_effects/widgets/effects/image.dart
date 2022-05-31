@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/image_mode_provder.dart';
@@ -18,12 +21,19 @@ class _ImagePresetState extends State<ImagePreset> {
   void _showPhotoLibrary() async {
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
-    ImageModeProvider imageModeProvider =
-        Provider.of<ImageModeProvider>(context, listen: false);
-    imageModeProvider.selectImage();
-    setState(() {
-      filePath = imageModeProvider.currentImage;
-    });
+    // ImageModeProvider imageModeProvider =
+    //     Provider.of<ImageModeProvider>(context, listen: false);
+    // imageModeProvider.selectImage();
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'png', 'jpeg', 'ico'],
+    );
+    if (result != null) {
+      PlatformFile file = result.files.first;
+      setState(() {
+        filePath = Image.memory(File(file.path!).readAsBytesSync()).image;
+      });
+    }
     layerProvider.toolsEffectsUpdated();
   }
 
