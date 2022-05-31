@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/key_rrect.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/key_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/workspace_provider.dart';
@@ -66,32 +67,81 @@ KeyModel _updateKeyInfo(
   KeyModel keyModel,
   RenderBox? renderBox,
 ) {
-  final isWidgetInZone = provider.isWidgetInZone(renderBox);
-
-  // final currentMode = modeProvider.currentMode;
-  // List<Color> colors = [Colors.orange];
-
-  // if (currentMode.currentColor.runtimeType.toString() == 'List<Color>') {
-  //   colors = currentMode.currentColor as List<Color>;
-  // }
-
-  // if (provider.isDragModeZone || provider.isDragModeResizable) {
-  //   keyModel.selectKey(isWidgetInZone);
-  //   // if (isWidgetInZone == true && provider.isDragModeZone) {
-  //   // if (isWidgetInZone == true) {
-  //   //   // keyModel.setPathColors(colors);
-  //   //   //(provider.animColors);
-  //   // }
-  // }
+  final layers = layersProvider.layeritems;
   final layerIndex = layersProvider.listIndex;
+
+  // clear key selections
+  final keyChipKeys = keyModel.getLayeredChips();
+  if (keyChipKeys.isNotEmpty) {
+    List<KeyPaintChip> krect = [];
+    // key has existing chips; preserve their properties
+    for (var l in layers) {
+      final c = keyModel.getChip(l.id.toString());
+      if (c != null) {
+        krect.add(c);
+      }
+    }
+
+    // remove all chip layers in key
+    for (var k in keyChipKeys) {
+      keyModel.removeChip(k);
+    }
+
+    final currentId = layers[layerIndex].id.toString();
+    // add new chip layers in reverse order
+    for (var i = krect.length - 1; i >= 0; i--) {
+      final chip = krect[i] as KeyPaintRect;
+
+      if (currentId == chip.chipKey) {
+        chip.color = layers[layerIndex].mode?.currentColor.last;
+      }
+
+      debugPrint(
+          'currentId $currentId $i ${chip.chipKey} ${layers[i].mode?.currentColor}');
+      keyModel.addChip(chip.chipKey, chip);
+    }
+  }
+
+  if (keyModel.keyCode.toString().contains('kEsc')) {
+    for (var i = 0; i < layers.length; i++) {
+      debugPrint('\t esc $i ${layers[i].mode?.currentColor.first}');
+    }
+
+    debugPrint(
+        '${keyModel.keyCode} \t layerIndex $layerIndex \t ${keyModel.chipsValues.map((e) => e.chipKey)}');
+  }
+  // update if previously selected
+
+  final isWidgetInZone =
+      provider.isWidgetInZone(renderBox, k: keyModel.keyCode.toString());
   bool layerVisible = false;
+  double opacity = 1.0;
+  // provider.animation.value;
+
   if (layersProvider.layeritems.isNotEmpty) {
     final layer = layersProvider.layeritems[layerIndex];
     layerVisible = layer.visible;
-    keyModel.highlightColor = layer.mode?.currentColor.first;
+    // keyModel.highlightColor = layer.mode?.currentColor.first;
+
+    switch (layer.mode?.value) {
+      case EnumModes.mood:
+        // provider.stopAnimating();
+
+        // show full opacity
+        opacity = 1.0;
+        break;
+      default:
+    }
   }
+
   keyModel.selectKey(isWidgetInZone, layerIndex, layerVisible,
-      animValue: provider.animation.value);
+      opacity: opacity, currentLayers: layers);
+
+  if (keyModel.keyCode.toString().contains('kEsc')) {
+    debugPrint(
+        '${keyModel.keyCode} \t layerIndex $layerIndex \t ${keyModel.chipsValues.map((e) => e.chipKey)}');
+  }
+
   // if (provider.isDragModeClick &&
   //     isWidgetInZone == true &&
   //     !keyModel.isSelected) {

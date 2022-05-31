@@ -43,23 +43,35 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// Animation controls
   /// should contain a list of animations for different layers.
-  late AnimationController _controller;
-  late Animation<double> _animation;
+  // late AnimationController _controller;
+  // late Animation<double> _animation;
 
-  Animation<double> get animation => _animation;
+  // Animation<double> get animation => _animation;
+  // AnimationController get controller => _controller;
 
-  void setAnimation(
-      AnimationController controller, Animation<double> animation) {
-    _controller = controller;
-    _animation = animation;
-    _controller.forward();
-  }
+  // void setAnimation(
+  //     AnimationController controller, Animation<double> animation) {
+  //   _controller = controller;
+  //   _animation = animation;
+  //   // _controller.forward();
+  // }
+
+  // void stopAnimating() {
+  //   if (_controller.isAnimating) {
+  //     _controller.stop();
+  //   }
+  // }
 
   ResizableProvider? _resizableProvider;
   LayersProvider? get getLayersProvider => _layersProvider;
 
-  void setLayersProvider(LayersProvider? v) => _layersProvider = v;
-  void setResizableProvider(ResizableProvider? v) => _resizableProvider = v;
+  void setLayersProvider(LayersProvider? v) {
+    _layersProvider = v;
+  }
+
+  void setResizableProvider(ResizableProvider? r) {
+    _resizableProvider = r;
+  }
 
   WorkspaceDragMode? _keyDragMode = WorkspaceDragMode.resizable;
 
@@ -253,7 +265,7 @@ class WorkspaceProvider with ChangeNotifier {
       _panDownDetails!.globalPosition, _panUpdateDetails!.globalPosition);
 
   /// [isWidgetInZone] checks a widget intersects with the zone selection
-  bool? isWidgetInZone(RenderBox? box, {RenderBox? box2}) {
+  bool? isWidgetInZone(RenderBox? box, {RenderBox? box2, String k = ''}) {
     // drag mode has changed, unselect box
     if (_dragModeChanged) return false;
 
@@ -276,17 +288,16 @@ class WorkspaceProvider with ChangeNotifier {
 
         selectorRect = _rectFromPanDetails;
         break;
+      // TODO: Resizable is buggy
+      // 1. new layer should show resizable
+      // 2. each layer should show resizable and keep it's state
       case WorkspaceDragMode.resizable:
         if (_layersProvider == null || _layersProvider!.length <= 0) {
           return null;
         }
 
         // calculate rect based on resizable widget offsets.
-        // final layerModel =
-        //     _layersProvider!.stackedLayeritems[_layersProvider!.index];
-        // box2 = layerModel.controller.draggableKey.currentContext
-        // final layerModel = _layersProvider!.getItem(_layersProvider!.listIndex);
-
+        _resizableProvider?.calculateSizeFromLocal();
         box2 = _resizableProvider!.draggableKey.currentContext
             ?.findRenderObject() as RenderBox?;
 
@@ -303,14 +314,11 @@ class WorkspaceProvider with ChangeNotifier {
     final rectIntersect = selectorRect.intersect(boxRect);
 
     // debugPrint('$_dragModeChanged, $_keyDragMode');
-    // if (k.contains('kEsc')) {
-    //   debugPrint('$k $rectIntersect');
-    // }
+    if (k.contains('kEsc')) {
+      debugPrint('$k $boxRect $selectorRect $rectIntersect');
+    }
 
     // include 0 for scenarios where a button is clicked.
     return (rectIntersect.width >= 0 && rectIntersect.height >= 0);
   }
-
-  // TODO: this is a debug implementation and must be refactored for production.
-  // send random color to animate
 }

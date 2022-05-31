@@ -143,7 +143,7 @@ class _WorkspaceState extends State<Workspace>
     super.initState();
 
     // initialize animation
-    _initAnimation();
+    // _initAnimation();
 
     // Initialize zoom value and scale.
     _zoomValue = 60;
@@ -157,7 +157,7 @@ class _WorkspaceState extends State<Workspace>
   @override
   void dispose() {
     _zoomTextCtrl.dispose();
-    _controller.dispose();
+    // _controller.dispose();
     _timer.cancel();
     super.dispose();
   }
@@ -167,7 +167,7 @@ class _WorkspaceState extends State<Workspace>
     final workspaceProvider = Provider.of<WorkspaceProvider>(context);
 
     // initialize animation controller
-    workspaceProvider.setAnimation(_controller, _animation);
+    // workspaceProvider.setAnimation(_controller, _animation);
 
     // initialize layers provider
     workspaceProvider.setLayersProvider(Provider.of<LayersProvider>(context));
