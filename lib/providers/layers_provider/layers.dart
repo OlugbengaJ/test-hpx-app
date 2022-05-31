@@ -165,6 +165,7 @@ class LayersProvider extends ChangeNotifier {
       item.hasSublayer = true;
       duplicatedItem.layerText = "Sublayer";
       duplicatedItem.parentID = item.id;
+      duplicatedItem.isSublayer = true;
       duplicatedItem.mode = modeProvider.getModeInformation();
       _sublayers.insert(0, duplicatedItem);
       _layeritems[index] = item;
@@ -190,6 +191,11 @@ class LayersProvider extends ChangeNotifier {
     _layeritems[_listIndex] = item;
     toggleHideStackedLayers(!item.visible);
     notifyListeners();
+  }
+
+
+  void changeSublayerIndex(int subIndex){
+    debugPrint("Layer index: $listIndex, sublayer index: $subIndex");
   }
 
   /// Update the layerText using its ID
@@ -271,7 +277,7 @@ class LayersProvider extends ChangeNotifier {
         newTop: item.top,
       );
     }
-    provider.setSize();
+    _resizableProvider!.setSize();
 
     notifyListeners();
   }

@@ -51,10 +51,7 @@ class _LayersState extends State<Layers> {
   /// use the [ModeProvider] the set the newly created layer name
   _addLayer() {
     context.read<ResizableProvider>().initialize();
-
     ModeProvider modeProvider = context.read<ModeProvider>();
-    
-
     var provider = context.read<LayersProvider>();
     int id = 1; // For first element;
     if (provider.layeritems.isNotEmpty) {
@@ -70,15 +67,15 @@ class _LayersState extends State<Layers> {
     /// Add a new provider to the layeritems, using the LayersProvider
     
     LayerItemModel itemModel =  LayerItemModel(
-        id: id,
-        layerText: "Mood",
-        //mode: modeProvider.currentMode,
-        top: context.read<ResizableProvider>().top,
-        bottom: context.read<ResizableProvider>().bottom,
-        left: context.read<ResizableProvider>().left,
-        right: context.read<ResizableProvider>().right,
-        icon: Icons.mood
-      );
+      id: id,
+      layerText: "Mood",
+      //mode: modeProvider.currentMode,
+      top: context.read<ResizableProvider>().top,
+      bottom: context.read<ResizableProvider>().bottom,
+      left: context.read<ResizableProvider>().left,
+      right: context.read<ResizableProvider>().right,
+      icon: Icons.mood
+    );
 
     
     provider.add(
