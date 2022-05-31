@@ -55,12 +55,12 @@ class _WavePresetState extends State<WavePreset> {
         degree: returnValue,
         speed: effectsProvider.currentEffect?.speed));
     setState(() {
-      isRotate = true;
-      // degreeController.text = (returnValue! < 0
-      //         ? (360 - (0 - returnValue) * (180 / pi))
-      //         : returnValue * (180 / pi))
-      //     .toStringAsFixed(0);
-      degreeController.text = returnValue!.toStringAsFixed(0);
+      // isRotate = true;
+      degreeController.text = (returnValue! < 0
+              ? (360 - (0 - returnValue) * (180 / pi))
+              : returnValue * (180 / pi))
+          .toStringAsFixed(0);
+      // degreeController.text = returnValue!.toStringAsFixed(0);
       effectsProvider.currentEffect?.degree = returnValue;
     });
     layerProvider.toolsEffectsUpdated();
@@ -202,6 +202,9 @@ class _WavePresetState extends State<WavePreset> {
                           child: RotateButton(
                               value: double.parse(degreeController.text) % 360,
                               onChange: (double? returnValue) {
+                                setState(() {
+                                  isRotate = true;
+                                });
                                 _setDegreeValue(returnValue);
                               }))),
                   Expanded(

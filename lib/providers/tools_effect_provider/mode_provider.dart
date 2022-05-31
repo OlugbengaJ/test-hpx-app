@@ -186,6 +186,13 @@ class ModeProvider extends ChangeNotifier {
     WorkspaceProvider workProvider =
         Provider.of<WorkspaceProvider>(context, listen: false);
 
+    /// if last mode was interactive
+    if (currentMode.value == EnumModes.interactive) {
+      ////  set an notification message for interactive mode
+      workProvider.toggleStripNotification(
+          "Your interactive setting are going to be lost");
+    }
+
     // switch case design to switch and set the values for each mode been selected based on the enum value set by the mode
     switch (pickerChoice!.value) {
       case EnumModes.shortcut:
@@ -193,21 +200,25 @@ class ModeProvider extends ChangeNotifier {
         for (var element in shortcutList) {
           currentColors.add(element.colorCode[0]);
         }
+        effects.effectName = pickerChoice.value;
         setModeType(true);
         preset = const ShortcutColorsPreset();
         break;
       case EnumModes.mood:
         currentColors = moodThemesList.first.colorCode;
+        effects.effectName = pickerChoice.value;
         preset = const MoodPreset();
         break;
       case EnumModes.colorproduction:
         currentColors = colorProductionList.first.colorCode;
+        effects.effectName = pickerChoice.value;
         preset = const ColorProductionPreset();
         break;
       case EnumModes.audiovisualizer:
         for (var element in audioVisualSolidList) {
           currentColors.add(element.colorCode[0]);
         }
+        effects.effectName = pickerChoice.value;
         preset = const AudioVisualPreset();
         break;
       case EnumModes.wave:
@@ -220,6 +231,7 @@ class ModeProvider extends ChangeNotifier {
         for (var element in colorcycleDefaultsList.first.colorCode) {
           currentColors.add(element);
         }
+        defaultColorcycleEffectValues.effectName = pickerChoice.value;
         effects = defaultColorcycleEffectValues;
         preset = const ColorCyclePreset();
         break;
@@ -251,10 +263,12 @@ class ModeProvider extends ChangeNotifier {
         break;
       case EnumModes.image:
         currentColors.add(Colors.transparent);
+        effects.effectName = pickerChoice.value;
         preset = const ImagePreset();
         break;
       case EnumModes.ambient:
         currentColors.add(Colors.transparent);
+        effects.effectName = pickerChoice.value;
         preset = const AmbeintPreset();
         break;
       default:
