@@ -50,21 +50,20 @@ class _WavePresetState extends State<WavePreset> {
     // /// initialize the layers provider to use to send notification accross the layers
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
+    effectsProvider.setCurrentEffect(EffectsModel(
+        effectName: modeProvider.currentMode.value,
+        degree: returnValue,
+        speed: effectsProvider.currentEffect?.speed));
     setState(() {
       isRotate = true;
-      degreeController.text = (returnValue! < 0
-              ? (360 - (0 - returnValue) * (180 / pi))
-              : returnValue * (180 / pi))
-          .toStringAsFixed(0);
-
-      effectsProvider.setCurrentEffect(EffectsModel(
-          effectName: modeProvider.currentMode.value,
-          degree: returnValue < 0
-              ? (360 - (0 - returnValue) * (180 / pi))
-              : returnValue * (180 / pi),
-          speed: effectsProvider.currentEffect?.speed));
-      layerProvider.toolsEffectsUpdated();
+      // degreeController.text = (returnValue! < 0
+      //         ? (360 - (0 - returnValue) * (180 / pi))
+      //         : returnValue * (180 / pi))
+      //     .toStringAsFixed(0);
+      degreeController.text = returnValue!.toStringAsFixed(0);
+      effectsProvider.currentEffect?.degree = returnValue;
     });
+    layerProvider.toolsEffectsUpdated();
   }
 
   void _setSliderValue(double returnValue) {
