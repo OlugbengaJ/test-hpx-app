@@ -193,6 +193,7 @@ class ModeProvider extends ChangeNotifier {
         for (var element in shortcutList) {
           currentColors.add(element.colorCode[0]);
         }
+        setModeType(true);
         preset = const ShortcutColorsPreset();
         break;
       case EnumModes.mood:
@@ -226,6 +227,7 @@ class ModeProvider extends ChangeNotifier {
         for (var element in breathingList) {
           currentColors.add(element.colorCode[0]);
         }
+        defaultBreathingEffectValues.effectName = pickerChoice.value;
         effects = defaultBreathingEffectValues;
         preset = const BreathingPreset();
         break;

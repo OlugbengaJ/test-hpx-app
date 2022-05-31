@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
@@ -15,6 +17,7 @@ class BlinkingPreset extends StatefulWidget {
 
 class _BlinkingPresetState extends State<BlinkingPreset> {
   TextEditingController degreeController = TextEditingController();
+  // Double speed
 
   void _setSliderValue(double returnValue) {
     EffectProvider effectsProvider =
@@ -26,6 +29,9 @@ class _BlinkingPresetState extends State<BlinkingPreset> {
         degree: effectsProvider.currentEffect?.degree,
         speed: returnValue.floorToDouble()));
     layerProvider.toolsEffectsUpdated();
+    setState(() {
+      effectsProvider.currentEffect?.speed = returnValue;
+    });
   }
 
   @override
@@ -51,7 +57,7 @@ class _BlinkingPresetState extends State<BlinkingPreset> {
                 Text("Speed", textAlign: TextAlign.left, style: labelStyle),
                 Container(margin: const EdgeInsets.only(bottom: 10.0)),
                 Slider(
-                  value: effectsProvider.currentEffect!.speed!.toDouble(),
+                  value: effectsProvider.currentEffect!.speed!,
                   max: 100,
                   min: 0,
                   divisions: 100,
