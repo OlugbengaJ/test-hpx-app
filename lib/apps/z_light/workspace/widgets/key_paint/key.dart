@@ -1,3 +1,4 @@
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 /// [KeyCustomPainter] is a reference to a custom key layout.
@@ -8,8 +9,8 @@ import 'package:flutter/material.dart';
 class KeyCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    // var rect = ui.Offset.zero & size;
-    // canvas.clipRect(rect);
+    var rect = ui.Offset.zero & size;
+    canvas.clipRect(rect);
 
     // Paint paint0Stroke = Paint()
     //   ..style = PaintingStyle.stroke
@@ -1148,1049 +1149,1050 @@ class KeyCustomPainter extends CustomPainter {
             topRight: Radius.circular(size.width * 0.001594051)),
         paint74Stroke);
 
-    // Path path_75 = Path();
-    // path_75.moveTo(size.width * 0.6784962, size.height * 1.303571);
-    // path_75.lineTo(size.width * 0.7144078, size.height * 1.303571);
-    // path_75.cubicTo(
-    //     size.width * 0.7159590,
-    //     size.height * 1.303524,
-    //     size.width * 0.7161068,
-    //     size.height * 1.309174,
-    //     size.width * 0.7159999,
-    //     size.height * 1.313091);
-    // path_75.lineTo(size.width * 0.7159999, size.height * 1.429417);
-    // path_75.cubicTo(
-    //     size.width * 0.7160140,
-    //     size.height * 1.434622,
-    //     size.width * 0.7143304,
-    //     size.height * 1.435118,
-    //     size.width * 0.7131630,
-    //     size.height * 1.434760);
-    // path_75.lineTo(size.width * 0.6784962, size.height * 1.434760);
-    // path_75.cubicTo(
-    //     size.width * 0.6769451,
-    //     size.height * 1.434807,
-    //     size.width * 0.6767979,
-    //     size.height * 1.429157,
-    //     size.width * 0.6769041,
-    //     size.height * 1.425240);
-    // path_75.lineTo(size.width * 0.6769041, size.height * 1.308915);
-    // path_75.cubicTo(
-    //     size.width * 0.6768836,
-    //     size.height * 1.306040,
-    //     size.width * 0.6776404,
-    //     size.height * 1.303503,
-    //     size.width * 0.6784969,
-    //     size.height * 1.303571);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.7216738, size.height * 1.303479);
-    // path_75.lineTo(size.width * 0.7575853, size.height * 1.303479);
-    // path_75.cubicTo(
-    //     size.width * 0.7591365,
-    //     size.height * 1.303432,
-    //     size.width * 0.7592843,
-    //     size.height * 1.309084,
-    //     size.width * 0.7591775,
-    //     size.height * 1.313005);
-    // path_75.lineTo(size.width * 0.7591775, size.height * 1.429414);
-    // path_75.cubicTo(
-    //     size.width * 0.7591915,
-    //     size.height * 1.434622,
-    //     size.width * 0.7575079,
-    //     size.height * 1.435120,
-    //     size.width * 0.7563405,
-    //     size.height * 1.434760);
-    // path_75.lineTo(size.width * 0.7216738, size.height * 1.434760);
-    // path_75.cubicTo(
-    //     size.width * 0.7201226,
-    //     size.height * 1.434807,
-    //     size.width * 0.7199755,
-    //     size.height * 1.429155,
-    //     size.width * 0.7200816,
-    //     size.height * 1.425234);
-    // path_75.lineTo(size.width * 0.7200816, size.height * 1.308825);
-    // path_75.cubicTo(
-    //     size.width * 0.7200612,
-    //     size.height * 1.305950,
-    //     size.width * 0.7208179,
-    //     size.height * 1.303411,
-    //     size.width * 0.7216744,
-    //     size.height * 1.303479);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.7648513, size.height * 1.303479);
-    // path_75.lineTo(size.width * 0.8007629, size.height * 1.303479);
-    // path_75.cubicTo(
-    //     size.width * 0.8023141,
-    //     size.height * 1.303432,
-    //     size.width * 0.8024618,
-    //     size.height * 1.309084,
-    //     size.width * 0.8023550,
-    //     size.height * 1.313005);
-    // path_75.lineTo(size.width * 0.8023550, size.height * 1.429414);
-    // path_75.cubicTo(
-    //     size.width * 0.8023691,
-    //     size.height * 1.434622,
-    //     size.width * 0.8006855,
-    //     size.height * 1.435120,
-    //     size.width * 0.7995181,
-    //     size.height * 1.434760);
-    // path_75.lineTo(size.width * 0.7648513, size.height * 1.434760);
-    // path_75.cubicTo(
-    //     size.width * 0.7633001,
-    //     size.height * 1.434807,
-    //     size.width * 0.7631530,
-    //     size.height * 1.429155,
-    //     size.width * 0.7632592,
-    //     size.height * 1.425234);
-    // path_75.lineTo(size.width * 0.7632592, size.height * 1.308825);
-    // path_75.cubicTo(
-    //     size.width * 0.7632387,
-    //     size.height * 1.305950,
-    //     size.width * 0.7639954,
-    //     size.height * 1.303411,
-    //     size.width * 0.7648520,
-    //     size.height * 1.303479);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.6784962, size.height * 1.486060);
-    // path_75.lineTo(size.width * 0.7144078, size.height * 1.486060);
-    // path_75.cubicTo(
-    //     size.width * 0.7159590,
-    //     size.height * 1.486012,
-    //     size.width * 0.7161068,
-    //     size.height * 1.491667,
-    //     size.width * 0.7159999,
-    //     size.height * 1.495586);
-    // path_75.lineTo(size.width * 0.7159999, size.height * 1.611995);
-    // path_75.cubicTo(
-    //     size.width * 0.7160140,
-    //     size.height * 1.617203,
-    //     size.width * 0.7143304,
-    //     size.height * 1.617701,
-    //     size.width * 0.7131630,
-    //     size.height * 1.617340);
-    // path_75.lineTo(size.width * 0.6784962, size.height * 1.617340);
-    // path_75.cubicTo(
-    //     size.width * 0.6769451,
-    //     size.height * 1.617390,
-    //     size.width * 0.6767979,
-    //     size.height * 1.611735,
-    //     size.width * 0.6769041,
-    //     size.height * 1.607814);
-    // path_75.lineTo(size.width * 0.6769041, size.height * 1.491405);
-    // path_75.cubicTo(
-    //     size.width * 0.6768836,
-    //     size.height * 1.488531,
-    //     size.width * 0.6776404,
-    //     size.height * 1.485991,
-    //     size.width * 0.6784969,
-    //     size.height * 1.486060);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.7216738, size.height * 1.486060);
-    // path_75.lineTo(size.width * 0.7575853, size.height * 1.486060);
-    // path_75.cubicTo(
-    //     size.width * 0.7591365,
-    //     size.height * 1.486012,
-    //     size.width * 0.7592843,
-    //     size.height * 1.491667,
-    //     size.width * 0.7591775,
-    //     size.height * 1.495586);
-    // path_75.lineTo(size.width * 0.7591775, size.height * 1.611995);
-    // path_75.cubicTo(
-    //     size.width * 0.7591915,
-    //     size.height * 1.617203,
-    //     size.width * 0.7575079,
-    //     size.height * 1.617701,
-    //     size.width * 0.7563405,
-    //     size.height * 1.617340);
-    // path_75.lineTo(size.width * 0.7216738, size.height * 1.617340);
-    // path_75.cubicTo(
-    //     size.width * 0.7201226,
-    //     size.height * 1.617390,
-    //     size.width * 0.7199755,
-    //     size.height * 1.611735,
-    //     size.width * 0.7200816,
-    //     size.height * 1.607814);
-    // path_75.lineTo(size.width * 0.7200816, size.height * 1.491405);
-    // path_75.cubicTo(
-    //     size.width * 0.7200612,
-    //     size.height * 1.488531,
-    //     size.width * 0.7208179,
-    //     size.height * 1.485991,
-    //     size.width * 0.7216744,
-    //     size.height * 1.486060);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.7648513, size.height * 1.486060);
-    // path_75.lineTo(size.width * 0.8007629, size.height * 1.486060);
-    // path_75.cubicTo(
-    //     size.width * 0.8023141,
-    //     size.height * 1.486012,
-    //     size.width * 0.8024618,
-    //     size.height * 1.491667,
-    //     size.width * 0.8023550,
-    //     size.height * 1.495586);
-    // path_75.lineTo(size.width * 0.8023550, size.height * 1.611995);
-    // path_75.cubicTo(
-    //     size.width * 0.8023691,
-    //     size.height * 1.617203,
-    //     size.width * 0.8006855,
-    //     size.height * 1.617701,
-    //     size.width * 0.7995181,
-    //     size.height * 1.617340);
-    // path_75.lineTo(size.width * 0.7648513, size.height * 1.617340);
-    // path_75.cubicTo(
-    //     size.width * 0.7633001,
-    //     size.height * 1.617390,
-    //     size.width * 0.7631530,
-    //     size.height * 1.611735,
-    //     size.width * 0.7632592,
-    //     size.height * 1.607814);
-    // path_75.lineTo(size.width * 0.7632592, size.height * 1.491405);
-    // path_75.cubicTo(
-    //     size.width * 0.7632387,
-    //     size.height * 1.488531,
-    //     size.width * 0.7639954,
-    //     size.height * 1.485991,
-    //     size.width * 0.7648520,
-    //     size.height * 1.486060);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.6784962, size.height * 1.630847);
-    // path_75.lineTo(size.width * 0.7144078, size.height * 1.630847);
-    // path_75.cubicTo(
-    //     size.width * 0.7159590,
-    //     size.height * 1.630800,
-    //     size.width * 0.7161068,
-    //     size.height * 1.636454,
-    //     size.width * 0.7159999,
-    //     size.height * 1.640373);
-    // path_75.lineTo(size.width * 0.7159999, size.height * 1.756782);
-    // path_75.cubicTo(
-    //     size.width * 0.7160140,
-    //     size.height * 1.761991,
-    //     size.width * 0.7143304,
-    //     size.height * 1.762488,
-    //     size.width * 0.7131630,
-    //     size.height * 1.762128);
-    // path_75.lineTo(size.width * 0.6784962, size.height * 1.762128);
-    // path_75.cubicTo(
-    //     size.width * 0.6769451,
-    //     size.height * 1.762177,
-    //     size.width * 0.6767979,
-    //     size.height * 1.756523,
-    //     size.width * 0.6769041,
-    //     size.height * 1.752602);
-    // path_75.lineTo(size.width * 0.6769041, size.height * 1.636193);
-    // path_75.cubicTo(
-    //     size.width * 0.6768836,
-    //     size.height * 1.633318,
-    //     size.width * 0.6776404,
-    //     size.height * 1.630779,
-    //     size.width * 0.6784969,
-    //     size.height * 1.630847);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.7216738, size.height * 1.630847);
-    // path_75.lineTo(size.width * 0.7575853, size.height * 1.630847);
-    // path_75.cubicTo(
-    //     size.width * 0.7591365,
-    //     size.height * 1.630800,
-    //     size.width * 0.7592843,
-    //     size.height * 1.636454,
-    //     size.width * 0.7591775,
-    //     size.height * 1.640373);
-    // path_75.lineTo(size.width * 0.7591775, size.height * 1.756782);
-    // path_75.cubicTo(
-    //     size.width * 0.7591915,
-    //     size.height * 1.761991,
-    //     size.width * 0.7575079,
-    //     size.height * 1.762488,
-    //     size.width * 0.7563405,
-    //     size.height * 1.762128);
-    // path_75.lineTo(size.width * 0.7216738, size.height * 1.762128);
-    // path_75.cubicTo(
-    //     size.width * 0.7201226,
-    //     size.height * 1.762177,
-    //     size.width * 0.7199755,
-    //     size.height * 1.756523,
-    //     size.width * 0.7200816,
-    //     size.height * 1.752602);
-    // path_75.lineTo(size.width * 0.7200816, size.height * 1.636193);
-    // path_75.cubicTo(
-    //     size.width * 0.7200612,
-    //     size.height * 1.633318,
-    //     size.width * 0.7208179,
-    //     size.height * 1.630779,
-    //     size.width * 0.7216744,
-    //     size.height * 1.630847);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.7648513, size.height * 1.630847);
-    // path_75.lineTo(size.width * 0.8007629, size.height * 1.630847);
-    // path_75.cubicTo(
-    //     size.width * 0.8023141,
-    //     size.height * 1.630800,
-    //     size.width * 0.8024618,
-    //     size.height * 1.636454,
-    //     size.width * 0.8023550,
-    //     size.height * 1.640373);
-    // path_75.lineTo(size.width * 0.8023550, size.height * 1.756782);
-    // path_75.cubicTo(
-    //     size.width * 0.8023691,
-    //     size.height * 1.761991,
-    //     size.width * 0.8006855,
-    //     size.height * 1.762488,
-    //     size.width * 0.7995181,
-    //     size.height * 1.762128);
-    // path_75.lineTo(size.width * 0.7648513, size.height * 1.762128);
-    // path_75.cubicTo(
-    //     size.width * 0.7633001,
-    //     size.height * 1.762177,
-    //     size.width * 0.7631530,
-    //     size.height * 1.756523,
-    //     size.width * 0.7632592,
-    //     size.height * 1.752602);
-    // path_75.lineTo(size.width * 0.7632592, size.height * 1.636193);
-    // path_75.cubicTo(
-    //     size.width * 0.7632387,
-    //     size.height * 1.633318,
-    //     size.width * 0.7639954,
-    //     size.height * 1.630779,
-    //     size.width * 0.7648520,
-    //     size.height * 1.630847);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.7216738, size.height * 1.920423);
-    // path_75.lineTo(size.width * 0.7575853, size.height * 1.920423);
-    // path_75.cubicTo(
-    //     size.width * 0.7591365,
-    //     size.height * 1.920375,
-    //     size.width * 0.7592843,
-    //     size.height * 1.926030,
-    //     size.width * 0.7591775,
-    //     size.height * 1.929949);
-    // path_75.lineTo(size.width * 0.7591775, size.height * 2.046358);
-    // path_75.cubicTo(
-    //     size.width * 0.7591915,
-    //     size.height * 2.051566,
-    //     size.width * 0.7575079,
-    //     size.height * 2.052063,
-    //     size.width * 0.7563405,
-    //     size.height * 2.051703);
-    // path_75.lineTo(size.width * 0.7216738, size.height * 2.051703);
-    // path_75.cubicTo(
-    //     size.width * 0.7201226,
-    //     size.height * 2.051752,
-    //     size.width * 0.7199755,
-    //     size.height * 2.046098,
-    //     size.width * 0.7200816,
-    //     size.height * 2.042177);
-    // path_75.lineTo(size.width * 0.7200816, size.height * 1.925768);
-    // path_75.cubicTo(
-    //     size.width * 0.7200612,
-    //     size.height * 1.922894,
-    //     size.width * 0.7208179,
-    //     size.height * 1.920354,
-    //     size.width * 0.7216744,
-    //     size.height * 1.920423);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.6784962, size.height * 2.065210);
-    // path_75.lineTo(size.width * 0.7144078, size.height * 2.065210);
-    // path_75.cubicTo(
-    //     size.width * 0.7159590,
-    //     size.height * 2.065163,
-    //     size.width * 0.7161068,
-    //     size.height * 2.070817,
-    //     size.width * 0.7159999,
-    //     size.height * 2.074736);
-    // path_75.lineTo(size.width * 0.7159999, size.height * 2.191145);
-    // path_75.cubicTo(
-    //     size.width * 0.7160140,
-    //     size.height * 2.196353,
-    //     size.width * 0.7143304,
-    //     size.height * 2.196851,
-    //     size.width * 0.7131630,
-    //     size.height * 2.196491);
-    // path_75.lineTo(size.width * 0.6784962, size.height * 2.196491);
-    // path_75.cubicTo(
-    //     size.width * 0.6769451,
-    //     size.height * 2.196538,
-    //     size.width * 0.6767979,
-    //     size.height * 2.190886,
-    //     size.width * 0.6769041,
-    //     size.height * 2.186965);
-    // path_75.lineTo(size.width * 0.6769041, size.height * 2.070556);
-    // path_75.cubicTo(
-    //     size.width * 0.6768836,
-    //     size.height * 2.067681,
-    //     size.width * 0.6776404,
-    //     size.height * 2.065142,
-    //     size.width * 0.6784969,
-    //     size.height * 2.065210);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.7216738, size.height * 2.065210);
-    // path_75.lineTo(size.width * 0.7575853, size.height * 2.065210);
-    // path_75.cubicTo(
-    //     size.width * 0.7591365,
-    //     size.height * 2.065163,
-    //     size.width * 0.7592843,
-    //     size.height * 2.070817,
-    //     size.width * 0.7591775,
-    //     size.height * 2.074736);
-    // path_75.lineTo(size.width * 0.7591775, size.height * 2.191145);
-    // path_75.cubicTo(
-    //     size.width * 0.7591915,
-    //     size.height * 2.196353,
-    //     size.width * 0.7575079,
-    //     size.height * 2.196851,
-    //     size.width * 0.7563405,
-    //     size.height * 2.196491);
-    // path_75.lineTo(size.width * 0.7216738, size.height * 2.196491);
-    // path_75.cubicTo(
-    //     size.width * 0.7201226,
-    //     size.height * 2.196538,
-    //     size.width * 0.7199755,
-    //     size.height * 2.190886,
-    //     size.width * 0.7200816,
-    //     size.height * 2.186965);
-    // path_75.lineTo(size.width * 0.7200816, size.height * 2.070556);
-    // path_75.cubicTo(
-    //     size.width * 0.7200612,
-    //     size.height * 2.067681,
-    //     size.width * 0.7208179,
-    //     size.height * 2.065142,
-    //     size.width * 0.7216744,
-    //     size.height * 2.065210);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.7648513, size.height * 2.065210);
-    // path_75.lineTo(size.width * 0.8007629, size.height * 2.065210);
-    // path_75.cubicTo(
-    //     size.width * 0.8023141,
-    //     size.height * 2.065163,
-    //     size.width * 0.8024618,
-    //     size.height * 2.070817,
-    //     size.width * 0.8023550,
-    //     size.height * 2.074736);
-    // path_75.lineTo(size.width * 0.8023550, size.height * 2.191145);
-    // path_75.cubicTo(
-    //     size.width * 0.8023691,
-    //     size.height * 2.196353,
-    //     size.width * 0.8006855,
-    //     size.height * 2.196851,
-    //     size.width * 0.7995181,
-    //     size.height * 2.196491);
-    // path_75.lineTo(size.width * 0.7648513, size.height * 2.196491);
-    // path_75.cubicTo(
-    //     size.width * 0.7633001,
-    //     size.height * 2.196538,
-    //     size.width * 0.7631530,
-    //     size.height * 2.190886,
-    //     size.width * 0.7632592,
-    //     size.height * 2.186965);
-    // path_75.lineTo(size.width * 0.7632592, size.height * 2.070556);
-    // path_75.cubicTo(
-    //     size.width * 0.7632387,
-    //     size.height * 2.067681,
-    //     size.width * 0.7639954,
-    //     size.height * 2.065142,
-    //     size.width * 0.7648520,
-    //     size.height * 2.065210);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.8193126, size.height * 1.486060);
-    // path_75.lineTo(size.width * 0.8552241, size.height * 1.486060);
-    // path_75.cubicTo(
-    //     size.width * 0.8567753,
-    //     size.height * 1.486012,
-    //     size.width * 0.8569231,
-    //     size.height * 1.491667,
-    //     size.width * 0.8568163,
-    //     size.height * 1.495586);
-    // path_75.lineTo(size.width * 0.8568163, size.height * 1.611995);
-    // path_75.cubicTo(
-    //     size.width * 0.8568303,
-    //     size.height * 1.617203,
-    //     size.width * 0.8551467,
-    //     size.height * 1.617701,
-    //     size.width * 0.8539793,
-    //     size.height * 1.617340);
-    // path_75.lineTo(size.width * 0.8193126, size.height * 1.617340);
-    // path_75.cubicTo(
-    //     size.width * 0.8177614,
-    //     size.height * 1.617387,
-    //     size.width * 0.8176143,
-    //     size.height * 1.611735,
-    //     size.width * 0.8177204,
-    //     size.height * 1.607814);
-    // path_75.lineTo(size.width * 0.8177204, size.height * 1.491405);
-    // path_75.cubicTo(
-    //     size.width * 0.8177000,
-    //     size.height * 1.488531,
-    //     size.width * 0.8184567,
-    //     size.height * 1.485991,
-    //     size.width * 0.8193132,
-    //     size.height * 1.486060);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.8624901, size.height * 1.486060);
-    // path_75.lineTo(size.width * 0.8984017, size.height * 1.486060);
-    // path_75.cubicTo(
-    //     size.width * 0.8999529,
-    //     size.height * 1.486012,
-    //     size.width * 0.9001006,
-    //     size.height * 1.491667,
-    //     size.width * 0.8999938,
-    //     size.height * 1.495586);
-    // path_75.lineTo(size.width * 0.8999938, size.height * 1.611995);
-    // path_75.cubicTo(
-    //     size.width * 0.9000079,
-    //     size.height * 1.617203,
-    //     size.width * 0.8983243,
-    //     size.height * 1.617701,
-    //     size.width * 0.8971569,
-    //     size.height * 1.617340);
-    // path_75.lineTo(size.width * 0.8624901, size.height * 1.617340);
-    // path_75.cubicTo(
-    //     size.width * 0.8609389,
-    //     size.height * 1.617387,
-    //     size.width * 0.8607918,
-    //     size.height * 1.611735,
-    //     size.width * 0.8608980,
-    //     size.height * 1.607814);
-    // path_75.lineTo(size.width * 0.8608980, size.height * 1.491405);
-    // path_75.cubicTo(
-    //     size.width * 0.8608775,
-    //     size.height * 1.488531,
-    //     size.width * 0.8616342,
-    //     size.height * 1.485991,
-    //     size.width * 0.8624907,
-    //     size.height * 1.486060);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.9056676, size.height * 1.486060);
-    // path_75.lineTo(size.width * 0.9415792, size.height * 1.486060);
-    // path_75.cubicTo(
-    //     size.width * 0.9431304,
-    //     size.height * 1.486012,
-    //     size.width * 0.9432782,
-    //     size.height * 1.491667,
-    //     size.width * 0.9431713,
-    //     size.height * 1.495586);
-    // path_75.lineTo(size.width * 0.9431713, size.height * 1.611995);
-    // path_75.cubicTo(
-    //     size.width * 0.9431854,
-    //     size.height * 1.617203,
-    //     size.width * 0.9415018,
-    //     size.height * 1.617701,
-    //     size.width * 0.9403344,
-    //     size.height * 1.617340);
-    // path_75.lineTo(size.width * 0.9056676, size.height * 1.617340);
-    // path_75.cubicTo(
-    //     size.width * 0.9041165,
-    //     size.height * 1.617387,
-    //     size.width * 0.9039693,
-    //     size.height * 1.611735,
-    //     size.width * 0.9040755,
-    //     size.height * 1.607814);
-    // path_75.lineTo(size.width * 0.9040755, size.height * 1.491405);
-    // path_75.cubicTo(
-    //     size.width * 0.9040550,
-    //     size.height * 1.488531,
-    //     size.width * 0.9048118,
-    //     size.height * 1.485991,
-    //     size.width * 0.9056683,
-    //     size.height * 1.486060);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.9488452, size.height * 1.486060);
-    // path_75.lineTo(size.width * 0.9847567, size.height * 1.486060);
-    // path_75.cubicTo(
-    //     size.width * 0.9863079,
-    //     size.height * 1.486012,
-    //     size.width * 0.9864557,
-    //     size.height * 1.491667,
-    //     size.width * 0.9863489,
-    //     size.height * 1.495586);
-    // path_75.lineTo(size.width * 0.9863489, size.height * 1.611995);
-    // path_75.cubicTo(
-    //     size.width * 0.9863629,
-    //     size.height * 1.617203,
-    //     size.width * 0.9846793,
-    //     size.height * 1.617701,
-    //     size.width * 0.9835119,
-    //     size.height * 1.617340);
-    // path_75.lineTo(size.width * 0.9488452, size.height * 1.617340);
-    // path_75.cubicTo(
-    //     size.width * 0.9472940,
-    //     size.height * 1.617387,
-    //     size.width * 0.9471469,
-    //     size.height * 1.611735,
-    //     size.width * 0.9472530,
-    //     size.height * 1.607814);
-    // path_75.lineTo(size.width * 0.9472530, size.height * 1.491405);
-    // path_75.cubicTo(
-    //     size.width * 0.9472326,
-    //     size.height * 1.488531,
-    //     size.width * 0.9479893,
-    //     size.height * 1.485991,
-    //     size.width * 0.9488458,
-    //     size.height * 1.486060);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.8193126, size.height * 1.630847);
-    // path_75.lineTo(size.width * 0.8552241, size.height * 1.630847);
-    // path_75.cubicTo(
-    //     size.width * 0.8567753,
-    //     size.height * 1.630800,
-    //     size.width * 0.8569231,
-    //     size.height * 1.636454,
-    //     size.width * 0.8568163,
-    //     size.height * 1.640373);
-    // path_75.lineTo(size.width * 0.8568163, size.height * 1.756782);
-    // path_75.cubicTo(
-    //     size.width * 0.8568303,
-    //     size.height * 1.761991,
-    //     size.width * 0.8551467,
-    //     size.height * 1.762488,
-    //     size.width * 0.8539793,
-    //     size.height * 1.762128);
-    // path_75.lineTo(size.width * 0.8193126, size.height * 1.762128);
-    // path_75.cubicTo(
-    //     size.width * 0.8177614,
-    //     size.height * 1.762175,
-    //     size.width * 0.8176143,
-    //     size.height * 1.756523,
-    //     size.width * 0.8177204,
-    //     size.height * 1.752602);
-    // path_75.lineTo(size.width * 0.8177204, size.height * 1.636193);
-    // path_75.cubicTo(
-    //     size.width * 0.8177000,
-    //     size.height * 1.633318,
-    //     size.width * 0.8184567,
-    //     size.height * 1.630779,
-    //     size.width * 0.8193132,
-    //     size.height * 1.630847);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.8624901, size.height * 1.630847);
-    // path_75.lineTo(size.width * 0.8984017, size.height * 1.630847);
-    // path_75.cubicTo(
-    //     size.width * 0.8999529,
-    //     size.height * 1.630800,
-    //     size.width * 0.9001006,
-    //     size.height * 1.636454,
-    //     size.width * 0.8999938,
-    //     size.height * 1.640373);
-    // path_75.lineTo(size.width * 0.8999938, size.height * 1.756782);
-    // path_75.cubicTo(
-    //     size.width * 0.9000079,
-    //     size.height * 1.761991,
-    //     size.width * 0.8983243,
-    //     size.height * 1.762488,
-    //     size.width * 0.8971569,
-    //     size.height * 1.762128);
-    // path_75.lineTo(size.width * 0.8624901, size.height * 1.762128);
-    // path_75.cubicTo(
-    //     size.width * 0.8609389,
-    //     size.height * 1.762175,
-    //     size.width * 0.8607918,
-    //     size.height * 1.756523,
-    //     size.width * 0.8608980,
-    //     size.height * 1.752602);
-    // path_75.lineTo(size.width * 0.8608980, size.height * 1.636193);
-    // path_75.cubicTo(
-    //     size.width * 0.8608775,
-    //     size.height * 1.633318,
-    //     size.width * 0.8616342,
-    //     size.height * 1.630779,
-    //     size.width * 0.8624907,
-    //     size.height * 1.630847);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.9056676, size.height * 1.630847);
-    // path_75.lineTo(size.width * 0.9415792, size.height * 1.630847);
-    // path_75.cubicTo(
-    //     size.width * 0.9431304,
-    //     size.height * 1.630800,
-    //     size.width * 0.9432782,
-    //     size.height * 1.636454,
-    //     size.width * 0.9431713,
-    //     size.height * 1.640373);
-    // path_75.lineTo(size.width * 0.9431713, size.height * 1.756782);
-    // path_75.cubicTo(
-    //     size.width * 0.9431854,
-    //     size.height * 1.761991,
-    //     size.width * 0.9415018,
-    //     size.height * 1.762488,
-    //     size.width * 0.9403344,
-    //     size.height * 1.762128);
-    // path_75.lineTo(size.width * 0.9056676, size.height * 1.762128);
-    // path_75.cubicTo(
-    //     size.width * 0.9041165,
-    //     size.height * 1.762175,
-    //     size.width * 0.9039693,
-    //     size.height * 1.756523,
-    //     size.width * 0.9040755,
-    //     size.height * 1.752602);
-    // path_75.lineTo(size.width * 0.9040755, size.height * 1.636193);
-    // path_75.cubicTo(
-    //     size.width * 0.9040550,
-    //     size.height * 1.633318,
-    //     size.width * 0.9048118,
-    //     size.height * 1.630779,
-    //     size.width * 0.9056683,
-    //     size.height * 1.630847);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.9488452, size.height * 1.630849);
-    // path_75.lineTo(size.width * 0.9847567, size.height * 1.630849);
-    // path_75.cubicTo(
-    //     size.width * 0.9863079,
-    //     size.height * 1.630749,
-    //     size.width * 0.9864557,
-    //     size.height * 1.642630,
-    //     size.width * 0.9863489,
-    //     size.height * 1.650869);
-    // path_75.lineTo(size.width * 0.9863489, size.height * 1.895489);
-    // path_75.cubicTo(
-    //     size.width * 0.9863629,
-    //     size.height * 1.906437,
-    //     size.width * 0.9846793,
-    //     size.height * 1.907477,
-    //     size.width * 0.9835119,
-    //     size.height * 1.906725);
-    // path_75.lineTo(size.width * 0.9488452, size.height * 1.906725);
-    // path_75.cubicTo(
-    //     size.width * 0.9472940,
-    //     size.height * 1.906823,
-    //     size.width * 0.9471469,
-    //     size.height * 1.894944,
-    //     size.width * 0.9472530,
-    //     size.height * 1.886705);
-    // path_75.lineTo(size.width * 0.9472530, size.height * 1.642083);
-    // path_75.cubicTo(
-    //     size.width * 0.9472326,
-    //     size.height * 1.636045,
-    //     size.width * 0.9479893,
-    //     size.height * 1.630704,
-    //     size.width * 0.9488458,
-    //     size.height * 1.630849);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.8193126, size.height * 1.775635);
-    // path_75.lineTo(size.width * 0.8552241, size.height * 1.775635);
-    // path_75.cubicTo(
-    //     size.width * 0.8567753,
-    //     size.height * 1.775588,
-    //     size.width * 0.8569231,
-    //     size.height * 1.781238,
-    //     size.width * 0.8568163,
-    //     size.height * 1.785154);
-    // path_75.lineTo(size.width * 0.8568163, size.height * 1.901482);
-    // path_75.cubicTo(
-    //     size.width * 0.8568303,
-    //     size.height * 1.906688,
-    //     size.width * 0.8551467,
-    //     size.height * 1.907181,
-    //     size.width * 0.8539793,
-    //     size.height * 1.906823);
-    // path_75.lineTo(size.width * 0.8193126, size.height * 1.906823);
-    // path_75.cubicTo(
-    //     size.width * 0.8177614,
-    //     size.height * 1.906870,
-    //     size.width * 0.8176143,
-    //     size.height * 1.901223,
-    //     size.width * 0.8177204,
-    //     size.height * 1.897304);
-    // path_75.lineTo(size.width * 0.8177204, size.height * 1.780978);
-    // path_75.cubicTo(
-    //     size.width * 0.8177000,
-    //     size.height * 1.778106,
-    //     size.width * 0.8184567,
-    //     size.height * 1.775566,
-    //     size.width * 0.8193132,
-    //     size.height * 1.775637);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.8624901, size.height * 1.775635);
-    // path_75.lineTo(size.width * 0.8984017, size.height * 1.775635);
-    // path_75.cubicTo(
-    //     size.width * 0.8999529,
-    //     size.height * 1.775588,
-    //     size.width * 0.9001006,
-    //     size.height * 1.781238,
-    //     size.width * 0.8999938,
-    //     size.height * 1.785154);
-    // path_75.lineTo(size.width * 0.8999938, size.height * 1.901482);
-    // path_75.cubicTo(
-    //     size.width * 0.9000079,
-    //     size.height * 1.906688,
-    //     size.width * 0.8983243,
-    //     size.height * 1.907181,
-    //     size.width * 0.8971569,
-    //     size.height * 1.906823);
-    // path_75.lineTo(size.width * 0.8624901, size.height * 1.906823);
-    // path_75.cubicTo(
-    //     size.width * 0.8609389,
-    //     size.height * 1.906870,
-    //     size.width * 0.8607918,
-    //     size.height * 1.901223,
-    //     size.width * 0.8608980,
-    //     size.height * 1.897304);
-    // path_75.lineTo(size.width * 0.8608980, size.height * 1.780978);
-    // path_75.cubicTo(
-    //     size.width * 0.8608775,
-    //     size.height * 1.778106,
-    //     size.width * 0.8616342,
-    //     size.height * 1.775566,
-    //     size.width * 0.8624907,
-    //     size.height * 1.775637);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.9056676, size.height * 1.775635);
-    // path_75.lineTo(size.width * 0.9415792, size.height * 1.775635);
-    // path_75.cubicTo(
-    //     size.width * 0.9431304,
-    //     size.height * 1.775588,
-    //     size.width * 0.9432782,
-    //     size.height * 1.781238,
-    //     size.width * 0.9431713,
-    //     size.height * 1.785154);
-    // path_75.lineTo(size.width * 0.9431713, size.height * 1.901482);
-    // path_75.cubicTo(
-    //     size.width * 0.9431854,
-    //     size.height * 1.906688,
-    //     size.width * 0.9415018,
-    //     size.height * 1.907181,
-    //     size.width * 0.9403344,
-    //     size.height * 1.906823);
-    // path_75.lineTo(size.width * 0.9056676, size.height * 1.906823);
-    // path_75.cubicTo(
-    //     size.width * 0.9041165,
-    //     size.height * 1.906870,
-    //     size.width * 0.9039693,
-    //     size.height * 1.901223,
-    //     size.width * 0.9040755,
-    //     size.height * 1.897304);
-    // path_75.lineTo(size.width * 0.9040755, size.height * 1.780978);
-    // path_75.cubicTo(
-    //     size.width * 0.9040550,
-    //     size.height * 1.778106,
-    //     size.width * 0.9048118,
-    //     size.height * 1.775566,
-    //     size.width * 0.9056683,
-    //     size.height * 1.775637);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.8193126, size.height * 1.920470);
-    // path_75.lineTo(size.width * 0.8552241, size.height * 1.920470);
-    // path_75.cubicTo(
-    //     size.width * 0.8567753,
-    //     size.height * 1.920420,
-    //     size.width * 0.8569231,
-    //     size.height * 1.926070,
-    //     size.width * 0.8568163,
-    //     size.height * 1.929989);
-    // path_75.lineTo(size.width * 0.8568163, size.height * 2.046315);
-    // path_75.cubicTo(
-    //     size.width * 0.8568303,
-    //     size.height * 2.051521,
-    //     size.width * 0.8551467,
-    //     size.height * 2.052016,
-    //     size.width * 0.8539793,
-    //     size.height * 2.051656);
-    // path_75.lineTo(size.width * 0.8193126, size.height * 2.051656);
-    // path_75.cubicTo(
-    //     size.width * 0.8177614,
-    //     size.height * 2.051705,
-    //     size.width * 0.8176143,
-    //     size.height * 2.046057,
-    //     size.width * 0.8177204,
-    //     size.height * 2.042139);
-    // path_75.lineTo(size.width * 0.8177204, size.height * 1.925811);
-    // path_75.cubicTo(
-    //     size.width * 0.8177000,
-    //     size.height * 1.922941,
-    //     size.width * 0.8184567,
-    //     size.height * 1.920399,
-    //     size.width * 0.8193132,
-    //     size.height * 1.920470);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.8624901, size.height * 1.920470);
-    // path_75.lineTo(size.width * 0.8984017, size.height * 1.920470);
-    // path_75.cubicTo(
-    //     size.width * 0.8999529,
-    //     size.height * 1.920420,
-    //     size.width * 0.9001006,
-    //     size.height * 1.926070,
-    //     size.width * 0.8999938,
-    //     size.height * 1.929989);
-    // path_75.lineTo(size.width * 0.8999938, size.height * 2.046315);
-    // path_75.cubicTo(
-    //     size.width * 0.9000079,
-    //     size.height * 2.051521,
-    //     size.width * 0.8983243,
-    //     size.height * 2.052016,
-    //     size.width * 0.8971569,
-    //     size.height * 2.051656);
-    // path_75.lineTo(size.width * 0.8624901, size.height * 2.051656);
-    // path_75.cubicTo(
-    //     size.width * 0.8609389,
-    //     size.height * 2.051705,
-    //     size.width * 0.8607918,
-    //     size.height * 2.046057,
-    //     size.width * 0.8608980,
-    //     size.height * 2.042139);
-    // path_75.lineTo(size.width * 0.8608980, size.height * 1.925811);
-    // path_75.cubicTo(
-    //     size.width * 0.8608775,
-    //     size.height * 1.922941,
-    //     size.width * 0.8616342,
-    //     size.height * 1.920399,
-    //     size.width * 0.8624907,
-    //     size.height * 1.920470);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.9056676, size.height * 1.920470);
-    // path_75.lineTo(size.width * 0.9415792, size.height * 1.920470);
-    // path_75.cubicTo(
-    //     size.width * 0.9431304,
-    //     size.height * 1.920420,
-    //     size.width * 0.9432782,
-    //     size.height * 1.926070,
-    //     size.width * 0.9431713,
-    //     size.height * 1.929989);
-    // path_75.lineTo(size.width * 0.9431713, size.height * 2.046315);
-    // path_75.cubicTo(
-    //     size.width * 0.9431854,
-    //     size.height * 2.051521,
-    //     size.width * 0.9415018,
-    //     size.height * 2.052016,
-    //     size.width * 0.9403344,
-    //     size.height * 2.051656);
-    // path_75.lineTo(size.width * 0.9056676, size.height * 2.051656);
-    // path_75.cubicTo(
-    //     size.width * 0.9041165,
-    //     size.height * 2.051705,
-    //     size.width * 0.9039693,
-    //     size.height * 2.046057,
-    //     size.width * 0.9040755,
-    //     size.height * 2.042139);
-    // path_75.lineTo(size.width * 0.9040755, size.height * 1.925811);
-    // path_75.cubicTo(
-    //     size.width * 0.9040550,
-    //     size.height * 1.922941,
-    //     size.width * 0.9048118,
-    //     size.height * 1.920399,
-    //     size.width * 0.9056683,
-    //     size.height * 1.920470);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.9488452, size.height * 1.920517);
-    // path_75.lineTo(size.width * 0.9847567, size.height * 1.920517);
-    // path_75.cubicTo(
-    //     size.width * 0.9863079,
-    //     size.height * 1.920416,
-    //     size.width * 0.9864557,
-    //     size.height * 1.932297,
-    //     size.width * 0.9863489,
-    //     size.height * 1.940536);
-    // path_75.lineTo(size.width * 0.9863489, size.height * 2.185157);
-    // path_75.cubicTo(
-    //     size.width * 0.9863629,
-    //     size.height * 2.196105,
-    //     size.width * 0.9846793,
-    //     size.height * 2.197145,
-    //     size.width * 0.9835119,
-    //     size.height * 2.196390);
-    // path_75.lineTo(size.width * 0.9488452, size.height * 2.196390);
-    // path_75.cubicTo(
-    //     size.width * 0.9472940,
-    //     size.height * 2.196489,
-    //     size.width * 0.9471469,
-    //     size.height * 2.184612,
-    //     size.width * 0.9472530,
-    //     size.height * 2.176371);
-    // path_75.lineTo(size.width * 0.9472530, size.height * 1.931750);
-    // path_75.cubicTo(
-    //     size.width * 0.9472326,
-    //     size.height * 1.925712,
-    //     size.width * 0.9479893,
-    //     size.height * 1.920371,
-    //     size.width * 0.9488458,
-    //     size.height * 1.920517);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.8210985, size.height * 2.065302);
-    // path_75.lineTo(size.width * 0.8966157, size.height * 2.065302);
-    // path_75.cubicTo(
-    //     size.width * 0.8998780,
-    //     size.height * 2.065255,
-    //     size.width * 0.9001883,
-    //     size.height * 2.070905,
-    //     size.width * 0.8999637,
-    //     size.height * 2.074822);
-    // path_75.lineTo(size.width * 0.8999637, size.height * 2.191150);
-    // path_75.cubicTo(
-    //     size.width * 0.8999932,
-    //     size.height * 2.196353,
-    //     size.width * 0.8964532,
-    //     size.height * 2.196849,
-    //     size.width * 0.8939982,
-    //     size.height * 2.196491);
-    // path_75.lineTo(size.width * 0.8210985, size.height * 2.196491);
-    // path_75.cubicTo(
-    //     size.width * 0.8178362,
-    //     size.height * 2.196538,
-    //     size.width * 0.8175260,
-    //     size.height * 2.190890,
-    //     size.width * 0.8177505,
-    //     size.height * 2.186971);
-    // path_75.lineTo(size.width * 0.8177505, size.height * 2.070646);
-    // path_75.cubicTo(
-    //     size.width * 0.8177077,
-    //     size.height * 2.067771,
-    //     size.width * 0.8192985,
-    //     size.height * 2.065234,
-    //     size.width * 0.8210985,
-    //     size.height * 2.065305);
-    // path_75.close();
-    // path_75.moveTo(size.width * 0.9056676, size.height * 2.065302);
-    // path_75.lineTo(size.width * 0.9415792, size.height * 2.065302);
-    // path_75.cubicTo(
-    //     size.width * 0.9431304,
-    //     size.height * 2.065255,
-    //     size.width * 0.9432782,
-    //     size.height * 2.070905,
-    //     size.width * 0.9431713,
-    //     size.height * 2.074822);
-    // path_75.lineTo(size.width * 0.9431713, size.height * 2.191150);
-    // path_75.cubicTo(
-    //     size.width * 0.9431854,
-    //     size.height * 2.196353,
-    //     size.width * 0.9415018,
-    //     size.height * 2.196849,
-    //     size.width * 0.9403344,
-    //     size.height * 2.196491);
-    // path_75.lineTo(size.width * 0.9056676, size.height * 2.196491);
-    // path_75.cubicTo(
-    //     size.width * 0.9041165,
-    //     size.height * 2.196538,
-    //     size.width * 0.9039693,
-    //     size.height * 2.190890,
-    //     size.width * 0.9040755,
-    //     size.height * 2.186971);
-    // path_75.lineTo(size.width * 0.9040755, size.height * 2.070646);
-    // path_75.cubicTo(
-    //     size.width * 0.9040550,
-    //     size.height * 2.067771,
-    //     size.width * 0.9048118,
-    //     size.height * 2.065234,
-    //     size.width * 0.9056683,
-    //     size.height * 2.065305);
-    // path_75.close();
+    // TODO: Number pad section on an external keyboard
+    Path path_75 = Path();
+    path_75.moveTo(size.width * 0.6784962, size.height * 1.303571);
+    path_75.lineTo(size.width * 0.7144078, size.height * 1.303571);
+    path_75.cubicTo(
+        size.width * 0.7159590,
+        size.height * 1.303524,
+        size.width * 0.7161068,
+        size.height * 1.309174,
+        size.width * 0.7159999,
+        size.height * 1.313091);
+    path_75.lineTo(size.width * 0.7159999, size.height * 1.429417);
+    path_75.cubicTo(
+        size.width * 0.7160140,
+        size.height * 1.434622,
+        size.width * 0.7143304,
+        size.height * 1.435118,
+        size.width * 0.7131630,
+        size.height * 1.434760);
+    path_75.lineTo(size.width * 0.6784962, size.height * 1.434760);
+    path_75.cubicTo(
+        size.width * 0.6769451,
+        size.height * 1.434807,
+        size.width * 0.6767979,
+        size.height * 1.429157,
+        size.width * 0.6769041,
+        size.height * 1.425240);
+    path_75.lineTo(size.width * 0.6769041, size.height * 1.308915);
+    path_75.cubicTo(
+        size.width * 0.6768836,
+        size.height * 1.306040,
+        size.width * 0.6776404,
+        size.height * 1.303503,
+        size.width * 0.6784969,
+        size.height * 1.303571);
+    path_75.close();
+    path_75.moveTo(size.width * 0.7216738, size.height * 1.303479);
+    path_75.lineTo(size.width * 0.7575853, size.height * 1.303479);
+    path_75.cubicTo(
+        size.width * 0.7591365,
+        size.height * 1.303432,
+        size.width * 0.7592843,
+        size.height * 1.309084,
+        size.width * 0.7591775,
+        size.height * 1.313005);
+    path_75.lineTo(size.width * 0.7591775, size.height * 1.429414);
+    path_75.cubicTo(
+        size.width * 0.7591915,
+        size.height * 1.434622,
+        size.width * 0.7575079,
+        size.height * 1.435120,
+        size.width * 0.7563405,
+        size.height * 1.434760);
+    path_75.lineTo(size.width * 0.7216738, size.height * 1.434760);
+    path_75.cubicTo(
+        size.width * 0.7201226,
+        size.height * 1.434807,
+        size.width * 0.7199755,
+        size.height * 1.429155,
+        size.width * 0.7200816,
+        size.height * 1.425234);
+    path_75.lineTo(size.width * 0.7200816, size.height * 1.308825);
+    path_75.cubicTo(
+        size.width * 0.7200612,
+        size.height * 1.305950,
+        size.width * 0.7208179,
+        size.height * 1.303411,
+        size.width * 0.7216744,
+        size.height * 1.303479);
+    path_75.close();
+    path_75.moveTo(size.width * 0.7648513, size.height * 1.303479);
+    path_75.lineTo(size.width * 0.8007629, size.height * 1.303479);
+    path_75.cubicTo(
+        size.width * 0.8023141,
+        size.height * 1.303432,
+        size.width * 0.8024618,
+        size.height * 1.309084,
+        size.width * 0.8023550,
+        size.height * 1.313005);
+    path_75.lineTo(size.width * 0.8023550, size.height * 1.429414);
+    path_75.cubicTo(
+        size.width * 0.8023691,
+        size.height * 1.434622,
+        size.width * 0.8006855,
+        size.height * 1.435120,
+        size.width * 0.7995181,
+        size.height * 1.434760);
+    path_75.lineTo(size.width * 0.7648513, size.height * 1.434760);
+    path_75.cubicTo(
+        size.width * 0.7633001,
+        size.height * 1.434807,
+        size.width * 0.7631530,
+        size.height * 1.429155,
+        size.width * 0.7632592,
+        size.height * 1.425234);
+    path_75.lineTo(size.width * 0.7632592, size.height * 1.308825);
+    path_75.cubicTo(
+        size.width * 0.7632387,
+        size.height * 1.305950,
+        size.width * 0.7639954,
+        size.height * 1.303411,
+        size.width * 0.7648520,
+        size.height * 1.303479);
+    path_75.close();
+    path_75.moveTo(size.width * 0.6784962, size.height * 1.486060);
+    path_75.lineTo(size.width * 0.7144078, size.height * 1.486060);
+    path_75.cubicTo(
+        size.width * 0.7159590,
+        size.height * 1.486012,
+        size.width * 0.7161068,
+        size.height * 1.491667,
+        size.width * 0.7159999,
+        size.height * 1.495586);
+    path_75.lineTo(size.width * 0.7159999, size.height * 1.611995);
+    path_75.cubicTo(
+        size.width * 0.7160140,
+        size.height * 1.617203,
+        size.width * 0.7143304,
+        size.height * 1.617701,
+        size.width * 0.7131630,
+        size.height * 1.617340);
+    path_75.lineTo(size.width * 0.6784962, size.height * 1.617340);
+    path_75.cubicTo(
+        size.width * 0.6769451,
+        size.height * 1.617390,
+        size.width * 0.6767979,
+        size.height * 1.611735,
+        size.width * 0.6769041,
+        size.height * 1.607814);
+    path_75.lineTo(size.width * 0.6769041, size.height * 1.491405);
+    path_75.cubicTo(
+        size.width * 0.6768836,
+        size.height * 1.488531,
+        size.width * 0.6776404,
+        size.height * 1.485991,
+        size.width * 0.6784969,
+        size.height * 1.486060);
+    path_75.close();
+    path_75.moveTo(size.width * 0.7216738, size.height * 1.486060);
+    path_75.lineTo(size.width * 0.7575853, size.height * 1.486060);
+    path_75.cubicTo(
+        size.width * 0.7591365,
+        size.height * 1.486012,
+        size.width * 0.7592843,
+        size.height * 1.491667,
+        size.width * 0.7591775,
+        size.height * 1.495586);
+    path_75.lineTo(size.width * 0.7591775, size.height * 1.611995);
+    path_75.cubicTo(
+        size.width * 0.7591915,
+        size.height * 1.617203,
+        size.width * 0.7575079,
+        size.height * 1.617701,
+        size.width * 0.7563405,
+        size.height * 1.617340);
+    path_75.lineTo(size.width * 0.7216738, size.height * 1.617340);
+    path_75.cubicTo(
+        size.width * 0.7201226,
+        size.height * 1.617390,
+        size.width * 0.7199755,
+        size.height * 1.611735,
+        size.width * 0.7200816,
+        size.height * 1.607814);
+    path_75.lineTo(size.width * 0.7200816, size.height * 1.491405);
+    path_75.cubicTo(
+        size.width * 0.7200612,
+        size.height * 1.488531,
+        size.width * 0.7208179,
+        size.height * 1.485991,
+        size.width * 0.7216744,
+        size.height * 1.486060);
+    path_75.close();
+    path_75.moveTo(size.width * 0.7648513, size.height * 1.486060);
+    path_75.lineTo(size.width * 0.8007629, size.height * 1.486060);
+    path_75.cubicTo(
+        size.width * 0.8023141,
+        size.height * 1.486012,
+        size.width * 0.8024618,
+        size.height * 1.491667,
+        size.width * 0.8023550,
+        size.height * 1.495586);
+    path_75.lineTo(size.width * 0.8023550, size.height * 1.611995);
+    path_75.cubicTo(
+        size.width * 0.8023691,
+        size.height * 1.617203,
+        size.width * 0.8006855,
+        size.height * 1.617701,
+        size.width * 0.7995181,
+        size.height * 1.617340);
+    path_75.lineTo(size.width * 0.7648513, size.height * 1.617340);
+    path_75.cubicTo(
+        size.width * 0.7633001,
+        size.height * 1.617390,
+        size.width * 0.7631530,
+        size.height * 1.611735,
+        size.width * 0.7632592,
+        size.height * 1.607814);
+    path_75.lineTo(size.width * 0.7632592, size.height * 1.491405);
+    path_75.cubicTo(
+        size.width * 0.7632387,
+        size.height * 1.488531,
+        size.width * 0.7639954,
+        size.height * 1.485991,
+        size.width * 0.7648520,
+        size.height * 1.486060);
+    path_75.close();
+    path_75.moveTo(size.width * 0.6784962, size.height * 1.630847);
+    path_75.lineTo(size.width * 0.7144078, size.height * 1.630847);
+    path_75.cubicTo(
+        size.width * 0.7159590,
+        size.height * 1.630800,
+        size.width * 0.7161068,
+        size.height * 1.636454,
+        size.width * 0.7159999,
+        size.height * 1.640373);
+    path_75.lineTo(size.width * 0.7159999, size.height * 1.756782);
+    path_75.cubicTo(
+        size.width * 0.7160140,
+        size.height * 1.761991,
+        size.width * 0.7143304,
+        size.height * 1.762488,
+        size.width * 0.7131630,
+        size.height * 1.762128);
+    path_75.lineTo(size.width * 0.6784962, size.height * 1.762128);
+    path_75.cubicTo(
+        size.width * 0.6769451,
+        size.height * 1.762177,
+        size.width * 0.6767979,
+        size.height * 1.756523,
+        size.width * 0.6769041,
+        size.height * 1.752602);
+    path_75.lineTo(size.width * 0.6769041, size.height * 1.636193);
+    path_75.cubicTo(
+        size.width * 0.6768836,
+        size.height * 1.633318,
+        size.width * 0.6776404,
+        size.height * 1.630779,
+        size.width * 0.6784969,
+        size.height * 1.630847);
+    path_75.close();
+    path_75.moveTo(size.width * 0.7216738, size.height * 1.630847);
+    path_75.lineTo(size.width * 0.7575853, size.height * 1.630847);
+    path_75.cubicTo(
+        size.width * 0.7591365,
+        size.height * 1.630800,
+        size.width * 0.7592843,
+        size.height * 1.636454,
+        size.width * 0.7591775,
+        size.height * 1.640373);
+    path_75.lineTo(size.width * 0.7591775, size.height * 1.756782);
+    path_75.cubicTo(
+        size.width * 0.7591915,
+        size.height * 1.761991,
+        size.width * 0.7575079,
+        size.height * 1.762488,
+        size.width * 0.7563405,
+        size.height * 1.762128);
+    path_75.lineTo(size.width * 0.7216738, size.height * 1.762128);
+    path_75.cubicTo(
+        size.width * 0.7201226,
+        size.height * 1.762177,
+        size.width * 0.7199755,
+        size.height * 1.756523,
+        size.width * 0.7200816,
+        size.height * 1.752602);
+    path_75.lineTo(size.width * 0.7200816, size.height * 1.636193);
+    path_75.cubicTo(
+        size.width * 0.7200612,
+        size.height * 1.633318,
+        size.width * 0.7208179,
+        size.height * 1.630779,
+        size.width * 0.7216744,
+        size.height * 1.630847);
+    path_75.close();
+    path_75.moveTo(size.width * 0.7648513, size.height * 1.630847);
+    path_75.lineTo(size.width * 0.8007629, size.height * 1.630847);
+    path_75.cubicTo(
+        size.width * 0.8023141,
+        size.height * 1.630800,
+        size.width * 0.8024618,
+        size.height * 1.636454,
+        size.width * 0.8023550,
+        size.height * 1.640373);
+    path_75.lineTo(size.width * 0.8023550, size.height * 1.756782);
+    path_75.cubicTo(
+        size.width * 0.8023691,
+        size.height * 1.761991,
+        size.width * 0.8006855,
+        size.height * 1.762488,
+        size.width * 0.7995181,
+        size.height * 1.762128);
+    path_75.lineTo(size.width * 0.7648513, size.height * 1.762128);
+    path_75.cubicTo(
+        size.width * 0.7633001,
+        size.height * 1.762177,
+        size.width * 0.7631530,
+        size.height * 1.756523,
+        size.width * 0.7632592,
+        size.height * 1.752602);
+    path_75.lineTo(size.width * 0.7632592, size.height * 1.636193);
+    path_75.cubicTo(
+        size.width * 0.7632387,
+        size.height * 1.633318,
+        size.width * 0.7639954,
+        size.height * 1.630779,
+        size.width * 0.7648520,
+        size.height * 1.630847);
+    path_75.close();
+    path_75.moveTo(size.width * 0.7216738, size.height * 1.920423);
+    path_75.lineTo(size.width * 0.7575853, size.height * 1.920423);
+    path_75.cubicTo(
+        size.width * 0.7591365,
+        size.height * 1.920375,
+        size.width * 0.7592843,
+        size.height * 1.926030,
+        size.width * 0.7591775,
+        size.height * 1.929949);
+    path_75.lineTo(size.width * 0.7591775, size.height * 2.046358);
+    path_75.cubicTo(
+        size.width * 0.7591915,
+        size.height * 2.051566,
+        size.width * 0.7575079,
+        size.height * 2.052063,
+        size.width * 0.7563405,
+        size.height * 2.051703);
+    path_75.lineTo(size.width * 0.7216738, size.height * 2.051703);
+    path_75.cubicTo(
+        size.width * 0.7201226,
+        size.height * 2.051752,
+        size.width * 0.7199755,
+        size.height * 2.046098,
+        size.width * 0.7200816,
+        size.height * 2.042177);
+    path_75.lineTo(size.width * 0.7200816, size.height * 1.925768);
+    path_75.cubicTo(
+        size.width * 0.7200612,
+        size.height * 1.922894,
+        size.width * 0.7208179,
+        size.height * 1.920354,
+        size.width * 0.7216744,
+        size.height * 1.920423);
+    path_75.close();
+    path_75.moveTo(size.width * 0.6784962, size.height * 2.065210);
+    path_75.lineTo(size.width * 0.7144078, size.height * 2.065210);
+    path_75.cubicTo(
+        size.width * 0.7159590,
+        size.height * 2.065163,
+        size.width * 0.7161068,
+        size.height * 2.070817,
+        size.width * 0.7159999,
+        size.height * 2.074736);
+    path_75.lineTo(size.width * 0.7159999, size.height * 2.191145);
+    path_75.cubicTo(
+        size.width * 0.7160140,
+        size.height * 2.196353,
+        size.width * 0.7143304,
+        size.height * 2.196851,
+        size.width * 0.7131630,
+        size.height * 2.196491);
+    path_75.lineTo(size.width * 0.6784962, size.height * 2.196491);
+    path_75.cubicTo(
+        size.width * 0.6769451,
+        size.height * 2.196538,
+        size.width * 0.6767979,
+        size.height * 2.190886,
+        size.width * 0.6769041,
+        size.height * 2.186965);
+    path_75.lineTo(size.width * 0.6769041, size.height * 2.070556);
+    path_75.cubicTo(
+        size.width * 0.6768836,
+        size.height * 2.067681,
+        size.width * 0.6776404,
+        size.height * 2.065142,
+        size.width * 0.6784969,
+        size.height * 2.065210);
+    path_75.close();
+    path_75.moveTo(size.width * 0.7216738, size.height * 2.065210);
+    path_75.lineTo(size.width * 0.7575853, size.height * 2.065210);
+    path_75.cubicTo(
+        size.width * 0.7591365,
+        size.height * 2.065163,
+        size.width * 0.7592843,
+        size.height * 2.070817,
+        size.width * 0.7591775,
+        size.height * 2.074736);
+    path_75.lineTo(size.width * 0.7591775, size.height * 2.191145);
+    path_75.cubicTo(
+        size.width * 0.7591915,
+        size.height * 2.196353,
+        size.width * 0.7575079,
+        size.height * 2.196851,
+        size.width * 0.7563405,
+        size.height * 2.196491);
+    path_75.lineTo(size.width * 0.7216738, size.height * 2.196491);
+    path_75.cubicTo(
+        size.width * 0.7201226,
+        size.height * 2.196538,
+        size.width * 0.7199755,
+        size.height * 2.190886,
+        size.width * 0.7200816,
+        size.height * 2.186965);
+    path_75.lineTo(size.width * 0.7200816, size.height * 2.070556);
+    path_75.cubicTo(
+        size.width * 0.7200612,
+        size.height * 2.067681,
+        size.width * 0.7208179,
+        size.height * 2.065142,
+        size.width * 0.7216744,
+        size.height * 2.065210);
+    path_75.close();
+    path_75.moveTo(size.width * 0.7648513, size.height * 2.065210);
+    path_75.lineTo(size.width * 0.8007629, size.height * 2.065210);
+    path_75.cubicTo(
+        size.width * 0.8023141,
+        size.height * 2.065163,
+        size.width * 0.8024618,
+        size.height * 2.070817,
+        size.width * 0.8023550,
+        size.height * 2.074736);
+    path_75.lineTo(size.width * 0.8023550, size.height * 2.191145);
+    path_75.cubicTo(
+        size.width * 0.8023691,
+        size.height * 2.196353,
+        size.width * 0.8006855,
+        size.height * 2.196851,
+        size.width * 0.7995181,
+        size.height * 2.196491);
+    path_75.lineTo(size.width * 0.7648513, size.height * 2.196491);
+    path_75.cubicTo(
+        size.width * 0.7633001,
+        size.height * 2.196538,
+        size.width * 0.7631530,
+        size.height * 2.190886,
+        size.width * 0.7632592,
+        size.height * 2.186965);
+    path_75.lineTo(size.width * 0.7632592, size.height * 2.070556);
+    path_75.cubicTo(
+        size.width * 0.7632387,
+        size.height * 2.067681,
+        size.width * 0.7639954,
+        size.height * 2.065142,
+        size.width * 0.7648520,
+        size.height * 2.065210);
+    path_75.close();
+    path_75.moveTo(size.width * 0.8193126, size.height * 1.486060);
+    path_75.lineTo(size.width * 0.8552241, size.height * 1.486060);
+    path_75.cubicTo(
+        size.width * 0.8567753,
+        size.height * 1.486012,
+        size.width * 0.8569231,
+        size.height * 1.491667,
+        size.width * 0.8568163,
+        size.height * 1.495586);
+    path_75.lineTo(size.width * 0.8568163, size.height * 1.611995);
+    path_75.cubicTo(
+        size.width * 0.8568303,
+        size.height * 1.617203,
+        size.width * 0.8551467,
+        size.height * 1.617701,
+        size.width * 0.8539793,
+        size.height * 1.617340);
+    path_75.lineTo(size.width * 0.8193126, size.height * 1.617340);
+    path_75.cubicTo(
+        size.width * 0.8177614,
+        size.height * 1.617387,
+        size.width * 0.8176143,
+        size.height * 1.611735,
+        size.width * 0.8177204,
+        size.height * 1.607814);
+    path_75.lineTo(size.width * 0.8177204, size.height * 1.491405);
+    path_75.cubicTo(
+        size.width * 0.8177000,
+        size.height * 1.488531,
+        size.width * 0.8184567,
+        size.height * 1.485991,
+        size.width * 0.8193132,
+        size.height * 1.486060);
+    path_75.close();
+    path_75.moveTo(size.width * 0.8624901, size.height * 1.486060);
+    path_75.lineTo(size.width * 0.8984017, size.height * 1.486060);
+    path_75.cubicTo(
+        size.width * 0.8999529,
+        size.height * 1.486012,
+        size.width * 0.9001006,
+        size.height * 1.491667,
+        size.width * 0.8999938,
+        size.height * 1.495586);
+    path_75.lineTo(size.width * 0.8999938, size.height * 1.611995);
+    path_75.cubicTo(
+        size.width * 0.9000079,
+        size.height * 1.617203,
+        size.width * 0.8983243,
+        size.height * 1.617701,
+        size.width * 0.8971569,
+        size.height * 1.617340);
+    path_75.lineTo(size.width * 0.8624901, size.height * 1.617340);
+    path_75.cubicTo(
+        size.width * 0.8609389,
+        size.height * 1.617387,
+        size.width * 0.8607918,
+        size.height * 1.611735,
+        size.width * 0.8608980,
+        size.height * 1.607814);
+    path_75.lineTo(size.width * 0.8608980, size.height * 1.491405);
+    path_75.cubicTo(
+        size.width * 0.8608775,
+        size.height * 1.488531,
+        size.width * 0.8616342,
+        size.height * 1.485991,
+        size.width * 0.8624907,
+        size.height * 1.486060);
+    path_75.close();
+    path_75.moveTo(size.width * 0.9056676, size.height * 1.486060);
+    path_75.lineTo(size.width * 0.9415792, size.height * 1.486060);
+    path_75.cubicTo(
+        size.width * 0.9431304,
+        size.height * 1.486012,
+        size.width * 0.9432782,
+        size.height * 1.491667,
+        size.width * 0.9431713,
+        size.height * 1.495586);
+    path_75.lineTo(size.width * 0.9431713, size.height * 1.611995);
+    path_75.cubicTo(
+        size.width * 0.9431854,
+        size.height * 1.617203,
+        size.width * 0.9415018,
+        size.height * 1.617701,
+        size.width * 0.9403344,
+        size.height * 1.617340);
+    path_75.lineTo(size.width * 0.9056676, size.height * 1.617340);
+    path_75.cubicTo(
+        size.width * 0.9041165,
+        size.height * 1.617387,
+        size.width * 0.9039693,
+        size.height * 1.611735,
+        size.width * 0.9040755,
+        size.height * 1.607814);
+    path_75.lineTo(size.width * 0.9040755, size.height * 1.491405);
+    path_75.cubicTo(
+        size.width * 0.9040550,
+        size.height * 1.488531,
+        size.width * 0.9048118,
+        size.height * 1.485991,
+        size.width * 0.9056683,
+        size.height * 1.486060);
+    path_75.close();
+    path_75.moveTo(size.width * 0.9488452, size.height * 1.486060);
+    path_75.lineTo(size.width * 0.9847567, size.height * 1.486060);
+    path_75.cubicTo(
+        size.width * 0.9863079,
+        size.height * 1.486012,
+        size.width * 0.9864557,
+        size.height * 1.491667,
+        size.width * 0.9863489,
+        size.height * 1.495586);
+    path_75.lineTo(size.width * 0.9863489, size.height * 1.611995);
+    path_75.cubicTo(
+        size.width * 0.9863629,
+        size.height * 1.617203,
+        size.width * 0.9846793,
+        size.height * 1.617701,
+        size.width * 0.9835119,
+        size.height * 1.617340);
+    path_75.lineTo(size.width * 0.9488452, size.height * 1.617340);
+    path_75.cubicTo(
+        size.width * 0.9472940,
+        size.height * 1.617387,
+        size.width * 0.9471469,
+        size.height * 1.611735,
+        size.width * 0.9472530,
+        size.height * 1.607814);
+    path_75.lineTo(size.width * 0.9472530, size.height * 1.491405);
+    path_75.cubicTo(
+        size.width * 0.9472326,
+        size.height * 1.488531,
+        size.width * 0.9479893,
+        size.height * 1.485991,
+        size.width * 0.9488458,
+        size.height * 1.486060);
+    path_75.close();
+    path_75.moveTo(size.width * 0.8193126, size.height * 1.630847);
+    path_75.lineTo(size.width * 0.8552241, size.height * 1.630847);
+    path_75.cubicTo(
+        size.width * 0.8567753,
+        size.height * 1.630800,
+        size.width * 0.8569231,
+        size.height * 1.636454,
+        size.width * 0.8568163,
+        size.height * 1.640373);
+    path_75.lineTo(size.width * 0.8568163, size.height * 1.756782);
+    path_75.cubicTo(
+        size.width * 0.8568303,
+        size.height * 1.761991,
+        size.width * 0.8551467,
+        size.height * 1.762488,
+        size.width * 0.8539793,
+        size.height * 1.762128);
+    path_75.lineTo(size.width * 0.8193126, size.height * 1.762128);
+    path_75.cubicTo(
+        size.width * 0.8177614,
+        size.height * 1.762175,
+        size.width * 0.8176143,
+        size.height * 1.756523,
+        size.width * 0.8177204,
+        size.height * 1.752602);
+    path_75.lineTo(size.width * 0.8177204, size.height * 1.636193);
+    path_75.cubicTo(
+        size.width * 0.8177000,
+        size.height * 1.633318,
+        size.width * 0.8184567,
+        size.height * 1.630779,
+        size.width * 0.8193132,
+        size.height * 1.630847);
+    path_75.close();
+    path_75.moveTo(size.width * 0.8624901, size.height * 1.630847);
+    path_75.lineTo(size.width * 0.8984017, size.height * 1.630847);
+    path_75.cubicTo(
+        size.width * 0.8999529,
+        size.height * 1.630800,
+        size.width * 0.9001006,
+        size.height * 1.636454,
+        size.width * 0.8999938,
+        size.height * 1.640373);
+    path_75.lineTo(size.width * 0.8999938, size.height * 1.756782);
+    path_75.cubicTo(
+        size.width * 0.9000079,
+        size.height * 1.761991,
+        size.width * 0.8983243,
+        size.height * 1.762488,
+        size.width * 0.8971569,
+        size.height * 1.762128);
+    path_75.lineTo(size.width * 0.8624901, size.height * 1.762128);
+    path_75.cubicTo(
+        size.width * 0.8609389,
+        size.height * 1.762175,
+        size.width * 0.8607918,
+        size.height * 1.756523,
+        size.width * 0.8608980,
+        size.height * 1.752602);
+    path_75.lineTo(size.width * 0.8608980, size.height * 1.636193);
+    path_75.cubicTo(
+        size.width * 0.8608775,
+        size.height * 1.633318,
+        size.width * 0.8616342,
+        size.height * 1.630779,
+        size.width * 0.8624907,
+        size.height * 1.630847);
+    path_75.close();
+    path_75.moveTo(size.width * 0.9056676, size.height * 1.630847);
+    path_75.lineTo(size.width * 0.9415792, size.height * 1.630847);
+    path_75.cubicTo(
+        size.width * 0.9431304,
+        size.height * 1.630800,
+        size.width * 0.9432782,
+        size.height * 1.636454,
+        size.width * 0.9431713,
+        size.height * 1.640373);
+    path_75.lineTo(size.width * 0.9431713, size.height * 1.756782);
+    path_75.cubicTo(
+        size.width * 0.9431854,
+        size.height * 1.761991,
+        size.width * 0.9415018,
+        size.height * 1.762488,
+        size.width * 0.9403344,
+        size.height * 1.762128);
+    path_75.lineTo(size.width * 0.9056676, size.height * 1.762128);
+    path_75.cubicTo(
+        size.width * 0.9041165,
+        size.height * 1.762175,
+        size.width * 0.9039693,
+        size.height * 1.756523,
+        size.width * 0.9040755,
+        size.height * 1.752602);
+    path_75.lineTo(size.width * 0.9040755, size.height * 1.636193);
+    path_75.cubicTo(
+        size.width * 0.9040550,
+        size.height * 1.633318,
+        size.width * 0.9048118,
+        size.height * 1.630779,
+        size.width * 0.9056683,
+        size.height * 1.630847);
+    path_75.close();
+    path_75.moveTo(size.width * 0.9488452, size.height * 1.630849);
+    path_75.lineTo(size.width * 0.9847567, size.height * 1.630849);
+    path_75.cubicTo(
+        size.width * 0.9863079,
+        size.height * 1.630749,
+        size.width * 0.9864557,
+        size.height * 1.642630,
+        size.width * 0.9863489,
+        size.height * 1.650869);
+    path_75.lineTo(size.width * 0.9863489, size.height * 1.895489);
+    path_75.cubicTo(
+        size.width * 0.9863629,
+        size.height * 1.906437,
+        size.width * 0.9846793,
+        size.height * 1.907477,
+        size.width * 0.9835119,
+        size.height * 1.906725);
+    path_75.lineTo(size.width * 0.9488452, size.height * 1.906725);
+    path_75.cubicTo(
+        size.width * 0.9472940,
+        size.height * 1.906823,
+        size.width * 0.9471469,
+        size.height * 1.894944,
+        size.width * 0.9472530,
+        size.height * 1.886705);
+    path_75.lineTo(size.width * 0.9472530, size.height * 1.642083);
+    path_75.cubicTo(
+        size.width * 0.9472326,
+        size.height * 1.636045,
+        size.width * 0.9479893,
+        size.height * 1.630704,
+        size.width * 0.9488458,
+        size.height * 1.630849);
+    path_75.close();
+    path_75.moveTo(size.width * 0.8193126, size.height * 1.775635);
+    path_75.lineTo(size.width * 0.8552241, size.height * 1.775635);
+    path_75.cubicTo(
+        size.width * 0.8567753,
+        size.height * 1.775588,
+        size.width * 0.8569231,
+        size.height * 1.781238,
+        size.width * 0.8568163,
+        size.height * 1.785154);
+    path_75.lineTo(size.width * 0.8568163, size.height * 1.901482);
+    path_75.cubicTo(
+        size.width * 0.8568303,
+        size.height * 1.906688,
+        size.width * 0.8551467,
+        size.height * 1.907181,
+        size.width * 0.8539793,
+        size.height * 1.906823);
+    path_75.lineTo(size.width * 0.8193126, size.height * 1.906823);
+    path_75.cubicTo(
+        size.width * 0.8177614,
+        size.height * 1.906870,
+        size.width * 0.8176143,
+        size.height * 1.901223,
+        size.width * 0.8177204,
+        size.height * 1.897304);
+    path_75.lineTo(size.width * 0.8177204, size.height * 1.780978);
+    path_75.cubicTo(
+        size.width * 0.8177000,
+        size.height * 1.778106,
+        size.width * 0.8184567,
+        size.height * 1.775566,
+        size.width * 0.8193132,
+        size.height * 1.775637);
+    path_75.close();
+    path_75.moveTo(size.width * 0.8624901, size.height * 1.775635);
+    path_75.lineTo(size.width * 0.8984017, size.height * 1.775635);
+    path_75.cubicTo(
+        size.width * 0.8999529,
+        size.height * 1.775588,
+        size.width * 0.9001006,
+        size.height * 1.781238,
+        size.width * 0.8999938,
+        size.height * 1.785154);
+    path_75.lineTo(size.width * 0.8999938, size.height * 1.901482);
+    path_75.cubicTo(
+        size.width * 0.9000079,
+        size.height * 1.906688,
+        size.width * 0.8983243,
+        size.height * 1.907181,
+        size.width * 0.8971569,
+        size.height * 1.906823);
+    path_75.lineTo(size.width * 0.8624901, size.height * 1.906823);
+    path_75.cubicTo(
+        size.width * 0.8609389,
+        size.height * 1.906870,
+        size.width * 0.8607918,
+        size.height * 1.901223,
+        size.width * 0.8608980,
+        size.height * 1.897304);
+    path_75.lineTo(size.width * 0.8608980, size.height * 1.780978);
+    path_75.cubicTo(
+        size.width * 0.8608775,
+        size.height * 1.778106,
+        size.width * 0.8616342,
+        size.height * 1.775566,
+        size.width * 0.8624907,
+        size.height * 1.775637);
+    path_75.close();
+    path_75.moveTo(size.width * 0.9056676, size.height * 1.775635);
+    path_75.lineTo(size.width * 0.9415792, size.height * 1.775635);
+    path_75.cubicTo(
+        size.width * 0.9431304,
+        size.height * 1.775588,
+        size.width * 0.9432782,
+        size.height * 1.781238,
+        size.width * 0.9431713,
+        size.height * 1.785154);
+    path_75.lineTo(size.width * 0.9431713, size.height * 1.901482);
+    path_75.cubicTo(
+        size.width * 0.9431854,
+        size.height * 1.906688,
+        size.width * 0.9415018,
+        size.height * 1.907181,
+        size.width * 0.9403344,
+        size.height * 1.906823);
+    path_75.lineTo(size.width * 0.9056676, size.height * 1.906823);
+    path_75.cubicTo(
+        size.width * 0.9041165,
+        size.height * 1.906870,
+        size.width * 0.9039693,
+        size.height * 1.901223,
+        size.width * 0.9040755,
+        size.height * 1.897304);
+    path_75.lineTo(size.width * 0.9040755, size.height * 1.780978);
+    path_75.cubicTo(
+        size.width * 0.9040550,
+        size.height * 1.778106,
+        size.width * 0.9048118,
+        size.height * 1.775566,
+        size.width * 0.9056683,
+        size.height * 1.775637);
+    path_75.close();
+    path_75.moveTo(size.width * 0.8193126, size.height * 1.920470);
+    path_75.lineTo(size.width * 0.8552241, size.height * 1.920470);
+    path_75.cubicTo(
+        size.width * 0.8567753,
+        size.height * 1.920420,
+        size.width * 0.8569231,
+        size.height * 1.926070,
+        size.width * 0.8568163,
+        size.height * 1.929989);
+    path_75.lineTo(size.width * 0.8568163, size.height * 2.046315);
+    path_75.cubicTo(
+        size.width * 0.8568303,
+        size.height * 2.051521,
+        size.width * 0.8551467,
+        size.height * 2.052016,
+        size.width * 0.8539793,
+        size.height * 2.051656);
+    path_75.lineTo(size.width * 0.8193126, size.height * 2.051656);
+    path_75.cubicTo(
+        size.width * 0.8177614,
+        size.height * 2.051705,
+        size.width * 0.8176143,
+        size.height * 2.046057,
+        size.width * 0.8177204,
+        size.height * 2.042139);
+    path_75.lineTo(size.width * 0.8177204, size.height * 1.925811);
+    path_75.cubicTo(
+        size.width * 0.8177000,
+        size.height * 1.922941,
+        size.width * 0.8184567,
+        size.height * 1.920399,
+        size.width * 0.8193132,
+        size.height * 1.920470);
+    path_75.close();
+    path_75.moveTo(size.width * 0.8624901, size.height * 1.920470);
+    path_75.lineTo(size.width * 0.8984017, size.height * 1.920470);
+    path_75.cubicTo(
+        size.width * 0.8999529,
+        size.height * 1.920420,
+        size.width * 0.9001006,
+        size.height * 1.926070,
+        size.width * 0.8999938,
+        size.height * 1.929989);
+    path_75.lineTo(size.width * 0.8999938, size.height * 2.046315);
+    path_75.cubicTo(
+        size.width * 0.9000079,
+        size.height * 2.051521,
+        size.width * 0.8983243,
+        size.height * 2.052016,
+        size.width * 0.8971569,
+        size.height * 2.051656);
+    path_75.lineTo(size.width * 0.8624901, size.height * 2.051656);
+    path_75.cubicTo(
+        size.width * 0.8609389,
+        size.height * 2.051705,
+        size.width * 0.8607918,
+        size.height * 2.046057,
+        size.width * 0.8608980,
+        size.height * 2.042139);
+    path_75.lineTo(size.width * 0.8608980, size.height * 1.925811);
+    path_75.cubicTo(
+        size.width * 0.8608775,
+        size.height * 1.922941,
+        size.width * 0.8616342,
+        size.height * 1.920399,
+        size.width * 0.8624907,
+        size.height * 1.920470);
+    path_75.close();
+    path_75.moveTo(size.width * 0.9056676, size.height * 1.920470);
+    path_75.lineTo(size.width * 0.9415792, size.height * 1.920470);
+    path_75.cubicTo(
+        size.width * 0.9431304,
+        size.height * 1.920420,
+        size.width * 0.9432782,
+        size.height * 1.926070,
+        size.width * 0.9431713,
+        size.height * 1.929989);
+    path_75.lineTo(size.width * 0.9431713, size.height * 2.046315);
+    path_75.cubicTo(
+        size.width * 0.9431854,
+        size.height * 2.051521,
+        size.width * 0.9415018,
+        size.height * 2.052016,
+        size.width * 0.9403344,
+        size.height * 2.051656);
+    path_75.lineTo(size.width * 0.9056676, size.height * 2.051656);
+    path_75.cubicTo(
+        size.width * 0.9041165,
+        size.height * 2.051705,
+        size.width * 0.9039693,
+        size.height * 2.046057,
+        size.width * 0.9040755,
+        size.height * 2.042139);
+    path_75.lineTo(size.width * 0.9040755, size.height * 1.925811);
+    path_75.cubicTo(
+        size.width * 0.9040550,
+        size.height * 1.922941,
+        size.width * 0.9048118,
+        size.height * 1.920399,
+        size.width * 0.9056683,
+        size.height * 1.920470);
+    path_75.close();
+    path_75.moveTo(size.width * 0.9488452, size.height * 1.920517);
+    path_75.lineTo(size.width * 0.9847567, size.height * 1.920517);
+    path_75.cubicTo(
+        size.width * 0.9863079,
+        size.height * 1.920416,
+        size.width * 0.9864557,
+        size.height * 1.932297,
+        size.width * 0.9863489,
+        size.height * 1.940536);
+    path_75.lineTo(size.width * 0.9863489, size.height * 2.185157);
+    path_75.cubicTo(
+        size.width * 0.9863629,
+        size.height * 2.196105,
+        size.width * 0.9846793,
+        size.height * 2.197145,
+        size.width * 0.9835119,
+        size.height * 2.196390);
+    path_75.lineTo(size.width * 0.9488452, size.height * 2.196390);
+    path_75.cubicTo(
+        size.width * 0.9472940,
+        size.height * 2.196489,
+        size.width * 0.9471469,
+        size.height * 2.184612,
+        size.width * 0.9472530,
+        size.height * 2.176371);
+    path_75.lineTo(size.width * 0.9472530, size.height * 1.931750);
+    path_75.cubicTo(
+        size.width * 0.9472326,
+        size.height * 1.925712,
+        size.width * 0.9479893,
+        size.height * 1.920371,
+        size.width * 0.9488458,
+        size.height * 1.920517);
+    path_75.close();
+    path_75.moveTo(size.width * 0.8210985, size.height * 2.065302);
+    path_75.lineTo(size.width * 0.8966157, size.height * 2.065302);
+    path_75.cubicTo(
+        size.width * 0.8998780,
+        size.height * 2.065255,
+        size.width * 0.9001883,
+        size.height * 2.070905,
+        size.width * 0.8999637,
+        size.height * 2.074822);
+    path_75.lineTo(size.width * 0.8999637, size.height * 2.191150);
+    path_75.cubicTo(
+        size.width * 0.8999932,
+        size.height * 2.196353,
+        size.width * 0.8964532,
+        size.height * 2.196849,
+        size.width * 0.8939982,
+        size.height * 2.196491);
+    path_75.lineTo(size.width * 0.8210985, size.height * 2.196491);
+    path_75.cubicTo(
+        size.width * 0.8178362,
+        size.height * 2.196538,
+        size.width * 0.8175260,
+        size.height * 2.190890,
+        size.width * 0.8177505,
+        size.height * 2.186971);
+    path_75.lineTo(size.width * 0.8177505, size.height * 2.070646);
+    path_75.cubicTo(
+        size.width * 0.8177077,
+        size.height * 2.067771,
+        size.width * 0.8192985,
+        size.height * 2.065234,
+        size.width * 0.8210985,
+        size.height * 2.065305);
+    path_75.close();
+    path_75.moveTo(size.width * 0.9056676, size.height * 2.065302);
+    path_75.lineTo(size.width * 0.9415792, size.height * 2.065302);
+    path_75.cubicTo(
+        size.width * 0.9431304,
+        size.height * 2.065255,
+        size.width * 0.9432782,
+        size.height * 2.070905,
+        size.width * 0.9431713,
+        size.height * 2.074822);
+    path_75.lineTo(size.width * 0.9431713, size.height * 2.191150);
+    path_75.cubicTo(
+        size.width * 0.9431854,
+        size.height * 2.196353,
+        size.width * 0.9415018,
+        size.height * 2.196849,
+        size.width * 0.9403344,
+        size.height * 2.196491);
+    path_75.lineTo(size.width * 0.9056676, size.height * 2.196491);
+    path_75.cubicTo(
+        size.width * 0.9041165,
+        size.height * 2.196538,
+        size.width * 0.9039693,
+        size.height * 2.190890,
+        size.width * 0.9040755,
+        size.height * 2.186971);
+    path_75.lineTo(size.width * 0.9040755, size.height * 2.070646);
+    path_75.cubicTo(
+        size.width * 0.9040550,
+        size.height * 2.067771,
+        size.width * 0.9048118,
+        size.height * 2.065234,
+        size.width * 0.9056683,
+        size.height * 2.065305);
+    path_75.close();
 
-    // Paint paint75Stroke = Paint()
-    //   ..style = PaintingStyle.stroke
-    //   ..strokeWidth = size.width * 0.0009191897;
-    // paint75Stroke.color = Color.fromARGB(255, 117, 36, 36).withOpacity(1);
-    // paint75Stroke.strokeCap = StrokeCap.round;
-    // canvas.drawPath(path_75, paint75Stroke);
+    Paint paint75Stroke = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = size.width * 0.0009191897;
+    paint75Stroke.color = Color.fromARGB(255, 117, 36, 36).withOpacity(1);
+    paint75Stroke.strokeCap = StrokeCap.round;
+    canvas.drawPath(path_75, paint75Stroke);
 
-    // Paint paint76Stroke = Paint()
-    //   ..style = PaintingStyle.stroke
-    //   ..strokeWidth = size.width * 0.0009120650;
-    // paint76Stroke.color = Color.fromARGB(255, 186, 186, 186).withOpacity(1);
-    // paint76Stroke.strokeCap = StrokeCap.round;
-    // canvas.drawRRect(
-    //     RRect.fromRectAndCorners(
-    //         Rect.fromLTWH(size.width * 0.8177198, size.height * 0.01141999,
-    //             size.width * 0.1686892, size.height * 0.1313042),
-    //         bottomRight: Radius.circular(size.width * 0.001588933),
-    //         bottomLeft: Radius.circular(size.width * 0.001588933),
-    //         topLeft: Radius.circular(size.width * 0.001588933),
-    //         topRight: Radius.circular(size.width * 0.001588933)),
-    //     paint76Stroke);
+    Paint paint76Stroke = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = size.width * 0.0009120650;
+    paint76Stroke.color = Color.fromARGB(255, 186, 186, 186).withOpacity(1);
+    paint76Stroke.strokeCap = StrokeCap.round;
+    canvas.drawRRect(
+        RRect.fromRectAndCorners(
+            Rect.fromLTWH(size.width * 0.8177198, size.height * 0.01141999,
+                size.width * 0.1686892, size.height * 0.1313042),
+            bottomRight: Radius.circular(size.width * 0.001588933),
+            bottomLeft: Radius.circular(size.width * 0.001588933),
+            topLeft: Radius.circular(size.width * 0.001588933),
+            topRight: Radius.circular(size.width * 0.001588933)),
+        paint76Stroke);
   }
 
   @override

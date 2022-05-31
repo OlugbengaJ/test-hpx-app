@@ -108,6 +108,7 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
         currentColor: currentColors,
         value: modeProvider.currentMode.value,
         effects: modeProvider.currentMode.effects,
+        icon: modeProvider.currentMode.icon,
         name: modeProvider.currentMode.name));
     layerProvider.toolsEffectsUpdated();
   }

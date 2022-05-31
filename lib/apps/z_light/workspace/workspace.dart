@@ -1,14 +1,12 @@
 import 'dart:async';
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/imports.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/keyboard_selector.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/notification_modal.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/notification_strip.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/round_button.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/zoom_toolbar.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/utils/comparer.dart';
@@ -18,25 +16,28 @@ import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
 class Workspace extends StatefulWidget {
-  const Workspace({
-    Key? key,
-  }) : super(key: key);
+  const Workspace({Key? key}) : super(key: key);
 
   @override
   State<Workspace> createState() => _WorkspaceState();
 }
 
-class _WorkspaceState extends State<Workspace> {
-  final _zoomTextCtrl = TextEditingController(text: '60');
-  final double _zoomInThreshold = 250;
-  final double _zoomOutThreshold = 60;
-  double _zoomValue = 60;
-  double _zoomScale = 0.6;
+class _WorkspaceState extends State<Workspace>
+    with SingleTickerProviderStateMixin {
+  // late variables are initialize on initState()
+  late Animation<double> _animation;
+  late AnimationController _controller;
+
+  late TextEditingController _zoomTextCtrl;
+  late double _zoomValue;
+  late double _zoomScale;
+
+  static const double _zoomInThreshold = 250;
+  static const double _zoomOutThreshold = 60;
+  static const Duration _duration = Duration(milliseconds: 50);
+  static const double _buttonSize = 32.0;
 
   Timer _timer = Timer.periodic(Duration.zero, ((t) {}));
-  final _duration = const Duration(milliseconds: 50);
-
-  final double _buttonSize = 32.0;
 
   /// [zoomTextChanged] ensure user enters only digits
   /// that are within the acceptable zoom threshold.
@@ -113,24 +114,62 @@ class _WorkspaceState extends State<Workspace> {
     });
   }
 
+  void _initAnimation() {
+    const duration = Duration(seconds: 1);
+
+    _controller = AnimationController(vsync: this, duration: duration);
+    final curveAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.linear,
+      reverseCurve: Curves.linear,
+    );
+    _animation = Tween<double>(
+      begin: 0,
+      end: math.sin(math.pi / 2), // max value of 1
+    ).animate(curveAnimation)
+      ..addListener(() {
+        setState(() {});
+      })
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          _controller.repeat();
+        }
+        if (status == AnimationStatus.dismissed) {
+          debugPrint('dismissed');
+        }
+      });
+  }
+
   @override
   void initState() {
     super.initState();
 
-    // Start listening to changes.
+    // initialize animation
+    _initAnimation();
+
+    // Initialize zoom value and scale.
+    _zoomValue = 60;
+    _zoomScale = 0.6;
+    _zoomTextCtrl = TextEditingController(text: _zoomValue.ceil().toString());
+
+    //Start listening to changes.
     _zoomTextCtrl.addListener(zoomTextChanged);
   }
 
   @override
   void dispose() {
-    _timer.cancel();
     _zoomTextCtrl.dispose();
+    _controller.dispose();
+    _timer.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final workspaceProvider = Provider.of<WorkspaceProvider>(context);
+
+    // initialize animation controller
+    workspaceProvider.setAnimation(_controller, _animation);
 
     // initialize layers provider
     workspaceProvider.setLayersProvider(Provider.of<LayersProvider>(context));

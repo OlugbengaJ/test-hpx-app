@@ -41,6 +41,20 @@ class WorkspaceProvider with ChangeNotifier {
   /// [_layersProvider] grants access to [LayersProvider] resizable widget
   LayersProvider? _layersProvider;
 
+  /// Animation controls
+  /// should contain a list of animations for different layers.
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  Animation<double> get animation => _animation;
+
+  void setAnimation(
+      AnimationController controller, Animation<double> animation) {
+    _controller = controller;
+    _animation = animation;
+    _controller.forward();
+  }
+
   ResizableProvider? _resizableProvider;
   LayersProvider? get getLayersProvider => _layersProvider;
 
@@ -86,6 +100,7 @@ class WorkspaceProvider with ChangeNotifier {
     _dragModeChanged = true;
 
     if (_layersProvider != null) {
+      // toggle resizable visibility for the active layer.
       _layersProvider!.toggleHideStackedLayers(!isDragModeResizable);
     }
 
