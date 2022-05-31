@@ -80,6 +80,9 @@ class _LayerListItemState extends State<LayerListItem> {
     // setState(() {
     //   _showDeleteTooltip = true;
     // });
+
+    ResizableProvider resizableProvider = context.read<ResizableProvider>();
+    provider.setResizablePosition(resizableProvider);
   }
 
 
