@@ -196,7 +196,7 @@ class ModeProvider extends ChangeNotifier {
     // switch case design to switch and set the values for each mode been selected based on the enum value set by the mode
     switch (pickerChoice!.value) {
       case EnumModes.shortcut:
-        workProvider.toggleModal([Text("Hello World", style: h2Style)]);
+        // workProvider.toggleModal([Text("Hello World", style: h2Style)]);
         for (var element in shortcutList) {
           currentColors.add(element.colorCode[0]);
         }
