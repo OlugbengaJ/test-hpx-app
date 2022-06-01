@@ -170,9 +170,9 @@ class _WorkspaceState extends State<Workspace>
     // workspaceProvider.setAnimation(_controller, _animation);
 
     // initialize layers provider
-    workspaceProvider.setLayersProvider(Provider.of<LayersProvider>(context));
+    workspaceProvider.initLayersProvider(Provider.of<LayersProvider>(context));
     workspaceProvider
-        .setResizableProvider(Provider.of<ResizableProvider>(context));
+        .initResizableProvider(Provider.of<ResizableProvider>(context));
 
     return Column(
       children: [

@@ -9,12 +9,12 @@ class KeyboardSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<WorkspaceProvider>(
       builder: (context, value, child) => Positioned(
-        left: value.leftZonePosition,
-        top: value.topZonePosition,
+        left: value.zoneL,
+        top: value.zoneT,
         child: Container(
           margin: EdgeInsets.zero,
-          height: value.zoneHeight,
-          width: value.zoneWidth,
+          height: value.zoneH,
+          width: value.zoneW,
           decoration: BoxDecoration(
             color: Colors.blue.withOpacity(0.4),
           ),

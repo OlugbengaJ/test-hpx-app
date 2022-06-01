@@ -2,33 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
+import 'package:hpx/models/apps/zlightspace_models/workspace_models/selection_offset.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 
-/// [WorkspaceProvider] handles the workspace events
+/// [WorkspaceProvider] handles the workspace events.
+///
 /// e.g. display certain widgets based on certain events.
 class WorkspaceProvider with ChangeNotifier {
   bool _isStripNotify = false;
   bool _isModalNotify = false;
 
-  /// [isStripNotify] indicates if the strip notifcation should be displayed.
+  /// [_stripNotificationText] holds text used by the strip notifcation.
+  String? _stripNotificationText;
+
+  /// [_modalWidgets] holds widgets that are rendered in the modal notifcation.
+  List<Widget>? _modalWidgets;
+
+  /// [isStripNotify] returns if strip notifcation is displayed.
   bool get isStripNotify => _isStripNotify;
+
+  /// [isModalNotify] returns if modal notifcation is displayed.
   bool get isModalNotify => _isModalNotify;
 
-  /// [stripNotificationText] indicates text used by the strip notifcation.
-  String? _stripNotificationText;
+  /// [stripNotificationText] returns the strip notification text
+  /// or an empty string when empty.
   String get stripNotificationText => _stripNotificationText ?? '';
 
   /// [modalWidgets] indicates widgets used by the modal notifcation.
-  List<Widget>? _modalWidgets;
   List<Widget> get modalWidgets => _modalWidgets ?? [];
 
-  /// [_workspaceView] determines if the lighting options is displayed.
+  /// [_workspaceView] indicates the current view in focus.
   WorkspaceView _workspaceView = WorkspaceView.lighting;
 
   /// [getWorkspaceView] returns the current view.
   WorkspaceView get getWorkspaceView => _workspaceView;
 
+  /// [isLightingView] returns a boolean.
+  /// Checks if the current view is [WorkspaceView.lighting].
   bool get isLightingView => _workspaceView == WorkspaceView.lighting;
+
+  /// [isWorkspaceView] returns a boolean.
+  /// Checks if the current view is [WorkspaceView.workspace].
   bool get isWorkspaceView => _workspaceView == WorkspaceView.workspace;
 
   /// [toggleView] is used to switch views within the app.
@@ -37,9 +51,6 @@ class WorkspaceProvider with ChangeNotifier {
 
     notifyListeners();
   }
-
-  /// [_layersProvider] grants access to [LayersProvider] resizable widget
-  LayersProvider? _layersProvider;
 
   /// Animation controls
   /// should contain a list of animations for different layers.
@@ -63,13 +74,16 @@ class WorkspaceProvider with ChangeNotifier {
   // }
 
   ResizableProvider? _resizableProvider;
+
+  /// [_layersProvider] grants access to [LayersProvider] resizable widget
+  LayersProvider? _layersProvider;
   LayersProvider? get getLayersProvider => _layersProvider;
 
-  void setLayersProvider(LayersProvider? v) {
+  void initLayersProvider(LayersProvider? v) {
     _layersProvider = v;
   }
 
-  void setResizableProvider(ResizableProvider? r) {
+  void initResizableProvider(ResizableProvider? r) {
     _resizableProvider = r;
   }
 
@@ -86,9 +100,9 @@ class WorkspaceProvider with ChangeNotifier {
   bool _dragModeChanged = false;
   bool _isCurrentDeviceSelected = false;
 
-  /// Selection mode is used in zone selection, resizable, or click mode.
+  /// [toggleDragMode] changes the current selection mode.
   ///
-  /// [toggleDragMode] changes the current mode.
+  /// Selection mode is used in zone selection, resizable, or click mode.
   void toggleDragMode(WorkspaceDragMode mode) {
     if (_keyDragMode == mode) {
       // reset selection mode
@@ -192,8 +206,8 @@ class WorkspaceProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  /// [leftZonePosition] calculates the left of the zone selection highlight.
-  double? get leftZonePosition {
+  /// [zoneL] calculates the left of the zone selection highlight.
+  double? get zoneL {
     if (_panDownDetails == null) return null;
 
     // disable highlight in zone mode
@@ -210,8 +224,8 @@ class WorkspaceProvider with ChangeNotifier {
     return _panUpdateDetails!.localPosition.dx;
   }
 
-  /// [topZonePosition] calculates the top of the zone selection highlight.
-  double? get topZonePosition {
+  /// [zoneT] calculates the top of the zone selection highlight.
+  double? get zoneT {
     if (_panDownDetails == null) return null;
 
     // disable highlight in zone mode
@@ -228,8 +242,8 @@ class WorkspaceProvider with ChangeNotifier {
     return _panUpdateDetails!.localPosition.dy;
   }
 
-  /// [zoneHeight] calculate the zone selection height
-  double? get zoneHeight {
+  /// [zoneH] calculate the zone selection height
+  double? get zoneH {
     if (_panDownDetails == null ||
         _panUpdateDetails == null ||
         _panDownDetails!.globalPosition.dy ==
@@ -241,8 +255,8 @@ class WorkspaceProvider with ChangeNotifier {
         .abs();
   }
 
-  /// [zoneWidth] calculates the zone selection width
-  double? get zoneWidth {
+  /// [zoneW] calculates the zone selection width
+  double? get zoneW {
     if (_panDownDetails == null ||
         _panUpdateDetails == null ||
         _panDownDetails!.globalPosition.dx ==
@@ -274,6 +288,7 @@ class WorkspaceProvider with ChangeNotifier {
     switch (_keyDragMode) {
       case WorkspaceDragMode.click:
         return _isCurrentDeviceSelected ? true : null;
+
       // // prevent keys from being highlighted in click mode.
       // if (_panNotAllowed(box) ||
       //     _panDownDetails!.globalPosition !=
@@ -320,5 +335,73 @@ class WorkspaceProvider with ChangeNotifier {
 
     // include 0 for scenarios where a button is clicked.
     return (rectIntersect.width >= 0 && rectIntersect.height >= 0);
+  }
+
+  /// Each layer selections need to be maintained so the user can switch
+  /// from back and forth from highlight selection to rezisable, or simply
+  /// shortcut keys selection .
+  ///
+  /// In this case, we would need to store offset information such as
+  ///
+  /// * highlightLTWH: to track the highlight offsets of a layer
+  ///
+  /// * resizableLTWH: to track the resizable offsets for a layer
+
+  late Map<String, SelectionOffset> layersLTWH = {};
+
+  int get currentLayerId =>
+      _layersProvider!.layeritems[_layersProvider!.listIndex].id;
+
+  SelectionOffset? getLayerLTWH(int id) => layersLTWH['$id'];
+
+  void initLayerLTWH() {
+    if (_layersProvider?.layeritems == null) return;
+
+    for (var layer in _layersProvider!.layeritems) {
+      SelectionOffset? layerLTWH = getLayerLTWH(layer.id);
+
+      if (layerLTWH == null) {
+        // layer does not exist, hence add it
+        layerLTWH = SelectionOffset()
+          ..id = '${layer.id}'
+          ..dragMode = WorkspaceDragMode.resizable
+          ..highlightLTWH = LTWH(zoneL, zoneT, zoneW, zoneH);
+      } else {
+        // layer exist but need to reinsert as it's index may have changed.
+        deleteLayerLTWH(layer.id);
+      }
+
+      // add the layerLTHW to the map.
+      addLayerLTWH(layerLTWH);
+    }
+  }
+
+  void addLayerLTWH(SelectionOffset layerLTWH) {
+    layersLTWH.putIfAbsent(layerLTWH.id, () => layerLTWH);
+  }
+
+  void deleteLayerLTWH(int id) {
+    layersLTWH.remove('$id');
+  }
+
+  void setLayerDragMode() {
+    // find the layer LTWH
+    final ltwh = getLayerLTWH(currentLayerId);
+
+    ltwh?.dragMode = _keyDragMode;
+  }
+
+  void setLayerLTWH() {
+    // find the layer LTWH
+    final ltwh = getLayerLTWH(currentLayerId);
+
+    if (isDragModeResizable && ltwh != null) {
+      ltwh.highlightLTWH ??= LTWH(zoneL, zoneT, zoneW, zoneH);
+
+      ltwh.highlightLTWH?.left = zoneL;
+      ltwh.highlightLTWH?.top = zoneT;
+      ltwh.highlightLTWH?.width = zoneW;
+      ltwh.highlightLTWH?.height = zoneH;
+    }
   }
 }
