@@ -28,6 +28,9 @@ class _ColorCycleState extends State<ColorCyclePreset> {
         degree: effectsProvider.currentEffect?.degree,
         speed: returnValue.floorToDouble()));
     layerProvider.toolsEffectsUpdated();
+    setState(() {
+      effectsProvider.currentEffect?.speed = returnValue;
+    });
   }
 
   @override
