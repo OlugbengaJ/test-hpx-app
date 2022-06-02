@@ -38,6 +38,7 @@ class ImageModeProvider extends ChangeNotifier {
   Future<void> extractColors(Uint8List imageBytes) async {
     extractedColors = [];
     extractedColors = await extractPixelsColors(imageBytes);
+    print(extractedColors);
   }
 
   // this function calculate dthe algeberic equivalent of a color into color code
