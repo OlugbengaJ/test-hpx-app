@@ -3,7 +3,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
-import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
+import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/imports.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
@@ -134,9 +134,7 @@ class _WorkspaceState extends State<Workspace>
         if (status == AnimationStatus.completed) {
           _controller.repeat();
         }
-        if (status == AnimationStatus.dismissed) {
-          debugPrint('dismissed');
-        }
+        if (status == AnimationStatus.dismissed) {}
       });
   }
 
@@ -145,7 +143,7 @@ class _WorkspaceState extends State<Workspace>
     super.initState();
 
     // initialize animation
-    _initAnimation();
+    // _initAnimation();
 
     // Initialize zoom value and scale.
     _zoomValue = 60;
@@ -159,7 +157,7 @@ class _WorkspaceState extends State<Workspace>
   @override
   void dispose() {
     _zoomTextCtrl.dispose();
-    _controller.dispose();
+    // _controller.dispose();
     _timer.cancel();
     super.dispose();
   }
@@ -169,12 +167,10 @@ class _WorkspaceState extends State<Workspace>
     final workspaceProvider = Provider.of<WorkspaceProvider>(context);
 
     // initialize animation controller
-    workspaceProvider.setAnimation(_controller, _animation);
+    // workspaceProvider.setAnimation(_controller, _animation);
 
     // initialize layers provider
-    workspaceProvider.setLayersProvider(Provider.of<LayersProvider>(context));
-    workspaceProvider
-        .setResizableProvider(Provider.of<ResizableProvider>(context));
+    workspaceProvider.initLayersProvider(Provider.of<LayersProvider>(context));
 
     return Column(
       children: [
@@ -208,12 +204,12 @@ class _WorkspaceState extends State<Workspace>
                                 message: 'Highlight selector',
                                 child: RoundButton(
                                   onTapDown: () {
-                                    provider
-                                        .toggleDragMode(WorkspaceDragMode.zone);
+                                    provider.toggleDragMode(
+                                        WorkspaceDragMode.highlight);
                                   },
                                   size: _buttonSize,
                                   icon: Icons.highlight_alt,
-                                  iconColor: provider.isDragModeZone
+                                  iconColor: provider.isDragModeHighlight
                                       ? Theme.of(context).colorScheme.primary
                                       : null,
                                 ),
@@ -292,9 +288,10 @@ class _WorkspaceState extends State<Workspace>
               ),
             ),
             child: Stack(
+              key: workspaceKey,
               children: [
                 GestureDetector(
-                  behavior: HitTestBehavior.opaque,
+                  behavior: HitTestBehavior.translucent,
                   onPanDown: (details) {
                     workspaceProvider.onPanDown(details);
                   },
@@ -321,7 +318,13 @@ class _WorkspaceState extends State<Workspace>
                         ),
                       ),
                       const LayersStack(),
-                      if (workspaceProvider.isPanning) const KeyboardSelector(),
+                      // if (workspaceProvider.selectorVisible)
+                      OverlaySelector(
+                        showCrossHair: workspaceProvider.isDragModeResizable,
+                        onPanDown: workspaceProvider.onPanDown,
+                        onPanUpdate: workspaceProvider.onPanUpdate,
+                        isVisible: workspaceProvider.selectorVisible,
+                      ),
 
                       if (workspaceProvider.isModalNotify)
                         ModalNotification(
