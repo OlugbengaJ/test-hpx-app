@@ -12,7 +12,7 @@ import 'package:file_picker/file_picker.dart';
 const String keyPalette = 'palette';
 const String keyNoOfItems = 'noIfItems';
 
-int noOfPixelsPerAxis = 12;
+int noOfPixelsPerAxis = 8;
 
 // Mode provider to manage the image colors of a mode been selected
 class ImageModeProvider extends ChangeNotifier {
@@ -36,9 +36,12 @@ class ImageModeProvider extends ChangeNotifier {
 
   // this function takes an image in bytes and converts it to a matrix of colors
   Future<void> extractColors(Uint8List imageBytes) async {
-    extractedColors = [];
     extractedColors = await extractPixelsColors(imageBytes);
-    print(extractedColors);
+    List matrix = extractedColors.fold([[]], (list, x) {
+      return list.last.length == noOfPixelsPerAxis
+          ? (list..add([x]))
+          : (list..last.add(x));
+    });
   }
 
   // this function calculate dthe algeberic equivalent of a color into color code
