@@ -445,7 +445,6 @@ class WorkspaceProvider with ChangeNotifier {
           final Rect boxRect = box!.localToGlobal(Offset.zero) & box.size;
           final rectIntersect = selectorRect.intersect(boxRect);
 
-          // debugPrint('$_dragModeChanged, $_keyDragMode');
           if (k.contains('kF5')) {
             // final g = workspaceKey.currentContext?.findRenderObject() as RenderBox?;
             // final s = g!.localToGlobal(Offset.zero);
