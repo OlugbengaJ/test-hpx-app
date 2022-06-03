@@ -16,7 +16,9 @@ class _LayersStackState extends State<LayersStack> {
 
   @override
   Widget build(BuildContext context) {
-    return NotificationListener<SizeChangedLayoutNotification>(
+    return Container();
+
+    /* return NotificationListener<SizeChangedLayoutNotification>(
       onNotification: (notification) {
         print("Notification");
         return true;
@@ -68,6 +70,6 @@ class _LayersStackState extends State<LayersStack> {
           );
         },
       ),
-    );
+    ); */
   }
 }
