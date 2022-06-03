@@ -1,12 +1,10 @@
 import 'package:hpx/apps/z_light/app_enum.dart';
 
 class SelectionOffset {
-  // SelectionOffset(this.id);
-
   /// [id] identity of this selection offset.
   late String id;
 
-  /// Indicates the type of selection used i.e. highlight, resizable or non.
+  /// Indicates the last selection used i.e. highlight, resizable or non.
   late WorkspaceDragMode? dragMode;
 
   /// [highlightLTWH] is the Rect position for the highlight.
@@ -17,6 +15,7 @@ class SelectionOffset {
 }
 
 class LTWH {
+  /// [LTWH] stores location information and could be used to draw out a Rect
   LTWH(this.left, this.top, this.width, this.height);
 
   late double? left;

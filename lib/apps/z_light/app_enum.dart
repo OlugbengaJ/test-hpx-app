@@ -15,6 +15,6 @@ enum WorkspaceDragMode {
   /// [resizable] handles to select an area
   resizable,
 
-  /// [zone] highlight to select an area
-  zone,
+  /// [highlight] highlight to select an area
+  highlight,
 }

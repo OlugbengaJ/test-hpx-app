@@ -96,21 +96,20 @@ KeyModel _updateKeyInfo(
         chip.color = layers[layerIndex].mode?.currentColor.last;
       }
 
-      debugPrint(
-          'currentId $currentId $i ${chip.chipKey} ${layers[i].mode?.currentColor}');
-      keyModel.addChip(chip.chipKey, chip);
+      // debugPrint(
+      //     'currentId $currentId $i ${chip.chipKey} ${layers[i].mode?.currentColor}');
+      // keyModel.addChip(chip.chipKey, chip);
     }
   }
 
   if (keyModel.keyCode.toString().contains('kEsc')) {
-    for (var i = 0; i < layers.length; i++) {
-      debugPrint('\t esc $i ${layers[i].mode?.currentColor.first}');
-    }
+    // for (var i = 0; i < layers.length; i++) {
+    //   debugPrint('\t esc $i ${layers[i].mode?.currentColor.first}');
+    // }
 
-    debugPrint(
-        '${keyModel.keyCode} \t layerIndex $layerIndex \t ${keyModel.chipsValues.map((e) => e.chipKey)}');
+    // debugPrint(
+    //     '${keyModel.keyCode} \t layerIndex $layerIndex \t ${keyModel.chipsValues.map((e) => e.chipKey)}');
   }
-  // update if previously selected
 
   final isWidgetInZone =
       provider.isWidgetInZone(renderBox, k: keyModel.keyCode.toString());
@@ -138,8 +137,8 @@ KeyModel _updateKeyInfo(
       opacity: opacity, currentLayers: layers);
 
   if (keyModel.keyCode.toString().contains('kEsc')) {
-    debugPrint(
-        '${keyModel.keyCode} \t layerIndex $layerIndex \t ${keyModel.chipsValues.map((e) => e.chipKey)}');
+    // debugPrint(
+    //     '${keyModel.keyCode} \t layerIndex $layerIndex \t ${keyModel.chipsValues.map((e) => e.chipKey)}');
   }
 
   // if (provider.isDragModeClick &&

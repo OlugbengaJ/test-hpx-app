@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
-import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
+import 'package:hpx/apps/z_light/globals.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/overlay_selector.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/selection_offset.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
+import 'package:hpx/utils/common.dart';
 
 /// [WorkspaceProvider] handles the workspace events.
 ///
@@ -17,6 +19,22 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [_modalWidgets] holds widgets that are rendered in the modal notifcation.
   List<Widget>? _modalWidgets;
+
+  /// [_selectorVisible] determines overlay selectors visibility.
+  bool _selectorVisible = false;
+
+  final double _resizableThreshold = 50;
+  bool get selectorVisible => _selectorVisible;
+
+  /// [_workspaceRect] returns a [Rect] of the rendered workspace stack.
+  ///
+  /// This is necessary to determine the overlay selector's global position.
+  Rect get _workspaceRect {
+    final workspaceRender =
+        workspaceKey.currentContext?.findRenderObject() as RenderBox?;
+
+    return workspaceRender!.localToGlobal(Offset.zero) & workspaceRender.size;
+  }
 
   /// [isStripNotify] returns if strip notifcation is displayed.
   bool get isStripNotify => _isStripNotify;
@@ -44,6 +62,8 @@ class WorkspaceProvider with ChangeNotifier {
   /// [isWorkspaceView] returns a boolean.
   /// Checks if the current view is [WorkspaceView.workspace].
   bool get isWorkspaceView => _workspaceView == WorkspaceView.workspace;
+
+  bool _isPanning = true;
 
   /// [toggleView] is used to switch views within the app.
   void toggleView(WorkspaceView view) {
@@ -73,18 +93,15 @@ class WorkspaceProvider with ChangeNotifier {
   //   }
   // }
 
-  ResizableProvider? _resizableProvider;
-
   /// [_layersProvider] grants access to [LayersProvider] resizable widget
   LayersProvider? _layersProvider;
   LayersProvider? get getLayersProvider => _layersProvider;
 
   void initLayersProvider(LayersProvider? v) {
     _layersProvider = v;
-  }
 
-  void initResizableProvider(ResizableProvider? r) {
-    _resizableProvider = r;
+    // initialize the layers selections
+    initLayerLTWH();
   }
 
   WorkspaceDragMode? _keyDragMode = WorkspaceDragMode.resizable;
@@ -93,41 +110,48 @@ class WorkspaceProvider with ChangeNotifier {
 
   bool get isDragModeResizable => _keyDragMode == WorkspaceDragMode.resizable;
 
-  bool get isDragModeZone => _keyDragMode == WorkspaceDragMode.zone;
+  bool get isDragModeHighlight => _keyDragMode == WorkspaceDragMode.highlight;
 
   /// [getKeyDragMode] returns the current mode of the [Workspace].
   WorkspaceDragMode? get getKeyDragMode => _keyDragMode;
-  bool _dragModeChanged = false;
   bool _isCurrentDeviceSelected = false;
 
   /// [toggleDragMode] changes the current selection mode.
-  ///
-  /// Selection mode is used in zone selection, resizable, or click mode.
   void toggleDragMode(WorkspaceDragMode mode) {
     if (_keyDragMode == mode) {
       // reset selection mode
       _keyDragMode = null;
-      _dragModeChanged = false;
     } else {
       _keyDragMode = mode;
-      _dragModeChanged = true;
     }
+
+    // hide the overlay selector
+    _selectorVisible = false;
 
     switch (_keyDragMode) {
       case WorkspaceDragMode.click:
         // set to true to enable selection of the entire keys
         _isCurrentDeviceSelected = true;
-        _dragModeChanged = false;
+
         break;
+      case WorkspaceDragMode.resizable:
+        // show the overlay selector
+        _selectorVisible = true;
+        _isPanning = true;
+
+        // set the current layer's drag mode
+        getLayerLTWH(currentLayerId)!.dragMode = WorkspaceDragMode.resizable;
+
+        break;
+      case WorkspaceDragMode.highlight:
+        // set the current layer's drag mode
+        getLayerLTWH(currentLayerId)!.dragMode = WorkspaceDragMode.highlight;
+        _isPanning = false;
+
+        break;
+
       default:
         _isCurrentDeviceSelected = false;
-    }
-    // drag mode has changed
-    _dragModeChanged = true;
-
-    if (_layersProvider != null) {
-      // toggle resizable visibility for the active layer.
-      _layersProvider!.toggleHideStackedLayers(!isDragModeResizable);
     }
 
     notifyListeners();
@@ -145,10 +169,10 @@ class WorkspaceProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  /// [toggleModal] is used to hide or show a modal notification.
+  /// [toggleModal] hides or shows a modal notification.
   ///
   /// The modal notification shows up right at the center of the screen.
-  /// Passing empty [children] hides the modal.
+  /// Passing no argument or empty [children] hides the modal.
   void toggleModal([List<Widget>? children]) {
     _isModalNotify = !(children == null || children.isEmpty);
     _modalWidgets = children;
@@ -159,33 +183,121 @@ class WorkspaceProvider with ChangeNotifier {
   DragDownDetails? _panDownDetails;
   DragUpdateDetails? _panUpdateDetails;
 
-  bool _isPanning = false;
-  bool get isPanning => _isPanning;
-
   /// [onPanDown] indicates the the primary mouse is down and pan started.
-  void onPanDown(DragDownDetails details) {
-    // drag mode has changed, clear selection
-    _dragModeChanged = false;
+  void onPanDown(DragDownDetails details, [DraggableRegionName? handleName]) {
+    if (_keyDragMode == WorkspaceDragMode.highlight) {
+      _panDownDetails = details;
+      _panUpdateDetails =
+          DragUpdateDetails(globalPosition: details.globalPosition);
 
-    switch (_keyDragMode) {
-      // case WorkspaceDragMode.click:
-      case WorkspaceDragMode.zone:
-        _panDownDetails = details;
-        _panUpdateDetails =
-            DragUpdateDetails(globalPosition: details.globalPosition);
-        _isPanning = true;
-
-        notifyListeners();
-        break;
-      case WorkspaceDragMode.resizable:
-        notifyListeners();
-        break;
-      default:
+      _isPanning = !_isPanning;
     }
   }
 
   /// [onPanUpdate] indicates the current position of the pan.
-  void onPanUpdate(DragUpdateDetails details) {
+  void onPanUpdate(DragUpdateDetails details,
+      [DraggableRegionName? handleName]) {
+    // no drag mode so don't update overlay selector.
+    if (_keyDragMode == null) return;
+
+    // get the current layer
+    final ltwh = getLayerLTWH(currentLayerId)!;
+
+    if (isDragModeHighlight) {
+      ltwh.highlightLTWH!.left = _dragL;
+      ltwh.highlightLTWH!.top = _dragT;
+      ltwh.highlightLTWH!.width = _dragW;
+      ltwh.highlightLTWH!.height = _dragH;
+
+      _selectorVisible = true;
+    } else if (isDragModeResizable && handleName != null) {
+      // check the name of the handle then update the
+      // overlay selector's position.
+
+      switch (handleName) {
+        case DraggableRegionName.center:
+
+          // moving the entire selector hence update left and top.
+          ltwh.resizableLTWH!.left =
+              (ltwh.resizableLTWH!.left ?? 0) + details.delta.dx;
+          ltwh.resizableLTWH!.top =
+              (ltwh.resizableLTWH!.top ?? 0) + details.delta.dy;
+          break;
+        case DraggableRegionName.topLeft:
+
+          // resize from top-left, update selector's left, top, width, and height.
+          final top = (ltwh.resizableLTWH!.top ?? 0) + details.delta.dy;
+          final left = (ltwh.resizableLTWH!.left ?? 0) + details.delta.dx;
+          final width = (ltwh.resizableLTWH!.width ?? 0) - details.delta.dx;
+          final height = (ltwh.resizableLTWH!.height ?? 0) - details.delta.dy;
+
+          // width must be greater than threshold
+          if (width >= _resizableThreshold) {
+            ltwh.resizableLTWH!.left = left;
+            ltwh.resizableLTWH!.width = width;
+          }
+
+          // height must be greater than threshold
+          if (height >= _resizableThreshold) {
+            ltwh.resizableLTWH!.top = top;
+            ltwh.resizableLTWH!.height = height;
+          }
+          break;
+        case DraggableRegionName.topRight:
+
+          // resize from top-right, update selector's top, width, and height.
+          final top = (ltwh.resizableLTWH!.top ?? 0) + details.delta.dy;
+          final width = (ltwh.resizableLTWH!.width ?? 0) + details.delta.dx;
+          final height = (ltwh.resizableLTWH!.height ?? 0) - details.delta.dy;
+
+          // width must be greater than threshold
+          if (width >= _resizableThreshold) {
+            ltwh.resizableLTWH!.width = width;
+          }
+
+          // height must be greater than threshold
+          if (height >= _resizableThreshold) {
+            ltwh.resizableLTWH!.top = top;
+            ltwh.resizableLTWH!.height = height;
+          }
+          break;
+        case DraggableRegionName.bottomRight:
+
+          // resize from bottom-right, update selector's width and height.
+          final width = (ltwh.resizableLTWH!.width ?? 0) + details.delta.dx;
+          final height = (ltwh.resizableLTWH!.height ?? 0) + details.delta.dy;
+
+          // width must be greater than threshold
+          if (width >= _resizableThreshold) {
+            ltwh.resizableLTWH!.width = width;
+          }
+
+          // height must be greater than threshold
+          if (height >= _resizableThreshold) {
+            ltwh.resizableLTWH!.height = height;
+          }
+          break;
+        case DraggableRegionName.bottomLeft:
+
+          // resize from bottom-left, update selector's left, width, and height.
+          final left = (ltwh.resizableLTWH!.left ?? 0) + details.delta.dx;
+          final width = (ltwh.resizableLTWH!.width ?? 0) - details.delta.dx;
+          final height = (ltwh.resizableLTWH!.height ?? 0) + details.delta.dy;
+
+          // width must be greater than threshold
+          if (width >= _resizableThreshold) {
+            ltwh.resizableLTWH!.left = left;
+            ltwh.resizableLTWH!.width = width;
+          }
+
+          // height must be greater than threshold
+          if (height >= _resizableThreshold) {
+            ltwh.resizableLTWH!.height = height;
+          }
+          break;
+        default:
+      }
+    }
     _panUpdateDetails = details;
 
     notifyListeners();
@@ -199,24 +311,32 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [onPanClear] resets variables used to indicate pan in progress.
   void onPanClear() {
-    _isPanning = false;
-    _panDownDetails = null;
-    _panUpdateDetails = null;
+    if (isDragModeHighlight) {
+      _isPanning = false;
+      _selectorVisible = false;
+    }
 
     notifyListeners();
   }
 
-  /// [zoneL] calculates the left of the zone selection highlight.
+  /// [zoneL] calculates the zone selection left.
   double? get zoneL {
-    if (_panDownDetails == null) return null;
+    // return the current layer selection
+    switch (_keyDragMode) {
+      case WorkspaceDragMode.resizable:
+        return getLayerLTWH(currentLayerId)?.resizableLTWH?.left;
+      case WorkspaceDragMode.highlight:
+        return getLayerLTWH(currentLayerId)?.highlightLTWH?.left;
+      default:
+        return null;
+    }
+  }
 
-    // disable highlight in zone mode
-    if (!isDragModeZone) return _panDownDetails!.localPosition.dx;
-
-    if (_panDownDetails == null || _panUpdateDetails == null) return null;
-
+  /// [_dragL] calculate the left in drag mode highlight.
+  double get _dragL {
     if (_panUpdateDetails!.localPosition.dx >
         _panDownDetails!.localPosition.dx) {
+      // mouse drag going right
       return _panDownDetails!.localPosition.dx;
     }
 
@@ -224,17 +344,23 @@ class WorkspaceProvider with ChangeNotifier {
     return _panUpdateDetails!.localPosition.dx;
   }
 
-  /// [zoneT] calculates the top of the zone selection highlight.
+  /// [zoneT] calculates the zone selection top.
   double? get zoneT {
-    if (_panDownDetails == null) return null;
+    switch (_keyDragMode) {
+      case WorkspaceDragMode.resizable:
+        return getLayerLTWH(currentLayerId)?.resizableLTWH?.top;
+      case WorkspaceDragMode.highlight:
+        return getLayerLTWH(currentLayerId)?.highlightLTWH?.top;
+      default:
+        return null;
+    }
+  }
 
-    // disable highlight in zone mode
-    if (!isDragModeZone) return _panDownDetails!.localPosition.dx;
-
-    if (_panDownDetails == null || _panUpdateDetails == null) return null;
-
+  /// [_dragT] calculate the top in drag mode highlight.
+  double get _dragT {
     if (_panUpdateDetails!.localPosition.dy >
         _panDownDetails!.localPosition.dy) {
+      // mouse drag going down
       return _panDownDetails!.localPosition.dy;
     }
 
@@ -244,97 +370,95 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [zoneH] calculate the zone selection height
   double? get zoneH {
-    if (_panDownDetails == null ||
-        _panUpdateDetails == null ||
-        _panDownDetails!.globalPosition.dy ==
-            _panUpdateDetails!.globalPosition.dy ||
-        !isDragModeZone) return 0.0;
+    switch (_keyDragMode) {
+      case WorkspaceDragMode.resizable:
+        return getLayerLTWH(currentLayerId)?.resizableLTWH?.height;
+      case WorkspaceDragMode.highlight:
+        return getLayerLTWH(currentLayerId)?.highlightLTWH?.height;
+      default:
+        return null;
+    }
+  }
 
-    return (_panUpdateDetails!.localPosition.dy -
-            _panDownDetails!.localPosition.dy)
-        .abs();
+  /// [_dragH] calculate the height in drag mode highlight.
+  double get _dragH {
+    if (_panDownDetails!.globalPosition.dy ==
+        _panUpdateDetails!.globalPosition.dy) {
+      return 0.0;
+    }
+
+    return subtractAbs(
+        _panUpdateDetails!.localPosition.dy, _panDownDetails!.localPosition.dy);
   }
 
   /// [zoneW] calculates the zone selection width
   double? get zoneW {
-    if (_panDownDetails == null ||
-        _panUpdateDetails == null ||
-        _panDownDetails!.globalPosition.dx ==
-            _panUpdateDetails!.globalPosition.dx ||
-        !isDragModeZone) return 0.0;
-
-    return (_panUpdateDetails!.localPosition.dx -
-            _panDownDetails!.localPosition.dx)
-        .abs();
+    switch (_keyDragMode) {
+      case WorkspaceDragMode.resizable:
+        return getLayerLTWH(currentLayerId)?.resizableLTWH?.width;
+      case WorkspaceDragMode.highlight:
+        return getLayerLTWH(currentLayerId)?.highlightLTWH?.width;
+      default:
+        return null;
+    }
   }
 
-  /// [_panNotAllowed] checks if [object] exists and mouse is panning.
-  bool _panNotAllowed(Object? object) {
-    return (object == null || _panUpdateDetails == null || !_isPanning);
-  }
+  /// [_dragW] calculate the width in drag mode highlight.
+  double get _dragW {
+    if (_panDownDetails!.globalPosition.dx ==
+        _panUpdateDetails!.globalPosition.dx) return 0.0;
 
-  /// [_rectFromPanDetails] returns a Rect
-  /// from [_panDownDetails] and [_panUpdateDetails].
-  Rect get _rectFromPanDetails => Rect.fromPoints(
-      _panDownDetails!.globalPosition, _panUpdateDetails!.globalPosition);
+    return subtractAbs(
+        _panUpdateDetails!.localPosition.dx, _panDownDetails!.localPosition.dx);
+  }
 
   /// [isWidgetInZone] checks a widget intersects with the zone selection
   bool? isWidgetInZone(RenderBox? box, {RenderBox? box2, String k = ''}) {
-    // drag mode has changed, unselect box
-    if (_dragModeChanged) return false;
-
     final Rect selectorRect;
 
     switch (_keyDragMode) {
       case WorkspaceDragMode.click:
         return _isCurrentDeviceSelected ? true : null;
 
-      // // prevent keys from being highlighted in click mode.
-      // if (_panNotAllowed(box) ||
-      //     _panDownDetails!.globalPosition !=
-      //         _panUpdateDetails!.globalPosition) {
-      //   return null;
-      // }
+      default:
+        final ltwh = getLayerLTWH(currentLayerId);
 
-      // selectorRect = _rectFromPanDetails;
-      // break;
-      case WorkspaceDragMode.zone:
-        if (_panNotAllowed(box)) return null;
+        if (ltwh != null) {
+          // check the last drag mode used and paint widget with LTWH.
+          // LTWH used by the overlay selectors uses local offsets, hence the
+          // need to add workspace left and top to get their global offsets.
+          if (ltwh.dragMode == WorkspaceDragMode.resizable) {
+            selectorRect = Rect.fromLTWH(
+              ltwh.resizableLTWH!.left! + _workspaceRect.left,
+              ltwh.resizableLTWH!.top! + _workspaceRect.top,
+              ltwh.resizableLTWH!.width!,
+              ltwh.resizableLTWH!.height!,
+            );
+          } else {
+            selectorRect = Rect.fromLTWH(
+              ltwh.highlightLTWH!.left! + _workspaceRect.left,
+              ltwh.highlightLTWH!.top! + _workspaceRect.top,
+              ltwh.highlightLTWH!.width!,
+              ltwh.highlightLTWH!.height!,
+            );
+          }
+          final Rect boxRect = box!.localToGlobal(Offset.zero) & box.size;
+          final rectIntersect = selectorRect.intersect(boxRect);
 
-        selectorRect = _rectFromPanDetails;
-        break;
-      // TODO: Resizable is buggy
-      // 1. new layer should show resizable
-      // 2. each layer should show resizable and keep it's state
-      case WorkspaceDragMode.resizable:
-        if (_layersProvider == null || _layersProvider!.length <= 0) {
-          return null;
+          // debugPrint('$_dragModeChanged, $_keyDragMode');
+          if (k.contains('kF5')) {
+            // final g = workspaceKey.currentContext?.findRenderObject() as RenderBox?;
+            // final s = g!.localToGlobal(Offset.zero);
+            // debugPrint('$k $s');
+            // debugPrint('$k $boxRect $selectorRect $rectIntersect');
+          }
+
+          // include 0 for scenarios where a button is clicked.
+          return (rectIntersect.width >= 0 && rectIntersect.height >= 0);
         }
 
-        // calculate rect based on resizable widget offsets.
-        _resizableProvider?.calculateSizeFromLocal();
-        box2 = _resizableProvider!.draggableKey.currentContext
-            ?.findRenderObject() as RenderBox?;
-
-        if (box2 == null) return null;
-
-        selectorRect = box2.localToGlobal(Offset.zero) & box2.size;
-        break;
-
-      default:
         return null;
     }
-
-    final Rect boxRect = box!.localToGlobal(Offset.zero) & box.size;
-    final rectIntersect = selectorRect.intersect(boxRect);
-
-    // debugPrint('$_dragModeChanged, $_keyDragMode');
-    if (k.contains('kEsc')) {
-      debugPrint('$k $boxRect $selectorRect $rectIntersect');
-    }
-
-    // include 0 for scenarios where a button is clicked.
-    return (rectIntersect.width >= 0 && rectIntersect.height >= 0);
   }
 
   /// Each layer selections need to be maintained so the user can switch
@@ -349,10 +473,15 @@ class WorkspaceProvider with ChangeNotifier {
 
   late Map<String, SelectionOffset> layersLTWH = {};
 
-  int get currentLayerId =>
-      _layersProvider!.layeritems[_layersProvider!.listIndex].id;
+  int? get currentLayerId {
+    if (_layersProvider!.layeritems.isEmpty) return null;
+    return _layersProvider!.layeritems[_layersProvider!.listIndex].id;
+  }
 
-  SelectionOffset? getLayerLTWH(int id) => layersLTWH['$id'];
+  SelectionOffset? getLayerLTWH(int? id) {
+    if (id == null) return null;
+    return layersLTWH['$id'];
+  }
 
   void initLayerLTWH() {
     if (_layersProvider?.layeritems == null) return;
@@ -361,11 +490,21 @@ class WorkspaceProvider with ChangeNotifier {
       SelectionOffset? layerLTWH = getLayerLTWH(layer.id);
 
       if (layerLTWH == null) {
-        // layer does not exist, hence add it
+        // layer does not exist, hence set the LTWH to defaults
+        // get the workspace stack via its global key and use its size
+
+        final left = _workspaceRect.size.width / 2;
+        final top = _workspaceRect.size.height / 2;
+        const double halfSize = 100.0;
+
+        // actual size of the overlay
+        const double size = halfSize * 2;
+
         layerLTWH = SelectionOffset()
           ..id = '${layer.id}'
           ..dragMode = WorkspaceDragMode.resizable
-          ..highlightLTWH = LTWH(zoneL, zoneT, zoneW, zoneH);
+          ..highlightLTWH = LTWH(0.0, 0.0, 0.0, 0.0)
+          ..resizableLTWH = LTWH(left - halfSize, top - halfSize, size, size);
       } else {
         // layer exist but need to reinsert as it's index may have changed.
         deleteLayerLTWH(layer.id);
@@ -373,7 +512,32 @@ class WorkspaceProvider with ChangeNotifier {
 
       // add the layerLTHW to the map.
       addLayerLTWH(layerLTWH);
+
+      if (currentLayerId == layer.id) {
+        // set workspace drag mode to the current layer's last drag mode
+        if (_keyDragMode != null) {
+          _keyDragMode = getLayerLTWH(currentLayerId)?.dragMode;
+        }
+
+        if (isDragModeResizable) {
+          // show the selector when drag mode is resizeable.
+          _selectorVisible = true;
+        } else if (_keyDragMode == null) {
+          // hide the selector when drag mode is null.
+          _selectorVisible = false;
+        } else {
+          // show the selector when drag mode is highlight.
+          _selectorVisible = _isPanning;
+        }
+      }
     }
+
+    // set overlay selector visibility in resize mode
+    // if (isDragModeResizable) {
+    //   _selectorVisible = true;
+    // } else {
+    //   _selectorVisible = false;
+    // }
   }
 
   void addLayerLTWH(SelectionOffset layerLTWH) {
@@ -386,22 +550,8 @@ class WorkspaceProvider with ChangeNotifier {
 
   void setLayerDragMode() {
     // find the layer LTWH
-    final ltwh = getLayerLTWH(currentLayerId);
+    final ltwh = getLayerLTWH(currentLayerId!);
 
     ltwh?.dragMode = _keyDragMode;
-  }
-
-  void setLayerLTWH() {
-    // find the layer LTWH
-    final ltwh = getLayerLTWH(currentLayerId);
-
-    if (isDragModeResizable && ltwh != null) {
-      ltwh.highlightLTWH ??= LTWH(zoneL, zoneT, zoneW, zoneH);
-
-      ltwh.highlightLTWH?.left = zoneL;
-      ltwh.highlightLTWH?.top = zoneT;
-      ltwh.highlightLTWH?.width = zoneW;
-      ltwh.highlightLTWH?.height = zoneH;
-    }
   }
 }
