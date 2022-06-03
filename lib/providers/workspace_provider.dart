@@ -67,6 +67,20 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [toggleView] is used to switch views within the app.
   void toggleView(WorkspaceView view) {
+    if (view != _workspaceView) {
+      // view changed, update the layers LTWH offsets.
+      // since this method can only called after the widget tree is built,
+      // we can safely iterate the layers LTWH here without checking for null.
+
+      for (var ltwh in layersLTWH.values) {
+        if (ltwh.dragMode == WorkspaceDragMode.resizable) {
+          resetLTWHOffset(ltwh.resizableLTWH!, view);
+        } else {
+          resetLTWHOffset(ltwh.highlightLTWH!, view);
+        }
+      }
+    }
+
     _workspaceView = view;
 
     notifyListeners();
@@ -185,6 +199,9 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [onPanDown] indicates the the primary mouse is down and pan started.
   void onPanDown(DragDownDetails details, [DraggableRegionName? handleName]) {
+    _workspaceOffsetBeforePan = _workspaceOffset;
+    _workspaceOffset = null;
+
     if (_keyDragMode == WorkspaceDragMode.highlight) {
       _panDownDetails = details;
       _panUpdateDetails =
@@ -306,6 +323,7 @@ class WorkspaceProvider with ChangeNotifier {
   /// [onPanEnd] indicates the primary mouse is up and the end of pan.
   void onPanEnd(DragEndDetails details) {
     // update state and clear unwanted data
+    _workspaceOffset = _workspaceOffsetBeforePan;
     onPanClear();
   }
 
@@ -412,8 +430,14 @@ class WorkspaceProvider with ChangeNotifier {
         _panUpdateDetails!.localPosition.dx, _panDownDetails!.localPosition.dx);
   }
 
-  /// [isWidgetInZone] checks a widget intersects with the zone selection
-  bool? isWidgetInZone(RenderBox? box, {RenderBox? box2, String k = ''}) {
+  /// [_workspaceOffset] holds the offset of the workspace stack.
+  ///
+  /// This offset is used to adjust the offset of the overlay selector.
+  Offset? _workspaceOffset;
+  Offset? _workspaceOffsetBeforePan;
+
+  /// [isBoxZoned] checks a widget intersects with the selector.
+  bool? isBoxZoned(RenderBox? box, int? layerId, {String k = ''}) {
     final Rect selectorRect;
 
     switch (_keyDragMode) {
@@ -421,12 +445,13 @@ class WorkspaceProvider with ChangeNotifier {
         return _isCurrentDeviceSelected ? true : null;
 
       default:
-        final ltwh = getLayerLTWH(currentLayerId);
+        final ltwh = getLayerLTWH(layerId);
 
         if (ltwh != null) {
           // check the last drag mode used and paint widget with LTWH.
           // LTWH used by the overlay selectors uses local offsets, hence the
           // need to add workspace left and top to get their global offsets.
+
           if (ltwh.dragMode == WorkspaceDragMode.resizable) {
             selectorRect = Rect.fromLTWH(
               ltwh.resizableLTWH!.left! + _workspaceRect.left,
@@ -457,6 +482,21 @@ class WorkspaceProvider with ChangeNotifier {
         }
 
         return null;
+    }
+  }
+
+  /// [resetLTWHOffset] updates a LTHW left and top values using the
+  /// workspace offsets based on the current view in focus.
+  void resetLTWHOffset(LTWH d, WorkspaceView selectedView) {
+    if (selectedView == WorkspaceView.workspace) {
+      d.left = d.left! + _workspaceRect.left;
+      // d.top = d.top! + _workspaceRect.top;
+
+      // set the workspace offset to be used on lighting view.
+      _workspaceOffset = Offset(_workspaceRect.left, _workspaceRect.top);
+    } else {
+      d.left = d.left! - (_workspaceOffset?.dx ?? 0);
+      // d.top = d.top! - (_workspaceOffset?.dy ?? 0);
     }
   }
 
@@ -530,13 +570,6 @@ class WorkspaceProvider with ChangeNotifier {
         }
       }
     }
-
-    // set overlay selector visibility in resize mode
-    // if (isDragModeResizable) {
-    //   _selectorVisible = true;
-    // } else {
-    //   _selectorVisible = false;
-    // }
   }
 
   void addLayerLTWH(SelectionOffset layerLTWH) {

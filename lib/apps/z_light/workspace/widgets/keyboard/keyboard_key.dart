@@ -70,71 +70,121 @@ KeyModel _updateKeyInfo(
   final layers = layersProvider.layeritems;
   final layerIndex = layersProvider.listIndex;
 
+  bool? isBoxZoned;
+
+  // holds the existing layer chips that are remain selected.
+  List<KeyPaintChip> krect = [];
+
   // clear key selections
-  final keyChipKeys = keyModel.getLayeredChips();
-  if (keyChipKeys.isNotEmpty) {
-    List<KeyPaintChip> krect = [];
+  final layersChipKeys = keyModel.getLayeredChips();
+
+  if (layersChipKeys.isNotEmpty) {
+    // TODO: using workspace provider layers selection map could be useful.
+
+    // check if the key is selected for each layer, then paint if true
     // key has existing chips; preserve their properties
-    for (var l in layers) {
-      final c = keyModel.getChip(l.id.toString());
-      if (c != null) {
-        krect.add(c);
+    // for (var l in layers) {
+    for (var k in layersChipKeys) {
+      final chip = keyModel.getChip(k.toString());
+      // isBoxZoned =
+      //     provider.isBoxZoned(renderBox, l.id, k: '${keyModel.keyCode}');
+
+      // only preserve zoned keys
+      if (chip != null) {
+        krect.add(chip);
       }
+
+      // TODO: might make sense to have this here for performance.
+      // no need to loop through the layered chips to remove each key.
+      // however, deleting a layer may not address this problem.
+      // keyModel.removeChip('${l.id}');
     }
 
     // remove all chip layers in key
-    for (var k in keyChipKeys) {
+    for (var k in layersChipKeys) {
       keyModel.removeChip(k);
     }
+  }
 
-    final currentId = layers[layerIndex].id.toString();
+  if (layers.isNotEmpty) {
     // add new chip layers in reverse order
-    for (var i = krect.length - 1; i >= 0; i--) {
-      final chip = krect[i] as KeyPaintRect;
+    // get the current index id as we need to update its properties
+    final currentLayer = layers[layerIndex];
 
-      if (currentId == chip.chipKey) {
-        chip.color = layers[layerIndex].mode?.currentColor.last;
+    for (var i = layers.length - 1; i >= 0; i--) {
+      final layer = layers[i];
+      final layerId = layer.id;
+
+      isBoxZoned =
+          provider.isBoxZoned(renderBox, layerId, k: '${keyModel.keyCode}');
+
+      if (isBoxZoned == true) {
+        // insert new chip
+        final chip = KeyPaintRect('$layerId');
+
+        if ('${currentLayer.id}' == chip.chipKey) {
+          // use the default color
+          chip.color = currentLayer.mode?.currentColor.last;
+        } else {
+          // use existing color
+          final foundKeys = krect.where((e) => e.chipKey == chip.chipKey);
+          if (foundKeys.isNotEmpty) {
+            chip.color = foundKeys.first.color;
+          }
+        }
+
+        // get the current chip in layers
+        switch (layer.mode?.value) {
+          // layers.firstWhere((e) => '${e.id}' == chip.chipKey).mode?.value) {
+          case EnumModes.mood:
+            // provider.stopAnimating();
+
+            // update effect
+            chip.opacity = 1.0;
+            break;
+          default:
+        }
+
+        // debugPrint(
+        //     'currentId $currentId $i ${chip.chipKey} ${layers[i].mode?.currentColor}');
+
+        // add the chip
+        keyModel.addChip(chip);
       }
+    }
 
-      // debugPrint(
-      //     'currentId $currentId $i ${chip.chipKey} ${layers[i].mode?.currentColor}');
-      // keyModel.addChip(chip.chipKey, chip);
+    // TODO: only for debugging, delete.
+    if ('${keyModel.keyCode}'.contains('kF5')) {
+      // for (var i = 0; i < layers.length; i++) {
+      //   debugPrint('\t esc $i ${layers[i].mode?.currentColor.first}');
+      // }
+
+      // debugPrint('kF5 \t ${keyModel.chipsValues.map((e) => e.chipKey)}');
     }
   }
 
-  if (keyModel.keyCode.toString().contains('kEsc')) {
-    // for (var i = 0; i < layers.length; i++) {
-    //   debugPrint('\t esc $i ${layers[i].mode?.currentColor.first}');
-    // }
-
-    // debugPrint(
-    //     '${keyModel.keyCode} \t layerIndex $layerIndex \t ${keyModel.chipsValues.map((e) => e.chipKey)}');
-  }
-
-  final isWidgetInZone =
-      provider.isWidgetInZone(renderBox, k: keyModel.keyCode.toString());
-  bool layerVisible = false;
-  double opacity = 1.0;
+  // bool layerVisible = false;
+  // double opacity = 1.0;
   // provider.animation.value;
 
-  if (layersProvider.layeritems.isNotEmpty) {
-    final layer = layersProvider.layeritems[layerIndex];
-    layerVisible = layer.visible;
-    // keyModel.highlightColor = layer.mode?.currentColor.first;
+  // if (layersProvider.layeritems.isNotEmpty) {
+  //   final layer = layersProvider.layeritems[layerIndex];
+  //   layerVisible = layer.visible;
+  //   // keyModel.highlightColor = layer.mode?.currentColor.first;
 
-    switch (layer.mode?.value) {
-      case EnumModes.mood:
-        // provider.stopAnimating();
+  //   switch (layer.mode?.value) {
+  //     case EnumModes.mood:
+  //       // provider.stopAnimating();
 
-        // show full opacity
-        opacity = 1.0;
-        break;
-      default:
-    }
-  }
+  //       // show full opacity
+  //       opacity = 1.0;
+  //       break;
+  //     default:
+  //   }
+  // }
 
-  keyModel.selectKey(isWidgetInZone, layerIndex, layerVisible,
-      opacity: opacity, currentLayers: layers);
+  // keyModel.selectKey(isBoxZoned, layerIndex, layerVisible,
+  //     opacity: opacity, currentLayers: layers);
 
   if (keyModel.keyCode.toString().contains('kEsc')) {
     // debugPrint(

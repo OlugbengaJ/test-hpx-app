@@ -31,10 +31,6 @@ class KeyModel with ChangeNotifier {
   final double keyHeight;
   final double keyRadius;
 
-  /// [toolsModeModel] is used to paint the key and must be initialized
-  /// otherwise a default white color is used.
-  // late Color highlightColor;
-
   late List<LayerItemModel> layers = [];
 
   /// [_isSelected] indicates key is selected.
@@ -62,11 +58,12 @@ class KeyModel with ChangeNotifier {
     List<KeyIconPath>? iconPath, {
     Color? color,
   }) {
-    final icon = KeyPaintIcon(pathsValue: iconPath);
+    final icon = KeyPaintIcon(pathsValue: iconPath)
+      ..chipKey = '${ChipKey.overlay}';
 
     if (color != null) icon.color = color;
 
-    addChip(ChipKey.overlay.toString(), icon);
+    addChip(icon);
   }
 
   /// [addChipText] adds a text layer to chips.
@@ -75,21 +72,22 @@ class KeyModel with ChangeNotifier {
     Color? color,
     TextDirection? textDirection,
   }) {
-    final text = KeyPaintText(textValue: keyText);
+    final text = KeyPaintText(textValue: keyText)
+      ..chipKey = '${ChipKey.overlay}';
 
     if (color != null) text.color = color;
     if (textDirection != null) text.direction = textDirection;
 
-    addChip(ChipKey.overlay.toString(), text);
+    addChip(text);
   }
 
   /// [addChip] adds a new chip under an overlay.
-  void addChip(String chipKey, KeyPaintChip? chip) {
+  void addChip(KeyPaintChip? chip) {
     if (chip != null) {
       final overlay = getChip(ChipKey.overlay.toString());
 
       removeChip(ChipKey.overlay.toString());
-      _chips.putIfAbsent(chipKey, () => chip);
+      _chips.putIfAbsent(chip.chipKey, () => chip);
 
       // add existing overlay on top of the chips.
       if (overlay != null) {
@@ -123,47 +121,38 @@ class KeyModel with ChangeNotifier {
     }
   }
 
-  List<String> getLayeredChips() => _chips.keys
-      .where((k) =>
-          k != ChipKey.base.toString() && k != ChipKey.overlay.toString())
-      .toList();
-
-  void deleteNonExistingLayer() {
-    // final layerChipKeys = getLayeredChips();
-
-    // for (var k in layerChipKeys) {
-    //   try {
-    //     // search layers for matching chip key
-    //     layers.firstWhere((l) => l.id.toString() == k);
-    //   } catch (e) {
-    //     // remove non existing layer
-    //     removeChip(k);
-    //   }
-    // }
+  List<String> getLayeredChips() {
+    return _chips.keys
+        .where(
+          (k) =>
+              k != ChipKey.base.toString() && k != ChipKey.overlay.toString(),
+        )
+        .toList();
   }
 
-  /// [_updateChip] updates the state of a chip in [chips].
+  /// [updateChip] updates the state of a chip in [chips].
   ///
   /// Adds a new chip layer if the chip with [chipKey] does not exist.
-  void _updateChip(int layerIndex,
-      {double? opacity, bool showOutline = false}) {
+  void updateChip(String chipKey,
+      {Color? color, double? opacity, bool showOutline = false}) {
     // for (var i = layers.length - 1; i >= 0; i--) {
     // debugPrint('${layers[i].mode?.currentColor.first}');
     // layers[i].mode?.currentColor.forEach(print);
 
-    String chipKey = layers[layerIndex].id.toString();
+    // String chipKey = layers[layerIndex].id.toString();
     // remove layer chip at index
     KeyPaintChip? chip = getChip(chipKey);
     if (chip == null) {
       // add a new chip.
       chip = KeyPaintRect(chipKey);
-      addChip(chipKey, chip);
+      addChip(chip);
       // chip exists and needs to be recreated
       // final oldChipColor = chip.color;
       // _removeChip(chipKey);
     }
     // add a new chip
-    chip.color = layers[layerIndex].mode?.currentColor.first;
+    // chip.color = layers[layerIndex].mode?.currentColor.first;
+    chip.color = color ?? Colors.grey;
     // addChip(chipKey, chip);
     // _updateChipsExclude('$i', chips.indexOf(chip));
     // }
@@ -206,7 +195,6 @@ class KeyModel with ChangeNotifier {
     // debugPrint(
     //     '$id layers = ${layers.length} newLayers = ${currentLayers.length}');
     layers = currentLayers;
-    deleteNonExistingLayer();
 
     if (isWidgetInZone == true) {
       // TODO: note this is an experimental feature and may not behave as expected.
@@ -217,7 +205,7 @@ class KeyModel with ChangeNotifier {
       // debugPrint('sel $keyCode $id ${layers[id].id}');
 
       // _isSelected = true;
-      _updateChip(layerIndex, opacity: opacity, showOutline: true);
+      // _updateChip(layerIndex, opacity: opacity, showOutline: true);
     } else if (isWidgetInZone == false) {
       // key unselected, remove chip with specific id
       // debugPrint('\t not sel $keyCode $layerIndex ${layers[layerIndex].id}');
