@@ -129,9 +129,7 @@ class _WrapperState extends State<Wrapper> {
         child: ThreeColumns(
           leftChild: Layers(onReorder: _updateLayers, layers: _layersListItems),
           centerChild: Stack(
-            children: [
-              Workspace(),
-            ],
+            children: const [Workspace()],
           ),
           rightChild: const ToolsEffectsWrapper(),
         ),

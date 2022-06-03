@@ -44,7 +44,7 @@ class KeyRRectPainter extends CustomPainter {
     //     ..colorFilter = ColorFilter.mode(keyPathColor, BlendMode.luminosity);
     // }
 
-    for (var element in keyModel.chips) {
+    for (var element in keyModel.chipsValues) {
       switch (element.runtimeType) {
         case KeyPaintIcon:
           final iconPaint = element as KeyPaintIcon;
