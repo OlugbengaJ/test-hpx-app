@@ -321,7 +321,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint4Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint4Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint4Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.1755919, size.height * 0.5205903,
@@ -800,7 +800,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint6Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint6Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint6Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.1755919, size.height * 0.5720659,
@@ -837,7 +837,7 @@ class RPSCustomPainter extends CustomPainter {
     canvas.drawPath(path_7, paint7Stroke);
 
     Paint paint7Fill = Paint()..style = PaintingStyle.fill;
-    paint7Fill.color = Color(0xff000000).withOpacity(1.0);
+    paint7Fill.color = const Color(0xff000000).withOpacity(1.0);
     canvas.drawPath(path_7, paint7Fill);
 
     Path path_8 = Path();
@@ -853,7 +853,7 @@ class RPSCustomPainter extends CustomPainter {
     canvas.drawPath(path_8, paint8Stroke);
 
     Paint paint8Fill = Paint()..style = PaintingStyle.fill;
-    paint8Fill.color = Color(0xff000000).withOpacity(1.0);
+    paint8Fill.color = const Color(0xff000000).withOpacity(1.0);
     canvas.drawPath(path_8, paint8Fill);
 
     Path path_9 = Path();
@@ -1111,7 +1111,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint10Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint10Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint10Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2122322, size.height * 0.4169526,
@@ -1152,7 +1152,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint12Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint12Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint12Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2274521, size.height * 0.4684283,
@@ -1264,7 +1264,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint14Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint14Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint14Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2432356, size.height * 0.5205903,
@@ -1311,7 +1311,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint16Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint16Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint16Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2669109, size.height * 0.5720659,
@@ -1355,7 +1355,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint18Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint18Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint18Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.1755919, size.height * 0.6228552,
@@ -1517,7 +1517,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint20Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint20Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint20Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2573281, size.height * 0.4169526,
@@ -1600,7 +1600,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint22Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint22Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint22Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2725479, size.height * 0.4684283,
@@ -1647,7 +1647,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint24Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint24Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint24Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2883315, size.height * 0.5205903,
@@ -1767,7 +1767,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint26Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint26Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint26Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3120068, size.height * 0.5720659,
@@ -1813,7 +1813,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint28Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint28Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint28Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2223788, size.height * 0.6228552,
@@ -1925,7 +1925,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint30Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint30Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint30Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3024239, size.height * 0.4169526,
@@ -2048,7 +2048,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint32Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint32Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint32Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3176437, size.height * 0.4684283,
@@ -2094,7 +2094,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint34Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint34Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint34Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3334273, size.height * 0.5205903,
@@ -2164,7 +2164,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint36Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint36Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint36Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3571026, size.height * 0.5720659,
@@ -2256,7 +2256,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint38Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint38Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint38Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2702931, size.height * 0.6262869,
@@ -2330,7 +2330,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint43Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint43Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint43Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3475197, size.height * 0.4169526,
@@ -2380,7 +2380,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint45Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint45Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint45Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3627396, size.height * 0.4684283,
@@ -2455,7 +2455,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint47Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint47Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint47Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3785231, size.height * 0.5205903,
@@ -2499,7 +2499,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint49Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint49Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint49Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4021984, size.height * 0.5720659,
@@ -2540,7 +2540,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint51Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint51Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint51Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3125705, size.height * 0.6228552,
@@ -2714,7 +2714,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint53Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint53Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint53Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3576663, size.height * 0.6228552,
@@ -2740,7 +2740,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint54Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint54Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint54Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3926156, size.height * 0.4169526,
@@ -2837,7 +2837,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint56Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint56Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint56Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4078354, size.height * 0.4684283,
@@ -2879,7 +2879,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint58Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint58Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint58Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4236189, size.height * 0.5205903,
@@ -2975,7 +2975,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint60Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint60Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint60Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4472943, size.height * 0.5720659,
@@ -3078,7 +3078,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint62Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint62Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint62Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4377114, size.height * 0.4169526,
@@ -3199,7 +3199,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint64Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint64Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint64Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4529312, size.height * 0.4684283,
@@ -3242,7 +3242,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint66Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint66Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint66Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4687148, size.height * 0.5205903,
@@ -3288,7 +3288,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint68Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint68Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint68Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4923901, size.height * 0.5720659,
@@ -3332,7 +3332,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint70Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint70Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint70Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4828072, size.height * 0.4169526,
@@ -3373,7 +3373,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint72Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint72Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint72Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4980271, size.height * 0.4684283,
@@ -3441,7 +3441,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint74Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint74Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint74Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5138106, size.height * 0.5205903,
@@ -3507,7 +3507,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint76Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint76Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint76Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5374859, size.height * 0.5720659,
@@ -3553,7 +3553,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint78Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint78Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint78Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5279030, size.height * 0.4169526,
@@ -3703,7 +3703,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint80Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint80Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint80Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5431229, size.height * 0.4684283,
@@ -3741,7 +3741,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint82Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint82Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint82Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5589064, size.height * 0.5205903,
@@ -3781,7 +3781,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint84Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint84Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint84Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5825817, size.height * 0.5720659,
@@ -3851,7 +3851,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint86Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint86Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint86Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5837091, size.height * 0.6228552,
@@ -4025,7 +4025,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint88Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint88Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint88Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5729989, size.height * 0.4169526,
@@ -4146,7 +4146,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint90Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint90Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint90Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5882187, size.height * 0.4684283,
@@ -4238,7 +4238,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint92Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint92Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint92Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.6040023, size.height * 0.5205903,
@@ -4279,7 +4279,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint94Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint94Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint94Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.6276776, size.height * 0.5720659,
@@ -4341,7 +4341,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint96Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint96Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint96Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.6288050, size.height * 0.6228552,
@@ -4503,7 +4503,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint98Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint98Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint98Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.6180947, size.height * 0.4169526,
@@ -4595,7 +4595,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint100Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint100Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint100Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.6333145, size.height * 0.4684283,
@@ -4667,7 +4667,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint102Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint102Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint102Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.6490981, size.height * 0.5205903,
@@ -4708,7 +4708,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint104Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint104Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint104Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.6727734, size.height * 0.5720659,
@@ -4746,7 +4746,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint106Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint106Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint106Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.6739008, size.height * 0.6228552,
@@ -4787,7 +4787,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint108Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint108Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint108Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.7860767, size.height * 0.6228552,
@@ -4828,7 +4828,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint110Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint110Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint110Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.7178692, size.height * 0.6228552,
@@ -4869,7 +4869,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint112Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint112Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint112Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.7184329, size.height * 0.6489362,
@@ -4910,7 +4910,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint114Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint114Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint114Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.6631905, size.height * 0.4169526,
@@ -4948,7 +4948,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint116Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint116Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint116Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.6784104, size.height * 0.4684283,
@@ -4990,7 +4990,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint118Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint118Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint118Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.6941939, size.height * 0.5205903,
@@ -5031,7 +5031,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint120Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint120Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint120Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.7178692, size.height * 0.5720659,
@@ -5068,7 +5068,7 @@ class RPSCustomPainter extends CustomPainter {
     canvas.drawPath(path_121, paint121Stroke);
 
     Paint paint121Fill = Paint()..style = PaintingStyle.fill;
-    paint121Fill.color = Color(0xff000000).withOpacity(1.0);
+    paint121Fill.color = const Color(0xff000000).withOpacity(1.0);
     canvas.drawPath(path_121, paint121Fill);
 
     Path path_122 = Path();
@@ -5084,7 +5084,7 @@ class RPSCustomPainter extends CustomPainter {
     canvas.drawPath(path_122, paint122Stroke);
 
     Paint paint122Fill = Paint()..style = PaintingStyle.fill;
-    paint122Fill.color = Color(0xff000000).withOpacity(1.0);
+    paint122Fill.color = const Color(0xff000000).withOpacity(1.0);
     canvas.drawPath(path_122, paint122Fill);
 
     Path path_123 = Path();
@@ -5342,7 +5342,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint124Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint124Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint124Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.7082864, size.height * 0.4169526,
@@ -5386,7 +5386,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint126Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint126Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint126Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.7235062, size.height * 0.4684283,
@@ -5428,7 +5428,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint128Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint128Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint128Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.7392897, size.height * 0.5205903,
@@ -5469,7 +5469,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint130Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint130Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint130Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.7533822, size.height * 0.4169526,
@@ -5506,7 +5506,7 @@ class RPSCustomPainter extends CustomPainter {
     canvas.drawPath(path_131, paint131Stroke);
 
     Paint paint131Fill = Paint()..style = PaintingStyle.fill;
-    paint131Fill.color = Color(0xff000000).withOpacity(1.0);
+    paint131Fill.color = const Color(0xff000000).withOpacity(1.0);
     canvas.drawPath(path_131, paint131Fill);
 
     Path path_132 = Path();
@@ -5522,13 +5522,13 @@ class RPSCustomPainter extends CustomPainter {
     canvas.drawPath(path_132, paint132Stroke);
 
     Paint paint132Fill = Paint()..style = PaintingStyle.fill;
-    paint132Fill.color = Color(0xff000000).withOpacity(1.0);
+    paint132Fill.color = const Color(0xff000000).withOpacity(1.0);
     canvas.drawPath(path_132, paint132Fill);
 
     Paint paint133Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint133Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint133Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.7680383, size.height * 0.4684283,
@@ -5566,7 +5566,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint135Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint135Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint135Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2161781, size.height * 0.3743995,
@@ -5649,7 +5649,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint137Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint137Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint137Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2567644, size.height * 0.3743995,
@@ -5774,7 +5774,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint139Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint139Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint139Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.2979143, size.height * 0.3743995,
@@ -5939,7 +5939,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint141Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint141Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint141Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3385006, size.height * 0.3743995,
@@ -6031,7 +6031,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint143Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint143Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint143Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.3790868, size.height * 0.3743995,
@@ -6170,7 +6170,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint145Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint145Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint145Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4208005, size.height * 0.3743995,
@@ -6333,7 +6333,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint147Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint147Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint147Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.4613867, size.height * 0.3743995,
@@ -6416,7 +6416,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint149Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint149Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint149Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5019729, size.height * 0.3743995,
@@ -6608,7 +6608,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint151Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint151Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint151Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5431229, size.height * 0.3743995,
@@ -6771,7 +6771,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint153Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint153Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint153Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.5837091, size.height * 0.3743995,
@@ -6914,7 +6914,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint155Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint155Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint155Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.6248591, size.height * 0.3743995,
@@ -7006,7 +7006,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint157Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint157Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint157Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.6654453, size.height * 0.3743995,
@@ -7140,7 +7140,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint159Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint159Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint159Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.7060316, size.height * 0.3743995,
@@ -7395,7 +7395,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint161Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint161Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint161Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.7466178, size.height * 0.3743995,
@@ -7529,7 +7529,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint163Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint163Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint163Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.7877678, size.height * 0.3743995,
@@ -7863,7 +7863,7 @@ class RPSCustomPainter extends CustomPainter {
     Paint paint165Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
-    paint165Stroke.color = Color(0xff474747).withOpacity(1.0);
+    paint165Stroke.color = const Color(0xff474747).withOpacity(1.0);
     canvas.drawRRect(
         RRect.fromRectAndCorners(
             Rect.fromLTWH(size.width * 0.1755919, size.height * 0.3743995,

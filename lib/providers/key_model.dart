@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/key_code.dart';
 import 'package:hpx/utils/KeyboardController.dart';
 
@@ -30,9 +31,11 @@ class KeyModel with ChangeNotifier {
   final double keyHeight;
   final double keyRadius;
 
-  /// [highlightColor] is used to paint the key and must be initialized
+  /// [toolsModeModel] is used to paint the key and must be initialized
   /// otherwise a default white color is used.
-  late Color highlightColor;
+  // late Color highlightColor;
+
+  late List<LayerItemModel> layers = [];
 
   /// [_isSelected] indicates key is selected.
   bool _isSelected = false;
@@ -45,11 +48,14 @@ class KeyModel with ChangeNotifier {
   /// Each layer of the chip will be rendered from first to last and by default,
   /// a chip is initialized with a [KeyPaintRect] base.
   final Map<String, KeyPaintChip> _chips = {
-    ChipKey.base.toString(): KeyPaintRect(),
+    ChipKey.base.toString(): KeyPaintRect(ChipKey.base.toString()),
   };
 
   /// [chips] returns the values of [_chips] as a new list.
-  List<KeyPaintChip> get chips => [..._chips.values];
+  Map<String, KeyPaintChip> get chips => _chips;
+
+  /// [chipsValues] returns the values of [_chips] as a new list.
+  List<KeyPaintChip> get chipsValues => [..._chips.values];
 
   /// [addChipIcon] adds an icon layer to chips.
   void addChipIcon(
@@ -82,7 +88,7 @@ class KeyModel with ChangeNotifier {
     if (chip != null) {
       final overlay = getChip(ChipKey.overlay.toString());
 
-      _removeChip(ChipKey.overlay.toString());
+      removeChip(ChipKey.overlay.toString());
       _chips.putIfAbsent(chipKey, () => chip);
 
       // add existing overlay on top of the chips.
@@ -113,50 +119,94 @@ class KeyModel with ChangeNotifier {
 
       // update the opacity of the key so it remains visible unless disabled.
       (element.value as KeyPaintRect).opacity = 0.4;
+      //chipIndex > oldChipIndex ? 0.4 : 1;
     }
+  }
+
+  List<String> getLayeredChips() => _chips.keys
+      .where((k) =>
+          k != ChipKey.base.toString() && k != ChipKey.overlay.toString())
+      .toList();
+
+  void deleteNonExistingLayer() {
+    // final layerChipKeys = getLayeredChips();
+
+    // for (var k in layerChipKeys) {
+    //   try {
+    //     // search layers for matching chip key
+    //     layers.firstWhere((l) => l.id.toString() == k);
+    //   } catch (e) {
+    //     // remove non existing layer
+    //     removeChip(k);
+    //   }
+    // }
   }
 
   /// [_updateChip] updates the state of a chip in [chips].
   ///
   /// Adds a new chip layer if the chip with [chipKey] does not exist.
-  void _updateChip(String chipKey,
+  void _updateChip(int layerIndex,
       {double? opacity, bool showOutline = false}) {
-    KeyPaintChip? chip = getChip(chipKey);
+    // for (var i = layers.length - 1; i >= 0; i--) {
+    // debugPrint('${layers[i].mode?.currentColor.first}');
+    // layers[i].mode?.currentColor.forEach(print);
 
+    String chipKey = layers[layerIndex].id.toString();
+    // remove layer chip at index
+    KeyPaintChip? chip = getChip(chipKey);
     if (chip == null) {
       // add a new chip.
-      chip = KeyPaintRect();
+      chip = KeyPaintRect(chipKey);
       addChip(chipKey, chip);
+      // chip exists and needs to be recreated
+      // final oldChipColor = chip.color;
+      // _removeChip(chipKey);
     }
+    // add a new chip
+    chip.color = layers[layerIndex].mode?.currentColor.first;
+    // addChip(chipKey, chip);
+    // _updateChipsExclude('$i', chips.indexOf(chip));
+    // }
 
-    if (chip.runtimeType == KeyPaintRect) {
-      (chip as KeyPaintRect)
-        ..opacity = opacity!
-        ..showOutline = showOutline;
+    // if (chip == null) {
+    //   // add a new chip.
+    //   chip = KeyPaintRect();
+    //   addChip(chipKey, chip);
+    // }
 
-      _updateChipsExclude(chipKey, chips.indexOf(chip));
-    }
+    // if (chip.runtimeType == KeyPaintRect) {
+    //   (chip as KeyPaintRect)
+    //     ..opacity = opacity!
+    //     ..showOutline = showOutline;
 
-    chip.color = highlightColor;
+    //   _updateChipsExclude(chipKey, chips.indexOf(chip));
+    // }
+
+    // chip!.color = highlightColor;
   }
 
-  /// [_removeChip] deletes chip layer whose key matches [chipKey].
-  void _removeChip(String chipKey) {
+  /// [removeChip] deletes chip layer whose key matches [chipKey].
+  void removeChip(String chipKey) {
     _chips.removeWhere((key, value) => key == chipKey);
   }
 
   /// [selectKey] highlights [KeyModel] under a selected zone.
   ///
-  /// [animValue] is an animation value which determines behaviour of the key.
+  /// [opacity] is an animation value which determines behaviour of the key.
   void selectKey(
     bool? isWidgetInZone,
-    int id,
+    int layerIndex,
     bool isVisible, {
-    required double animValue,
+    required double opacity,
     // chip has animation
     bool isAnimated = false,
+    required List<LayerItemModel> currentLayers,
   }) {
-    final opacity = isVisible ? animValue : 0.0;
+    opacity = isVisible ? opacity : 0.0;
+    // debugPrint(
+    //     '$id layers = ${layers.length} newLayers = ${currentLayers.length}');
+    layers = currentLayers;
+    deleteNonExistingLayer();
 
     if (isWidgetInZone == true) {
       // TODO: note this is an experimental feature and may not behave as expected.
@@ -164,26 +214,22 @@ class KeyModel with ChangeNotifier {
       // KeyboardController.blinkingEffect();
 
       // key selected, highlight the chip with keys matching id
-      _isSelected = true;
-      _updateChip(id.toString(), opacity: opacity, showOutline: true);
+      // debugPrint('sel $keyCode $id ${layers[id].id}');
+
+      // _isSelected = true;
+      _updateChip(layerIndex, opacity: opacity, showOutline: true);
     } else if (isWidgetInZone == false) {
       // key unselected, remove chip with specific id
+      // debugPrint('\t not sel $keyCode $layerIndex ${layers[layerIndex].id}');
 
-      _isSelected = false;
-      _removeChip(id.toString());
+      // _isSelected = false;
+      removeChip(layers[layerIndex].id.toString());
     } else if (isSelected) {
       // update selected chip opacity when visibility is disabled.
 
-      _updateChip(id.toString(), opacity: opacity, showOutline: false);
+      // _updateChip(id.toString(), opacity: opacity, showOutline: false);
     }
   }
-
-  // /// [clearKeys] restore [KeyModel] previous settings.
-  // void clearKeys() {
-  //   // restore base key settings i.e. remove chip.id if exists.
-  //   _isSelected = false;
-  //   getBase().color = Colors.black;
-  // }
 }
 
 enum ChipKey {
@@ -195,6 +241,7 @@ enum ChipKey {
 }
 
 mixin KeyPaintChip {
+  late String chipKey;
   late Color color;
   late bool isOverlay;
 }
@@ -227,6 +274,7 @@ class KeyPaintIcon with KeyPaintChip {
     Color pathColor = Colors.white,
     List<KeyIconPath>? pathsValue,
   }) {
+    chipKey = ChipKey.overlay.toString();
     color = pathColor;
     paths = pathsValue;
     isOverlay = true;
@@ -242,6 +290,7 @@ class KeyPaintText with KeyPaintChip {
     TextDirection textDirection = TextDirection.ltr,
     String? textValue,
   }) {
+    chipKey = ChipKey.overlay.toString();
     color = textColor;
     direction = textDirection;
     text = textValue;
@@ -254,7 +303,8 @@ class KeyPaintText with KeyPaintChip {
 
 class KeyPaintRect with KeyPaintChip {
   /// [KeyPaintRect] intended to draw a RRect on a canvas.
-  KeyPaintRect({
+  KeyPaintRect(
+    String key, {
     Color rectColor = Colors.black,
     double rectOpacity = 1.0,
     PaintingStyle rectPaintingStyle = PaintingStyle.fill,
@@ -262,6 +312,7 @@ class KeyPaintRect with KeyPaintChip {
     StrokeJoin rectStrokeJoin = StrokeJoin.round,
     double rectStrokeWidthFactor = 50,
   }) {
+    chipKey = key;
     isOverlay = false;
     showOutline = false;
     color = rectColor;

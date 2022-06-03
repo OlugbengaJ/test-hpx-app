@@ -16,7 +16,7 @@ class KeyboardRowFn extends StatelessWidget {
     double zoomedPadding = 2.0 * zoomScale;
 
     final keysProvider = Provider.of<KeysProvider>(context);
-    final rowKeys = keysProvider.getKeyInRow(0);
+    final rowKeys = keysProvider.getKeysInRow(0);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -25,9 +25,9 @@ class KeyboardRowFn extends StatelessWidget {
           (keyModel) => Padding(
             padding: EdgeInsets.all(zoomedPadding),
 
-            // use ChangeNotifierProvider.value() when using child values of Provider.of()
-            // as notifier; otherwise you encounter errors with ChangeNotifierProvider(create)
-            // when flutter rebuilds the widget tree
+            // use ChangeNotifierProvider.value() when using child values of
+            // Provider.of() as notifier; otherwise you encounter errors with
+            // ChangeNotifierProvider(create) when flutter rebuilds the widget tree.
             child: ChangeNotifierProvider.value(
               value: keyModel,
               builder: (_, w) => KeyboardKey(

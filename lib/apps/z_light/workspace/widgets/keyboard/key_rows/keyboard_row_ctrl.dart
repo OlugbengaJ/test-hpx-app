@@ -17,7 +17,7 @@ class KeyboardRowCtrl extends StatelessWidget {
     double zoomedPadding = 2.0 * zoomScale;
 
     final keysProvider = Provider.of<KeysProvider>(context);
-    final rowKeysFiltered = keysProvider.getKeyInRow(5).where((element) =>
+    final rowKeysFiltered = keysProvider.getKeysInRow(5).where((element) =>
         element.keyCode != KeyCode.kArrowUp &&
         element.keyCode != KeyCode.kArrowDown &&
         element.keyCode != KeyCode.kArrowRight);
@@ -32,9 +32,9 @@ class KeyboardRowCtrl extends StatelessWidget {
           (keyModel) => Padding(
             padding: EdgeInsets.all(zoomedPadding),
 
-            // use ChangeNotifierProvider.value() when using child values of Provider.of()
-            // as notifier; otherwise you encounter errors with ChangeNotifierProvider(create)
-            // when flutter rebuilds the widget tree
+            // use ChangeNotifierProvider.value() when using child values of
+            // Provider.of() as notifier; otherwise you encounter errors with
+            // ChangeNotifierProvider(create) when flutter rebuilds the widget tree.
             child: ChangeNotifierProvider.value(
               value: keyModel,
               builder: (context, child) => KeyboardKey(
