@@ -35,6 +35,8 @@ class _ImagePresetState extends State<ImagePreset> {
         Provider.of<ImageModeProvider>(context, listen: false);
     ModeProvider modeProvider =
         Provider.of<ModeProvider>(context, listen: false);
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
 
     /// convert the default image into color paltte
     ByteData image = await rootBundle.load(Constants.defaultImageMode);
@@ -43,6 +45,7 @@ class _ImagePresetState extends State<ImagePreset> {
         currentColor: imageModeProvider.extractedColors,
         effects: modeProvider.currentMode.effects,
         name: modeProvider.currentMode.name));
+    layerProvider.toolsEffectsUpdated();
   }
 
   void _showPhotoLibrary() async {
