@@ -41,24 +41,38 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+
+
   /// [setModeProvider] to set the mode provider to use on layers
-  void setModeProvider(ModeProvider modeProvider) {
+  void setModeProvider(ModeProvider modeProvider){
     _modeProvider = modeProvider;
   }
 
-  /// [setResizableProvider] to set the mode provider to use on layers
-  void setResizableProvider(ResizableProvider resizableProvider) {
+  /// [setResizableProvider] to set the resizable provider to use on layers
+  void setResizableProvider(ResizableProvider resizableProvider){
     _resizableProvider = resizableProvider;
   }
 
+
   /// listen to any change from the tools and effects so the current layers can be updated
-  void toolsEffectsUpdated() {
+  void toolsEffectsUpdated(){
     LayerItemModel item = getItem(listIndex);
-    item.mode = _modeProvider!.getModeInformation();
+    item.mode =  _modeProvider!.getModeInformation();
     item.layerText = _modeProvider!.currentMode.name;
     _layeritems[listIndex] = item;
+
+    if(item.mode!.name=="Shortcut Colors"){
+      debugPrint("Create a shortcut layer");
+      var subLayers = getSublayers(item.id);
+      debugPrint('$subLayers');
+    }
+    for (var i = 0; i < length; i++) {
+      debugPrint('${layeritems[i].mode?.currentColor.first}');
+    }
     notifyListeners();
   }
+
+
 
   /// [updateView] use to update the item position when the resizable-draggable stop dragging
   /// This method is called from the [ResizableProvider]
@@ -113,13 +127,14 @@ class LayersProvider extends ChangeNotifier {
   /// Add a new layer. By default new added layers use the mood mode
   void add(LayerItemModel item) {
     ToolsModeModel mode = ToolsModeModel(
-        currentColor: moodThemesList.first.colorCode,
-        effects: EffectsModel(effectName: EnumModes.mood),
-        name: "Mood",
-        value: EnumModes.mood,
-        modeType: EnumModeType.layers,
-        icon: Icons.mood);
-
+      currentColor: moodThemesList.first.colorCode,
+      effects: EffectsModel(effectName: EnumModes.mood),
+      name: "Mood",
+      value: EnumModes.mood,
+      modeType: EnumModeType.layers,
+      icon: Icons.mood
+    );
+    
     item.mode = mode;
 
     for (var element in _layeritems) {
@@ -150,6 +165,7 @@ class LayersProvider extends ChangeNotifier {
       item.hasSublayer = true;
       duplicatedItem.layerText = "Sublayer";
       duplicatedItem.parentID = item.id;
+      duplicatedItem.isSublayer = true;
       duplicatedItem.mode = modeProvider.getModeInformation();
       _sublayers.insert(0, duplicatedItem);
       _layeritems[index] = item;
@@ -177,6 +193,11 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+
+  void changeSublayerIndex(int subIndex){
+    debugPrint("Layer index: $listIndex, sublayer index: $subIndex");
+  }
+
   /// Update the layerText using its ID
   void update(int id, String text) {
     LayerItemModel item = layeritems.singleWhere((item) => item.id == id);
@@ -198,7 +219,6 @@ class LayersProvider extends ChangeNotifier {
 
   /// [toggleVisibility] toggle visiblity for a layers
   void toggleVisibility(LayerItemModel item, int index) {
-    print("Toggle visibility");
     item.listDisplayColor = Colors.grey;
     if (item.visible) {
       item.listDisplayColor = Colors.white;
@@ -257,7 +277,7 @@ class LayersProvider extends ChangeNotifier {
         newTop: item.top,
       );
     }
-    provider.setSize();
+    _resizableProvider!.setSize();
 
     notifyListeners();
   }

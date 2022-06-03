@@ -28,10 +28,6 @@ class _LayerListItemState extends State<LayerListItem> {
   TextEditingController _layerNameController = TextEditingController(text: "");
   GlobalKey deleteKey = GlobalKey<State<Tooltip>>();
 
-  @override
-  void initState() {
-    super.initState();
-  }
 
   _onHover(isHovering) {
     if(!_showDeleteTooltip){
@@ -84,6 +80,9 @@ class _LayerListItemState extends State<LayerListItem> {
     // setState(() {
     //   _showDeleteTooltip = true;
     // });
+
+    ResizableProvider resizableProvider = context.read<ResizableProvider>();
+    provider.setResizablePosition(resizableProvider);
   }
 
 

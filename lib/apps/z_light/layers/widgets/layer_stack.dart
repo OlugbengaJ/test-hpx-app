@@ -16,52 +16,60 @@ class _LayersStackState extends State<LayersStack> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LayersProvider>(
-      builder: (context, value, child) {
-        return 
-        (value.hideDraggable)? 
-        Consumer<ResizableProvider>(
-          builder: (context, provider, child) {
-            return SizedBox(
-              height: 0,
-              width: 0,
-              key:  provider.draggableKey,
-            );
-          }
-        ):
-        Stack(
-          children: [
-            (value.isLayerVisible)?
-            StatelessResizable(
-              dragWidgetHeight: dragWidgetSize,
-              dragWidgetWidth: dragWidgetSize,
-              dragWidget: Container(
-                height: dragWidgetSize,
-                width: dragWidgetSize,              
-                decoration: const BoxDecoration(
-                  shape: BoxShape.rectangle,
-                  color: Colors.white,
-                ),
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white),
-                ),
-              ),
-            )
-            :
-            Consumer<ResizableProvider>(
-              builder: (context, provider, child) {
-                return SizedBox(
-                  height: 0,
-                  width: 0,
-                  key:  provider.draggableKey,
-                );
-              }
-            ),
-          ],
-        );
+    return Container();
+
+    /* return NotificationListener<SizeChangedLayoutNotification>(
+      onNotification: (notification) {
+        print("Notification");
+        return true;
       },
-    );
+      child: Consumer<LayersProvider>(
+        builder: (context, value, child) {
+          return 
+          (value.hideDraggable)? 
+          Consumer<ResizableProvider>(
+            builder: (context, provider, child) {
+              return SizedBox(
+                height: 0,
+                width: 0,
+                key:  provider.draggableKey,
+              );
+            }
+          ):
+          Stack(
+            children: [
+              (value.isLayerVisible)?
+              StatelessResizable(
+                dragWidgetHeight: dragWidgetSize,
+                dragWidgetWidth: dragWidgetSize,
+                dragWidget: Container(
+                  height: dragWidgetSize,
+                  width: dragWidgetSize,              
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    color: Colors.white,
+                  ),
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white),
+                  ),
+                ),
+              )
+              :
+              Consumer<ResizableProvider>(
+                builder: (context, provider, child) {
+                  return SizedBox(
+                    height: 0,
+                    width: 0,
+                    key:  provider.draggableKey,
+                  );
+                }
+              ),
+            ],
+          );
+        },
+      ),
+    ); */
   }
 }
