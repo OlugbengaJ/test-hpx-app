@@ -180,101 +180,95 @@ class _WorkspaceState extends State<Workspace>
         /// Setting width/height with double.infinity is not recommended,
         /// instead we want to keep the view constrained and have excessive
         /// sub-widgets cliped only to the view.
-        Consumer<WorkspaceProvider>(
-          builder: (context, provider, child) => (provider.isLightingView)
-              ? ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxHeight: 85,
+        if (workspaceProvider.isLightingView)
+          ConstrainedBox(
+            key: workspaceZoneToolsKey,
+            constraints: const BoxConstraints(
+              maxHeight: 85,
+            ),
+            child: Container(
+              margin: const EdgeInsets.all(15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text('Zone Selection', style: h5Style),
                   ),
-                  child: Container(
-                    margin: const EdgeInsets.all(15.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text('Zone Selection', style: h5Style),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 20.0),
+                        child: Tooltip(
+                          message: 'Highlight selector',
+                          child: RoundButton(
+                            onTapDown: () {
+                              workspaceProvider
+                                  .toggleDragMode(WorkspaceDragMode.highlight);
+                            },
+                            size: _buttonSize,
+                            icon: Icons.highlight_alt,
+                            iconColor: workspaceProvider.isDragModeHighlight
+                                ? Theme.of(context).colorScheme.primary
+                                : null,
+                          ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 20.0),
-                              child: Tooltip(
-                                message: 'Highlight selector',
-                                child: RoundButton(
-                                  onTapDown: () {
-                                    provider.toggleDragMode(
-                                        WorkspaceDragMode.highlight);
-                                  },
-                                  size: _buttonSize,
-                                  icon: Icons.highlight_alt,
-                                  iconColor: provider.isDragModeHighlight
-                                      ? Theme.of(context).colorScheme.primary
-                                      : null,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 20.0),
-                              child: Tooltip(
-                                message: 'Resizable selector',
-                                child: RoundButton(
-                                  onTapDown: () {
-                                    provider.toggleDragMode(
-                                        WorkspaceDragMode.resizable);
-                                  },
-                                  onTapUp: () {},
-                                  size: _buttonSize,
-                                  icon: Icons.select_all,
-                                  iconColor: provider.isDragModeResizable
-                                      ? Theme.of(context).colorScheme.primary
-                                      : null,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 20.0),
-                              child: Tooltip(
-                                message: 'Click selector',
-                                child: RoundButton(
-                                  onTapDown: () {
-                                    provider.toggleDragMode(
-                                        WorkspaceDragMode.click);
-                                  },
-                                  size: _buttonSize,
-                                  icon: Icons.mouse,
-                                  iconColor: provider.isDragModeClick
-                                      ? Theme.of(context).colorScheme.primary
-                                      : null,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 20.0),
-                              child: DropDown(
-                                enabled: workspaceProvider.isDragModeClick,
-                                hint: 'Select by devices...',
-                                hintStyle: pStyle,
-                                items: getDropdownMenuItems(
-                                  Theme.of(context).colorScheme.primary,
-                                  devices(),
-                                ),
-                                onChangedHandler: (o) {},
-                              ),
-                            ),
-                          ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 20.0),
+                        child: Tooltip(
+                          message: 'Resizable selector',
+                          child: RoundButton(
+                            onTapDown: () {
+                              workspaceProvider
+                                  .toggleDragMode(WorkspaceDragMode.resizable);
+                            },
+                            onTapUp: () {},
+                            size: _buttonSize,
+                            icon: Icons.select_all,
+                            iconColor: workspaceProvider.isDragModeResizable
+                                ? Theme.of(context).colorScheme.primary
+                                : null,
+                          ),
                         ),
-                      ],
-                    ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 20.0),
+                        child: Tooltip(
+                          message: 'Click selector',
+                          child: RoundButton(
+                            onTapDown: () {
+                              workspaceProvider
+                                  .toggleDragMode(WorkspaceDragMode.click);
+                            },
+                            size: _buttonSize,
+                            icon: Icons.mouse,
+                            iconColor: workspaceProvider.isDragModeClick
+                                ? Theme.of(context).colorScheme.primary
+                                : null,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 20.0),
+                        child: DropDown(
+                          enabled: workspaceProvider.isDragModeClick,
+                          hint: 'Select by devices...',
+                          hintStyle: pStyle,
+                          items: getDropdownMenuItems(
+                            Theme.of(context).colorScheme.primary,
+                            devices(),
+                          ),
+                          onChangedHandler: (o) {},
+                        ),
+                      ),
+                    ],
                   ),
-                )
-              : Container(),
-          // ConstrainedBox(
-          //     constraints: const BoxConstraints(maxHeight: 0),
-          //     child: Container(),
-          //   ),
-        ),
+                ],
+              ),
+            ),
+          ),
         if (workspaceProvider.isStripNotify)
           StripNotification(
             message: workspaceProvider.stripNotificationText,
@@ -319,7 +313,6 @@ class _WorkspaceState extends State<Workspace>
                         ),
                       ),
                       const LayersStack(),
-                      // if (workspaceProvider.selectorVisible)
                       OverlaySelector(
                         showCrossHair: workspaceProvider.isDragModeResizable,
                         onPanDown: workspaceProvider.onPanDown,

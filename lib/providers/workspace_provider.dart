@@ -36,6 +36,31 @@ class WorkspaceProvider with ChangeNotifier {
     return workspaceRender!.localToGlobal(Offset.zero) & workspaceRender.size;
   }
 
+  /// [_getWorkspaceOffset] returns an offset from the workspace left and top.
+  Offset get _getWorkspaceOffset {
+    return Offset(_workspaceRect.left, _workspaceRect.top);
+  }
+
+  /// [_zoneToolsRect] returns a nullable [Rect] of the
+  /// rendered workspace zone selection tools section.
+  ///
+  /// This is necessary to determine the overlay selector's global position.
+  Rect? get _zoneToolsRect {
+    final zoneToolsRender =
+        workspaceZoneToolsKey.currentContext?.findRenderObject() as RenderBox?;
+
+    if (zoneToolsRender == null) return null;
+    return zoneToolsRender.localToGlobal(Offset.zero) & zoneToolsRender.size;
+  }
+
+  /// [zoneToolsHeight] gives the value of the zone selection constrained widget.
+  double? _zoneToolsHeight;
+  double get zoneToolsHeight {
+    // initialize variable if null
+    _zoneToolsHeight ??= _zoneToolsRect?.height;
+    return _zoneToolsHeight!;
+  }
+
   /// [isStripNotify] returns if strip notifcation is displayed.
   bool get isStripNotify => _isStripNotify;
 
@@ -115,7 +140,7 @@ class WorkspaceProvider with ChangeNotifier {
     _layersProvider = v;
 
     // initialize the layers selections
-    initLayerLTWH();
+    _initLayerLTWH();
   }
 
   WorkspaceDragMode? _keyDragMode = WorkspaceDragMode.resizable;
@@ -154,12 +179,12 @@ class WorkspaceProvider with ChangeNotifier {
         _isPanning = true;
 
         // set the current layer's drag mode
-        getLayerLTWH(currentLayerId)!.dragMode = WorkspaceDragMode.resizable;
+        _getLayerLTWH(_currentLayerId)!.dragMode = WorkspaceDragMode.resizable;
 
         break;
       case WorkspaceDragMode.highlight:
         // set the current layer's drag mode
-        getLayerLTWH(currentLayerId)!.dragMode = WorkspaceDragMode.highlight;
+        _getLayerLTWH(_currentLayerId)!.dragMode = WorkspaceDragMode.highlight;
         _isPanning = false;
 
         break;
@@ -222,7 +247,7 @@ class WorkspaceProvider with ChangeNotifier {
     if (_keyDragMode == null) return;
 
     // get the current layer
-    final ltwh = getLayerLTWH(currentLayerId)!;
+    final ltwh = _getLayerLTWH(_currentLayerId)!;
 
     if (isDragModeHighlight) {
       ltwh.highlightLTWH!.left = _dragL;
@@ -246,7 +271,7 @@ class WorkspaceProvider with ChangeNotifier {
           break;
         case DraggableRegionName.topLeft:
 
-          // resize from top-left, update selector's left, top, width, and height.
+          // resize from top-left, set selector's left, top, width, and height.
           final top = (ltwh.resizableLTWH!.top ?? 0) + details.delta.dy;
           final left = (ltwh.resizableLTWH!.left ?? 0) + details.delta.dx;
           final width = (ltwh.resizableLTWH!.width ?? 0) - details.delta.dx;
@@ -266,7 +291,7 @@ class WorkspaceProvider with ChangeNotifier {
           break;
         case DraggableRegionName.topRight:
 
-          // resize from top-right, update selector's top, width, and height.
+          // resize from top-right, set selector's top, width, and height.
           final top = (ltwh.resizableLTWH!.top ?? 0) + details.delta.dy;
           final width = (ltwh.resizableLTWH!.width ?? 0) + details.delta.dx;
           final height = (ltwh.resizableLTWH!.height ?? 0) - details.delta.dy;
@@ -284,7 +309,7 @@ class WorkspaceProvider with ChangeNotifier {
           break;
         case DraggableRegionName.bottomRight:
 
-          // resize from bottom-right, update selector's width and height.
+          // resize from bottom-right, set selector's width and height.
           final width = (ltwh.resizableLTWH!.width ?? 0) + details.delta.dx;
           final height = (ltwh.resizableLTWH!.height ?? 0) + details.delta.dy;
 
@@ -300,7 +325,7 @@ class WorkspaceProvider with ChangeNotifier {
           break;
         case DraggableRegionName.bottomLeft:
 
-          // resize from bottom-left, update selector's left, width, and height.
+          // resize from bottom-left, set selector's left, width, and height.
           final left = (ltwh.resizableLTWH!.left ?? 0) + details.delta.dx;
           final width = (ltwh.resizableLTWH!.width ?? 0) - details.delta.dx;
           final height = (ltwh.resizableLTWH!.height ?? 0) + details.delta.dy;
@@ -349,9 +374,9 @@ class WorkspaceProvider with ChangeNotifier {
     // return the current layer selection
     switch (_keyDragMode) {
       case WorkspaceDragMode.resizable:
-        return getLayerLTWH(currentLayerId)?.resizableLTWH?.left;
+        return _getLayerLTWH(_currentLayerId)?.resizableLTWH?.left;
       case WorkspaceDragMode.highlight:
-        return getLayerLTWH(currentLayerId)?.highlightLTWH?.left;
+        return _getLayerLTWH(_currentLayerId)?.highlightLTWH?.left;
       default:
         return null;
     }
@@ -373,9 +398,9 @@ class WorkspaceProvider with ChangeNotifier {
   double? get zoneT {
     switch (_keyDragMode) {
       case WorkspaceDragMode.resizable:
-        return getLayerLTWH(currentLayerId)?.resizableLTWH?.top;
+        return _getLayerLTWH(_currentLayerId)?.resizableLTWH?.top;
       case WorkspaceDragMode.highlight:
-        return getLayerLTWH(currentLayerId)?.highlightLTWH?.top;
+        return _getLayerLTWH(_currentLayerId)?.highlightLTWH?.top;
       default:
         return null;
     }
@@ -397,9 +422,9 @@ class WorkspaceProvider with ChangeNotifier {
   double? get zoneH {
     switch (_keyDragMode) {
       case WorkspaceDragMode.resizable:
-        return getLayerLTWH(currentLayerId)?.resizableLTWH?.height;
+        return _getLayerLTWH(_currentLayerId)?.resizableLTWH?.height;
       case WorkspaceDragMode.highlight:
-        return getLayerLTWH(currentLayerId)?.highlightLTWH?.height;
+        return _getLayerLTWH(_currentLayerId)?.highlightLTWH?.height;
       default:
         return null;
     }
@@ -420,9 +445,9 @@ class WorkspaceProvider with ChangeNotifier {
   double? get zoneW {
     switch (_keyDragMode) {
       case WorkspaceDragMode.resizable:
-        return getLayerLTWH(currentLayerId)?.resizableLTWH?.width;
+        return _getLayerLTWH(_currentLayerId)?.resizableLTWH?.width;
       case WorkspaceDragMode.highlight:
-        return getLayerLTWH(currentLayerId)?.highlightLTWH?.width;
+        return _getLayerLTWH(_currentLayerId)?.highlightLTWH?.width;
       default:
         return null;
     }
@@ -452,7 +477,7 @@ class WorkspaceProvider with ChangeNotifier {
         return _isCurrentDeviceSelected ? true : null;
 
       default:
-        final ltwh = getLayerLTWH(layerId);
+        final ltwh = _getLayerLTWH(layerId);
 
         if (ltwh != null) {
           // check the last drag mode used and paint widget with LTWH.
@@ -462,11 +487,26 @@ class WorkspaceProvider with ChangeNotifier {
           double topOffset;
 
           if (isLightingView) {
+            // lighting view is activated.
+
             leftOffset = _workspaceOffset?.dx ?? _workspaceRect.left;
-            topOffset = _workspaceOffset?.dy ?? _workspaceRect.top;
+
+            // set top offset to workspace top if it has not changed,
+            // else use workspace top minus half of the zone tools height.
+            topOffset = _workspaceOffset?.dy == null ||
+                    _workspaceOffset?.dy == _workspaceRect.top
+                ? _workspaceRect.top
+                : _workspaceOffset!.dy - (zoneToolsHeight / 2);
           } else {
+            // workspace view is activated.
+
             leftOffset = 0;
-            topOffset = _workspaceRect.top;
+
+            // set top offset to workspace top if it has changed,
+            // else use workspace top offset minus half of the zone tools height.
+            topOffset = (_workspaceOffset?.dy != _workspaceRect.top
+                ? _workspaceRect.top
+                : _workspaceOffset!.dy - (zoneToolsHeight / 2));
           }
 
           if (ltwh.dragMode == WorkspaceDragMode.resizable) {
@@ -502,59 +542,57 @@ class WorkspaceProvider with ChangeNotifier {
     }
   }
 
-  Offset get _getWorkspaceOffset {
-    // set the workspace offset to be used on lighting view.
-    return Offset(_workspaceRect.left, _workspaceRect.top);
-  }
-
-  final double topWidgetHeight = 85;
-
   /// [resetLTWHOffset] updates a LTHW left and top values using the
   /// workspace offsets based on the current view in focus.
   void resetLTWHOffset(LTWH d, WorkspaceView selectedView) {
-    if (selectedView == WorkspaceView.workspace) {
-      d.left = d.left! + _workspaceRect.left;
-      d.top = d.top! + (topWidgetHeight / 2);
-      //_workspaceRect.top; //;+ (85 / 2)
+    final topOffset = (zoneToolsHeight / 2);
 
-      // set the workspace offset for both on pan down and off pan down.
+    if (selectedView == WorkspaceView.workspace) {
+      // subtract workspace left from selection offset's left
+      // and add half of zone tools height to offset's top.
+      d.left = d.left! + _workspaceRect.left;
+      d.top = d.top! + topOffset;
+
+      // set the workspace offset.
       _workspaceOffset = _getWorkspaceOffset;
     } else {
+      // subtract workspace offset left from selection offset's left
+      // and subtract half of zone tools height from offset's top.
       d.left = d.left! - (_workspaceOffset?.dx ?? _workspaceRect.left);
-      d.top = d.top! - (topWidgetHeight / 2);
-      //(_workspaceOffset?.dy ?? _workspaceRect.top);
-      //(85 / 2);
-      //-(_workspaceOffset?.dy ?? 0);
+      d.top = d.top! - topOffset;
     }
   }
 
-  /// Each layer selections need to be maintained so the user can switch
-  /// from back and forth from highlight selection to rezisable, or simply
+  /// [layersLTWH] maintains each layer selections and allows the user to switch
+  /// back and forth from highlight selection to rezisable, or simply
   /// shortcut keys selection .
   ///
-  /// In this case, we would need to store offset information such as
+  /// In this case, we would need to store offset information as follows:
   ///
-  /// * highlightLTWH: to track the highlight offsets of a layer
+  /// - highlightLTWH: to track the highlight offsets of a layer.
   ///
-  /// * resizableLTWH: to track the resizable offsets for a layer
-
+  /// - resizableLTWH: to track the resizable offsets for a layer.
   late Map<String, SelectionOffset> layersLTWH = {};
 
-  int? get currentLayerId {
+  /// [_currentLayerId] is a convenient getter that returns the current layer id.
+  int? get _currentLayerId {
     if (_layersProvider!.layeritems.isEmpty) return null;
     return _layersProvider!.layeritems[_layersProvider!.listIndex].id;
   }
 
-  SelectionOffset? getLayerLTWH(int? id) {
+  /// [_getLayerLTWH] returns a [SelectionOffset] entry
+  /// whose key matches [id] in [layersLTWH].
+  SelectionOffset? _getLayerLTWH(int? id) {
     if (id == null) return null;
     return layersLTWH['$id'];
   }
 
-  void initLayerLTWH() {
+  /// [_initLayerLTWH] initializes the layers [SelectionOffset].
+  void _initLayerLTWH() {
     if (_layersProvider?.layeritems == null) return;
 
     for (var layer in _layersProvider!.layeritems) {
-      SelectionOffset? layerLTWH = getLayerLTWH(layer.id);
+      SelectionOffset? layerLTWH = _getLayerLTWH(layer.id);
 
       if (layerLTWH == null) {
         // layer does not exist, hence set the LTWH to defaults
@@ -574,16 +612,16 @@ class WorkspaceProvider with ChangeNotifier {
           ..resizableLTWH = LTWH(left - halfSize, top - halfSize, size, size);
       } else {
         // layer exist but need to reinsert as it's index may have changed.
-        deleteLayerLTWH(layer.id);
+        _deleteLayerLTWH(layer.id);
       }
 
       // add the layerLTHW to the map.
-      addLayerLTWH(layerLTWH);
+      _addLayerLTWH(layerLTWH);
 
-      if (currentLayerId == layer.id) {
+      if (_currentLayerId == layer.id) {
         // set workspace drag mode to the current layer's last drag mode
         if (_keyDragMode != null) {
-          _keyDragMode = getLayerLTWH(currentLayerId)?.dragMode;
+          _keyDragMode = _getLayerLTWH(_currentLayerId)?.dragMode;
         }
 
         if (isDragModeResizable) {
@@ -600,18 +638,13 @@ class WorkspaceProvider with ChangeNotifier {
     }
   }
 
-  void addLayerLTWH(SelectionOffset layerLTWH) {
+  /// [_addLayerLTWH] adds a [SelectionOffset] entry to the [layersLTWH]
+  void _addLayerLTWH(SelectionOffset layerLTWH) {
     layersLTWH.putIfAbsent(layerLTWH.id, () => layerLTWH);
   }
 
-  void deleteLayerLTWH(int id) {
+  /// [_deleteLayerLTWH] removes a entry from [layersLTWH] with key matching [id].
+  void _deleteLayerLTWH(int id) {
     layersLTWH.remove('$id');
-  }
-
-  void setLayerDragMode() {
-    // find the layer LTWH
-    final ltwh = getLayerLTWH(currentLayerId!);
-
-    ltwh?.dragMode = _keyDragMode;
   }
 }
