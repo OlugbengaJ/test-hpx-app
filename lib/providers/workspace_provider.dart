@@ -23,7 +23,7 @@ class WorkspaceProvider with ChangeNotifier {
   /// [_selectorVisible] determines overlay selectors visibility.
   bool _selectorVisible = false;
 
-  final double _resizableThreshold = 50;
+  final double _resizableThreshold = 20;
   bool get selectorVisible => _selectorVisible;
 
   /// [_workspaceRect] returns a [Rect] of the rendered workspace stack.
