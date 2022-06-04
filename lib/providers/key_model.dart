@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/key_code.dart';
-import 'package:hpx/utils/KeyboardController.dart';
 
 class KeyModel with ChangeNotifier {
   KeyModel({
@@ -33,9 +32,9 @@ class KeyModel with ChangeNotifier {
 
   late List<LayerItemModel> layers = [];
 
-  /// [_isSelected] indicates key is selected.
-  bool _isSelected = false;
-  bool get isSelected => _isSelected;
+  // /// [_isSelected] indicates key is selected.
+  // bool _isSelected = false;
+  // bool get isSelected => _isSelected;
 
   /// [_chips] holds multiple layers of a key
   /// e.g. a key could have only 1 base color, multiple layers with unique keys,
@@ -101,26 +100,7 @@ class KeyModel with ChangeNotifier {
     return _chips[chipKey];
   }
 
-  /// [_updateChipsExclude] updates chips excluding [chipKey].
-  /// This primarily activates visibility of the chips to a certain degree.
-  void _updateChipsExclude(String chipKey, int chipIndex) {
-    // select KeyPaintRect chips that are neither base nor overlay exluding chipKey.
-    var chipsExcluded = _chips.entries.where((element) =>
-        element.value.runtimeType == KeyPaintRect &&
-        element.key != ChipKey.base.toString() &&
-        element.key != ChipKey.overlay.toString() &&
-        element.key != chipKey);
-
-    for (var element in chipsExcluded) {
-      // final oldChipIndex = chips.indexOf(element.value);
-      // debugPrint('$chipKey $chipIndex ===> ${element.key} $oldChipIndex');
-
-      // update the opacity of the key so it remains visible unless disabled.
-      (element.value as KeyPaintRect).opacity = 0.4;
-      //chipIndex > oldChipIndex ? 0.4 : 1;
-    }
-  }
-
+  /// [getLayeredChips] returns chips other than base, overlay, and icon
   List<String> getLayeredChips() {
     return _chips.keys
         .where(
@@ -130,94 +110,94 @@ class KeyModel with ChangeNotifier {
         .toList();
   }
 
-  /// [updateChip] updates the state of a chip in [chips].
-  ///
-  /// Adds a new chip layer if the chip with [chipKey] does not exist.
-  void updateChip(String chipKey,
-      {Color? color, double? opacity, bool showOutline = false}) {
-    // for (var i = layers.length - 1; i >= 0; i--) {
-    // debugPrint('${layers[i].mode?.currentColor.first}');
-    // layers[i].mode?.currentColor.forEach(print);
-
-    // String chipKey = layers[layerIndex].id.toString();
-    // remove layer chip at index
-    KeyPaintChip? chip = getChip(chipKey);
-    if (chip == null) {
-      // add a new chip.
-      chip = KeyPaintRect(chipKey);
-      addChip(chip);
-      // chip exists and needs to be recreated
-      // final oldChipColor = chip.color;
-      // _removeChip(chipKey);
-    }
-    // add a new chip
-    // chip.color = layers[layerIndex].mode?.currentColor.first;
-    chip.color = color ?? Colors.grey;
-    // addChip(chipKey, chip);
-    // _updateChipsExclude('$i', chips.indexOf(chip));
-    // }
-
-    // if (chip == null) {
-    //   // add a new chip.
-    //   chip = KeyPaintRect();
-    //   addChip(chipKey, chip);
-    // }
-
-    // if (chip.runtimeType == KeyPaintRect) {
-    //   (chip as KeyPaintRect)
-    //     ..opacity = opacity!
-    //     ..showOutline = showOutline;
-
-    //   _updateChipsExclude(chipKey, chips.indexOf(chip));
-    // }
-
-    // chip!.color = highlightColor;
-  }
-
   /// [removeChip] deletes chip layer whose key matches [chipKey].
   void removeChip(String chipKey) {
     _chips.removeWhere((key, value) => key == chipKey);
   }
 
-  /// [selectKey] highlights [KeyModel] under a selected zone.
-  ///
-  /// [opacity] is an animation value which determines behaviour of the key.
-  void selectKey(
-    bool? isWidgetInZone,
-    int layerIndex,
-    bool isVisible, {
-    required double opacity,
-    // chip has animation
-    bool isAnimated = false,
-    required List<LayerItemModel> currentLayers,
-  }) {
-    opacity = isVisible ? opacity : 0.0;
-    // debugPrint(
-    //     '$id layers = ${layers.length} newLayers = ${currentLayers.length}');
-    layers = currentLayers;
+  // /// [updateChip] updates the state of a chip in [chips].
+  // ///
+  // /// Adds a new chip layer if the chip with [chipKey] does not exist.
+  // void updateChip(String chipKey,
+  //     {Color? color, double? opacity, bool showOutline = false}) {
+  //   // for (var i = layers.length - 1; i >= 0; i--) {
+  //   // debugPrint('${layers[i].mode?.currentColor.first}');
+  //   // layers[i].mode?.currentColor.forEach(print);
 
-    if (isWidgetInZone == true) {
-      // TODO: note this is an experimental feature and may not behave as expected.
-      // uncomment the line below to test a default blinking effect on a Zbook;
-      // KeyboardController.blinkingEffect();
+  //   // String chipKey = layers[layerIndex].id.toString();
+  //   // remove layer chip at index
+  //   KeyPaintChip? chip = getChip(chipKey);
+  //   if (chip == null) {
+  //     // add a new chip.
+  //     chip = KeyPaintRect(chipKey);
+  //     addChip(chip);
+  //     // chip exists and needs to be recreated
+  //     // final oldChipColor = chip.color;
+  //     // _removeChip(chipKey);
+  //   }
+  //   // add a new chip
+  //   // chip.color = layers[layerIndex].mode?.currentColor.first;
+  //   chip.color = color ?? Colors.grey;
+  //   // addChip(chipKey, chip);
+  //   // _updateChipsExclude('$i', chips.indexOf(chip));
+  //   // }
 
-      // key selected, highlight the chip with keys matching id
-      // debugPrint('sel $keyCode $id ${layers[id].id}');
+  //   // if (chip == null) {
+  //   //   // add a new chip.
+  //   //   chip = KeyPaintRect();
+  //   //   addChip(chipKey, chip);
+  //   // }
 
-      // _isSelected = true;
-      // _updateChip(layerIndex, opacity: opacity, showOutline: true);
-    } else if (isWidgetInZone == false) {
-      // key unselected, remove chip with specific id
-      // debugPrint('\t not sel $keyCode $layerIndex ${layers[layerIndex].id}');
+  //   // if (chip.runtimeType == KeyPaintRect) {
+  //   //   (chip as KeyPaintRect)
+  //   //     ..opacity = opacity!
+  //   //     ..showOutline = showOutline;
 
-      // _isSelected = false;
-      removeChip(layers[layerIndex].id.toString());
-    } else if (isSelected) {
-      // update selected chip opacity when visibility is disabled.
+  //   //   _updateChipsExclude(chipKey, chips.indexOf(chip));
+  //   // }
 
-      // _updateChip(id.toString(), opacity: opacity, showOutline: false);
-    }
-  }
+  //   // chip!.color = highlightColor;
+  // }
+
+  // /// [selectKey] highlights [KeyModel] under a selected zone.
+  // ///
+  // /// [opacity] is an animation value which determines behaviour of the key.
+  // void selectKey(
+  //   bool? isWidgetInZone,
+  //   int layerIndex,
+  //   bool isVisible, {
+  //   required double opacity,
+  //   // chip has animation
+  //   bool isAnimated = false,
+  //   required List<LayerItemModel> currentLayers,
+  // }) {
+  //   opacity = isVisible ? opacity : 0.0;
+  //   // debugPrint(
+  //   //     '$id layers = ${layers.length} newLayers = ${currentLayers.length}');
+  //   layers = currentLayers;
+
+  //   if (isWidgetInZone == true) {
+  //     // TODO: note this is an experimental feature and may not behave as expected.
+  //     // uncomment the line below to test a default blinking effect on a Zbook;
+  //     // KeyboardController.blinkingEffect();
+
+  //     // key selected, highlight the chip with keys matching id
+  //     // debugPrint('sel $keyCode $id ${layers[id].id}');
+
+  //     // _isSelected = true;
+  //     // _updateChip(layerIndex, opacity: opacity, showOutline: true);
+  //   } else if (isWidgetInZone == false) {
+  //     // key unselected, remove chip with specific id
+  //     // debugPrint('\t not sel $keyCode $layerIndex ${layers[layerIndex].id}');
+
+  //     // _isSelected = false;
+  //     removeChip(layers[layerIndex].id.toString());
+  //   } else if (isSelected) {
+  //     // update selected chip opacity when visibility is disabled.
+
+  //     // _updateChip(id.toString(), opacity: opacity, showOutline: false);
+  //   }
+  // }
 }
 
 enum ChipKey {

@@ -60,7 +60,7 @@ class KeyboardKey extends StatelessWidget {
 
 /// [_updateKeyInfo]
 ///
-/// Helper function to update the key properties.
+/// Helper function to update the key's properties.
 KeyModel _updateKeyInfo(
   WorkspaceProvider provider,
   LayersProvider layersProvider,
@@ -86,18 +86,9 @@ KeyModel _updateKeyInfo(
     // for (var l in layers) {
     for (var k in layersChipKeys) {
       final chip = keyModel.getChip(k.toString());
-      // isBoxZoned =
-      //     provider.isBoxZoned(renderBox, l.id, k: '${keyModel.keyCode}');
 
-      // only preserve zoned keys
-      if (chip != null) {
-        krect.add(chip);
-      }
-
-      // TODO: might make sense to have this here for performance.
-      // no need to loop through the layered chips to remove each key.
-      // however, deleting a layer may not address this problem.
-      // keyModel.removeChip('${l.id}');
+      // preserve only zoned keys
+      if (chip != null) krect.add(chip);
     }
 
     // remove all chip layers in key
@@ -119,14 +110,14 @@ KeyModel _updateKeyInfo(
           provider.isBoxZoned(renderBox, layerId, k: '${keyModel.keyCode}');
 
       if (isBoxZoned == true) {
-        // insert new chip
+        // insert new chip with the layer id as key
         final chip = KeyPaintRect('$layerId');
 
         if ('${currentLayer.id}' == chip.chipKey) {
-          // use the default color
+          // use the default color for current layer
           chip.color = currentLayer.mode?.currentColor.last;
         } else {
-          // use existing color
+          // use existing color for non-current layer
           final foundKeys = krect.where((e) => e.chipKey == chip.chipKey);
           if (foundKeys.isNotEmpty) {
             chip.color = foundKeys.first.color;
@@ -162,44 +153,6 @@ KeyModel _updateKeyInfo(
       // debugPrint('kF5 \t ${keyModel.chipsValues.map((e) => e.chipKey)}');
     }
   }
-
-  // bool layerVisible = false;
-  // double opacity = 1.0;
-  // provider.animation.value;
-
-  // if (layersProvider.layeritems.isNotEmpty) {
-  //   final layer = layersProvider.layeritems[layerIndex];
-  //   layerVisible = layer.visible;
-  //   // keyModel.highlightColor = layer.mode?.currentColor.first;
-
-  //   switch (layer.mode?.value) {
-  //     case EnumModes.mood:
-  //       // provider.stopAnimating();
-
-  //       // show full opacity
-  //       opacity = 1.0;
-  //       break;
-  //     default:
-  //   }
-  // }
-
-  // keyModel.selectKey(isBoxZoned, layerIndex, layerVisible,
-  //     opacity: opacity, currentLayers: layers);
-
-  if (keyModel.keyCode.toString().contains('kEsc')) {
-    // debugPrint(
-    //     '${keyModel.keyCode} \t layerIndex $layerIndex \t ${keyModel.chipsValues.map((e) => e.chipKey)}');
-  }
-
-  // if (provider.isDragModeClick &&
-  //     isWidgetInZone == true &&
-  //     !keyModel.isSelected) {
-  //   keyModel.selectKey(isWidgetInZone);
-  // } else if (provider.isDragModeClick &&
-  //     isWidgetInZone == true &&
-  //     keyModel.isSelected) {
-  //   keyModel.unSelectKey();
-  // }
 
   return keyModel;
 }
