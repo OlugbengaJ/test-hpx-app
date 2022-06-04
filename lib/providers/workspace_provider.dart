@@ -257,88 +257,76 @@ class WorkspaceProvider with ChangeNotifier {
 
       _selectorVisible = true;
     } else if (isDragModeResizable && handleName != null) {
-      // check the name of the handle then update the
-      // overlay selector's position.
+      // based on the handle name update the overlay selector's position.
+
+      final left = (ltwh.resizableLTWH!.left ?? 0) + details.delta.dx;
+      final top = (ltwh.resizableLTWH!.top ?? 0) + details.delta.dy;
+      final widthPlus = (ltwh.resizableLTWH!.width ?? 0) + details.delta.dx;
+      final widthMinus = (ltwh.resizableLTWH!.width ?? 0) - details.delta.dx;
+      final heightPlus = (ltwh.resizableLTWH!.height ?? 0) + details.delta.dy;
+      final heightMinus = (ltwh.resizableLTWH!.height ?? 0) - details.delta.dy;
 
       switch (handleName) {
         case DraggableRegionName.center:
 
           // moving the entire selector hence update left and top.
-          ltwh.resizableLTWH!.left =
-              (ltwh.resizableLTWH!.left ?? 0) + details.delta.dx;
-          ltwh.resizableLTWH!.top =
-              (ltwh.resizableLTWH!.top ?? 0) + details.delta.dy;
+          ltwh.resizableLTWH!.left = left;
+          ltwh.resizableLTWH!.top = top;
           break;
         case DraggableRegionName.topLeft:
 
           // resize from top-left, set selector's left, top, width, and height.
-          final top = (ltwh.resizableLTWH!.top ?? 0) + details.delta.dy;
-          final left = (ltwh.resizableLTWH!.left ?? 0) + details.delta.dx;
-          final width = (ltwh.resizableLTWH!.width ?? 0) - details.delta.dx;
-          final height = (ltwh.resizableLTWH!.height ?? 0) - details.delta.dy;
-
           // width must be greater than threshold
-          if (width >= _resizableThreshold) {
+          if (widthMinus >= _resizableThreshold) {
             ltwh.resizableLTWH!.left = left;
-            ltwh.resizableLTWH!.width = width;
+            ltwh.resizableLTWH!.width = widthMinus;
           }
 
           // height must be greater than threshold
-          if (height >= _resizableThreshold) {
+          if (heightMinus >= _resizableThreshold) {
             ltwh.resizableLTWH!.top = top;
-            ltwh.resizableLTWH!.height = height;
+            ltwh.resizableLTWH!.height = heightMinus;
           }
           break;
         case DraggableRegionName.topRight:
 
           // resize from top-right, set selector's top, width, and height.
-          final top = (ltwh.resizableLTWH!.top ?? 0) + details.delta.dy;
-          final width = (ltwh.resizableLTWH!.width ?? 0) + details.delta.dx;
-          final height = (ltwh.resizableLTWH!.height ?? 0) - details.delta.dy;
-
           // width must be greater than threshold
-          if (width >= _resizableThreshold) {
-            ltwh.resizableLTWH!.width = width;
+          if (widthPlus >= _resizableThreshold) {
+            ltwh.resizableLTWH!.width = widthPlus;
           }
 
           // height must be greater than threshold
-          if (height >= _resizableThreshold) {
+          if (heightMinus >= _resizableThreshold) {
             ltwh.resizableLTWH!.top = top;
-            ltwh.resizableLTWH!.height = height;
+            ltwh.resizableLTWH!.height = heightMinus;
           }
           break;
         case DraggableRegionName.bottomRight:
 
           // resize from bottom-right, set selector's width and height.
-          final width = (ltwh.resizableLTWH!.width ?? 0) + details.delta.dx;
-          final height = (ltwh.resizableLTWH!.height ?? 0) + details.delta.dy;
-
           // width must be greater than threshold
-          if (width >= _resizableThreshold) {
-            ltwh.resizableLTWH!.width = width;
+          if (widthPlus >= _resizableThreshold) {
+            ltwh.resizableLTWH!.width = widthPlus;
           }
 
           // height must be greater than threshold
-          if (height >= _resizableThreshold) {
-            ltwh.resizableLTWH!.height = height;
+          if (heightPlus >= _resizableThreshold) {
+            ltwh.resizableLTWH!.height = heightPlus;
           }
           break;
         case DraggableRegionName.bottomLeft:
 
           // resize from bottom-left, set selector's left, width, and height.
-          final left = (ltwh.resizableLTWH!.left ?? 0) + details.delta.dx;
-          final width = (ltwh.resizableLTWH!.width ?? 0) - details.delta.dx;
-          final height = (ltwh.resizableLTWH!.height ?? 0) + details.delta.dy;
-
           // width must be greater than threshold
-          if (width >= _resizableThreshold) {
+          if (widthMinus >= _resizableThreshold) {
             ltwh.resizableLTWH!.left = left;
-            ltwh.resizableLTWH!.width = width;
+            ltwh.resizableLTWH!.width = widthMinus;
           }
 
           // height must be greater than threshold
-          if (height >= _resizableThreshold) {
-            ltwh.resizableLTWH!.height = height;
+          if (heightPlus >= _resizableThreshold) {
+            ltwh.resizableLTWH!.height = heightPlus;
           }
           break;
         default:

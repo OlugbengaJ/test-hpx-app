@@ -109,7 +109,7 @@ KeyModel _updateKeyInfo(
       isBoxZoned =
           provider.isBoxZoned(renderBox, layerId, k: '${keyModel.keyCode}');
 
-      if (isBoxZoned == true) {
+      if (isBoxZoned == true && layer.visible) {
         // insert new chip with the layer id as key
         final chip = KeyPaintRect('$layerId');
 
