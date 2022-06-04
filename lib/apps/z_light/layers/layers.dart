@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_list_item.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
@@ -37,11 +36,9 @@ class _LayersState extends State<Layers> {
   /// [initialLayer] add a default layer to the workspace if there no layer available
   void initialLayer() {
     ModeProvider modeProvider = context.read<ModeProvider>();
-    ResizableProvider resizableProvider = context.read<ResizableProvider>();
 
     LayersProvider provider = context.read<LayersProvider>();
     provider.setModeProvider(modeProvider);
-    provider.setResizableProvider(resizableProvider);
     if (provider.length < 1) {
       _addLayer();
     }
@@ -50,7 +47,6 @@ class _LayersState extends State<Layers> {
   /// [_addLayer] used to add a layer to the available list
   /// use the [ModeProvider] the set the newly created layer name
   _addLayer() {
-    context.read<ResizableProvider>().initialize();
     ModeProvider modeProvider = context.read<ModeProvider>();
     var provider = context.read<LayersProvider>();
     int id = 1; // For first element;
@@ -63,34 +59,23 @@ class _LayersState extends State<Layers> {
       id = id + 1;
     }
 
-
     /// Add a new provider to the layeritems, using the LayersProvider
-    
-    LayerItemModel itemModel =  LayerItemModel(
-      id: id,
-      layerText: "Mood",
-      //mode: modeProvider.currentMode,
-      top: context.read<ResizableProvider>().top,
-      bottom: context.read<ResizableProvider>().bottom,
-      left: context.read<ResizableProvider>().left,
-      right: context.read<ResizableProvider>().right,
-      icon: Icons.mood
-    );
 
-    
-    provider.add(
-     itemModel
-    );
+    LayerItemModel itemModel = LayerItemModel(
+        id: id,
+        layerText: "Mood",
+        //mode: modeProvider.currentMode,
+        icon: Icons.mood);
+
+    provider.add(itemModel);
 
     modeProvider.changeModeComponent(
-      PickerModel(
-        title: itemModel.mode!.name, 
-        value: itemModel.mode!.value, 
-        enabled: true, 
-        icon: itemModel.mode!.icon
-      ),
-      context
-    );
+        PickerModel(
+            title: itemModel.mode!.name,
+            value: itemModel.mode!.value,
+            enabled: true,
+            icon: itemModel.mode!.icon),
+        context);
   }
 
   @override

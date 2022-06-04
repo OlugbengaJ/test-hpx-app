@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
@@ -12,7 +11,6 @@ class LayersProvider extends ChangeNotifier {
   final List<LayerItemModel> _layeritems = [];
   final List<LayerItemModel> _sublayers = [];
   ModeProvider? _modeProvider;
-  ResizableProvider? _resizableProvider;
 
   /// [hideDraggable] use to show or hide the stack layers for resizable widget
   bool hideDraggable = false;
@@ -41,27 +39,19 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-
   /// [setModeProvider] to set the mode provider to use on layers
-  void setModeProvider(ModeProvider modeProvider){
+  void setModeProvider(ModeProvider modeProvider) {
     _modeProvider = modeProvider;
   }
 
-  /// [setResizableProvider] to set the resizable provider to use on layers
-  void setResizableProvider(ResizableProvider resizableProvider){
-    _resizableProvider = resizableProvider;
-  }
-
-
   /// listen to any change from the tools and effects so the current layers can be updated
-  void toolsEffectsUpdated(){
+  void toolsEffectsUpdated() {
     LayerItemModel item = getItem(listIndex);
-    item.mode =  _modeProvider!.getModeInformation();
+    item.mode = _modeProvider!.getModeInformation();
     item.layerText = _modeProvider!.currentMode.name;
     _layeritems[listIndex] = item;
 
-    if(item.mode!.name=="Shortcut Colors"){
+    if (item.mode!.name == "Shortcut Colors") {
       debugPrint("Create a shortcut layer");
       var subLayers = getSublayers(item.id);
       debugPrint('$subLayers');
@@ -71,8 +61,6 @@ class LayersProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
-
-
 
   /// [updateView] use to update the item position when the resizable-draggable stop dragging
   /// This method is called from the [ResizableProvider]
@@ -127,14 +115,13 @@ class LayersProvider extends ChangeNotifier {
   /// Add a new layer. By default new added layers use the mood mode
   void add(LayerItemModel item) {
     ToolsModeModel mode = ToolsModeModel(
-      currentColor: moodThemesList.first.colorCode,
-      effects: EffectsModel(effectName: EnumModes.mood),
-      name: "Mood",
-      value: EnumModes.mood,
-      modeType: EnumModeType.layers,
-      icon: Icons.mood
-    );
-    
+        currentColor: moodThemesList.first.colorCode,
+        effects: EffectsModel(effectName: EnumModes.mood),
+        name: "Mood",
+        value: EnumModes.mood,
+        modeType: EnumModeType.layers,
+        icon: Icons.mood);
+
     item.mode = mode;
 
     for (var element in _layeritems) {
@@ -193,8 +180,7 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-  void changeSublayerIndex(int subIndex){
+  void changeSublayerIndex(int subIndex) {
     debugPrint("Layer index: $listIndex, sublayer index: $subIndex");
   }
 
@@ -260,24 +246,6 @@ class LayersProvider extends ChangeNotifier {
     if (sublayerItems.length > 1) {
       sublayerItems.remove(item);
     }
-
-    notifyListeners();
-  }
-
-  /// [setResizablePosition] this function call the [ResizableProvider] to set the resizable position anytime the index.
-  /// There is no need to have multiple resizable anymore. Use only one for all the layers
-  void setResizablePosition(ResizableProvider provider) {
-    final item = _layeritems[_listIndex];
-    isLayerVisible = item.visible;
-    if (item.top != 0) {
-      provider.setSize(
-        newBottom: item.bottom,
-        newLeft: item.left,
-        newRight: item.right,
-        newTop: item.top,
-      );
-    }
-    _resizableProvider!.setSize();
 
     notifyListeners();
   }
