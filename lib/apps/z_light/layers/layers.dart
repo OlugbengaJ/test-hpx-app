@@ -6,6 +6,7 @@ import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart'
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/utils/common.dart';
+import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
@@ -50,9 +51,7 @@ class _LayersState extends State<Layers> {
   /// use the [ModeProvider] the set the newly created layer name
   _addLayer() {
     context.read<ResizableProvider>().initialize();
-
     ModeProvider modeProvider = context.read<ModeProvider>();
-
     var provider = context.read<LayersProvider>();
     int id = 1; // For first element;
     if (provider.layeritems.isNotEmpty) {
@@ -66,17 +65,31 @@ class _LayersState extends State<Layers> {
 
 
     /// Add a new provider to the layeritems, using the LayersProvider
+    
+    LayerItemModel itemModel =  LayerItemModel(
+      id: id,
+      layerText: "Mood",
+      //mode: modeProvider.currentMode,
+      top: context.read<ResizableProvider>().top,
+      bottom: context.read<ResizableProvider>().bottom,
+      left: context.read<ResizableProvider>().left,
+      right: context.read<ResizableProvider>().right,
+      icon: Icons.mood
+    );
+
+    
     provider.add(
-      LayerItemModel(
-        id: id,
-        layerText: "Mood",
-        //mode: modeProvider.currentMode,
-        top: context.read<ResizableProvider>().top,
-        bottom: context.read<ResizableProvider>().bottom,
-        left: context.read<ResizableProvider>().left,
-        right: context.read<ResizableProvider>().right,
-        icon: Icons.mood
-      )
+     itemModel
+    );
+
+    modeProvider.changeModeComponent(
+      PickerModel(
+        title: itemModel.mode!.name, 
+        value: itemModel.mode!.value, 
+        enabled: true, 
+        icon: itemModel.mode!.icon
+      ),
+      context
     );
   }
 
