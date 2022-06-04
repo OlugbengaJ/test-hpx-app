@@ -23,7 +23,7 @@ class WorkspaceProvider with ChangeNotifier {
   /// [_selectorVisible] determines overlay selectors visibility.
   bool _selectorVisible = false;
 
-  final double _resizableThreshold = 50;
+  final double _resizableThreshold = 20;
   bool get selectorVisible => _selectorVisible;
 
   /// [_workspaceRect] returns a [Rect] of the rendered workspace stack.
@@ -269,21 +269,28 @@ class WorkspaceProvider with ChangeNotifier {
       switch (handleName) {
         case DraggableRegionName.center:
 
-          // moving the entire selector hence update left and top.
-          ltwh.resizableLTWH!.left = left;
-          ltwh.resizableLTWH!.top = top;
+          // selector move hence update left and top limited to view.
+          if (left > 0 &&
+              (left + ltwh.resizableLTWH!.width!) < _workspaceRect.width) {
+            ltwh.resizableLTWH!.left = left;
+          }
+
+          if (top > 0 &&
+              (top + ltwh.resizableLTWH!.height!) < _workspaceRect.height) {
+            ltwh.resizableLTWH!.top = top;
+          }
           break;
         case DraggableRegionName.topLeft:
 
           // resize from top-left, set selector's left, top, width, and height.
-          // width must be greater than threshold
-          if (widthMinus >= _resizableThreshold) {
+          // width must be greater than threshold and within view.
+          if (left > 0 && widthMinus >= _resizableThreshold) {
             ltwh.resizableLTWH!.left = left;
             ltwh.resizableLTWH!.width = widthMinus;
           }
 
-          // height must be greater than threshold
-          if (heightMinus >= _resizableThreshold) {
+          // height must be greater than threshold and within view.
+          if (top > 0 && heightMinus >= _resizableThreshold) {
             ltwh.resizableLTWH!.top = top;
             ltwh.resizableLTWH!.height = heightMinus;
           }
@@ -291,13 +298,14 @@ class WorkspaceProvider with ChangeNotifier {
         case DraggableRegionName.topRight:
 
           // resize from top-right, set selector's top, width, and height.
-          // width must be greater than threshold
-          if (widthPlus >= _resizableThreshold) {
+          // width must be greater than threshold and within view.
+          if ((ltwh.resizableLTWH!.left! + widthPlus) < _workspaceRect.width &&
+              widthPlus >= _resizableThreshold) {
             ltwh.resizableLTWH!.width = widthPlus;
           }
 
-          // height must be greater than threshold
-          if (heightMinus >= _resizableThreshold) {
+          // height must be greater than threshold and within view.
+          if (top > 0 && heightMinus >= _resizableThreshold) {
             ltwh.resizableLTWH!.top = top;
             ltwh.resizableLTWH!.height = heightMinus;
           }
@@ -305,27 +313,30 @@ class WorkspaceProvider with ChangeNotifier {
         case DraggableRegionName.bottomRight:
 
           // resize from bottom-right, set selector's width and height.
-          // width must be greater than threshold
-          if (widthPlus >= _resizableThreshold) {
+          // width must be greater than threshold and within view.
+          if ((ltwh.resizableLTWH!.left! + widthPlus) < _workspaceRect.width &&
+              widthPlus >= _resizableThreshold) {
             ltwh.resizableLTWH!.width = widthPlus;
           }
 
-          // height must be greater than threshold
-          if (heightPlus >= _resizableThreshold) {
+          // height must be greater than threshold and within view.
+          if ((top + ltwh.resizableLTWH!.height!) < _workspaceRect.height &&
+              heightPlus >= _resizableThreshold) {
             ltwh.resizableLTWH!.height = heightPlus;
           }
           break;
         case DraggableRegionName.bottomLeft:
 
           // resize from bottom-left, set selector's left, width, and height.
-          // width must be greater than threshold
-          if (widthMinus >= _resizableThreshold) {
+          // width must be greater than threshold and within view.
+          if (left > 0 && widthMinus >= _resizableThreshold) {
             ltwh.resizableLTWH!.left = left;
             ltwh.resizableLTWH!.width = widthMinus;
           }
 
-          // height must be greater than threshold
-          if (heightPlus >= _resizableThreshold) {
+          // height must be greater than threshold and within view.
+          if ((top + ltwh.resizableLTWH!.height!) < _workspaceRect.height &&
+              heightPlus >= _resizableThreshold) {
             ltwh.resizableLTWH!.height = heightPlus;
           }
           break;
