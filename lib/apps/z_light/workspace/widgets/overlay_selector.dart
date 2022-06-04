@@ -13,6 +13,7 @@ class OverlaySelector extends StatelessWidget {
     this.isVisible = false,
     this.onPanDown,
     this.onPanUpdate,
+    this.onPanEnd,
   }) : super(key: key);
 
   final Color overlayColor;
@@ -25,6 +26,7 @@ class OverlaySelector extends StatelessWidget {
 
   final void Function(DragDownDetails, [DraggableRegionName])? onPanDown;
   final void Function(DragUpdateDetails, [DraggableRegionName])? onPanUpdate;
+  final void Function(DragEndDetails details)? onPanEnd;
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +75,7 @@ class OverlaySelector extends StatelessWidget {
             cursor: SystemMouseCursors.move,
             onPanDown: onPanDown,
             onPanUpdate: onPanUpdate,
+            onPanEnd: onPanEnd,
           ),
         ),
         Align(
@@ -85,6 +88,7 @@ class OverlaySelector extends StatelessWidget {
             height: crosshairSize,
             onPanDown: onPanDown,
             onPanUpdate: onPanUpdate,
+            onPanEnd: onPanEnd,
           ),
         ),
         Align(
@@ -97,6 +101,7 @@ class OverlaySelector extends StatelessWidget {
             height: crosshairSize,
             onPanDown: onPanDown,
             onPanUpdate: onPanUpdate,
+            onPanEnd: onPanEnd,
           ),
         ),
         Align(
@@ -109,6 +114,7 @@ class OverlaySelector extends StatelessWidget {
             height: crosshairSize,
             onPanDown: onPanDown,
             onPanUpdate: onPanUpdate,
+            onPanEnd: onPanEnd,
           ),
         ),
         Align(
@@ -121,6 +127,7 @@ class OverlaySelector extends StatelessWidget {
             height: crosshairSize,
             onPanDown: onPanDown,
             onPanUpdate: onPanUpdate,
+            onPanEnd: onPanEnd,
           ),
         ),
       ],
@@ -138,6 +145,7 @@ class DraggableRegion extends StatelessWidget {
     this.height,
     this.onPanDown,
     this.onPanUpdate,
+    this.onPanEnd,
   }) : super(key: key);
 
   final DraggableRegionName name;
@@ -151,6 +159,7 @@ class DraggableRegion extends StatelessWidget {
 
   final void Function(DragDownDetails, DraggableRegionName)? onPanDown;
   final void Function(DragUpdateDetails, DraggableRegionName)? onPanUpdate;
+  final void Function(DragEndDetails details)? onPanEnd;
 
   double? getValue(double? v, double max) {
     if (v == null) return v;
@@ -168,6 +177,7 @@ class DraggableRegion extends StatelessWidget {
       child: GestureDetector(
         onPanDown: (details) => onPanDown!(details, name),
         onPanUpdate: (details) => onPanUpdate!(details, name),
+        onPanEnd: (details) => onPanEnd!(details),
         child: Container(
           color: color,
           width: width,

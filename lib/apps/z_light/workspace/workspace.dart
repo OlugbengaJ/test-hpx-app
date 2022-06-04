@@ -269,10 +269,11 @@ class _WorkspaceState extends State<Workspace>
                     ),
                   ),
                 )
-              : ConstrainedBox(
-                  constraints: const BoxConstraints(maxHeight: 0),
-                  child: Container(),
-                ),
+              : Container(),
+          // ConstrainedBox(
+          //     constraints: const BoxConstraints(maxHeight: 0),
+          //     child: Container(),
+          //   ),
         ),
         if (workspaceProvider.isStripNotify)
           StripNotification(
@@ -288,7 +289,7 @@ class _WorkspaceState extends State<Workspace>
               ),
             ),
             child: Stack(
-              key: workspaceKey,
+              key: workspaceStackKey,
               children: [
                 GestureDetector(
                   behavior: HitTestBehavior.translucent,
@@ -323,6 +324,7 @@ class _WorkspaceState extends State<Workspace>
                         showCrossHair: workspaceProvider.isDragModeResizable,
                         onPanDown: workspaceProvider.onPanDown,
                         onPanUpdate: workspaceProvider.onPanUpdate,
+                        onPanEnd: workspaceProvider.onPanEnd,
                         isVisible: workspaceProvider.selectorVisible,
                       ),
 

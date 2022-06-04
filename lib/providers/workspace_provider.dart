@@ -31,7 +31,7 @@ class WorkspaceProvider with ChangeNotifier {
   /// This is necessary to determine the overlay selector's global position.
   Rect get _workspaceRect {
     final workspaceRender =
-        workspaceKey.currentContext?.findRenderObject() as RenderBox?;
+        workspaceStackKey.currentContext?.findRenderObject() as RenderBox?;
 
     return workspaceRender!.localToGlobal(Offset.zero) & workspaceRender.size;
   }
@@ -199,7 +199,11 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [onPanDown] indicates the the primary mouse is down and pan started.
   void onPanDown(DragDownDetails details, [DraggableRegionName? handleName]) {
-    _workspaceOffsetBeforePan = _workspaceOffset;
+    // preserve the workspace offset on pan down when pan down offset is null,
+    // which is used to reinitialize the workspace offset on pan end.
+    _workspacePanDownOffset ??= _getWorkspaceOffset;
+
+    // set workspace offset to null to allow drag without offset.
     _workspaceOffset = null;
 
     if (_keyDragMode == WorkspaceDragMode.highlight) {
@@ -323,12 +327,15 @@ class WorkspaceProvider with ChangeNotifier {
   /// [onPanEnd] indicates the primary mouse is up and the end of pan.
   void onPanEnd(DragEndDetails details) {
     // update state and clear unwanted data
-    _workspaceOffset = _workspaceOffsetBeforePan;
     onPanClear();
   }
 
   /// [onPanClear] resets variables used to indicate pan in progress.
   void onPanClear() {
+    // reinitialize workspace offset from its offset at pan down.
+    _workspaceOffset = _workspacePanDownOffset;
+
+    // disable panning and selector visibility in highlight mode.
     if (isDragModeHighlight) {
       _isPanning = false;
       _selectorVisible = false;
@@ -434,7 +441,7 @@ class WorkspaceProvider with ChangeNotifier {
   ///
   /// This offset is used to adjust the offset of the overlay selector.
   Offset? _workspaceOffset;
-  Offset? _workspaceOffsetBeforePan;
+  Offset? _workspacePanDownOffset;
 
   /// [isBoxZoned] checks a widget intersects with the selector.
   bool? isBoxZoned(RenderBox? box, int? layerId, {String k = ''}) {
@@ -451,18 +458,28 @@ class WorkspaceProvider with ChangeNotifier {
           // check the last drag mode used and paint widget with LTWH.
           // LTWH used by the overlay selectors uses local offsets, hence the
           // need to add workspace left and top to get their global offsets.
+          double leftOffset;
+          double topOffset;
+
+          if (isLightingView) {
+            leftOffset = _workspaceOffset?.dx ?? _workspaceRect.left;
+            topOffset = _workspaceOffset?.dy ?? _workspaceRect.top;
+          } else {
+            leftOffset = 0;
+            topOffset = _workspaceRect.top;
+          }
 
           if (ltwh.dragMode == WorkspaceDragMode.resizable) {
             selectorRect = Rect.fromLTWH(
-              ltwh.resizableLTWH!.left! + _workspaceRect.left,
-              ltwh.resizableLTWH!.top! + _workspaceRect.top,
+              ltwh.resizableLTWH!.left! + leftOffset,
+              ltwh.resizableLTWH!.top! + topOffset,
               ltwh.resizableLTWH!.width!,
               ltwh.resizableLTWH!.height!,
             );
           } else {
             selectorRect = Rect.fromLTWH(
-              ltwh.highlightLTWH!.left! + _workspaceRect.left,
-              ltwh.highlightLTWH!.top! + _workspaceRect.top,
+              ltwh.highlightLTWH!.left! + leftOffset,
+              ltwh.highlightLTWH!.top! + topOffset,
               ltwh.highlightLTWH!.width!,
               ltwh.highlightLTWH!.height!,
             );
@@ -485,18 +502,29 @@ class WorkspaceProvider with ChangeNotifier {
     }
   }
 
+  Offset get _getWorkspaceOffset {
+    // set the workspace offset to be used on lighting view.
+    return Offset(_workspaceRect.left, _workspaceRect.top);
+  }
+
+  final double topWidgetHeight = 85;
+
   /// [resetLTWHOffset] updates a LTHW left and top values using the
   /// workspace offsets based on the current view in focus.
   void resetLTWHOffset(LTWH d, WorkspaceView selectedView) {
     if (selectedView == WorkspaceView.workspace) {
       d.left = d.left! + _workspaceRect.left;
-      // d.top = d.top! + _workspaceRect.top;
+      d.top = d.top! + (topWidgetHeight / 2);
+      //_workspaceRect.top; //;+ (85 / 2)
 
-      // set the workspace offset to be used on lighting view.
-      _workspaceOffset = Offset(_workspaceRect.left, _workspaceRect.top);
+      // set the workspace offset for both on pan down and off pan down.
+      _workspaceOffset = _getWorkspaceOffset;
     } else {
-      d.left = d.left! - (_workspaceOffset?.dx ?? 0);
-      // d.top = d.top! - (_workspaceOffset?.dy ?? 0);
+      d.left = d.left! - (_workspaceOffset?.dx ?? _workspaceRect.left);
+      d.top = d.top! - (topWidgetHeight / 2);
+      //(_workspaceOffset?.dy ?? _workspaceRect.top);
+      //(85 / 2);
+      //-(_workspaceOffset?.dy ?? 0);
     }
   }
 
