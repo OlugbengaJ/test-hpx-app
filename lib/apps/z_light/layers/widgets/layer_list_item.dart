@@ -75,6 +75,8 @@ class _LayerListItemState extends State<LayerListItem> {
     
   }
 
+
+  /// Save the current editing layer if the textfield loses focus
   _onFocusChange(LayersProvider provider){
     provider.saveEditingLayer();
   }

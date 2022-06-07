@@ -281,13 +281,16 @@ class LayersProvider extends ChangeNotifier {
     if(isLayerEditing){
       saveEditingLayer();
     }
-    if (length > 1) {
-      final item = _layeritems[index];
+    /// Still check if there is no editing layer
+    if(!isLayerEditing){
+      if (length > 1) {
+        final item = _layeritems[index];
 
-      _layeritems.remove(item);
+        _layeritems.remove(item);
 
-      if (_layeritems.isNotEmpty) {
-        changeIndex(0);
+        if (_layeritems.isNotEmpty) {
+          changeIndex(0);
+        }
       }
     }
 

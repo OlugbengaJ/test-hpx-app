@@ -49,33 +49,40 @@ class _LayersState extends State<Layers> {
   _addLayer() {
     ModeProvider modeProvider = context.read<ModeProvider>();
     var provider = context.read<LayersProvider>();
-    int id = 1; // For first element;
-    if (provider.layeritems.isNotEmpty) {
-      for (var element in provider.layeritems) {
-        if (element.id > id) {
-          id = element.id;
+
+    if(!provider.isLayerEditing){
+      int id = 1; // For first element;
+      if (provider.layeritems.isNotEmpty) {
+        for (var element in provider.layeritems) {
+          if (element.id > id) {
+            id = element.id;
+          }
         }
+        id = id + 1;
       }
-      id = id + 1;
-    }
 
-    /// Add a new provider to the layeritems, using the LayersProvider
+      /// Add a new provider to the layeritems, using the LayersProvider
 
-    LayerItemModel itemModel = LayerItemModel(
+      LayerItemModel itemModel = LayerItemModel(
         id: id,
         layerText: "Mood",
         //mode: modeProvider.currentMode,
-        icon: Icons.mood);
+        icon: Icons.mood
+      );
 
-    provider.add(itemModel);
+      provider.add(itemModel);
 
-    modeProvider.changeModeComponent(
-        PickerModel(
-            title: itemModel.mode!.name,
-            value: itemModel.mode!.value,
-            enabled: true,
-            icon: itemModel.mode!.icon),
-        context);
+      modeProvider.changeModeComponent(
+      PickerModel(
+          title: itemModel.mode!.name,
+          value: itemModel.mode!.value,
+          enabled: true,
+          icon: itemModel.mode!.icon
+        ),
+        context
+      );
+    }
+    
   }
 
   @override
