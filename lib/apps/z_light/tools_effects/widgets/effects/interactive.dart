@@ -40,10 +40,25 @@ class _InteractivePresetState extends State<InteractivePreset> {
     layerProvider.toolsEffectsUpdated();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  /// function designed to change the tools and effects sub mode
+  changeSubMode(PickerModel? pickerChoice) {
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
+    modeProvider.setCurrentMode(ToolsModeModel(
+        subMode: pickerChoice?.value,
+        currentColor: modeProvider.currentMode.currentColor,
+        value: modeProvider.currentMode.value,
+        icon: modeProvider.currentMode.icon,
+        effects: modeProvider.currentMode.effects,
+        name: modeProvider.currentMode.name));
+
+    layerProvider.toolsEffectsUpdated();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     EffectProvider effectsProvider =
         Provider.of<EffectProvider>(context, listen: false);
     return Container(
@@ -55,10 +70,7 @@ class _InteractivePresetState extends State<InteractivePreset> {
                 width: MediaQuery.of(context).size.width * 0.45,
                 child: PickerDropdown(
                     onChange: (PickerModel? returnValue) {
-                      setState(() {
-                        // preset = changeComponent();
-                        layerProvider.toolsEffectsUpdated();
-                      });
+                      changeSubMode(returnValue);
                     },
                     defaultPicker: _defaultPicker,
                     pickerList:
