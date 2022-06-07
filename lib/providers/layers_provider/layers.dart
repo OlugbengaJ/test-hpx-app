@@ -100,11 +100,11 @@ class LayersProvider extends ChangeNotifier {
       _modeProvider!.setModeType(true);
       debugPrint("Create a shortcut layer");
       var subLayers = getSublayers(item.id);
-      debugPrint('$subLayers');
+      // debugPrint('$subLayers');
     }
-    for (var i = 0; i < length; i++) {
-      debugPrint('${layeritems[i].mode?.currentColor.first}');
-    }
+    // for (var i = 0; i < length; i++) {
+    //   debugPrint('${layeritems[i].mode?.currentColor.first}');
+    // }
     notifyListeners();
   }
 
