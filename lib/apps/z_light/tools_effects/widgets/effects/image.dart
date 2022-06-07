@@ -5,8 +5,10 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
+import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/image_mode_provder.dart';
 import 'package:hpx/utils/constants.dart';
@@ -37,10 +39,17 @@ class _ImagePresetState extends State<ImagePreset> {
         Provider.of<ModeProvider>(context, listen: false);
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
+    EffectProvider effectProvider =
+        Provider.of<EffectProvider>(context, listen: false);
 
     /// convert the default image into color paltte
     ByteData image = await rootBundle.load(Constants.defaultImageMode);
     await imageModeProvider.extractColors(image.buffer.asUint8List());
+    effectProvider.setCurrentEffect(EffectsModel(
+      effectName: effectProvider.currentEffect?.effectName,
+      effectType: effectProvider.currentEffect?.effectType,
+      extractedColors: imageModeProvider.extractedMatrix,
+    ));
     modeProvider.setCurrentMode(ToolsModeModel(
         currentColor: imageModeProvider.extractedColors,
         effects: modeProvider.currentMode.effects,
@@ -55,6 +64,8 @@ class _ImagePresetState extends State<ImagePreset> {
         Provider.of<ImageModeProvider>(context, listen: false);
     ModeProvider modeProvider =
         Provider.of<ModeProvider>(context, listen: false);
+    EffectProvider effectProvider =
+        Provider.of<EffectProvider>(context, listen: false);
 
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -63,6 +74,11 @@ class _ImagePresetState extends State<ImagePreset> {
     if (result != null) {
       PlatformFile file = result.files.first;
       await imageModeProvider.extractColors(File(file.path!).readAsBytesSync());
+      effectProvider.setCurrentEffect(EffectsModel(
+        effectName: effectProvider.currentEffect?.effectName,
+        effectType: effectProvider.currentEffect?.effectType,
+        extractedColors: imageModeProvider.extractedMatrix,
+      ));
       modeProvider.setCurrentMode(ToolsModeModel(
           currentColor: imageModeProvider.extractedColors,
           effects: modeProvider.currentMode.effects,

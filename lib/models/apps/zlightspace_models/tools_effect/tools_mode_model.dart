@@ -23,7 +23,7 @@ class ToolsModeModel {
       this.icon,
 
       /// submode is not required while using toolsmode model
-      this.subMode = false,
+      this.subMode,
 
       /// mode value is not required while using toolsmode model but highly advised to be set
       this.value});
@@ -35,13 +35,13 @@ class ToolsModeModel {
   EnumModeType? modeType;
 
   /// submode set the mode as a sub mode or not
-  bool? subMode;
+  dynamic subMode;
 
   /// icon variable to set the icon data for that tools and effects mode
   IconData? icon;
 
   /// value is either and enum or string used to specify which toole and effects mode the user is current on
-  final dynamic? value;
+  final dynamic value;
 
   /// current color holds a list of colors been current in used by the color picker
   late final List<dynamic> currentColor;
@@ -67,13 +67,18 @@ enum EnumModes {
 
 //// enum value for audio visual  picker
 enum AudioVisualEnum { powerbar, waveform }
+
 //// enum value for interactive  picker
 enum InteractiveEnum { keywave, keyfade, keywavefilled, keywaverainbow }
+
 //// enum value for ambient  picker
 enum AmbientEnum { entirescreen, foregroundapp }
+
 //// enum value for ambient display picker
 enum AmbientDisplayEnum { display1 }
+
 //// enum value for mode type picker
 enum EnumModeType { layers, sublayer }
+
 //// enum value for profile picker
 enum ProfileEnum { defaultprofile, calculator }
