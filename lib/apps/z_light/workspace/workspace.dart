@@ -164,6 +164,8 @@ class _WorkspaceState extends State<Workspace>
 
   @override
   Widget build(BuildContext context) {
+    final controllerH = ScrollController();
+    final controllerV = ScrollController();
     final workspaceProvider = Provider.of<WorkspaceProvider>(context);
 
     // initialize animation controller
@@ -302,17 +304,36 @@ class _WorkspaceState extends State<Workspace>
                       // This ensures seamless zooming of the entire keyboard.
                       Align(
                         alignment: Alignment.center,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          primary: false,
+                        child: Scrollbar(
+                          scrollbarOrientation: ScrollbarOrientation.bottom,
+                          controller: controllerH,
+                          thumbVisibility: true,
                           child: SingleChildScrollView(
+                            controller: controllerH,
                             scrollDirection: Axis.horizontal,
                             primary: false,
-                            child: Keyboard(zoomScale: _zoomScale),
+                            child: Scrollbar(
+                              scrollbarOrientation: ScrollbarOrientation.left,
+                              controller: controllerV,
+                              thumbVisibility: true,
+                              child: SingleChildScrollView(
+                                controller: controllerV,
+                                scrollDirection: Axis.vertical,
+                                primary: false,
+                                child: Keyboard(zoomScale: _zoomScale),
+                              ),
+                            ),
                           ),
                         ),
                       ),
+
+                      // Container(
+                      //   color: Colors.blue,
+                      //   width: 50,
+                      // ),
+
                       const LayersStack(),
+
                       OverlaySelector(
                         showCrossHair: workspaceProvider.isDragModeResizable,
                         onPanDown: workspaceProvider.onPanDown,

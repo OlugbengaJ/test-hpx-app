@@ -644,8 +644,7 @@ class KeysProvider with ChangeNotifier {
   /// one chip that is neither a [ChipKey.base] nor [ChipKey.overlay].
   List<KeyModel> getLayeredKeys() {
     return _keys
-        .where((element) => element.chips.keys.any(
-            (key) => key != '${ChipKey.base}' && key != '${ChipKey.overlay}'))
+        .where((element) => element.getLayeredChips().isNotEmpty)
         .toList();
   }
 }

@@ -103,10 +103,8 @@ class KeyModel with ChangeNotifier {
   /// [getLayeredChips] returns chips other than base, overlay, and icon
   List<String> getLayeredChips() {
     return _chips.keys
-        .where(
-          (k) =>
-              k != ChipKey.base.toString() && k != ChipKey.overlay.toString(),
-        )
+        .where((k) =>
+            k != ChipKey.base.toString() && k != ChipKey.overlay.toString())
         .toList();
   }
 
