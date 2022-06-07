@@ -11,6 +11,9 @@ class LayersProvider extends ChangeNotifier {
   final List<LayerItemModel> _layeritems = [];
   final List<LayerItemModel> _sublayers = [];
   ModeProvider? _modeProvider;
+  bool isLayerEditing = false; // Used to check wether a layer is in edit mode
+  int currentEditingID = 0; // if the ID is 0 then no layer is in edit mode
+  GlobalKey<FormFieldState>? editLayerKey;
 
   /// [hideDraggable] use to show or hide the stack layers for resizable widget
   bool hideDraggable = false;
@@ -39,19 +42,62 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  setEditingLayerKey(GlobalKey<FormFieldState> key, int layerID){
+    editLayerKey = key;
+    currentEditingID = layerID;
+    notifyListeners();
+  }
+
+
+  /// To check if the layer is the one on edit mode
+  bool isTheCurrentLayerEditing(GlobalKey<FormFieldState> key){
+    if(editLayerKey==key){
+      return true;
+    }else{
+      return false;
+    }
+    
+  }
+
+
+  toggleEditMode(bool editing){
+    isLayerEditing = editing;
+    notifyListeners();
+  }
+
+  saveEditingLayer(){
+    if(editLayerKey!.currentState!.value.toString().isNotEmpty){
+      editLayerKey!.currentState!.save();
+      if(currentEditingID!=0){
+        update(currentEditingID, editLayerKey!.currentState!.value.toString());
+      }
+
+      
+    }else{
+      update(currentEditingID, "$currentEditingID - No name");
+    }
+    isLayerEditing = false;
+    notifyListeners();
+  }
+
+  
+
+
+
   /// [setModeProvider] to set the mode provider to use on layers
-  void setModeProvider(ModeProvider modeProvider) {
+  void setModeProvider(ModeProvider modeProvider){
     _modeProvider = modeProvider;
   }
 
   /// listen to any change from the tools and effects so the current layers can be updated
-  void toolsEffectsUpdated() {
+  void toolsEffectsUpdated(){
     LayerItemModel item = getItem(listIndex);
-    item.mode = _modeProvider!.getModeInformation();
+    item.mode =  _modeProvider!.getModeInformation();
     item.layerText = _modeProvider!.currentMode.name;
     _layeritems[listIndex] = item;
 
     if (item.mode!.name == "Shortcut Colors") {
+      _modeProvider!.setModeType(true);
       debugPrint("Create a shortcut layer");
       var subLayers = getSublayers(item.id);
       // debugPrint('$subLayers');
@@ -61,6 +107,8 @@ class LayersProvider extends ChangeNotifier {
     // }
     notifyListeners();
   }
+
+
 
   /// [updateView] use to update the item position when the resizable-draggable stop dragging
   /// This method is called from the [ResizableProvider]
@@ -115,13 +163,14 @@ class LayersProvider extends ChangeNotifier {
   /// Add a new layer. By default new added layers use the mood mode
   void add(LayerItemModel item) {
     ToolsModeModel mode = ToolsModeModel(
-        currentColor: moodThemesList.first.colorCode,
-        effects: EffectsModel(effectName: EnumModes.mood),
-        name: "Mood",
-        value: EnumModes.mood,
-        modeType: EnumModeType.layers,
-        icon: Icons.mood);
-
+      currentColor: moodThemesList.first.colorCode,
+      effects: EffectsModel(effectName: EnumModes.mood),
+      name: "Mood",
+      value: EnumModes.mood,
+      modeType: EnumModeType.layers,
+      icon: Icons.mood
+    );
+    
     item.mode = mode;
 
     for (var element in _layeritems) {
@@ -218,6 +267,10 @@ class LayersProvider extends ChangeNotifier {
 
   /// [reorder] is called to rearrange layers
   void reorder(int oldIndex, int newIndex) {
+    /// Save any editing layer before rearrange
+    if(isLayerEditing){
+      saveEditingLayer();
+    }
     if (newIndex > oldIndex) {
       newIndex -= 1;
     }
@@ -228,13 +281,20 @@ class LayersProvider extends ChangeNotifier {
 
   /// [removeItem] is used to remove a layer from the [layeritems]
   void removeItem(int index) {
-    if (length > 1) {
-      final item = _layeritems[index];
+    /// Save any editing layer before delete
+    if(isLayerEditing){
+      saveEditingLayer();
+    }
+    /// Still check if there is no editing layer
+    if(!isLayerEditing){
+      if (length > 1) {
+        final item = _layeritems[index];
 
-      _layeritems.remove(item);
+        _layeritems.remove(item);
 
-      if (_layeritems.isNotEmpty) {
-        changeIndex(0);
+        if (_layeritems.isNotEmpty) {
+          changeIndex(0);
+        }
       }
     }
 
