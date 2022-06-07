@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 //// class interface model for Effects
 class EffectsModel {
   //// Effects model initialization model and value default set
@@ -14,6 +16,7 @@ class EffectsModel {
       this.updatePerSecond = 0.0,
       this.imageQuality = 0.0,
       this.effectType,
+      this.extractedColors,
       this.effectName = "mood"});
 
   /// degree variable with type double
@@ -36,4 +39,7 @@ class EffectsModel {
 
   /// effect name variable with type double
   dynamic? effectName;
+
+  /// effect extractColors for the extract colors matrix from image
+  List? extractedColors;
 }
