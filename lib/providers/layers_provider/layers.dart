@@ -11,6 +11,9 @@ class LayersProvider extends ChangeNotifier {
   final List<LayerItemModel> _layeritems = [];
   final List<LayerItemModel> _sublayers = [];
   ModeProvider? _modeProvider;
+  bool isLayerEditing = false; // Used to check wether a layer is in edit mode
+  int currentEditingID = 0; // if the ID is 0 then no layer is in edit mode
+  GlobalKey<FormFieldState>? editLayerKey;
 
   /// [hideDraggable] use to show or hide the stack layers for resizable widget
   bool hideDraggable = false;
@@ -39,6 +42,42 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  setEditingLayerKey(GlobalKey<FormFieldState> key, int layerID){
+    editLayerKey = key;
+    currentEditingID = layerID;
+    notifyListeners();
+  }
+
+
+  /// To check if the layer is the one on edit mode
+  bool isTheCurrentLayerEditing(GlobalKey<FormFieldState> key){
+    if(editLayerKey==key){
+      return true;
+    }else{
+      return false;
+    }
+    
+  }
+
+
+  toggleEditMode(bool editing){
+    isLayerEditing = editing;
+    notifyListeners();
+  }
+
+  saveEditingLayer(){
+    if(editLayerKey!.currentState!.value.toString().length>=3){
+      editLayerKey!.currentState!.save();
+      if(currentEditingID!=0){
+        update(currentEditingID, editLayerKey!.currentState!.value.toString());
+      }
+      isLayerEditing = false;
+      notifyListeners();
+    }
+  }
+
+  
+
 
 
   /// [setModeProvider] to set the mode provider to use on layers
@@ -54,6 +93,7 @@ class LayersProvider extends ChangeNotifier {
     _layeritems[listIndex] = item;
 
     if (item.mode!.name == "Shortcut Colors") {
+      _modeProvider!.setModeType(true);
       debugPrint("Create a shortcut layer");
       var subLayers = getSublayers(item.id);
       debugPrint('$subLayers');
@@ -223,6 +263,10 @@ class LayersProvider extends ChangeNotifier {
 
   /// [reorder] is called to rearrange layers
   void reorder(int oldIndex, int newIndex) {
+    /// Save any editing layer before rearrange
+    if(isLayerEditing){
+      saveEditingLayer();
+    }
     if (newIndex > oldIndex) {
       newIndex -= 1;
     }
@@ -233,6 +277,10 @@ class LayersProvider extends ChangeNotifier {
 
   /// [removeItem] is used to remove a layer from the [layeritems]
   void removeItem(int index) {
+    /// Save any editing layer before delete
+    if(isLayerEditing){
+      saveEditingLayer();
+    }
     if (length > 1) {
       final item = _layeritems[index];
 
