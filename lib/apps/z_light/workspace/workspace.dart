@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
@@ -25,7 +24,7 @@ class Workspace extends StatefulWidget {
 class _WorkspaceState extends State<Workspace>
     with SingleTickerProviderStateMixin {
   // late variables are initialize on initState()
-  late Animation<double> _animation;
+  // late Animation<double> _animation;
   late AnimationController _controller;
 
   late TextEditingController _zoomTextCtrl;
@@ -118,24 +117,24 @@ class _WorkspaceState extends State<Workspace>
     const duration = Duration(seconds: 1);
 
     _controller = AnimationController(vsync: this, duration: duration);
-    final curveAnimation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.linear,
-      reverseCurve: Curves.linear,
-    );
-    _animation = Tween<double>(
-      begin: 0,
-      end: math.sin(math.pi / 2), // max value of 1
-    ).animate(curveAnimation)
-      ..addListener(() {
-        setState(() {});
-      })
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          _controller.repeat();
-        }
-        if (status == AnimationStatus.dismissed) {}
-      });
+    // final curveAnimation = CurvedAnimation(
+    //   parent: _controller,
+    //   curve: Curves.linear,
+    //   reverseCurve: Curves.linear,
+    // );
+    // _animation = Tween<double>(
+    //   begin: 0,
+    //   end: math.sin(math.pi / 2), // max value of 1
+    // ).animate(curveAnimation)
+    //   ..addListener(() {
+    //     setState(() {});
+    //   })
+    //   ..addStatusListener((status) {
+    //     if (status == AnimationStatus.completed) {
+    //       _controller.repeat();
+    //     }
+    //     if (status == AnimationStatus.dismissed) {}
+    //   });
   }
 
   @override
@@ -143,7 +142,7 @@ class _WorkspaceState extends State<Workspace>
     super.initState();
 
     // initialize animation
-    // _initAnimation();
+    _initAnimation();
 
     // Initialize zoom value and scale.
     _zoomValue = 60;
@@ -157,7 +156,7 @@ class _WorkspaceState extends State<Workspace>
   @override
   void dispose() {
     _zoomTextCtrl.dispose();
-    // _controller.dispose();
+    _controller.dispose();
     _timer.cancel();
     super.dispose();
   }
@@ -169,7 +168,7 @@ class _WorkspaceState extends State<Workspace>
     final workspaceProvider = Provider.of<WorkspaceProvider>(context);
 
     // initialize animation controller
-    // workspaceProvider.setAnimation(_controller, _animation);
+    workspaceProvider.setAnimation(_controller);
 
     // initialize layers provider
     workspaceProvider.initLayersProvider(Provider.of<LayersProvider>(context));

@@ -38,15 +38,19 @@ class KeyboardKey extends StatelessWidget {
                 onTap: onTapHandler,
 
                 // listens to key changes and allows updating this key instance
-                child: Consumer<KeyModel>(
-                  builder: (context, keyModel, child) => KeyRRect(
-                    keyModel: _updateKeyInfo(
-                      workspaceProvider,
-                      layersProvider,
-                      keyModel,
-                      box,
+                child: AnimatedBuilder(
+                  animation: workspaceProvider.controller,
+                  builder: (context, child) => Consumer<KeyModel>(
+                    builder: (context, keyModel, child) => KeyRRect(
+                      animation: workspaceProvider.controller,
+                      keyModel: _updateKeyInfo(
+                        workspaceProvider,
+                        layersProvider,
+                        keyModel,
+                        box,
+                      ),
+                      zoomScale: zoomScale,
                     ),
-                    zoomScale: zoomScale,
                   ),
                 ),
               );
@@ -126,14 +130,12 @@ KeyModel _updateKeyInfo(
 
         // get the current chip in layers
         switch (layer.mode?.value) {
-          // layers.firstWhere((e) => '${e.id}' == chip.chipKey).mode?.value) {
-          case EnumModes.mood:
-            // provider.stopAnimating();
-
-            // update effect
-            chip.opacity = 1.0;
+          case EnumModes.breathing:
+            provider.checkAnimation();
+            chip.opacity = provider.controller.value;
             break;
           default:
+            chip.opacity = 1;
         }
 
         // debugPrint(

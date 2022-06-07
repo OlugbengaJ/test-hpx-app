@@ -20,10 +20,11 @@ class WorkspaceProvider with ChangeNotifier {
   /// [_modalWidgets] holds widgets that are rendered in the modal notifcation.
   List<Widget>? _modalWidgets;
 
+  final double _resizableThreshold = 20;
+
   /// [_selectorVisible] determines overlay selectors visibility.
   bool _selectorVisible = false;
 
-  final double _resizableThreshold = 20;
   bool get selectorVisible => _selectorVisible;
 
   /// [_workspaceRect] returns a [Rect] of the rendered workspace stack.
@@ -113,24 +114,58 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// Animation controls
   /// should contain a list of animations for different layers.
-  // late AnimationController _controller;
   // late Animation<double> _animation;
-
   // Animation<double> get animation => _animation;
-  // AnimationController get controller => _controller;
 
-  // void setAnimation(
-  //     AnimationController controller, Animation<double> animation) {
-  //   _controller = controller;
-  //   _animation = animation;
-  //   // _controller.forward();
-  // }
+  late AnimationController _controller;
+  AnimationController get controller => _controller;
 
-  // void stopAnimating() {
-  //   if (_controller.isAnimating) {
-  //     _controller.stop();
-  //   }
-  // }
+  void setAnimation(AnimationController animController,
+      {Animation<double>? animation}) {
+    _controller = animController;
+    startAnimating();
+  }
+
+  void checkAnimation() {
+    switch (_controller.status) {
+      case AnimationStatus.completed:
+        _controller.reverse();
+        break;
+      case AnimationStatus.dismissed:
+        // debugPrint('dismissed ${_controller.animationBehavior}');
+        // if (_animDirection == AnimationStatus.reverse) {
+        _controller.forward();
+        // }
+        break;
+      case AnimationStatus.forward:
+        if (!_controller.isAnimating) {
+          _controller.reverse();
+        }
+        // debugPrint('forward');
+        break;
+      case AnimationStatus.reverse:
+        // debugPrint('reverse ${_controller.isAnimating}');
+        if (!_controller.isAnimating) {
+          _controller.forward();
+        }
+        break;
+      default:
+    }
+  }
+
+  void startAnimating() {
+    if (_controller.isDismissed) {
+      // debugPrint('animation started ${_controller.status.name}');
+      _controller.reverse(
+          from: _controller.value == 0 ? 1.0 : _controller.value);
+    }
+  }
+
+  void stopAnimating() {
+    if (_controller.isAnimating) {
+      _controller.stop();
+    }
+  }
 
   /// [_layersProvider] grants access to [LayersProvider] resizable widget
   LayersProvider? _layersProvider;
