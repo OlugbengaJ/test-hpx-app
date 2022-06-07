@@ -16,7 +16,7 @@ class SelectionOffset {
 
 class LTWH {
   /// [LTWH] stores location information and could be used to draw out a Rect
-  LTWH(this.left, this.top, this.width, this.height);
+  LTWH([this.left, this.top, this.width, this.height]);
 
   late double? left;
   late double? top;

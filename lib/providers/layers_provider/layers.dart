@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
@@ -12,7 +11,6 @@ class LayersProvider extends ChangeNotifier {
   final List<LayerItemModel> _layeritems = [];
   final List<LayerItemModel> _sublayers = [];
   ModeProvider? _modeProvider;
-  ResizableProvider? _resizableProvider;
 
   /// [hideDraggable] use to show or hide the stack layers for resizable widget
   bool hideDraggable = false;
@@ -46,17 +44,21 @@ class LayersProvider extends ChangeNotifier {
     _modeProvider = modeProvider;
   }
 
-  /// [setResizableProvider] to set the mode provider to use on layers
-  void setResizableProvider(ResizableProvider resizableProvider) {
-    _resizableProvider = resizableProvider;
-  }
-
   /// listen to any change from the tools and effects so the current layers can be updated
   void toolsEffectsUpdated() {
     LayerItemModel item = getItem(listIndex);
     item.mode = _modeProvider!.getModeInformation();
     item.layerText = _modeProvider!.currentMode.name;
     _layeritems[listIndex] = item;
+
+    if (item.mode!.name == "Shortcut Colors") {
+      debugPrint("Create a shortcut layer");
+      var subLayers = getSublayers(item.id);
+      debugPrint('$subLayers');
+    }
+    for (var i = 0; i < length; i++) {
+      debugPrint('${layeritems[i].mode?.currentColor.first}');
+    }
     notifyListeners();
   }
 
@@ -150,6 +152,7 @@ class LayersProvider extends ChangeNotifier {
       item.hasSublayer = true;
       duplicatedItem.layerText = "Sublayer";
       duplicatedItem.parentID = item.id;
+      duplicatedItem.isSublayer = true;
       duplicatedItem.mode = modeProvider.getModeInformation();
       _sublayers.insert(0, duplicatedItem);
       _layeritems[index] = item;
@@ -177,6 +180,10 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void changeSublayerIndex(int subIndex) {
+    debugPrint("Layer index: $listIndex, sublayer index: $subIndex");
+  }
+
   /// Update the layerText using its ID
   void update(int id, String text) {
     LayerItemModel item = layeritems.singleWhere((item) => item.id == id);
@@ -198,7 +205,6 @@ class LayersProvider extends ChangeNotifier {
 
   /// [toggleVisibility] toggle visiblity for a layers
   void toggleVisibility(LayerItemModel item, int index) {
-    print("Toggle visibility");
     item.listDisplayColor = Colors.grey;
     if (item.visible) {
       item.listDisplayColor = Colors.white;
@@ -240,24 +246,6 @@ class LayersProvider extends ChangeNotifier {
     if (sublayerItems.length > 1) {
       sublayerItems.remove(item);
     }
-
-    notifyListeners();
-  }
-
-  /// [setResizablePosition] this function call the [ResizableProvider] to set the resizable position anytime the index.
-  /// There is no need to have multiple resizable anymore. Use only one for all the layers
-  void setResizablePosition(ResizableProvider provider) {
-    final item = _layeritems[_listIndex];
-    isLayerVisible = item.visible;
-    if (item.top != 0) {
-      provider.setSize(
-        newBottom: item.bottom,
-        newLeft: item.left,
-        newRight: item.right,
-        newTop: item.top,
-      );
-    }
-    provider.setSize();
 
     notifyListeners();
   }
