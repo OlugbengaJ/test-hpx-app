@@ -90,11 +90,14 @@ class _LayerListItemState extends State<LayerListItem> {
   }
 
   /// Save the layer's new text
-  _onSubmit(value, LayersProvider provider) {
-    setState(() {
-      _editing = !_editing;
-    });
-    provider.update(widget.layerItemModel.id, value);
+  _onSubmit(String value, LayersProvider provider) {
+    if(value.isNotEmpty && value.length>3){
+      setState(() {
+        _editing = !_editing;
+      });
+      provider.update(widget.layerItemModel.id, value);
+    }
+    
   }
 
   /// Widget method to list sublayers
@@ -167,8 +170,7 @@ class _LayerListItemState extends State<LayerListItem> {
                                                 maxWidth: 80,
                                               ),
                                               child: TextFormField(
-                                                controller:
-                                                    _layerNameController,
+                                                controller: _layerNameController,                                                
                                                 autofocus: true,
                                                 style: const TextStyle(
                                                   fontSize: 16,
