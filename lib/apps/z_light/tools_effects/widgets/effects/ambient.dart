@@ -25,6 +25,27 @@ class _AmbeintPresetState extends State<AmbeintPreset> {
       enabled: true,
       value: AmbientDisplayEnum.display1);
 
+  /// function designed to change the tools and effects sub mode
+  changeSubMode(PickerModel? pickerChoice, bool isDisplay) {
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
+    modeProvider.setCurrentMode(ToolsModeModel(
+        subMode: (isDisplay == false)
+            ? pickerChoice?.value
+            : modeProvider.currentMode.subMode,
+        display: (isDisplay == true)
+            ? pickerChoice?.value
+            : modeProvider.currentMode.display,
+        currentColor: modeProvider.currentMode.currentColor,
+        value: modeProvider.currentMode.value,
+        icon: modeProvider.currentMode.icon,
+        effects: modeProvider.currentMode.effects,
+        name: modeProvider.currentMode.name));
+    layerProvider.toolsEffectsUpdated();
+  }
+
   void _setSliderValue(double returnValue, String type) {
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
@@ -50,9 +71,7 @@ class _AmbeintPresetState extends State<AmbeintPreset> {
                 width: MediaQuery.of(context).size.width * 0.45,
                 child: PickerDropdown(
                     onChange: (PickerModel? returnValue) {
-                      setState(() {
-                        // preset = changeComponent();
-                      });
+                      changeSubMode(returnValue, false);
                     },
                     defaultPicker: _defaultScreenPicker,
                     pickerList: _modeProvider.getPickerModes('ambientscreen'))),
@@ -60,9 +79,7 @@ class _AmbeintPresetState extends State<AmbeintPreset> {
                 width: MediaQuery.of(context).size.width * 0.45,
                 child: PickerDropdown(
                     onChange: (PickerModel? returnValue) {
-                      setState(() {
-                        // preset = changeComponent();
-                      });
+                      changeSubMode(returnValue, true);
                     },
                     defaultPicker: _defaultDisplayPicker,
                     pickerList:

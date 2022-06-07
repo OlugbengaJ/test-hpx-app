@@ -25,6 +25,9 @@ class ToolsModeModel {
       /// submode is not required while using toolsmode model
       this.subMode,
 
+      /// display is not required while using toolsmode model
+      this.display,
+
       /// mode value is not required while using toolsmode model but highly advised to be set
       this.value});
 
@@ -36,6 +39,9 @@ class ToolsModeModel {
 
   /// submode set the mode as a sub mode or not
   dynamic subMode;
+
+  /// display set the display for the current mode
+  dynamic display;
 
   /// icon variable to set the icon data for that tools and effects mode
   IconData? icon;
