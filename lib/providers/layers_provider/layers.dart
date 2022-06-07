@@ -66,14 +66,18 @@ class LayersProvider extends ChangeNotifier {
   }
 
   saveEditingLayer(){
-    if(editLayerKey!.currentState!.value.toString().length>=3){
+    if(editLayerKey!.currentState!.value.toString().isNotEmpty){
       editLayerKey!.currentState!.save();
       if(currentEditingID!=0){
         update(currentEditingID, editLayerKey!.currentState!.value.toString());
       }
-      isLayerEditing = false;
-      notifyListeners();
+
+      
+    }else{
+      update(currentEditingID, "$currentEditingID - No name");
     }
+    isLayerEditing = false;
+    notifyListeners();
   }
 
   

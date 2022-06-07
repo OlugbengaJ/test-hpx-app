@@ -106,7 +106,7 @@ class _LayerListItemState extends State<LayerListItem> {
 
   /// Save the layer's new text
   _onSubmit(String value, LayersProvider provider) {
-    if(value.isNotEmpty && value.length>3){
+    if(value.isNotEmpty){
       setState(() {
         _editing = !_editing;
       });
