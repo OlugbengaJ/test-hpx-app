@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
@@ -67,27 +68,39 @@ class _WavePresetState extends State<WavePreset> {
     setState(() {
       degreeController.text = returnValue!.toStringAsFixed(0);
     });
-
     effectsProvider.setCurrentEffect(EffectsModel(
         effectName: modeProvider.currentMode.effects.effectName,
         degree: returnValue,
         speed: effectsProvider.currentEffect?.speed));
+
+    modeProvider.setCurrentMode(ToolsModeModel(
+        currentColor: modeProvider.currentMode.currentColor,
+        effects: modeProvider.currentMode.effects,
+        value: modeProvider.currentMode.value,
+        name: modeProvider.currentMode.name));
     layerProvider.toolsEffectsUpdated();
   }
 
   void _setSliderValue(double returnValue) {
     EffectProvider effectsProvider =
         Provider.of<EffectProvider>(context, listen: false);
-    // /// initialize the layers provider to use to send notification accross the layers
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
-    setState(() {
-      effectsProvider.setCurrentEffect(EffectsModel(
-          effectName: effectsProvider.currentEffect?.effectName,
-          degree: effectsProvider.currentEffect?.degree,
-          speed: returnValue.floorToDouble()));
-      layerProvider.toolsEffectsUpdated();
-    });
+
+    effectsProvider.setCurrentEffect(EffectsModel(
+        effectName: modeProvider.currentMode.effects.effectName,
+        degree: effectsProvider.currentEffect?.degree,
+        speed: returnValue.floorToDouble()));
+
+    modeProvider.setCurrentMode(ToolsModeModel(
+        currentColor: modeProvider.currentMode.currentColor,
+        effects: modeProvider.currentMode.effects,
+        value: modeProvider.currentMode.value,
+        name: modeProvider.currentMode.name));
+
+    layerProvider.toolsEffectsUpdated();
   }
 
   @override
@@ -178,7 +191,9 @@ class _WavePresetState extends State<WavePreset> {
               divisions: 100,
               label: effectsProvider.currentEffect!.speed.toString(),
               onChanged: (double value) {
-                _setSliderValue(value);
+                setState(() {
+                  _setSliderValue(value);
+                });
               },
             ),
             Row(children: [
