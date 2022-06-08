@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -22,14 +24,18 @@ class _BlinkingPresetState extends State<BlinkingPreset> {
         Provider.of<EffectProvider>(context, listen: false);
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
+
     effectsProvider.setCurrentEffect(EffectsModel(
         effectName: effectsProvider.currentEffect?.effectName,
-        degree: effectsProvider.currentEffect?.degree,
-        speed: returnValue.floorToDouble()));
+        speed: effectsProvider.currentEffect?.speed));
+    modeProvider.setCurrentMode(ToolsModeModel(
+        currentColor: modeProvider.currentMode.currentColor,
+        effects: modeProvider.currentMode.effects,
+        value: modeProvider.currentMode.value,
+        name: modeProvider.currentMode.name));
     layerProvider.toolsEffectsUpdated();
-    setState(() {
-      effectsProvider.currentEffect?.speed = returnValue;
-    });
   }
 
   @override
@@ -61,6 +67,9 @@ class _BlinkingPresetState extends State<BlinkingPreset> {
                   divisions: 100,
                   label: effectsProvider.currentEffect!.speed.toString(),
                   onChanged: (double value) {
+                    setState(() {
+                      effectsProvider.currentEffect?.speed = value;
+                    });
                     _setSliderValue(value);
                   },
                 ),
