@@ -63,14 +63,15 @@ class _WavePresetState extends State<WavePreset> {
     // /// initialize the layers provider to use to send notification accross the layers
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
-    effectsProvider.setCurrentEffect(EffectsModel(
-        effectName: modeProvider.currentMode.value,
-        degree: returnValue,
-        speed: effectsProvider.currentEffect?.speed));
+
     setState(() {
       degreeController.text = returnValue!.toStringAsFixed(0);
-      effectsProvider.currentEffect?.degree = returnValue;
     });
+
+    effectsProvider.setCurrentEffect(EffectsModel(
+        effectName: modeProvider.currentMode.effects.effectName,
+        degree: returnValue,
+        speed: effectsProvider.currentEffect?.speed));
     layerProvider.toolsEffectsUpdated();
   }
 
@@ -235,11 +236,9 @@ class _WavePresetState extends State<WavePreset> {
                                     value =
                                         (double.parse(value) % 360).toString();
                                   }
-                                  setState(() {
-                                    _controller
-                                        ?.setCurrentValue(double.parse(value!));
-                                    _setDegreeValue(double.parse(value!));
-                                  });
+                                  _controller
+                                      ?.setCurrentValue(double.parse(value));
+                                  _setDegreeValue(double.parse(value));
                                 },
                                 style: const TextStyle(fontSize: 14),
                                 controller: degreeController,
