@@ -76,11 +76,11 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
                   onPressed: () {
                     setState(() {
                       shortcutProvider.addNewCommand('');
-                      // /// initialize the layers provider to use to send notification accross the layers
-                      LayersProvider layerProvider =
-                          Provider.of<LayersProvider>(context, listen: false);
-                      layerProvider.toolsEffectsUpdated();
                     });
+                    // /// initialize the layers provider to use to send notification accross the layers
+                    LayersProvider layerProvider =
+                        Provider.of<LayersProvider>(context, listen: false);
+                    layerProvider.toolsEffectsUpdated();
                   },
                 )
               ],
