@@ -170,13 +170,13 @@ KeyModel _updateKeyInfo(
     }
 
     // TODO: only for debugging, delete.
-    if ('${keyModel.keyCode}'.contains('kF5')) {
-      // for (var i = 0; i < layers.length; i++) {
-      //   debugPrint('\t esc $i ${layers[i].mode?.currentColor.first}');
-      // }
+    // if ('${keyModel.keyCode}'.contains('kF5')) {
+    //   // for (var i = 0; i < layers.length; i++) {
+    //   //   debugPrint('\t esc $i ${layers[i].mode?.currentColor.first}');
+    //   // }
 
-      // debugPrint('kF5 \t ${keyModel.chipsValues.map((e) => e.chipKey)}');
-    }
+    //   // debugPrint('kF5 \t ${keyModel.chipsValues.map((e) => e.chipKey)}');
+    // }
   }
 
   return keyModel;
