@@ -130,22 +130,39 @@ KeyModel _updateKeyInfo(
 
         // get the current chip in layers
         switch (layer.mode?.value) {
+          case EnumModes.blinking:
+            final beginColor = layer.mode?.currentColor.first;
+            final endColor = layer.mode?.currentColor.last;
+            final animColor = provider.animColor(beginColor, endColor,
+                speed: layer.mode?.effects.speed);
+
+            // if (keyModel.keyCode.name.contains('k5')) {
+            //   debugPrint(
+            //       'anim colors ${layer.mode?.currentColor.length} ${animColor?.value} ${layer.mode?.currentColor.first} ${layer.mode?.currentColor.last}');
+            // }
+
+            chip.color = animColor!;
+            chip.opacity = 1;
+            break;
           case EnumModes.breathing:
-            provider.checkAnimation();
-            chip.opacity = provider.controller.value;
+            final beginColor = layer.mode?.currentColor.first;
+            final endColor = layer.mode?.currentColor.last;
+            final animColor = provider.animColor(beginColor, endColor,
+                speed: layer.mode?.effects.speed);
+
+            chip.color = animColor!;
+            chip.opacity = 1;
             break;
           case EnumModes.image:
             // get the row and column of this key and use the matching
             // coordinate from the matrix.
-            debugPrint('${layer.mode?.effects.extractedColors?.map((e) => e)}');
+            debugPrint(
+                'images ${layer.mode?.effects.extractedColors?.map((e) => e)}');
             break;
           default:
             chip.opacity = 1;
         }
-        debugPrint('current mode name ${layer.mode?.value}');
-
-        // debugPrint(
-        //     'currentId $currentId $i ${chip.chipKey} ${layers[i].mode?.currentColor}');
+        // debugPrint('current mode name ${layer.mode?.value}');
 
         // add the chip
         keyModel.addChip(chip);

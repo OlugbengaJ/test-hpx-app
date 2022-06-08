@@ -112,40 +112,70 @@ class WorkspaceProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // TODO: Animation controls
-  // should contain a list of animations for different layers.
-  // late Animation<double> _animation;
-  // Animation<double> get animation => _animation;
+  /// [_animMillisecond] is the animation duration in milliseconds and defaults to 1s.
+  double? _animMillisecond = 1000.0;
 
+  /// [_animationColor] is used to create a ColorTween animation.
+  late Animation<Color?> _animationColor;
+
+  /// [_controller] is the private instance of the AnimationController
+  /// which is instantiated in [initAnimation].
   late AnimationController _controller;
+
+  /// [controller] returns this instance of the AnimationController.
   AnimationController get controller => _controller;
 
-  void setAnimation(AnimationController animController,
-      {Animation<double>? animation}) {
+  /// [initAnimation] initalizes the animation controller.
+  void initAnimation(AnimationController animController) {
     _controller = animController;
-    startAnimating();
+    startAnimation();
   }
 
-  void checkAnimation() {
+  /// [_setAnimDuration] updates the animation duration by [speed] factor.
+  void _setAnimDuration(double? speed) {
+    if (speed != null) {
+      // speed exists so check if it has changed
+      final ms = speed * 10;
+      if (ms != _animMillisecond) {
+        // update the controller duration
+        _animMillisecond = ms;
+        _controller.duration = Duration(milliseconds: ms.toInt());
+        // debugPrint('anim duration changed $speed ${controller.duration}');
+      }
+    }
+  }
+
+  /// [animColor] returns an animation color.
+  Color? animColor(Color beginColor, Color endColor, {double? speed}) {
+    _animationColor =
+        ColorTween(begin: beginColor, end: endColor).animate(_controller);
+
+    _setAnimDuration(speed);
+    _checkAnimaStatus();
+
+    return _animationColor.value;
+  }
+
+  /// [_checkAnimaStatus] this ensures the animation controller is always active.
+  void _checkAnimaStatus() {
     switch (_controller.status) {
       case AnimationStatus.completed:
         _controller.reverse();
+        // debugPrint('completed');
         break;
       case AnimationStatus.dismissed:
-        // debugPrint('dismissed ${_controller.animationBehavior}');
-        // if (_animDirection == AnimationStatus.reverse) {
+        // debugPrint('dismissed');
         _controller.forward();
-        // }
         break;
       case AnimationStatus.forward:
         if (!_controller.isAnimating) {
           _controller.reverse();
+          // debugPrint('forward');
         }
-        // debugPrint('forward');
         break;
       case AnimationStatus.reverse:
-        // debugPrint('reverse ${_controller.isAnimating}');
         if (!_controller.isAnimating) {
+          // debugPrint('reverse');
           _controller.forward();
         }
         break;
@@ -153,15 +183,16 @@ class WorkspaceProvider with ChangeNotifier {
     }
   }
 
-  void startAnimating() {
+  /// [startAnimation] begins the animation.
+  void startAnimation() {
     if (_controller.isDismissed) {
-      // debugPrint('animation started ${_controller.status.name}');
       _controller.reverse(
           from: _controller.value == 0 ? 1.0 : _controller.value);
     }
   }
 
-  void stopAnimating() {
+  /// [stopAnimation] stops the animation.
+  void stopAnimation() {
     if (_controller.isAnimating) {
       _controller.stop();
     }

@@ -168,7 +168,7 @@ class _WorkspaceState extends State<Workspace>
     final workspaceProvider = Provider.of<WorkspaceProvider>(context);
 
     // initialize animation controller
-    workspaceProvider.setAnimation(_controller);
+    workspaceProvider.initAnimation(_controller);
 
     // initialize layers provider
     workspaceProvider.initLayersProvider(Provider.of<LayersProvider>(context));
