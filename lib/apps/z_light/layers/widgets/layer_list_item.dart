@@ -26,6 +26,7 @@ class _LayerListItemState extends State<LayerListItem> {
   final double _iconSize = 16;
   TextEditingController _layerNameController = TextEditingController(text: "");
   GlobalKey deleteKey = GlobalKey<State<Tooltip>>();
+  GlobalKey<FormFieldState> editLayerKey = GlobalKey<FormFieldState>(); // Each layer should have a key for its editing field
 
   _onHover(isHovering) {
     if (!_showDeleteTooltip) {
@@ -56,12 +57,28 @@ class _LayerListItemState extends State<LayerListItem> {
   }
 
   /// Use to edit the layer's text
-  _toggleEditing(LayersProvider value) {
-    setState(() {
-      _editing = !_editing;
-      _layerNameController = TextEditingController(
-          text: value.getItem(widget.layerIndex).layerText);
-    });
+  _toggleEditing(LayersProvider provider) {
+    /// Check if the layer is not already in edit mode
+    if(!provider.isLayerEditing){      
+      provider.setEditingLayerKey(editLayerKey, widget.layerItemModel.id);
+      setState(() {
+        _editing = provider.isTheCurrentLayerEditing(editLayerKey);
+        _layerNameController = TextEditingController(text: provider.getItem(widget.layerIndex).layerText);
+      });
+      provider.toggleEditMode(true);
+    }else{
+      /// Save the already editing layer and if the new layer to edit is different then retoggle it
+      provider.saveEditingLayer();
+      provider.setEditingLayerKey(editLayerKey, widget.layerItemModel.id);
+      _toggleEditing(provider);
+    }    
+    
+  }
+
+
+  /// Save the current editing layer if the textfield loses focus
+  _onFocusChange(LayersProvider provider){
+    provider.saveEditingLayer();
   }
 
   /// Use to delete a layer from the list
@@ -71,7 +88,7 @@ class _LayerListItemState extends State<LayerListItem> {
     // tooltip?.ensureTooltipVisible();
     // setState(() {
     //   _showDeleteTooltip = true;
-    // });
+    // });    
   }
 
   // Tap on a layer to select it
@@ -88,11 +105,15 @@ class _LayerListItemState extends State<LayerListItem> {
   }
 
   /// Save the layer's new text
-  _onSubmit(value, LayersProvider provider) {
-    setState(() {
-      _editing = !_editing;
-    });
-    provider.update(widget.layerItemModel.id, value);
+  _onSubmit(String value, LayersProvider provider) {
+    if(value.isNotEmpty){
+      setState(() {
+        _editing = !_editing;
+      });
+      provider.update(widget.layerItemModel.id, value);
+      provider.toggleEditMode(false);
+    }
+    
   }
 
   /// Widget method to list sublayers
@@ -110,6 +131,8 @@ class _LayerListItemState extends State<LayerListItem> {
 
   @override
   Widget build(BuildContext context) {
+    _editing = context.read<LayersProvider>().isTheCurrentLayerEditing(editLayerKey);
+
     return Consumer<LayersProvider>(
       builder: (context, _value, child) {
         return Column(
@@ -158,31 +181,39 @@ class _LayerListItemState extends State<LayerListItem> {
                                             .layerItemModel.listDisplayColor,
                                         size: _iconSize,
                                       ),
-                                      (_editing)
+                                      (_editing && _value.isLayerEditing)
                                           ? Container(
                                               height: 30,
                                               constraints: const BoxConstraints(
                                                 maxWidth: 80,
                                               ),
-                                              child: TextFormField(
-                                                controller:
-                                                    _layerNameController,
-                                                autofocus: true,
-                                                style: const TextStyle(
-                                                  fontSize: 16,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                              child: Focus(
+                                                onFocusChange: (hasFocus) {
+                                                  if(!hasFocus) {
+                                                    _onFocusChange(_value);
+                                                  }
+                                                },
+                                                child: TextFormField(
+                                                  key: editLayerKey,
+                                                  controller: _layerNameController,                                                
+                                                  autofocus: true,
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  decoration:
+                                                      const InputDecoration(
+                                                          focusColor:
+                                                              Colors.white,
+                                                          border:
+                                                              OutlineInputBorder(),
+                                                          contentPadding:
+                                                              EdgeInsets.all(8)),
+                                                  onFieldSubmitted: (value) =>  _onSubmit(value, _value),
+                                                  
                                                 ),
-                                                decoration:
-                                                    const InputDecoration(
-                                                        focusColor:
-                                                            Colors.white,
-                                                        border:
-                                                            OutlineInputBorder(),
-                                                        contentPadding:
-                                                            EdgeInsets.all(8)),
-                                                onFieldSubmitted: (value) =>
-                                                    _onSubmit(value, _value),
+                                                
                                               ),
                                             )
                                           : Expanded(
