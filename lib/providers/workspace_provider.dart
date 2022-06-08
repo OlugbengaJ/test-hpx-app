@@ -112,8 +112,8 @@ class WorkspaceProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  /// Animation controls
-  /// should contain a list of animations for different layers.
+  // TODO: Animation controls
+  // should contain a list of animations for different layers.
   // late Animation<double> _animation;
   // Animation<double> get animation => _animation;
 
