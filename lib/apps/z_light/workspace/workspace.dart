@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
@@ -25,7 +24,7 @@ class Workspace extends StatefulWidget {
 class _WorkspaceState extends State<Workspace>
     with SingleTickerProviderStateMixin {
   // late variables are initialize on initState()
-  late Animation<double> _animation;
+  // late Animation<double> _animation;
   late AnimationController _controller;
 
   late TextEditingController _zoomTextCtrl;
@@ -118,24 +117,24 @@ class _WorkspaceState extends State<Workspace>
     const duration = Duration(seconds: 1);
 
     _controller = AnimationController(vsync: this, duration: duration);
-    final curveAnimation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.linear,
-      reverseCurve: Curves.linear,
-    );
-    _animation = Tween<double>(
-      begin: 0,
-      end: math.sin(math.pi / 2), // max value of 1
-    ).animate(curveAnimation)
-      ..addListener(() {
-        setState(() {});
-      })
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          _controller.repeat();
-        }
-        if (status == AnimationStatus.dismissed) {}
-      });
+    // final curveAnimation = CurvedAnimation(
+    //   parent: _controller,
+    //   curve: Curves.linear,
+    //   reverseCurve: Curves.linear,
+    // );
+    // _animation = Tween<double>(
+    //   begin: 0,
+    //   end: math.sin(math.pi / 2), // max value of 1
+    // ).animate(curveAnimation)
+    //   ..addListener(() {
+    //     setState(() {});
+    //   })
+    //   ..addStatusListener((status) {
+    //     if (status == AnimationStatus.completed) {
+    //       _controller.repeat();
+    //     }
+    //     if (status == AnimationStatus.dismissed) {}
+    //   });
   }
 
   @override
@@ -143,7 +142,7 @@ class _WorkspaceState extends State<Workspace>
     super.initState();
 
     // initialize animation
-    // _initAnimation();
+    _initAnimation();
 
     // Initialize zoom value and scale.
     _zoomValue = 60;
@@ -157,17 +156,19 @@ class _WorkspaceState extends State<Workspace>
   @override
   void dispose() {
     _zoomTextCtrl.dispose();
-    // _controller.dispose();
+    _controller.dispose();
     _timer.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final controllerH = ScrollController();
+    final controllerV = ScrollController();
     final workspaceProvider = Provider.of<WorkspaceProvider>(context);
 
     // initialize animation controller
-    // workspaceProvider.setAnimation(_controller, _animation);
+    workspaceProvider.initAnimation(_controller);
 
     // initialize layers provider
     workspaceProvider.initLayersProvider(Provider.of<LayersProvider>(context));
@@ -302,17 +303,36 @@ class _WorkspaceState extends State<Workspace>
                       // This ensures seamless zooming of the entire keyboard.
                       Align(
                         alignment: Alignment.center,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          primary: false,
+                        child: Scrollbar(
+                          scrollbarOrientation: ScrollbarOrientation.bottom,
+                          controller: controllerH,
+                          thumbVisibility: true,
                           child: SingleChildScrollView(
+                            controller: controllerH,
                             scrollDirection: Axis.horizontal,
                             primary: false,
-                            child: Keyboard(zoomScale: _zoomScale),
+                            child: Scrollbar(
+                              scrollbarOrientation: ScrollbarOrientation.left,
+                              controller: controllerV,
+                              thumbVisibility: true,
+                              child: SingleChildScrollView(
+                                controller: controllerV,
+                                scrollDirection: Axis.vertical,
+                                primary: false,
+                                child: Keyboard(zoomScale: _zoomScale),
+                              ),
+                            ),
                           ),
                         ),
                       ),
+
+                      // Container(
+                      //   color: Colors.blue,
+                      //   width: 50,
+                      // ),
+
                       const LayersStack(),
+
                       OverlaySelector(
                         showCrossHair: workspaceProvider.isDragModeResizable,
                         onPanDown: workspaceProvider.onPanDown,
