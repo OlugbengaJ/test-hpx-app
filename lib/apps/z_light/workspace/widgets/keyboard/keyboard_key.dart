@@ -137,11 +137,12 @@ KeyModel _updateKeyInfo(
           case EnumModes.image:
             // get the row and column of this key and use the matching
             // coordinate from the matrix.
-            // layer.mode!.effects.extractedMatrix;
+            debugPrint('${layer.mode?.effects.extractedColors?.map((e) => e)}');
             break;
           default:
             chip.opacity = 1;
         }
+        debugPrint('current mode name ${layer.mode?.value}');
 
         // debugPrint(
         //     'currentId $currentId $i ${chip.chipKey} ${layers[i].mode?.currentColor}');
