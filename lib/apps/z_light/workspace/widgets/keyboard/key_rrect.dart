@@ -10,10 +10,13 @@ class KeyRRect extends StatelessWidget {
     Key? key,
     required this.keyModel,
     required this.zoomScale,
+    this.animation,
   }) : super(key: key);
 
   final KeyModel keyModel;
   final double zoomScale;
+
+  final Animation<double>? animation;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +31,7 @@ class KeyRRect extends StatelessWidget {
     return CustomPaint(
       size: Size(width, height * 0.298212833898266),
       painter: KeyRRectPainter(
+        animation: animation,
         keyModel: keyModel,
         zoomScale: zoomScale,
         clipper: KeyRRectClipper(

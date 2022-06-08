@@ -6,15 +6,18 @@ class KeyRRectPainter extends CustomPainter {
   ///
   /// The painter uses the clipper to draw actual object on the canvas.
   const KeyRRectPainter({
-    Listenable? repaint,
+    // Listenable? repaint,
     required this.keyModel,
     required this.clipper,
     required this.zoomScale,
-  }) : super(repaint: repaint);
+    this.animation,
+  }) : super(repaint: animation);
 
   final CustomClipper<RRect> clipper;
   final KeyModel keyModel;
   final double zoomScale;
+
+  final Animation<double>? animation;
 
   static const double opacityFactor = 0.4;
   static const double fontFactor = 0.3;
@@ -91,6 +94,12 @@ class KeyRRectPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    // animation not required
+    if (animation == null) return false;
+
+    // // animation required
+    // final old = oldDelegate as KeyRRectPainter;
+
     return true;
   }
 }
