@@ -134,6 +134,11 @@ KeyModel _updateKeyInfo(
             provider.checkAnimation();
             chip.opacity = provider.controller.value;
             break;
+          case EnumModes.image:
+            // get the row and column of this key and use the matching
+            // coordinate from the matrix.
+            // layer.mode!.effects.extractedMatrix;
+            break;
           default:
             chip.opacity = 1;
         }
