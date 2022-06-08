@@ -292,6 +292,7 @@ class ModeProvider extends ChangeNotifier {
         currentColor: currentColors,
         value: pickerChoice.value,
         icon: pickerChoice.icon,
+        modeType: currentMode.modeType,
         effects: effectsProvider.currentEffect!,
         name: pickerChoice.title));
   }

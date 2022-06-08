@@ -225,12 +225,18 @@ class LayersProvider extends ChangeNotifier {
     final item = _layeritems[_listIndex];
     item.listDisplayColor = Colors.white;
     _layeritems[_listIndex] = item;
+    
+    
+    if (item.mode!.name == "Shortcut Colors") {   
+      _modeProvider!.setModeType(true);
+    }
     toggleHideStackedLayers(!item.visible);
     notifyListeners();
   }
 
   void changeSublayerIndex(int subIndex) {
-    debugPrint("Layer index: $listIndex, sublayer index: $subIndex");
+    _modeProvider!.setModeType(true);
+    notifyListeners();
   }
 
   /// Update the layerText using its ID

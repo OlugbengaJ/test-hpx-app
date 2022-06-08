@@ -95,6 +95,7 @@ class _LayerListItemState extends State<LayerListItem> {
   _onTap(LayersProvider provider) {
     provider.changeIndex(widget.layerIndex);
     ModeProvider modeProvider = context.read<ModeProvider>();
+    
     modeProvider.changeModeComponent(
         PickerModel(
             title: widget.layerItemModel.mode!.name,
