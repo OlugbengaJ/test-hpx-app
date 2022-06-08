@@ -38,15 +38,19 @@ class KeyboardKey extends StatelessWidget {
                 onTap: onTapHandler,
 
                 // listens to key changes and allows updating this key instance
-                child: Consumer<KeyModel>(
-                  builder: (context, keyModel, child) => KeyRRect(
-                    keyModel: _updateKeyInfo(
-                      workspaceProvider,
-                      layersProvider,
-                      keyModel,
-                      box,
+                child: AnimatedBuilder(
+                  animation: workspaceProvider.controller,
+                  builder: (context, child) => Consumer<KeyModel>(
+                    builder: (context, keyModel, child) => KeyRRect(
+                      animation: workspaceProvider.controller,
+                      keyModel: _updateKeyInfo(
+                        workspaceProvider,
+                        layersProvider,
+                        keyModel,
+                        box,
+                      ),
+                      zoomScale: zoomScale,
                     ),
-                    zoomScale: zoomScale,
                   ),
                 ),
               );
@@ -126,18 +130,39 @@ KeyModel _updateKeyInfo(
 
         // get the current chip in layers
         switch (layer.mode?.value) {
-          // layers.firstWhere((e) => '${e.id}' == chip.chipKey).mode?.value) {
-          case EnumModes.mood:
-            // provider.stopAnimating();
+          case EnumModes.blinking:
+            final beginColor = layer.mode?.currentColor.first;
+            final endColor = layer.mode?.currentColor.last;
+            final animColor = provider.animColor(beginColor, endColor,
+                speed: layer.mode?.effects.speed);
 
-            // update effect
-            chip.opacity = 1.0;
+            // if (keyModel.keyCode.name.contains('k5')) {
+            //   debugPrint(
+            //       'anim colors ${layer.mode?.currentColor.length} ${animColor?.value} ${layer.mode?.currentColor.first} ${layer.mode?.currentColor.last}');
+            // }
+
+            chip.color = animColor!;
+            chip.opacity = 1;
+            break;
+          case EnumModes.breathing:
+            final beginColor = layer.mode?.currentColor.first;
+            final endColor = layer.mode?.currentColor.last;
+            final animColor = provider.animColor(beginColor, endColor,
+                speed: layer.mode?.effects.speed);
+
+            chip.color = animColor!;
+            chip.opacity = 1;
+            break;
+          case EnumModes.image:
+            // get the row and column of this key and use the matching
+            // coordinate from the matrix.
+            debugPrint(
+                'images ${layer.mode?.effects.extractedColors?.map((e) => e)}');
             break;
           default:
+            chip.opacity = 1;
         }
-
-        // debugPrint(
-        //     'currentId $currentId $i ${chip.chipKey} ${layers[i].mode?.currentColor}');
+        // debugPrint('current mode name ${layer.mode?.value}');
 
         // add the chip
         keyModel.addChip(chip);
@@ -145,13 +170,13 @@ KeyModel _updateKeyInfo(
     }
 
     // TODO: only for debugging, delete.
-    if ('${keyModel.keyCode}'.contains('kF5')) {
-      // for (var i = 0; i < layers.length; i++) {
-      //   debugPrint('\t esc $i ${layers[i].mode?.currentColor.first}');
-      // }
+    // if ('${keyModel.keyCode}'.contains('kF5')) {
+    //   // for (var i = 0; i < layers.length; i++) {
+    //   //   debugPrint('\t esc $i ${layers[i].mode?.currentColor.first}');
+    //   // }
 
-      // debugPrint('kF5 \t ${keyModel.chipsValues.map((e) => e.chipKey)}');
-    }
+    //   // debugPrint('kF5 \t ${keyModel.chipsValues.map((e) => e.chipKey)}');
+    // }
   }
 
   return keyModel;

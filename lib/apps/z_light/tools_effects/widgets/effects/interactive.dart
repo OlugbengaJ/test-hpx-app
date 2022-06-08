@@ -26,17 +26,21 @@ class _InteractivePresetState extends State<InteractivePreset> {
   void _setSliderValue(double returnValue, String type) {
     EffectProvider effectsProvider =
         Provider.of<EffectProvider>(context, listen: false);
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
     effectsProvider.setCurrentEffect(EffectsModel(
         effectName: effectsProvider.currentEffect?.effectName,
         degree: effectsProvider.currentEffect?.degree,
-        speed: (type == 'speed')
-            ? returnValue.floorToDouble()
-            : effectsProvider.currentEffect?.speed,
-        size: (type == 'size')
-            ? returnValue.floorToDouble()
-            : effectsProvider.currentEffect?.size));
+        speed: effectsProvider.currentEffect?.speed,
+        size: effectsProvider.currentEffect?.size));
+
+    modeProvider.setCurrentMode(ToolsModeModel(
+        currentColor: modeProvider.currentMode.currentColor,
+        effects: modeProvider.currentMode.effects,
+        value: modeProvider.currentMode.value,
+        name: modeProvider.currentMode.name));
     layerProvider.toolsEffectsUpdated();
   }
 
@@ -44,8 +48,14 @@ class _InteractivePresetState extends State<InteractivePreset> {
   changeSubMode(PickerModel? pickerChoice) {
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
+    EffectProvider effectsProvider =
+        Provider.of<EffectProvider>(context, listen: false);
     ModeProvider modeProvider =
         Provider.of<ModeProvider>(context, listen: false);
+    effectsProvider.setCurrentEffect(EffectsModel(
+        effectName: effectsProvider.currentEffect?.effectName,
+        size: effectsProvider.currentEffect?.size,
+        speed: effectsProvider.currentEffect?.speed));
     modeProvider.setCurrentMode(ToolsModeModel(
         subMode: pickerChoice?.value,
         currentColor: modeProvider.currentMode.currentColor,
@@ -100,6 +110,9 @@ class _InteractivePresetState extends State<InteractivePreset> {
               divisions: 100,
               label: effectsProvider.currentEffect!.speed.toString(),
               onChanged: (double value) {
+                setState(() {
+                  effectsProvider.currentEffect?.speed = value;
+                });
                 _setSliderValue(value, "speed");
               },
             ),
@@ -129,6 +142,9 @@ class _InteractivePresetState extends State<InteractivePreset> {
               divisions: 24,
               label: effectsProvider.currentEffect!.size.toString(),
               onChanged: (double value) {
+                setState(() {
+                  effectsProvider.currentEffect?.size = value;
+                });
                 _setSliderValue(value, "size");
               },
             ),

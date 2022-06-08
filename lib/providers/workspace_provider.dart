@@ -20,10 +20,11 @@ class WorkspaceProvider with ChangeNotifier {
   /// [_modalWidgets] holds widgets that are rendered in the modal notifcation.
   List<Widget>? _modalWidgets;
 
+  final double _resizableThreshold = 20;
+
   /// [_selectorVisible] determines overlay selectors visibility.
   bool _selectorVisible = false;
 
-  final double _resizableThreshold = 20;
   bool get selectorVisible => _selectorVisible;
 
   /// [_workspaceRect] returns a [Rect] of the rendered workspace stack.
@@ -111,26 +112,91 @@ class WorkspaceProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  /// Animation controls
-  /// should contain a list of animations for different layers.
-  // late AnimationController _controller;
-  // late Animation<double> _animation;
+  /// [_animMillisecond] is the animation duration in milliseconds and defaults to 1s.
+  double? _animMillisecond = 1000.0;
 
-  // Animation<double> get animation => _animation;
-  // AnimationController get controller => _controller;
+  /// [_animationColor] is used to create a ColorTween animation.
+  late Animation<Color?> _animationColor;
 
-  // void setAnimation(
-  //     AnimationController controller, Animation<double> animation) {
-  //   _controller = controller;
-  //   _animation = animation;
-  //   // _controller.forward();
-  // }
+  /// [_controller] is the private instance of the AnimationController
+  /// which is instantiated in [initAnimation].
+  late AnimationController _controller;
 
-  // void stopAnimating() {
-  //   if (_controller.isAnimating) {
-  //     _controller.stop();
-  //   }
-  // }
+  /// [controller] returns this instance of the AnimationController.
+  AnimationController get controller => _controller;
+
+  /// [initAnimation] initalizes the animation controller.
+  void initAnimation(AnimationController animController) {
+    _controller = animController;
+    startAnimation();
+  }
+
+  /// [_setAnimDuration] updates the animation duration by [speed] factor.
+  void _setAnimDuration(double? speed) {
+    if (speed != null) {
+      // speed exists so check if it has changed
+      final ms = speed * 10;
+      if (ms != _animMillisecond) {
+        // update the controller duration
+        _animMillisecond = ms;
+        _controller.duration = Duration(milliseconds: ms.toInt());
+        // debugPrint('anim duration changed $speed ${controller.duration}');
+      }
+    }
+  }
+
+  /// [animColor] returns an animation color.
+  Color? animColor(Color beginColor, Color endColor, {double? speed}) {
+    _animationColor =
+        ColorTween(begin: beginColor, end: endColor).animate(_controller);
+
+    _setAnimDuration(speed);
+    _checkAnimaStatus();
+
+    return _animationColor.value;
+  }
+
+  /// [_checkAnimaStatus] this ensures the animation controller is always active.
+  void _checkAnimaStatus() {
+    switch (_controller.status) {
+      case AnimationStatus.completed:
+        _controller.reverse();
+        // debugPrint('completed');
+        break;
+      case AnimationStatus.dismissed:
+        // debugPrint('dismissed');
+        _controller.forward();
+        break;
+      case AnimationStatus.forward:
+        if (!_controller.isAnimating) {
+          _controller.reverse();
+          // debugPrint('forward');
+        }
+        break;
+      case AnimationStatus.reverse:
+        if (!_controller.isAnimating) {
+          // debugPrint('reverse');
+          _controller.forward();
+        }
+        break;
+      default:
+    }
+  }
+
+  /// [startAnimation] begins the animation.
+  void startAnimation() {
+    if (_controller.isDismissed) {
+      _controller.reverse(
+          from: _controller.value == 0 ? 1.0 : _controller.value);
+    }
+  }
+
+  /// [stopAnimation] stops the animation.
+  void stopAnimation() {
+    if (_controller.isAnimating) {
+      _controller.stop();
+    }
+  }
 
   /// [_layersProvider] grants access to [LayersProvider] resizable widget
   LayersProvider? _layersProvider;
