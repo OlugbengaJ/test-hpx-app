@@ -100,12 +100,24 @@ class KeyModel with ChangeNotifier {
     return _chips[chipKey];
   }
 
+  bool _isLayerChip(String k) {
+    return k != ChipKey.base.toString() && k != ChipKey.overlay.toString();
+  }
+
+  /// [getLayeredChipsqKeys] returns chips keys other than base, overlay, and icon
+  List<String> getLayeredChipsqKeys() {
+    return _chips.keys.where((k) => _isLayerChip(k)).toList();
+  }
+
   /// [getLayeredChips] returns chips other than base, overlay, and icon
-  List<String> getLayeredChips() {
-    return _chips.keys
-        .where((k) =>
-            k != ChipKey.base.toString() && k != ChipKey.overlay.toString())
-        .toList();
+  List<KeyPaintRect?> getLayeredChips() {
+    return [
+      ..._chips.entries.map((e) {
+        if (_isLayerChip(e.key)) {
+          return e.value as KeyPaintRect;
+        }
+      })
+    ];
   }
 
   /// [removeChip] deletes chip layer whose key matches [chipKey].
