@@ -80,7 +80,7 @@ KeyModel _updateKeyInfo(
   List<KeyPaintChip> krect = [];
 
   // clear key selections
-  final layersChipKeys = keyModel.getLayeredChips();
+  final layersChipKeys = keyModel.getLayeredChipsqKeys();
 
   if (layersChipKeys.isNotEmpty) {
     // TODO: using workspace provider layers selection map could be useful.
@@ -162,7 +162,7 @@ KeyModel _updateKeyInfo(
           default:
             chip.opacity = 1;
         }
-        // debugPrint('current mode name ${layer.mode?.value}');
+        debugPrint('current mode name ${layer.mode?.value}');
 
         // add the chip
         keyModel.addChip(chip);
