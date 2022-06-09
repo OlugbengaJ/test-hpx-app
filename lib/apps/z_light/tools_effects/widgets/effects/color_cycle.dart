@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -21,16 +23,24 @@ class _ColorCycleState extends State<ColorCyclePreset> {
   void _setSliderValue(double returnValue) {
     EffectProvider effectsProvider =
         Provider.of<EffectProvider>(context, listen: false);
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
+    setState(() {
+      effectsProvider.currentEffect?.speed = returnValue;
+    });
     effectsProvider.setCurrentEffect(EffectsModel(
         effectName: effectsProvider.currentEffect?.effectName,
         degree: effectsProvider.currentEffect?.degree,
         speed: returnValue.floorToDouble()));
+
+    modeProvider.setCurrentMode(ToolsModeModel(
+        currentColor: modeProvider.currentMode.currentColor,
+        effects: modeProvider.currentMode.effects,
+        value: modeProvider.currentMode.value,
+        name: modeProvider.currentMode.name));
     layerProvider.toolsEffectsUpdated();
-    setState(() {
-      effectsProvider.currentEffect?.speed = returnValue;
-    });
   }
 
   @override

@@ -20,13 +20,13 @@ class LayerItemModel {
     this.bottom = 0,
     this.left = 0,
     this.right = 0,
-    this.icon = Icons.mood
+    this.icon = Icons.mood,
   });
   final int id;
   int parentID;
   String layerText;
   bool visible = true;
-  final bool isSublayer;
+  bool isSublayer = false;
   IconData icon = Icons.mood;
   bool hasSublayer;
   bool visibleOnStack;
@@ -34,7 +34,6 @@ class LayerItemModel {
   Color paintColor;
   ToolsModeModel? mode;
   List<KeyModel> _keys = [];
-
 
   List<KeyModel> get keys => _keys;
   void setKeys(List<KeyModel> keys) {
@@ -45,6 +44,4 @@ class LayerItemModel {
   double bottom = 0.0;
   double left = 0.0;
   double right = 0.0;
-
-  
 }

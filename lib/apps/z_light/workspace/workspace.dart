@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
-import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
+import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_stack.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/imports.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
@@ -25,7 +24,7 @@ class Workspace extends StatefulWidget {
 class _WorkspaceState extends State<Workspace>
     with SingleTickerProviderStateMixin {
   // late variables are initialize on initState()
-  late Animation<double> _animation;
+  // late Animation<double> _animation;
   late AnimationController _controller;
 
   late TextEditingController _zoomTextCtrl;
@@ -118,26 +117,24 @@ class _WorkspaceState extends State<Workspace>
     const duration = Duration(seconds: 1);
 
     _controller = AnimationController(vsync: this, duration: duration);
-    final curveAnimation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.linear,
-      reverseCurve: Curves.linear,
-    );
-    _animation = Tween<double>(
-      begin: 0,
-      end: math.sin(math.pi / 2), // max value of 1
-    ).animate(curveAnimation)
-      ..addListener(() {
-        setState(() {});
-      })
-      ..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          _controller.repeat();
-        }
-        if (status == AnimationStatus.dismissed) {
-          debugPrint('dismissed');
-        }
-      });
+    // final curveAnimation = CurvedAnimation(
+    //   parent: _controller,
+    //   curve: Curves.linear,
+    //   reverseCurve: Curves.linear,
+    // );
+    // _animation = Tween<double>(
+    //   begin: 0,
+    //   end: math.sin(math.pi / 2), // max value of 1
+    // ).animate(curveAnimation)
+    //   ..addListener(() {
+    //     setState(() {});
+    //   })
+    //   ..addStatusListener((status) {
+    //     if (status == AnimationStatus.completed) {
+    //       _controller.repeat();
+    //     }
+    //     if (status == AnimationStatus.dismissed) {}
+    //   });
   }
 
   @override
@@ -166,15 +163,15 @@ class _WorkspaceState extends State<Workspace>
 
   @override
   Widget build(BuildContext context) {
+    final controllerH = ScrollController();
+    final controllerV = ScrollController();
     final workspaceProvider = Provider.of<WorkspaceProvider>(context);
 
     // initialize animation controller
-    workspaceProvider.setAnimation(_controller, _animation);
+    workspaceProvider.initAnimation(_controller);
 
     // initialize layers provider
-    workspaceProvider.setLayersProvider(Provider.of<LayersProvider>(context));
-    workspaceProvider
-        .setResizableProvider(Provider.of<ResizableProvider>(context));
+    workspaceProvider.initLayersProvider(Provider.of<LayersProvider>(context));
 
     return Column(
       children: [
@@ -184,100 +181,95 @@ class _WorkspaceState extends State<Workspace>
         /// Setting width/height with double.infinity is not recommended,
         /// instead we want to keep the view constrained and have excessive
         /// sub-widgets cliped only to the view.
-        Consumer<WorkspaceProvider>(
-          builder: (context, provider, child) => (provider.isLightingView)
-              ? ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxHeight: 85,
+        if (workspaceProvider.isLightingView)
+          ConstrainedBox(
+            key: workspaceZoneToolsKey,
+            constraints: const BoxConstraints(
+              maxHeight: 85,
+            ),
+            child: Container(
+              margin: const EdgeInsets.all(15.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text('Zone Selection', style: h5Style),
                   ),
-                  child: Container(
-                    margin: const EdgeInsets.all(15.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text('Zone Selection', style: h5Style),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 20.0),
+                        child: Tooltip(
+                          message: 'Highlight selector',
+                          child: RoundButton(
+                            onTapDown: () {
+                              workspaceProvider
+                                  .toggleDragMode(WorkspaceDragMode.highlight);
+                            },
+                            size: _buttonSize,
+                            icon: Icons.highlight_alt,
+                            iconColor: workspaceProvider.isDragModeHighlight
+                                ? Theme.of(context).colorScheme.primary
+                                : null,
+                          ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 20.0),
-                              child: Tooltip(
-                                message: 'Highlight selector',
-                                child: RoundButton(
-                                  onTapDown: () {
-                                    provider
-                                        .toggleDragMode(WorkspaceDragMode.zone);
-                                  },
-                                  size: _buttonSize,
-                                  icon: Icons.highlight_alt,
-                                  iconColor: provider.isDragModeZone
-                                      ? Theme.of(context).colorScheme.primary
-                                      : null,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 20.0),
-                              child: Tooltip(
-                                message: 'Resizable selector',
-                                child: RoundButton(
-                                  onTapDown: () {
-                                    provider.toggleDragMode(
-                                        WorkspaceDragMode.resizable);
-                                  },
-                                  onTapUp: () {},
-                                  size: _buttonSize,
-                                  icon: Icons.select_all,
-                                  iconColor: provider.isDragModeResizable
-                                      ? Theme.of(context).colorScheme.primary
-                                      : null,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 20.0),
-                              child: Tooltip(
-                                message: 'Click selector',
-                                child: RoundButton(
-                                  onTapDown: () {
-                                    provider.toggleDragMode(
-                                        WorkspaceDragMode.click);
-                                  },
-                                  size: _buttonSize,
-                                  icon: Icons.mouse,
-                                  iconColor: provider.isDragModeClick
-                                      ? Theme.of(context).colorScheme.primary
-                                      : null,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 20.0),
-                              child: DropDown(
-                                enabled: workspaceProvider.isDragModeClick,
-                                hint: 'Select by devices...',
-                                hintStyle: pStyle,
-                                items: getDropdownMenuItems(
-                                  Theme.of(context).colorScheme.primary,
-                                  devices(),
-                                ),
-                                onChangedHandler: (o) {},
-                              ),
-                            ),
-                          ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 20.0),
+                        child: Tooltip(
+                          message: 'Resizable selector',
+                          child: RoundButton(
+                            onTapDown: () {
+                              workspaceProvider
+                                  .toggleDragMode(WorkspaceDragMode.resizable);
+                            },
+                            onTapUp: () {},
+                            size: _buttonSize,
+                            icon: Icons.select_all,
+                            iconColor: workspaceProvider.isDragModeResizable
+                                ? Theme.of(context).colorScheme.primary
+                                : null,
+                          ),
                         ),
-                      ],
-                    ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 20.0),
+                        child: Tooltip(
+                          message: 'Click selector',
+                          child: RoundButton(
+                            onTapDown: () {
+                              workspaceProvider
+                                  .toggleDragMode(WorkspaceDragMode.click);
+                            },
+                            size: _buttonSize,
+                            icon: Icons.mouse,
+                            iconColor: workspaceProvider.isDragModeClick
+                                ? Theme.of(context).colorScheme.primary
+                                : null,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 20.0),
+                        child: DropDown(
+                          enabled: workspaceProvider.isDragModeClick,
+                          hint: 'Select by devices...',
+                          hintStyle: pStyle,
+                          items: getDropdownMenuItems(
+                            Theme.of(context).colorScheme.primary,
+                            devices(),
+                          ),
+                          onChangedHandler: (o) {},
+                        ),
+                      ),
+                    ],
                   ),
-                )
-              : ConstrainedBox(
-                  constraints: const BoxConstraints(maxHeight: 0),
-                  child: Container(),
-                ),
-        ),
+                ],
+              ),
+            ),
+          ),
         if (workspaceProvider.isStripNotify)
           StripNotification(
             message: workspaceProvider.stripNotificationText,
@@ -292,9 +284,10 @@ class _WorkspaceState extends State<Workspace>
               ),
             ),
             child: Stack(
+              key: workspaceStackKey,
               children: [
                 GestureDetector(
-                  behavior: HitTestBehavior.opaque,
+                  behavior: HitTestBehavior.translucent,
                   onPanDown: (details) {
                     workspaceProvider.onPanDown(details);
                   },
@@ -310,18 +303,43 @@ class _WorkspaceState extends State<Workspace>
                       // This ensures seamless zooming of the entire keyboard.
                       Align(
                         alignment: Alignment.center,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          primary: false,
+                        child: Scrollbar(
+                          scrollbarOrientation: ScrollbarOrientation.bottom,
+                          controller: controllerH,
+                          thumbVisibility: true,
                           child: SingleChildScrollView(
+                            controller: controllerH,
                             scrollDirection: Axis.horizontal,
                             primary: false,
-                            child: Keyboard(zoomScale: _zoomScale),
+                            child: Scrollbar(
+                              scrollbarOrientation: ScrollbarOrientation.left,
+                              controller: controllerV,
+                              thumbVisibility: true,
+                              child: SingleChildScrollView(
+                                controller: controllerV,
+                                scrollDirection: Axis.vertical,
+                                primary: false,
+                                child: Keyboard(zoomScale: _zoomScale),
+                              ),
+                            ),
                           ),
                         ),
                       ),
+
+                      // Container(
+                      //   color: Colors.blue,
+                      //   width: 50,
+                      // ),
+
                       const LayersStack(),
-                      if (workspaceProvider.isPanning) const KeyboardSelector(),
+
+                      OverlaySelector(
+                        showCrossHair: workspaceProvider.isDragModeResizable,
+                        onPanDown: workspaceProvider.onPanDown,
+                        onPanUpdate: workspaceProvider.onPanUpdate,
+                        onPanEnd: workspaceProvider.onPanEnd,
+                        isVisible: workspaceProvider.selectorVisible,
+                      ),
 
                       if (workspaceProvider.isModalNotify)
                         ModalNotification(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/globals.dart';
-import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/apps/z_light/wrapper.dart';
 import 'package:hpx/providers/keys_provider.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
@@ -18,7 +17,6 @@ void main() => runApp(
       MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => LayersProvider()),
-          ChangeNotifierProvider(create: (_) => ResizableProvider()),
           ChangeNotifierProvider(create: (_) => ColorPickerProvider()),
           ChangeNotifierProvider(create: (_) => ModeProvider()),
           ChangeNotifierProvider(create: (_) => ShortcutWidgetProvider()),

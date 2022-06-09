@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
+import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
@@ -14,9 +16,6 @@ class AmbeintPreset extends StatefulWidget {
 }
 
 class _AmbeintPresetState extends State<AmbeintPreset> {
-  final _modeProvider = ModeProvider();
-  double _imageSliderValue = 50.0;
-  double _updatesSliderValue = 40.0;
   final PickerModel _defaultScreenPicker = PickerModel(
       title: 'Entire Screen', enabled: true, value: AmbientEnum.entirescreen);
   final PickerModel _defaultDisplayPicker = PickerModel(
@@ -25,22 +24,54 @@ class _AmbeintPresetState extends State<AmbeintPreset> {
       enabled: true,
       value: AmbientDisplayEnum.display1);
 
-  void _setSliderValue(double returnValue, String type) {
+  /// function designed to change the tools and effects sub mode
+  changeSubMode(PickerModel? pickerChoice, bool isDisplay) {
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
-    setState(() {
-      if (type == "image") {
-        _imageSliderValue = returnValue;
-      }
-      if (type == "updates") {
-        _updatesSliderValue = returnValue;
-      }
-    });
+    modeProvider.setCurrentMode(ToolsModeModel(
+        subMode: (isDisplay == false)
+            ? pickerChoice?.value
+            : modeProvider.currentMode.subMode,
+        display: (isDisplay == true)
+            ? pickerChoice?.value
+            : modeProvider.currentMode.display,
+        currentColor: modeProvider.currentMode.currentColor,
+        value: modeProvider.currentMode.value,
+        icon: modeProvider.currentMode.icon,
+        effects: modeProvider.currentMode.effects,
+        name: modeProvider.currentMode.name));
+    layerProvider.toolsEffectsUpdated();
+  }
+
+  void _setSliderValue(double returnValue) {
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
+    EffectProvider effectsProvider =
+        Provider.of<EffectProvider>(context, listen: false);
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
+
+    effectsProvider.setCurrentEffect(EffectsModel(
+      effectName: modeProvider.currentMode.effects.effectName,
+      imageQuality: effectsProvider.currentEffect?.imageQuality,
+      updatePerSecond: effectsProvider.currentEffect?.updatePerSecond,
+    ));
+    modeProvider.setCurrentMode(ToolsModeModel(
+        currentColor: modeProvider.currentMode.currentColor,
+        effects: modeProvider.currentMode.effects,
+        value: modeProvider.currentMode.value,
+        name: modeProvider.currentMode.name));
     layerProvider.toolsEffectsUpdated();
   }
 
   @override
   Widget build(BuildContext context) {
+    EffectProvider effectsProvider =
+        Provider.of<EffectProvider>(context, listen: false);
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
     return Container(
         margin: const EdgeInsets.only(top: 20, bottom: 20.0),
         child: Column(
@@ -50,23 +81,18 @@ class _AmbeintPresetState extends State<AmbeintPreset> {
                 width: MediaQuery.of(context).size.width * 0.45,
                 child: PickerDropdown(
                     onChange: (PickerModel? returnValue) {
-                      setState(() {
-                        // preset = changeComponent();
-                      });
+                      changeSubMode(returnValue, false);
                     },
                     defaultPicker: _defaultScreenPicker,
-                    pickerList: _modeProvider.getPickerModes('ambientscreen'))),
+                    pickerList: modeProvider.getPickerModes('ambientscreen'))),
             SizedBox(
                 width: MediaQuery.of(context).size.width * 0.45,
                 child: PickerDropdown(
                     onChange: (PickerModel? returnValue) {
-                      setState(() {
-                        // preset = changeComponent();
-                      });
+                      changeSubMode(returnValue, true);
                     },
                     defaultPicker: _defaultDisplayPicker,
-                    pickerList:
-                        _modeProvider.getPickerModes('ambientdisplay'))),
+                    pickerList: modeProvider.getPickerModes('ambientdisplay'))),
             Container(margin: const EdgeInsets.only(top: 30.0)),
             Divider(
               color: Colors.grey.shade800,
@@ -76,13 +102,16 @@ class _AmbeintPresetState extends State<AmbeintPreset> {
             Text("Image Quality", textAlign: TextAlign.left, style: labelStyle),
             Container(margin: const EdgeInsets.only(bottom: 10.0)),
             Slider(
-              value: _imageSliderValue,
+              value: effectsProvider.currentEffect!.imageQuality!,
               max: 100,
               min: 0,
               divisions: 10,
-              label: _imageSliderValue.round().toString(),
+              label: effectsProvider.currentEffect?.imageQuality.toString(),
               onChanged: (double value) {
-                _setSliderValue(value, "image");
+                setState(() {
+                  effectsProvider.currentEffect?.imageQuality = value;
+                });
+                _setSliderValue(value);
               },
             ),
             Row(children: [
@@ -106,13 +135,16 @@ class _AmbeintPresetState extends State<AmbeintPreset> {
                 textAlign: TextAlign.left, style: labelStyle),
             Container(margin: const EdgeInsets.only(bottom: 10.0)),
             Slider(
-              value: _updatesSliderValue,
+              value: effectsProvider.currentEffect!.updatePerSecond!,
               max: 100,
               min: 0,
               divisions: 10,
-              label: _updatesSliderValue.round().toString(),
+              label: effectsProvider.currentEffect?.updatePerSecond.toString(),
               onChanged: (double value) {
-                _setSliderValue(value, "updates");
+                setState(() {
+                  effectsProvider.currentEffect?.updatePerSecond = value;
+                });
+                _setSliderValue(value);
               },
             ),
             Row(children: [

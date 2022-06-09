@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/effects/ambient.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/effects/audio_visualization.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/effects/blinking.dart';
@@ -14,7 +15,9 @@ import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.da
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/widget/image_mode_provder.dart';
 import 'package:hpx/providers/workspace_provider.dart';
+import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:ionicons/ionicons.dart';
@@ -176,7 +179,7 @@ class ModeProvider extends ChangeNotifier {
 
   /// function designed to change the tools and effects mode widget and return the chosen widget
   /// also sets the default colors and mode information
-  changeModeComponent(PickerModel? pickerChoice, BuildContext context) {
+  changeModeComponent(PickerModel? pickerChoice, BuildContext context) async {
     // default variable for settin currentcolors in this function
     List<Color> currentColors = [];
     // default variable for settin effects in this function
@@ -185,6 +188,9 @@ class ModeProvider extends ChangeNotifier {
     /// initialize the workspace provider to use to send notification accross the workspace
     WorkspaceProvider workProvider =
         Provider.of<WorkspaceProvider>(context, listen: false);
+
+    ImageModeProvider imageModeProvider =
+        Provider.of<ImageModeProvider>(context, listen: false);
 
     /// if last mode was interactive
     if (currentMode.value == EnumModes.interactive) {
@@ -262,13 +268,21 @@ class ModeProvider extends ChangeNotifier {
         preset = const InteractivePreset();
         break;
       case EnumModes.image:
+
+        /// convert the default image into color paltte
+        ByteData image = await rootBundle.load(Constants.defaultImageMode);
+        await imageModeProvider.extractColors(image.buffer.asUint8List());
+
         currentColors.add(Colors.transparent);
         effects.effectName = pickerChoice.value;
+        effects.extractedColors = imageModeProvider.extractedMatrix;
         preset = const ImagePreset();
         break;
       case EnumModes.ambient:
         currentColors.add(Colors.transparent);
         effects.effectName = pickerChoice.value;
+        effects.imageQuality = 50.0;
+        effects.updatePerSecond = 40.0;
         preset = const AmbeintPreset();
         break;
       default:
@@ -285,6 +299,10 @@ class ModeProvider extends ChangeNotifier {
     effectsProvider.setCurrentEffect(EffectsModel(
         effectName: effects.effectName,
         degree: effects.degree,
+        imageQuality: effects.imageQuality,
+        updatePerSecond: effects.updatePerSecond,
+        size: effects.size,
+        extractedColors: effects.extractedColors,
         speed: effects.speed));
 
     //// set the current mode to the mode been selected and change to and apply all current colors and effects
@@ -292,6 +310,7 @@ class ModeProvider extends ChangeNotifier {
         currentColor: currentColors,
         value: pickerChoice.value,
         icon: pickerChoice.icon,
+        modeType: currentMode.modeType,
         effects: effectsProvider.currentEffect!,
         name: pickerChoice.title));
   }
@@ -304,7 +323,8 @@ class ModeProvider extends ChangeNotifier {
   // change the mode type for the current mode between sublayer and layer based on the value passed
   setModeType(bool isSubLayer) {
     currentMode.modeType =
-        (isSubLayer == true) ? EnumModeType.sublayer : EnumModeType.layers;
+        (isSubLayer) ? EnumModeType.sublayer : EnumModeType.layers;
+    // print(currentMode.modeType);
     notifyListeners();
   }
 }

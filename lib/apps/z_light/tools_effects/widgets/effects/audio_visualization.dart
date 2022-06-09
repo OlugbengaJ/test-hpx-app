@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
@@ -21,6 +22,22 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
       value: AudioVisualEnum.powerbar,
       icon: Icons.power_input_outlined);
 
+  /// function designed to change the tools and effects sub mode
+  changeSubMode(PickerModel? pickerChoice) {
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
+    modeProvider.setCurrentMode(ToolsModeModel(
+        subMode: pickerChoice?.value,
+        currentColor: modeProvider.currentMode.currentColor,
+        value: modeProvider.currentMode.value,
+        icon: modeProvider.currentMode.icon,
+        effects: modeProvider.currentMode.effects,
+        name: modeProvider.currentMode.name));
+    layerProvider.toolsEffectsUpdated();
+  }
+
   @override
   Widget build(BuildContext context) {
     ModeProvider modeProvider =
@@ -36,9 +53,10 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
                 width: MediaQuery.of(context).size.width * 0.45,
                 child: PickerDropdown(
                     onChange: (PickerModel? returnValue) {
-                      setState(() {
-                        // preset = changeComponent();
-                      });
+                      changeSubMode(returnValue);
+                      // setState(() {
+                      //   // preset = changeComponent();
+                      // });
                     },
                     defaultPicker: _defaultPicker,
                     pickerList: modeProvider.getPickerModes('audiolist'))),

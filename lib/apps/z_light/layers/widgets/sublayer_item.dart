@@ -19,11 +19,6 @@ class _SublayerItemState extends State<SublayerItem> {
   final double _iconSize = 16;
   TextEditingController _layerNameController = TextEditingController(text: "");
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   _onHover(isHovering) {
     setState(() {
       _showActions = isHovering;
@@ -33,12 +28,12 @@ class _SublayerItemState extends State<SublayerItem> {
   _toggleLayer(LayersProvider provider) {
     LayerItemModel layerItemModel = widget.layerItemModel;
     provider.toggleVisibility(
-        LayerItemModel(
-          id: layerItemModel.id,
-          layerText: layerItemModel.layerText,
-          visible: !layerItemModel.visible,
-        ),
-        widget.layerIndex);
+    LayerItemModel(
+      id: layerItemModel.id,
+      layerText: layerItemModel.layerText,
+      visible: !layerItemModel.visible,
+    ),
+    widget.layerIndex);
   }
 
   _toggleEditing(value) {
@@ -49,15 +44,15 @@ class _SublayerItemState extends State<SublayerItem> {
     });
   }
 
-  _deleteLayer(provider){
+  _deleteLayer(LayersProvider provider){
     provider.removeSubItem(widget.layerItemModel);
   }
 
-  _onTap(provider) {
-    provider.changeIndex(widget.layerIndex);
+  _onTap(LayersProvider provider) {
+    provider.changeSublayerIndex(widget.layerIndex);
   }
 
-  _onSubmit(value, provider) {
+  _onSubmit(value, LayersProvider provider) {
     setState(() {
       _editing = !_editing;
     });

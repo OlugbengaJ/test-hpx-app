@@ -606,7 +606,7 @@ class KeysProvider with ChangeNotifier {
 
   List<KeyModel> get keys => [..._keys];
 
-  /// Add a new [key]
+  /// [add] adds a new [KeyModel]
   void add(KeyModel key) {
     if (_keys.isEmpty ||
         _keys.any((element) => element.keyCode != key.keyCode)) {
@@ -617,7 +617,7 @@ class KeysProvider with ChangeNotifier {
     }
   }
 
-  /// Replaces an existing [key]
+  /// [replace] replaces an existing [KeyModel]
   void replace(KeyModel key) {
     int keyIndex =
         _keys.indexWhere((element) => element.keyCode == key.keyCode);
@@ -628,11 +628,23 @@ class KeysProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<KeyModel> getKeyInRow(int rowId) {
+  /// [getKey] returns a [KeyModel] matching the [keyCode].
+  KeyModel getKey(KeyCode keyCode) {
+    return _keys.firstWhere((element) => element.keyCode == keyCode);
+  }
+
+  /// [getKeysInRow] returns a list of [KeyModel] in a specific row.
+  List<KeyModel> getKeysInRow(int rowId) {
     return _keys.where((element) => element.keyRow == rowId).toList();
   }
 
-  KeyModel getKey(KeyCode keyCode) {
-    return _keys.firstWhere((element) => element.keyCode == keyCode);
+  /// [getLayeredKeys] returns a list of [KeyModel] that have layered chips.
+  ///
+  /// A [KeyModel] is said to have layered chips when it contains at least
+  /// one chip that is neither a [ChipKey.base] nor [ChipKey.overlay].
+  List<KeyModel> getLayeredKeys() {
+    return _keys
+        .where((element) => element.getLayeredChips().isNotEmpty)
+        .toList();
   }
 }

@@ -1149,7 +1149,7 @@ class KeyCustomPainter extends CustomPainter {
             topRight: Radius.circular(size.width * 0.001594051)),
         paint74Stroke);
 
-    // TODO: Number pad section on an external keyboard
+    // Number pad section on an external keyboard
     Path path_75 = Path();
     path_75.moveTo(size.width * 0.6784962, size.height * 1.303571);
     path_75.lineTo(size.width * 0.7144078, size.height * 1.303571);
@@ -2175,14 +2175,15 @@ class KeyCustomPainter extends CustomPainter {
     Paint paint75Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009191897;
-    paint75Stroke.color = Color.fromARGB(255, 117, 36, 36).withOpacity(1);
+    paint75Stroke.color = const Color.fromARGB(255, 117, 36, 36).withOpacity(1);
     paint75Stroke.strokeCap = StrokeCap.round;
     canvas.drawPath(path_75, paint75Stroke);
 
     Paint paint76Stroke = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width * 0.0009120650;
-    paint76Stroke.color = Color.fromARGB(255, 186, 186, 186).withOpacity(1);
+    paint76Stroke.color =
+        const Color.fromARGB(255, 186, 186, 186).withOpacity(1);
     paint76Stroke.strokeCap = StrokeCap.round;
     canvas.drawRRect(
         RRect.fromRectAndCorners(

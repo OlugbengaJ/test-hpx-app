@@ -2,12 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/rotate_button.dart';
 import 'package:hpx/widgets/theme.dart';
+import 'package:knob_widget/knob_widget.dart';
 import 'package:provider/provider.dart';
 
 class WavePreset extends StatefulWidget {
@@ -24,8 +26,13 @@ class _WavePresetState extends State<WavePreset> {
   /// variable for managing degree input been set to the for the knob and input field
   TextEditingController degreeController = TextEditingController();
 
-  /// this variable checks if the degree knob should rotate or not
-  bool isRotate = false;
+  late KnobController? _controller;
+
+  void valueChangedListener(double value) {
+    if (mounted) {
+      _setDegreeValue(value);
+    }
+  }
 
   //// this function sets the default effect degree value to the degree knob
   @override
@@ -38,6 +45,13 @@ class _WavePresetState extends State<WavePreset> {
       degreeController.text =
           effectsProvider.currentEffect!.degree!.toStringAsFixed(0);
     });
+    _controller = KnobController(
+      initial: double.parse(degreeController.text),
+      maximum: 360,
+      startAngle: 0,
+      endAngle: 360,
+    );
+    _controller?.addOnValueChangedListener(valueChangedListener);
     super.initState();
   }
 
@@ -50,35 +64,43 @@ class _WavePresetState extends State<WavePreset> {
     // /// initialize the layers provider to use to send notification accross the layers
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
+
+    setState(() {
+      degreeController.text = returnValue!.toStringAsFixed(0);
+    });
     effectsProvider.setCurrentEffect(EffectsModel(
-        effectName: modeProvider.currentMode.value,
+        effectName: modeProvider.currentMode.effects.effectName,
         degree: returnValue,
         speed: effectsProvider.currentEffect?.speed));
-    setState(() {
-      // isRotate = true;
-      degreeController.text = (returnValue! < 0
-              ? (360 - (0 - returnValue) * (180 / pi))
-              : returnValue * (180 / pi))
-          .toStringAsFixed(0);
-      // degreeController.text = returnValue!.toStringAsFixed(0);
-      effectsProvider.currentEffect?.degree = returnValue;
-    });
+
+    modeProvider.setCurrentMode(ToolsModeModel(
+        currentColor: modeProvider.currentMode.currentColor,
+        effects: modeProvider.currentMode.effects,
+        value: modeProvider.currentMode.value,
+        name: modeProvider.currentMode.name));
     layerProvider.toolsEffectsUpdated();
   }
 
   void _setSliderValue(double returnValue) {
     EffectProvider effectsProvider =
         Provider.of<EffectProvider>(context, listen: false);
-    // /// initialize the layers provider to use to send notification accross the layers
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
-    setState(() {
-      effectsProvider.setCurrentEffect(EffectsModel(
-          effectName: effectsProvider.currentEffect?.effectName,
-          degree: effectsProvider.currentEffect?.degree,
-          speed: returnValue.floorToDouble()));
-      layerProvider.toolsEffectsUpdated();
-    });
+
+    effectsProvider.setCurrentEffect(EffectsModel(
+        effectName: modeProvider.currentMode.effects.effectName,
+        degree: effectsProvider.currentEffect?.degree,
+        speed: returnValue.floorToDouble()));
+
+    modeProvider.setCurrentMode(ToolsModeModel(
+        currentColor: modeProvider.currentMode.currentColor,
+        effects: modeProvider.currentMode.effects,
+        value: modeProvider.currentMode.value,
+        name: modeProvider.currentMode.name));
+
+    layerProvider.toolsEffectsUpdated();
   }
 
   @override
@@ -169,7 +191,9 @@ class _WavePresetState extends State<WavePreset> {
               divisions: 100,
               label: effectsProvider.currentEffect!.speed.toString(),
               onChanged: (double value) {
-                _setSliderValue(value);
+                setState(() {
+                  _setSliderValue(value);
+                });
               },
             ),
             Row(children: [
@@ -198,54 +222,57 @@ class _WavePresetState extends State<WavePreset> {
                   Expanded(
                       flex: 2,
                       child: Transform.rotate(
-                          angle: 1.6,
-                          child: RotateButton(
-                              value: double.parse(degreeController.text) % 360,
-                              onChange: (double? returnValue) {
-                                setState(() {
-                                  isRotate = true;
-                                });
-                                _setDegreeValue(returnValue);
-                              }))),
+                        angle: 3.2,
+                        child: Container(
+                          alignment: Alignment.center,
+                          margin: const EdgeInsets.only(
+                              top: 10, left: 0, right: 0, bottom: 0),
+                          child: Knob(
+                            controller: _controller,
+                            width: 70,
+                            height: 70,
+                            // style: KnobStyle(showLabels: false),
+                          ),
+                        ),
+                      )),
                   Expanded(
+                      flex: 1,
                       child: Column(
-                    children: [
-                      Text("Degrees (o)",
-                          textAlign: TextAlign.left, style: labelStyle),
-                      Container(margin: const EdgeInsets.only(top: 10.0)),
-                      SizedBox(
-                          width: 200,
-                          height: 30,
-                          child: TextField(
-                            onSubmitted: (String? value) {
-                              // print(value);
-                              setState(() {
-                                if (isRotate == false) {
-                                  // var returnValue = double.parse(value!);
-                                  degreeController.text = value!;
+                        children: [
+                          Text("Degrees (o)",
+                              textAlign: TextAlign.left, style: labelStyle),
+                          Container(margin: const EdgeInsets.only(top: 10.0)),
+                          SizedBox(
+                              width: 70,
+                              height: 30,
+                              child: TextField(
+                                onSubmitted: (String? value) {
+                                  if (double.parse(value!) > 360) {
+                                    value =
+                                        (double.parse(value) % 360).toString();
+                                  }
+                                  _controller
+                                      ?.setCurrentValue(double.parse(value));
                                   _setDegreeValue(double.parse(value));
-                                }
-                              });
-                            },
-                            style: const TextStyle(fontSize: 14),
-                            controller: degreeController,
-                            obscureText: false,
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 0, horizontal: 5),
-                              hintStyle: TextStyle(color: Colors.grey),
-                            ),
-                          ))
-                    ],
-                  )),
+                                },
+                                style: const TextStyle(fontSize: 14),
+                                controller: degreeController,
+                                obscureText: false,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: 0, horizontal: 5),
+                                  hintStyle: TextStyle(color: Colors.grey),
+                                ),
+                              ))
+                        ],
+                      )),
                   const VerticalDivider(
-                    width: 10,
+                    width: 60,
                     thickness: 0,
                     indent: 20,
                     endIndent: 0,
                   ),
-                  // Expanded(child: Text("o", style: h1Style)),
                 ])
           ],
         ));
