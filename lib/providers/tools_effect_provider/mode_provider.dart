@@ -15,9 +15,7 @@ import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.da
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
-import 'package:hpx/providers/tools_effect_provider/widget/image_mode_provder.dart';
 import 'package:hpx/providers/workspace_provider.dart';
-import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:ionicons/ionicons.dart';
@@ -189,9 +187,6 @@ class ModeProvider extends ChangeNotifier {
     WorkspaceProvider workProvider =
         Provider.of<WorkspaceProvider>(context, listen: false);
 
-    ImageModeProvider imageModeProvider =
-        Provider.of<ImageModeProvider>(context, listen: false);
-
     /// if last mode was interactive
     if (currentMode.value == EnumModes.interactive) {
       ////  set an notification message for interactive mode
@@ -268,14 +263,8 @@ class ModeProvider extends ChangeNotifier {
         preset = const InteractivePreset();
         break;
       case EnumModes.image:
-
-        /// convert the default image into color paltte
-        // ByteData image = await rootBundle.load(Constants.defaultImageMode);
-        // await imageModeProvider.extractColors(image.buffer.asUint8List());
-
         currentColors.add(Colors.transparent);
         effects.effectName = pickerChoice.value;
-        // effects.extractedColors = imageModeProvider.extractedMatrix;
         preset = const ImagePreset();
         break;
       case EnumModes.ambient:
