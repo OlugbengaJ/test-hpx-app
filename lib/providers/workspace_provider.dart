@@ -599,18 +599,21 @@ class WorkspaceProvider with ChangeNotifier {
               ltwh.highlightLTWH!.height!,
             );
           }
+
           final Rect boxRect = box!.localToGlobal(Offset.zero) & box.size;
           final rectIntersect = selectorRect.intersect(boxRect);
 
-          if (k.contains('kF5')) {
-            // final g = workspaceKey.currentContext?.findRenderObject() as RenderBox?;
-            // final s = g!.localToGlobal(Offset.zero);
-            // debugPrint('$k $s');
-            // debugPrint('$k $boxRect $selectorRect $rectIntersect');
+          // include 0 for scenarios where a button is clicked.
+          final isBoxed = rectIntersect.width >= 0 && rectIntersect.height >= 0;
+
+          if (isBoxed && k.contains('k5')) {
+            // identify what percentage of the key is boxed by rect
+            //
+            debugPrint(
+                'box: $boxRect selector: $selectorRect rect: $rectIntersect');
           }
 
-          // include 0 for scenarios where a button is clicked.
-          return (rectIntersect.width >= 0 && rectIntersect.height >= 0);
+          return isBoxed;
         }
 
         return null;
