@@ -134,7 +134,7 @@ KeyModel _updateKeyInfo(
             final beginColor = layer.mode?.currentColor.first;
             final endColor = layer.mode?.currentColor.last;
             final animColor = provider.animColor(beginColor, endColor,
-                speed: layer.mode?.effects.speed);
+                effect: EnumModes.blinking, speed: layer.mode?.effects.speed);
 
             // if (keyModel.keyCode.name.contains('k5')) {
             //   debugPrint(

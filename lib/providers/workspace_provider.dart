@@ -3,6 +3,7 @@ import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/overlay_selector.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/selection_offset.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/utils/common.dart';
@@ -146,9 +147,19 @@ class WorkspaceProvider with ChangeNotifier {
   }
 
   /// [animColor] returns an animation color.
-  Color? animColor(Color beginColor, Color endColor, {double? speed}) {
-    _animationColor =
-        ColorTween(begin: beginColor, end: endColor).animate(_controller);
+  Color? animColor(Color beginColor, Color endColor,
+      {double? speed, EnumModes? effect}) {
+    if (effect == EnumModes.blinking) {
+      _animationColor = TweenSequence<Color?>([
+        TweenSequenceItem<Color?>(
+          tween: ColorTween(begin: beginColor, end: endColor),
+          weight: 1,
+        )
+      ]).animate(controller);
+    } else {
+      _animationColor =
+          ColorTween(begin: beginColor, end: endColor).animate(_controller);
+    }
 
     _setAnimDuration(speed);
     _checkAnimaStatus();
