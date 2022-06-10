@@ -109,8 +109,7 @@ KeyModel _updateKeyInfo(
       final layer = layers[i];
       final layerId = layer.id;
 
-      final boxZone =
-          provider.boxZone(renderBox, layerId, k: '${keyModel.keyCode}');
+      final boxZone = provider.boxZone(renderBox, layerId);
 
       if (boxZone != null) {
         // insert new chip with the layer id as key
