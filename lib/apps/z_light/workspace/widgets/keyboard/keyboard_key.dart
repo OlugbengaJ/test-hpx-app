@@ -142,12 +142,12 @@ KeyModel _updateKeyInfo(
               try {
                 final chip = KeyPaintRect('$layerId');
                 chip.color = colors[colorIndex] as Color;
+
+                // add the chip
                 keyModel.addChip(chip);
               } catch (e) {
                 // color cast failed.
               }
-
-              // add the chip
             }
           }
         } else {
