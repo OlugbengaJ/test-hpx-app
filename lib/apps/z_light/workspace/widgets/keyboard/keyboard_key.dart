@@ -129,8 +129,8 @@ KeyModel _updateKeyInfo(
           final rowColors =
               layer.mode?.effects.extractedColors?.elementAt(keyModel.keyRow);
 
-          if (rowColors.runtimeType == List<Color>) {
-            final colors = rowColors as List<Color>;
+          if (rowColors != null) {
+            final colors = rowColors as List;
 
             if (colors.isNotEmpty) {
               // get number of keys possible per matrix
@@ -139,11 +139,15 @@ KeyModel _updateKeyInfo(
               // find color index for this key.
               final colorIndex = (keyIndex / maxKeysPerMatrix).floor();
 
-              final chip = KeyPaintRect('$layerId');
-              chip.color = colors[colorIndex];
+              try {
+                final chip = KeyPaintRect('$layerId');
+                chip.color = colors[colorIndex] as Color;
 
-              // add the chip
-              keyModel.addChip(chip);
+                // add the chip
+                keyModel.addChip(chip);
+              } catch (e) {
+                // color cast failed.
+              }
             }
           }
         } else {
