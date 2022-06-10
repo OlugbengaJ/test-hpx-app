@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/key_code.dart';
 
 class KeyModel with ChangeNotifier {
@@ -29,12 +28,6 @@ class KeyModel with ChangeNotifier {
   final double keyWidth;
   final double keyHeight;
   final double keyRadius;
-
-  late List<LayerItemModel> layers = [];
-
-  // /// [_isSelected] indicates key is selected.
-  // bool _isSelected = false;
-  // bool get isSelected => _isSelected;
 
   /// [_chips] holds multiple layers of a key
   /// e.g. a key could have only 1 base color, multiple layers with unique keys,
@@ -115,9 +108,11 @@ class KeyModel with ChangeNotifier {
       ..._chips.entries.map((e) {
         if (_isLayerChip(e.key)) {
           return e.value as KeyPaintRect;
+        } else {
+          return null;
         }
       })
-    ];
+    ].where((element) => element != null).toList();
   }
 
   /// [removeChip] deletes chip layer whose key matches [chipKey].

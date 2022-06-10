@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/key_rrect.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
@@ -13,8 +15,6 @@ class KeyboardKey extends StatelessWidget {
   const KeyboardKey({
     Key? key,
     this.onTapHandler,
-    required this.rowKeysCount,
-    required this.keyIndex,
     required this.zoomScale,
   }) : super(key: key);
 
@@ -23,9 +23,6 @@ class KeyboardKey extends StatelessWidget {
 
   /// [zoomScale] is a zoom factor to scale the key size.
   final double zoomScale;
-
-  final int rowKeysCount;
-  final int keyIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +50,6 @@ class KeyboardKey extends StatelessWidget {
                         layersProvider,
                         keyModel,
                         box,
-                        rowKeysCount,
-                        keyIndex,
                       ),
                       zoomScale: zoomScale,
                     ),
@@ -77,13 +72,9 @@ KeyModel _updateKeyInfo(
   LayersProvider layersProvider,
   KeyModel keyModel,
   RenderBox? renderBox,
-  int rowKeysCount,
-  int keyIndex,
 ) {
   final layers = layersProvider.layeritems;
   final layerIndex = layersProvider.listIndex;
-
-  bool? isBoxZoned;
 
   // holds the existing layer chips that are remain selected.
   List<KeyPaintChip> krect = [];
@@ -96,7 +87,6 @@ KeyModel _updateKeyInfo(
 
     // check if the key is selected for each layer, then paint if true
     // key has existing chips; preserve their properties
-    // for (var l in layers) {
     for (var k in layersChipKeys) {
       final chip = keyModel.getChip(k.toString());
 
@@ -119,88 +109,114 @@ KeyModel _updateKeyInfo(
       final layer = layers[i];
       final layerId = layer.id;
 
-      if (layer.visible) {
-        // paint only visible layers
+      final boxZone =
+          provider.boxZone(renderBox, layerId, k: '${keyModel.keyCode}');
 
-        if (layer.mode?.value == EnumModes.image) {
-          // paint all keys based on color matrix (m x n)
+      if (boxZone != null) {
+        // insert new chip with the layer id as key
+        final chip = KeyPaintRect('$layerId');
 
-          // get column (n) values where row (m) matches key row index.
-          final rowColors =
-              layer.mode?.effects.extractedColors?.elementAt(keyModel.keyRow);
+        if ('${currentLayer.id}' == chip.chipKey) {
+          // use the default color for current layer
+          chip.color = currentLayer.mode?.currentColor.last;
+        } else {
+          // use existing color for non-current layer
+          final foundKeys = krect.where((e) => e.chipKey == chip.chipKey);
+          if (foundKeys.isNotEmpty) {
+            chip.color = foundKeys.first.color;
+          }
+        }
 
-          if (rowColors != null) {
-            final colors = rowColors as List;
+        // get the current chip in layers
+        switch (layer.mode?.value) {
+          case EnumModes.blinking:
+            final beginColor = layer.mode?.currentColor.first;
+            final endColor = layer.mode?.currentColor.last;
+            final animColor = provider.animColor(beginColor, endColor,
+                effect: EnumModes.blinking, speed: layer.mode?.effects.speed);
 
-            if (colors.isNotEmpty) {
-              // get number of keys possible per matrix
-              final double maxKeysPerMatrix = rowKeysCount / colors.length;
+            chip.color = animColor!;
+            break;
+          case EnumModes.breathing:
+            final beginColor = layer.mode?.currentColor.first;
+            final endColor = layer.mode?.currentColor.last;
+            final animColor = provider.animColor(beginColor, endColor,
+                speed: layer.mode?.effects.speed);
 
-              // find color index for this key.
-              final colorIndex = (keyIndex / maxKeysPerMatrix).floor();
+            chip.color = animColor!;
+            break;
+          case EnumModes.image:
+            // paint all keys based on color matrix (m x n)
+
+            // get column (n) values where row (m) matches key row index.
+            final colorsMatrix = layer.mode?.effects.extractedColors;
+
+            if (colorsMatrix != null && colorsMatrix.isNotEmpty) {
+              final rowIndex = getColorIndex(
+                boxZone.selectorRect.height,
+                boxZone.selectorRect.top,
+                boxZone.boxRect.top,
+                colorsMatrix.length,
+              );
+
+              final rowColors = colorsMatrix[rowIndex] as List;
+
+              final colIndex = getColorIndex(
+                boxZone.selectorRect.width,
+                boxZone.selectorRect.left,
+                boxZone.boxRect.left,
+                rowColors.length,
+              );
 
               try {
-                final chip = KeyPaintRect('$layerId');
-                chip.color = colors[colorIndex] as Color;
-
-                // add the chip
-                keyModel.addChip(chip);
+                chip.color = rowColors[colIndex] as Color;
               } catch (e) {
                 // color cast failed.
               }
             }
-          }
-        } else {
-          isBoxZoned =
-              provider.isBoxZoned(renderBox, layerId, k: '${keyModel.keyCode}');
-
-          if (isBoxZoned == true) {
-            // insert new chip with the layer id as key
-            final chip = KeyPaintRect('$layerId');
-
-            if ('${currentLayer.id}' == chip.chipKey) {
-              // use the default color for current layer
-              chip.color = currentLayer.mode?.currentColor.last;
-            } else {
-              // use existing color for non-current layer
-              final foundKeys = krect.where((e) => e.chipKey == chip.chipKey);
-              if (foundKeys.isNotEmpty) {
-                chip.color = foundKeys.first.color;
-              }
-            }
-
-            // get the current chip in layers
-            switch (layer.mode?.value) {
-              case EnumModes.blinking:
-                final beginColor = layer.mode?.currentColor.first;
-                final endColor = layer.mode?.currentColor.last;
-                final animColor = provider.animColor(beginColor, endColor,
-                    effect: EnumModes.blinking,
-                    speed: layer.mode?.effects.speed);
-
-                chip.color = animColor!;
-                chip.opacity = 1;
-                break;
-              case EnumModes.breathing:
-                final beginColor = layer.mode?.currentColor.first;
-                final endColor = layer.mode?.currentColor.last;
-                final animColor = provider.animColor(beginColor, endColor,
-                    speed: layer.mode?.effects.speed);
-
-                chip.color = animColor!;
-                chip.opacity = 1;
-                break;
-              default:
-                chip.opacity = 1;
-            }
-
-            // add the chip
-            keyModel.addChip(chip);
-          }
+            break;
+          default:
         }
+
+        chip.opacity = layer.visible ? 1 : 0;
+
+        // add the chip
+        keyModel.addChip(chip);
       }
     }
   }
 
   return keyModel;
+}
+
+/// [getColorIndex] is a helper function that finds an index
+/// that corresponds to the image colors matrix.
+int getColorIndex(
+  /// selectorWH is the selector width or height
+  double selectorWH,
+
+  /// selectorLT is the selector left or top
+  double selectorLT,
+
+  /// boxLT is the box(key) left or top
+  double boxLT,
+
+  /// divider is the number of rows or columns from the image matrix
+  int divider,
+) {
+  // get maximum height per image color row within the selector
+  final chunkSize = selectorWH / divider;
+
+  double diff = selectorLT - boxLT;
+  int index = 0;
+
+  while (diff < 0) {
+    diff += chunkSize;
+
+    index++;
+  }
+
+  // return index or last index of m or n when
+  // index is not less than divider to avoid array overflow error.
+  return math.min(index, divider - 1);
 }

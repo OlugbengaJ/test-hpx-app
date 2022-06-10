@@ -42,8 +42,6 @@ class KeyboardRowCtrl extends StatelessWidget {
                 onTapHandler: () {
                   debugPrint('\r\n key ${keyModel.keyCode} triggered');
                 },
-                rowKeysCount: rowKeys.length,
-                keyIndex: rowKeys.indexOf(keyModel),
                 zoomScale: zoomScale,
               ),
             ),
@@ -62,8 +60,6 @@ class KeyboardRowCtrl extends StatelessWidget {
                     onTapHandler: () {
                       debugPrint('\r\n key ${rowKeyUp.keyCode} triggered');
                     },
-                    rowKeysCount: rowKeys.length,
-                    keyIndex: rowKeys.indexOf(rowKeyUp),
                     zoomScale: zoomScale,
                   ),
                 ),
@@ -76,8 +72,6 @@ class KeyboardRowCtrl extends StatelessWidget {
                     onTapHandler: () {
                       debugPrint('\r\n key ${rowKeyDown.keyCode} triggered');
                     },
-                    rowKeysCount: rowKeys.length,
-                    keyIndex: rowKeys.indexOf(rowKeyDown),
                     zoomScale: zoomScale,
                   ),
                 ),
@@ -93,8 +87,6 @@ class KeyboardRowCtrl extends StatelessWidget {
               onTapHandler: () {
                 debugPrint('\r\n key ${rowKeyRight.keyCode} triggered');
               },
-              rowKeysCount: rowKeys.length,
-              keyIndex: rowKeys.indexOf(rowKeyRight),
               zoomScale: zoomScale,
             ),
           ),

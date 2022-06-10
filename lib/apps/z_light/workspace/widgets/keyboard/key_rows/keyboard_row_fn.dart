@@ -35,8 +35,6 @@ class KeyboardRowFn extends StatelessWidget {
                 onTapHandler: () {
                   debugPrint('\r\n key ${keyModel.keyCode} triggered');
                 },
-                rowKeysCount: rowKeys.length,
-                keyIndex: rowKeys.indexOf(keyModel),
                 zoomScale: zoomScale,
               ),
             ),

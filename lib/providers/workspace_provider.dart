@@ -4,6 +4,7 @@ import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/overlay_selector.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/workspace_models/box_zone.dart';
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/selection_offset.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/utils/common.dart';
@@ -543,13 +544,14 @@ class WorkspaceProvider with ChangeNotifier {
   Offset? _workspaceOffset;
   Offset? _workspacePanDownOffset;
 
-  /// [isBoxZoned] checks a widget intersects with the selector.
-  bool? isBoxZoned(RenderBox? box, int? layerId, {String k = ''}) {
+  /// [boxZone] checks a widget intersects with the selector.
+  BoxZone? boxZone(RenderBox? box, int? layerId, {String k = ''}) {
     final Rect selectorRect;
 
     switch (_keyDragMode) {
       case WorkspaceDragMode.click:
-        return _isCurrentDeviceSelected ? true : null;
+        // return _isCurrentDeviceSelected ? true : null;
+        return null;
 
       default:
         final ltwh = _getLayerLTWH(layerId);
@@ -599,18 +601,23 @@ class WorkspaceProvider with ChangeNotifier {
               ltwh.highlightLTWH!.height!,
             );
           }
+
           final Rect boxRect = box!.localToGlobal(Offset.zero) & box.size;
           final rectIntersect = selectorRect.intersect(boxRect);
 
-          if (k.contains('kF5')) {
-            // final g = workspaceKey.currentContext?.findRenderObject() as RenderBox?;
-            // final s = g!.localToGlobal(Offset.zero);
-            // debugPrint('$k $s');
-            // debugPrint('$k $boxRect $selectorRect $rectIntersect');
-          }
-
           // include 0 for scenarios where a button is clicked.
-          return (rectIntersect.width >= 0 && rectIntersect.height >= 0);
+          final isBoxed = rectIntersect.width >= 0 && rectIntersect.height >= 0;
+
+          // if (isBoxed && k.contains('k5')) {
+          //   // identify what percentage of the key is boxed by rect
+          //   //
+          //   debugPrint(
+          //       'box: $boxRect selector: $selectorRect rect: $rectIntersect');
+          // }
+
+          if (isBoxed) {
+            return BoxZone(boxRect: boxRect, selectorRect: selectorRect);
+          }
         }
 
         return null;
@@ -710,10 +717,10 @@ class WorkspaceProvider with ChangeNotifier {
           _selectorVisible = _isPanning;
         }
 
-        if (layer.mode?.value == EnumModes.image) {
-          _keyDragMode = null;
-          _selectorVisible = false;
-        }
+        // if (layer.mode?.value == EnumModes.image) {
+        //   _keyDragMode = null;
+        //   _selectorVisible = false;
+        // }
       }
     }
   }
