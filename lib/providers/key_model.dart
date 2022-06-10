@@ -30,12 +30,6 @@ class KeyModel with ChangeNotifier {
   final double keyHeight;
   final double keyRadius;
 
-  late List<LayerItemModel> layers = [];
-
-  // /// [_isSelected] indicates key is selected.
-  // bool _isSelected = false;
-  // bool get isSelected => _isSelected;
-
   /// [_chips] holds multiple layers of a key
   /// e.g. a key could have only 1 base color, multiple layers with unique keys,
   /// and only 1 overlay (text or icon layer).
