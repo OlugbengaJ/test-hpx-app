@@ -27,13 +27,11 @@ class _SublayerItemState extends State<SublayerItem> {
 
   _toggleLayer(LayersProvider provider) {
     LayerItemModel layerItemModel = widget.layerItemModel;
-    provider.toggleVisibility(
-    LayerItemModel(
-      id: layerItemModel.id,
-      layerText: layerItemModel.layerText,
-      visible: !layerItemModel.visible,
-    ),
+    layerItemModel.visible = !layerItemModel.visible;
+    provider.toggleSublayerVisibility(
+    layerItemModel,
     widget.layerIndex);
+    print(widget.layerIndex);
   }
 
   _toggleEditing(value) {

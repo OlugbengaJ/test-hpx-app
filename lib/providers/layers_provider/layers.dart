@@ -92,14 +92,36 @@ class LayersProvider extends ChangeNotifier {
   /// listen to any change from the tools and effects so the current layers can be updated
   void toolsEffectsUpdated(){
     LayerItemModel item = getItem(listIndex);
+    var subLayers = getSublayers(item.id);
+
+    // Check the if the current mode is shortcut colors
+    if(item.mode!.name == "Shortcut Colors"){
+      if(_modeProvider!.getModeInformation().name != "Shortcut Colors"){
+        if(sublayerItems.isNotEmpty){
+          _sublayers.removeWhere((layer) => layer.parentID==item.id);
+          notifyListeners();
+        }
+      }
+      
+    }
+
     item.mode =  _modeProvider!.getModeInformation();
     item.layerText = _modeProvider!.currentMode.name;
     _layeritems[listIndex] = item;
 
     if (item.mode!.name == "Shortcut Colors") {
-      _modeProvider!.setModeType(true);
-      debugPrint("Create a shortcut layer");
-      var subLayers = getSublayers(item.id);
+      
+
+      if(subLayers.isEmpty){
+        duplicateOrCreatSubLayer(
+          item,
+          listIndex,
+          _modeProvider!,
+          sublayer: true
+        );
+      }
+
+      
       // debugPrint('$subLayers');
     }
     // for (var i = 0; i < length; i++) {
@@ -228,7 +250,7 @@ class LayersProvider extends ChangeNotifier {
     
     
     if (item.mode!.name == "Shortcut Colors") {   
-      _modeProvider!.setModeType(true);
+      //_modeProvider!.setModeType(true);
     }
     toggleHideStackedLayers(!item.visible);
     notifyListeners();
@@ -268,6 +290,20 @@ class LayersProvider extends ChangeNotifier {
     _layeritems[index] = item;
 
     toggleHideStackedLayers(!item.visible);
+    notifyListeners();
+  }
+
+
+   /// [toggleVisibility] toggle visiblity for a layers
+  void toggleSublayerVisibility(LayerItemModel item, int index) {
+    item.listDisplayColor = Colors.grey;
+
+    if (item.visible) {
+      item.listDisplayColor = Colors.white;
+    }
+
+    _sublayers[index] = item;
+
     notifyListeners();
   }
 
