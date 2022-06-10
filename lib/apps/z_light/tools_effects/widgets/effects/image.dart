@@ -25,6 +25,40 @@ class ImagePreset extends StatefulWidget {
 class _ImagePresetState extends State<ImagePreset> {
   dynamic filePath = const AssetImage(Constants.defaultImageMode);
 
+  //// this function sets the default effect degree value to the degree knob
+  @override
+  void initState() {
+    processDefault();
+    super.initState();
+  }
+
+  Future<void> processDefault() async {
+    ImageModeProvider imageModeProvider =
+        Provider.of<ImageModeProvider>(context, listen: false);
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
+    EffectProvider effectProvider =
+        Provider.of<EffectProvider>(context, listen: false);
+
+    /// convert the default image into color paltte
+    ByteData image = await rootBundle.load(Constants.defaultImageMode);
+    await imageModeProvider.extractColors(image.buffer.asUint8List());
+    effectProvider.setCurrentEffect(EffectsModel(
+      effectName: effectProvider.currentEffect?.effectName,
+      effectType: effectProvider.currentEffect?.effectType,
+      extractedColors: imageModeProvider.extractedMatrix,
+    ));
+    modeProvider.setCurrentMode(ToolsModeModel(
+        currentColor: imageModeProvider.extractedColors,
+        effects: effectProvider.currentEffect!,
+        value: modeProvider.currentMode.value,
+        icon: modeProvider.currentMode.icon,
+        name: modeProvider.currentMode.name));
+    layerProvider.toolsEffectsUpdated();
+  }
+
   void _showPhotoLibrary() async {
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
@@ -50,6 +84,8 @@ class _ImagePresetState extends State<ImagePreset> {
       modeProvider.setCurrentMode(ToolsModeModel(
           currentColor: imageModeProvider.extractedColors,
           effects: modeProvider.currentMode.effects,
+          value: modeProvider.currentMode.value,
+          icon: modeProvider.currentMode.icon,
           name: modeProvider.currentMode.name));
       setState(() {
         filePath = Image.memory(File(file.path!).readAsBytesSync()).image;
