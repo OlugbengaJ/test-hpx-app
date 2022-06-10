@@ -112,7 +112,7 @@ KeyModel _updateKeyInfo(
       final boxZone =
           provider.boxZone(renderBox, layerId, k: '${keyModel.keyCode}');
 
-      if (boxZone != null && layer.visible) {
+      if (boxZone != null) {
         // insert new chip with the layer id as key
         final chip = KeyPaintRect('$layerId');
 
@@ -136,7 +136,6 @@ KeyModel _updateKeyInfo(
                 effect: EnumModes.blinking, speed: layer.mode?.effects.speed);
 
             chip.color = animColor!;
-            chip.opacity = 1;
             break;
           case EnumModes.breathing:
             final beginColor = layer.mode?.currentColor.first;
@@ -145,7 +144,6 @@ KeyModel _updateKeyInfo(
                 speed: layer.mode?.effects.speed);
 
             chip.color = animColor!;
-            chip.opacity = 1;
             break;
           case EnumModes.image:
             // paint all keys based on color matrix (m x n)
@@ -172,15 +170,15 @@ KeyModel _updateKeyInfo(
 
               try {
                 chip.color = rowColors[colIndex] as Color;
-                chip.opacity = 1;
               } catch (e) {
                 // color cast failed.
               }
             }
             break;
           default:
-            chip.opacity = 1;
         }
+
+        chip.opacity = layer.visible ? 1 : 0;
 
         // add the chip
         keyModel.addChip(chip);
