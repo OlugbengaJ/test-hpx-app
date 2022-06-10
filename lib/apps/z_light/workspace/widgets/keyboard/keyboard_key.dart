@@ -13,6 +13,8 @@ class KeyboardKey extends StatelessWidget {
   const KeyboardKey({
     Key? key,
     this.onTapHandler,
+    required this.rowKeysCount,
+    required this.keyIndex,
     required this.zoomScale,
   }) : super(key: key);
 
@@ -21,6 +23,9 @@ class KeyboardKey extends StatelessWidget {
 
   /// [zoomScale] is a zoom factor to scale the key size.
   final double zoomScale;
+
+  final int rowKeysCount;
+  final int keyIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +53,8 @@ class KeyboardKey extends StatelessWidget {
                         layersProvider,
                         keyModel,
                         box,
+                        rowKeysCount,
+                        keyIndex,
                       ),
                       zoomScale: zoomScale,
                     ),
@@ -70,6 +77,8 @@ KeyModel _updateKeyInfo(
   LayersProvider layersProvider,
   KeyModel keyModel,
   RenderBox? renderBox,
+  int rowKeysCount,
+  int keyIndex,
 ) {
   final layers = layersProvider.layeritems;
   final layerIndex = layersProvider.listIndex;
@@ -110,73 +119,87 @@ KeyModel _updateKeyInfo(
       final layer = layers[i];
       final layerId = layer.id;
 
-      isBoxZoned =
-          provider.isBoxZoned(renderBox, layerId, k: '${keyModel.keyCode}');
+      if (layer.visible) {
+        // paint only visible layers
 
-      if (isBoxZoned == true && layer.visible) {
-        // insert new chip with the layer id as key
-        final chip = KeyPaintRect('$layerId');
+        if (layer.mode?.value == EnumModes.image) {
+          // paint all keys based on color matrix (m x n)
 
-        if ('${currentLayer.id}' == chip.chipKey) {
-          // use the default color for current layer
-          chip.color = currentLayer.mode?.currentColor.last;
+          // get column (n) values where row (m) matches key row index.
+          final rowColors =
+              layer.mode?.effects.extractedColors?.elementAt(keyModel.keyRow);
+
+          if (rowColors != null) {
+            final colors = rowColors as List;
+
+            if (colors.isNotEmpty) {
+              // get number of keys possible per matrix
+              final double maxKeysPerMatrix = rowKeysCount / colors.length;
+
+              // find color index for this key.
+              final colorIndex = (keyIndex / maxKeysPerMatrix).floor();
+
+              try {
+                final chip = KeyPaintRect('$layerId');
+                chip.color = colors[colorIndex] as Color;
+
+                // add the chip
+                keyModel.addChip(chip);
+              } catch (e) {
+                // color cast failed.
+              }
+            }
+          }
         } else {
-          // use existing color for non-current layer
-          final foundKeys = krect.where((e) => e.chipKey == chip.chipKey);
-          if (foundKeys.isNotEmpty) {
-            chip.color = foundKeys.first.color;
+          isBoxZoned =
+              provider.isBoxZoned(renderBox, layerId, k: '${keyModel.keyCode}');
+
+          if (isBoxZoned == true) {
+            // insert new chip with the layer id as key
+            final chip = KeyPaintRect('$layerId');
+
+            if ('${currentLayer.id}' == chip.chipKey) {
+              // use the default color for current layer
+              chip.color = currentLayer.mode?.currentColor.last;
+            } else {
+              // use existing color for non-current layer
+              final foundKeys = krect.where((e) => e.chipKey == chip.chipKey);
+              if (foundKeys.isNotEmpty) {
+                chip.color = foundKeys.first.color;
+              }
+            }
+
+            // get the current chip in layers
+            switch (layer.mode?.value) {
+              case EnumModes.blinking:
+                final beginColor = layer.mode?.currentColor.first;
+                final endColor = layer.mode?.currentColor.last;
+                final animColor = provider.animColor(beginColor, endColor,
+                    effect: EnumModes.blinking,
+                    speed: layer.mode?.effects.speed);
+
+                chip.color = animColor!;
+                chip.opacity = 1;
+                break;
+              case EnumModes.breathing:
+                final beginColor = layer.mode?.currentColor.first;
+                final endColor = layer.mode?.currentColor.last;
+                final animColor = provider.animColor(beginColor, endColor,
+                    speed: layer.mode?.effects.speed);
+
+                chip.color = animColor!;
+                chip.opacity = 1;
+                break;
+              default:
+                chip.opacity = 1;
+            }
+
+            // add the chip
+            keyModel.addChip(chip);
           }
         }
-
-        // get the current chip in layers
-        switch (layer.mode?.value) {
-          case EnumModes.blinking:
-            final beginColor = layer.mode?.currentColor.first;
-            final endColor = layer.mode?.currentColor.last;
-            final animColor = provider.animColor(beginColor, endColor,
-                speed: layer.mode?.effects.speed);
-
-            // if (keyModel.keyCode.name.contains('k5')) {
-            //   debugPrint(
-            //       'anim colors ${layer.mode?.currentColor.length} ${animColor?.value} ${layer.mode?.currentColor.first} ${layer.mode?.currentColor.last}');
-            // }
-
-            chip.color = animColor!;
-            chip.opacity = 1;
-            break;
-          case EnumModes.breathing:
-            final beginColor = layer.mode?.currentColor.first;
-            final endColor = layer.mode?.currentColor.last;
-            final animColor = provider.animColor(beginColor, endColor,
-                speed: layer.mode?.effects.speed);
-
-            chip.color = animColor!;
-            chip.opacity = 1;
-            break;
-          case EnumModes.image:
-            // get the row and column of this key and use the matching
-            // coordinate from the matrix.
-            debugPrint(
-                'images ${layer.mode?.effects.extractedColors?.map((e) => e)}');
-            break;
-          default:
-            chip.opacity = 1;
-        }
-        debugPrint('current mode name ${layer.mode?.value}');
-
-        // add the chip
-        keyModel.addChip(chip);
       }
     }
-
-    // TODO: only for debugging, delete.
-    // if ('${keyModel.keyCode}'.contains('kF5')) {
-    //   // for (var i = 0; i < layers.length; i++) {
-    //   //   debugPrint('\t esc $i ${layers[i].mode?.currentColor.first}');
-    //   // }
-
-    //   // debugPrint('kF5 \t ${keyModel.chipsValues.map((e) => e.chipKey)}');
-    // }
   }
 
   return keyModel;
