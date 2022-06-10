@@ -191,6 +191,8 @@ KeyModel _updateKeyInfo(
   return keyModel;
 }
 
+/// [getColorIndex] is a helper function that finds an index
+/// that corresponds to the image colors matrix.
 int getColorIndex(
   /// selectorWH is the selector width or height
   double selectorWH,
