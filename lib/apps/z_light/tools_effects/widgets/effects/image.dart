@@ -81,9 +81,10 @@ class _ImagePresetState extends State<ImagePreset> {
         effectType: effectProvider.currentEffect?.effectType,
         extractedColors: imageModeProvider.extractedMatrix,
       ));
+
       modeProvider.setCurrentMode(ToolsModeModel(
           currentColor: imageModeProvider.extractedColors,
-          effects: modeProvider.currentMode.effects,
+          effects: effectProvider.currentEffect!,
           value: modeProvider.currentMode.value,
           icon: modeProvider.currentMode.icon,
           name: modeProvider.currentMode.name));
