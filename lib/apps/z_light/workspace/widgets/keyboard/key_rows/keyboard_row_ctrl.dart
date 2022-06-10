@@ -17,7 +17,8 @@ class KeyboardRowCtrl extends StatelessWidget {
     double zoomedPadding = 2.0 * zoomScale;
 
     final keysProvider = Provider.of<KeysProvider>(context);
-    final rowKeysFiltered = keysProvider.getKeysInRow(5).where((element) =>
+    final rowKeys = keysProvider.getKeysInRow(5);
+    final rowKeysFiltered = rowKeys.where((element) =>
         element.keyCode != KeyCode.kArrowUp &&
         element.keyCode != KeyCode.kArrowDown &&
         element.keyCode != KeyCode.kArrowRight);
@@ -41,6 +42,8 @@ class KeyboardRowCtrl extends StatelessWidget {
                 onTapHandler: () {
                   debugPrint('\r\n key ${keyModel.keyCode} triggered');
                 },
+                rowKeysCount: rowKeys.length,
+                keyIndex: rowKeys.indexOf(keyModel),
                 zoomScale: zoomScale,
               ),
             ),
@@ -59,6 +62,8 @@ class KeyboardRowCtrl extends StatelessWidget {
                     onTapHandler: () {
                       debugPrint('\r\n key ${rowKeyUp.keyCode} triggered');
                     },
+                    rowKeysCount: rowKeys.length,
+                    keyIndex: rowKeys.indexOf(rowKeyUp),
                     zoomScale: zoomScale,
                   ),
                 ),
@@ -71,6 +76,8 @@ class KeyboardRowCtrl extends StatelessWidget {
                     onTapHandler: () {
                       debugPrint('\r\n key ${rowKeyDown.keyCode} triggered');
                     },
+                    rowKeysCount: rowKeys.length,
+                    keyIndex: rowKeys.indexOf(rowKeyDown),
                     zoomScale: zoomScale,
                   ),
                 ),
@@ -86,6 +93,8 @@ class KeyboardRowCtrl extends StatelessWidget {
               onTapHandler: () {
                 debugPrint('\r\n key ${rowKeyRight.keyCode} triggered');
               },
+              rowKeysCount: rowKeys.length,
+              keyIndex: rowKeys.indexOf(rowKeyRight),
               zoomScale: zoomScale,
             ),
           ),
