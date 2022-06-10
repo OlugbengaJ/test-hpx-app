@@ -139,11 +139,15 @@ KeyModel _updateKeyInfo(
               // find color index for this key.
               final colorIndex = (keyIndex / maxKeysPerMatrix).floor();
 
-              final chip = KeyPaintRect('$layerId');
-              chip.color = colors[colorIndex] as Color;
+              try {
+                final chip = KeyPaintRect('$layerId');
+                chip.color = colors[colorIndex] as Color;
+                keyModel.addChip(chip);
+              } catch (e) {
+                // color cast failed.
+              }
 
               // add the chip
-              keyModel.addChip(chip);
             }
           }
         } else {
