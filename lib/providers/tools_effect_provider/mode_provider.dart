@@ -270,12 +270,12 @@ class ModeProvider extends ChangeNotifier {
       case EnumModes.image:
 
         /// convert the default image into color paltte
-        ByteData image = await rootBundle.load(Constants.defaultImageMode);
-        await imageModeProvider.extractColors(image.buffer.asUint8List());
+        // ByteData image = await rootBundle.load(Constants.defaultImageMode);
+        // await imageModeProvider.extractColors(image.buffer.asUint8List());
 
         currentColors.add(Colors.transparent);
         effects.effectName = pickerChoice.value;
-        effects.extractedColors = imageModeProvider.extractedMatrix;
+        // effects.extractedColors = imageModeProvider.extractedMatrix;
         preset = const ImagePreset();
         break;
       case EnumModes.ambient:
