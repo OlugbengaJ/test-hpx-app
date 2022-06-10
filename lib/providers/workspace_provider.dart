@@ -141,7 +141,6 @@ class WorkspaceProvider with ChangeNotifier {
         // update the controller duration
         _animMillisecond = ms;
         _controller.duration = Duration(milliseconds: ms.toInt());
-        // debugPrint('anim duration changed $speed ${controller.duration}');
       }
     }
   }
@@ -709,6 +708,11 @@ class WorkspaceProvider with ChangeNotifier {
         } else {
           // show the selector when drag mode is highlight.
           _selectorVisible = _isPanning;
+        }
+
+        if (layer.mode?.value == EnumModes.image) {
+          _keyDragMode = null;
+          _selectorVisible = false;
         }
       }
     }
