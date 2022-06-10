@@ -113,36 +113,13 @@ class _WorkspaceState extends State<Workspace>
     });
   }
 
-  void _initAnimation() {
-    const duration = Duration(seconds: 1);
-
-    _controller = AnimationController(vsync: this, duration: duration);
-    // final curveAnimation = CurvedAnimation(
-    //   parent: _controller,
-    //   curve: Curves.linear,
-    //   reverseCurve: Curves.linear,
-    // );
-    // _animation = Tween<double>(
-    //   begin: 0,
-    //   end: math.sin(math.pi / 2), // max value of 1
-    // ).animate(curveAnimation)
-    //   ..addListener(() {
-    //     setState(() {});
-    //   })
-    //   ..addStatusListener((status) {
-    //     if (status == AnimationStatus.completed) {
-    //       _controller.repeat();
-    //     }
-    //     if (status == AnimationStatus.dismissed) {}
-    //   });
-  }
-
   @override
   void initState() {
     super.initState();
 
     // initialize animation
-    _initAnimation();
+    _controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
 
     // Initialize zoom value and scale.
     _zoomValue = 60;
