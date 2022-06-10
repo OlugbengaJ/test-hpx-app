@@ -172,21 +172,17 @@ class WorkspaceProvider with ChangeNotifier {
     switch (_controller.status) {
       case AnimationStatus.completed:
         _controller.reverse();
-        // debugPrint('completed');
         break;
       case AnimationStatus.dismissed:
-        // debugPrint('dismissed');
         _controller.forward();
         break;
       case AnimationStatus.forward:
         if (!_controller.isAnimating) {
           _controller.reverse();
-          // debugPrint('forward');
         }
         break;
       case AnimationStatus.reverse:
         if (!_controller.isAnimating) {
-          // debugPrint('reverse');
           _controller.forward();
         }
         break;
