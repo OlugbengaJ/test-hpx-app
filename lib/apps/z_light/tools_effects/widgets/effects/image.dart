@@ -35,39 +35,15 @@ class _ImagePresetState extends State<ImagePreset> {
   Future<void> processDefault() async {
     ImageModeProvider imageModeProvider =
         Provider.of<ImageModeProvider>(context, listen: false);
-    ModeProvider modeProvider =
-        Provider.of<ModeProvider>(context, listen: false);
-    LayersProvider layerProvider =
-        Provider.of<LayersProvider>(context, listen: false);
-    EffectProvider effectProvider =
-        Provider.of<EffectProvider>(context, listen: false);
 
     /// convert the default image into color paltte
     ByteData image = await rootBundle.load(Constants.defaultImageMode);
-    await imageModeProvider.extractColors(image.buffer.asUint8List());
-    effectProvider.setCurrentEffect(EffectsModel(
-      effectName: effectProvider.currentEffect?.effectName,
-      effectType: effectProvider.currentEffect?.effectType,
-      extractedColors: imageModeProvider.extractedMatrix,
-    ));
-    modeProvider.setCurrentMode(ToolsModeModel(
-        currentColor: imageModeProvider.extractedColors,
-        effects: effectProvider.currentEffect!,
-        value: modeProvider.currentMode.value,
-        icon: modeProvider.currentMode.icon,
-        name: modeProvider.currentMode.name));
-    layerProvider.toolsEffectsUpdated();
+    await imageModeProvider.extractColors(context, image.buffer.asUint8List());
   }
 
   void _showPhotoLibrary() async {
-    LayersProvider layerProvider =
-        Provider.of<LayersProvider>(context, listen: false);
     ImageModeProvider imageModeProvider =
         Provider.of<ImageModeProvider>(context, listen: false);
-    ModeProvider modeProvider =
-        Provider.of<ModeProvider>(context, listen: false);
-    EffectProvider effectProvider =
-        Provider.of<EffectProvider>(context, listen: false);
 
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -75,23 +51,11 @@ class _ImagePresetState extends State<ImagePreset> {
     );
     if (result != null) {
       PlatformFile file = result.files.first;
-      await imageModeProvider.extractColors(File(file.path!).readAsBytesSync());
-      effectProvider.setCurrentEffect(EffectsModel(
-        effectName: effectProvider.currentEffect?.effectName,
-        effectType: effectProvider.currentEffect?.effectType,
-        extractedColors: imageModeProvider.extractedMatrix,
-      ));
-
-      modeProvider.setCurrentMode(ToolsModeModel(
-          currentColor: imageModeProvider.extractedColors,
-          effects: effectProvider.currentEffect!,
-          value: modeProvider.currentMode.value,
-          icon: modeProvider.currentMode.icon,
-          name: modeProvider.currentMode.name));
       setState(() {
         filePath = Image.memory(File(file.path!).readAsBytesSync()).image;
       });
-      layerProvider.toolsEffectsUpdated();
+      await imageModeProvider.extractColors(
+          context, File(file.path!).readAsBytesSync());
     }
   }
 

@@ -62,10 +62,6 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
   }
 
   void changeColor(Color selectedColor) {
-    ModeProvider modeProvider =
-        Provider.of<ModeProvider>(context, listen: false);
-    ColorPickerProvider colorPickerProviderInstance =
-        Provider.of<ColorPickerProvider>(context, listen: false);
     setState(() {
       currentColors[colorPosition] =
           widget.color = currentColor = selectedColor;
@@ -88,6 +84,7 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
       time!.cancel();
       currentColors = widget.colors;
     }
+    print(colorPosition);
     generatePreviewBox(true);
   }
 
