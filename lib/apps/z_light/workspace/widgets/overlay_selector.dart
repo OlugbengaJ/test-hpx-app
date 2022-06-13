@@ -45,7 +45,7 @@ class OverlaySelector extends StatelessWidget {
             height: value.zoneH,
             decoration: BoxDecoration(
               color: showCrossHair
-                  ? overlayColor.withOpacity(opacity * 0.3)
+                  ? overlayColor.withOpacity(opacity * 0.2)
                   : overlayColor.withOpacity(opacity),
               border: getBorder,
             ),
