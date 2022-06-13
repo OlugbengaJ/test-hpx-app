@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/key_code.dart';
 
 class KeyModel with ChangeNotifier {
@@ -44,6 +46,9 @@ class KeyModel with ChangeNotifier {
 
   /// [chipsValues] returns the values of [_chips] as a new list.
   List<KeyPaintChip> get chipsValues => [..._chips.values];
+
+  /// [topChip] sets the topmost paint of this key.
+  KeyPaintRect? topChip;
 
   /// [addChipIcon] adds an icon layer to chips.
   void addChipIcon(
@@ -97,8 +102,8 @@ class KeyModel with ChangeNotifier {
     return k != ChipKey.base.toString() && k != ChipKey.overlay.toString();
   }
 
-  /// [getLayeredChipsqKeys] returns chips keys other than base, overlay, and icon
-  List<String> getLayeredChipsqKeys() {
+  /// [getLayeredChipsKeys] returns chips keys other than base, overlay, and icon
+  List<String> getLayeredChipsKeys() {
     return _chips.keys.where((k) => _isLayerChip(k)).toList();
   }
 
