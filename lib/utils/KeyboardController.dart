@@ -597,12 +597,11 @@ class KeyboardController {
     ]);
   }
 
-  static blinkingEffect(LayerItemModel layer)  {
+  static blinkingEffect(LayerItemModel layer) {
     KeyboardDriverWrapper.blinkingEffect(
         colors: layer.mode?.currentColor as List<Color>,
         primaryColorSpeed: 3000,
-        blinkingColorSpeed: 900
-    );
+        blinkingColorSpeed: 900);
   }
 
   static waveEffect(LayerItemModel layer) {
