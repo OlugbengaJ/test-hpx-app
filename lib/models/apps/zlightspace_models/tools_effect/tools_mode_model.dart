@@ -50,7 +50,7 @@ class ToolsModeModel {
   final dynamic value;
 
   /// current color holds a list of colors been current in used by the color picker
-  late final List<dynamic> currentColor;
+  late final List<Color> currentColor;
 
   /// effects holds the current effect been used by the effects provider and tools and effects mode
   late final EffectsModel effects;
