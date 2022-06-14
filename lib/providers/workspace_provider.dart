@@ -115,7 +115,7 @@ class WorkspaceProvider with ChangeNotifier {
   }
 
   /// [_animMillisecond] is the animation duration in milliseconds and defaults to 1s.
-  double? _animMillisecond = 1000.0;
+  double _animMillisecond = 1000.0;
 
   /// [_animationColor] is used to create a ColorTween animation.
   late Animation<Color?> _animationColor;
@@ -137,7 +137,7 @@ class WorkspaceProvider with ChangeNotifier {
   void _setAnimDuration(double? speed) {
     if (speed != null) {
       // speed exists so check if it has changed
-      final ms = speed * 10;
+      final ms = speed * (_animMillisecond / 10);
       if (ms != _animMillisecond) {
         // update the controller duration
         _animMillisecond = ms;
@@ -146,7 +146,7 @@ class WorkspaceProvider with ChangeNotifier {
     }
   }
 
-  /// [animColor] returns an animation color.
+  /// [animColor] returns a color from transitions of a start to end color.
   Color? animColor(Color beginColor, Color endColor,
       {double? speed, EnumModes? effect}) {
     if (effect == EnumModes.blinking) {
@@ -162,13 +162,33 @@ class WorkspaceProvider with ChangeNotifier {
     }
 
     _setAnimDuration(speed);
-    _checkAnimaStatus();
+    _checkAnimStatus();
 
     return _animationColor.value;
   }
 
-  /// [_checkAnimaStatus] this ensures the animation controller is always active.
-  void _checkAnimaStatus() {
+  /// [animColorTween] returns an animation color from a tween of colors.
+  Color? animColorTween(List<Color>? colors, {double? speed}) {
+    if (colors == null) return null;
+
+    List<TweenSequenceItem<Color?>> tween = [];
+
+    for (var i = 0; i < colors.length - 1; i++) {
+      tween.add(TweenSequenceItem<Color?>(
+        tween: ColorTween(begin: colors[i], end: colors[i + 1]),
+        weight: 1,
+      ));
+    }
+    _animationColor = TweenSequence<Color?>(tween).animate(controller);
+
+    _setAnimDuration(speed);
+    _checkAnimStatus();
+
+    return _animationColor.value;
+  }
+
+  /// [_checkAnimStatus] this ensures the animation controller is always active.
+  void _checkAnimStatus() {
     switch (_controller.status) {
       case AnimationStatus.completed:
         _controller.reverse();
@@ -671,7 +691,7 @@ class WorkspaceProvider with ChangeNotifier {
 
         final left = _workspaceRect.size.width / 2;
         final top = _workspaceRect.size.height / 2;
-        const double halfSize = 100.0;
+        const double halfSize = 70.0;
 
         // actual size of the overlay
         const double size = halfSize * 2;

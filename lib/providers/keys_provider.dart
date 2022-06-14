@@ -651,10 +651,6 @@ class KeysProvider with ChangeNotifier {
   /// [getTopLayeredKeys] returns a list of [KeyModel] with
   /// top level layered chips from [getLayeredKeys].
   List<KeyModel> getTopLayeredKeys() {
-    // for (var element in getLayeredKeys()) {
-    //   element.
-    // }
-
     return [
       ...getLayeredKeys().map((e) {
         e.topChip = e.getLayeredChips().last;
