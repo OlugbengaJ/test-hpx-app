@@ -78,19 +78,13 @@ class _WorkspaceState extends State<Workspace>
         return;
       }
 
-      setState(() {
-        _zoomValue += 1;
-        updateZoomText();
-      });
+      zoomTextSubmitted('${_zoomValue + 1}');
     });
   }
 
   /// [zoomExpand] sets the zoomValue to half the zoomIn threshold.
   void zoomExpand() {
-    setState(() {
-      _zoomValue = _zoomInThreshold / 1.5; // / 3.1;
-      updateZoomText();
-    });
+    zoomTextSubmitted('${_zoomInThreshold / 1.5}');
   }
 
   /// [zoomOut] decreases the zoomValue only up to the zoomOut threshold
@@ -102,19 +96,13 @@ class _WorkspaceState extends State<Workspace>
         return;
       }
 
-      setState(() {
-        _zoomValue -= 1;
-        updateZoomText();
-      });
+      zoomTextSubmitted('${_zoomValue - 1}');
     });
   }
 
   /// [zoomCollapse] sets the zoomValue to the zoomOut threshold.
   void zoomCollapse() {
-    setState(() {
-      _zoomValue = _zoomOutThreshold;
-      updateZoomText();
-    });
+    zoomTextSubmitted('$_zoomOutThreshold');
   }
 
   @override
