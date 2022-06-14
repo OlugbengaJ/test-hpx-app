@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard_key.dart';
 import 'package:hpx/providers/keys_provider.dart';
@@ -35,8 +37,6 @@ class KeyboardRowFn extends StatelessWidget {
                 onTapHandler: () {
                   debugPrint('\r\n key ${keyModel.keyCode} triggered');
                 },
-                rowKeysCount: rowKeys.length,
-                keyIndex: rowKeys.indexOf(keyModel),
                 zoomScale: zoomScale,
               ),
             ),

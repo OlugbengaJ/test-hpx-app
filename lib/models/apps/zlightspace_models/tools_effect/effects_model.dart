@@ -41,5 +41,5 @@ class EffectsModel {
   dynamic? effectName;
 
   /// effect extractColors for the extract colors matrix from image
-  List? extractedColors;
+  List<List<Color>>? extractedColors;
 }

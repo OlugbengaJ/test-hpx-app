@@ -4,10 +4,15 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
+import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:image/image.dart' as imageLib;
 
 import 'package:file_picker/file_picker.dart';
+import 'package:provider/provider.dart';
 
 const String keyPalette = 'palette';
 const String keyNoOfItems = 'noIfItems';
@@ -16,10 +21,10 @@ int noOfPixelsPerAxis = 6;
 
 // Mode provider to manage the image colors of a mode been selected
 class ImageModeProvider extends ChangeNotifier {
-  List<Color> extractedColors = [];
-  List extractedMatrix = [];
+  List<dynamic> extractedColors = [];
+  List<List<Color>> extractedMatrix = [];
   late Random random;
-  Uint8List? imageBytes;
+  late Uint8List imageBytes;
   dynamic currentImage;
 
   // this function selects an image and return its value in byes
@@ -36,13 +41,15 @@ class ImageModeProvider extends ChangeNotifier {
   }
 
   // this function takes an image in bytes and converts it to a matrix of colors
-  Future<void> extractColors(Uint8List imageBytes) async {
+  Future<void> extractColors(BuildContext context, Uint8List image) async {
+    imageBytes = image;
     extractedColors = await extractPixelsColors(imageBytes);
     extractedMatrix = extractedColors.fold([[]], (list, x) {
       return list.last.length == noOfPixelsPerAxis
           ? (list..add([x]))
           : (list..last.add(x));
     });
+    setImageToExtractedEffect(context);
   }
 
   // this function calculate dthe algeberic equivalent of a color into color code
@@ -51,6 +58,29 @@ class ImageModeProvider extends ChangeNotifier {
     int b = argbColor & 0xFF;
     int hex = (argbColor & 0xFF00FF00) | (b << 16) | r;
     return Color(hex);
+  }
+
+  setImageToExtractedEffect(BuildContext context) {
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
+    EffectProvider effectProvider =
+        Provider.of<EffectProvider>(context, listen: false);
+
+    effectProvider.setCurrentEffect(EffectsModel(
+      effectName: effectProvider.currentEffect?.effectName,
+      effectType: effectProvider.currentEffect?.effectType,
+      extractedColors: extractedMatrix,
+    ));
+
+    modeProvider.setCurrentMode(ToolsModeModel(
+        currentColor: extractedColors,
+        effects: effectProvider.currentEffect!,
+        value: modeProvider.currentMode.value,
+        icon: modeProvider.currentMode.icon,
+        name: modeProvider.currentMode.name));
+    layerProvider.toolsEffectsUpdated();
   }
 
   // this function converts the bytes data of an image to colors using the alto colr function and each byte chunk of the image

@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/key_code.dart';
 
 class KeyModel with ChangeNotifier {
@@ -30,12 +29,6 @@ class KeyModel with ChangeNotifier {
   final double keyHeight;
   final double keyRadius;
 
-  late List<LayerItemModel> layers = [];
-
-  // /// [_isSelected] indicates key is selected.
-  // bool _isSelected = false;
-  // bool get isSelected => _isSelected;
-
   /// [_chips] holds multiple layers of a key
   /// e.g. a key could have only 1 base color, multiple layers with unique keys,
   /// and only 1 overlay (text or icon layer).
@@ -51,6 +44,9 @@ class KeyModel with ChangeNotifier {
 
   /// [chipsValues] returns the values of [_chips] as a new list.
   List<KeyPaintChip> get chipsValues => [..._chips.values];
+
+  /// [topChip] sets the topmost paint of this key.
+  KeyPaintRect? topChip;
 
   /// [addChipIcon] adds an icon layer to chips.
   void addChipIcon(
@@ -104,8 +100,8 @@ class KeyModel with ChangeNotifier {
     return k != ChipKey.base.toString() && k != ChipKey.overlay.toString();
   }
 
-  /// [getLayeredChipsqKeys] returns chips keys other than base, overlay, and icon
-  List<String> getLayeredChipsqKeys() {
+  /// [getLayeredChipsKeys] returns chips keys other than base, overlay, and icon
+  List<String> getLayeredChipsKeys() {
     return _chips.keys.where((k) => _isLayerChip(k)).toList();
   }
 
@@ -115,9 +111,11 @@ class KeyModel with ChangeNotifier {
       ..._chips.entries.map((e) {
         if (_isLayerChip(e.key)) {
           return e.value as KeyPaintRect;
+        } else {
+          return null;
         }
       })
-    ];
+    ].where((element) => element != null).toList();
   }
 
   /// [removeChip] deletes chip layer whose key matches [chipKey].

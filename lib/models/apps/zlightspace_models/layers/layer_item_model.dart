@@ -40,6 +40,10 @@ class LayerItemModel {
     _keys = [...keys];
   }
 
+  void addKey(KeyModel key) {
+    _keys.add(key);
+  }
+
   double top = 0.0;
   double bottom = 0.0;
   double left = 0.0;

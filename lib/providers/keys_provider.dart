@@ -647,4 +647,15 @@ class KeysProvider with ChangeNotifier {
         .where((element) => element.getLayeredChips().isNotEmpty)
         .toList();
   }
+
+  /// [getTopLayeredKeys] returns a list of [KeyModel] with
+  /// top level layered chips from [getLayeredKeys].
+  List<KeyModel> getTopLayeredKeys() {
+    return [
+      ...getLayeredKeys().map((e) {
+        e.topChip = e.getLayeredChips().last;
+        return e;
+      })
+    ];
+  }
 }

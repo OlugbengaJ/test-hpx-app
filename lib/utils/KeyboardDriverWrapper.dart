@@ -1,8 +1,18 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 
 class KeyboardDriverWrapper {
   static const _outputFilePath = "/dev/usb/rgb_kbd2";
+  static String runningEffectName = "";
+  static List<Color>? colorCycleleColors;
+  static List<Color>? waveColors;
+  static List<Color>? blinkingColors;
+  static List<Color>? breathingColors;
 
   ///Singleton design pattern, so that this class cannot be instantiated
   KeyboardDriverWrapper._();
@@ -581,37 +591,38 @@ class KeyboardDriverWrapper {
 
   ///Turns the keyboard light on
   static powerKeyboardOn() async {
-    await outputFile.writeAsString("SPO");
+    await outputFile.writeAsString("SPO", flush: true);
   }
 
   ///Turns the keyboard light off
   static powerKeyboardOff() async {
-    await outputFile.writeAsString("SPF");
+    await outputFile.writeAsString("SPF", flush: true);
   }
 
   ///Sets all the keys on the keyboard to the red
   static setAllKeysRed() async {
-    await outputFile.writeAsString("SAR");
+    await outputFile.writeAsString("SAR", flush: true);
   }
 
   ///Sets all the keys on the keyboard to the green
   static setAllKeysGreen() async {
-    await outputFile.writeAsString("SAG");
+    await outputFile.writeAsString("SAG", flush: true);
   }
 
   ///Sets all the keys on the keyboard to the blue
   static setAllKeysBlue() async {
-    await outputFile.writeAsString("SAB");
+    await outputFile.writeAsString("SAB", flush: true);
   }
 
   ///Sets  all the keys on the keyboard to the specified hex color
   ///@funcParameter: rgb color codes for red, green abd blue
-  static setAllKeysSpecificColor(
-      {required int red, required int green, required int blue}) async {
-    await outputFile.writeAsBytes([83, 65, 83, red, green, blue]);
+  static setAllKeysSpecificColor({required Color color}) async {
+    await outputFile
+        .writeAsBytes([83, 65, 83, color.red, color.green, color.blue]);
   }
 
-  static setSpecificKeysSpecificColors(List<List<dynamic>> keyAndColorList) async {
+  static setSpecificKeysSpecificColors(
+      List<List<dynamic>> keyAndColorList) async {
     List<int> completeByteArray = [];
 
     //Update color information for each key in the keyboardKyes json object
@@ -627,10 +638,12 @@ class KeyboardDriverWrapper {
     completeByteArray.add(83);
     completeByteArray.add(65);
     completeByteArray.add(67);
+
     completeByteArray = [
       ...completeByteArray,
       ...composeSpecificColorCompletePacket()
     ];
+    print(completeByteArray);
     await outputFile.writeAsBytes(completeByteArray);
   }
 
@@ -645,7 +658,7 @@ class KeyboardDriverWrapper {
   }
 
   static composeSpecificColorSubPacket({required String colorName}) {
-    var subPacketByteArray = List<int>.filled(179, 0, growable: false);
+    var subPacketByteArray = List<int>.filled(180, 0, growable: false);
     keyboardKeys.forEach((key, value) {
       for (int index in value["index"] as List) {
         if (colorName == "red") {
@@ -657,7 +670,6 @@ class KeyboardDriverWrapper {
       }
     });
 
-    //print(subPacketByteArray);
     return subPacketByteArray;
   }
 
@@ -673,16 +685,17 @@ class KeyboardDriverWrapper {
     return completePacketByteArray;
   }
 
-  static breathingEffect() async {
-    var fromColor = RGBColor(255, 255, 255);
-    var toColor = RGBColor(0, 0, 0);
-    while (true) {
-      await fadeTransition(fromColor, toColor);
-      var temp = toColor;
-      toColor = fromColor;
-      fromColor = temp;
-      await Future.delayed(
-          Duration(milliseconds: 1000), () => null);
+  static breathingEffect(List<Color> colors) async {
+    breathingColors = colors;
+    if(runningEffectName == "breathingEffect") return;
+    runningEffectName = "breathingEffect";
+
+    while (runningEffectName == "breathingEffect") {
+      await fadeTransition(breathingColors!.first, breathingColors!.last);
+      var temp = breathingColors!.last;
+      breathingColors!.last = breathingColors!.first;
+      breathingColors!.first = temp;
+      await Future.delayed(Duration(milliseconds: 1000), () => null);
     }
   }
 
@@ -690,73 +703,214 @@ class KeyboardDriverWrapper {
   ///primaryColorSpeed -set in milliseconds, determines how long the primary color stays on
   ///blinkingColorSpeed - set in milliseconds, determines how fast the blinking is
   static blinkingEffect(
-      {required int primaryColorRed,
-        required int primaryColorGreen,
-        required int primaryColorBlue,
-        required int blinkingColorRed,
-        required int blinkingColorGreen,
-        required int blinkingColorBlue,
+      {required List<Color> colors,
         required int primaryColorSpeed,
-        required int blinkingColorSpeed}) async {
-    while (true) {
+        required int blinkingColorSpeed})  async {
+
+    blinkingColors = colors;
+    if(runningEffectName == "blinkingEffect") return;
+    runningEffectName = "blinkingEffect";
+
+    while (runningEffectName == "blinkingEffect") {
       await Future.delayed(
           Duration(milliseconds: primaryColorSpeed),
-              () => setAllKeysSpecificColor(
-              red: blinkingColorRed,
-              green: blinkingColorGreen,
-              blue: blinkingColorBlue));
+              () => setAllKeysSpecificColor(color: blinkingColors!.last));
       await Future.delayed(
           Duration(milliseconds: blinkingColorSpeed),
-              () => setAllKeysSpecificColor(
-              red: primaryColorRed,
-              green: primaryColorGreen,
-              blue: primaryColorBlue));
+              () => setAllKeysSpecificColor(color: blinkingColors!.first));
     }
   }
 
-  static waveEffect(int waveSpeed) async {
-    var zone1 = ["escape", "backquote", "tab", "caps lock", "left shift", "left ctrl",
-      "f1", "1", "q", "a", "fn"];
-    var zone2 = ["f2", "2", "w", "s", "z", "left window key",
-      "f3", "3", "e", "d", "x", "left alt"];
-    var zone3 = [ "f4", "4", "r", "f", "c",
-      "f5", "5",  "t", "g", "v"];
-    var zone4 = ["f6", "6", "y", "h", "b",
-      "f7", "7", "u", "j", "n", "f8"];
-    var zone5 = ["f9", "8", "i", "k", "m",
-      "f10", "9", "o", "l", "comma", "right alt", "0", "dot", "right ctrl"];
-    var zone6 = ["f11", "dash", "p", "semi-colon", "forward slash", "left arrow", "f12",
-      "print screen", "equal", "open bracket", "single quote", "up arrow", "down arrow"];
-    var zone7 = ["power", "close bracket", "delete", "backspace",
-      "back slash", "enter", "right shift", "right arrow"];
+  static waveEffect(List<Color> colors, int waveSpeed) async {
+    waveColors = colors;
+
+    if(runningEffectName == "waveEffect") return;
+    runningEffectName = "waveEffect";
+    var zone1 = [
+      "escape",
+      "backquote",
+      "tab",
+      "caps lock",
+      "left shift",
+      "left ctrl",
+      "f1",
+      "1",
+      "q",
+      "a",
+      "fn"
+    ];
+    var zone2 = [
+      "f2",
+      "2",
+      "w",
+      "s",
+      "z",
+      "left window key",
+      "f3",
+      "3",
+      "e",
+      "d",
+      "x",
+      "left alt"
+    ];
+    var zone3 = ["f4", "4", "r", "f", "c", "f5", "5", "t", "g", "v"];
+    var zone4 = ["f6", "6", "y", "h", "b", "f7", "7", "u", "j", "n", "f8"];
+    var zone5 = [
+      "f9",
+      "8",
+      "i",
+      "k",
+      "m",
+      "f10",
+      "9",
+      "o",
+      "l",
+      "comma",
+      "right alt",
+      "0",
+      "dot",
+      "right ctrl"
+    ];
+    var zone6 = [
+      "f11",
+      "dash",
+      "p",
+      "semi-colon",
+      "forward slash",
+      "left arrow",
+      "f12",
+      "print screen",
+      "equal",
+      "open bracket",
+      "single quote",
+      "up arrow",
+      "down arrow"
+    ];
+    var zone7 = [
+      "power",
+      "close bracket",
+      "delete",
+      "backspace",
+      "back slash",
+      "enter",
+      "right shift",
+      "right arrow"
+    ];
 
     var zones = [zone1, zone2, zone3, zone4, zone5, zone6, zone7];
 
-    List<RGBColor> colors = [];
-    colors.add(RGBColor(60, 200, 55));
-    colors.add(RGBColor(100, 50, 0));
-    colors.add(RGBColor(255, 200, 0));
-    colors.add(RGBColor(255, 0, 255));
-    colors.add(RGBColor(220, 30, 50));
-    colors.add(RGBColor(30, 50, 150));
-    colors.add(RGBColor(20, 180, 90));
-    colors.add(RGBColor(180, 202, 0));
-
-    while(true) {
-      waveEffectImpl(zones, colors);
-      var color = colors.last;
-      colors.removeLast();
-      colors.insert(0, color);
-      await Future.delayed(Duration(milliseconds: 1000 - waveSpeed as int), () => null);
+    while (runningEffectName == "waveEffect") {
+      waveEffectImpl(zones, waveColors!);
+      var color = waveColors?.last;
+      waveColors?.removeLast();
+      waveColors?.insert(0, color!);
+      await Future.delayed(
+          Duration(milliseconds: 1000 - waveSpeed as int), () => null);
     }
   }
 
-  static waveEffectImpl(List<List<String>> zones, List<RGBColor> colors) async {
+  static waveEffectImpl(List<List<String>> zones, List<Color> colors) async {
     var index = 0;
     while (index < zones.length && index < colors.length) {
-      applyColorToSpecificZone(keyboardZone: zones[index], color: colors[index]);
+      applyColorToSpecificZone(
+          keyboardZone: zones[index], color: colors[index]);
       index++;
     }
+
+    List<int> completeByteArray = [];
+    completeByteArray.add(83);
+    completeByteArray.add(65);
+    completeByteArray.add(67);
+    completeByteArray = [
+      ...completeByteArray,
+      ...composeSpecificColorCompletePacket()
+    ];
+    await outputFile.writeAsBytes(completeByteArray);
+  }
+
+  static applyColorToSpecificZone(
+      {required List<String> keyboardZone, required Color color}) {
+    keyboardZone.forEach((element) {
+      updateKeyColorInfo(
+          keyName: element,
+          redOpacity: color.red,
+          greenOpacity: color.green,
+          blueOpacity: color.blue);
+    });
+  }
+
+  static colorCycleEffect(List<Color> colors, int cycleSpeed) async {
+    colorCycleleColors = colors;
+    if(runningEffectName == "colorCycleEffect") return;
+    runningEffectName = "colorCycleEffect";
+
+    while (runningEffectName == "colorCycleEffect") {
+      for (var color in colorCycleleColors!) {
+        setAllKeysSpecificColor(color: color);
+        await Future.delayed(
+            Duration(milliseconds: 1000 - cycleSpeed as int), () => null);
+      }
+    }
+  }
+
+  static fadeTransition(Color fromColor, Color toColor) async {
+    int incomingRed = fromColor.red;
+    int incomingGreen = fromColor.green;
+    int incomingBlue = fromColor.blue;
+
+    while (
+    runningEffectName == "breathingEffect" && incomingRed != toColor.red ||
+        runningEffectName == "breathingEffect" && incomingGreen != toColor.green ||
+        runningEffectName == "breathingEffect" && incomingBlue != toColor.blue) {
+      if (incomingRed > toColor.red) {
+        incomingRed -= 1;
+      } else if (incomingRed < toColor.red) {
+        incomingRed += 1;
+      }
+
+      if (incomingGreen > toColor.green) {
+        incomingGreen -= 1;
+      } else if (incomingGreen < toColor.green) {
+        incomingGreen += 1;
+      }
+
+      if (incomingBlue > toColor.blue) {
+        incomingBlue -= 1;
+      } else if (incomingBlue < toColor.blue) {
+        incomingBlue += 1;
+      }
+
+      await setAllKeysSpecificColor(color: Color.fromRGBO(incomingRed, incomingGreen, incomingBlue, 100));
+      //await Future.delayed(Duration(microseconds: 100), () => null);
+    }
+  }
+
+  static imageEffect(List<List<Color>> imageMatrix) async {
+    //var imageMatrix = [[Color(0x00000000), Color(0xff0096d6), Color(0x00000000), Color(0xff0096d6), Color(0xff0096d6), Color(0x00000000)], [Color(0xff0096d6), Color(0x8c002d41), Color(0xff0096d6), Color(0xff0096d6), Color(0xff0096d6), Color(0xff0096d6)], [Color(0xff0096d6), Color(0x00000000), Color(0x00000000), Color(0xff0096d6), Color(0xff0096d6), Color(0x00000000)], [Color(0xff0096d6), Color(0xff0094d5), Color(0x00000000), Color(0x00000000), Color(0x00000000), Color(0xff0096d6)], [Color(0xff0096d6), Color(0xff0096d6), Color(0xff0096d6), Color(0x00000000), Color(0xff0096d6), Color(0xff0096d6)], [Color(0x00000000), Color(0xff0096d6), Color(0xc300577c), Color(0xff0096d6), Color(0xff0096d6), Color(0x00000000)]];
+
+    var row1 = ["f5", "f6", "f7", "f8", "f9", "f10"];
+    var row2 = ["4", "5", "6", "7", "8", "9"];
+    var row3 = ["r", "t", "y", "u", "i", "o"];
+    var row4 = ["d", "f", "g", "h", "j", "k"];
+    var row5 = ["c", "v", "b", "n", "m", "comma"];
+
+    //var colors =[Colors.green, Colors.green, Colors.white, Colors.white, Colors.green, Colors.green];
+    var rows = [row1, row2, row3, row4, row5];
+
+    for(var rowAndColors in IterableZip([rows, imageMatrix])) {
+      var index = 0;
+      var colors = rowAndColors[1] as List<Color>;
+      var row = rowAndColors[0] as List<String>;
+      while(index < colors.length) {
+        var c = colors[index];
+        var k = row[index];
+        updateKeyColorInfo(keyName: k, redOpacity: c.red, greenOpacity: c.green, blueOpacity: c.blue);
+        index++;
+      }
+
+
+    }
+
 
     List<int> completeByteArray = [];
     completeByteArray.add(83);
@@ -770,70 +924,18 @@ class KeyboardDriverWrapper {
 
   }
 
-  static applyColorToSpecificZone(
-      {required List<String> keyboardZone, required RGBColor color}) {
-    keyboardZone.forEach((element) {
-      updateKeyColorInfo(
-          keyName: element,
-          redOpacity: color.red,
-          greenOpacity: color.green,
-          blueOpacity: color.blue);
-    });
+  static audioVisualizerEffect() {
+    var data = File("assets/audio.json").readAsString();
+    print(data);
   }
 
-  static colorCycleEffect(int cycleSpeed) async {
-    List<RGBColor> colors = [];
-    colors.add(RGBColor(60, 200, 55));
-    colors.add(RGBColor(100, 50, 0));
-    colors.add(RGBColor(255, 200, 0));
-    colors.add(RGBColor(255, 0, 255));
-    colors.add(RGBColor(220, 30, 50));
-    colors.add(RGBColor(30, 50, 150));
-    colors.add(RGBColor(20, 180, 90));
-    colors.add(RGBColor(180, 202, 0));
-
-    while(true) {
-      for(var color in colors) {
-        setAllKeysSpecificColor(red: color.red, green: color.green, blue: color.blue);
-        await Future.delayed(Duration(milliseconds: 1000 - cycleSpeed as int), () => null);
-      }
-    }
+  static colorProductionEffect(Color color) {
+    runningEffectName = "colorProductionEffect";
+    setAllKeysSpecificColor(color: color);
   }
 
-  static fadeTransition(RGBColor fromColor, RGBColor toColor) async {
-    int incomingRed = fromColor.red;
-    int incomingGreen = fromColor.green;
-    int incomingBlue = fromColor.blue;
-
-    while(incomingRed != toColor.red || incomingGreen != toColor.green || incomingBlue != toColor.blue) {
-      if(incomingRed > toColor.red) {
-        incomingRed -= 1;
-      } else if (incomingRed < toColor.red) {
-        incomingRed += 1;
-      }
-
-      if(incomingGreen > toColor.green) {
-        incomingGreen -= 1;
-      } else if (incomingGreen < toColor.green) {
-        incomingGreen += 1;
-      }
-
-      if(incomingBlue > toColor.blue) {
-        incomingBlue -= 1;
-      } else if (incomingBlue < toColor.blue) {
-        incomingBlue += 1;
-      }
-
-      await setAllKeysSpecificColor(red: incomingRed, green: incomingGreen, blue: incomingBlue);
-      //await Future.delayed(Duration(microseconds: 100), () => null);
-    }
+  static moodEffect({required Color color}) {
+    runningEffectName = "moodEffect";
+    setAllKeysSpecificColor(color: color);
   }
-}
-
-class RGBColor {
-  int red;
-  int green;
-  int blue;
-
-  RGBColor(this.red, this.green, this.blue);
 }

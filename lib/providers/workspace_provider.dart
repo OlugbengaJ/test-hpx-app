@@ -4,6 +4,7 @@ import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/overlay_selector.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/workspace_models/box_zone.dart';
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/selection_offset.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/utils/common.dart';
@@ -114,7 +115,7 @@ class WorkspaceProvider with ChangeNotifier {
   }
 
   /// [_animMillisecond] is the animation duration in milliseconds and defaults to 1s.
-  double? _animMillisecond = 1000.0;
+  double _animMillisecond = 1000.0;
 
   /// [_animationColor] is used to create a ColorTween animation.
   late Animation<Color?> _animationColor;
@@ -136,7 +137,7 @@ class WorkspaceProvider with ChangeNotifier {
   void _setAnimDuration(double? speed) {
     if (speed != null) {
       // speed exists so check if it has changed
-      final ms = speed * 10;
+      final ms = speed * (_animMillisecond / 10);
       if (ms != _animMillisecond) {
         // update the controller duration
         _animMillisecond = ms;
@@ -145,7 +146,7 @@ class WorkspaceProvider with ChangeNotifier {
     }
   }
 
-  /// [animColor] returns an animation color.
+  /// [animColor] returns a color from transitions of a start to end color.
   Color? animColor(Color beginColor, Color endColor,
       {double? speed, EnumModes? effect}) {
     if (effect == EnumModes.blinking) {
@@ -161,31 +162,47 @@ class WorkspaceProvider with ChangeNotifier {
     }
 
     _setAnimDuration(speed);
-    _checkAnimaStatus();
+    _checkAnimStatus();
 
     return _animationColor.value;
   }
 
-  /// [_checkAnimaStatus] this ensures the animation controller is always active.
-  void _checkAnimaStatus() {
+  /// [animColorTween] returns an animation color from a tween of colors.
+  Color? animColorTween(List<Color>? colors, {double? speed}) {
+    if (colors == null) return null;
+
+    List<TweenSequenceItem<Color?>> tween = [];
+
+    for (var i = 0; i < colors.length - 1; i++) {
+      tween.add(TweenSequenceItem<Color?>(
+        tween: ColorTween(begin: colors[i], end: colors[i + 1]),
+        weight: 1,
+      ));
+    }
+    _animationColor = TweenSequence<Color?>(tween).animate(controller);
+
+    _setAnimDuration(speed);
+    _checkAnimStatus();
+
+    return _animationColor.value;
+  }
+
+  /// [_checkAnimStatus] this ensures the animation controller is always active.
+  void _checkAnimStatus() {
     switch (_controller.status) {
       case AnimationStatus.completed:
         _controller.reverse();
-        // debugPrint('completed');
         break;
       case AnimationStatus.dismissed:
-        // debugPrint('dismissed');
         _controller.forward();
         break;
       case AnimationStatus.forward:
         if (!_controller.isAnimating) {
           _controller.reverse();
-          // debugPrint('forward');
         }
         break;
       case AnimationStatus.reverse:
         if (!_controller.isAnimating) {
-          // debugPrint('reverse');
           _controller.forward();
         }
         break;
@@ -543,13 +560,14 @@ class WorkspaceProvider with ChangeNotifier {
   Offset? _workspaceOffset;
   Offset? _workspacePanDownOffset;
 
-  /// [isBoxZoned] checks a widget intersects with the selector.
-  bool? isBoxZoned(RenderBox? box, int? layerId, {String k = ''}) {
+  /// [boxZone] checks a widget intersects with the selector.
+  BoxZone? boxZone(RenderBox? box, int? layerId) {
     final Rect selectorRect;
 
     switch (_keyDragMode) {
       case WorkspaceDragMode.click:
-        return _isCurrentDeviceSelected ? true : null;
+        // return _isCurrentDeviceSelected ? true : null;
+        return null;
 
       default:
         final ltwh = _getLayerLTWH(layerId);
@@ -599,18 +617,16 @@ class WorkspaceProvider with ChangeNotifier {
               ltwh.highlightLTWH!.height!,
             );
           }
+
           final Rect boxRect = box!.localToGlobal(Offset.zero) & box.size;
           final rectIntersect = selectorRect.intersect(boxRect);
 
-          if (k.contains('kF5')) {
-            // final g = workspaceKey.currentContext?.findRenderObject() as RenderBox?;
-            // final s = g!.localToGlobal(Offset.zero);
-            // debugPrint('$k $s');
-            // debugPrint('$k $boxRect $selectorRect $rectIntersect');
-          }
-
           // include 0 for scenarios where a button is clicked.
-          return (rectIntersect.width >= 0 && rectIntersect.height >= 0);
+          final isBoxed = rectIntersect.width >= 0 && rectIntersect.height >= 0;
+
+          if (isBoxed) {
+            return BoxZone(boxRect: boxRect, selectorRect: selectorRect);
+          }
         }
 
         return null;
@@ -675,7 +691,7 @@ class WorkspaceProvider with ChangeNotifier {
 
         final left = _workspaceRect.size.width / 2;
         final top = _workspaceRect.size.height / 2;
-        const double halfSize = 100.0;
+        const double halfSize = 70.0;
 
         // actual size of the overlay
         const double size = halfSize * 2;
@@ -710,10 +726,10 @@ class WorkspaceProvider with ChangeNotifier {
           _selectorVisible = _isPanning;
         }
 
-        if (layer.mode?.value == EnumModes.image) {
-          _keyDragMode = null;
-          _selectorVisible = false;
-        }
+        // if (layer.mode?.value == EnumModes.image) {
+        //   _keyDragMode = null;
+        //   _selectorVisible = false;
+        // }
       }
     }
   }
