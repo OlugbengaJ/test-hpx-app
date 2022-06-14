@@ -5,6 +5,8 @@ import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 
+import '../../utils/KeyboardController.dart';
+
 ///[LayersProvider] to controle the layers state
 
 class LayersProvider extends ChangeNotifier {
@@ -90,7 +92,7 @@ class LayersProvider extends ChangeNotifier {
   }
 
   /// listen to any change from the tools and effects so the current layers can be updated
-  void toolsEffectsUpdated(){
+  Future<void> toolsEffectsUpdated() async {
     LayerItemModel item = getItem(listIndex);
     var subLayers = getSublayers(item.id);
 
@@ -128,6 +130,39 @@ class LayersProvider extends ChangeNotifier {
     //   debugPrint('${layeritems[i].mode?.currentColor.first}');
     // }
     notifyListeners();
+
+    switch(item.mode?.name) {
+
+      case "Color Production": { await KeyboardController.colorProductionEffect(item); }
+      break;
+
+      case "Mood": { await KeyboardController.moodEffect(item); }
+      break;
+
+      case "Wave": {await KeyboardController.waveEffect(item);}
+      break;
+
+      case "Color Cycle": {await KeyboardController.colorCycleEffect(item); }
+      break;
+
+      case "Breathing": {await KeyboardController.breathingEffect(item);}
+      break;
+
+      case "Blinking": {  await KeyboardController.blinkingEffect(item); }
+      break;
+
+      case "Shortcut Colors": { await KeyboardController.shortcutColorEffect(item); }
+      break;
+
+      case "Image": { await KeyboardController.imageEffect(item); }
+      break;
+
+      case "Ambient": { await KeyboardController.imageEffect(item); }
+      break;
+
+      default: { await KeyboardController.cleanUpOldEffect(); }
+      break;
+    }
   }
 
 

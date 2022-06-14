@@ -80,7 +80,7 @@ KeyModel _updateKeyInfo(
   List<KeyPaintChip> krect = [];
 
   // clear key selections
-  final layersChipKeys = keyModel.getLayeredChipsqKeys();
+  final layersChipKeys = keyModel.getLayeredChipsKeys();
 
   if (layersChipKeys.isNotEmpty) {
     // TODO: using workspace provider layers selection map could be useful.
@@ -109,8 +109,10 @@ KeyModel _updateKeyInfo(
       final layer = layers[i];
       final layerId = layer.id;
 
-      final boxZone =
-          provider.boxZone(renderBox, layerId, k: '${keyModel.keyCode}');
+      final boxZone = provider.boxZone(renderBox, layerId);
+
+      // clear the layer keys info
+      layer.setKeys([]);
 
       if (boxZone != null) {
         // insert new chip with the layer id as key
@@ -179,6 +181,7 @@ KeyModel _updateKeyInfo(
         }
 
         chip.opacity = layer.visible ? 1 : 0;
+        layer.addKey(keyModel);
 
         // add the chip
         keyModel.addChip(chip);

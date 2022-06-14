@@ -1,7 +1,13 @@
 import 'KeyboardDriverWrapper.dart';
 import 'dart:math';
+import 'dart:isolate';
+
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 
 class KeyboardController {
+  static Isolate? isolate;
 
   static var tempKeys = {
     "escape": {
@@ -574,54 +580,59 @@ class KeyboardController {
     KeyboardDriverWrapper.powerKeyboardOn();
   }
 
-  static imageEffect() {
-    var temp = [];
-    List<List<dynamic>> keys = [];
-    tempKeys.forEach((key, value) {
-      temp = [];
-      temp.add(key);
-      temp.add(Random().nextInt(255));
-      temp.add(Random().nextInt(255));
-      temp.add(Random().nextInt(255));
-      keys.add(temp);
-    });
-    KeyboardDriverWrapper.setSpecificKeysSpecificColors(keys);
+  static imageEffect(LayerItemModel layer) {
+    //var imageMatrix = layer.mode?.effects?.extractedColors;
+    //KeyboardDriverWrapper.imageEffect(imageMatrix);
   }
 
-  static modeEffect() {
-    KeyboardDriverWrapper.setAllKeysSpecificColor(red: 50, green: 255, blue: 70);
+  static modeEffect(LayerItemModel layer) {
+    var color = layer.mode?.currentColor.first;
+    KeyboardDriverWrapper.setAllKeysSpecificColor(color: color);
   }
 
-  static shortcutColorEffect() {
+  static shortcutColorEffect(LayerItemModel layer) {
     KeyboardDriverWrapper.setSpecificKeysSpecificColors([
-      ["enter", 255, 0, 0],
-      ["tab", 255, 0, 0],
-      ["right shift", 0, 255, 0],
-      ['j', 0, 0, 255]     ]);
+      ["right arrow", 255, 255, 255],
+      ["enter", 255, 255, 255],
+    ]);
   }
 
-  static blinkingEffect() {
+  static blinkingEffect(LayerItemModel layer)  {
     KeyboardDriverWrapper.blinkingEffect(
-        primaryColorRed: 255,
-        primaryColorGreen: 0,
-        primaryColorBlue: 0,
-        blinkingColorRed: 0,
-        blinkingColorGreen: 255,
-        blinkingColorBlue: 0,
+        colors: layer.mode?.currentColor as List<Color>,
         primaryColorSpeed: 3000,
         blinkingColorSpeed: 900
     );
   }
 
-  static waveEffect() {
-    KeyboardDriverWrapper.waveEffect(900);
+  static waveEffect(LayerItemModel layer) {
+    var colors = layer.mode?.currentColor;
+    KeyboardDriverWrapper.waveEffect(colors as List<Color>, 300);
   }
 
-  static colorCycleEffect() {
-    KeyboardDriverWrapper.colorCycleEffect(100);
+  static colorCycleEffect(LayerItemModel layer) {
+    var colors = layer.mode?.currentColor;
+    KeyboardDriverWrapper.colorCycleEffect(colors as List<Color>, 100);
   }
 
-  static breathingEffect() {
-    KeyboardDriverWrapper.breathingEffect();
+  static breathingEffect(LayerItemModel layer) {
+    var colors = layer.mode?.currentColor;
+    KeyboardDriverWrapper.breathingEffect(colors as List<Color>);
+  }
+
+  static colorProductionEffect(LayerItemModel layer) {
+    var color = layer.mode?.currentColor.first;
+    KeyboardDriverWrapper.colorProductionEffect(color);
+  }
+
+  static moodEffect(LayerItemModel layer) {
+    var color = layer.mode?.currentColor.first;
+    KeyboardDriverWrapper.moodEffect(color: color);
+  }
+
+  static cleanUpOldEffect() {
+    if (isolate != null) {
+      isolate?.kill();
+    }
   }
 }

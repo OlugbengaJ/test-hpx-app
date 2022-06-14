@@ -172,21 +172,17 @@ class WorkspaceProvider with ChangeNotifier {
     switch (_controller.status) {
       case AnimationStatus.completed:
         _controller.reverse();
-        // debugPrint('completed');
         break;
       case AnimationStatus.dismissed:
-        // debugPrint('dismissed');
         _controller.forward();
         break;
       case AnimationStatus.forward:
         if (!_controller.isAnimating) {
           _controller.reverse();
-          // debugPrint('forward');
         }
         break;
       case AnimationStatus.reverse:
         if (!_controller.isAnimating) {
-          // debugPrint('reverse');
           _controller.forward();
         }
         break;
@@ -545,7 +541,7 @@ class WorkspaceProvider with ChangeNotifier {
   Offset? _workspacePanDownOffset;
 
   /// [boxZone] checks a widget intersects with the selector.
-  BoxZone? boxZone(RenderBox? box, int? layerId, {String k = ''}) {
+  BoxZone? boxZone(RenderBox? box, int? layerId) {
     final Rect selectorRect;
 
     switch (_keyDragMode) {
@@ -607,13 +603,6 @@ class WorkspaceProvider with ChangeNotifier {
 
           // include 0 for scenarios where a button is clicked.
           final isBoxed = rectIntersect.width >= 0 && rectIntersect.height >= 0;
-
-          // if (isBoxed && k.contains('k5')) {
-          //   // identify what percentage of the key is boxed by rect
-          //   //
-          //   debugPrint(
-          //       'box: $boxRect selector: $selectorRect rect: $rectIntersect');
-          // }
 
           if (isBoxed) {
             return BoxZone(boxRect: boxRect, selectorRect: selectorRect);
