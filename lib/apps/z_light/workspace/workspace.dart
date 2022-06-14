@@ -23,8 +23,6 @@ class Workspace extends StatefulWidget {
 
 class _WorkspaceState extends State<Workspace>
     with SingleTickerProviderStateMixin {
-  // late variables are initialize on initState()
-  // late Animation<double> _animation;
   late AnimationController _controller;
 
   late TextEditingController _zoomTextCtrl;
@@ -38,18 +36,24 @@ class _WorkspaceState extends State<Workspace>
 
   Timer _timer = Timer.periodic(Duration.zero, ((t) {}));
 
-  /// [zoomTextChanged] ensure user enters only digits
-  /// that are within the acceptable zoom threshold.
-  void zoomTextChanged() {
-    double? value = double.tryParse(_zoomTextCtrl.text);
-
+  /// [zoomTextSubmitted] is called when user hits the Enter key.
+  /// This updates the zoom value and resets the value when outside
+  /// the acceptable thresholds [_zoomOutThreshold] and [_zoomInThreshold].
+  void zoomTextSubmitted(String v) {
+    debugPrint('pressed $v ${_zoomTextCtrl.text}');
+    double? value = double.tryParse(v);
     if (value != null) {
-      if (value >= _zoomOutThreshold && value <= _zoomInThreshold) {
-        setState(() {
-          _zoomValue = value;
-          _zoomScale = _zoomValue / (60 / 0.6);
-        });
+      if (value < _zoomOutThreshold) {
+        value = _zoomOutThreshold;
+      } else if (value > _zoomInThreshold) {
+        value = _zoomInThreshold;
       }
+
+      setState(() {
+        _zoomValue = value!;
+        _zoomScale = _zoomValue / (60 / 0.6);
+        updateZoomText();
+      });
     }
   }
 
@@ -60,8 +64,8 @@ class _WorkspaceState extends State<Workspace>
     _timer.cancel();
   }
 
-  /// [updateZoom] sets the zoom text (without fractions) and zoom scale.
-  void updateZoom() {
+  /// [updateZoomText] sets the zoom text (without fractions) and zoom scale.
+  void updateZoomText() {
     _zoomTextCtrl.text = '${_zoomValue.ceil()}';
   }
 
@@ -76,7 +80,7 @@ class _WorkspaceState extends State<Workspace>
 
       setState(() {
         _zoomValue += 1;
-        updateZoom();
+        updateZoomText();
       });
     });
   }
@@ -85,7 +89,7 @@ class _WorkspaceState extends State<Workspace>
   void zoomExpand() {
     setState(() {
       _zoomValue = _zoomInThreshold / 1.5; // / 3.1;
-      updateZoom();
+      updateZoomText();
     });
   }
 
@@ -100,7 +104,7 @@ class _WorkspaceState extends State<Workspace>
 
       setState(() {
         _zoomValue -= 1;
-        updateZoom();
+        updateZoomText();
       });
     });
   }
@@ -109,7 +113,7 @@ class _WorkspaceState extends State<Workspace>
   void zoomCollapse() {
     setState(() {
       _zoomValue = _zoomOutThreshold;
-      updateZoom();
+      updateZoomText();
     });
   }
 
@@ -125,9 +129,6 @@ class _WorkspaceState extends State<Workspace>
     _zoomValue = 60;
     _zoomScale = 0.6;
     _zoomTextCtrl = TextEditingController(text: _zoomValue.ceil().toString());
-
-    //Start listening to changes.
-    _zoomTextCtrl.addListener(zoomTextChanged);
   }
 
   @override
@@ -332,6 +333,7 @@ class _WorkspaceState extends State<Workspace>
                   right: 0,
                   child: Center(
                     child: ZoomToolbar(
+                      onSubmitted: zoomTextSubmitted,
                       zoomTextController: _zoomTextCtrl,
                       zoomInHandler: zoomIn,
                       zoomExpandHandler: zoomExpand,

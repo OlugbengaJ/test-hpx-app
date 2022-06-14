@@ -137,7 +137,7 @@ class WorkspaceProvider with ChangeNotifier {
   void _setAnimDuration(double? speed) {
     if (speed != null) {
       // speed exists so check if it has changed
-      final ms = speed * 10;
+      final ms = speed * 50;
       if (ms != _animMillisecond) {
         // update the controller duration
         _animMillisecond = ms;
@@ -160,6 +160,26 @@ class WorkspaceProvider with ChangeNotifier {
       _animationColor =
           ColorTween(begin: beginColor, end: endColor).animate(_controller);
     }
+
+    _setAnimDuration(speed);
+    _checkAnimaStatus();
+
+    return _animationColor.value;
+  }
+
+  /// [animColorTween] returns an animation color.
+  Color? animColorTween(List<Color>? colors, {double? speed}) {
+    if (colors == null) return null;
+
+    List<TweenSequenceItem<Color?>> tween = [];
+
+    for (var i = 0; i < colors.length - 1; i++) {
+      tween.add(TweenSequenceItem<Color?>(
+        tween: ColorTween(begin: colors[i], end: colors[i + 1]),
+        weight: 1,
+      ));
+    }
+    _animationColor = TweenSequence<Color?>(tween).animate(controller);
 
     _setAnimDuration(speed);
     _checkAnimaStatus();
