@@ -63,7 +63,6 @@ class _BlinkingPresetState extends State<BlinkingPreset> {
                       width: blinkingList[0].width,
                       height: blinkingList[0].height,
                       picker: blinkingList[0].canEdit,
-                      setRandom: blinkingList[0].setRandom,
                       leftTitle: blinkingList[0].action!,
                     ),
                     ColorPickerWidget(
@@ -74,7 +73,6 @@ class _BlinkingPresetState extends State<BlinkingPreset> {
                       width: blinkingList[1].width,
                       height: blinkingList[1].height,
                       picker: blinkingList[1].canEdit,
-                      setRandom: blinkingList[1].setRandom,
                       leftTitle: blinkingList[1].action!,
                     )
                   ],

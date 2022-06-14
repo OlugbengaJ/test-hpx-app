@@ -20,6 +20,7 @@ class ColorPickerWidget extends StatefulWidget {
       this.picker,
       this.label = "",
       this.hasBorder = true,
+      this.onchange,
       this.setRandom = false,
       this.width,
       this.height,
@@ -33,6 +34,7 @@ class ColorPickerWidget extends StatefulWidget {
   bool? picker;
   final bool? setRandom;
   bool? hasBorder;
+  Function? onchange;
   final double? width;
   final String? label;
   final double? height;
