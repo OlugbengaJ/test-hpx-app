@@ -151,13 +151,6 @@ KeyModel _updateKeyInfo(
 
             chip.color = animColor!;
             break;
-          case EnumModes.colorcycle:
-            final animColor = provider.animColorTween(
-                layer.mode?.currentColor as List<Color>,
-                speed: layer.mode?.effects.speed);
-
-            chip.color = animColor!;
-            break;
           case EnumModes.image:
             // paint all keys based on color matrix (m x n)
 
