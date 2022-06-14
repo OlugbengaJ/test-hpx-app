@@ -20,6 +20,7 @@ class ColorPickerWidget extends StatefulWidget {
       this.picker,
       this.label = "",
       this.hasBorder = true,
+      this.onchange,
       this.setRandom = false,
       this.width,
       this.height,
@@ -33,6 +34,7 @@ class ColorPickerWidget extends StatefulWidget {
   bool? picker;
   final bool? setRandom;
   bool? hasBorder;
+  Function(List<Color> colors)? onchange;
   final double? width;
   final String? label;
   final double? height;
@@ -70,24 +72,6 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
     });
   }
 
-  void changeColorRandom(bool timer) {
-    ColorPickerProvider colorPickerProviderInstance =
-        Provider.of<ColorPickerProvider>(context, listen: false);
-    if (timer == true) {
-      time = Timer.periodic(new Duration(seconds: 1), (timer) {
-        currentColors[colorPosition] =
-            colorPickerProviderInstance.generateRandomColor();
-        // print(colorPosition);
-        setCurrentColor(currentColors[colorPosition]);
-      });
-    } else {
-      time!.cancel();
-      currentColors = widget.colors;
-    }
-    print(colorPosition);
-    generatePreviewBox(true);
-  }
-
   void setCurrentColor(Color selectedColor) {
     ColorPickerProvider colorPickerProviderInstance =
         Provider.of<ColorPickerProvider>(context, listen: false);
@@ -107,6 +91,7 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
         effects: modeProvider.currentMode.effects,
         icon: modeProvider.currentMode.icon,
         name: modeProvider.currentMode.name));
+    widget.onchange!(widget.colors);
     layerProvider.toolsEffectsUpdated();
   }
 
@@ -499,12 +484,22 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                                 activeColor: Colors.green,
                                 value: _value,
                                 onChanged: (bool? value) {
+                                  ColorPickerProvider
+                                      colorPickerProviderInstance =
+                                      Provider.of<ColorPickerProvider>(context,
+                                          listen: false);
                                   setState(() {
-                                    // colorPosition = widget.colorIndex!;
                                     _value = value!;
                                     widget.hasBorder = (!_value) ? true : false;
                                     widget.picker = (!_value) ? true : false;
-                                    changeColorRandom((!_value) ? false : true);
+
+                                    List<Color> selectedColor = (!_value)
+                                        ? [widget.color]
+                                        : [
+                                            colorPickerProviderInstance
+                                                .generateRandomColor() as Color
+                                          ];
+                                    widget.onchange!(selectedColor);
                                   });
                                 },
                               )
