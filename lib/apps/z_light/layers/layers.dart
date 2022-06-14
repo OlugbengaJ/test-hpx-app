@@ -50,7 +50,7 @@ class _LayersState extends State<Layers> {
     ModeProvider modeProvider = context.read<ModeProvider>();
     var provider = context.read<LayersProvider>();
 
-    if(!provider.isLayerEditing){
+    if (!provider.isLayerEditing) {
       int id = 1; // For first element;
       if (provider.layeritems.isNotEmpty) {
         for (var element in provider.layeritems) {
@@ -64,25 +64,21 @@ class _LayersState extends State<Layers> {
       /// Add a new provider to the layeritems, using the LayersProvider
 
       LayerItemModel itemModel = LayerItemModel(
-        id: id,
-        layerText: "Mood",
-        //mode: modeProvider.currentMode,
-        icon: Icons.mood
-      );
+          id: id,
+          layerText: 'Mood',
+          //mode: modeProvider.currentMode,
+          icon: Icons.mood);
 
       provider.add(itemModel);
 
       modeProvider.changeModeComponent(
-      PickerModel(
-          title: itemModel.mode!.name,
-          value: itemModel.mode!.value,
-          enabled: true,
-          icon: itemModel.mode!.icon
-        ),
-        context
-      );
+          PickerModel(
+              title: itemModel.mode!.name,
+              value: itemModel.mode!.value,
+              enabled: true,
+              icon: itemModel.mode!.icon),
+          context);
     }
-    
   }
 
   @override
@@ -98,12 +94,12 @@ class _LayersState extends State<Layers> {
             children: [
               Container(
                 margin: EdgeInsets.zero,
-                child: Text("Layers", style: h5Style),
+                child: Text('Layers', style: h5Style),
               ),
               Container(
                 margin: const EdgeInsets.only(top: 8.0),
                 child: Tooltip(
-                  message: "Add a new Layer",
+                  message: 'Add a new Layer',
                   child: TextButton(
                     onPressed: () => _addLayer(),
                     style: textBtnStyleWhite,
@@ -116,7 +112,7 @@ class _LayersState extends State<Layers> {
                           Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Text(
-                              "Create New Layer",
+                              'Create New Layer',
                               style: TextStyle(color: Colors.black),
                             ),
                           ),
@@ -141,7 +137,7 @@ class _LayersState extends State<Layers> {
                             ScrollController(keepScrollOffset: false),
                         itemBuilder: (BuildContext context, int index) {
                           return Container(
-                            key: Key("$index"),
+                            key: Key('$index'),
                             child: LayerListItem(
                               layerIndex: index,
                               layerItemModel: provider.getItem(index),
