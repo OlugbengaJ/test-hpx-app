@@ -691,7 +691,7 @@ class WorkspaceProvider with ChangeNotifier {
 
         final left = _workspaceRect.size.width / 2;
         final top = _workspaceRect.size.height / 2;
-        const double halfSize = 100.0;
+        const double halfSize = 70.0;
 
         // actual size of the overlay
         const double size = halfSize * 2;

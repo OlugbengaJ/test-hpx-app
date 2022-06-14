@@ -28,6 +28,7 @@ class _WorkspaceState extends State<Workspace>
   late TextEditingController _zoomTextCtrl;
   late double _zoomValue;
   late double _zoomScale;
+  static const double _zoomScaleFactor = 0.4;
 
   static const double _zoomInThreshold = 250;
   static const double _zoomOutThreshold = 60;
@@ -51,7 +52,7 @@ class _WorkspaceState extends State<Workspace>
 
       setState(() {
         _zoomValue = value!;
-        _zoomScale = _zoomValue / (60 / 0.6);
+        _zoomScale = _zoomValue / (60 / _zoomScaleFactor);
         updateZoomText();
       });
     }
@@ -115,7 +116,7 @@ class _WorkspaceState extends State<Workspace>
 
     // Initialize zoom value and scale.
     _zoomValue = 60;
-    _zoomScale = 0.6;
+    _zoomScale = _zoomScaleFactor;
     _zoomTextCtrl = TextEditingController(text: _zoomValue.ceil().toString());
   }
 
