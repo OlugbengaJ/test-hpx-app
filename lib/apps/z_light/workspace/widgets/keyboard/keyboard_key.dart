@@ -147,6 +147,13 @@ KeyModel _updateKeyInfo(
 
             chip.color = animColor!;
             break;
+          case EnumModes.colorcycle:
+            final animColor = provider.animColorTween(
+                layer.mode?.currentColor as List<Color>,
+                speed: layer.mode?.effects.speed);
+
+            chip.color = animColor!;
+            break;
           case EnumModes.image:
             // paint all keys based on color matrix (m x n)
 
@@ -161,8 +168,7 @@ KeyModel _updateKeyInfo(
                 colorsMatrix.length,
               );
 
-              final rowColors = colorsMatrix[rowIndex] as List;
-
+              final rowColors = colorsMatrix[rowIndex];
               final colIndex = getColorIndex(
                 boxZone.selectorRect.width,
                 boxZone.selectorRect.left,
@@ -171,7 +177,7 @@ KeyModel _updateKeyInfo(
               );
 
               try {
-                chip.color = rowColors[colIndex] as Color;
+                chip.color = rowColors[colIndex];
               } catch (e) {
                 // color cast failed.
               }
