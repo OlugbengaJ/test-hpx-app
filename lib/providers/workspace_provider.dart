@@ -714,11 +714,6 @@ class WorkspaceProvider with ChangeNotifier {
           // show the selector when drag mode is highlight.
           _selectorVisible = _isPanning;
         }
-
-        // if (layer.mode?.value == EnumModes.image) {
-        //   _keyDragMode = null;
-        //   _selectorVisible = false;
-        // }
       }
     }
   }

@@ -121,11 +121,13 @@ KeyModel _updateKeyInfo(
         if ('${currentLayer.id}' == chip.chipKey) {
           // use the default color for current layer
           chip.color = currentLayer.mode?.currentColor.last;
+          chip.showOutline = true;
         } else {
           // use existing color for non-current layer
           final foundKeys = krect.where((e) => e.chipKey == chip.chipKey);
           if (foundKeys.isNotEmpty) {
             chip.color = foundKeys.first.color;
+            chip.showOutline = false;
           }
         }
 

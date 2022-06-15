@@ -41,8 +41,8 @@ class _WorkspaceState extends State<Workspace>
   /// This updates the zoom value and resets the value when outside
   /// the acceptable thresholds [_zoomOutThreshold] and [_zoomInThreshold].
   void zoomTextSubmitted(String v) {
-    debugPrint('pressed $v ${_zoomTextCtrl.text}');
     double? value = double.tryParse(v);
+
     if (value != null) {
       if (value < _zoomOutThreshold) {
         value = _zoomOutThreshold;
@@ -52,7 +52,7 @@ class _WorkspaceState extends State<Workspace>
 
       setState(() {
         _zoomValue = value!;
-        _zoomScale = _zoomValue / (60 / _zoomScaleFactor);
+        _zoomScale = _zoomScaleFactor * _zoomValue / 60;
         updateZoomText();
       });
     }
