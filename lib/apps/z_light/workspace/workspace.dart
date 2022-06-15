@@ -171,10 +171,7 @@ class _WorkspaceState extends State<Workspace>
                         child: Tooltip(
                           message: 'Highlight selector',
                           child: RoundButton(
-                            onTapDown: () {
-                              workspaceProvider
-                                  .toggleDragMode(WorkspaceDragMode.highlight);
-                            },
+                            onTapDown: workspaceProvider.zoneHighlightFnc,
                             size: _buttonSize,
                             icon: Icons.highlight_alt,
                             iconColor: workspaceProvider.isDragModeHighlight
@@ -188,11 +185,7 @@ class _WorkspaceState extends State<Workspace>
                         child: Tooltip(
                           message: 'Resizable selector',
                           child: RoundButton(
-                            onTapDown: () {
-                              workspaceProvider
-                                  .toggleDragMode(WorkspaceDragMode.resizable);
-                            },
-                            onTapUp: () {},
+                            onTapDown: workspaceProvider.zoneResizableFnc,
                             size: _buttonSize,
                             icon: Icons.select_all,
                             iconColor: workspaceProvider.isDragModeResizable
@@ -206,10 +199,7 @@ class _WorkspaceState extends State<Workspace>
                         child: Tooltip(
                           message: 'Click selector',
                           child: RoundButton(
-                            onTapDown: () {
-                              workspaceProvider
-                                  .toggleDragMode(WorkspaceDragMode.click);
-                            },
+                            onTapDown: workspaceProvider.zoneClickFnc,
                             size: _buttonSize,
                             icon: Icons.mouse,
                             iconColor: workspaceProvider.isDragModeClick
