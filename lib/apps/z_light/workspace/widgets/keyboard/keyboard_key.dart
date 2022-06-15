@@ -132,18 +132,15 @@ KeyModel _updateKeyInfo(
         // get the current chip in layers
         switch (layer.mode?.value) {
           case EnumModes.blinking:
-            final beginColor = layer.mode?.currentColor.first;
-            final endColor = layer.mode?.currentColor.last;
-            final animColor = provider.animColor(beginColor, endColor,
-                effect: EnumModes.blinking, speed: layer.mode?.effects.speed);
-
-            chip.color = animColor!;
-            break;
           case EnumModes.breathing:
             final beginColor = layer.mode?.currentColor.first;
             final endColor = layer.mode?.currentColor.last;
-            final animColor = provider.animColor(beginColor, endColor,
-                speed: layer.mode?.effects.speed);
+            final animColor = provider.animColor(
+              beginColor,
+              endColor,
+              effect: layer.mode?.value,
+              speed: layer.mode?.effects.speed,
+            );
 
             chip.color = animColor!;
             break;

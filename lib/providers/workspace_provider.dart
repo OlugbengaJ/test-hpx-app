@@ -137,7 +137,7 @@ class WorkspaceProvider with ChangeNotifier {
   void _setAnimDuration(double? speed) {
     if (speed != null) {
       // speed exists so check if it has changed
-      final ms = speed * (_animMillisecond / 10);
+      final ms = speed * 100;
       if (ms != _animMillisecond) {
         // update the controller duration
         _animMillisecond = ms;
@@ -150,25 +150,14 @@ class WorkspaceProvider with ChangeNotifier {
   Color? animColor(Color beginColor, Color endColor,
       {double? speed, EnumModes? effect}) {
     if (effect == EnumModes.blinking) {
-      _animationColor = TweenSequence<Color?>([
-        TweenSequenceItem<Color?>(
-          tween: ColorTween(begin: beginColor, end: endColor),
-          weight: 1,
-        )
-      ]).animate(controller);
-    } else {
-      _animationColor =
-          ColorTween(begin: beginColor, end: endColor).animate(_controller);
+      return animColorTween([beginColor, null, endColor]);
     }
 
-    _setAnimDuration(speed);
-    _checkAnimStatus();
-
-    return _animationColor.value;
+    return animColorTween([beginColor, endColor]);
   }
 
   /// [animColorTween] returns an animation color from a tween of colors.
-  Color? animColorTween(List<Color>? colors, {double? speed}) {
+  Color? animColorTween(List<Color?>? colors, {double? speed}) {
     if (colors == null) return null;
 
     List<TweenSequenceItem<Color?>> tween = [];
