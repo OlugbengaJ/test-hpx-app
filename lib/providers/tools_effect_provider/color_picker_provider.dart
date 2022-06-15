@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/color_picker_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
+import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/color_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -396,7 +398,8 @@ class ColorPickerProvider extends ChangeNotifier {
   }
 
   // function to generate the color picker widget based on the various picker model been passed as an argument
-  List<Widget> generateColorPickerWidget(List<ColorPickerWidgetModel> list) {
+  List<Widget> generateColorPickerWidget(
+      List<ColorPickerWidgetModel> list, BuildContext context) {
     List<Widget> generatedUI = [];
     for (ColorPickerWidgetModel element in list) {
       /// loop through the color pickermodel list
@@ -413,12 +416,35 @@ class ColorPickerProvider extends ChangeNotifier {
           label: element.label,
           hasBorder: element.hasBorder,
           leftTitle: element.action!,
+          onchange: (colors) {
+            colorChange(colors, context);
+          },
           setRandom: element.setRandom,
           picker: element.canEdit));
     }
 
     /// return the list of generate color picker model
     return generatedUI;
+  }
+
+  colorChange(List<Color> colors, BuildContext context) {
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
+    // setCurrentPickerWidget(ColorPickerWidgetModel(
+    //   action: widget.title,
+    //   name: widget.title,
+    //   canEdit: widget.picker,
+    //   colorCode: currentColors,
+    // ));
+    modeProvider.setCurrentMode(ToolsModeModel(
+        currentColor: currentColor!.colorCode,
+        value: modeProvider.currentMode.value,
+        effects: modeProvider.currentMode.effects,
+        icon: modeProvider.currentMode.icon,
+        name: modeProvider.currentMode.name));
+    layerProvider.toolsEffectsUpdated();
   }
 
   /// function to generate random colors
