@@ -38,7 +38,7 @@ class _InteractivePresetState extends State<InteractivePreset> {
 
     modeProvider.setCurrentMode(ToolsModeModel(
         currentColor: modeProvider.currentMode.currentColor,
-        effects: modeProvider.currentMode.effects,
+        effects: effectsProvider.currentEffect!,
         value: modeProvider.currentMode.value,
         name: modeProvider.currentMode.name));
     layerProvider.toolsEffectsUpdated();
@@ -61,7 +61,7 @@ class _InteractivePresetState extends State<InteractivePreset> {
         currentColor: modeProvider.currentMode.currentColor,
         value: modeProvider.currentMode.value,
         icon: modeProvider.currentMode.icon,
-        effects: modeProvider.currentMode.effects,
+        effects: effectsProvider.currentEffect!,
         name: modeProvider.currentMode.name));
 
     layerProvider.toolsEffectsUpdated();
@@ -92,8 +92,8 @@ class _InteractivePresetState extends State<InteractivePreset> {
             ),
             Container(margin: const EdgeInsets.only(bottom: 10.0)),
             Wrap(
-              children: _toolsProvider
-                  .generateColorPickerWidget(interactiveColorList),
+              children: _toolsProvider.generateColorPickerWidget(
+                  interactiveColorList, context),
             ),
             Container(margin: const EdgeInsets.only(bottom: 50.0)),
             Divider(
@@ -104,7 +104,7 @@ class _InteractivePresetState extends State<InteractivePreset> {
             Text("Speed", textAlign: TextAlign.left, style: labelStyle),
             Container(margin: const EdgeInsets.only(bottom: 10.0)),
             Slider(
-              value: effectsProvider.currentEffect!.speed!.toDouble(),
+              value: effectsProvider.currentEffect!.speed!.roundToDouble(),
               max: 100,
               min: 0,
               divisions: 100,
@@ -136,16 +136,16 @@ class _InteractivePresetState extends State<InteractivePreset> {
             Text("Size", textAlign: TextAlign.left, style: labelStyle),
             Container(margin: const EdgeInsets.only(bottom: 10.0)),
             Slider(
-              value: effectsProvider.currentEffect!.size!.toDouble(),
+              value: effectsProvider.currentEffect!.size!.roundToDouble(),
               max: 24,
               min: 0,
               divisions: 24,
-              label: effectsProvider.currentEffect!.size.toString(),
+              label: effectsProvider.currentEffect!.size?.round().toString(),
               onChanged: (double value) {
                 setState(() {
                   effectsProvider.currentEffect?.size = value;
+                  _setSliderValue(value, "size");
                 });
-                _setSliderValue(value, "size");
               },
             ),
             Row(children: [

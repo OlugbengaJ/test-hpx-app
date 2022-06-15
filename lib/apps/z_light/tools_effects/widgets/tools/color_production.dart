@@ -16,8 +16,8 @@ class _ColorProductionPresetState extends State<ColorProductionPreset> {
     return Container(
         margin: const EdgeInsets.only(top: 20, bottom: 20.0),
         child: Wrap(
-          children:
-              _toolsProvider.generateColorPickerWidget(colorProductionList),
+          children: _toolsProvider.generateColorPickerWidget(
+              colorProductionList, context),
         ));
   }
 }

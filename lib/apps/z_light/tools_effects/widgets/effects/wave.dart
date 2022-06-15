@@ -30,6 +30,7 @@ class _WavePresetState extends State<WavePreset> {
 
   void valueChangedListener(double value) {
     if (mounted) {
+      degreeController.text = value.toStringAsFixed(0);
       _setDegreeValue(value);
     }
   }
@@ -65,9 +66,6 @@ class _WavePresetState extends State<WavePreset> {
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
 
-    setState(() {
-      degreeController.text = returnValue!.toStringAsFixed(0);
-    });
     effectsProvider.setCurrentEffect(EffectsModel(
         effectName: modeProvider.currentMode.effects.effectName,
         degree: returnValue,
@@ -75,7 +73,7 @@ class _WavePresetState extends State<WavePreset> {
 
     modeProvider.setCurrentMode(ToolsModeModel(
         currentColor: modeProvider.currentMode.currentColor,
-        effects: modeProvider.currentMode.effects,
+        effects: effectsProvider.currentEffect!,
         value: modeProvider.currentMode.value,
         name: modeProvider.currentMode.name));
     layerProvider.toolsEffectsUpdated();
@@ -96,7 +94,7 @@ class _WavePresetState extends State<WavePreset> {
 
     modeProvider.setCurrentMode(ToolsModeModel(
         currentColor: modeProvider.currentMode.currentColor,
-        effects: modeProvider.currentMode.effects,
+        effects: effectsProvider.currentEffect!,
         value: modeProvider.currentMode.value,
         name: modeProvider.currentMode.name));
 
@@ -174,7 +172,8 @@ class _WavePresetState extends State<WavePreset> {
                               colorpickerProvider.generateColorPickerWidget(
                                   activatedButton == 'DEFAULT'
                                       ? waveDefaultsList
-                                      : waveCustomList))
+                                      : waveCustomList,
+                                  context))
                     ])),
             Container(margin: const EdgeInsets.only(bottom: 10.0)),
             Divider(
@@ -189,7 +188,7 @@ class _WavePresetState extends State<WavePreset> {
               max: 100,
               min: 0,
               divisions: 100,
-              label: effectsProvider.currentEffect!.speed.toString(),
+              label: effectsProvider.currentEffect!.speed?.round().toString(),
               onChanged: (double value) {
                 setState(() {
                   _setSliderValue(value);
@@ -231,7 +230,8 @@ class _WavePresetState extends State<WavePreset> {
                             controller: _controller,
                             width: 70,
                             height: 70,
-                            // style: KnobStyle(showLabels: false),
+                            style: KnobStyle(
+                                showLabels: false, minorTicksPerInterval: 0),
                           ),
                         ),
                       )),
@@ -251,9 +251,12 @@ class _WavePresetState extends State<WavePreset> {
                                     value =
                                         (double.parse(value) % 360).toString();
                                   }
-                                  _controller
-                                      ?.setCurrentValue(double.parse(value));
-                                  _setDegreeValue(double.parse(value));
+                                  setState(() {
+                                    degreeController.text = value.toString();
+                                    _controller
+                                        ?.setCurrentValue(double.parse(value!));
+                                    _setDegreeValue(double.parse(value!));
+                                  });
                                 },
                                 style: const TextStyle(fontSize: 14),
                                 controller: degreeController,

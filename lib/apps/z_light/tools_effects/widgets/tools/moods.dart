@@ -82,7 +82,8 @@ class _MoodPresetState extends State<MoodPreset> {
                             _colorPickerProvider.generateColorPickerWidget(
                                 activatedButton == 'Themes'
                                     ? moodThemesList
-                                    : moodCustomList))
+                                    : moodCustomList,
+                                context))
                   ]),
             ),
           ],
