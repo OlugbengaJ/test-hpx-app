@@ -123,7 +123,8 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
                   children: _colorPickerProvider.generateColorPickerWidget(
                       activatedButton == 'Gradient'
                           ? audioVisualGradientList
-                          : audioVisualSolidList)),
+                          : audioVisualSolidList,
+                      context)),
             ),
           ],
         ));

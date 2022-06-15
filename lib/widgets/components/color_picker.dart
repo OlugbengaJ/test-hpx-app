@@ -75,24 +75,16 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
   void setCurrentColor(Color selectedColor) {
     ColorPickerProvider colorPickerProviderInstance =
         Provider.of<ColorPickerProvider>(context, listen: false);
-    ModeProvider modeProvider =
-        Provider.of<ModeProvider>(context, listen: false);
-    LayersProvider layerProvider =
-        Provider.of<LayersProvider>(context, listen: false);
     colorPickerProviderInstance.setCurrentPickerWidget(ColorPickerWidgetModel(
       action: widget.title,
       name: widget.title,
       canEdit: widget.picker,
       colorCode: currentColors,
+      label: colorPickerProviderInstance.currentColor?.label,
+      setRandom: colorPickerProviderInstance.currentColor?.setRandom,
+      hasBorder: colorPickerProviderInstance.currentColor?.hasBorder,
     ));
-    modeProvider.setCurrentMode(ToolsModeModel(
-        currentColor: currentColors,
-        value: modeProvider.currentMode.value,
-        effects: modeProvider.currentMode.effects,
-        icon: modeProvider.currentMode.icon,
-        name: modeProvider.currentMode.name));
     widget.onchange!(widget.colors);
-    layerProvider.toolsEffectsUpdated();
   }
 
   void closeDialog(BuildContext context) {

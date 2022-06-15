@@ -36,8 +36,8 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
                 Container(
                   margin: const EdgeInsets.only(top: 5, bottom: 20),
                   child: Wrap(
-                      children: colorPickerProvider
-                          .generateColorPickerWidget(shortcutList)),
+                      children: colorPickerProvider.generateColorPickerWidget(
+                          shortcutList, context)),
                 ),
                 Container(
                   decoration: BoxDecoration(color: Colors.grey.shade900),
