@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/globals.dart';
-import 'package:hpx/apps/z_light/layers/widgets/layer_stack.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/imports.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
@@ -313,7 +312,6 @@ class _WorkspaceState extends State<Workspace>
                           ),
                         ),
                       ),
-                      // const LayersStack(),
 
                       if (workspaceProvider.isModalNotify)
                         ModalNotification(
