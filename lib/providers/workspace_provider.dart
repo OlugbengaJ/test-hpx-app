@@ -237,8 +237,39 @@ class WorkspaceProvider with ChangeNotifier {
   WorkspaceDragMode? get getKeyDragMode => _keyDragMode;
   bool _isCurrentDeviceSelected = false;
 
-  /// [toggleDragMode] changes the current selection mode.
-  void toggleDragMode(WorkspaceDragMode mode) {
+  /// [_disableZoneClick] tracks the disabled state of the highlight icon.
+  bool _disableZoneClick = false;
+
+  /// [_disableZoneHighlight] tracks the disabled state of the highlight icon.
+  final bool _disableZoneHighlight = false;
+
+  /// [_disableZoneResizable] tracks the disabled state of the resizable icon.
+  bool _disableZoneResizable = false;
+
+  /// [zoneClickFnc] returns null or the corresponding [_toggleDragMode]
+  /// function based on the [_disableZoneClick] state.
+  void zoneClickFnc() {
+    return _disableZoneClick ? null : _toggleDragMode(WorkspaceDragMode.click);
+  }
+
+  /// [zoneHighlightFnc] returns null or the corresponding [_toggleDragMode]
+  /// function based on the [_disableZoneHighlight] state.
+  void zoneHighlightFnc() {
+    return _disableZoneHighlight
+        ? null
+        : _toggleDragMode(WorkspaceDragMode.highlight);
+  }
+
+  /// [zoneResizableFnc] returns null or the corresponding [_toggleDragMode]
+  /// function based on the [_disableZoneResizable] state.
+  void zoneResizableFnc() {
+    return _disableZoneResizable
+        ? null
+        : _toggleDragMode(WorkspaceDragMode.resizable);
+  }
+
+  /// [_toggleDragMode] changes the current selection mode.
+  void _toggleDragMode(WorkspaceDragMode mode) {
     if (_keyDragMode == mode) {
       // reset selection mode
       _keyDragMode = null;
@@ -246,13 +277,22 @@ class WorkspaceProvider with ChangeNotifier {
       _keyDragMode = mode;
     }
 
-    // hide the overlay selector
+    // hide the overlay selector and disable panning.
     _selectorVisible = false;
+    _isPanning = false;
 
     switch (_keyDragMode) {
       case WorkspaceDragMode.click:
         // set to true to enable selection of the entire keys
         _isCurrentDeviceSelected = true;
+
+        // set the current layer's drag mode
+        _getLayerLTWH(_currentLayerId)!.dragMode = WorkspaceDragMode.click;
+
+        break;
+      case WorkspaceDragMode.highlight:
+        // set the current layer's drag mode
+        _getLayerLTWH(_currentLayerId)!.dragMode = WorkspaceDragMode.highlight;
 
         break;
       case WorkspaceDragMode.resizable:
@@ -264,13 +304,6 @@ class WorkspaceProvider with ChangeNotifier {
         _getLayerLTWH(_currentLayerId)!.dragMode = WorkspaceDragMode.resizable;
 
         break;
-      case WorkspaceDragMode.highlight:
-        // set the current layer's drag mode
-        _getLayerLTWH(_currentLayerId)!.dragMode = WorkspaceDragMode.highlight;
-        _isPanning = false;
-
-        break;
-
       default:
         _isCurrentDeviceSelected = false;
     }
@@ -318,7 +351,7 @@ class WorkspaceProvider with ChangeNotifier {
       _panUpdateDetails =
           DragUpdateDetails(globalPosition: details.globalPosition);
 
-      _isPanning = !_isPanning;
+      _isPanning = true;
     }
   }
 
@@ -715,10 +748,22 @@ class WorkspaceProvider with ChangeNotifier {
           _selectorVisible = _isPanning;
         }
 
-        // if (layer.mode?.value == EnumModes.image) {
-        //   _keyDragMode = null;
-        //   _selectorVisible = false;
-        // }
+        // set highlight selector for shortcut colors
+        switch (layer.mode?.value) {
+          case EnumModes.shortcut:
+            _keyDragMode = WorkspaceDragMode.highlight;
+            _selectorVisible = _isPanning;
+
+            // disable zone selection icons
+            _disableZoneResizable = true;
+            _disableZoneClick = true;
+            break;
+
+          default:
+            // enable zone selection icons
+            _disableZoneClick = false;
+            _disableZoneResizable = false;
+        }
       }
     }
   }
