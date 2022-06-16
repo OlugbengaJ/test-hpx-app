@@ -75,7 +75,7 @@ class ImageModeProvider extends ChangeNotifier {
     ));
 
     modeProvider.setCurrentMode(ToolsModeModel(
-        currentColor: extractedColors,
+        currentColor: [],
         effects: effectProvider.currentEffect!,
         value: modeProvider.currentMode.value,
         icon: modeProvider.currentMode.icon,

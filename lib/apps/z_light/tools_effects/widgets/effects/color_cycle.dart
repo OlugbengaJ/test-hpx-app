@@ -27,9 +27,6 @@ class _ColorCycleState extends State<ColorCyclePreset> {
         Provider.of<ModeProvider>(context, listen: false);
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
-    setState(() {
-      effectsProvider.currentEffect?.speed = returnValue;
-    });
     effectsProvider.setCurrentEffect(EffectsModel(
         effectName: effectsProvider.currentEffect?.effectName,
         degree: effectsProvider.currentEffect?.degree,
@@ -37,7 +34,7 @@ class _ColorCycleState extends State<ColorCyclePreset> {
 
     modeProvider.setCurrentMode(ToolsModeModel(
         currentColor: modeProvider.currentMode.currentColor,
-        effects: modeProvider.currentMode.effects,
+        effects: effectsProvider.currentEffect!,
         value: modeProvider.currentMode.value,
         name: modeProvider.currentMode.name));
     layerProvider.toolsEffectsUpdated();
@@ -112,7 +109,8 @@ class _ColorCycleState extends State<ColorCyclePreset> {
                               _colorPickerProvider.generateColorPickerWidget(
                                   activatedButton == 'DEFAULT'
                                       ? colorcycleDefaultsList
-                                      : colorcycleCustomList))
+                                      : colorcycleCustomList,
+                                  context))
                     ])),
             Container(margin: const EdgeInsets.only(bottom: 10.0)),
             Divider(
@@ -123,13 +121,16 @@ class _ColorCycleState extends State<ColorCyclePreset> {
             Text("Speed", textAlign: TextAlign.left, style: labelStyle),
             Container(margin: const EdgeInsets.only(bottom: 10.0)),
             Slider(
-              value: effectsProvider.currentEffect!.speed!.toDouble(),
+              value: effectsProvider.currentEffect!.speed!.roundToDouble(),
               max: 100,
               min: 0,
               divisions: 100,
-              label: effectsProvider.currentEffect!.speed.toString(),
+              label: effectsProvider.currentEffect!.speed?.round().toString(),
               onChanged: (double value) {
-                _setSliderValue(value);
+                setState(() {
+                  effectsProvider.currentEffect?.speed = value;
+                  _setSliderValue(value);
+                });
               },
             ),
             Row(children: [
