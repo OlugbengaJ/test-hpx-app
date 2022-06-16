@@ -591,27 +591,47 @@ class KeyboardDriverWrapper {
 
   ///Turns the keyboard light on
   static powerKeyboardOn() async {
-    await outputFile.writeAsString("SPO", flush: true);
+    try {
+      await outputFile.writeAsString("SPO", flush: true);
+    } catch (e) {
+      // error happened
+    }
   }
 
   ///Turns the keyboard light off
   static powerKeyboardOff() async {
-    await outputFile.writeAsString("SPF", flush: true);
+    try {
+      await outputFile.writeAsString("SPF", flush: true);
+    } catch (e) {
+      // error happened
+    }
   }
 
   ///Sets all the keys on the keyboard to the red
   static setAllKeysRed() async {
-    await outputFile.writeAsString("SAR", flush: true);
+    try {
+      await outputFile.writeAsString("SAR", flush: true);
+    } catch (e) {
+      // error happened
+    }
   }
 
   ///Sets all the keys on the keyboard to the green
   static setAllKeysGreen() async {
-    await outputFile.writeAsString("SAG", flush: true);
+    try {
+      await outputFile.writeAsString("SAG", flush: true);
+    } catch (e) {
+      // error happened
+    }
   }
 
   ///Sets all the keys on the keyboard to the blue
   static setAllKeysBlue() async {
-    await outputFile.writeAsString("SAB", flush: true);
+    try {
+      await outputFile.writeAsString("SAB", flush: true);
+    } catch (e) {
+      // error happened
+    }
   }
 
   ///Sets  all the keys on the keyboard to the specified hex color
@@ -621,7 +641,7 @@ class KeyboardDriverWrapper {
       await outputFile
           .writeAsBytes([83, 65, 83, color.red, color.green, color.blue]);
     } catch (e) {
-      // shit happened
+      // error happened
     }
   }
 
@@ -648,7 +668,11 @@ class KeyboardDriverWrapper {
       ...composeSpecificColorCompletePacket()
     ];
     print(completeByteArray);
-    await outputFile.writeAsBytes(completeByteArray);
+    try {
+      await outputFile.writeAsBytes(completeByteArray);
+    } catch (e) {
+      // error happened
+    }
   }
 
   static updateKeyColorInfo(
@@ -826,7 +850,11 @@ class KeyboardDriverWrapper {
       ...completeByteArray,
       ...composeSpecificColorCompletePacket()
     ];
-    await outputFile.writeAsBytes(completeByteArray);
+    try {
+      await outputFile.writeAsBytes(completeByteArray);
+    } catch (e) {
+      // error happened
+    }
   }
 
   static applyColorToSpecificZone(
@@ -925,7 +953,11 @@ class KeyboardDriverWrapper {
       ...completeByteArray,
       ...composeSpecificColorCompletePacket()
     ];
-    await outputFile.writeAsBytes(completeByteArray);
+    try {
+      await outputFile.writeAsBytes(completeByteArray);
+    } catch (e) {
+      // error happened
+    }
   }
 
   static audioVisualizerEffect() {
