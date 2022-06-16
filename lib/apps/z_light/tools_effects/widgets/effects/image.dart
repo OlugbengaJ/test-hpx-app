@@ -5,11 +5,6 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
-import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
-import 'package:hpx/providers/layers_provider/layers.dart';
-import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
-import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/image_mode_provder.dart';
 import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/theme.dart';
@@ -56,7 +51,7 @@ class _ImagePresetState extends State<ImagePreset> {
       PlatformFile file = result.files.first;
       setState(() async {
         filePath = Image.memory(File(file.path!).readAsBytesSync()).image;
-        await imageModeProvider.extractColors(
+        imageModeProvider.extractColors(
             context, File(file.path!).readAsBytesSync());
       });
     }
