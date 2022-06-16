@@ -146,7 +146,8 @@ class _WorkspaceState extends State<Workspace>
     // initialize layers provider
     workspaceProvider.initLayersProvider(Provider.of<LayersProvider>(context));
 
-    const double bottomOffset = 12.0;
+    // initialize scroll offset
+    workspaceProvider.scrollOffset = 12.0;
 
     return Column(
       children: [
@@ -249,8 +250,25 @@ class _WorkspaceState extends State<Workspace>
               ),
             ),
             child: Stack(
-              key: workspaceStackKey,
               children: [
+                CustomVScrollbar(
+                  top: 0,
+                  end: 0,
+                  bottom: workspaceProvider.scrollOffset,
+                  size: workspaceProvider.scrollOffset,
+                  trackSize: 50,
+                  primaryColor: themeData.primaryColor,
+                  secondaryColor: themeData.primaryColorLight,
+                ),
+                CustomHScrollbar(
+                  start: 0,
+                  end: workspaceProvider.scrollOffset,
+                  bottom: 0,
+                  size: workspaceProvider.scrollOffset,
+                  trackSize: 50,
+                  primaryColor: themeData.primaryColor,
+                  secondaryColor: themeData.primaryColorLight,
+                ),
                 GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onPanDown: (details) {
@@ -261,6 +279,7 @@ class _WorkspaceState extends State<Workspace>
                   onPanEnd: (details) => workspaceProvider.onPanEnd(details),
                   onPanCancel: () => workspaceProvider.onPanClear(),
                   child: Stack(
+                    key: workspaceStackKey,
                     alignment: Alignment.bottomLeft,
                     fit: StackFit.expand,
                     children: [
@@ -268,7 +287,11 @@ class _WorkspaceState extends State<Workspace>
                       // This ensures seamless zooming of the entire keyboard.
                       Align(
                         alignment: Alignment.center,
-                        child: Scrollbar(
+                        child:
+                            // TODO: Keyboard, delete default scrollbar below
+                            // once custom implementation is done.
+                            // Keyboard(zoomScale: _zoomScale),
+                            Scrollbar(
                           scrollbarOrientation: ScrollbarOrientation.bottom,
                           controller: controllerH,
                           thumbVisibility: true,
@@ -290,16 +313,7 @@ class _WorkspaceState extends State<Workspace>
                           ),
                         ),
                       ),
-
-                      const LayersStack(),
-
-                      OverlaySelector(
-                        showCrossHair: workspaceProvider.isDragModeResizable,
-                        onPanDown: workspaceProvider.onPanDown,
-                        onPanUpdate: workspaceProvider.onPanUpdate,
-                        onPanEnd: workspaceProvider.onPanEnd,
-                        isVisible: workspaceProvider.selectorVisible,
-                      ),
+                      // const LayersStack(),
 
                       if (workspaceProvider.isModalNotify)
                         ModalNotification(
@@ -310,7 +324,7 @@ class _WorkspaceState extends State<Workspace>
                   ),
                 ),
                 Positioned(
-                  bottom: bottomOffset,
+                  bottom: workspaceProvider.scrollOffset,
                   left: 0,
                   right: 0,
                   child: Center(
@@ -325,23 +339,12 @@ class _WorkspaceState extends State<Workspace>
                     ),
                   ),
                 ),
-                CustomVScrollbar(
-                  top: 0,
-                  end: 0,
-                  bottom: bottomOffset,
-                  size: bottomOffset,
-                  trackSize: 50,
-                  primaryColor: themeData.primaryColor,
-                  secondaryColor: themeData.primaryColorLight,
-                ),
-                CustomHScrollbar(
-                  start: 0,
-                  end: bottomOffset,
-                  bottom: 0,
-                  size: bottomOffset,
-                  trackSize: 50,
-                  primaryColor: themeData.primaryColor,
-                  secondaryColor: themeData.primaryColorLight,
+                OverlaySelector(
+                  showCrossHair: workspaceProvider.isDragModeResizable,
+                  onPanDown: workspaceProvider.onPanDown,
+                  onPanUpdate: workspaceProvider.onPanUpdate,
+                  onPanEnd: workspaceProvider.onPanEnd,
+                  isVisible: workspaceProvider.selectorVisible,
                 ),
               ],
             ),

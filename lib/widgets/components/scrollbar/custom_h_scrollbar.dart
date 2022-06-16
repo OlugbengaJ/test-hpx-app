@@ -37,7 +37,7 @@ class CustomHScrollbar extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.zero,
         color: secondaryColor,
-        // height: height,
+        height: size,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
