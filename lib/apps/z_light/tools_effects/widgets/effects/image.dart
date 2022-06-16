@@ -38,7 +38,10 @@ class _ImagePresetState extends State<ImagePreset> {
 
     /// convert the default image into color paltte
     ByteData image = await rootBundle.load(Constants.defaultImageMode);
-    await imageModeProvider.extractColors(context, image.buffer.asUint8List());
+    setState(() async {
+      await imageModeProvider.extractColors(
+          context, image.buffer.asUint8List());
+    });
   }
 
   void _showPhotoLibrary() async {
@@ -51,11 +54,11 @@ class _ImagePresetState extends State<ImagePreset> {
     );
     if (result != null) {
       PlatformFile file = result.files.first;
-      setState(() {
+      setState(() async {
         filePath = Image.memory(File(file.path!).readAsBytesSync()).image;
+        await imageModeProvider.extractColors(
+            context, File(file.path!).readAsBytesSync());
       });
-      await imageModeProvider.extractColors(
-          context, File(file.path!).readAsBytesSync());
     }
   }
 

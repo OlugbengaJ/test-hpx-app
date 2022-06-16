@@ -591,34 +591,58 @@ class KeyboardDriverWrapper {
 
   ///Turns the keyboard light on
   static powerKeyboardOn() async {
-    await outputFile.writeAsString("SPO", flush: true);
+    try {
+      await outputFile.writeAsString("SPO", flush: true);
+    } catch (e) {
+      // error happened
+    }
   }
 
   ///Turns the keyboard light off
   static powerKeyboardOff() async {
-    await outputFile.writeAsString("SPF", flush: true);
+    try {
+      await outputFile.writeAsString("SPF", flush: true);
+    } catch (e) {
+      // error happened
+    }
   }
 
   ///Sets all the keys on the keyboard to the red
   static setAllKeysRed() async {
-    await outputFile.writeAsString("SAR", flush: true);
+    try {
+      await outputFile.writeAsString("SAR", flush: true);
+    } catch (e) {
+      // error happened
+    }
   }
 
   ///Sets all the keys on the keyboard to the green
   static setAllKeysGreen() async {
-    await outputFile.writeAsString("SAG", flush: true);
+    try {
+      await outputFile.writeAsString("SAG", flush: true);
+    } catch (e) {
+      // error happened
+    }
   }
 
   ///Sets all the keys on the keyboard to the blue
   static setAllKeysBlue() async {
-    await outputFile.writeAsString("SAB", flush: true);
+    try {
+      await outputFile.writeAsString("SAB", flush: true);
+    } catch (e) {
+      // error happened
+    }
   }
 
   ///Sets  all the keys on the keyboard to the specified hex color
   ///@funcParameter: rgb color codes for red, green abd blue
   static setAllKeysSpecificColor({required Color color}) async {
-    await outputFile
-        .writeAsBytes([83, 65, 83, color.red, color.green, color.blue]);
+    try {
+      await outputFile
+          .writeAsBytes([83, 65, 83, color.red, color.green, color.blue]);
+    } catch (e) {
+      // error happened
+    }
   }
 
   static setSpecificKeysSpecificColors(
@@ -644,14 +668,18 @@ class KeyboardDriverWrapper {
       ...composeSpecificColorCompletePacket()
     ];
     print(completeByteArray);
-    await outputFile.writeAsBytes(completeByteArray);
+    try {
+      await outputFile.writeAsBytes(completeByteArray);
+    } catch (e) {
+      // error happened
+    }
   }
 
   static updateKeyColorInfo(
       {required String keyName,
-        required int redOpacity,
-        required int greenOpacity,
-        required int blueOpacity}) {
+      required int redOpacity,
+      required int greenOpacity,
+      required int blueOpacity}) {
     keyboardKeys[keyName]!["redOpacity"] = redOpacity;
     keyboardKeys[keyName]!["greenOpacity"] = greenOpacity;
     keyboardKeys[keyName]!["blueOpacity"] = blueOpacity;
@@ -687,7 +715,7 @@ class KeyboardDriverWrapper {
 
   static breathingEffect(List<Color> colors) async {
     breathingColors = colors;
-    if(runningEffectName == "breathingEffect") return;
+    if (runningEffectName == "breathingEffect") return;
     runningEffectName = "breathingEffect";
 
     while (runningEffectName == "breathingEffect") {
@@ -704,27 +732,24 @@ class KeyboardDriverWrapper {
   ///blinkingColorSpeed - set in milliseconds, determines how fast the blinking is
   static blinkingEffect(
       {required List<Color> colors,
-        required int primaryColorSpeed,
-        required int blinkingColorSpeed})  async {
-
+      required int primaryColorSpeed,
+      required int blinkingColorSpeed}) async {
     blinkingColors = colors;
-    if(runningEffectName == "blinkingEffect") return;
+    if (runningEffectName == "blinkingEffect") return;
     runningEffectName = "blinkingEffect";
 
     while (runningEffectName == "blinkingEffect") {
-      await Future.delayed(
-          Duration(milliseconds: primaryColorSpeed),
-              () => setAllKeysSpecificColor(color: blinkingColors!.last));
-      await Future.delayed(
-          Duration(milliseconds: blinkingColorSpeed),
-              () => setAllKeysSpecificColor(color: blinkingColors!.first));
+      await Future.delayed(Duration(milliseconds: primaryColorSpeed),
+          () => setAllKeysSpecificColor(color: blinkingColors!.last));
+      await Future.delayed(Duration(milliseconds: blinkingColorSpeed),
+          () => setAllKeysSpecificColor(color: blinkingColors!.first));
     }
   }
 
   static waveEffect(List<Color> colors, int waveSpeed) async {
     waveColors = colors;
 
-    if(runningEffectName == "waveEffect") return;
+    if (runningEffectName == "waveEffect") return;
     runningEffectName = "waveEffect";
     var zone1 = [
       "escape",
@@ -825,7 +850,11 @@ class KeyboardDriverWrapper {
       ...completeByteArray,
       ...composeSpecificColorCompletePacket()
     ];
-    await outputFile.writeAsBytes(completeByteArray);
+    try {
+      await outputFile.writeAsBytes(completeByteArray);
+    } catch (e) {
+      // error happened
+    }
   }
 
   static applyColorToSpecificZone(
@@ -841,7 +870,7 @@ class KeyboardDriverWrapper {
 
   static colorCycleEffect(List<Color> colors, int cycleSpeed) async {
     colorCycleleColors = colors;
-    if(runningEffectName == "colorCycleEffect") return;
+    if (runningEffectName == "colorCycleEffect") return;
     runningEffectName = "colorCycleEffect";
 
     while (runningEffectName == "colorCycleEffect") {
@@ -859,9 +888,11 @@ class KeyboardDriverWrapper {
     int incomingBlue = fromColor.blue;
 
     while (
-    runningEffectName == "breathingEffect" && incomingRed != toColor.red ||
-        runningEffectName == "breathingEffect" && incomingGreen != toColor.green ||
-        runningEffectName == "breathingEffect" && incomingBlue != toColor.blue) {
+        runningEffectName == "breathingEffect" && incomingRed != toColor.red ||
+            runningEffectName == "breathingEffect" &&
+                incomingGreen != toColor.green ||
+            runningEffectName == "breathingEffect" &&
+                incomingBlue != toColor.blue) {
       if (incomingRed > toColor.red) {
         incomingRed -= 1;
       } else if (incomingRed < toColor.red) {
@@ -880,7 +911,8 @@ class KeyboardDriverWrapper {
         incomingBlue += 1;
       }
 
-      await setAllKeysSpecificColor(color: Color.fromRGBO(incomingRed, incomingGreen, incomingBlue, 100));
+      await setAllKeysSpecificColor(
+          color: Color.fromRGBO(incomingRed, incomingGreen, incomingBlue, 100));
       //await Future.delayed(Duration(microseconds: 100), () => null);
     }
   }
@@ -897,20 +929,21 @@ class KeyboardDriverWrapper {
     //var colors =[Colors.green, Colors.green, Colors.white, Colors.white, Colors.green, Colors.green];
     var rows = [row1, row2, row3, row4, row5];
 
-    for(var rowAndColors in IterableZip([rows, imageMatrix])) {
+    for (var rowAndColors in IterableZip([rows, imageMatrix])) {
       var index = 0;
       var colors = rowAndColors[1] as List<Color>;
       var row = rowAndColors[0] as List<String>;
-      while(index < colors.length) {
+      while (index < colors.length) {
         var c = colors[index];
         var k = row[index];
-        updateKeyColorInfo(keyName: k, redOpacity: c.red, greenOpacity: c.green, blueOpacity: c.blue);
+        updateKeyColorInfo(
+            keyName: k,
+            redOpacity: c.red,
+            greenOpacity: c.green,
+            blueOpacity: c.blue);
         index++;
       }
-
-
     }
-
 
     List<int> completeByteArray = [];
     completeByteArray.add(83);
@@ -920,8 +953,11 @@ class KeyboardDriverWrapper {
       ...completeByteArray,
       ...composeSpecificColorCompletePacket()
     ];
-    await outputFile.writeAsBytes(completeByteArray);
-
+    try {
+      await outputFile.writeAsBytes(completeByteArray);
+    } catch (e) {
+      // error happened
+    }
   }
 
   static audioVisualizerEffect() {

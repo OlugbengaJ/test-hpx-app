@@ -121,29 +121,28 @@ KeyModel _updateKeyInfo(
         if ('${currentLayer.id}' == chip.chipKey) {
           // use the default color for current layer
           chip.color = currentLayer.mode?.currentColor.last;
+          chip.showOutline = true;
         } else {
           // use existing color for non-current layer
           final foundKeys = krect.where((e) => e.chipKey == chip.chipKey);
           if (foundKeys.isNotEmpty) {
             chip.color = foundKeys.first.color;
+            chip.showOutline = false;
           }
         }
 
         // get the current chip in layers
         switch (layer.mode?.value) {
           case EnumModes.blinking:
-            final beginColor = layer.mode?.currentColor.first;
-            final endColor = layer.mode?.currentColor.last;
-            final animColor = provider.animColor(beginColor, endColor,
-                effect: EnumModes.blinking, speed: layer.mode?.effects.speed);
-
-            chip.color = animColor!;
-            break;
           case EnumModes.breathing:
             final beginColor = layer.mode?.currentColor.first;
             final endColor = layer.mode?.currentColor.last;
-            final animColor = provider.animColor(beginColor, endColor,
-                speed: layer.mode?.effects.speed);
+            final animColor = provider.animColor(
+              beginColor,
+              endColor,
+              effect: layer.mode?.value,
+              speed: layer.mode?.effects.speed,
+            );
 
             chip.color = animColor!;
             break;

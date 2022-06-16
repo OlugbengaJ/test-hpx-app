@@ -32,7 +32,7 @@ class _BreathingPresetState extends State<BreathingPreset> {
         speed: effectsProvider.currentEffect?.speed));
     modeProvider.setCurrentMode(ToolsModeModel(
         currentColor: modeProvider.currentMode.currentColor,
-        effects: modeProvider.currentMode.effects,
+        effects: effectsProvider.currentEffect!,
         value: modeProvider.currentMode.value,
         name: modeProvider.currentMode.name));
     layerProvider.toolsEffectsUpdated();
@@ -107,16 +107,16 @@ class _BreathingPresetState extends State<BreathingPreset> {
           Text("Speed", textAlign: TextAlign.left, style: labelStyle),
           Container(margin: const EdgeInsets.only(bottom: 10.0)),
           Slider(
-            value: effectsProvider.currentEffect!.speed!.toDouble(),
+            value: effectsProvider.currentEffect!.speed!.roundToDouble(),
             max: 100,
             min: 0,
             divisions: 100,
-            label: effectsProvider.currentEffect!.speed.toString(),
+            label: effectsProvider.currentEffect!.speed?.round().toString(),
             onChanged: (double value) {
               setState(() {
                 effectsProvider.currentEffect?.speed = value;
+                _setSliderValue(value);
               });
-              _setSliderValue(value);
             },
           ),
           Row(children: [
