@@ -30,12 +30,64 @@ class _ToolModesState extends State<ToolModes> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
+  changeMode(value) {
     ModeProvider modeProvider = Provider.of<ModeProvider>(context);
     // /// initialize the layers provider to use to send notification accross the layers
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
+    setState(() {
+      modeProvider.changeModeComponent(value, context, false);
+    });
+    layerProvider.toolsEffectsUpdated();
+  }
+
+  shortcutAlertDialogOnChangeMode(value) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return SimpleDialog(
+              contentPadding: const EdgeInsets.only(
+                  top: 50, left: 20, right: 20, bottom: 30),
+              children: [
+                const SizedBox(
+                  width: 400,
+                  child: Text(
+                      'Switching to another layer or effect would permanently delete/overide your shortcut color configurations?'),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 50),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        style: TextButton.styleFrom(
+                          primary: Colors.white,
+                          backgroundColor: Colors.red,
+                        ),
+                        child: const Text("Cancel"),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          changeMode(value);
+                          Navigator.of(context).pop();
+                        },
+                        style: textBtnStyleWhite,
+                        child: const Text("Continue"),
+                      ),
+                    ],
+                  ),
+                ),
+              ]);
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ModeProvider modeProvider = Provider.of<ModeProvider>(context);
     return Container(
         margin: EdgeInsets.zero,
         child: Column(
@@ -47,52 +99,7 @@ class _ToolModesState extends State<ToolModes> {
                 child: PickerDropdown(
                   onChange: (PickerModel? returnValue) {
                     if (modeProvider.currentMode.value == EnumModes.shortcut) {
-                      showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (context) {
-                            return SimpleDialog(
-                                contentPadding: const EdgeInsets.only(
-                                    top: 50, left: 20, right: 20, bottom: 30),
-                                children: [
-                                  const SizedBox(
-                                    width: 400,
-                                    child: Text(
-                                        'Switching to another layer or effect would permanently delete/overide your shortcut color configurations?'),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(top: 50),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          style: TextButton.styleFrom(
-                                            primary: Colors.white,
-                                            backgroundColor: Colors.red,
-                                          ),
-                                          child: const Text("Cancel"),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              modeProvider.changeModeComponent(
-                                                  returnValue, context, false);
-                                            });
-                                            layerProvider.toolsEffectsUpdated();
-                                            Navigator.of(context).pop();
-                                          },
-                                          style: textBtnStyleWhite,
-                                          child: const Text("Continue"),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ]);
-                          });
+                      shortcutAlertDialogOnChangeMode(returnValue);
                     } else {
                       setState(() {
                         modeProvider.changeModeComponent(
