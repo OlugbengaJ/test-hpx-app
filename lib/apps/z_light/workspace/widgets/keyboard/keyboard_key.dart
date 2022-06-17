@@ -153,6 +153,8 @@ KeyModel _updateKeyInfo(
 
             chip.color = animColor!;
             break;
+          case EnumModes.wave:
+            break;
           case EnumModes.image:
             // paint all keys based on color matrix (m x n)
 
