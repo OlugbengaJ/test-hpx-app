@@ -354,6 +354,12 @@ class ModeProvider extends ChangeNotifier {
     for (var element in shortcutWidgetProvider.keys) {
       shortcutWidgetProvider.addNewCommand(element.first, element.last);
     }
+    currentMode.shortcutKeys = keys;
+    setCurrentMode(currentMode);
+
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
+    layerProvider.toolsEffectsUpdated();
   }
 
   // change the mode type for the current mode between sublayer and layer based on the value passed
