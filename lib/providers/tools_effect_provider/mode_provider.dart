@@ -17,6 +17,7 @@ import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/image_mode_provder.dart';
+import 'package:hpx/providers/tools_effect_provider/widget/shortcut_widget_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
@@ -199,6 +200,8 @@ class ModeProvider extends ChangeNotifier {
         Provider.of<EffectProvider>(context, listen: false);
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
+    ShortcutWidgetProvider shortcutWidgetProvider =
+        Provider.of<ShortcutWidgetProvider>(context, listen: false);
 
     /// if last mode was interactive
     if (currentMode.value == EnumModes.interactive) {
@@ -210,12 +213,10 @@ class ModeProvider extends ChangeNotifier {
     // switch case design to switch and set the values for each mode been selected based on the enum value set by the mode
     switch (pickerChoice!.value) {
       case EnumModes.shortcut:
-        // workProvider.toggleModal([Text("Hello World", style: h2Style)]);
         for (var element in shortcutList) {
           currentColors.add(element.colorCode[0]);
         }
         effects.effectName = pickerChoice.value;
-        setModeType(true);
         preset = const ShortcutColorsPreset();
         break;
       case EnumModes.mood:
@@ -303,30 +304,56 @@ class ModeProvider extends ChangeNotifier {
 
     modePicker = pickerChoice;
     effectsProvider.setCurrentEffect(EffectsModel(
-        effectName: effects.effectName,
-        degree: effects.degree,
-        imageQuality: effects.imageQuality,
-        updatePerSecond: effects.updatePerSecond,
-        size: effects.size,
-        extractedColors: effects.extractedColors,
-        speed: effects.speed));
+        effectName: (isChange == true)
+            ? currentMode.effects.effectName
+            : effects.effectName,
+        degree:
+            (isChange == true) ? currentMode.effects.degree : effects.degree,
+        imageQuality: (isChange == true)
+            ? currentMode.effects.imageQuality
+            : effects.imageQuality,
+        updatePerSecond: (isChange == true)
+            ? currentMode.effects.updatePerSecond
+            : effects.updatePerSecond,
+        size: (isChange == true) ? currentMode.effects.size : effects.size,
+        extractedColors: (isChange == true)
+            ? currentMode.effects.extractedColors
+            : effects.extractedColors,
+        speed: (isChange == true) ? currentMode.effects.speed : effects.speed));
 
     //// set the current mode to the mode been selected and change to and apply all current colors and effects
     setCurrentMode(ToolsModeModel(
-        currentColor: currentColors,
-        value: pickerChoice.value,
-        icon: pickerChoice.icon,
-        modeType: currentMode.modeType,
-        effects: effectsProvider.currentEffect!,
-        name: (currentMode.value == pickerChoice.value)
+        currentColor:
+            (isChange == true) ? currentMode.currentColor : currentColors,
+        value: (isChange == true) ? currentMode.value : pickerChoice.value,
+        icon: (isChange == true) ? currentMode.icon : pickerChoice.icon,
+        shortcutKeys: (isChange == true)
+            ? currentMode.shortcutKeys
+            : shortcutWidgetProvider.keys,
+        modeType:
+            (isChange == true) ? currentMode.modeType : currentMode.modeType,
+        effects: (isChange == true)
+            ? currentMode.effects
+            : effectsProvider.currentEffect!,
+        name: (isChange == true)
             ? currentMode.name
-            : pickerChoice.title));
+            : (currentMode.value == pickerChoice.value)
+                ? currentMode.name
+                : pickerChoice.title));
     layerProvider.toolsEffectsUpdated();
   }
 
   // get current mode information
   getModeInformation() {
     return currentMode;
+  }
+
+  setShortcutKeys(context, List<List<String>> keys) {
+    ShortcutWidgetProvider shortcutWidgetProvider =
+        Provider.of<ShortcutWidgetProvider>(context, listen: false);
+    for (var element in shortcutWidgetProvider.keys) {
+      shortcutWidgetProvider.addNewCommand(element.first, element.last);
+    }
   }
 
   // change the mode type for the current mode between sublayer and layer based on the value passed
