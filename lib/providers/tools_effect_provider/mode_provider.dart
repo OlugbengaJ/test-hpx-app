@@ -145,6 +145,8 @@ class ModeProvider extends ChangeNotifier {
       modeType: EnumModeType.layers,
       icon: Icons.mood);
 
+  bool isLost = false;
+
   // default variable for settin tools and effects widget in this function
   Widget preset = Container();
 
@@ -180,7 +182,8 @@ class ModeProvider extends ChangeNotifier {
 
   /// function designed to change the tools and effects mode widget and return the chosen widget
   /// also sets the default colors and mode information
-  changeModeComponent(PickerModel? pickerChoice, BuildContext context) async {
+  changeModeComponent(
+      PickerModel? pickerChoice, BuildContext context, bool isChange) async {
     // default variable for settin currentcolors in this function
     List<Color> currentColors = [];
     // default variable for settin effects in this function
