@@ -13,7 +13,7 @@ class ShortcutWidgetProvider extends ChangeNotifier {
   /// also sets the default input field if passed as an argument in the function or defaults to 'esc'
   addNewCommand(String textinput) {
     TextEditingController inputController = TextEditingController();
-    inputController.text = (textinput != '') ? textinput : "esc";
+    inputController.text = (textinput != '') ? textinput : " ";
     keyController.add(inputController);
     commandsList.add(Container(
         decoration: BoxDecoration(color: Colors.grey.shade800),

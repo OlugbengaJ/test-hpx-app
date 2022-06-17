@@ -26,16 +26,68 @@ class _ToolModesState extends State<ToolModes> {
         Provider.of<ModeProvider>(context, listen: false);
     await Future.delayed(Duration(seconds: 0));
     setState(() {
-      modeProvider.changeModeComponent(modeProvider.modePicker, context);
+      modeProvider.changeModeComponent(modeProvider.modePicker, context, false);
     });
+  }
+
+  changeMode(value) {
+    ModeProvider modeProvider = Provider.of<ModeProvider>(context);
+    // /// initialize the layers provider to use to send notification accross the layers
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
+    setState(() {
+      modeProvider.changeModeComponent(value, context, false);
+    });
+    layerProvider.toolsEffectsUpdated();
+  }
+
+  shortcutAlertDialogOnChangeMode(value) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return SimpleDialog(
+              contentPadding: const EdgeInsets.only(
+                  top: 50, left: 20, right: 20, bottom: 30),
+              children: [
+                const SizedBox(
+                  width: 400,
+                  child: Text(
+                      'Switching to another layer or effect would permanently delete/overide your shortcut color configurations?'),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 50),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        style: TextButton.styleFrom(
+                          primary: Colors.white,
+                          backgroundColor: Colors.red,
+                        ),
+                        child: const Text("Cancel"),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          changeMode(value);
+                          Navigator.of(context).pop();
+                        },
+                        style: textBtnStyleWhite,
+                        child: const Text("Continue"),
+                      ),
+                    ],
+                  ),
+                ),
+              ]);
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     ModeProvider modeProvider = Provider.of<ModeProvider>(context);
-    // /// initialize the layers provider to use to send notification accross the layers
-    LayersProvider layerProvider =
-        Provider.of<LayersProvider>(context, listen: false);
     return Container(
         margin: EdgeInsets.zero,
         child: Column(
@@ -46,10 +98,14 @@ class _ToolModesState extends State<ToolModes> {
                 width: MediaQuery.of(context).size.width * 0.45,
                 child: PickerDropdown(
                   onChange: (PickerModel? returnValue) {
-                    setState(() {
-                      modeProvider.changeModeComponent(returnValue, context);
-                    });
-                    layerProvider.toolsEffectsUpdated();
+                    if (modeProvider.currentMode.value == EnumModes.shortcut) {
+                      shortcutAlertDialogOnChangeMode(returnValue);
+                    } else {
+                      setState(() {
+                        modeProvider.changeModeComponent(
+                            returnValue, context, false);
+                      });
+                    }
                   },
                   pickerHintText: "Picker a tool or effect mode ....",
                   pickerList: modeProvider.getPickerModes('mood'),

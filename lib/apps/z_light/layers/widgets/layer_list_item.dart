@@ -27,8 +27,8 @@ class _LayerListItemState extends State<LayerListItem> {
   final double _iconSize = 16;
   TextEditingController _layerNameController = TextEditingController(text: '');
   GlobalKey deleteKey = GlobalKey<State<Tooltip>>();
-  GlobalKey<FormFieldState> editLayerKey = GlobalKey<FormFieldState>(); // Each layer should have a key for its editing field
-
+  GlobalKey<FormFieldState> editLayerKey = GlobalKey<
+      FormFieldState>(); // Each layer should have a key for its editing field
 
   Future<void> _deleteLayerDialog(LayersProvider provider) async {
     return showDialog<void>(
@@ -42,19 +42,18 @@ class _LayerListItemState extends State<LayerListItem> {
               children: <Widget>[
                 const Text('Do you wish to delete this layer?'),
                 Padding(
-                  padding: const EdgeInsets.only(top:8.0),
+                  padding: const EdgeInsets.only(top: 8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextButton(
-                        onPressed: (){
+                        onPressed: () {
                           Navigator.of(context).pop();
                         },
                         child: const Text("Cancel"),
-                        
                       ),
                       TextButton(
-                        onPressed: (){
+                        onPressed: () {
                           provider.removeItem(widget.layerIndex);
                           Navigator.of(context).pop();
                         },
@@ -67,7 +66,6 @@ class _LayerListItemState extends State<LayerListItem> {
               ],
             ),
           ),
-          
         );
       },
     );
@@ -147,7 +145,8 @@ class _LayerListItemState extends State<LayerListItem> {
             value: widget.layerItemModel.mode!.value,
             enabled: true,
             icon: widget.layerItemModel.mode!.icon),
-        context);
+        context,
+        true);
   }
 
   /// Save the layer's new text
