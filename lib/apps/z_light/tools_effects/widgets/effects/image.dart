@@ -1,17 +1,8 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
-import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
-import 'package:hpx/providers/layers_provider/layers.dart';
-import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
-import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/image_mode_provder.dart';
-import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -23,25 +14,17 @@ class ImagePreset extends StatefulWidget {
 }
 
 class _ImagePresetState extends State<ImagePreset> {
-  dynamic filePath = const AssetImage(Constants.defaultImageMode);
+  dynamic filePath;
 
   //// this function sets the default effect degree value to the degree knob
   @override
   void initState() {
-    processDefault();
-    super.initState();
-  }
-
-  Future<void> processDefault() async {
     ImageModeProvider imageModeProvider =
         Provider.of<ImageModeProvider>(context, listen: false);
-
-    /// convert the default image into color paltte
-    ByteData image = await rootBundle.load(Constants.defaultImageMode);
-    setState(() async {
-      await imageModeProvider.extractColors(
-          context, image.buffer.asUint8List());
+    setState(() {
+      filePath = Image.memory(imageModeProvider.imageBytes).image;
     });
+    super.initState();
   }
 
   void _showPhotoLibrary() async {
@@ -54,10 +37,11 @@ class _ImagePresetState extends State<ImagePreset> {
     );
     if (result != null) {
       PlatformFile file = result.files.first;
-      setState(() async {
-        filePath = Image.memory(File(file.path!).readAsBytesSync()).image;
-        await imageModeProvider.extractColors(
-            context, File(file.path!).readAsBytesSync());
+      imageModeProvider.setImageBytes(File(file.path!).readAsBytesSync());
+      imageModeProvider.extractColors();
+      imageModeProvider.setImageToExtractedEffect(context);
+      setState(() {
+        filePath = Image.memory(imageModeProvider.imageBytes).image;
       });
     }
   }
@@ -73,9 +57,9 @@ class _ImagePresetState extends State<ImagePreset> {
             children: [
               Container(
                 height: 170,
-                width: MediaQuery.of(context).size.width * 0.14,
+                width: MediaQuery.of(context).size.width * 0.2,
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: filePath, fit: BoxFit.cover),
+                  image: DecorationImage(image: filePath, fit: BoxFit.fill),
                 ),
               ),
               Container(margin: const EdgeInsets.only(top: 5.0)),

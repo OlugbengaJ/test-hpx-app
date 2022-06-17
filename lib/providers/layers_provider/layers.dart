@@ -5,7 +5,7 @@ import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 
-import '../../utils/KeyboardController.dart';
+import 'package:hpx/utils/KeyboardController.dart';
 
 ///[LayersProvider] to controle the layers state
 

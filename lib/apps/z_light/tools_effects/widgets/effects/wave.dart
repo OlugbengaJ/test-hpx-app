@@ -7,7 +7,6 @@ import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
-import 'package:hpx/widgets/components/rotate_button.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:knob_widget/knob_widget.dart';
 import 'package:provider/provider.dart';
@@ -49,7 +48,7 @@ class _WavePresetState extends State<WavePreset> {
     _controller = KnobController(
       initial: double.parse(degreeController.text),
       maximum: 360,
-      startAngle: 0,
+      startAngle: 0.00,
       endAngle: 360,
     );
     _controller?.addOnValueChangedListener(valueChangedListener);
@@ -121,20 +120,33 @@ class _WavePresetState extends State<WavePreset> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          FlatButton(
-                            textColor: (activatedButton == 'CUSTOM')
-                                ? Colors.grey
-                                : Colors.black,
-                            height: 40.0,
-                            color: (activatedButton == 'CUSTOM')
-                                ? Colors.black
-                                : Colors.white,
-                            child: const Text('DEFAULT'),
+                          TextButton(
                             onPressed: () {
                               setState(() {
                                 activatedButton = "DEFAULT";
                               });
                             },
+                            style: (activatedButton != 'DEFAULT')
+                                ? textBtnStyleBlack
+                                : textBtnStyleWhite,
+                            child: SizedBox(
+                              height: 40,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'DEFAULT',
+                                      style: TextStyle(
+                                          color: (activatedButton != 'DEFAULT')
+                                              ? Colors.white
+                                              : Colors.black),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ]),
                   ),
@@ -142,21 +154,34 @@ class _WavePresetState extends State<WavePreset> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          FlatButton(
-                            textColor: (activatedButton != 'CUSTOM')
-                                ? Colors.grey
-                                : Colors.black,
-                            height: 40.0,
-                            color: (activatedButton != 'CUSTOM')
-                                ? Colors.black
-                                : Colors.white,
-                            child: const Text('CUSTOM'),
+                          TextButton(
                             onPressed: () {
                               setState(() {
-                                activatedButton = "CUSTOM";
+                                activatedButton = "Custom";
                               });
                             },
-                          )
+                            style: (activatedButton != 'Custom')
+                                ? textBtnStyleBlack
+                                : textBtnStyleWhite,
+                            child: SizedBox(
+                              height: 40,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'CUSTOM',
+                                      style: TextStyle(
+                                          color: (activatedButton != 'Custom')
+                                              ? Colors.white
+                                              : Colors.black),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ]),
                   ),
                 ],
@@ -230,8 +255,17 @@ class _WavePresetState extends State<WavePreset> {
                             controller: _controller,
                             width: 70,
                             height: 70,
-                            style: KnobStyle(
-                                showLabels: false, minorTicksPerInterval: 0),
+                            style: const KnobStyle(
+                                labelStyle:
+                                    TextStyle(color: Colors.transparent),
+                                controlStyle: ControlStyle(
+                                    backgroundColor: Colors.black,
+                                    shadowColor: Colors.transparent),
+                                showLabels: false,
+                                minorTicksPerInterval: 360,
+                                minorTickStyle: MinorTickStyle(
+                                    color: Colors.transparent,
+                                    highlightColor: Colors.transparent)),
                           ),
                         ),
                       )),

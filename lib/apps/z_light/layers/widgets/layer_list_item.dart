@@ -4,6 +4,7 @@ import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart'
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
+import 'package:hpx/widgets/theme.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 
@@ -28,6 +29,47 @@ class _LayerListItemState extends State<LayerListItem> {
   GlobalKey deleteKey = GlobalKey<State<Tooltip>>();
   GlobalKey<FormFieldState> editLayerKey = GlobalKey<
       FormFieldState>(); // Each layer should have a key for its editing field
+
+  Future<void> _deleteLayerDialog(LayersProvider provider) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete a layer'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                const Text('Do you wish to delete this layer?'),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("Cancel"),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          provider.removeItem(widget.layerIndex);
+                          Navigator.of(context).pop();
+                        },
+                        style: textBtnStyleWhite,
+                        child: const Text("Delete"),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   _onHover(isHovering) {
     if (!_showDeleteTooltip) {
@@ -83,7 +125,8 @@ class _LayerListItemState extends State<LayerListItem> {
 
   /// Use to delete a layer from the list
   _deleteLayer(LayersProvider provider) {
-    provider.removeItem(widget.layerIndex);
+    _deleteLayerDialog(provider);
+    //provider.removeItem(widget.layerIndex);
     // final dynamic tooltip = deleteKey.currentState;
     // tooltip?.ensureTooltipVisible();
     // setState(() {
@@ -102,7 +145,8 @@ class _LayerListItemState extends State<LayerListItem> {
             value: widget.layerItemModel.mode!.value,
             enabled: true,
             icon: widget.layerItemModel.mode!.icon),
-        context);
+        context,
+        true);
   }
 
   /// Save the layer's new text

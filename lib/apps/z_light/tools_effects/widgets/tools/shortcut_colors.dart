@@ -68,21 +68,33 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
                     ],
                   ),
                 ),
-                FlatButton(
-                  textColor: Colors.black,
-                  height: 30.0,
-                  color: Colors.white,
-                  child: const Text('Add Shortcut'),
+                TextButton(
                   onPressed: () {
                     setState(() {
                       shortcutProvider.addNewCommand('');
+                      // /// initialize the layers provider to use to send notification accross the layers
+                      LayersProvider layerProvider =
+                          Provider.of<LayersProvider>(context, listen: false);
+                      layerProvider.toolsEffectsUpdated();
                     });
-                    // /// initialize the layers provider to use to send notification accross the layers
-                    LayersProvider layerProvider =
-                        Provider.of<LayersProvider>(context, listen: false);
-                    layerProvider.toolsEffectsUpdated();
                   },
-                )
+                  style: textBtnStyleWhite,
+                  child: SizedBox(
+                    height: 40,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Add Shortcut',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           );
