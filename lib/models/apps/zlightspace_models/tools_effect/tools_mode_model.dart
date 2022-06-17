@@ -25,6 +25,9 @@ class ToolsModeModel {
       /// submode is not required while using toolsmode model
       this.subMode,
 
+      /// submode is not required while using toolsmode model
+      this.shortcutKeys,
+
       /// display is not required while using toolsmode model
       this.display,
 
@@ -51,6 +54,9 @@ class ToolsModeModel {
 
   /// current color holds a list of colors been current in used by the color picker
   late final List<dynamic> currentColor;
+
+  /// shortcutKey holds a list of shortcut keyboard keys been currently in used by the shortcut mode
+  List<List<String>>? shortcutKeys;
 
   /// effects holds the current effect been used by the effects provider and tools and effects mode
   late final EffectsModel effects;
