@@ -308,33 +308,35 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
   }
 
   generatePreviewBox(bool? preview) {
+    ColorPickerProvider colorPickerProviderInstance =
+        Provider.of<ColorPickerProvider>(context, listen: false);
     return (widget.colors.length > 1 && preview == true)
         ? BoxDecoration(
             gradient: LinearGradient(colors: widget.colors),
             border: Border.all(
                 width: (isFocused)
                     ? 2
-                    : (isHover && widget.hasBorder == false)
+                    : (isHover || widget.hasBorder == true)
                         ? 2
                         : 1,
                 color: (isFocused)
                     ? Colors.white
-                    : (!isHover && widget.hasBorder == false)
-                        ? Colors.grey.shade700
-                        : Colors.grey.shade400))
+                    : (isHover || widget.hasBorder == true)
+                        ? Colors.white
+                        : Colors.grey.shade700))
         : BoxDecoration(
             color: widget.color,
             border: Border.all(
                 width: (isFocused)
                     ? 2
-                    : (isHover && widget.hasBorder == false)
+                    : (isHover || widget.hasBorder == true)
                         ? 2
                         : 1,
                 color: (isFocused)
                     ? Colors.white
-                    : (!isHover && widget.hasBorder == false)
-                        ? Colors.grey.shade700
-                        : Colors.grey.shade400));
+                    : (isHover || widget.hasBorder == true)
+                        ? Colors.white
+                        : Colors.grey.shade700));
   }
 
   generateGradientClickBoxes(BuildContext context) {
@@ -406,6 +408,7 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                         isHover = false;
                         isFocused = true;
                         widget.hasBorder = true;
+                        // widget.hasBorder = true;
                       });
                       (widget.picker == false) ? '' : selectcolor(context);
                     },
@@ -439,6 +442,7 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                         isHover = false;
                         isFocused = true;
                         widget.hasBorder = true;
+                        // widget.hasBorder = true;
                       });
                       (widget.picker == false) ? '' : selectcolor(context);
                     },
