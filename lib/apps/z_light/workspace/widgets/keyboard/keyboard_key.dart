@@ -111,9 +111,6 @@ KeyModel _updateKeyInfo(
 
       final boxZone = provider.boxZone(renderBox, layerId);
 
-      // clear the layer keys info
-      layer.setKeys([]);
-
       if (boxZone != null) {
         // insert new chip with the layer id as key
         final chip = KeyPaintRect('$layerId');
@@ -154,7 +151,20 @@ KeyModel _updateKeyInfo(
             chip.color = animColor!;
             break;
           case EnumModes.wave:
-            debugPrint('${layer.mode?.currentColor.map((e) => e)}');
+            if (layer.mode?.currentColor != null) {
+              final colIndex = getColorIndex(
+                boxZone.selectorRect.width,
+                boxZone.selectorRect.left,
+                boxZone.boxRect.left,
+                layer.mode!.currentColor.length,
+              );
+
+              try {
+                chip.color = layer.mode!.currentColor[colIndex];
+              } catch (e) {
+                // color cast failed.
+              }
+            }
             break;
           case EnumModes.image:
             // paint all keys based on color matrix (m x n)

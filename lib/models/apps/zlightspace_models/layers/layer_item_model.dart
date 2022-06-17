@@ -41,6 +41,15 @@ class LayerItemModel {
   }
 
   void addKey(KeyModel key) {
+    // check if key exists, then replace existing key or add new key
+    final index = _keys.indexWhere((k) => k.keyCode == key.keyCode);
+
+    if (index != -1) {
+      // remove existing key
+      _keys.removeAt(index);
+    }
+
+    // add new key
     _keys.add(key);
   }
 
