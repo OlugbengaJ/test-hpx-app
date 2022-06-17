@@ -1,12 +1,8 @@
-import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/image_mode_provder.dart';
-import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -23,16 +19,12 @@ class _ImagePresetState extends State<ImagePreset> {
   //// this function sets the default effect degree value to the degree knob
   @override
   void initState() {
-    processDefault();
-    super.initState();
-  }
-
-  void processDefault() {
     ImageModeProvider imageModeProvider =
         Provider.of<ImageModeProvider>(context, listen: false);
     setState(() {
       filePath = Image.memory(imageModeProvider.imageBytes).image;
     });
+    super.initState();
   }
 
   void _showPhotoLibrary() async {
@@ -45,9 +37,9 @@ class _ImagePresetState extends State<ImagePreset> {
     );
     if (result != null) {
       PlatformFile file = result.files.first;
-      imageModeProvider.imageBytes = File(file.path!).readAsBytesSync();
+      imageModeProvider.setImageBytes(File(file.path!).readAsBytesSync());
       imageModeProvider.extractColors();
-      await imageModeProvider.setImageToExtractedEffect(context);
+      imageModeProvider.setImageToExtractedEffect(context);
       setState(() {
         filePath = Image.memory(imageModeProvider.imageBytes).image;
       });
@@ -56,8 +48,6 @@ class _ImagePresetState extends State<ImagePreset> {
 
   @override
   Widget build(BuildContext context) {
-    ImageModeProvider imageModeProvider =
-        Provider.of<ImageModeProvider>(context, listen: false);
     return Container(
       margin: const EdgeInsets.only(top: 20, bottom: 20.0),
       child: Row(
@@ -67,9 +57,9 @@ class _ImagePresetState extends State<ImagePreset> {
             children: [
               Container(
                 height: 170,
-                width: MediaQuery.of(context).size.width * 0.14,
+                width: MediaQuery.of(context).size.width * 0.2,
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: filePath, fit: BoxFit.cover),
+                  image: DecorationImage(image: filePath, fit: BoxFit.fill),
                 ),
               ),
               Container(margin: const EdgeInsets.only(top: 5.0)),

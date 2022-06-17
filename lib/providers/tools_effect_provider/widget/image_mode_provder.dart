@@ -22,11 +22,16 @@ class ImageModeProvider extends ChangeNotifier {
   List<dynamic> extractedColors = [];
   List<List<Color>> extractedMatrix = [];
   late Random random;
-  late Uint8List imageBytes;
+  late Uint8List imageBytes = Uint8List(0);
+
+  setImageBytes(Uint8List bytes) {
+    imageBytes = bytes;
+    notifyListeners();
+  }
 
   // this function takes an image in bytes and converts it to a matrix of colors
-  void extractColors() async {
-    extractedColors = await extractPixelsColors(imageBytes);
+  void extractColors() {
+    extractedColors = extractPixelsColors(imageBytes) as List;
     extractedMatrix = extractedColors.fold([[]], (list, x) {
       return list.last.length == noOfPixelsPerAxis
           ? (list..add([x]))
@@ -42,7 +47,6 @@ class ImageModeProvider extends ChangeNotifier {
           ? (list..add([x]))
           : (list..last.add(x));
     });
-    notifyListeners();
     return extractedMatrix;
   }
 
@@ -55,12 +59,12 @@ class ImageModeProvider extends ChangeNotifier {
   }
 
   setImageToExtractedEffect(BuildContext context) {
-    LayersProvider layerProvider =
-        Provider.of<LayersProvider>(context, listen: false);
     ModeProvider modeProvider =
         Provider.of<ModeProvider>(context, listen: false);
     EffectProvider effectProvider =
         Provider.of<EffectProvider>(context, listen: false);
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
 
     effectProvider.setCurrentEffect(EffectsModel(
       effectName: effectProvider.currentEffect?.effectName,
@@ -74,7 +78,6 @@ class ImageModeProvider extends ChangeNotifier {
         value: modeProvider.currentMode.value,
         icon: modeProvider.currentMode.icon,
         name: modeProvider.currentMode.name));
-    notifyListeners();
     layerProvider.toolsEffectsUpdated();
   }
 

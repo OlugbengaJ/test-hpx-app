@@ -48,7 +48,7 @@ class _WavePresetState extends State<WavePreset> {
     _controller = KnobController(
       initial: double.parse(degreeController.text),
       maximum: 360,
-      startAngle: 0,
+      startAngle: 0.00,
       endAngle: 360,
     );
     _controller?.addOnValueChangedListener(valueChangedListener);
@@ -255,8 +255,17 @@ class _WavePresetState extends State<WavePreset> {
                             controller: _controller,
                             width: 70,
                             height: 70,
-                            style: KnobStyle(
-                                showLabels: false, minorTicksPerInterval: 0),
+                            style: const KnobStyle(
+                                labelStyle:
+                                    TextStyle(color: Colors.transparent),
+                                controlStyle: ControlStyle(
+                                    backgroundColor: Colors.black,
+                                    shadowColor: Colors.transparent),
+                                showLabels: false,
+                                minorTicksPerInterval: 360,
+                                minorTickStyle: MinorTickStyle(
+                                    color: Colors.transparent,
+                                    highlightColor: Colors.transparent)),
                           ),
                         ),
                       )),

@@ -13,6 +13,7 @@ import 'package:hpx/apps/z_light/tools_effects/widgets/tools/moods.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/tools/shortcut_colors.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/image_mode_provder.dart';
@@ -190,6 +191,11 @@ class ModeProvider extends ChangeNotifier {
         Provider.of<WorkspaceProvider>(context, listen: false);
     ImageModeProvider imageModeProvider =
         Provider.of<ImageModeProvider>(context, listen: false);
+    //// set the current effects to the effects provider
+    EffectProvider effectsProvider =
+        Provider.of<EffectProvider>(context, listen: false);
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
 
     /// if last mode was interactive
     if (currentMode.value == EnumModes.interactive) {
@@ -268,13 +274,15 @@ class ModeProvider extends ChangeNotifier {
         break;
       case EnumModes.image:
         currentColors.add(Colors.transparent);
-        effects.effectName = pickerChoice.value;
 
         /// convert the default image into color paltte
         ByteData image = await rootBundle.load(Constants.defaultImageMode);
-        imageModeProvider.imageBytes = image.buffer.asUint8List();
+        if (imageModeProvider.imageBytes.isEmpty) {
+          imageModeProvider.setImageBytes(image.buffer.asUint8List());
+        }
         effects.extractedColors = imageModeProvider.getExtractColors();
 
+        effects.effectName = pickerChoice.value;
         preset = const ImagePreset();
         break;
       case EnumModes.ambient:
@@ -291,10 +299,6 @@ class ModeProvider extends ChangeNotifier {
     }
 
     modePicker = pickerChoice;
-
-    //// set the current effects to the effects provider
-    EffectProvider effectsProvider =
-        Provider.of<EffectProvider>(context, listen: false);
     effectsProvider.setCurrentEffect(EffectsModel(
         effectName: effects.effectName,
         degree: effects.degree,
@@ -311,7 +315,10 @@ class ModeProvider extends ChangeNotifier {
         icon: pickerChoice.icon,
         modeType: currentMode.modeType,
         effects: effectsProvider.currentEffect!,
-        name: pickerChoice.title));
+        name: (currentMode.value == pickerChoice.value)
+            ? currentMode.name
+            : pickerChoice.title));
+    layerProvider.toolsEffectsUpdated();
   }
 
   // get current mode information
