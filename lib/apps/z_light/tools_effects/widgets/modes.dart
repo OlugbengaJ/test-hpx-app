@@ -49,13 +49,20 @@ class _ToolModesState extends State<ToolModes> {
         builder: (context) {
           return SimpleDialog(
               contentPadding: const EdgeInsets.only(
-                  top: 50, left: 20, right: 20, bottom: 30),
+                  top: 40, left: 20, right: 20, bottom: 30),
               children: [
+                Text(
+                  'Leaving Shortcut Tools & Effect',
+                  style: h2Style,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 20),
+                ),
                 SizedBox(
                   width: 400,
                   child: Text(
                     'Switching to another layer or effect would permanently delete/overide your shortcut color configurations?',
-                    style: h3Style,
+                    style: labelStyle,
                   ),
                 ),
                 Container(
