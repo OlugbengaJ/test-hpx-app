@@ -21,7 +21,6 @@ import 'package:hpx/providers/tools_effect_provider/widget/shortcut_widget_provi
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
-import 'package:hpx/widgets/theme.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 
