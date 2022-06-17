@@ -18,7 +18,7 @@ class ImagePreset extends StatefulWidget {
 }
 
 class _ImagePresetState extends State<ImagePreset> {
-  dynamic filePath = const AssetImage(Constants.defaultImageMode);
+  dynamic filePath;
 
   //// this function sets the default effect degree value to the degree knob
   @override
@@ -27,15 +27,11 @@ class _ImagePresetState extends State<ImagePreset> {
     super.initState();
   }
 
-  Future<void> processDefault() async {
+  void processDefault() {
     ImageModeProvider imageModeProvider =
         Provider.of<ImageModeProvider>(context, listen: false);
-
-    /// convert the default image into color paltte
-    ByteData image = await rootBundle.load(Constants.defaultImageMode);
-    setState(() async {
-      await imageModeProvider.extractColors(
-          context, image.buffer.asUint8List());
+    setState(() {
+      filePath = Image.memory(imageModeProvider.imageBytes).image;
     });
   }
 
@@ -49,16 +45,19 @@ class _ImagePresetState extends State<ImagePreset> {
     );
     if (result != null) {
       PlatformFile file = result.files.first;
-      setState(() async {
-        filePath = Image.memory(File(file.path!).readAsBytesSync()).image;
-        imageModeProvider.extractColors(
-            context, File(file.path!).readAsBytesSync());
+      imageModeProvider.imageBytes = File(file.path!).readAsBytesSync();
+      imageModeProvider.extractColors();
+      await imageModeProvider.setImageToExtractedEffect(context);
+      setState(() {
+        filePath = Image.memory(imageModeProvider.imageBytes).image;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    ImageModeProvider imageModeProvider =
+        Provider.of<ImageModeProvider>(context, listen: false);
     return Container(
       margin: const EdgeInsets.only(top: 20, bottom: 20.0),
       child: Row(
