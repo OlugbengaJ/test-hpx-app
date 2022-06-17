@@ -111,8 +111,8 @@ KeyModel _updateKeyInfo(
 
       final boxZone = provider.boxZone(renderBox, layerId);
 
-      // clear the layer keys info
-      layer.setKeys([]);
+      // remove key in layer
+      layer.removeKey(keyModel);
 
       if (boxZone != null) {
         // insert new chip with the layer id as key
@@ -152,6 +152,22 @@ KeyModel _updateKeyInfo(
                 speed: layer.mode?.effects.speed);
 
             chip.color = animColor!;
+            break;
+          case EnumModes.wave:
+            if (layer.mode?.currentColor != null) {
+              final colIndex = getColorIndex(
+                boxZone.selectorRect.width,
+                boxZone.selectorRect.left,
+                boxZone.boxRect.left,
+                layer.mode!.currentColor.length,
+              );
+
+              try {
+                chip.color = layer.mode!.currentColor[colIndex];
+              } catch (e) {
+                // color cast failed.
+              }
+            }
             break;
           case EnumModes.image:
             // paint all keys based on color matrix (m x n)

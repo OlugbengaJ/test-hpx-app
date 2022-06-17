@@ -1,9 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/globals.dart';
-import 'package:hpx/apps/z_light/layers/widgets/layer_stack.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/imports.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
@@ -11,6 +7,8 @@ import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/utils/comparer.dart';
 import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/components/dropdown.dart';
+import 'package:hpx/widgets/components/scrollbar/custom_h_scrollbar.dart';
+import 'package:hpx/widgets/components/scrollbar/custom_v_scrollbar.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -32,10 +30,10 @@ class _WorkspaceState extends State<Workspace>
 
   static const double _zoomInThreshold = 250;
   static const double _zoomOutThreshold = 60;
-  static const Duration _duration = Duration(milliseconds: 50);
   static const double _buttonSize = 32.0;
 
-  Timer _timer = Timer.periodic(Duration.zero, ((t) {}));
+  // static const Duration _duration = Duration(milliseconds: 50);
+  // Timer _timer = Timer.periodic(Duration.zero, ((t) {}));
 
   /// [zoomTextSubmitted] is called when user hits the Enter key.
   /// This updates the zoom value and resets the value when outside
@@ -62,25 +60,28 @@ class _WorkspaceState extends State<Workspace>
   ///
   /// timer is canceled to stop zooming by the duration specified
   void zoomEnd() {
-    _timer.cancel();
+    // _timer.cancel();
   }
 
   /// [updateZoomText] sets the zoom text (without fractions) and zoom scale.
   void updateZoomText() {
-    _zoomTextCtrl.text = '${_zoomValue.ceil()}';
+    _zoomTextCtrl.text = '${_zoomValue.ceil()}%';
   }
 
   /// [zoomIn] increases the zoomValue only up to the zoomIn threshold
   /// preventing scenario where content is unnecessarily large.
   void zoomIn() {
-    _timer = Timer.periodic(_duration, (t) {
-      if (_zoomValue == _zoomInThreshold) {
-        _timer.cancel();
-        return;
-      }
+    // _timer = Timer.periodic(_duration, (t) {
+    //   if (_zoomValue == _zoomInThreshold) {
+    //     _timer.cancel();
+    //     return;
+    //   }
 
-      zoomTextSubmitted('${_zoomValue + 1}');
-    });
+    //   zoomTextSubmitted('${_zoomValue + 1}');
+    // });
+
+    if (_zoomValue == _zoomInThreshold) return;
+    zoomTextSubmitted('${_zoomValue + 10}');
   }
 
   /// [zoomExpand] sets the zoomValue to half the zoomIn threshold.
@@ -91,14 +92,16 @@ class _WorkspaceState extends State<Workspace>
   /// [zoomOut] decreases the zoomValue only up to the zoomOut threshold
   /// preventing scenario where content is completely not visible.
   void zoomOut() {
-    _timer = Timer.periodic(_duration, (t) {
-      if (_zoomValue == _zoomOutThreshold) {
-        _timer.cancel();
-        return;
-      }
+    // _timer = Timer.periodic(_duration, (t) {
+    //   if (_zoomValue == _zoomOutThreshold) {
+    //     _timer.cancel();
+    //     return;
+    //   }
 
-      zoomTextSubmitted('${_zoomValue - 1}');
-    });
+    //   zoomTextSubmitted('${_zoomValue - 1}');
+    // });
+    if (_zoomValue == _zoomOutThreshold) return;
+    zoomTextSubmitted('${_zoomValue - 10}');
   }
 
   /// [zoomCollapse] sets the zoomValue to the zoomOut threshold.
@@ -117,14 +120,14 @@ class _WorkspaceState extends State<Workspace>
     // Initialize zoom value and scale.
     _zoomValue = 60;
     _zoomScale = _zoomScaleFactor;
-    _zoomTextCtrl = TextEditingController(text: _zoomValue.ceil().toString());
+    _zoomTextCtrl = TextEditingController(text: '${_zoomValue.ceil()}%');
   }
 
   @override
   void dispose() {
     _zoomTextCtrl.dispose();
     _controller.dispose();
-    _timer.cancel();
+    // _timer.cancel();
     super.dispose();
   }
 
@@ -134,11 +137,16 @@ class _WorkspaceState extends State<Workspace>
     final controllerV = ScrollController();
     final workspaceProvider = Provider.of<WorkspaceProvider>(context);
 
+    final themeData = Theme.of(context);
+
     // initialize animation controller
     workspaceProvider.initAnimation(_controller);
 
     // initialize layers provider
     workspaceProvider.initLayersProvider(Provider.of<LayersProvider>(context));
+
+    // initialize scroll offset
+    workspaceProvider.scrollOffset = 12.0;
 
     return Column(
       children: [
@@ -241,8 +249,25 @@ class _WorkspaceState extends State<Workspace>
               ),
             ),
             child: Stack(
-              key: workspaceStackKey,
               children: [
+                CustomVScrollbar(
+                  top: 0,
+                  end: 0,
+                  bottom: workspaceProvider.scrollOffset,
+                  size: workspaceProvider.scrollOffset,
+                  trackSize: 50,
+                  primaryColor: themeData.primaryColor,
+                  secondaryColor: themeData.primaryColorLight,
+                ),
+                CustomHScrollbar(
+                  start: 0,
+                  end: workspaceProvider.scrollOffset,
+                  bottom: 0,
+                  size: workspaceProvider.scrollOffset,
+                  trackSize: 50,
+                  primaryColor: themeData.primaryColor,
+                  secondaryColor: themeData.primaryColorLight,
+                ),
                 GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onPanDown: (details) {
@@ -253,6 +278,7 @@ class _WorkspaceState extends State<Workspace>
                   onPanEnd: (details) => workspaceProvider.onPanEnd(details),
                   onPanCancel: () => workspaceProvider.onPanClear(),
                   child: Stack(
+                    key: workspaceStackKey,
                     alignment: Alignment.bottomLeft,
                     fit: StackFit.expand,
                     children: [
@@ -260,7 +286,11 @@ class _WorkspaceState extends State<Workspace>
                       // This ensures seamless zooming of the entire keyboard.
                       Align(
                         alignment: Alignment.center,
-                        child: Scrollbar(
+                        child:
+                            // TODO: Keyboard, delete default scrollbar below
+                            // once custom implementation is done.
+                            // Keyboard(zoomScale: _zoomScale),
+                            Scrollbar(
                           scrollbarOrientation: ScrollbarOrientation.bottom,
                           controller: controllerH,
                           thumbVisibility: true,
@@ -283,21 +313,6 @@ class _WorkspaceState extends State<Workspace>
                         ),
                       ),
 
-                      // Container(
-                      //   color: Colors.blue,
-                      //   width: 50,
-                      // ),
-
-                      const LayersStack(),
-
-                      OverlaySelector(
-                        showCrossHair: workspaceProvider.isDragModeResizable,
-                        onPanDown: workspaceProvider.onPanDown,
-                        onPanUpdate: workspaceProvider.onPanUpdate,
-                        onPanEnd: workspaceProvider.onPanEnd,
-                        isVisible: workspaceProvider.selectorVisible,
-                      ),
-
                       if (workspaceProvider.isModalNotify)
                         ModalNotification(
                           closeHandler: workspaceProvider.toggleModal,
@@ -307,7 +322,7 @@ class _WorkspaceState extends State<Workspace>
                   ),
                 ),
                 Positioned(
-                  bottom: 0,
+                  bottom: workspaceProvider.scrollOffset,
                   left: 0,
                   right: 0,
                   child: Center(
@@ -321,6 +336,13 @@ class _WorkspaceState extends State<Workspace>
                       zoomEndHandler: zoomEnd,
                     ),
                   ),
+                ),
+                OverlaySelector(
+                  showCrossHair: workspaceProvider.isDragModeResizable,
+                  onPanDown: workspaceProvider.onPanDown,
+                  onPanUpdate: workspaceProvider.onPanUpdate,
+                  onPanEnd: workspaceProvider.onPanEnd,
+                  isVisible: workspaceProvider.selectorVisible,
                 ),
               ],
             ),
