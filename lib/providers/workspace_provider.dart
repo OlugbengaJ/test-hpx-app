@@ -224,10 +224,6 @@ class WorkspaceProvider with ChangeNotifier {
   void initLayersProvider(LayersProvider? v) {
     _layersProvider = v;
 
-    for (var element in v!.layeritems) {
-      debugPrint('${element.keys.map((e) => e.keyCode)}');
-    }
-
     // initialize the layers selections
     _initLayerLTWH();
   }

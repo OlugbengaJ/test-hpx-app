@@ -40,17 +40,30 @@ class LayerItemModel {
     _keys = [...keys];
   }
 
+  /// [_getKeyIndex] returns the index of the key in [_keys]
+  int _getKeyIndex(KeyModel key) {
+    return _keys.indexWhere((k) => k.keyCode == key.keyCode);
+  }
+
+  /// [addKey] check if key exists, then replaces the existing key
+  /// otherwise adds a new key.
   void addKey(KeyModel key) {
-    // check if key exists, then replace existing key or add new key
-    final index = _keys.indexWhere((k) => k.keyCode == key.keyCode);
+    // removes key if it exists
+    removeKey(key);
+
+    // add new key
+    _keys.add(key);
+  }
+
+  /// [removeKey] removes an existing key
+  void removeKey(KeyModel key) {
+    // check if key exists, then remove existing key
+    final index = _getKeyIndex(key);
 
     if (index != -1) {
       // remove existing key
       _keys.removeAt(index);
     }
-
-    // add new key
-    _keys.add(key);
   }
 
   double top = 0.0;

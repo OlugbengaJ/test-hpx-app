@@ -111,6 +111,9 @@ KeyModel _updateKeyInfo(
 
       final boxZone = provider.boxZone(renderBox, layerId);
 
+      // remove key in layer
+      layer.removeKey(keyModel);
+
       if (boxZone != null) {
         // insert new chip with the layer id as key
         final chip = KeyPaintRect('$layerId');
