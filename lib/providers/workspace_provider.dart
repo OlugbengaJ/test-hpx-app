@@ -138,9 +138,12 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [_setAnimDuration] updates the animation duration by [speed] factor.
   void _setAnimDuration(double? speed) {
+    // avoid divide by zero so set speed to max value.
+    if (speed == 0) speed = 100;
+
     if (speed != null) {
       // speed exists so check if it has changed
-      final ms = speed * 100;
+      final ms = 100000 / speed;
       if (ms != _animMillisecond) {
         // update the controller duration
         _animMillisecond = ms;
