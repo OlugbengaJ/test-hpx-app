@@ -280,6 +280,12 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+
+  void setShortuctKeys(BuildContext context, List<List<String>> keys){
+    _modeProvider!.setShortcutKeys(context, keys);
+    notifyListeners();
+  }
+
   /// [changeIndex] set index when tap on the layer in the [_layeritems]
   void changeIndex(int index) {
     for (var element in _layeritems) {
