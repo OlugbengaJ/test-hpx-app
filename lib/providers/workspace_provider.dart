@@ -24,6 +24,9 @@ class WorkspaceProvider with ChangeNotifier {
 
   final double _resizableThreshold = 20;
 
+  /// [scrollOffset] used to determine actual the workspace width and height minus scrollbars.
+  late double? scrollOffset;
+
   /// [_selectorVisible] determines overlay selectors visibility.
   bool _selectorVisible = false;
 
@@ -386,12 +389,14 @@ class WorkspaceProvider with ChangeNotifier {
 
           // selector move hence update left and top limited to view.
           if (left > 0 &&
-              (left + ltwh.resizableLTWH!.width!) < _workspaceRect.width) {
+              (left + ltwh.resizableLTWH!.width!) <
+                  _workspaceRect.width - scrollOffset!) {
             ltwh.resizableLTWH!.left = left;
           }
 
           if (top > 0 &&
-              (top + ltwh.resizableLTWH!.height!) < _workspaceRect.height) {
+              (top + ltwh.resizableLTWH!.height!) <
+                  _workspaceRect.height - scrollOffset!) {
             ltwh.resizableLTWH!.top = top;
           }
           break;
@@ -414,7 +419,8 @@ class WorkspaceProvider with ChangeNotifier {
 
           // resize from top-right, set selector's top, width, and height.
           // width must be greater than threshold and within view.
-          if ((ltwh.resizableLTWH!.left! + widthPlus) < _workspaceRect.width &&
+          if ((ltwh.resizableLTWH!.left! + widthPlus) <
+                  _workspaceRect.width - scrollOffset! &&
               widthPlus >= _resizableThreshold) {
             ltwh.resizableLTWH!.width = widthPlus;
           }
@@ -429,13 +435,15 @@ class WorkspaceProvider with ChangeNotifier {
 
           // resize from bottom-right, set selector's width and height.
           // width must be greater than threshold and within view.
-          if ((ltwh.resizableLTWH!.left! + widthPlus) < _workspaceRect.width &&
+          if ((ltwh.resizableLTWH!.left! + widthPlus) <
+                  _workspaceRect.width - scrollOffset! &&
               widthPlus >= _resizableThreshold) {
             ltwh.resizableLTWH!.width = widthPlus;
           }
 
           // height must be greater than threshold and within view.
-          if ((top + ltwh.resizableLTWH!.height!) < _workspaceRect.height &&
+          if ((top + ltwh.resizableLTWH!.height!) <
+                  _workspaceRect.height - scrollOffset! &&
               heightPlus >= _resizableThreshold) {
             ltwh.resizableLTWH!.height = heightPlus;
           }
@@ -450,7 +458,8 @@ class WorkspaceProvider with ChangeNotifier {
           }
 
           // height must be greater than threshold and within view.
-          if ((top + ltwh.resizableLTWH!.height!) < _workspaceRect.height &&
+          if ((top + ltwh.resizableLTWH!.height!) <
+                  _workspaceRect.height - scrollOffset! &&
               heightPlus >= _resizableThreshold) {
             ltwh.resizableLTWH!.height = heightPlus;
           }
@@ -711,8 +720,8 @@ class WorkspaceProvider with ChangeNotifier {
         // layer does not exist, hence set the LTWH to defaults
         // get the workspace stack via its global key and use its size
 
-        final left = _workspaceRect.size.width / 2;
-        final top = _workspaceRect.size.height / 2;
+        final left = (_workspaceRect.size.width - scrollOffset!) / 2;
+        final top = (_workspaceRect.size.height - scrollOffset!) / 2;
         const double halfSize = 70.0;
 
         // actual size of the overlay

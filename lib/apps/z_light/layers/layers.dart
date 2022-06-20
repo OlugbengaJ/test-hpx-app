@@ -77,7 +77,8 @@ class _LayersState extends State<Layers> {
               value: itemModel.mode!.value,
               enabled: true,
               icon: itemModel.mode!.icon),
-          context);
+          context,
+          false);
     }
   }
 

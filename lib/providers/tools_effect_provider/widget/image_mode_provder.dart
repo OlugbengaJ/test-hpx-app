@@ -10,8 +10,6 @@ import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:image/image.dart' as imageLib;
-
-import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
 
 const String keyPalette = 'palette';
@@ -24,32 +22,32 @@ class ImageModeProvider extends ChangeNotifier {
   List<dynamic> extractedColors = [];
   List<List<Color>> extractedMatrix = [];
   late Random random;
-  late Uint8List imageBytes;
-  dynamic currentImage;
+  late Uint8List imageBytes = Uint8List(0);
 
-  // this function selects an image and return its value in byes
-  selectImage() async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['jpg', 'png', 'jpeg', 'ico'],
-    );
-    if (result != null) {
-      PlatformFile file = result.files.first;
-      currentImage = Image.memory(File(file.path!).readAsBytesSync()).image;
-      notifyListeners();
-    }
+  setImageBytes(Uint8List bytes) {
+    imageBytes = bytes;
+    notifyListeners();
   }
 
   // this function takes an image in bytes and converts it to a matrix of colors
-  Future<void> extractColors(BuildContext context, Uint8List image) async {
-    imageBytes = image;
-    extractedColors = await extractPixelsColors(imageBytes);
+  void extractColors() {
+    extractedColors = extractPixelsColors(imageBytes) as List;
     extractedMatrix = extractedColors.fold([[]], (list, x) {
       return list.last.length == noOfPixelsPerAxis
           ? (list..add([x]))
           : (list..last.add(x));
     });
-    setImageToExtractedEffect(context);
+    notifyListeners();
+  }
+
+  getExtractColors() {
+    extractedColors = extractPixelsColors(imageBytes) as List;
+    extractedMatrix = extractedColors.fold([[]], (list, x) {
+      return list.last.length == noOfPixelsPerAxis
+          ? (list..add([x]))
+          : (list..last.add(x));
+    });
+    return extractedMatrix;
   }
 
   // this function calculate dthe algeberic equivalent of a color into color code
@@ -61,12 +59,12 @@ class ImageModeProvider extends ChangeNotifier {
   }
 
   setImageToExtractedEffect(BuildContext context) {
-    LayersProvider layerProvider =
-        Provider.of<LayersProvider>(context, listen: false);
     ModeProvider modeProvider =
         Provider.of<ModeProvider>(context, listen: false);
     EffectProvider effectProvider =
         Provider.of<EffectProvider>(context, listen: false);
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
 
     effectProvider.setCurrentEffect(EffectsModel(
       effectName: effectProvider.currentEffect?.effectName,
@@ -75,7 +73,7 @@ class ImageModeProvider extends ChangeNotifier {
     ));
 
     modeProvider.setCurrentMode(ToolsModeModel(
-        currentColor: [],
+        currentColor: modeProvider.currentMode.currentColor,
         effects: effectProvider.currentEffect!,
         value: modeProvider.currentMode.value,
         icon: modeProvider.currentMode.icon,
