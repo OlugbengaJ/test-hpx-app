@@ -17,6 +17,7 @@ class LayersProvider extends ChangeNotifier {
   int currentEditingID = 0; // if the ID is 0 then no layer is in edit mode
   GlobalKey<FormFieldState>? editLayerKey;
 
+
   /// [hideDraggable] use to show or hide the stack layers for resizable widget
   bool hideDraggable = false;
   bool isLayerVisible = true;
@@ -319,15 +320,7 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Update a sublayer text
-  void updateSublayer(LayerItemModel item, String value) {
-    for (var subItem in sublayerItems) {
-      if (item.id == subItem.id) {
-        subItem.layerText = value;
-      }
-    }
-    notifyListeners();
-  }
+  
 
   /// [toggleVisibility] toggle visiblity for a layers
   void toggleVisibility(LayerItemModel item, int index) {
@@ -400,4 +393,61 @@ class LayersProvider extends ChangeNotifier {
 
     notifyListeners();
   }
+
+
+  setEditingSubLayerKey(GlobalKey<FormFieldState> key, int layerID) {
+    editLayerKey = key;
+    currentEditingID = layerID;
+    notifyListeners();
+  }
+
+  /// To check if the layer is the one on edit mode
+  bool isTheCurrentSubLayerEditing(GlobalKey<FormFieldState> key) {
+    if (editLayerKey == key) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  toggleSubEditMode(bool editing) {
+    isLayerEditing = editing;
+    notifyListeners();
+  }
+
+  void updateSublayerWithID(int id, String text) {
+    LayerItemModel item = sublayerItems.singleWhere((item) => item.id == id);
+    updateSublayer(item, text);
+    notifyListeners();
+  }
+
+  saveEditingSubLayer() {
+    if (editLayerKey!.currentState!.value.toString().isNotEmpty) {
+      //editLayerKey!.currentState!.save();
+      if (currentEditingID != 0) {
+        updateSublayerWithID(currentEditingID, editLayerKey!.currentState!.value.toString());
+      }
+    } else {
+      updateSublayerWithID(currentEditingID, "$currentEditingID -Sub layer No name");
+    }
+    notifyListeners();
+  }
+
+
+  /// Update a sublayer text
+  void updateSublayer(LayerItemModel item, String value) {
+    for (var subItem in sublayerItems) {
+      if (item.id == subItem.id) {
+        if(value.isNotEmpty){
+          subItem.layerText = value;
+        }else{
+          subItem.layerText = "$currentEditingID -Sub layer No name";
+        }
+        
+      }
+    }
+    isLayerEditing = false;
+    notifyListeners();
+  }
+
 }
