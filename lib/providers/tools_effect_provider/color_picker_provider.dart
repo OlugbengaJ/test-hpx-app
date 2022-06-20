@@ -341,6 +341,7 @@ List<ColorPickerWidgetModel> audioVisualGradientList = [
 //// color picker provider class to handle the color picker generate ui functions, and set the current color
 class ColorPickerProvider extends ChangeNotifier {
   ColorPickerWidgetModel? currentColor;
+  bool hasBorder = false;
 
   /// current color
   List<Color> lastColors = [

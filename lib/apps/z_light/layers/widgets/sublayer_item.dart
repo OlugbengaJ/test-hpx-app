@@ -5,7 +5,9 @@ import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 
 class SublayerItem extends StatefulWidget {
-  const SublayerItem({ Key? key, required this.layerIndex, required this.layerItemModel }) : super(key: key);
+  const SublayerItem(
+      {Key? key, required this.layerIndex, required this.layerItemModel})
+      : super(key: key);
   final int layerIndex;
   final LayerItemModel layerItemModel;
 
@@ -28,21 +30,19 @@ class _SublayerItemState extends State<SublayerItem> {
   _toggleLayer(LayersProvider provider) {
     LayerItemModel layerItemModel = widget.layerItemModel;
     layerItemModel.visible = !layerItemModel.visible;
-    provider.toggleSublayerVisibility(
-    layerItemModel,
-    widget.layerIndex);
+    provider.toggleSublayerVisibility(layerItemModel, widget.layerIndex);
     print(widget.layerIndex);
   }
 
   _toggleEditing(value) {
     setState(() {
       _editing = !_editing;
-      _layerNameController = TextEditingController(
-          text: widget.layerItemModel.layerText);
+      _layerNameController =
+          TextEditingController(text: widget.layerItemModel.layerText);
     });
   }
 
-  _deleteLayer(LayersProvider provider){
+  _deleteLayer(LayersProvider provider) {
     provider.removeSubItem(widget.layerItemModel);
   }
 
@@ -71,7 +71,8 @@ class _SublayerItemState extends State<SublayerItem> {
             highlightColor: Colors.transparent,
             onTap: () => _onTap(_value),
             child: Container(
-              padding: const EdgeInsets.only(top:2, bottom: 2, right: 2, left: 30),
+              padding:
+                  const EdgeInsets.only(top: 2, bottom: 2, right: 2, left: 30),
               color: Colors.black12,
               child: SizedBox(
                 height: 35,
@@ -95,26 +96,35 @@ class _SublayerItemState extends State<SublayerItem> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Row(
-                            children: [                              
+                            children: [
                               (_editing)
                                   ? Container(
                                       height: 30,
                                       constraints: const BoxConstraints(
                                         maxWidth: 80,
                                       ),
-                                      child: TextFormField(
-                                        controller: _layerNameController,
-                                        autofocus: true,
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          overflow: TextOverflow.ellipsis,
+                                      child: Focus(
+                                        onFocusChange: (hasFocus) {
+                                          if (!hasFocus) {
+                                            _onSubmit(_layerNameController.text,
+                                                _value);
+                                          }
+                                        },
+                                        child: TextFormField(
+                                          controller: _layerNameController,
+                                          autofocus: true,
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          decoration: const InputDecoration(
+                                              focusColor: Colors.white,
+                                              border: OutlineInputBorder(),
+                                              contentPadding:
+                                                  EdgeInsets.all(8)),
+                                          onFieldSubmitted: (value) =>
+                                              _onSubmit(value, _value),
                                         ),
-                                        decoration: const InputDecoration(
-                                            focusColor: Colors.white,
-                                            border: OutlineInputBorder(),
-                                            contentPadding: EdgeInsets.all(8)),
-                                        onFieldSubmitted: (value) =>
-                                            _onSubmit(value, _value),
                                       ),
                                     )
                                   : Expanded(
@@ -140,7 +150,7 @@ class _SublayerItemState extends State<SublayerItem> {
                                         child: Row(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.end,
-                                          children: [                                            
+                                          children: [
                                             Tooltip(
                                               message: "Edit",
                                               child: InkWell(
@@ -164,7 +174,8 @@ class _SublayerItemState extends State<SublayerItem> {
                                                   color: widget.layerItemModel
                                                       .listDisplayColor,
                                                 ),
-                                                onTap: () => _deleteLayer(value),
+                                                onTap: () =>
+                                                    _deleteLayer(value),
                                               ),
                                             ),
                                           ],

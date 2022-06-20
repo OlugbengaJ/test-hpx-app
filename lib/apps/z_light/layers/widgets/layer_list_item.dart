@@ -73,6 +73,7 @@ class _LayerListItemState extends State<LayerListItem> {
     );
   }
 
+
   _onHover(isHovering) {
     if (!_showDeleteTooltip) {
       setState(() {
@@ -140,6 +141,7 @@ class _LayerListItemState extends State<LayerListItem> {
   _onTap(LayersProvider provider) {
     provider.changeIndex(widget.layerIndex);
     ModeProvider modeProvider = context.read<ModeProvider>();
+    modeProvider.setCurrentMode(widget.layerItemModel.mode!);
 
     modeProvider.changeModeComponent(
         PickerModel(
@@ -147,7 +149,8 @@ class _LayerListItemState extends State<LayerListItem> {
             value: widget.layerItemModel.mode!.value,
             enabled: true,
             icon: widget.layerItemModel.mode!.icon),
-        context);
+        context,
+        true);
   }
 
   /// Save the layer's new text

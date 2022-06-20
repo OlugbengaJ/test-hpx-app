@@ -1,11 +1,11 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'zone_selector_provider.dart';
 
 class ZoneSelector extends StatefulWidget {
-  const ZoneSelector({ Key? key,
+  const ZoneSelector({
+    Key? key,
     required this.widgetsKeys,
     this.showBorderOnMouseMoving = false,
     this.paintOnMouseMoving = true,
@@ -14,7 +14,6 @@ class ZoneSelector extends StatefulWidget {
     this.color = Colors.blue,
     this.borderColor = Colors.transparent,
     this.opacity = 0.2,
-    
   }) : super(key: key);
   final bool showBorderOnMouseMoving;
   final bool paintOnMouseMoving;
@@ -24,7 +23,6 @@ class ZoneSelector extends StatefulWidget {
   final Color borderColor;
   final double opacity;
   final List<GlobalKey> widgetsKeys;
-  
 
   @override
   State<ZoneSelector> createState() => _ZoneSelectorState();
@@ -35,23 +33,22 @@ class _ZoneSelectorState extends State<ZoneSelector> {
   late DragUpdateDetails lastDetails;
   double dx = 0;
   double dy = 0;
-  
 
   @override
   void initState() {
-    super.initState();    
+    super.initState();
   }
 
-  _paintWidgets(provider){
-    for(var key in widget.widgetsKeys){
+  _paintWidgets(provider) {
+    for (var key in widget.widgetsKeys) {
       provider.paintColor(key);
     }
   }
 
-  _onPanStart(DragStartDetails details, provider){ // Set the begining point the top, the bottom, the left, the right to 0.0
+  _onPanStart(DragStartDetails details, provider) {
+    // Set the begining point the top, the bottom, the left, the right to 0.0
     RenderBox box = context.findRenderObject() as RenderBox;
-    
-    
+
     Offset localOffset = box.globalToLocal(details.globalPosition);
     double dx = localOffset.dx;
     double dy = localOffset.dy;
@@ -62,33 +59,28 @@ class _ZoneSelectorState extends State<ZoneSelector> {
     provider.setPaddings(topPadding, lefPadding);
 
     provider.setStartingPoint(dx, dy);
-
   }
- 
-  _onPanUpdate(DragUpdateDetails details, provider){
+
+  _onPanUpdate(DragUpdateDetails details, provider) {
     RenderBox box = context.findRenderObject() as RenderBox;
     Offset localOffset = box.globalToLocal(details.globalPosition);
     double dx = localOffset.dx;
     double dy = localOffset.dy;
     provider.startMoving(dx, dy);
-    
   }
 
-
-  _onPanEnd(DragEndDetails details, provider){
+  _onPanEnd(DragEndDetails details, provider) {
     provider.stopMoving(); // Call to set boxSize
     _paintWidgets(provider);
-    
   }
 
-  _onTapUp(TapUpDetails details, provider){
+  _onTapUp(TapUpDetails details, provider) {
     RenderBox box = context.findRenderObject() as RenderBox;
     Offset localOffset = box.globalToLocal(details.globalPosition);
     provider.onTap(localOffset.dx, localOffset.dy);
   }
 
-
-  _getHighlightedZone(ZoneSelectorProvider provider){
+  _getHighlightedZone(ZoneSelectorProvider provider) {
     List<Widget> zones = [];
     for (var item in provider.zoneToPaint) {
       zones.add(
@@ -98,8 +90,8 @@ class _ZoneSelectorState extends State<ZoneSelector> {
           child: Opacity(
             opacity: 0.5,
             child: Container(
-              height: item['size'].height,
-              width: item['size'].width,
+              height: item['size'].size,
+              width: item['size'].size,
               color: Colors.yellow,
             ),
           ),
@@ -109,7 +101,6 @@ class _ZoneSelectorState extends State<ZoneSelector> {
 
     return zones;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +114,7 @@ class _ZoneSelectorState extends State<ZoneSelector> {
               onPanStart: (details) => _onPanStart(details, provider),
               onPanUpdate: (details) => _onPanUpdate(details, provider),
               onPanEnd: (details) => _onPanEnd(details, provider),
-              onTapUp: (details)=> _onTapUp(details, provider),
+              onTapUp: (details) => _onTapUp(details, provider),
             ),
             Positioned(
               key: provider.selectorKey,
@@ -131,16 +122,17 @@ class _ZoneSelectorState extends State<ZoneSelector> {
               left: provider.startingPoint.dx,
               child: Container(
                 decoration: BoxDecoration(
-                  border: Border.all(
-                    color: widget.borderColor,
-                  )
-                ),
+                    border: Border.all(
+                  color: widget.borderColor,
+                )),
                 child: Opacity(
                   opacity: widget.opacity,
                   child: GestureDetector(
-                    onTapUp: (details)=> _onTapUp(details, provider),
+                    onTapUp: (details) => _onTapUp(details, provider),
                     child: Container(
-                      color: provider.zoneSelecting? widget.color: Colors.transparent,
+                      color: provider.zoneSelecting
+                          ? widget.color
+                          : Colors.transparent,
                       height: provider.height,
                       width: provider.width,
                     ),
@@ -148,7 +140,6 @@ class _ZoneSelectorState extends State<ZoneSelector> {
                 ),
               ),
             ),
-
             Stack(
               children: _getHighlightedZone(provider),
             )

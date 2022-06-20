@@ -58,20 +58,33 @@ class _ColorCycleState extends State<ColorCyclePreset> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          FlatButton(
-                            textColor: (activatedButton == 'CUSTOM')
-                                ? Colors.grey
-                                : Colors.black,
-                            height: 40.0,
-                            color: (activatedButton == 'CUSTOM')
-                                ? Colors.black
-                                : Colors.white,
-                            child: const Text('DEFAULT'),
+                          TextButton(
                             onPressed: () {
                               setState(() {
                                 activatedButton = "DEFAULT";
                               });
                             },
+                            style: (activatedButton != 'DEFAULT')
+                                ? textBtnStyleBlack
+                                : textBtnStyleWhite,
+                            child: SizedBox(
+                              height: 40,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'DEFAULT',
+                                      style: TextStyle(
+                                          color: (activatedButton != 'DEFAULT')
+                                              ? Colors.white
+                                              : Colors.black),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ]),
                   ),
@@ -79,21 +92,34 @@ class _ColorCycleState extends State<ColorCyclePreset> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          FlatButton(
-                            textColor: (activatedButton != 'CUSTOM')
-                                ? Colors.grey
-                                : Colors.black,
-                            height: 40.0,
-                            color: (activatedButton != 'CUSTOM')
-                                ? Colors.black
-                                : Colors.white,
-                            child: const Text('CUSTOM'),
+                          TextButton(
                             onPressed: () {
                               setState(() {
-                                activatedButton = "CUSTOM";
+                                activatedButton = "Custom";
                               });
                             },
-                          )
+                            style: (activatedButton != 'Custom')
+                                ? textBtnStyleBlack
+                                : textBtnStyleWhite,
+                            child: SizedBox(
+                              height: 40,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'CUSTOM',
+                                      style: TextStyle(
+                                          color: (activatedButton != 'Custom')
+                                              ? Colors.white
+                                              : Colors.black),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ]),
                   ),
                 ],

@@ -26,6 +26,7 @@ class Keyboard extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(top: 30.0 * zoomScale),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               KeyboardRowFn(zoomScale: zoomScale),
               KeyboardRowNum(zoomScale: zoomScale),
