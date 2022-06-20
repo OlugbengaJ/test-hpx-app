@@ -152,6 +152,14 @@ class WorkspaceProvider with ChangeNotifier {
     }
   }
 
+  /// [animValue] returns a value of the anim controller.
+  double? animValue({double? speed}) {
+    _setAnimDuration(speed);
+    _checkAnimStatus();
+
+    return _controller.value;
+  }
+
   /// [animColor] returns a color from transitions of a start to end color.
   Color? animColor(Color beginColor, Color endColor,
       {double? speed, EnumModes? effect}) {
