@@ -276,17 +276,23 @@ class ModeProvider extends ChangeNotifier {
         preset = const InteractivePreset();
         break;
       case EnumModes.image:
-        currentColors.add(Colors.transparent);
 
         /// convert the default image into color paltte
         ByteData image = await rootBundle.load(Constants.defaultImageMode);
-        if (imageModeProvider.imageBytes.isEmpty) {
+        currentColors.add(Colors.transparent);
+
+        if (currentMode.effects.imageBytes == null || isChange == false) {
           imageModeProvider.setImageBytes(image.buffer.asUint8List());
+          effects.imageBytes = image.buffer.asUint8List();
+        }
+        if (currentMode.effects.imageBytes != null) {
+          effects.extractedColors = currentMode.effects.extractedColors;
+          imageModeProvider.setImageBytes(currentMode.effects.imageBytes!);
         }
         effects.extractedColors = imageModeProvider.getExtractColors();
 
         effects.effectName = pickerChoice.value;
-        preset = const ImagePreset();
+        preset = ImagePreset();
         break;
       case EnumModes.ambient:
         currentColors.add(Colors.transparent);
@@ -318,7 +324,10 @@ class ModeProvider extends ChangeNotifier {
         extractedColors: (isChange == true)
             ? currentMode.effects.extractedColors
             : effects.extractedColors,
-        speed: (isChange == true) ? currentMode.effects.speed : effects.speed));
+        speed: (isChange == true) ? currentMode.effects.speed : effects.speed,
+        imageBytes: (isChange == true)
+            ? currentMode.effects.imageBytes
+            : effects.imageBytes));
 
     //// set the current mode to the mode been selected and change to and apply all current colors and effects
     setCurrentMode(ToolsModeModel(
