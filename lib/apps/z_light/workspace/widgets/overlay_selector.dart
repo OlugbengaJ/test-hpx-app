@@ -176,9 +176,12 @@ class DraggableRegion extends StatelessWidget {
     return MouseRegion(
       cursor: cursor,
       child: GestureDetector(
-        onPanDown: (details) => onPanDown!(details, name),
-        onPanUpdate: (details) => onPanUpdate!(details, name),
-        onPanEnd: (details) => onPanEnd!(details),
+        onPanDown:
+            onPanDown == null ? null : (details) => onPanDown!(details, name),
+        onPanUpdate: onPanUpdate == null
+            ? null
+            : (details) => onPanUpdate!(details, name),
+        onPanEnd: onPanEnd == null ? null : (details) => onPanEnd!(details),
         child: Container(
           color: color,
           width: width,

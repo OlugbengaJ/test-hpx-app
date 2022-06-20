@@ -165,9 +165,12 @@ KeyModel _updateKeyInfo(
               );
 
               try {
+                // get total chunks posible by dividing 1 by total colors
                 final chunkSize = 1 / colorLength;
                 final animValue =
                     provider.animValue(speed: layer.mode?.effects.speed);
+
+                // offset the column index by the animation value and chunk
                 final shiftIndex = (animValue! / chunkSize).floor();
                 colIndex = (colIndex + shiftIndex) % colorLength;
 

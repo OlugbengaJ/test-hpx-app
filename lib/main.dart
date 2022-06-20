@@ -3,6 +3,7 @@ import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/apps/z_light/wrapper.dart';
 import 'package:hpx/providers/keys_provider.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
+import 'package:hpx/providers/scrollbar_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
@@ -25,6 +26,7 @@ void main() => runApp(
           ChangeNotifierProvider(create: (_) => EffectProvider()),
           ChangeNotifierProvider(create: (context) => KeysProvider()),
           ChangeNotifierProvider(create: (context) => WorkspaceProvider()),
+          ChangeNotifierProvider(create: (context) => ScrollbarProvider()),
         ],
         child: const MyApp(),
       ),

@@ -30,6 +30,12 @@ class WorkspaceProvider with ChangeNotifier {
   /// [_selectorVisible] determines overlay selectors visibility.
   bool _selectorVisible = false;
 
+  /// [keyboardPosLeft] holds the left position of the keyboard in workspace.
+  double? keyboardPosLeft;
+
+  /// [keyboardPosTop] holds the top position of the keyboard in workspace.
+  double? keyboardPosTop;
+
   bool get selectorVisible => _selectorVisible;
 
   /// [_workspaceRect] returns a [Rect] of the rendered workspace stack.
@@ -744,12 +750,12 @@ class WorkspaceProvider with ChangeNotifier {
           ..highlightLTWH = LTWH(0.0, 0.0, 0.0, 0.0)
           ..resizableLTWH = LTWH(left - halfSize, top - halfSize, size, size);
 
-        debugPrint('layer null ${_layersProvider?.layeritems.length}');
+        // debugPrint('layer null ${_layersProvider?.layeritems.length}');
       } else {
         // layer exist but need to reinsert as it's index may have changed.
         _deleteLayerLTWH(layer.id);
 
-        debugPrint('layer exist ${_layersProvider?.layeritems.length}');
+        // debugPrint('layer exist ${_layersProvider?.layeritems.length}');
       }
 
       // add the layerLTHW to the map.
@@ -800,5 +806,63 @@ class WorkspaceProvider with ChangeNotifier {
   /// [_deleteLayerLTWH] removes a entry from [layersLTWH] with key matching [id].
   void _deleteLayerLTWH(int id) {
     layersLTWH.remove('$id');
+  }
+
+  /// [recenter] sets the left and top position of the workspace children
+  void recenter(BoxConstraints constraints) {
+    if (keyboardPosLeft == null || keyboardPosTop == null) {
+      keyboardPosLeft = (constraints.maxWidth - scrollOffset!) / 5;
+      keyboardPosTop = (constraints.maxHeight - scrollOffset!) / 8;
+    }
+  }
+
+  void updateKeyboardPosLeft(bool scrolling, DragUpdateDetails details) {
+    if (scrolling) {
+      keyboardPosLeft = keyboardPosLeft! - details.delta.dx;
+
+      // update layers overlay selector position
+      layersLTWH.forEach(
+        (key, value) {
+          // update highlight left position
+          if (value.highlightLTWH != null) {
+            value.highlightLTWH?.left =
+                value.highlightLTWH!.left! - details.delta.dx;
+          }
+
+          // update resizable left position
+          if (value.resizableLTWH != null) {
+            value.resizableLTWH?.left =
+                value.resizableLTWH!.left! - details.delta.dx;
+          }
+        },
+      );
+
+      notifyListeners();
+    }
+  }
+
+  void updateKeyboardPosTop(bool scrolling, DragUpdateDetails details) {
+    if (scrolling) {
+      keyboardPosTop = keyboardPosTop! - details.delta.dy;
+
+      // update layers overlay selector position
+      layersLTWH.forEach(
+        (key, value) {
+          // update highlight top position
+          if (value.highlightLTWH != null) {
+            value.highlightLTWH?.top =
+                value.highlightLTWH!.top! - details.delta.dy;
+          }
+
+          // update resizable top position
+          if (value.resizableLTWH != null) {
+            value.resizableLTWH?.top =
+                value.resizableLTWH!.top! - details.delta.dy;
+          }
+        },
+      );
+
+      notifyListeners();
+    }
   }
 }
