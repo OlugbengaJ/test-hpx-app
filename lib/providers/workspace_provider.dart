@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/globals.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/overlay_selector.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/draggable_region.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/box_zone.dart';

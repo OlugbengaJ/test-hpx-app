@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/globals.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/overlay_selector.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/draggable_region.dart';
 
 class CustomVScrollbar extends StatelessWidget {
   /// [CustomVScrollbar] creates a vertical scrollbar.
