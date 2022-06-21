@@ -33,6 +33,8 @@ class _WorkspaceState extends State<Workspace>
   static const double _zoomOutThreshold = 60;
   static const double _buttonSize = 32.0;
 
+  bool _resetZoom = false;
+
   // static const Duration _duration = Duration(milliseconds: 50);
   // Timer _timer = Timer.periodic(Duration.zero, ((t) {}));
 
@@ -45,6 +47,7 @@ class _WorkspaceState extends State<Workspace>
     if (value != null) {
       if (value < _zoomOutThreshold) {
         value = _zoomOutThreshold;
+        _resetZoom = true;
       } else if (value > _zoomInThreshold) {
         value = _zoomInThreshold;
       }
@@ -82,11 +85,14 @@ class _WorkspaceState extends State<Workspace>
     // });
 
     if (_zoomValue == _zoomInThreshold) return;
+
+    _resetZoom = false;
     zoomTextSubmitted('${_zoomValue + 10}');
   }
 
   /// [zoomExpand] sets the zoomValue to half the zoomIn threshold.
   void zoomExpand() {
+    _resetZoom = false;
     zoomTextSubmitted('${_zoomInThreshold / 1.5}');
   }
 
@@ -102,11 +108,14 @@ class _WorkspaceState extends State<Workspace>
     //   zoomTextSubmitted('${_zoomValue - 1}');
     // });
     if (_zoomValue == _zoomOutThreshold) return;
+
+    _resetZoom = false;
     zoomTextSubmitted('${_zoomValue - 10}');
   }
 
   /// [zoomCollapse] sets the zoomValue to the zoomOut threshold.
   void zoomCollapse() {
+    _resetZoom = true;
     zoomTextSubmitted('$_zoomOutThreshold');
   }
 
@@ -250,7 +259,7 @@ class _WorkspaceState extends State<Workspace>
             child: LayoutBuilder(
               builder: (_, constraints) {
                 // set the keyboard center
-                workspaceProvider.recenter(constraints);
+                workspaceProvider.recenter(constraints, _resetZoom);
 
                 return Stack(
                   children: [
@@ -291,8 +300,13 @@ class _WorkspaceState extends State<Workspace>
                     Consumer<ScrollbarProvider>(
                         builder: (context, scrollProvider, child) {
                       // initialize vertical scroll offset
-                      scrollProvider.initVerticalScroll(constraints,
-                          workspaceProvider.scrollOffset, _zoomScale);
+                      scrollProvider.initVerticalScroll(
+                          constraints,
+                          workspaceProvider.scrollOffset,
+                          _zoomValue,
+                          _zoomOutThreshold,
+                          _zoomInThreshold,
+                          reset: _resetZoom);
 
                       return CustomVScrollbar(
                         top: 0,
@@ -308,17 +322,21 @@ class _WorkspaceState extends State<Workspace>
                           final isScroll =
                               scrollProvider.onPanVertical(details);
                           workspaceProvider.updateKeyboardPosTop(
-                              isScroll, details);
+                              isScroll, details, _zoomScale / _zoomScaleFactor);
                         },
                         onTapMinus: () {
                           final scrollDetails = scrollProvider.onTapUp();
                           workspaceProvider.updateKeyboardPosTop(
-                              scrollDetails.scrolling, scrollDetails.details);
+                              scrollDetails.scrolling,
+                              scrollDetails.details,
+                              _zoomScale / _zoomScaleFactor);
                         },
                         onTapPlus: () {
                           final scrollDetails = scrollProvider.onTapDown();
                           workspaceProvider.updateKeyboardPosTop(
-                              scrollDetails.scrolling, scrollDetails.details);
+                              scrollDetails.scrolling,
+                              scrollDetails.details,
+                              _zoomScale / _zoomScaleFactor);
                         },
                       );
                     }),
@@ -332,7 +350,8 @@ class _WorkspaceState extends State<Workspace>
                           workspaceProvider.scrollOffset,
                           _zoomValue,
                           _zoomOutThreshold,
-                          _zoomInThreshold);
+                          _zoomInThreshold,
+                          reset: _resetZoom);
 
                       return CustomHScrollbar(
                         start: 0,
@@ -348,17 +367,21 @@ class _WorkspaceState extends State<Workspace>
                           final isScroll =
                               scrollProvider.onPanHorizontal(details);
                           workspaceProvider.updateKeyboardPosLeft(
-                              isScroll, details);
+                              isScroll, details, _zoomScale / _zoomScaleFactor);
                         },
                         onTapMinus: () {
                           final scrollDetails = scrollProvider.onTapLeft();
                           workspaceProvider.updateKeyboardPosLeft(
-                              scrollDetails.scrolling, scrollDetails.details);
+                              scrollDetails.scrolling,
+                              scrollDetails.details,
+                              _zoomScale / _zoomScaleFactor);
                         },
                         onTapPlus: () {
                           final scrollDetails = scrollProvider.onTapRight();
                           workspaceProvider.updateKeyboardPosLeft(
-                              scrollDetails.scrolling, scrollDetails.details);
+                              scrollDetails.scrolling,
+                              scrollDetails.details,
+                              _zoomScale / _zoomScaleFactor);
                         },
                       );
                     }),

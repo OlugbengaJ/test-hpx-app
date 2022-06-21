@@ -809,8 +809,8 @@ class WorkspaceProvider with ChangeNotifier {
   }
 
   /// [recenter] sets the left and top position of the workspace children
-  void recenter(BoxConstraints constraints) {
-    if (keyboardPosLeft == null || keyboardPosTop == null) {
+  void recenter(BoxConstraints constraints, bool reset) {
+    if (keyboardPosLeft == null || keyboardPosTop == null || reset) {
       keyboardPosLeft = (constraints.maxWidth - scrollOffset!) / 5;
       keyboardPosTop = (constraints.maxHeight - scrollOffset!) / 8;
     }
@@ -820,23 +820,23 @@ class WorkspaceProvider with ChangeNotifier {
   ///
   /// [keyboardPosLeft] is consumed by the keyboard portion of the workspace
   /// to position its children's left i.e. keyboard and overlay selectors.
-  void updateKeyboardPosLeft(bool scrolling, DragUpdateDetails details) {
+  void updateKeyboardPosLeft(
+      bool scrolling, DragUpdateDetails details, double scale) {
     if (scrolling) {
-      keyboardPosLeft = keyboardPosLeft! - details.delta.dx;
+      final dx = details.delta.dx * scale;
+      keyboardPosLeft = keyboardPosLeft! - dx;
 
       // update layers overlay selector position
       layersLTWH.forEach(
         (key, value) {
           // update highlight left position
           if (value.highlightLTWH != null) {
-            value.highlightLTWH?.left =
-                value.highlightLTWH!.left! - details.delta.dx;
+            value.highlightLTWH?.left = value.highlightLTWH!.left! - dx;
           }
 
           // update resizable left position
           if (value.resizableLTWH != null) {
-            value.resizableLTWH?.left =
-                value.resizableLTWH!.left! - details.delta.dx;
+            value.resizableLTWH?.left = value.resizableLTWH!.left! - dx;
           }
         },
       );
@@ -849,23 +849,23 @@ class WorkspaceProvider with ChangeNotifier {
   ///
   /// [keyboardPosTop] is consumed by the keyboard portion of the workspace
   /// to position its children's top i.e. keyboard and overlay selectors.
-  void updateKeyboardPosTop(bool scrolling, DragUpdateDetails details) {
+  void updateKeyboardPosTop(
+      bool scrolling, DragUpdateDetails details, double scale) {
     if (scrolling) {
-      keyboardPosTop = keyboardPosTop! - details.delta.dy;
+      final dy = details.delta.dy * scale;
+      keyboardPosTop = keyboardPosTop! - dy;
 
       // update layers overlay selector position
       layersLTWH.forEach(
         (key, value) {
           // update highlight top position
           if (value.highlightLTWH != null) {
-            value.highlightLTWH?.top =
-                value.highlightLTWH!.top! - details.delta.dy;
+            value.highlightLTWH?.top = value.highlightLTWH!.top! - dy;
           }
 
           // update resizable top position
           if (value.resizableLTWH != null) {
-            value.resizableLTWH?.top =
-                value.resizableLTWH!.top! - details.delta.dy;
+            value.resizableLTWH?.top = value.resizableLTWH!.top! - dy;
           }
         },
       );
