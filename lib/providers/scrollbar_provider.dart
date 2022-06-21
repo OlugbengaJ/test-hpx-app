@@ -37,7 +37,7 @@ class ScrollbarProvider with ChangeNotifier {
     final width = constraints.maxWidth - (3 * offset!);
 
     // determine the ratio change in scale
-    final scaleRatio = _scaleChange(scale, scaleFactorH);
+    double scaleRatio = _scaleChange(scale, scaleFactorH);
 
     if (scale != scaleFactorH) {
       scaleFactorH = scale;
@@ -46,10 +46,41 @@ class ScrollbarProvider with ChangeNotifier {
         // set thumb to scale fraction of width.
         thumbSizeH = width * scale;
         _left = (width - thumbSizeH!) / 2;
-      } else if (scaleRatio > 0) {
-        thumbSizeH = (thumbSizeH! - (thumbSizeH! * scaleRatio)).abs();
+        // } else if (scaleRatio > 0) {
+        //   thumbSizeH = (thumbSizeH! - (thumbSizeH! * scaleRatio)).abs();
       } else {
-        thumbSizeH = thumbSizeH! + (thumbSizeH! * scaleRatio).abs();
+        final g = (thumbSizeH! * scaleRatio).abs();
+        int multiplier = 0;
+
+        if (scaleRatio > 1) {
+          // positive change
+          while (true) {
+            scaleRatio--;
+            multiplier++;
+
+            if (scaleRatio < 1) break;
+          }
+
+          thumbSizeH = (thumbSizeH! / multiplier) - (thumbSizeH! * scaleRatio);
+        } else if (scaleRatio < 0) {
+          // negative change
+          while (true) {
+            scaleRatio++;
+            multiplier++;
+
+            if (scaleRatio > 0) break;
+          }
+
+          thumbSizeH = (thumbSizeH! * (multiplier - scaleRatio));
+        }
+
+        // if (scaleRatio >= 1) {
+        //   final s = g - 1;
+        //   thumbSizeH = thumbSizeH! + (thumbSizeH! * s);
+        // } else {
+        //   thumbSizeH = thumbSizeH! + (thumbSizeH! - g);
+        // }
+        // thumbSizeH = thumbSizeH! + (thumbSizeH! * scaleRatio).abs();
       }
     }
 
