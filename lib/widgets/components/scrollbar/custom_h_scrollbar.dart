@@ -58,7 +58,7 @@ class CustomHScrollbar extends StatelessWidget {
                 child: InkWell(
                   onTap: onTapMinus,
                   splashColor: primaryColor,
-                  child: Icon(Icons.arrow_left, size: buttonSize),
+                  child: Icon(Icons.arrow_back, size: buttonSize),
                 ),
               ),
             ),
@@ -90,7 +90,7 @@ class CustomHScrollbar extends StatelessWidget {
                 child: InkWell(
                   onTap: onTapPlus,
                   splashColor: primaryColor,
-                  child: Icon(Icons.arrow_right, size: buttonSize),
+                  child: Icon(Icons.arrow_forward, size: buttonSize),
                 ),
               ),
             ),

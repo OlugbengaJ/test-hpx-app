@@ -327,8 +327,12 @@ class _WorkspaceState extends State<Workspace>
                     Consumer<ScrollbarProvider>(
                         builder: (context, scrollProvider, child) {
                       // initialize horizontal scroll offset
-                      scrollProvider.initHorizontalScroll(constraints,
-                          workspaceProvider.scrollOffset, _zoomScale);
+                      scrollProvider.initHorizontalScroll(
+                          constraints,
+                          workspaceProvider.scrollOffset,
+                          _zoomValue,
+                          _zoomOutThreshold,
+                          _zoomInThreshold);
 
                       return CustomHScrollbar(
                         start: 0,

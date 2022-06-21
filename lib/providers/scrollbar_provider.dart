@@ -16,6 +16,7 @@ class ScrollbarProvider with ChangeNotifier {
 
   /// [thumbSizeH] size of the horizontal thumb.
   double? thumbSizeH;
+  double? initThumbSizeH;
 
   /// [thumbSizeV] size of the vertical thumb.
   double? thumbSizeV;
@@ -32,61 +33,65 @@ class ScrollbarProvider with ChangeNotifier {
   }
 
   /// [initHorizontalScroll] sets the horizontal thumb and offset on changes.
-  void initHorizontalScroll(
-      BoxConstraints constraints, double? offset, double scale) {
+  void initHorizontalScroll(BoxConstraints constraints, double? offset,
+      double scale, double minScale, double maxScale) {
     final width = constraints.maxWidth - (3 * offset!);
+
+    if (scaleFactorH == null) {
+      scaleFactorH = maxScale - minScale;
+      initThumbSizeH = width * scale / 100;
+      _left = (width - initThumbSizeH!) / 2;
+    }
+
+    final scaleDiff = (scale - minScale + 10) * 1.4;
+    thumbSizeH = initThumbSizeH! - scaleDiff;
 
     // determine the ratio change in scale
     double scaleRatio = _scaleChange(scale, scaleFactorH);
 
-    if (scale != scaleFactorH) {
-      scaleFactorH = scale;
+    // if (scale != scaleFactorH) {
+    // if (scaleRatio == 0) {
+    //   // set thumb to scale fraction of width.
+    //   thumbSizeH = initThumbSizeH;
+    //   _left = (width - thumbSizeH!) / 2;
+    // } else {
+    //   int multiplier = 1;
 
-      if (scaleRatio == 0) {
-        // set thumb to scale fraction of width.
-        thumbSizeH = width * scale;
-        _left = (width - thumbSizeH!) / 2;
-        // } else if (scaleRatio > 0) {
-        //   thumbSizeH = (thumbSizeH! - (thumbSizeH! * scaleRatio)).abs();
-      } else {
-        final g = (thumbSizeH! * scaleRatio).abs();
-        int multiplier = 0;
+    //   if (scaleRatio > 0) {
+    //     // positive change
+    //     while (true) {
+    //       scaleRatio--;
+    //       if (scaleRatio < 1) break;
+    //       multiplier++;
+    //     }
 
-        if (scaleRatio > 1) {
-          // positive change
-          while (true) {
-            scaleRatio--;
-            multiplier++;
+    //     thumbSizeH = (thumbSizeH! / multiplier) -
+    //         (thumbSizeH! * (multiplier + scaleRatio));
+    //   } else if (scaleRatio < 0) {
+    //     // negative change
+    //     while (true) {
+    //       scaleRatio++;
+    //       multiplier++;
 
-            if (scaleRatio < 1) break;
-          }
+    //       if (scaleRatio > 0) break;
+    //     }
 
-          thumbSizeH = (thumbSizeH! / multiplier) - (thumbSizeH! * scaleRatio);
-        } else if (scaleRatio < 0) {
-          // negative change
-          while (true) {
-            scaleRatio++;
-            multiplier++;
+    //     thumbSizeH = (thumbSizeH! * multiplier) + (thumbSizeH! / scaleRatio);
+    //   }
 
-            if (scaleRatio > 0) break;
-          }
+    //   // if (scaleRatio >= 1) {
+    //   //   final s = g - 1;
+    //   //   thumbSizeH = thumbSizeH! + (thumbSizeH! * s);
+    //   // } else {
+    //   //   thumbSizeH = thumbSizeH! + (thumbSizeH! - g);
+    //   // }
+    //   // thumbSizeH = thumbSizeH! + (thumbSizeH! * scaleRatio).abs();
+    // }
+    // // }
 
-          thumbSizeH = (thumbSizeH! * multiplier) + (thumbSizeH! / scaleRatio);
-        }
-
-        // if (scaleRatio >= 1) {
-        //   final s = g - 1;
-        //   thumbSizeH = thumbSizeH! + (thumbSizeH! * s);
-        // } else {
-        //   thumbSizeH = thumbSizeH! + (thumbSizeH! - g);
-        // }
-        // thumbSizeH = thumbSizeH! + (thumbSizeH! * scaleRatio).abs();
-      }
-    }
-
-    if (_left! > width - thumbSizeH!) {
-      _left = (width - thumbSizeH!) / 2;
-    }
+    // if (_left! > width - thumbSizeH!) {
+    //   _left = (width - thumbSizeH!) / 2;
+    // }
 
     // debugPrint(
     //     'Hscroll scale $scale, percent $scaleRatio, thumb $thumbSizeH, left $left, width $width');
