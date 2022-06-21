@@ -18,6 +18,8 @@ class CustomHScrollbar extends StatelessWidget {
     required this.primaryColor,
     this.secondaryColor,
     this.onPanHorizontal,
+    this.onTapPlus,
+    this.onTapMinus,
   }) : super(key: key);
 
   final double? start;
@@ -32,6 +34,9 @@ class CustomHScrollbar extends StatelessWidget {
   // final void Function(DragDownDetails, DraggableRegionName)? onPanDown;
   final void Function(DragUpdateDetails, DraggableRegionName)? onPanHorizontal;
   // final void Function(DragEndDetails details)? onPanEnd;
+
+  final VoidCallback? onTapPlus;
+  final VoidCallback? onTapMinus;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +56,7 @@ class CustomHScrollbar extends StatelessWidget {
               child: Ink(
                 color: primaryColor,
                 child: InkWell(
-                  onTap: () {},
+                  onTap: onTapMinus,
                   splashColor: primaryColor,
                   child: Icon(Icons.arrow_left, size: buttonSize),
                 ),
@@ -83,7 +88,7 @@ class CustomHScrollbar extends StatelessWidget {
               child: Ink(
                 color: primaryColor,
                 child: InkWell(
-                  onTap: () {},
+                  onTap: onTapPlus,
                   splashColor: primaryColor,
                   child: Icon(Icons.arrow_right, size: buttonSize),
                 ),

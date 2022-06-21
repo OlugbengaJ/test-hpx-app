@@ -47,7 +47,7 @@ class ScrollbarProvider with ChangeNotifier {
         thumbSizeH = width * scale;
         _left = (width - thumbSizeH!) / 2;
       } else if (scaleRatio > 0) {
-        thumbSizeH = thumbSizeH! - (thumbSizeH! * scaleRatio);
+        thumbSizeH = (thumbSizeH! - (thumbSizeH! * scaleRatio)).abs();
       } else {
         thumbSizeH = thumbSizeH! + (thumbSizeH! * scaleRatio).abs();
       }
@@ -57,8 +57,8 @@ class ScrollbarProvider with ChangeNotifier {
       _left = (width - thumbSizeH!) / 2;
     }
 
-    debugPrint(
-        'Hscroll scale $scale, percent $scaleRatio, thumb $thumbSizeH, left $left, width $width');
+    // debugPrint(
+    //     'Hscroll scale $scale, percent $scaleRatio, thumb $thumbSizeH, left $left, width $width');
   }
 
   /// [initVerticalScroll] sets the vertical thumb and offset on changes.
@@ -77,7 +77,7 @@ class ScrollbarProvider with ChangeNotifier {
         thumbSizeV = height * scale;
         _top = (height - thumbSizeV!) / 2;
       } else if (scaleRatio > 0) {
-        thumbSizeV = thumbSizeV! - (thumbSizeV! * scaleRatio);
+        thumbSizeV = (thumbSizeV! - (thumbSizeV! * scaleRatio)).abs();
         // _top = _top! - (_top! * percent);
       } else {
         thumbSizeV = thumbSizeV! + (thumbSizeV! * scaleRatio).abs();
@@ -91,8 +91,8 @@ class ScrollbarProvider with ChangeNotifier {
       _top = (height - thumbSizeV!) / 2;
     }
 
-    debugPrint(
-        'Vscroll scale $scale, percent $scaleRatio, thumb $thumbSizeV, top $top, height $height');
+    // debugPrint(
+    //     'Vscroll scale $scale, percent $scaleRatio, thumb $thumbSizeV, top $top, height $height');
   }
 
   /// [hScrollSize] returns the size of the horizontal scroll track through a global key.
@@ -141,6 +141,68 @@ class ScrollbarProvider with ChangeNotifier {
     return false;
   }
 
+  /// [onTapUp] handles the scroll up button.
+  ScrollDetails onTapUp() {
+    double diff = -15.0;
+
+    if (_top! + diff < 0) {
+      // top cannot be less than 0, hence set diff to negative top.
+      diff = -_top!;
+    }
+
+    final details =
+        DragUpdateDetails(globalPosition: Offset.zero, delta: Offset(0, diff));
+
+    return ScrollDetails(onPanVertical(details), details);
+  }
+
+  /// [onTapDown] handles the scroll down button.
+  ScrollDetails onTapDown() {
+    double diff = 15.0;
+
+    if (_top! + diff > vScrollSize.height - thumbSizeV!) {
+      // top cannot exceed height of track minus thumb,
+      // hence set top to difference remaining.
+      diff = vScrollSize.height - thumbSizeV! - _top!;
+    }
+
+    final details =
+        DragUpdateDetails(globalPosition: Offset.zero, delta: Offset(0, diff));
+
+    return ScrollDetails(onPanVertical(details), details);
+  }
+
+  /// [onTapLeft] handles the scroll left button.
+  ScrollDetails onTapLeft() {
+    double diff = -15.0;
+
+    if (_left! + diff < 0) {
+      // left cannot be less than 0, hence set diff to negative left.
+      diff = -_left!;
+    }
+
+    final details =
+        DragUpdateDetails(globalPosition: Offset.zero, delta: Offset(diff, 0));
+
+    return ScrollDetails(onPanHorizontal(details), details);
+  }
+
+  /// [onTapRight] handles the scroll right button.
+  ScrollDetails onTapRight() {
+    double diff = 15.0;
+
+    if (_left! + diff > hScrollSize.width - thumbSizeH!) {
+      // left cannot exceed width of track minus thumb,
+      // hence set left to difference remaining.
+      diff = hScrollSize.width - thumbSizeH! - _left!;
+    }
+
+    final details =
+        DragUpdateDetails(globalPosition: Offset.zero, delta: Offset(diff, 0));
+
+    return ScrollDetails(onPanHorizontal(details), details);
+  }
+
   void onPanDown(DragDownDetails details) {
     // drag started
   }
@@ -148,4 +210,12 @@ class ScrollbarProvider with ChangeNotifier {
   void onPanEnd(DragEndDetails details) {
     // drag ended
   }
+}
+
+class ScrollDetails {
+  /// [ScrollDetails] returns scrolling state and [DragUpdateDetails].
+  const ScrollDetails(this.scrolling, this.details);
+
+  final DragUpdateDetails details;
+  final bool scrolling;
 }
