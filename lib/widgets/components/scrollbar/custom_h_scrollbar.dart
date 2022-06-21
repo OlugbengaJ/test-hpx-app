@@ -1,32 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/overlay_selector.dart';
+import 'package:hpx/apps/z_light/globals.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/draggable_region.dart';
 
 class CustomHScrollbar extends StatelessWidget {
   /// [CustomHScrollbar] creates a horizontal scrollbar.
   /// Only two out of the three values ([start], [end]) set the length,
   /// while [bottom] sets the vertical position of the scrollbar.
-  /// The height of the scrollbar and icons is defined by [size].
+  /// The height of the scrollbar and icons is defined by [buttonSize].
   const CustomHScrollbar({
     Key? key,
     this.start,
     this.end,
     this.bottom,
-    this.size,
-    this.trackSize,
+    this.buttonSize,
+    this.thumbSize,
+    this.thumbOffset,
     required this.primaryColor,
     this.secondaryColor,
-    this.onDragHandler,
+    this.onPanHorizontal,
   }) : super(key: key);
 
   final double? start;
   final double? end;
   final double? bottom;
-  final double? size;
-  final double? trackSize;
+  final double? buttonSize;
+  final double? thumbSize;
+  final double? thumbOffset;
   final Color? primaryColor;
   final Color? secondaryColor;
 
-  final VoidCallback? onDragHandler;
+  // final void Function(DragDownDetails, DraggableRegionName)? onPanDown;
+  final void Function(DragUpdateDetails, DraggableRegionName)? onPanHorizontal;
+  // final void Function(DragEndDetails details)? onPanEnd;
 
   @override
   Widget build(BuildContext context) {
@@ -37,39 +42,50 @@ class CustomHScrollbar extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.zero,
         color: secondaryColor,
-        height: size,
+        height: buttonSize,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            // left scroll button
             Material(
               child: Ink(
                 color: primaryColor,
                 child: InkWell(
                   onTap: () {},
                   splashColor: primaryColor,
-                  child: Icon(Icons.arrow_left, size: size),
+                  child: Icon(Icons.arrow_left, size: buttonSize),
                 ),
               ),
             ),
-            DraggableRegion(
-              name: DraggableRegionName.center,
-              cursor: SystemMouseCursors.grab,
-              color: primaryColor,
-              width: trackSize,
-              height: size,
-              onPanDown: (details, name) =>
-                  debugPrint('hS down $name $details'),
-              onPanUpdate: (details, name) =>
-                  debugPrint('hS update $name $details'),
-              onPanEnd: (details) => debugPrint('hS end $details'),
+
+            // thumb scroll
+            Expanded(
+              key: hScrollbarKey,
+              child: Stack(
+                children: [
+                  Positioned(
+                    left: thumbOffset,
+                    child: DraggableRegion(
+                      name: DraggableRegionName.center,
+                      cursor: SystemMouseCursors.grab,
+                      color: primaryColor,
+                      width: thumbSize,
+                      height: buttonSize,
+                      onPanUpdate: onPanHorizontal,
+                    ),
+                  ),
+                ],
+              ),
             ),
+
+            // right scroll button
             Material(
               child: Ink(
                 color: primaryColor,
                 child: InkWell(
                   onTap: () {},
                   splashColor: primaryColor,
-                  child: Icon(Icons.arrow_right, size: size),
+                  child: Icon(Icons.arrow_right, size: buttonSize),
                 ),
               ),
             ),

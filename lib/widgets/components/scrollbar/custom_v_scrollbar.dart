@@ -1,32 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/overlay_selector.dart';
+import 'package:hpx/apps/z_light/globals.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/draggable_region.dart';
 
 class CustomVScrollbar extends StatelessWidget {
   /// [CustomVScrollbar] creates a vertical scrollbar.
   /// Only two out of the three values ([top], [bottom]) set the height,
   /// while [end] sets the horizontal position of the scrollbar.
-  /// The width of the scrollbar and icons is defined by [size].
+  /// The width of the scrollbar and icons is defined by [buttonSize].
   const CustomVScrollbar({
     Key? key,
     this.top,
     this.end,
     this.bottom,
-    this.size,
-    this.trackSize,
-    this.primaryColor,
+    this.buttonSize,
+    this.thumbSize,
+    this.thumbOffset,
+    required this.primaryColor,
     this.secondaryColor,
-    this.onDragHandler,
+    this.onPanVertical,
   }) : super(key: key);
 
   final double? top;
   final double? end;
   final double? bottom;
-  final double? size;
-  final double? trackSize;
+  final double? buttonSize;
+  final double? thumbSize;
+  final double? thumbOffset;
   final Color? primaryColor;
   final Color? secondaryColor;
 
-  final VoidCallback? onDragHandler;
+  // final void Function(DragDownDetails, DraggableRegionName)? onPanDown;
+  final void Function(DragUpdateDetails, DraggableRegionName)? onPanVertical;
+  // final void Function(DragEndDetails details)? onPanEnd;
 
   @override
   Widget build(BuildContext context) {
@@ -37,32 +42,43 @@ class CustomVScrollbar extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.zero,
         color: secondaryColor,
-        width: size,
+        width: buttonSize,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            // up scroll button
             Material(
               child: Ink(
                 color: primaryColor,
                 child: InkWell(
                   onTap: () {},
                   splashColor: primaryColor,
-                  child: Icon(Icons.arrow_drop_up, size: size),
+                  child: Icon(Icons.arrow_drop_up, size: buttonSize),
                 ),
               ),
             ),
-            DraggableRegion(
-              name: DraggableRegionName.center,
-              cursor: SystemMouseCursors.grabbing,
-              color: primaryColor,
-              width: size,
-              height: trackSize,
-              onPanDown: (details, name) =>
-                  debugPrint('vS down $name $details'),
-              onPanUpdate: (details, name) =>
-                  debugPrint('vS update $name $details'),
-              onPanEnd: (details) => debugPrint('vS end $details'),
+
+            // thumb scroll
+            Expanded(
+              key: vScrollbarKey,
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: thumbOffset,
+                    child: DraggableRegion(
+                      name: DraggableRegionName.center,
+                      cursor: SystemMouseCursors.grabbing,
+                      color: primaryColor,
+                      width: buttonSize,
+                      height: thumbSize,
+                      onPanUpdate: onPanVertical,
+                    ),
+                  ),
+                ],
+              ),
             ),
+
+            // down scroll button
             Material(
               child: Ink(
                 color: primaryColor,
@@ -71,7 +87,7 @@ class CustomVScrollbar extends StatelessWidget {
                   splashColor: primaryColor,
                   child: Icon(
                     Icons.arrow_drop_down,
-                    size: size,
+                    size: buttonSize,
                   ),
                 ),
               ),

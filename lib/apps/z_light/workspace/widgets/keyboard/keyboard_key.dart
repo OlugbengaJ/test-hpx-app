@@ -155,14 +155,27 @@ KeyModel _updateKeyInfo(
             break;
           case EnumModes.wave:
             if (layer.mode?.currentColor != null) {
-              final colIndex = getColorIndex(
+              final colorLength = layer.mode!.currentColor.length;
+
+              int colIndex = getColorIndex(
                 boxZone.selectorRect.width,
                 boxZone.selectorRect.left,
                 boxZone.boxRect.left,
-                layer.mode!.currentColor.length,
+                colorLength,
               );
 
               try {
+                // get total chunks posible by dividing 1 by total colors
+                final chunkSize = 1 / colorLength;
+                final animValue =
+                    provider.animValue(speed: layer.mode?.effects.speed);
+
+                // offset the column index by the animation value and chunk
+                final shiftIndex = (animValue! / chunkSize).floor();
+                colIndex = (colIndex + shiftIndex) % colorLength;
+
+                debugPrint('${layer.mode!.currentColor}');
+
                 chip.color = layer.mode!.currentColor[colIndex];
               } catch (e) {
                 // color cast failed.
@@ -199,6 +212,7 @@ KeyModel _updateKeyInfo(
             }
             break;
           default:
+            break;
         }
 
         chip.opacity = layer.visible ? 1 : 0;
