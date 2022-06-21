@@ -46,6 +46,7 @@ class CustomVScrollbar extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            // up scroll button
             Material(
               child: Ink(
                 color: primaryColor,
@@ -56,6 +57,8 @@ class CustomVScrollbar extends StatelessWidget {
                 ),
               ),
             ),
+
+            // thumb scroll
             Expanded(
               key: vScrollbarKey,
               child: Stack(
@@ -74,6 +77,8 @@ class CustomVScrollbar extends StatelessWidget {
                 ],
               ),
             ),
+
+            // down scroll button
             Material(
               child: Ink(
                 color: primaryColor,

@@ -46,10 +46,7 @@ class CustomHScrollbar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // SizedBox(
-            //   width: size,
-            //   height: size,
-            //   child:
+            // left scroll button
             Material(
               child: Ink(
                 color: primaryColor,
@@ -60,7 +57,8 @@ class CustomHScrollbar extends StatelessWidget {
                 ),
               ),
             ),
-            // ),
+
+            // thumb scroll
             Expanded(
               key: hScrollbarKey,
               child: Stack(
@@ -79,10 +77,8 @@ class CustomHScrollbar extends StatelessWidget {
                 ],
               ),
             ),
-            // SizedBox(
-            //   width: size,
-            //   height: size,
-            //   child:
+
+            // right scroll button
             Material(
               child: Ink(
                 color: primaryColor,
@@ -93,7 +89,6 @@ class CustomHScrollbar extends StatelessWidget {
                 ),
               ),
             ),
-            // ),
           ],
         ),
       ),

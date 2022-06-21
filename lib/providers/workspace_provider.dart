@@ -816,6 +816,10 @@ class WorkspaceProvider with ChangeNotifier {
     }
   }
 
+  /// [updateKeyboardPosTop] changes [keyboardPosLeft] when scrolling horizontally.
+  ///
+  /// [keyboardPosLeft] is consumed by the keyboard portion of the workspace
+  /// to position its children's left i.e. keyboard and overlay selectors.
   void updateKeyboardPosLeft(bool scrolling, DragUpdateDetails details) {
     if (scrolling) {
       keyboardPosLeft = keyboardPosLeft! - details.delta.dx;
@@ -841,6 +845,10 @@ class WorkspaceProvider with ChangeNotifier {
     }
   }
 
+  /// [updateKeyboardPosTop] changes [keyboardPosTop] when scrolling vertically.
+  ///
+  /// [keyboardPosTop] is consumed by the keyboard portion of the workspace
+  /// to position its children's top i.e. keyboard and overlay selectors.
   void updateKeyboardPosTop(bool scrolling, DragUpdateDetails details) {
     if (scrolling) {
       keyboardPosTop = keyboardPosTop! - details.delta.dy;
