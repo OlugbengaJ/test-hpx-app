@@ -2,39 +2,59 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:hpx/providers/layers_provider/layers.dart';
-import 'package:hpx/utils/constants.dart';
+import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/widget/image_mode_provder.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
 class ImagePreset extends StatefulWidget {
-  const ImagePreset({Key? key}) : super(key: key);
+  // ImagePreset({Key? key}) : super(key: key);
 
   @override
   State<ImagePreset> createState() => _ImagePresetState();
 }
 
 class _ImagePresetState extends State<ImagePreset> {
-  dynamic filePath = const AssetImage(Constants.backdropImage);
+  dynamic filePath;
+
+  //// this function sets the default effect degree value to the degree knob
+  @override
+  void initState() {
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
+    setState(() {
+      filePath =
+          Image.memory(modeProvider.currentMode.effects.imageBytes!).image;
+    });
+    super.initState();
+  }
 
   void _showPhotoLibrary() async {
-    LayersProvider layerProvider =
-        Provider.of<LayersProvider>(context, listen: false);
+    ImageModeProvider imageModeProvider =
+        Provider.of<ImageModeProvider>(context, listen: false);
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
+
     final result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['jpg', 'png', 'jpeg', 'ico'],
     );
     if (result != null) {
       PlatformFile file = result.files.first;
+      imageModeProvider.setImageBytes(File(file.path!).readAsBytesSync());
+      imageModeProvider.extractColors();
+      imageModeProvider.setImageToExtractedEffect(context);
       setState(() {
-        filePath = Image.memory(File(file.path!).readAsBytesSync()).image;
+        filePath =
+            Image.memory(modeProvider.currentMode.effects.imageBytes!).image;
       });
     }
-    layerProvider.toolsEffectsUpdated();
   }
 
   @override
   Widget build(BuildContext context) {
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
     return Container(
       margin: const EdgeInsets.only(top: 20, bottom: 20.0),
       child: Row(
@@ -44,9 +64,13 @@ class _ImagePresetState extends State<ImagePreset> {
             children: [
               Container(
                 height: 170,
-                width: MediaQuery.of(context).size.width * 0.14,
+                width: MediaQuery.of(context).size.width * 0.2,
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: filePath, fit: BoxFit.cover),
+                  image: DecorationImage(
+                      image: Image.memory(
+                              modeProvider.currentMode.effects.imageBytes!)
+                          .image,
+                      fit: BoxFit.fill),
                 ),
               ),
               Container(margin: const EdgeInsets.only(top: 5.0)),

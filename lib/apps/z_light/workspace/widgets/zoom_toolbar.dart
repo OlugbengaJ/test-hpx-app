@@ -6,6 +6,7 @@ class ZoomToolbar extends StatelessWidget {
   /// [ZoomToolbar] displays the zoom controls at the bottom of the screen.
   const ZoomToolbar({
     Key? key,
+    this.onSubmitted,
     required this.zoomTextController,
     required this.zoomInHandler,
     required this.zoomExpandHandler,
@@ -14,6 +15,7 @@ class ZoomToolbar extends StatelessWidget {
     required this.zoomEndHandler,
   }) : super(key: key);
 
+  final void Function(String)? onSubmitted;
   final TextEditingController zoomTextController;
   final VoidCallback zoomInHandler;
   final VoidCallback zoomExpandHandler;
@@ -61,6 +63,7 @@ class ZoomToolbar extends StatelessWidget {
                 constraints: const BoxConstraints(maxWidth: 48, maxHeight: 24),
                 child: TextField(
                   controller: zoomTextController,
+                  onSubmitted: onSubmitted,
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   decoration: InputDecoration(

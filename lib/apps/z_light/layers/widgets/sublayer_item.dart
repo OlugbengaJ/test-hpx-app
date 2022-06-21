@@ -5,7 +5,9 @@ import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 
 class SublayerItem extends StatefulWidget {
-  const SublayerItem({ Key? key, required this.layerIndex, required this.layerItemModel }) : super(key: key);
+  const SublayerItem(
+      {Key? key, required this.layerIndex, required this.layerItemModel})
+      : super(key: key);
   final int layerIndex;
   final LayerItemModel layerItemModel;
 
@@ -18,11 +20,8 @@ class _SublayerItemState extends State<SublayerItem> {
   bool _editing = false;
   final double _iconSize = 16;
   TextEditingController _layerNameController = TextEditingController(text: "");
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  GlobalKey<FormFieldState> editLayerKey = GlobalKey<
+      FormFieldState>(); // Each layer should have a key for its editing field
 
   _onHover(isHovering) {
     setState(() {
@@ -30,38 +29,49 @@ class _SublayerItemState extends State<SublayerItem> {
     });
   }
 
+  /// Save the current editing layer if the textfield loses focus
+  _onFocusChange(LayersProvider provider) {
+    provider.saveEditingSubLayer();
+  }
+
   _toggleLayer(LayersProvider provider) {
     LayerItemModel layerItemModel = widget.layerItemModel;
-    provider.toggleVisibility(
-        LayerItemModel(
-          id: layerItemModel.id,
-          layerText: layerItemModel.layerText,
-          visible: !layerItemModel.visible,
-        ),
-        widget.layerIndex);
+    layerItemModel.visible = !layerItemModel.visible;
+    provider.toggleSublayerVisibility(layerItemModel, widget.layerIndex);
   }
 
-  _toggleEditing(value) {
-    setState(() {
-      _editing = !_editing;
-      _layerNameController = TextEditingController(
-          text: widget.layerItemModel.layerText);
-    });
+  _toggleEditing(LayersProvider provider) {
+    /// Check if the layer is not already in edit mode
+    if (!provider.isLayerEditing) {
+      provider.setEditingSubLayerKey(editLayerKey, widget.layerItemModel.id);
+      setState(() {
+        _editing = provider.isTheCurrentSubLayerEditing(editLayerKey);
+        _layerNameController =
+            TextEditingController(text: widget.layerItemModel.layerText);
+      });
+      provider.toggleEditMode(true);
+    } else {
+      /// Save the already editing layer and if the new layer to edit is different then retoggle it
+      provider.saveEditingSubLayer();
+      provider.setEditingLayerKey(editLayerKey, widget.layerItemModel.id);
+      _toggleEditing(provider);
+    }
   }
 
-  _deleteLayer(provider){
+  _deleteLayer(LayersProvider provider) {
     provider.removeSubItem(widget.layerItemModel);
   }
 
-  _onTap(provider) {
-    provider.changeIndex(widget.layerIndex);
+  _onTap(LayersProvider provider) {
+    provider.changeSublayerIndex(widget.layerIndex);
   }
 
-  _onSubmit(value, provider) {
+  _onSubmit(value, LayersProvider provider) {
     setState(() {
       _editing = !_editing;
     });
     provider.updateSublayer(widget.layerItemModel, value);
+    provider.toggleEditMode(false);
   }
 
   @override
@@ -78,7 +88,8 @@ class _SublayerItemState extends State<SublayerItem> {
             highlightColor: Colors.transparent,
             onTap: () => _onTap(_value),
             child: Container(
-              padding: const EdgeInsets.only(top:2, bottom: 2, right: 2, left: 30),
+              padding:
+                  const EdgeInsets.only(top: 2, bottom: 2, right: 2, left: 30),
               color: Colors.black12,
               child: SizedBox(
                 height: 35,
@@ -102,26 +113,43 @@ class _SublayerItemState extends State<SublayerItem> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Row(
-                            children: [                              
-                              (_editing)
+                            children: [
+                              (_editing && _value.isLayerEditing)
                                   ? Container(
                                       height: 30,
                                       constraints: const BoxConstraints(
                                         maxWidth: 80,
                                       ),
-                                      child: TextFormField(
-                                        controller: _layerNameController,
-                                        autofocus: true,
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          overflow: TextOverflow.ellipsis,
+                                      child: Focus(
+                                        onFocusChange: (hasFocus) {
+                                          if (!hasFocus) {
+                                            _onSubmit(_layerNameController.text,
+                                                _value);
+                                          }
+                                        },
+                                        child: Focus(
+                                          onFocusChange: (hasFocus) {
+                                            if (!hasFocus) {
+                                              _onFocusChange(_value);
+                                            }
+                                          },
+                                          child: TextFormField(
+                                            key: editLayerKey,
+                                            controller: _layerNameController,
+                                            autofocus: true,
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            decoration: const InputDecoration(
+                                                focusColor: Colors.white,
+                                                border: OutlineInputBorder(),
+                                                contentPadding:
+                                                    EdgeInsets.all(8)),
+                                            onFieldSubmitted: (value) =>
+                                                _onSubmit(value, _value),
+                                          ),
                                         ),
-                                        decoration: const InputDecoration(
-                                            focusColor: Colors.white,
-                                            border: OutlineInputBorder(),
-                                            contentPadding: EdgeInsets.all(8)),
-                                        onFieldSubmitted: (value) =>
-                                            _onSubmit(value, _value),
                                       ),
                                     )
                                   : Expanded(
@@ -147,7 +175,7 @@ class _SublayerItemState extends State<SublayerItem> {
                                         child: Row(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.end,
-                                          children: [                                            
+                                          children: [
                                             Tooltip(
                                               message: "Edit",
                                               child: InkWell(
@@ -171,7 +199,8 @@ class _SublayerItemState extends State<SublayerItem> {
                                                   color: widget.layerItemModel
                                                       .listDisplayColor,
                                                 ),
-                                                onTap: () => _deleteLayer(value),
+                                                onTap: () =>
+                                                    _deleteLayer(value),
                                               ),
                                             ),
                                           ],

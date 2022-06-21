@@ -6,17 +6,19 @@ class KeyRRectPainter extends CustomPainter {
   ///
   /// The painter uses the clipper to draw actual object on the canvas.
   const KeyRRectPainter({
-    Listenable? repaint,
+    // Listenable? repaint,
     required this.keyModel,
     required this.clipper,
     required this.zoomScale,
-  }) : super(repaint: repaint);
+    this.animation,
+  }) : super(repaint: animation);
 
   final CustomClipper<RRect> clipper;
   final KeyModel keyModel;
   final double zoomScale;
 
-  static const double opacityFactor = 0.4;
+  final Animation<double>? animation;
+
   static const double fontFactor = 0.3;
 
   @override
@@ -44,7 +46,7 @@ class KeyRRectPainter extends CustomPainter {
     //     ..colorFilter = ColorFilter.mode(keyPathColor, BlendMode.luminosity);
     // }
 
-    for (var element in keyModel.chips) {
+    for (var element in keyModel.chipsValues) {
       switch (element.runtimeType) {
         case KeyPaintIcon:
           final iconPaint = element as KeyPaintIcon;
@@ -73,9 +75,9 @@ class KeyRRectPainter extends CustomPainter {
           if (keyPaintRect.showOutline) {
             // display outline stroke around the key to indicate selection.
             Paint paintStroke = Paint()
-              ..blendMode = BlendMode.color
-              ..color = element.color.withOpacity(opacityFactor)
-              ..strokeWidth = 5 * zoomScale
+              // ..blendMode = BlendMode.color
+              ..color = Colors.white
+              ..strokeWidth = 3 * zoomScale
               ..style = PaintingStyle.stroke;
 
             canvas.drawRRect(rrect, paintStroke);
@@ -91,6 +93,12 @@ class KeyRRectPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    // animation not required
+    if (animation == null) return false;
+
+    // // animation required
+    // final old = oldDelegate as KeyRRectPainter;
+
     return true;
   }
 }

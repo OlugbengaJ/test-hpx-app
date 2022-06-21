@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
@@ -21,6 +22,22 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
       value: AudioVisualEnum.powerbar,
       icon: Icons.power_input_outlined);
 
+  /// function designed to change the tools and effects sub mode
+  changeSubMode(PickerModel? pickerChoice) {
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
+    modeProvider.setCurrentMode(ToolsModeModel(
+        subMode: pickerChoice?.value,
+        currentColor: modeProvider.currentMode.currentColor,
+        value: modeProvider.currentMode.value,
+        icon: modeProvider.currentMode.icon,
+        effects: modeProvider.currentMode.effects,
+        name: modeProvider.currentMode.name));
+    layerProvider.toolsEffectsUpdated();
+  }
+
   @override
   Widget build(BuildContext context) {
     ModeProvider modeProvider =
@@ -36,9 +53,10 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
                 width: MediaQuery.of(context).size.width * 0.45,
                 child: PickerDropdown(
                     onChange: (PickerModel? returnValue) {
-                      setState(() {
-                        // preset = changeComponent();
-                      });
+                      changeSubMode(returnValue);
+                      // setState(() {
+                      //   // preset = changeComponent();
+                      // });
                     },
                     defaultPicker: _defaultPicker,
                     pickerList: modeProvider.getPickerModes('audiolist'))),
@@ -57,20 +75,33 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          FlatButton(
-                            textColor: (activatedButton == 'Gradient')
-                                ? Colors.grey
-                                : Colors.black,
-                            height: 40.0,
-                            color: (activatedButton == 'Gradient')
-                                ? Colors.black
-                                : Colors.white,
-                            child: const Text('Solid'),
+                          TextButton(
                             onPressed: () {
                               setState(() {
                                 activatedButton = "Solid";
                               });
                             },
+                            style: (activatedButton != 'Solid')
+                                ? textBtnStyleBlack
+                                : textBtnStyleWhite,
+                            child: SizedBox(
+                              height: 40,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'SOLID',
+                                      style: TextStyle(
+                                          color: (activatedButton != 'Solid')
+                                              ? Colors.white
+                                              : Colors.black),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ]),
                   ),
@@ -78,21 +109,34 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          FlatButton(
-                            textColor: (activatedButton != 'Gradient')
-                                ? Colors.grey
-                                : Colors.black,
-                            height: 40.0,
-                            color: (activatedButton != 'Gradient')
-                                ? Colors.black
-                                : Colors.white,
-                            child: Text('Gradient'),
+                          TextButton(
                             onPressed: () {
                               setState(() {
                                 activatedButton = "Gradient";
                               });
                             },
-                          )
+                            style: (activatedButton != 'Gradient')
+                                ? textBtnStyleBlack
+                                : textBtnStyleWhite,
+                            child: SizedBox(
+                              height: 40,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'GRADIENT',
+                                      style: TextStyle(
+                                          color: (activatedButton != 'Gradient')
+                                              ? Colors.white
+                                              : Colors.black),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ]),
                   ),
                 ],
@@ -105,7 +149,8 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
                   children: _colorPickerProvider.generateColorPickerWidget(
                       activatedButton == 'Gradient'
                           ? audioVisualGradientList
-                          : audioVisualSolidList)),
+                          : audioVisualSolidList,
+                      context)),
             ),
           ],
         ));

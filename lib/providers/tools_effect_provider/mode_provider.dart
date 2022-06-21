@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/effects/ambient.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/effects/audio_visualization.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/effects/blinking.dart';
@@ -12,11 +13,14 @@ import 'package:hpx/apps/z_light/tools_effects/widgets/tools/moods.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/tools/shortcut_colors.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/widget/image_mode_provder.dart';
+import 'package:hpx/providers/tools_effect_provider/widget/shortcut_widget_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
+import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
-import 'package:hpx/widgets/theme.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 
@@ -141,6 +145,8 @@ class ModeProvider extends ChangeNotifier {
       modeType: EnumModeType.layers,
       icon: Icons.mood);
 
+  bool isLost = false;
+
   // default variable for settin tools and effects widget in this function
   Widget preset = Container();
 
@@ -176,7 +182,8 @@ class ModeProvider extends ChangeNotifier {
 
   /// function designed to change the tools and effects mode widget and return the chosen widget
   /// also sets the default colors and mode information
-  changeModeComponent(PickerModel? pickerChoice, BuildContext context) {
+  changeModeComponent(
+      PickerModel? pickerChoice, BuildContext context, bool isChange) async {
     // default variable for settin currentcolors in this function
     List<Color> currentColors = [];
     // default variable for settin effects in this function
@@ -185,28 +192,47 @@ class ModeProvider extends ChangeNotifier {
     /// initialize the workspace provider to use to send notification accross the workspace
     WorkspaceProvider workProvider =
         Provider.of<WorkspaceProvider>(context, listen: false);
+    ImageModeProvider imageModeProvider =
+        Provider.of<ImageModeProvider>(context, listen: false);
+    //// set the current effects to the effects provider
+    EffectProvider effectsProvider =
+        Provider.of<EffectProvider>(context, listen: false);
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
+    ShortcutWidgetProvider shortcutWidgetProvider =
+        Provider.of<ShortcutWidgetProvider>(context, listen: false);
+
+    /// if last mode was interactive
+    if (currentMode.value == EnumModes.interactive) {
+      ////  set an notification message for interactive mode
+      workProvider.toggleStripNotification(
+          "Your interactive setting are going to be lost");
+    }
 
     // switch case design to switch and set the values for each mode been selected based on the enum value set by the mode
     switch (pickerChoice!.value) {
       case EnumModes.shortcut:
-        workProvider.toggleModal([Text("Hello World", style: h2Style)]);
         for (var element in shortcutList) {
           currentColors.add(element.colorCode[0]);
         }
+        effects.effectName = pickerChoice.value;
         preset = const ShortcutColorsPreset();
         break;
       case EnumModes.mood:
         currentColors = moodThemesList.first.colorCode;
+        effects.effectName = pickerChoice.value;
         preset = const MoodPreset();
         break;
       case EnumModes.colorproduction:
         currentColors = colorProductionList.first.colorCode;
+        effects.effectName = pickerChoice.value;
         preset = const ColorProductionPreset();
         break;
       case EnumModes.audiovisualizer:
         for (var element in audioVisualSolidList) {
           currentColors.add(element.colorCode[0]);
         }
+        effects.effectName = pickerChoice.value;
         preset = const AudioVisualPreset();
         break;
       case EnumModes.wave:
@@ -219,6 +245,7 @@ class ModeProvider extends ChangeNotifier {
         for (var element in colorcycleDefaultsList.first.colorCode) {
           currentColors.add(element);
         }
+        defaultColorcycleEffectValues.effectName = pickerChoice.value;
         effects = defaultColorcycleEffectValues;
         preset = const ColorCyclePreset();
         break;
@@ -226,6 +253,7 @@ class ModeProvider extends ChangeNotifier {
         for (var element in breathingList) {
           currentColors.add(element.colorCode[0]);
         }
+        defaultBreathingEffectValues.effectName = pickerChoice.value;
         effects = defaultBreathingEffectValues;
         preset = const BreathingPreset();
         break;
@@ -248,11 +276,29 @@ class ModeProvider extends ChangeNotifier {
         preset = const InteractivePreset();
         break;
       case EnumModes.image:
+
+        /// convert the default image into color paltte
+        ByteData image = await rootBundle.load(Constants.defaultImageMode);
         currentColors.add(Colors.transparent);
-        preset = const ImagePreset();
+
+        if (currentMode.effects.imageBytes == null || isChange == false) {
+          imageModeProvider.setImageBytes(image.buffer.asUint8List());
+          effects.imageBytes = image.buffer.asUint8List();
+        }
+        if (currentMode.effects.imageBytes != null) {
+          effects.extractedColors = currentMode.effects.extractedColors;
+          imageModeProvider.setImageBytes(currentMode.effects.imageBytes!);
+        }
+        effects.extractedColors = imageModeProvider.getExtractColors();
+
+        effects.effectName = pickerChoice.value;
+        preset = ImagePreset();
         break;
       case EnumModes.ambient:
         currentColors.add(Colors.transparent);
+        effects.effectName = pickerChoice.value;
+        effects.imageQuality = 50.0;
+        effects.updatePerSecond = 40.0;
         preset = const AmbeintPreset();
         break;
       default:
@@ -262,22 +308,47 @@ class ModeProvider extends ChangeNotifier {
     }
 
     modePicker = pickerChoice;
-
-    //// set the current effects to the effects provider
-    EffectProvider effectsProvider =
-        Provider.of<EffectProvider>(context, listen: false);
     effectsProvider.setCurrentEffect(EffectsModel(
-        effectName: effects.effectName,
-        degree: effects.degree,
-        speed: effects.speed));
+        effectName: (isChange == true)
+            ? currentMode.effects.effectName
+            : effects.effectName,
+        degree:
+            (isChange == true) ? currentMode.effects.degree : effects.degree,
+        imageQuality: (isChange == true)
+            ? currentMode.effects.imageQuality
+            : effects.imageQuality,
+        updatePerSecond: (isChange == true)
+            ? currentMode.effects.updatePerSecond
+            : effects.updatePerSecond,
+        size: (isChange == true) ? currentMode.effects.size : effects.size,
+        extractedColors: (isChange == true)
+            ? currentMode.effects.extractedColors
+            : effects.extractedColors,
+        speed: (isChange == true) ? currentMode.effects.speed : effects.speed,
+        imageBytes: (isChange == true)
+            ? currentMode.effects.imageBytes
+            : effects.imageBytes));
 
     //// set the current mode to the mode been selected and change to and apply all current colors and effects
     setCurrentMode(ToolsModeModel(
-        currentColor: currentColors,
-        value: pickerChoice.value,
-        icon: pickerChoice.icon,
-        effects: effectsProvider.currentEffect!,
-        name: pickerChoice.title));
+        currentColor:
+            (isChange == true) ? currentMode.currentColor : currentColors,
+        value: (isChange == true) ? currentMode.value : pickerChoice.value,
+        icon: (isChange == true) ? currentMode.icon : pickerChoice.icon,
+        shortcutKeys: (isChange == true)
+            ? currentMode.shortcutKeys
+            : shortcutWidgetProvider.keys,
+        modeType:
+            (isChange == true) ? currentMode.modeType : currentMode.modeType,
+        effects: (isChange == true)
+            ? currentMode.effects
+            : effectsProvider.currentEffect!,
+        name: (isChange == true)
+            ? currentMode.name
+            : (currentMode.value == pickerChoice.value)
+                ? currentMode.name
+                : pickerChoice.title));
+    layerProvider.toolsEffectsUpdated();
   }
 
   // get current mode information
@@ -285,10 +356,25 @@ class ModeProvider extends ChangeNotifier {
     return currentMode;
   }
 
+  setShortcutKeys(context, List<List<String>> keys) {
+    ShortcutWidgetProvider shortcutWidgetProvider =
+        Provider.of<ShortcutWidgetProvider>(context, listen: false);
+    for (var element in shortcutWidgetProvider.keys) {
+      shortcutWidgetProvider.addNewCommand(element.first, element.last);
+    }
+    currentMode.shortcutKeys = keys;
+    setCurrentMode(currentMode);
+
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
+    layerProvider.toolsEffectsUpdated();
+  }
+
   // change the mode type for the current mode between sublayer and layer based on the value passed
   setModeType(bool isSubLayer) {
     currentMode.modeType =
-        (isSubLayer == true) ? EnumModeType.sublayer : EnumModeType.layers;
+        (isSubLayer) ? EnumModeType.sublayer : EnumModeType.layers;
+    // print(currentMode.modeType);
     notifyListeners();
   }
 }

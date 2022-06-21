@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -21,12 +23,20 @@ class _ColorCycleState extends State<ColorCyclePreset> {
   void _setSliderValue(double returnValue) {
     EffectProvider effectsProvider =
         Provider.of<EffectProvider>(context, listen: false);
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
     effectsProvider.setCurrentEffect(EffectsModel(
         effectName: effectsProvider.currentEffect?.effectName,
         degree: effectsProvider.currentEffect?.degree,
         speed: returnValue.floorToDouble()));
+
+    modeProvider.setCurrentMode(ToolsModeModel(
+        currentColor: modeProvider.currentMode.currentColor,
+        effects: effectsProvider.currentEffect!,
+        value: modeProvider.currentMode.value,
+        name: modeProvider.currentMode.name));
     layerProvider.toolsEffectsUpdated();
   }
 
@@ -48,20 +58,33 @@ class _ColorCycleState extends State<ColorCyclePreset> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          FlatButton(
-                            textColor: (activatedButton == 'CUSTOM')
-                                ? Colors.grey
-                                : Colors.black,
-                            height: 40.0,
-                            color: (activatedButton == 'CUSTOM')
-                                ? Colors.black
-                                : Colors.white,
-                            child: const Text('DEFAULT'),
+                          TextButton(
                             onPressed: () {
                               setState(() {
                                 activatedButton = "DEFAULT";
                               });
                             },
+                            style: (activatedButton != 'DEFAULT')
+                                ? textBtnStyleBlack
+                                : textBtnStyleWhite,
+                            child: SizedBox(
+                              height: 40,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'DEFAULT',
+                                      style: TextStyle(
+                                          color: (activatedButton != 'DEFAULT')
+                                              ? Colors.white
+                                              : Colors.black),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ]),
                   ),
@@ -69,21 +92,34 @@ class _ColorCycleState extends State<ColorCyclePreset> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          FlatButton(
-                            textColor: (activatedButton != 'CUSTOM')
-                                ? Colors.grey
-                                : Colors.black,
-                            height: 40.0,
-                            color: (activatedButton != 'CUSTOM')
-                                ? Colors.black
-                                : Colors.white,
-                            child: const Text('CUSTOM'),
+                          TextButton(
                             onPressed: () {
                               setState(() {
-                                activatedButton = "CUSTOM";
+                                activatedButton = "Custom";
                               });
                             },
-                          )
+                            style: (activatedButton != 'Custom')
+                                ? textBtnStyleBlack
+                                : textBtnStyleWhite,
+                            child: SizedBox(
+                              height: 40,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'CUSTOM',
+                                      style: TextStyle(
+                                          color: (activatedButton != 'Custom')
+                                              ? Colors.white
+                                              : Colors.black),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ]),
                   ),
                 ],
@@ -99,7 +135,8 @@ class _ColorCycleState extends State<ColorCyclePreset> {
                               _colorPickerProvider.generateColorPickerWidget(
                                   activatedButton == 'DEFAULT'
                                       ? colorcycleDefaultsList
-                                      : colorcycleCustomList))
+                                      : colorcycleCustomList,
+                                  context))
                     ])),
             Container(margin: const EdgeInsets.only(bottom: 10.0)),
             Divider(
@@ -110,13 +147,16 @@ class _ColorCycleState extends State<ColorCyclePreset> {
             Text("Speed", textAlign: TextAlign.left, style: labelStyle),
             Container(margin: const EdgeInsets.only(bottom: 10.0)),
             Slider(
-              value: effectsProvider.currentEffect!.speed!.toDouble(),
+              value: effectsProvider.currentEffect!.speed!.roundToDouble(),
               max: 100,
               min: 0,
               divisions: 100,
-              label: effectsProvider.currentEffect!.speed.toString(),
+              label: effectsProvider.currentEffect!.speed?.round().toString(),
               onChanged: (double value) {
-                _setSliderValue(value);
+                setState(() {
+                  effectsProvider.currentEffect?.speed = value;
+                  _setSliderValue(value);
+                });
               },
             ),
             Row(children: [

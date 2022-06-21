@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hpx/apps/z_light/layers/resizable/provider/resizable.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_list_item.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/utils/common.dart';
+import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
@@ -36,11 +36,9 @@ class _LayersState extends State<Layers> {
   /// [initialLayer] add a default layer to the workspace if there no layer available
   void initialLayer() {
     ModeProvider modeProvider = context.read<ModeProvider>();
-    ResizableProvider resizableProvider = context.read<ResizableProvider>();
 
     LayersProvider provider = context.read<LayersProvider>();
     provider.setModeProvider(modeProvider);
-    provider.setResizableProvider(resizableProvider);
     if (provider.length < 1) {
       _addLayer();
     }
@@ -49,35 +47,39 @@ class _LayersState extends State<Layers> {
   /// [_addLayer] used to add a layer to the available list
   /// use the [ModeProvider] the set the newly created layer name
   _addLayer() {
-    context.read<ResizableProvider>().initialize();
-
     ModeProvider modeProvider = context.read<ModeProvider>();
-
     var provider = context.read<LayersProvider>();
-    int id = 1; // For first element;
-    if (provider.layeritems.isNotEmpty) {
-      for (var element in provider.layeritems) {
-        if (element.id > id) {
-          id = element.id;
+
+    if (!provider.isLayerEditing) {
+      int id = 1; // For first element;
+      if (provider.layeritems.isNotEmpty) {
+        for (var element in provider.layeritems) {
+          if (element.id > id) {
+            id = element.id;
+          }
         }
+        id = id + 1;
       }
-      id = id + 1;
+
+      /// Add a new provider to the layeritems, using the LayersProvider
+
+      LayerItemModel itemModel = LayerItemModel(
+          id: id,
+          layerText: 'Mood',
+          //mode: modeProvider.currentMode,
+          icon: Icons.mood);
+
+      provider.add(itemModel);
+
+      modeProvider.changeModeComponent(
+          PickerModel(
+              title: itemModel.mode!.name,
+              value: itemModel.mode!.value,
+              enabled: true,
+              icon: itemModel.mode!.icon),
+          context,
+          false);
     }
-
-
-    /// Add a new provider to the layeritems, using the LayersProvider
-    provider.add(
-      LayerItemModel(
-        id: id,
-        layerText: "Mood",
-        //mode: modeProvider.currentMode,
-        top: context.read<ResizableProvider>().top,
-        bottom: context.read<ResizableProvider>().bottom,
-        left: context.read<ResizableProvider>().left,
-        right: context.read<ResizableProvider>().right,
-        icon: Icons.mood
-      )
-    );
   }
 
   @override
@@ -93,12 +95,12 @@ class _LayersState extends State<Layers> {
             children: [
               Container(
                 margin: EdgeInsets.zero,
-                child: Text("Layers", style: h5Style),
+                child: Text('Layers', style: h5Style),
               ),
               Container(
                 margin: const EdgeInsets.only(top: 8.0),
                 child: Tooltip(
-                  message: "Add a new Layer",
+                  message: 'Add a new Layer',
                   child: TextButton(
                     onPressed: () => _addLayer(),
                     style: textBtnStyleWhite,
@@ -111,7 +113,7 @@ class _LayersState extends State<Layers> {
                           Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Text(
-                              "Create New Layer",
+                              'Create New Layer',
                               style: TextStyle(color: Colors.black),
                             ),
                           ),
@@ -136,7 +138,7 @@ class _LayersState extends State<Layers> {
                             ScrollController(keepScrollOffset: false),
                         itemBuilder: (BuildContext context, int index) {
                           return Container(
-                            key: Key("$index"),
+                            key: Key('$index'),
                             child: LayerListItem(
                               layerIndex: index,
                               layerItemModel: provider.getItem(index),
