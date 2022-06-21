@@ -47,7 +47,7 @@ class ScrollbarProvider with ChangeNotifier {
         thumbSizeH = width * scale;
         _left = (width - thumbSizeH!) / 2;
       } else if (scaleRatio > 0) {
-        thumbSizeH = thumbSizeH! - (thumbSizeH! * scaleRatio);
+        thumbSizeH = (thumbSizeH! - (thumbSizeH! * scaleRatio)).abs();
       } else {
         thumbSizeH = thumbSizeH! + (thumbSizeH! * scaleRatio).abs();
       }
@@ -77,7 +77,7 @@ class ScrollbarProvider with ChangeNotifier {
         thumbSizeV = height * scale;
         _top = (height - thumbSizeV!) / 2;
       } else if (scaleRatio > 0) {
-        thumbSizeV = thumbSizeV! - (thumbSizeV! * scaleRatio);
+        thumbSizeV = (thumbSizeV! - (thumbSizeV! * scaleRatio)).abs();
         // _top = _top! - (_top! * percent);
       } else {
         thumbSizeV = thumbSizeV! + (thumbSizeV! * scaleRatio).abs();

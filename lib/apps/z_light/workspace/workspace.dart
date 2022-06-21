@@ -255,36 +255,37 @@ class _WorkspaceState extends State<Workspace>
                 return Stack(
                   children: [
                     GestureDetector(
-                        behavior: HitTestBehavior.translucent,
-                        onPanDown: (details) {
-                          workspaceProvider.onPanDown(details);
-                        },
-                        onPanUpdate: (details) =>
-                            workspaceProvider.onPanUpdate(details),
-                        onPanEnd: (details) =>
-                            workspaceProvider.onPanEnd(details),
-                        onPanCancel: () => workspaceProvider.onPanClear(),
-                        child: Stack(
-                          key: workspaceStackKey,
-                          alignment: Alignment.bottomLeft,
-                          fit: StackFit.expand,
-                          children: [
-                            // Keyboard widget takes a zoom scale which is applied to all keys.
-                            // This ensures seamless zooming of the entire keyboard.
-                            Positioned(
-                              left: workspaceProvider.keyboardPosLeft,
-                              top: workspaceProvider.keyboardPosTop,
-                              // alignment: Alignment.center,
-                              child: Keyboard(zoomScale: _zoomScale),
-                            ),
+                      behavior: HitTestBehavior.translucent,
+                      onPanDown: (details) {
+                        workspaceProvider.onPanDown(details);
+                      },
+                      onPanUpdate: (details) =>
+                          workspaceProvider.onPanUpdate(details),
+                      onPanEnd: (details) =>
+                          workspaceProvider.onPanEnd(details),
+                      onPanCancel: () => workspaceProvider.onPanClear(),
+                      child: Stack(
+                        key: workspaceStackKey,
+                        alignment: Alignment.bottomLeft,
+                        fit: StackFit.expand,
+                        children: [
+                          // Keyboard widget takes a zoom scale which is applied to all keys.
+                          // This ensures seamless zooming of the entire keyboard.
+                          Positioned(
+                            left: workspaceProvider.keyboardPosLeft,
+                            top: workspaceProvider.keyboardPosTop,
+                            // alignment: Alignment.center,
+                            child: Keyboard(zoomScale: _zoomScale),
+                          ),
 
-                            if (workspaceProvider.isModalNotify)
-                              ModalNotification(
-                                closeHandler: workspaceProvider.toggleModal,
-                                children: workspaceProvider.modalWidgets,
-                              ),
-                          ],
-                        )),
+                          if (workspaceProvider.isModalNotify)
+                            ModalNotification(
+                              closeHandler: workspaceProvider.toggleModal,
+                              children: workspaceProvider.modalWidgets,
+                            ),
+                        ],
+                      ),
+                    ),
 
                     // Vertical custom scrollbar
                     Consumer<ScrollbarProvider>(
