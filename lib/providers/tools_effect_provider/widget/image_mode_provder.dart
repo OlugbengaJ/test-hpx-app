@@ -67,6 +67,7 @@ class ImageModeProvider extends ChangeNotifier {
         Provider.of<LayersProvider>(context, listen: false);
 
     effectProvider.setCurrentEffect(EffectsModel(
+      imageBytes: imageBytes,
       effectName: effectProvider.currentEffect?.effectName,
       effectType: effectProvider.currentEffect?.effectType,
       extractedColors: extractedMatrix,
