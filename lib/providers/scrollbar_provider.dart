@@ -71,7 +71,7 @@ class ScrollbarProvider with ChangeNotifier {
             if (scaleRatio > 0) break;
           }
 
-          thumbSizeH = (thumbSizeH! * (multiplier - scaleRatio));
+          thumbSizeH = (thumbSizeH! * multiplier) + (thumbSizeH! / scaleRatio);
         }
 
         // if (scaleRatio >= 1) {
