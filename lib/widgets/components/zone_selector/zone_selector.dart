@@ -1,7 +1,3 @@
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:hpx/widgets/components/zone_selector/zone_selector_provider.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +29,6 @@ class ZoneSelector extends StatelessWidget {
     for (var key in widgetsKeys) {
       provider.paintColor(key);
     }
-
   }
 
   _onPanStart(BuildContext context, DragStartDetails details, provider) {
@@ -81,8 +76,8 @@ class ZoneSelector extends StatelessWidget {
           child: Opacity(
             opacity: 0.5,
             child: Container(
-              height: item['size'].height,
-              width: item['size'].width,
+              height: item['size'].size,
+              width: item['size'].size,
               color: Colors.yellow,
             ),
           ),
@@ -134,7 +129,6 @@ class ZoneSelector extends StatelessWidget {
             Stack(
               children: _getHighlightedZone(provider),
             )
-            
           ],
         );
       },

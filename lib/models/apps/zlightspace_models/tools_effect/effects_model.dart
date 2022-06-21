@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 
 //// class interface model for Effects
@@ -17,6 +19,7 @@ class EffectsModel {
       this.imageQuality = 0.0,
       this.effectType,
       this.extractedColors,
+      this.imageBytes,
       this.effectName = "mood"});
 
   /// degree variable with type double
@@ -41,5 +44,8 @@ class EffectsModel {
   dynamic? effectName;
 
   /// effect extractColors for the extract colors matrix from image
-  List? extractedColors;
+  List<List<Color>>? extractedColors;
+
+  /// effect image for the extract colors matrix
+  Uint8List? imageBytes;
 }

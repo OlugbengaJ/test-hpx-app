@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/key_rrect.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
@@ -74,20 +76,17 @@ KeyModel _updateKeyInfo(
   final layers = layersProvider.layeritems;
   final layerIndex = layersProvider.listIndex;
 
-  bool? isBoxZoned;
-
   // holds the existing layer chips that are remain selected.
   List<KeyPaintChip> krect = [];
 
   // clear key selections
-  final layersChipKeys = keyModel.getLayeredChipsqKeys();
+  final layersChipKeys = keyModel.getLayeredChipsKeys();
 
   if (layersChipKeys.isNotEmpty) {
     // TODO: using workspace provider layers selection map could be useful.
 
     // check if the key is selected for each layer, then paint if true
     // key has existing chips; preserve their properties
-    // for (var l in layers) {
     for (var k in layersChipKeys) {
       final chip = keyModel.getChip(k.toString());
 
@@ -110,74 +109,152 @@ KeyModel _updateKeyInfo(
       final layer = layers[i];
       final layerId = layer.id;
 
-      isBoxZoned =
-          provider.isBoxZoned(renderBox, layerId, k: '${keyModel.keyCode}');
+      final boxZone = provider.boxZone(renderBox, layerId);
 
-      if (isBoxZoned == true && layer.visible) {
+      // remove key in layer
+      layer.removeKey(keyModel);
+
+      if (boxZone != null) {
         // insert new chip with the layer id as key
         final chip = KeyPaintRect('$layerId');
 
         if ('${currentLayer.id}' == chip.chipKey) {
           // use the default color for current layer
           chip.color = currentLayer.mode?.currentColor.last;
+          chip.showOutline = true;
         } else {
           // use existing color for non-current layer
           final foundKeys = krect.where((e) => e.chipKey == chip.chipKey);
           if (foundKeys.isNotEmpty) {
             chip.color = foundKeys.first.color;
+            chip.showOutline = false;
           }
         }
 
         // get the current chip in layers
         switch (layer.mode?.value) {
           case EnumModes.blinking:
-            final beginColor = layer.mode?.currentColor.first;
-            final endColor = layer.mode?.currentColor.last;
-            final animColor = provider.animColor(beginColor, endColor,
-                speed: layer.mode?.effects.speed);
-
-            // if (keyModel.keyCode.name.contains('k5')) {
-            //   debugPrint(
-            //       'anim colors ${layer.mode?.currentColor.length} ${animColor?.value} ${layer.mode?.currentColor.first} ${layer.mode?.currentColor.last}');
-            // }
-
-            chip.color = animColor!;
-            chip.opacity = 1;
-            break;
           case EnumModes.breathing:
             final beginColor = layer.mode?.currentColor.first;
             final endColor = layer.mode?.currentColor.last;
-            final animColor = provider.animColor(beginColor, endColor,
+            final animColor = provider.animColor(
+              beginColor,
+              endColor,
+              effect: layer.mode?.value,
+              speed: layer.mode?.effects.speed,
+            );
+
+            chip.color = animColor!;
+            break;
+          case EnumModes.colorcycle:
+            final animColor = provider.animColorTween(
+                layer.mode?.currentColor as List<Color>,
                 speed: layer.mode?.effects.speed);
 
             chip.color = animColor!;
-            chip.opacity = 1;
+            break;
+          case EnumModes.wave:
+            if (layer.mode?.currentColor != null) {
+              final colorLength = layer.mode!.currentColor.length;
+
+              int colIndex = getColorIndex(
+                boxZone.selectorRect.width,
+                boxZone.selectorRect.left,
+                boxZone.boxRect.left,
+                colorLength,
+              );
+
+              try {
+                // get total chunks posible by dividing 1 by total colors
+                final chunkSize = 1 / colorLength;
+                final animValue =
+                    provider.animValue(speed: layer.mode?.effects.speed);
+
+                // offset the column index by the animation value and chunk
+                final shiftIndex = (animValue! / chunkSize).floor();
+                colIndex = (colIndex + shiftIndex) % colorLength;
+
+                debugPrint('${layer.mode!.currentColor}');
+
+                chip.color = layer.mode!.currentColor[colIndex];
+              } catch (e) {
+                // color cast failed.
+              }
+            }
             break;
           case EnumModes.image:
-            // get the row and column of this key and use the matching
-            // coordinate from the matrix.
-            debugPrint(
-                'images ${layer.mode?.effects.extractedColors?.map((e) => e)}');
+            // paint all keys based on color matrix (m x n)
+
+            // get column (n) values where row (m) matches key row index.
+            final colorsMatrix = layer.mode?.effects.extractedColors;
+
+            if (colorsMatrix != null && colorsMatrix.isNotEmpty) {
+              final rowIndex = getColorIndex(
+                boxZone.selectorRect.height,
+                boxZone.selectorRect.top,
+                boxZone.boxRect.top,
+                colorsMatrix.length,
+              );
+
+              final rowColors = colorsMatrix[rowIndex];
+              final colIndex = getColorIndex(
+                boxZone.selectorRect.width,
+                boxZone.selectorRect.left,
+                boxZone.boxRect.left,
+                rowColors.length,
+              );
+
+              try {
+                chip.color = rowColors[colIndex];
+              } catch (e) {
+                // color cast failed.
+              }
+            }
             break;
           default:
-            chip.opacity = 1;
+            break;
         }
-        debugPrint('current mode name ${layer.mode?.value}');
+
+        chip.opacity = layer.visible ? 1 : 0;
+        layer.addKey(keyModel);
 
         // add the chip
         keyModel.addChip(chip);
       }
     }
-
-    // TODO: only for debugging, delete.
-    // if ('${keyModel.keyCode}'.contains('kF5')) {
-    //   // for (var i = 0; i < layers.length; i++) {
-    //   //   debugPrint('\t esc $i ${layers[i].mode?.currentColor.first}');
-    //   // }
-
-    //   // debugPrint('kF5 \t ${keyModel.chipsValues.map((e) => e.chipKey)}');
-    // }
   }
 
   return keyModel;
+}
+
+/// [getColorIndex] is a helper function that finds an index
+/// that corresponds to the image colors matrix.
+int getColorIndex(
+  /// selectorWH is the selector width or height
+  double selectorWH,
+
+  /// selectorLT is the selector left or top
+  double selectorLT,
+
+  /// boxLT is the box(key) left or top
+  double boxLT,
+
+  /// divider is the number of rows or columns from the image matrix
+  int divider,
+) {
+  // get maximum height per image color row within the selector
+  final chunkSize = selectorWH / divider;
+
+  double diff = selectorLT - boxLT;
+  int index = 0;
+
+  while (diff < 0) {
+    diff += chunkSize;
+
+    index++;
+  }
+
+  // return index or last index of m or n when
+  // index is not less than divider to avoid array overflow error.
+  return math.min(index, divider - 1);
 }

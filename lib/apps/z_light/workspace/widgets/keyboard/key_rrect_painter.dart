@@ -19,7 +19,6 @@ class KeyRRectPainter extends CustomPainter {
 
   final Animation<double>? animation;
 
-  static const double opacityFactor = 0.4;
   static const double fontFactor = 0.3;
 
   @override
@@ -76,9 +75,9 @@ class KeyRRectPainter extends CustomPainter {
           if (keyPaintRect.showOutline) {
             // display outline stroke around the key to indicate selection.
             Paint paintStroke = Paint()
-              ..blendMode = BlendMode.color
-              ..color = element.color.withOpacity(opacityFactor)
-              ..strokeWidth = 5 * zoomScale
+              // ..blendMode = BlendMode.color
+              ..color = Colors.white
+              ..strokeWidth = 3 * zoomScale
               ..style = PaintingStyle.stroke;
 
             canvas.drawRRect(rrect, paintStroke);

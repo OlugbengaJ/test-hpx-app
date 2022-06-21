@@ -23,7 +23,7 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
         Provider.of<ShortcutWidgetProvider>(context, listen: false);
     ColorPickerProvider colorPickerProvider =
         Provider.of<ColorPickerProvider>(context, listen: false);
-    // print(modeProvider.currentMode.modeType);
+    // print(modeProvider.currentMode.shortcutKeys);
     return (modeProvider.currentMode.modeType == EnumModeType.layers)
         ? Container()
         : Container(
@@ -36,8 +36,8 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
                 Container(
                   margin: const EdgeInsets.only(top: 5, bottom: 20),
                   child: Wrap(
-                      children: colorPickerProvider
-                          .generateColorPickerWidget(shortcutList)),
+                      children: colorPickerProvider.generateColorPickerWidget(
+                          shortcutList, context)),
                 ),
                 Container(
                   decoration: BoxDecoration(color: Colors.grey.shade900),
@@ -68,21 +68,33 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
                     ],
                   ),
                 ),
-                FlatButton(
-                  textColor: Colors.black,
-                  height: 30.0,
-                  color: Colors.white,
-                  child: const Text('Add Shortcut'),
+                TextButton(
                   onPressed: () {
                     setState(() {
-                      shortcutProvider.addNewCommand('');
+                      shortcutProvider.addNewCommand('', '');
+                      // /// initialize the layers provider to use to send notification accross the layers
+                      LayersProvider layerProvider =
+                          Provider.of<LayersProvider>(context, listen: false);
+                      layerProvider.toolsEffectsUpdated();
                     });
-                    // /// initialize the layers provider to use to send notification accross the layers
-                    LayersProvider layerProvider =
-                        Provider.of<LayersProvider>(context, listen: false);
-                    layerProvider.toolsEffectsUpdated();
                   },
-                )
+                  style: textBtnStyleWhite,
+                  child: SizedBox(
+                    height: 40,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Add Shortcut',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           );

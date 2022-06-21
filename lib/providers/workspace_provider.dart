@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/globals.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/overlay_selector.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/draggable_region.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/workspace_models/box_zone.dart';
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/selection_offset.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/utils/common.dart';
@@ -22,8 +24,17 @@ class WorkspaceProvider with ChangeNotifier {
 
   final double _resizableThreshold = 20;
 
+  /// [scrollOffset] used to determine actual the workspace width and height minus scrollbars.
+  late double? scrollOffset;
+
   /// [_selectorVisible] determines overlay selectors visibility.
   bool _selectorVisible = false;
+
+  /// [keyboardPosLeft] holds the left position of the keyboard in workspace.
+  double? keyboardPosLeft;
+
+  /// [keyboardPosTop] holds the top position of the keyboard in workspace.
+  double? keyboardPosTop;
 
   bool get selectorVisible => _selectorVisible;
 
@@ -113,7 +124,7 @@ class WorkspaceProvider with ChangeNotifier {
   }
 
   /// [_animMillisecond] is the animation duration in milliseconds and defaults to 1s.
-  double? _animMillisecond = 1000.0;
+  double _animMillisecond = 1000.0;
 
   /// [_animationColor] is used to create a ColorTween animation.
   late Animation<Color?> _animationColor;
@@ -133,49 +144,74 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [_setAnimDuration] updates the animation duration by [speed] factor.
   void _setAnimDuration(double? speed) {
+    // avoid divide by zero so set speed to max value.
+    if (speed == 0) speed = 100;
+
     if (speed != null) {
       // speed exists so check if it has changed
-      final ms = speed * 10;
+      final ms = 100000 / speed;
       if (ms != _animMillisecond) {
         // update the controller duration
         _animMillisecond = ms;
         _controller.duration = Duration(milliseconds: ms.toInt());
-        // debugPrint('anim duration changed $speed ${controller.duration}');
       }
     }
   }
 
-  /// [animColor] returns an animation color.
-  Color? animColor(Color beginColor, Color endColor, {double? speed}) {
-    _animationColor =
-        ColorTween(begin: beginColor, end: endColor).animate(_controller);
+  /// [animValue] returns a value of the anim controller.
+  double? animValue({double? speed}) {
+    _setAnimDuration(speed);
+    _checkAnimStatus();
+
+    return _controller.value;
+  }
+
+  /// [animColor] returns a color from transitions of a start to end color.
+  Color? animColor(Color beginColor, Color endColor,
+      {double? speed, EnumModes? effect}) {
+    if (effect == EnumModes.blinking) {
+      return animColorTween([beginColor, null, endColor]);
+    }
+
+    return animColorTween([beginColor, endColor]);
+  }
+
+  /// [animColorTween] returns an animation color from a tween of colors.
+  Color? animColorTween(List<Color?>? colors, {double? speed}) {
+    if (colors == null) return null;
+
+    List<TweenSequenceItem<Color?>> tween = [];
+
+    for (var i = 0; i < colors.length - 1; i++) {
+      tween.add(TweenSequenceItem<Color?>(
+        tween: ColorTween(begin: colors[i], end: colors[i + 1]),
+        weight: 1,
+      ));
+    }
+    _animationColor = TweenSequence<Color?>(tween).animate(controller);
 
     _setAnimDuration(speed);
-    _checkAnimaStatus();
+    _checkAnimStatus();
 
     return _animationColor.value;
   }
 
-  /// [_checkAnimaStatus] this ensures the animation controller is always active.
-  void _checkAnimaStatus() {
+  /// [_checkAnimStatus] this ensures the animation controller is always active.
+  void _checkAnimStatus() {
     switch (_controller.status) {
       case AnimationStatus.completed:
         _controller.reverse();
-        // debugPrint('completed');
         break;
       case AnimationStatus.dismissed:
-        // debugPrint('dismissed');
         _controller.forward();
         break;
       case AnimationStatus.forward:
         if (!_controller.isAnimating) {
           _controller.reverse();
-          // debugPrint('forward');
         }
         break;
       case AnimationStatus.reverse:
         if (!_controller.isAnimating) {
-          // debugPrint('reverse');
           _controller.forward();
         }
         break;
@@ -221,8 +257,39 @@ class WorkspaceProvider with ChangeNotifier {
   WorkspaceDragMode? get getKeyDragMode => _keyDragMode;
   bool _isCurrentDeviceSelected = false;
 
-  /// [toggleDragMode] changes the current selection mode.
-  void toggleDragMode(WorkspaceDragMode mode) {
+  /// [_disableZoneClick] tracks the disabled state of the highlight icon.
+  bool _disableZoneClick = false;
+
+  /// [_disableZoneHighlight] tracks the disabled state of the highlight icon.
+  final bool _disableZoneHighlight = false;
+
+  /// [_disableZoneResizable] tracks the disabled state of the resizable icon.
+  bool _disableZoneResizable = false;
+
+  /// [zoneClickFnc] returns null or the corresponding [_toggleDragMode]
+  /// function based on the [_disableZoneClick] state.
+  void zoneClickFnc() {
+    return _disableZoneClick ? null : _toggleDragMode(WorkspaceDragMode.click);
+  }
+
+  /// [zoneHighlightFnc] returns null or the corresponding [_toggleDragMode]
+  /// function based on the [_disableZoneHighlight] state.
+  void zoneHighlightFnc() {
+    return _disableZoneHighlight
+        ? null
+        : _toggleDragMode(WorkspaceDragMode.highlight);
+  }
+
+  /// [zoneResizableFnc] returns null or the corresponding [_toggleDragMode]
+  /// function based on the [_disableZoneResizable] state.
+  void zoneResizableFnc() {
+    return _disableZoneResizable
+        ? null
+        : _toggleDragMode(WorkspaceDragMode.resizable);
+  }
+
+  /// [_toggleDragMode] changes the current selection mode.
+  void _toggleDragMode(WorkspaceDragMode mode) {
     if (_keyDragMode == mode) {
       // reset selection mode
       _keyDragMode = null;
@@ -230,13 +297,22 @@ class WorkspaceProvider with ChangeNotifier {
       _keyDragMode = mode;
     }
 
-    // hide the overlay selector
+    // hide the overlay selector and disable panning.
     _selectorVisible = false;
+    _isPanning = false;
 
     switch (_keyDragMode) {
       case WorkspaceDragMode.click:
         // set to true to enable selection of the entire keys
         _isCurrentDeviceSelected = true;
+
+        // set the current layer's drag mode
+        _getLayerLTWH(_currentLayerId)!.dragMode = WorkspaceDragMode.click;
+
+        break;
+      case WorkspaceDragMode.highlight:
+        // set the current layer's drag mode
+        _getLayerLTWH(_currentLayerId)!.dragMode = WorkspaceDragMode.highlight;
 
         break;
       case WorkspaceDragMode.resizable:
@@ -248,13 +324,6 @@ class WorkspaceProvider with ChangeNotifier {
         _getLayerLTWH(_currentLayerId)!.dragMode = WorkspaceDragMode.resizable;
 
         break;
-      case WorkspaceDragMode.highlight:
-        // set the current layer's drag mode
-        _getLayerLTWH(_currentLayerId)!.dragMode = WorkspaceDragMode.highlight;
-        _isPanning = false;
-
-        break;
-
       default:
         _isCurrentDeviceSelected = false;
     }
@@ -302,7 +371,7 @@ class WorkspaceProvider with ChangeNotifier {
       _panUpdateDetails =
           DragUpdateDetails(globalPosition: details.globalPosition);
 
-      _isPanning = !_isPanning;
+      _isPanning = true;
     }
   }
 
@@ -337,12 +406,14 @@ class WorkspaceProvider with ChangeNotifier {
 
           // selector move hence update left and top limited to view.
           if (left > 0 &&
-              (left + ltwh.resizableLTWH!.width!) < _workspaceRect.width) {
+              (left + ltwh.resizableLTWH!.width!) <
+                  _workspaceRect.width - scrollOffset!) {
             ltwh.resizableLTWH!.left = left;
           }
 
           if (top > 0 &&
-              (top + ltwh.resizableLTWH!.height!) < _workspaceRect.height) {
+              (top + ltwh.resizableLTWH!.height!) <
+                  _workspaceRect.height - scrollOffset!) {
             ltwh.resizableLTWH!.top = top;
           }
           break;
@@ -365,7 +436,8 @@ class WorkspaceProvider with ChangeNotifier {
 
           // resize from top-right, set selector's top, width, and height.
           // width must be greater than threshold and within view.
-          if ((ltwh.resizableLTWH!.left! + widthPlus) < _workspaceRect.width &&
+          if ((ltwh.resizableLTWH!.left! + widthPlus) <
+                  _workspaceRect.width - scrollOffset! &&
               widthPlus >= _resizableThreshold) {
             ltwh.resizableLTWH!.width = widthPlus;
           }
@@ -380,13 +452,15 @@ class WorkspaceProvider with ChangeNotifier {
 
           // resize from bottom-right, set selector's width and height.
           // width must be greater than threshold and within view.
-          if ((ltwh.resizableLTWH!.left! + widthPlus) < _workspaceRect.width &&
+          if ((ltwh.resizableLTWH!.left! + widthPlus) <
+                  _workspaceRect.width - scrollOffset! &&
               widthPlus >= _resizableThreshold) {
             ltwh.resizableLTWH!.width = widthPlus;
           }
 
           // height must be greater than threshold and within view.
-          if ((top + ltwh.resizableLTWH!.height!) < _workspaceRect.height &&
+          if ((top + ltwh.resizableLTWH!.height!) <
+                  _workspaceRect.height - scrollOffset! &&
               heightPlus >= _resizableThreshold) {
             ltwh.resizableLTWH!.height = heightPlus;
           }
@@ -401,7 +475,8 @@ class WorkspaceProvider with ChangeNotifier {
           }
 
           // height must be greater than threshold and within view.
-          if ((top + ltwh.resizableLTWH!.height!) < _workspaceRect.height &&
+          if ((top + ltwh.resizableLTWH!.height!) <
+                  _workspaceRect.height - scrollOffset! &&
               heightPlus >= _resizableThreshold) {
             ltwh.resizableLTWH!.height = heightPlus;
           }
@@ -533,13 +608,14 @@ class WorkspaceProvider with ChangeNotifier {
   Offset? _workspaceOffset;
   Offset? _workspacePanDownOffset;
 
-  /// [isBoxZoned] checks a widget intersects with the selector.
-  bool? isBoxZoned(RenderBox? box, int? layerId, {String k = ''}) {
+  /// [boxZone] checks a widget intersects with the selector.
+  BoxZone? boxZone(RenderBox? box, int? layerId) {
     final Rect selectorRect;
 
     switch (_keyDragMode) {
       case WorkspaceDragMode.click:
-        return _isCurrentDeviceSelected ? true : null;
+        // return _isCurrentDeviceSelected ? true : null;
+        return null;
 
       default:
         final ltwh = _getLayerLTWH(layerId);
@@ -589,18 +665,16 @@ class WorkspaceProvider with ChangeNotifier {
               ltwh.highlightLTWH!.height!,
             );
           }
+
           final Rect boxRect = box!.localToGlobal(Offset.zero) & box.size;
           final rectIntersect = selectorRect.intersect(boxRect);
 
-          if (k.contains('kF5')) {
-            // final g = workspaceKey.currentContext?.findRenderObject() as RenderBox?;
-            // final s = g!.localToGlobal(Offset.zero);
-            // debugPrint('$k $s');
-            // debugPrint('$k $boxRect $selectorRect $rectIntersect');
-          }
-
           // include 0 for scenarios where a button is clicked.
-          return (rectIntersect.width >= 0 && rectIntersect.height >= 0);
+          final isBoxed = rectIntersect.width >= 0 && rectIntersect.height >= 0;
+
+          if (isBoxed) {
+            return BoxZone(boxRect: boxRect, selectorRect: selectorRect);
+          }
         }
 
         return null;
@@ -663,9 +737,9 @@ class WorkspaceProvider with ChangeNotifier {
         // layer does not exist, hence set the LTWH to defaults
         // get the workspace stack via its global key and use its size
 
-        final left = _workspaceRect.size.width / 2;
-        final top = _workspaceRect.size.height / 2;
-        const double halfSize = 100.0;
+        final left = (_workspaceRect.size.width - scrollOffset!) / 2;
+        final top = (_workspaceRect.size.height - scrollOffset!) / 2;
+        const double halfSize = 70.0;
 
         // actual size of the overlay
         const double size = halfSize * 2;
@@ -675,9 +749,13 @@ class WorkspaceProvider with ChangeNotifier {
           ..dragMode = WorkspaceDragMode.resizable
           ..highlightLTWH = LTWH(0.0, 0.0, 0.0, 0.0)
           ..resizableLTWH = LTWH(left - halfSize, top - halfSize, size, size);
+
+        // debugPrint('layer null ${_layersProvider?.layeritems.length}');
       } else {
         // layer exist but need to reinsert as it's index may have changed.
         _deleteLayerLTWH(layer.id);
+
+        // debugPrint('layer exist ${_layersProvider?.layeritems.length}');
       }
 
       // add the layerLTHW to the map.
@@ -699,6 +777,23 @@ class WorkspaceProvider with ChangeNotifier {
           // show the selector when drag mode is highlight.
           _selectorVisible = _isPanning;
         }
+
+        // set highlight selector for shortcut colors
+        switch (layer.mode?.value) {
+          case EnumModes.shortcut:
+            _keyDragMode = WorkspaceDragMode.highlight;
+            _selectorVisible = _isPanning;
+
+            // disable zone selection icons
+            _disableZoneResizable = true;
+            _disableZoneClick = true;
+            break;
+
+          default:
+            // enable zone selection icons
+            _disableZoneClick = false;
+            _disableZoneResizable = false;
+        }
       }
     }
   }
@@ -711,5 +806,71 @@ class WorkspaceProvider with ChangeNotifier {
   /// [_deleteLayerLTWH] removes a entry from [layersLTWH] with key matching [id].
   void _deleteLayerLTWH(int id) {
     layersLTWH.remove('$id');
+  }
+
+  /// [recenter] sets the left and top position of the workspace children
+  void recenter(BoxConstraints constraints) {
+    if (keyboardPosLeft == null || keyboardPosTop == null) {
+      keyboardPosLeft = (constraints.maxWidth - scrollOffset!) / 5;
+      keyboardPosTop = (constraints.maxHeight - scrollOffset!) / 8;
+    }
+  }
+
+  /// [updateKeyboardPosTop] changes [keyboardPosLeft] when scrolling horizontally.
+  ///
+  /// [keyboardPosLeft] is consumed by the keyboard portion of the workspace
+  /// to position its children's left i.e. keyboard and overlay selectors.
+  void updateKeyboardPosLeft(bool scrolling, DragUpdateDetails details) {
+    if (scrolling) {
+      keyboardPosLeft = keyboardPosLeft! - details.delta.dx;
+
+      // update layers overlay selector position
+      layersLTWH.forEach(
+        (key, value) {
+          // update highlight left position
+          if (value.highlightLTWH != null) {
+            value.highlightLTWH?.left =
+                value.highlightLTWH!.left! - details.delta.dx;
+          }
+
+          // update resizable left position
+          if (value.resizableLTWH != null) {
+            value.resizableLTWH?.left =
+                value.resizableLTWH!.left! - details.delta.dx;
+          }
+        },
+      );
+
+      notifyListeners();
+    }
+  }
+
+  /// [updateKeyboardPosTop] changes [keyboardPosTop] when scrolling vertically.
+  ///
+  /// [keyboardPosTop] is consumed by the keyboard portion of the workspace
+  /// to position its children's top i.e. keyboard and overlay selectors.
+  void updateKeyboardPosTop(bool scrolling, DragUpdateDetails details) {
+    if (scrolling) {
+      keyboardPosTop = keyboardPosTop! - details.delta.dy;
+
+      // update layers overlay selector position
+      layersLTWH.forEach(
+        (key, value) {
+          // update highlight top position
+          if (value.highlightLTWH != null) {
+            value.highlightLTWH?.top =
+                value.highlightLTWH!.top! - details.delta.dy;
+          }
+
+          // update resizable top position
+          if (value.resizableLTWH != null) {
+            value.resizableLTWH?.top =
+                value.resizableLTWH!.top! - details.delta.dy;
+          }
+        },
+      );
+
+      notifyListeners();
+    }
   }
 }

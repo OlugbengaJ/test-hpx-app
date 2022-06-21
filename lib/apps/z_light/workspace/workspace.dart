@@ -1,16 +1,15 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/globals.dart';
-import 'package:hpx/apps/z_light/layers/widgets/layer_stack.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/imports.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
+import 'package:hpx/providers/scrollbar_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/utils/comparer.dart';
 import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/components/dropdown.dart';
+import 'package:hpx/widgets/components/scrollbar/custom_h_scrollbar.dart';
+import 'package:hpx/widgets/components/scrollbar/custom_v_scrollbar.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -23,33 +22,38 @@ class Workspace extends StatefulWidget {
 
 class _WorkspaceState extends State<Workspace>
     with SingleTickerProviderStateMixin {
-  // late variables are initialize on initState()
-  // late Animation<double> _animation;
   late AnimationController _controller;
 
   late TextEditingController _zoomTextCtrl;
   late double _zoomValue;
   late double _zoomScale;
+  static const double _zoomScaleFactor = 0.4;
 
   static const double _zoomInThreshold = 250;
   static const double _zoomOutThreshold = 60;
-  static const Duration _duration = Duration(milliseconds: 50);
   static const double _buttonSize = 32.0;
 
-  Timer _timer = Timer.periodic(Duration.zero, ((t) {}));
+  // static const Duration _duration = Duration(milliseconds: 50);
+  // Timer _timer = Timer.periodic(Duration.zero, ((t) {}));
 
-  /// [zoomTextChanged] ensure user enters only digits
-  /// that are within the acceptable zoom threshold.
-  void zoomTextChanged() {
-    double? value = double.tryParse(_zoomTextCtrl.text);
+  /// [zoomTextSubmitted] is called when user hits the Enter key.
+  /// This updates the zoom value and resets the value when outside
+  /// the acceptable thresholds [_zoomOutThreshold] and [_zoomInThreshold].
+  void zoomTextSubmitted(String v) {
+    double? value = double.tryParse(v);
 
     if (value != null) {
-      if (value >= _zoomOutThreshold && value <= _zoomInThreshold) {
-        setState(() {
-          _zoomValue = value;
-          _zoomScale = _zoomValue / (60 / 0.6);
-        });
+      if (value < _zoomOutThreshold) {
+        value = _zoomOutThreshold;
+      } else if (value > _zoomInThreshold) {
+        value = _zoomInThreshold;
       }
+
+      setState(() {
+        _zoomValue = value!;
+        _zoomScale = _zoomScaleFactor * _zoomValue / 60;
+        updateZoomText();
+      });
     }
   }
 
@@ -57,84 +61,53 @@ class _WorkspaceState extends State<Workspace>
   ///
   /// timer is canceled to stop zooming by the duration specified
   void zoomEnd() {
-    _timer.cancel();
+    // _timer.cancel();
   }
 
-  /// [updateZoom] sets the zoom text (without fractions) and zoom scale.
-  void updateZoom() {
-    _zoomTextCtrl.text = '${_zoomValue.ceil()}';
+  /// [updateZoomText] sets the zoom text (without fractions) and zoom scale.
+  void updateZoomText() {
+    _zoomTextCtrl.text = '${_zoomValue.ceil()}%';
   }
 
   /// [zoomIn] increases the zoomValue only up to the zoomIn threshold
   /// preventing scenario where content is unnecessarily large.
   void zoomIn() {
-    _timer = Timer.periodic(_duration, (t) {
-      if (_zoomValue == _zoomInThreshold) {
-        _timer.cancel();
-        return;
-      }
+    // _timer = Timer.periodic(_duration, (t) {
+    //   if (_zoomValue == _zoomInThreshold) {
+    //     _timer.cancel();
+    //     return;
+    //   }
 
-      setState(() {
-        _zoomValue += 1;
-        updateZoom();
-      });
-    });
+    //   zoomTextSubmitted('${_zoomValue + 1}');
+    // });
+
+    if (_zoomValue == _zoomInThreshold) return;
+    zoomTextSubmitted('${_zoomValue + 10}');
   }
 
   /// [zoomExpand] sets the zoomValue to half the zoomIn threshold.
   void zoomExpand() {
-    setState(() {
-      _zoomValue = _zoomInThreshold / 1.5; // / 3.1;
-      updateZoom();
-    });
+    zoomTextSubmitted('${_zoomInThreshold / 1.5}');
   }
 
   /// [zoomOut] decreases the zoomValue only up to the zoomOut threshold
   /// preventing scenario where content is completely not visible.
   void zoomOut() {
-    _timer = Timer.periodic(_duration, (t) {
-      if (_zoomValue == _zoomOutThreshold) {
-        _timer.cancel();
-        return;
-      }
+    // _timer = Timer.periodic(_duration, (t) {
+    //   if (_zoomValue == _zoomOutThreshold) {
+    //     _timer.cancel();
+    //     return;
+    //   }
 
-      setState(() {
-        _zoomValue -= 1;
-        updateZoom();
-      });
-    });
+    //   zoomTextSubmitted('${_zoomValue - 1}');
+    // });
+    if (_zoomValue == _zoomOutThreshold) return;
+    zoomTextSubmitted('${_zoomValue - 10}');
   }
 
   /// [zoomCollapse] sets the zoomValue to the zoomOut threshold.
   void zoomCollapse() {
-    setState(() {
-      _zoomValue = _zoomOutThreshold;
-      updateZoom();
-    });
-  }
-
-  void _initAnimation() {
-    const duration = Duration(seconds: 1);
-
-    _controller = AnimationController(vsync: this, duration: duration);
-    // final curveAnimation = CurvedAnimation(
-    //   parent: _controller,
-    //   curve: Curves.linear,
-    //   reverseCurve: Curves.linear,
-    // );
-    // _animation = Tween<double>(
-    //   begin: 0,
-    //   end: math.sin(math.pi / 2), // max value of 1
-    // ).animate(curveAnimation)
-    //   ..addListener(() {
-    //     setState(() {});
-    //   })
-    //   ..addStatusListener((status) {
-    //     if (status == AnimationStatus.completed) {
-    //       _controller.repeat();
-    //     }
-    //     if (status == AnimationStatus.dismissed) {}
-    //   });
+    zoomTextSubmitted('$_zoomOutThreshold');
   }
 
   @override
@@ -142,36 +115,37 @@ class _WorkspaceState extends State<Workspace>
     super.initState();
 
     // initialize animation
-    _initAnimation();
+    _controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
 
     // Initialize zoom value and scale.
     _zoomValue = 60;
-    _zoomScale = 0.6;
-    _zoomTextCtrl = TextEditingController(text: _zoomValue.ceil().toString());
-
-    //Start listening to changes.
-    _zoomTextCtrl.addListener(zoomTextChanged);
+    _zoomScale = _zoomScaleFactor;
+    _zoomTextCtrl = TextEditingController(text: '${_zoomValue.ceil()}%');
   }
 
   @override
   void dispose() {
     _zoomTextCtrl.dispose();
     _controller.dispose();
-    _timer.cancel();
+    // _timer.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final controllerH = ScrollController();
-    final controllerV = ScrollController();
     final workspaceProvider = Provider.of<WorkspaceProvider>(context);
+
+    final themeData = Theme.of(context);
 
     // initialize animation controller
     workspaceProvider.initAnimation(_controller);
 
     // initialize layers provider
     workspaceProvider.initLayersProvider(Provider.of<LayersProvider>(context));
+
+    // initialize scroll offset
+    workspaceProvider.scrollOffset = 12.0;
 
     return Column(
       children: [
@@ -204,10 +178,7 @@ class _WorkspaceState extends State<Workspace>
                         child: Tooltip(
                           message: 'Highlight selector',
                           child: RoundButton(
-                            onTapDown: () {
-                              workspaceProvider
-                                  .toggleDragMode(WorkspaceDragMode.highlight);
-                            },
+                            onTapDown: workspaceProvider.zoneHighlightFnc,
                             size: _buttonSize,
                             icon: Icons.highlight_alt,
                             iconColor: workspaceProvider.isDragModeHighlight
@@ -221,11 +192,7 @@ class _WorkspaceState extends State<Workspace>
                         child: Tooltip(
                           message: 'Resizable selector',
                           child: RoundButton(
-                            onTapDown: () {
-                              workspaceProvider
-                                  .toggleDragMode(WorkspaceDragMode.resizable);
-                            },
-                            onTapUp: () {},
+                            onTapDown: workspaceProvider.zoneResizableFnc,
                             size: _buttonSize,
                             icon: Icons.select_all,
                             iconColor: workspaceProvider.isDragModeResizable
@@ -239,10 +206,7 @@ class _WorkspaceState extends State<Workspace>
                         child: Tooltip(
                           message: 'Click selector',
                           child: RoundButton(
-                            onTapDown: () {
-                              workspaceProvider
-                                  .toggleDragMode(WorkspaceDragMode.click);
-                            },
+                            onTapDown: workspaceProvider.zoneClickFnc,
                             size: _buttonSize,
                             icon: Icons.mouse,
                             iconColor: workspaceProvider.isDragModeClick
@@ -283,88 +247,145 @@ class _WorkspaceState extends State<Workspace>
                 repeat: ImageRepeat.repeat,
               ),
             ),
-            child: Stack(
-              key: workspaceStackKey,
-              children: [
-                GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onPanDown: (details) {
-                    workspaceProvider.onPanDown(details);
-                  },
-                  onPanUpdate: (details) =>
-                      workspaceProvider.onPanUpdate(details),
-                  onPanEnd: (details) => workspaceProvider.onPanEnd(details),
-                  onPanCancel: () => workspaceProvider.onPanClear(),
-                  child: Stack(
-                    alignment: Alignment.bottomLeft,
-                    fit: StackFit.expand,
-                    children: [
-                      // Keyboard widget takes a zoom scale which is applied to all keys.
-                      // This ensures seamless zooming of the entire keyboard.
-                      Align(
-                        alignment: Alignment.center,
-                        child: Scrollbar(
-                          scrollbarOrientation: ScrollbarOrientation.bottom,
-                          controller: controllerH,
-                          thumbVisibility: true,
-                          child: SingleChildScrollView(
-                            controller: controllerH,
-                            scrollDirection: Axis.horizontal,
-                            primary: false,
-                            child: Scrollbar(
-                              scrollbarOrientation: ScrollbarOrientation.left,
-                              controller: controllerV,
-                              thumbVisibility: true,
-                              child: SingleChildScrollView(
-                                controller: controllerV,
-                                scrollDirection: Axis.vertical,
-                                primary: false,
-                                child: Keyboard(zoomScale: _zoomScale),
-                              ),
-                            ),
+            child: LayoutBuilder(
+              builder: (_, constraints) {
+                // set the keyboard center
+                workspaceProvider.recenter(constraints);
+
+                return Stack(
+                  children: [
+                    GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onPanDown: (details) {
+                        workspaceProvider.onPanDown(details);
+                      },
+                      onPanUpdate: (details) =>
+                          workspaceProvider.onPanUpdate(details),
+                      onPanEnd: (details) =>
+                          workspaceProvider.onPanEnd(details),
+                      onPanCancel: () => workspaceProvider.onPanClear(),
+                      child: Stack(
+                        key: workspaceStackKey,
+                        alignment: Alignment.bottomLeft,
+                        fit: StackFit.expand,
+                        children: [
+                          // Keyboard widget takes a zoom scale which is applied to all keys.
+                          // This ensures seamless zooming of the entire keyboard.
+                          Positioned(
+                            left: workspaceProvider.keyboardPosLeft,
+                            top: workspaceProvider.keyboardPosTop,
+                            // alignment: Alignment.center,
+                            child: Keyboard(zoomScale: _zoomScale),
                           ),
-                        ),
+
+                          if (workspaceProvider.isModalNotify)
+                            ModalNotification(
+                              closeHandler: workspaceProvider.toggleModal,
+                              children: workspaceProvider.modalWidgets,
+                            ),
+                        ],
                       ),
-
-                      // Container(
-                      //   color: Colors.blue,
-                      //   width: 50,
-                      // ),
-
-                      const LayersStack(),
-
-                      OverlaySelector(
-                        showCrossHair: workspaceProvider.isDragModeResizable,
-                        onPanDown: workspaceProvider.onPanDown,
-                        onPanUpdate: workspaceProvider.onPanUpdate,
-                        onPanEnd: workspaceProvider.onPanEnd,
-                        isVisible: workspaceProvider.selectorVisible,
-                      ),
-
-                      if (workspaceProvider.isModalNotify)
-                        ModalNotification(
-                          closeHandler: workspaceProvider.toggleModal,
-                          children: workspaceProvider.modalWidgets,
-                        ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: ZoomToolbar(
-                      zoomTextController: _zoomTextCtrl,
-                      zoomInHandler: zoomIn,
-                      zoomExpandHandler: zoomExpand,
-                      zoomOutHandler: zoomOut,
-                      zoomCollapseHandler: zoomCollapse,
-                      zoomEndHandler: zoomEnd,
                     ),
-                  ),
-                ),
-              ],
+
+                    // Vertical custom scrollbar
+                    Consumer<ScrollbarProvider>(
+                        builder: (context, scrollProvider, child) {
+                      // initialize vertical scroll offset
+                      scrollProvider.initVerticalScroll(constraints,
+                          workspaceProvider.scrollOffset, _zoomScale);
+
+                      return CustomVScrollbar(
+                        top: 0,
+                        end: 0,
+                        bottom: workspaceProvider.scrollOffset,
+                        buttonSize: workspaceProvider.scrollOffset,
+                        thumbSize: scrollProvider.thumbSizeV,
+                        thumbOffset: scrollProvider.top,
+                        primaryColor: themeData.primaryColor,
+                        secondaryColor: themeData.primaryColorLight,
+                        onPanVertical: (details, name) {
+                          // update scrollbar and keyboard top position
+                          final isScroll =
+                              scrollProvider.onPanVertical(details);
+                          workspaceProvider.updateKeyboardPosTop(
+                              isScroll, details);
+                        },
+                        onTapMinus: () {
+                          final scrollDetails = scrollProvider.onTapUp();
+                          workspaceProvider.updateKeyboardPosTop(
+                              scrollDetails.scrolling, scrollDetails.details);
+                        },
+                        onTapPlus: () {
+                          final scrollDetails = scrollProvider.onTapDown();
+                          workspaceProvider.updateKeyboardPosTop(
+                              scrollDetails.scrolling, scrollDetails.details);
+                        },
+                      );
+                    }),
+
+                    // Horizontal custom scrollbar
+                    Consumer<ScrollbarProvider>(
+                        builder: (context, scrollProvider, child) {
+                      // initialize horizontal scroll offset
+                      scrollProvider.initHorizontalScroll(constraints,
+                          workspaceProvider.scrollOffset, _zoomScale);
+
+                      return CustomHScrollbar(
+                        start: 0,
+                        end: workspaceProvider.scrollOffset,
+                        bottom: 0,
+                        buttonSize: workspaceProvider.scrollOffset,
+                        thumbSize: scrollProvider.thumbSizeH,
+                        thumbOffset: scrollProvider.left,
+                        primaryColor: themeData.primaryColor,
+                        secondaryColor: themeData.primaryColorLight,
+                        onPanHorizontal: (details, name) {
+                          // update scrollbar and keyboard left position
+                          final isScroll =
+                              scrollProvider.onPanHorizontal(details);
+                          workspaceProvider.updateKeyboardPosLeft(
+                              isScroll, details);
+                        },
+                        onTapMinus: () {
+                          final scrollDetails = scrollProvider.onTapLeft();
+                          workspaceProvider.updateKeyboardPosLeft(
+                              scrollDetails.scrolling, scrollDetails.details);
+                        },
+                        onTapPlus: () {
+                          final scrollDetails = scrollProvider.onTapRight();
+                          workspaceProvider.updateKeyboardPosLeft(
+                              scrollDetails.scrolling, scrollDetails.details);
+                        },
+                      );
+                    }),
+
+                    // zoom toolbar
+                    Positioned(
+                      bottom: workspaceProvider.scrollOffset,
+                      left: 0,
+                      right: 0,
+                      child: Center(
+                        child: ZoomToolbar(
+                          onSubmitted: zoomTextSubmitted,
+                          zoomTextController: _zoomTextCtrl,
+                          zoomInHandler: zoomIn,
+                          zoomExpandHandler: zoomExpand,
+                          zoomOutHandler: zoomOut,
+                          zoomCollapseHandler: zoomCollapse,
+                          zoomEndHandler: zoomEnd,
+                        ),
+                      ),
+                    ),
+                    OverlaySelector(
+                      showCrossHair: workspaceProvider.isDragModeResizable,
+                      onPanDown: workspaceProvider.onPanDown,
+                      onPanUpdate: workspaceProvider.onPanUpdate,
+                      onPanEnd: workspaceProvider.onPanEnd,
+                      isVisible: workspaceProvider.selectorVisible,
+                    ),
+                  ],
+                );
+              },
             ),
           ),
         )

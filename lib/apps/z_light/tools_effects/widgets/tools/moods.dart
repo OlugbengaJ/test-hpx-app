@@ -31,20 +31,33 @@ class _MoodPresetState extends State<MoodPreset> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          FlatButton(
-                            textColor: (activatedButton == 'Custom')
-                                ? Colors.grey
-                                : Colors.black,
-                            height: 40.0,
-                            color: (activatedButton == 'Custom')
-                                ? Colors.black
-                                : Colors.white,
-                            child: const Text('THEMES'),
+                          TextButton(
                             onPressed: () {
                               setState(() {
                                 activatedButton = "Themes";
                               });
                             },
+                            style: (activatedButton == 'Custom')
+                                ? textBtnStyleBlack
+                                : textBtnStyleWhite,
+                            child: SizedBox(
+                              height: 40,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'THEMES',
+                                      style: TextStyle(
+                                          color: (activatedButton == 'Custom')
+                                              ? Colors.white
+                                              : Colors.black),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ]),
                   ),
@@ -52,21 +65,34 @@ class _MoodPresetState extends State<MoodPreset> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          FlatButton(
-                            textColor: (activatedButton != 'Custom')
-                                ? Colors.grey
-                                : Colors.black,
-                            height: 40.0,
-                            color: (activatedButton != 'Custom')
-                                ? Colors.black
-                                : Colors.white,
-                            child: const Text('CUSTOM'),
+                          TextButton(
                             onPressed: () {
                               setState(() {
                                 activatedButton = "Custom";
                               });
                             },
-                          )
+                            style: (activatedButton != 'Custom')
+                                ? textBtnStyleBlack
+                                : textBtnStyleWhite,
+                            child: SizedBox(
+                              height: 40,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'CUSTOM',
+                                      style: TextStyle(
+                                          color: (activatedButton != 'Custom')
+                                              ? Colors.white
+                                              : Colors.black),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ]),
                   ),
                 ],
@@ -82,7 +108,8 @@ class _MoodPresetState extends State<MoodPreset> {
                             _colorPickerProvider.generateColorPickerWidget(
                                 activatedButton == 'Themes'
                                     ? moodThemesList
-                                    : moodCustomList))
+                                    : moodCustomList,
+                                context))
                   ]),
             ),
           ],

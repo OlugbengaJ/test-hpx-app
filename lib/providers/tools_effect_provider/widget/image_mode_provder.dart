@@ -4,10 +4,13 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
+import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:image/image.dart' as imageLib;
-
-import 'package:file_picker/file_picker.dart';
+import 'package:provider/provider.dart';
 
 const String keyPalette = 'palette';
 const String keyNoOfItems = 'noIfItems';
@@ -16,33 +19,35 @@ int noOfPixelsPerAxis = 6;
 
 // Mode provider to manage the image colors of a mode been selected
 class ImageModeProvider extends ChangeNotifier {
-  List<Color> extractedColors = [];
-  List extractedMatrix = [];
+  List<dynamic> extractedColors = [];
+  List<List<Color>> extractedMatrix = [];
   late Random random;
-  Uint8List? imageBytes;
-  dynamic currentImage;
+  late Uint8List imageBytes = Uint8List(0);
 
-  // this function selects an image and return its value in byes
-  selectImage() async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['jpg', 'png', 'jpeg', 'ico'],
-    );
-    if (result != null) {
-      PlatformFile file = result.files.first;
-      currentImage = Image.memory(File(file.path!).readAsBytesSync()).image;
-      notifyListeners();
-    }
+  setImageBytes(Uint8List bytes) {
+    imageBytes = bytes;
+    notifyListeners();
   }
 
   // this function takes an image in bytes and converts it to a matrix of colors
-  Future<void> extractColors(Uint8List imageBytes) async {
-    extractedColors = await extractPixelsColors(imageBytes);
+  void extractColors() {
+    extractedColors = extractPixelsColors(imageBytes) as List;
     extractedMatrix = extractedColors.fold([[]], (list, x) {
       return list.last.length == noOfPixelsPerAxis
           ? (list..add([x]))
           : (list..last.add(x));
     });
+    notifyListeners();
+  }
+
+  getExtractColors() {
+    extractedColors = extractPixelsColors(imageBytes) as List;
+    extractedMatrix = extractedColors.fold([[]], (list, x) {
+      return list.last.length == noOfPixelsPerAxis
+          ? (list..add([x]))
+          : (list..last.add(x));
+    });
+    return extractedMatrix;
   }
 
   // this function calculate dthe algeberic equivalent of a color into color code
@@ -51,6 +56,30 @@ class ImageModeProvider extends ChangeNotifier {
     int b = argbColor & 0xFF;
     int hex = (argbColor & 0xFF00FF00) | (b << 16) | r;
     return Color(hex);
+  }
+
+  setImageToExtractedEffect(BuildContext context) {
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
+    EffectProvider effectProvider =
+        Provider.of<EffectProvider>(context, listen: false);
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
+
+    effectProvider.setCurrentEffect(EffectsModel(
+      imageBytes: imageBytes,
+      effectName: effectProvider.currentEffect?.effectName,
+      effectType: effectProvider.currentEffect?.effectType,
+      extractedColors: extractedMatrix,
+    ));
+
+    modeProvider.setCurrentMode(ToolsModeModel(
+        currentColor: modeProvider.currentMode.currentColor,
+        effects: effectProvider.currentEffect!,
+        value: modeProvider.currentMode.value,
+        icon: modeProvider.currentMode.icon,
+        name: modeProvider.currentMode.name));
+    layerProvider.toolsEffectsUpdated();
   }
 
   // this function converts the bytes data of an image to colors using the alto colr function and each byte chunk of the image

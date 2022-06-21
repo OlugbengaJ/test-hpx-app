@@ -75,20 +75,33 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          FlatButton(
-                            textColor: (activatedButton == 'Gradient')
-                                ? Colors.grey
-                                : Colors.black,
-                            height: 40.0,
-                            color: (activatedButton == 'Gradient')
-                                ? Colors.black
-                                : Colors.white,
-                            child: const Text('Solid'),
+                          TextButton(
                             onPressed: () {
                               setState(() {
                                 activatedButton = "Solid";
                               });
                             },
+                            style: (activatedButton != 'Solid')
+                                ? textBtnStyleBlack
+                                : textBtnStyleWhite,
+                            child: SizedBox(
+                              height: 40,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'SOLID',
+                                      style: TextStyle(
+                                          color: (activatedButton != 'Solid')
+                                              ? Colors.white
+                                              : Colors.black),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ]),
                   ),
@@ -96,21 +109,34 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          FlatButton(
-                            textColor: (activatedButton != 'Gradient')
-                                ? Colors.grey
-                                : Colors.black,
-                            height: 40.0,
-                            color: (activatedButton != 'Gradient')
-                                ? Colors.black
-                                : Colors.white,
-                            child: Text('Gradient'),
+                          TextButton(
                             onPressed: () {
                               setState(() {
                                 activatedButton = "Gradient";
                               });
                             },
-                          )
+                            style: (activatedButton != 'Gradient')
+                                ? textBtnStyleBlack
+                                : textBtnStyleWhite,
+                            child: SizedBox(
+                              height: 40,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'GRADIENT',
+                                      style: TextStyle(
+                                          color: (activatedButton != 'Gradient')
+                                              ? Colors.white
+                                              : Colors.black),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ]),
                   ),
                 ],
@@ -123,7 +149,8 @@ class _AudioVisualPresetState extends State<AudioVisualPreset> {
                   children: _colorPickerProvider.generateColorPickerWidget(
                       activatedButton == 'Gradient'
                           ? audioVisualGradientList
-                          : audioVisualSolidList)),
+                          : audioVisualSolidList,
+                      context)),
             ),
           ],
         ));
