@@ -11,8 +11,8 @@ class ScrollbarProvider with ChangeNotifier {
   double? thumbSizeH;
   double? thumbSizeV;
 
-  // double trackSizeH = 0;
-  // double trackSizeV = 0;
+  double? scaleFactorH;
+  double? scaleFactorV;
 
   double scaleChange(double scale, double? scaleFactor) {
     return (scale - (scaleFactor ?? scale)) / (scaleFactor ?? scale);
@@ -27,7 +27,6 @@ class ScrollbarProvider with ChangeNotifier {
 
     if (scale != scaleFactorH) {
       scaleFactorH = scale;
-      resizeToScale(scale, percent);
 
       if (percent == 0) {
         // set thumb to scale fraction of width.
@@ -43,6 +42,9 @@ class ScrollbarProvider with ChangeNotifier {
     if (_left! > width - thumbSizeH!) {
       _left = (width - thumbSizeH!) / 2;
     }
+
+    debugPrint(
+        'Hscroll scale $scale, percent $percent, thumb $thumbSizeH, left $left, width $width');
   }
 
   void initVerticalScroll(
@@ -54,7 +56,6 @@ class ScrollbarProvider with ChangeNotifier {
 
     if (scale != scaleFactorV) {
       scaleFactorV = scale;
-      resizeToScale(scale, percent);
 
       if (percent == 0) {
         // set thumb to scale fraction of height.
@@ -74,13 +75,9 @@ class ScrollbarProvider with ChangeNotifier {
     if (_top! > height - thumbSizeV!) {
       _top = (height - thumbSizeV!) / 2;
     }
-  }
 
-  double? scaleFactorH;
-  double? scaleFactorV;
-
-  void resizeToScale(double scale, double percent) {
-    debugPrint('scroll scale $scale, percent $percent');
+    debugPrint(
+        'Vscroll scale $scale, percent $percent, thumb $thumbSizeV, top $top, height $height');
   }
 
   Size get hScrollSize {
