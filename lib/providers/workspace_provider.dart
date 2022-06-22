@@ -124,7 +124,7 @@ class WorkspaceProvider with ChangeNotifier {
   }
 
   /// [_animMillisecond] is the animation duration in milliseconds and defaults to 1s.
-  double _animMillisecond = 1000.0;
+  double _animMillisecond = 0.0;
 
   /// [_animationColor] is used to create a ColorTween animation.
   late Animation<Color?> _animationColor;
@@ -145,11 +145,11 @@ class WorkspaceProvider with ChangeNotifier {
   /// [_setAnimDuration] updates the animation duration by [speed] factor.
   void _setAnimDuration(double? speed) {
     // avoid divide by zero so set speed to max value.
-    if (speed == 0) speed = 100;
+    if (speed == 0) speed = 1;
 
     if (speed != null) {
       // speed exists so check if it has changed
-      final ms = 100000 / speed;
+      final ms = 25000 / speed;
       if (ms != _animMillisecond) {
         // update the controller duration
         _animMillisecond = ms;

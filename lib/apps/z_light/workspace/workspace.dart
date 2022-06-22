@@ -35,9 +35,6 @@ class _WorkspaceState extends State<Workspace>
 
   bool _resetZoom = false;
 
-  // static const Duration _duration = Duration(milliseconds: 50);
-  // Timer _timer = Timer.periodic(Duration.zero, ((t) {}));
-
   /// [zoomTextSubmitted] is called when user hits the Enter key.
   /// This updates the zoom value and resets the value when outside
   /// the acceptable thresholds [_zoomOutThreshold] and [_zoomInThreshold].
@@ -61,8 +58,6 @@ class _WorkspaceState extends State<Workspace>
   }
 
   /// [zoomEnd] terminates continuous zoom
-  ///
-  /// timer is canceled to stop zooming by the duration specified
   void zoomEnd() {
     // _timer.cancel();
   }
@@ -75,15 +70,6 @@ class _WorkspaceState extends State<Workspace>
   /// [zoomIn] increases the zoomValue only up to the zoomIn threshold
   /// preventing scenario where content is unnecessarily large.
   void zoomIn() {
-    // _timer = Timer.periodic(_duration, (t) {
-    //   if (_zoomValue == _zoomInThreshold) {
-    //     _timer.cancel();
-    //     return;
-    //   }
-
-    //   zoomTextSubmitted('${_zoomValue + 1}');
-    // });
-
     if (_zoomValue == _zoomInThreshold) return;
 
     _resetZoom = false;
@@ -99,14 +85,6 @@ class _WorkspaceState extends State<Workspace>
   /// [zoomOut] decreases the zoomValue only up to the zoomOut threshold
   /// preventing scenario where content is completely not visible.
   void zoomOut() {
-    // _timer = Timer.periodic(_duration, (t) {
-    //   if (_zoomValue == _zoomOutThreshold) {
-    //     _timer.cancel();
-    //     return;
-    //   }
-
-    //   zoomTextSubmitted('${_zoomValue - 1}');
-    // });
     if (_zoomValue == _zoomOutThreshold) return;
 
     _resetZoom = false;
@@ -137,7 +115,7 @@ class _WorkspaceState extends State<Workspace>
   void dispose() {
     _zoomTextCtrl.dispose();
     _controller.dispose();
-    // _timer.cancel();
+
     super.dispose();
   }
 
@@ -318,6 +296,8 @@ class _WorkspaceState extends State<Workspace>
                         primaryColor: themeData.primaryColor,
                         secondaryColor: themeData.primaryColorLight,
                         onPanVertical: (details, name) {
+                          _resetZoom = false;
+
                           // update scrollbar and keyboard top position
                           final isScroll =
                               scrollProvider.onPanVertical(details);
@@ -325,6 +305,8 @@ class _WorkspaceState extends State<Workspace>
                               isScroll, details, _zoomScale / _zoomScaleFactor);
                         },
                         onTapMinus: () {
+                          _resetZoom = false;
+
                           final scrollDetails = scrollProvider.onTapUp();
                           workspaceProvider.updateKeyboardPosTop(
                               scrollDetails.scrolling,
@@ -332,6 +314,8 @@ class _WorkspaceState extends State<Workspace>
                               _zoomScale / _zoomScaleFactor);
                         },
                         onTapPlus: () {
+                          _resetZoom = false;
+
                           final scrollDetails = scrollProvider.onTapDown();
                           workspaceProvider.updateKeyboardPosTop(
                               scrollDetails.scrolling,
@@ -363,6 +347,8 @@ class _WorkspaceState extends State<Workspace>
                         primaryColor: themeData.primaryColor,
                         secondaryColor: themeData.primaryColorLight,
                         onPanHorizontal: (details, name) {
+                          _resetZoom = false;
+
                           // update scrollbar and keyboard left position
                           final isScroll =
                               scrollProvider.onPanHorizontal(details);
@@ -370,6 +356,8 @@ class _WorkspaceState extends State<Workspace>
                               isScroll, details, _zoomScale / _zoomScaleFactor);
                         },
                         onTapMinus: () {
+                          _resetZoom = false;
+
                           final scrollDetails = scrollProvider.onTapLeft();
                           workspaceProvider.updateKeyboardPosLeft(
                               scrollDetails.scrolling,
@@ -377,6 +365,8 @@ class _WorkspaceState extends State<Workspace>
                               _zoomScale / _zoomScaleFactor);
                         },
                         onTapPlus: () {
+                          _resetZoom = false;
+
                           final scrollDetails = scrollProvider.onTapRight();
                           workspaceProvider.updateKeyboardPosLeft(
                               scrollDetails.scrolling,

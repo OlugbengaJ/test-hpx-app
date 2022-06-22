@@ -131,6 +131,8 @@ KeyModel _updateKeyInfo(
           }
         }
 
+        // placeholder for column and row index
+
         // get the current chip in layers
         switch (layer.mode?.value) {
           case EnumModes.blinking:
@@ -157,29 +159,51 @@ KeyModel _updateKeyInfo(
             if (layer.mode?.currentColor != null) {
               final colorLength = layer.mode!.currentColor.length;
 
-              int colIndex = getColorIndex(
-                boxZone.selectorRect.width,
-                boxZone.selectorRect.left,
-                boxZone.boxRect.left,
-                colorLength,
-              );
+              // determines the index of color to use
+              int index;
+              final int colIndex = getColorIndex(boxZone.selectorRect.width,
+                  boxZone.selectorRect.left, boxZone.boxRect.left, colorLength);
 
-              try {
-                // get total chunks posible by dividing 1 by total colors
-                final chunkSize = 1 / colorLength;
-                final animValue =
-                    provider.animValue(speed: layer.mode?.effects.speed);
+              final int rowIndex = getColorIndex(boxZone.selectorRect.height,
+                  boxZone.selectorRect.top, boxZone.boxRect.top, colorLength);
 
-                // offset the column index by the animation value and chunk
-                final shiftIndex = (animValue! / chunkSize).floor();
-                colIndex = (colIndex + shiftIndex) % colorLength;
+              final animValue =
+                  provider.animValue(speed: layer.mode?.effects.speed);
 
-                debugPrint('${layer.mode!.currentColor}');
+              // offset column index by the animation value and color length
+              final shiftIndex = (animValue! * colorLength).ceil();
 
-                chip.color = layer.mode!.currentColor[colIndex];
-              } catch (e) {
-                // color cast failed.
+              if (lastShiftIndex != shiftIndex) {
+                lastShiftIndex = shiftIndex;
+
+                if (incrementer < colorLength - 1) {
+                  incrementer++;
+                } else {
+                  incrementer = 0;
+                }
               }
+
+              final direction = layer.mode!.effects.degree!;
+              if (direction > 225 && direction < 315) {
+                // TODO: rowIndex + colIndex creates a directional wave
+                // index = (rowIndex + colIndex + incrementer).abs() % colorLength;
+
+                // wave flows along negative y axis.
+                index = (rowIndex + incrementer).abs() % colorLength;
+              } else if (direction > 45 && direction < 135) {
+                // wave flows along positive y axis.
+                index = (rowIndex - incrementer).abs() % colorLength;
+              } else if (direction > 90 && direction < 270) {
+                // wave flows along negative x axis.
+                index = (colIndex + incrementer).abs() % colorLength;
+              } else {
+                // wave flows along positive x axis.
+                index = (colIndex - incrementer).abs() % colorLength;
+              }
+
+              chip.color = colors[index];
+              // layer.mode!.currentColor[index];
+
             }
             break;
           case EnumModes.image:
@@ -227,6 +251,18 @@ KeyModel _updateKeyInfo(
   return keyModel;
 }
 
+int lastShiftIndex = -1;
+int incrementer = -1;
+
+List<Color> get colors => [
+      Colors.red,
+      Colors.blue,
+      Colors.brown,
+      Colors.purple,
+      Colors.green,
+      Colors.yellow
+    ];
+
 /// [getColorIndex] is a helper function that finds an index
 /// that corresponds to the image colors matrix.
 int getColorIndex(
@@ -246,7 +282,7 @@ int getColorIndex(
   final chunkSize = selectorWH / divider;
 
   double diff = selectorLT - boxLT;
-  int index = 0;
+  int index = -1;
 
   while (diff < 0) {
     diff += chunkSize;
@@ -254,7 +290,8 @@ int getColorIndex(
     index++;
   }
 
-  // return index or last index of m or n when
-  // index is not less than divider to avoid array overflow error.
-  return math.min(index, divider - 1);
+  // reset index if less than zero to avoid array overflow error.
+  if (index < 0) index = 0;
+
+  return index;
 }

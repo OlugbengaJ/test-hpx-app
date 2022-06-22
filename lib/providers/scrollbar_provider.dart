@@ -28,11 +28,6 @@ class ScrollbarProvider with ChangeNotifier {
   /// [scaleFactorV] scales the vertical thumb to update [thumbSizeV].
   double? scaleFactorV;
 
-  /// [_scaleChange] gets the ratio of change between old scale and new scale.
-  double _scaleChange(double scale, double? scaleFactor) {
-    return (scale - (scaleFactor ?? scale)) / (scaleFactor ?? scale);
-  }
-
   /// [initHorizontalScroll] sets the horizontal thumb and offset on changes.
   void initHorizontalScroll(BoxConstraints constraints, double? offset,
       double scale, double minScale, double maxScale,
