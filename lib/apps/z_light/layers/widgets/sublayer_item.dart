@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
+import 'package:hpx/widgets/theme.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +22,49 @@ class _SublayerItemState extends State<SublayerItem> {
   final double _iconSize = 16;
   TextEditingController _layerNameController = TextEditingController(text: "");
   GlobalKey<FormFieldState> editLayerKey = GlobalKey<FormFieldState>(); // Each layer should have a key for its editing field
+
+  Future<void> _deleteLayerDialog(LayersProvider provider) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete a layer'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                const Text('Do you wish to delete this layer?'),
+                Padding(
+                  padding: const EdgeInsets.only(top:8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed: (){
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("Cancel"),
+                        
+                      ),
+                      TextButton(
+                        onPressed: (){
+                          provider.removeSubItem(widget.layerItemModel);
+                          Navigator.of(context).pop();
+                        },
+                        style: textBtnStyleWhite,
+                        child: const Text("Delete"),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+          
+        );
+      },
+    );
+  }
 
   _onHover(isHovering) {
     setState(() {
@@ -59,7 +103,7 @@ class _SublayerItemState extends State<SublayerItem> {
   }
 
   _deleteLayer(LayersProvider provider) {
-    provider.removeSubItem(widget.layerItemModel);
+    _deleteLayerDialog(provider);
   }
 
   _onTap(LayersProvider provider) {
@@ -77,7 +121,7 @@ class _SublayerItemState extends State<SublayerItem> {
   @override
   Widget build(BuildContext context) {
     return Consumer<LayersProvider>(
-      builder: (context, _value, child) {
+      builder: (context, provider, child) {
         return Container(
           height: 40,
           margin: const EdgeInsets.only(bottom: 2),
@@ -86,7 +130,7 @@ class _SublayerItemState extends State<SublayerItem> {
             hoverColor: Colors.transparent,
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            onTap: () => _onTap(_value),
+            onTap: () => _onTap(provider),
             child: Container(
               padding:
                   const EdgeInsets.only(top: 2, bottom: 2, right: 2, left: 30),
@@ -96,7 +140,7 @@ class _SublayerItemState extends State<SublayerItem> {
                 child: Row(
                   children: [
                     InkWell(
-                        onTap: () => _toggleLayer(_value),
+                        onTap: () => _toggleLayer(provider),
                         child: Tooltip(
                           message: "Toogle visibility",
                           child: Icon(
@@ -114,7 +158,7 @@ class _SublayerItemState extends State<SublayerItem> {
                         children: [
                           Row(
                             children: [
-                              (_editing  && _value.isLayerEditing)
+                              (_editing  && provider.isLayerEditing)
                                   ? Container(
                                       height: 30,
                                       constraints: const BoxConstraints(
@@ -124,13 +168,13 @@ class _SublayerItemState extends State<SublayerItem> {
                                         onFocusChange: (hasFocus) {
                                           if (!hasFocus) {
                                             _onSubmit(_layerNameController.text,
-                                                _value);
+                                                provider);
                                           }
                                         },
                                         child: Focus(
                                           onFocusChange: (hasFocus) {
                                             if (!hasFocus) {
-                                              _onFocusChange(_value);
+                                              _onFocusChange(provider);
                                             }
                                           },
                                           child: TextFormField(
@@ -147,7 +191,7 @@ class _SublayerItemState extends State<SublayerItem> {
                                                 contentPadding:
                                                     EdgeInsets.all(8)),
                                             onFieldSubmitted: (value) =>
-                                                _onSubmit(value, _value),
+                                                _onSubmit(value, provider),
                                           ),
                                         ),
                                       ),
