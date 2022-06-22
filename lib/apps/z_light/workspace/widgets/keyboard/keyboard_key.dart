@@ -185,7 +185,7 @@ KeyModel _updateKeyInfo(
 
               final direction = layer.mode!.effects.degree!;
               if (direction > 225 && direction < 315) {
-                // TODO: rowIndex + colIndex creates a directional wave
+                // TODO: rowIndex +/- colIndex creates a directional wave
                 // index = (rowIndex + colIndex + incrementer).abs() % colorLength;
 
                 // wave flows along negative y axis.
@@ -228,11 +228,7 @@ KeyModel _updateKeyInfo(
                 rowColors.length,
               );
 
-              try {
-                chip.color = rowColors[colIndex];
-              } catch (e) {
-                // color cast failed.
-              }
+              chip.color = rowColors[colIndex];
             }
             break;
           default:

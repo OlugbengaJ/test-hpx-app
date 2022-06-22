@@ -123,8 +123,8 @@ class WorkspaceProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  /// [_animMillisecond] is the animation duration in milliseconds and defaults to 1s.
-  double _animMillisecond = 0.0;
+  /// [_animSpeed] is the animation speed in milliseconds and defaults to 0s.
+  double _animSpeed = 0.0;
 
   /// [_animationColor] is used to create a ColorTween animation.
   late Animation<Color?> _animationColor;
@@ -149,10 +149,10 @@ class WorkspaceProvider with ChangeNotifier {
 
     if (speed != null) {
       // speed exists so check if it has changed
-      final ms = 25000 / speed;
-      if (ms != _animMillisecond) {
+      final ms = 40000 / speed;
+      if (ms != _animSpeed) {
         // update the controller duration
-        _animMillisecond = ms;
+        _animSpeed = ms;
         _controller.duration = Duration(milliseconds: ms.toInt());
       }
     }
