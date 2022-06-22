@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/globals.dart';
-import 'package:hpx/apps/z_light/workspace/widgets/overlay_selector.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/draggable_region.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/box_zone.dart';
@@ -29,6 +29,12 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [_selectorVisible] determines overlay selectors visibility.
   bool _selectorVisible = false;
+
+  /// [keyboardPosLeft] holds the left position of the keyboard in workspace.
+  double? keyboardPosLeft;
+
+  /// [keyboardPosTop] holds the top position of the keyboard in workspace.
+  double? keyboardPosTop;
 
   bool get selectorVisible => _selectorVisible;
 
@@ -138,15 +144,26 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [_setAnimDuration] updates the animation duration by [speed] factor.
   void _setAnimDuration(double? speed) {
+    // avoid divide by zero so set speed to max value.
+    if (speed == 0) speed = 100;
+
     if (speed != null) {
       // speed exists so check if it has changed
-      final ms = speed * 100;
+      final ms = 100000 / speed;
       if (ms != _animMillisecond) {
         // update the controller duration
         _animMillisecond = ms;
         _controller.duration = Duration(milliseconds: ms.toInt());
       }
     }
+  }
+
+  /// [animValue] returns a value of the anim controller.
+  double? animValue({double? speed}) {
+    _setAnimDuration(speed);
+    _checkAnimStatus();
+
+    return _controller.value;
   }
 
   /// [animColor] returns a color from transitions of a start to end color.
@@ -732,9 +749,13 @@ class WorkspaceProvider with ChangeNotifier {
           ..dragMode = WorkspaceDragMode.resizable
           ..highlightLTWH = LTWH(0.0, 0.0, 0.0, 0.0)
           ..resizableLTWH = LTWH(left - halfSize, top - halfSize, size, size);
+
+        // debugPrint('layer null ${_layersProvider?.layeritems.length}');
       } else {
         // layer exist but need to reinsert as it's index may have changed.
         _deleteLayerLTWH(layer.id);
+
+        // debugPrint('layer exist ${_layersProvider?.layeritems.length}');
       }
 
       // add the layerLTHW to the map.
@@ -785,5 +806,71 @@ class WorkspaceProvider with ChangeNotifier {
   /// [_deleteLayerLTWH] removes a entry from [layersLTWH] with key matching [id].
   void _deleteLayerLTWH(int id) {
     layersLTWH.remove('$id');
+  }
+
+  /// [recenter] sets the left and top position of the workspace children
+  void recenter(BoxConstraints constraints) {
+    if (keyboardPosLeft == null || keyboardPosTop == null) {
+      keyboardPosLeft = (constraints.maxWidth - scrollOffset!) / 5;
+      keyboardPosTop = (constraints.maxHeight - scrollOffset!) / 8;
+    }
+  }
+
+  /// [updateKeyboardPosTop] changes [keyboardPosLeft] when scrolling horizontally.
+  ///
+  /// [keyboardPosLeft] is consumed by the keyboard portion of the workspace
+  /// to position its children's left i.e. keyboard and overlay selectors.
+  void updateKeyboardPosLeft(bool scrolling, DragUpdateDetails details) {
+    if (scrolling) {
+      keyboardPosLeft = keyboardPosLeft! - details.delta.dx;
+
+      // update layers overlay selector position
+      layersLTWH.forEach(
+        (key, value) {
+          // update highlight left position
+          if (value.highlightLTWH != null) {
+            value.highlightLTWH?.left =
+                value.highlightLTWH!.left! - details.delta.dx;
+          }
+
+          // update resizable left position
+          if (value.resizableLTWH != null) {
+            value.resizableLTWH?.left =
+                value.resizableLTWH!.left! - details.delta.dx;
+          }
+        },
+      );
+
+      notifyListeners();
+    }
+  }
+
+  /// [updateKeyboardPosTop] changes [keyboardPosTop] when scrolling vertically.
+  ///
+  /// [keyboardPosTop] is consumed by the keyboard portion of the workspace
+  /// to position its children's top i.e. keyboard and overlay selectors.
+  void updateKeyboardPosTop(bool scrolling, DragUpdateDetails details) {
+    if (scrolling) {
+      keyboardPosTop = keyboardPosTop! - details.delta.dy;
+
+      // update layers overlay selector position
+      layersLTWH.forEach(
+        (key, value) {
+          // update highlight top position
+          if (value.highlightLTWH != null) {
+            value.highlightLTWH?.top =
+                value.highlightLTWH!.top! - details.delta.dy;
+          }
+
+          // update resizable top position
+          if (value.resizableLTWH != null) {
+            value.resizableLTWH?.top =
+                value.resizableLTWH!.top! - details.delta.dy;
+          }
+        },
+      );
+
+      notifyListeners();
+    }
   }
 }

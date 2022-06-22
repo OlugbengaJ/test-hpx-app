@@ -3,6 +3,7 @@ import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/imports.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
+import 'package:hpx/providers/scrollbar_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/utils/comparer.dart';
 import 'package:hpx/utils/constants.dart';
@@ -133,8 +134,6 @@ class _WorkspaceState extends State<Workspace>
 
   @override
   Widget build(BuildContext context) {
-    final controllerH = ScrollController();
-    final controllerV = ScrollController();
     final workspaceProvider = Provider.of<WorkspaceProvider>(context);
 
     final themeData = Theme.of(context);
@@ -248,103 +247,145 @@ class _WorkspaceState extends State<Workspace>
                 repeat: ImageRepeat.repeat,
               ),
             ),
-            child: Stack(
-              children: [
-                CustomVScrollbar(
-                  top: 0,
-                  end: 0,
-                  bottom: workspaceProvider.scrollOffset,
-                  size: workspaceProvider.scrollOffset,
-                  trackSize: 50,
-                  primaryColor: themeData.primaryColor,
-                  secondaryColor: themeData.primaryColorLight,
-                ),
-                CustomHScrollbar(
-                  start: 0,
-                  end: workspaceProvider.scrollOffset,
-                  bottom: 0,
-                  size: workspaceProvider.scrollOffset,
-                  trackSize: 50,
-                  primaryColor: themeData.primaryColor,
-                  secondaryColor: themeData.primaryColorLight,
-                ),
-                GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onPanDown: (details) {
-                    workspaceProvider.onPanDown(details);
-                  },
-                  onPanUpdate: (details) =>
-                      workspaceProvider.onPanUpdate(details),
-                  onPanEnd: (details) => workspaceProvider.onPanEnd(details),
-                  onPanCancel: () => workspaceProvider.onPanClear(),
-                  child: Stack(
-                    key: workspaceStackKey,
-                    alignment: Alignment.bottomLeft,
-                    fit: StackFit.expand,
-                    children: [
-                      // Keyboard widget takes a zoom scale which is applied to all keys.
-                      // This ensures seamless zooming of the entire keyboard.
-                      Align(
-                        alignment: Alignment.center,
-                        child:
-                            // TODO: Keyboard, delete default scrollbar below
-                            // once custom implementation is done.
-                            // Keyboard(zoomScale: _zoomScale),
-                            Scrollbar(
-                          scrollbarOrientation: ScrollbarOrientation.bottom,
-                          controller: controllerH,
-                          thumbVisibility: true,
-                          child: SingleChildScrollView(
-                            controller: controllerH,
-                            scrollDirection: Axis.horizontal,
-                            primary: false,
-                            child: Scrollbar(
-                              scrollbarOrientation: ScrollbarOrientation.left,
-                              controller: controllerV,
-                              thumbVisibility: true,
-                              child: SingleChildScrollView(
-                                controller: controllerV,
-                                scrollDirection: Axis.vertical,
-                                primary: false,
-                                child: Keyboard(zoomScale: _zoomScale),
-                              ),
-                            ),
+            child: LayoutBuilder(
+              builder: (_, constraints) {
+                // set the keyboard center
+                workspaceProvider.recenter(constraints);
+
+                return Stack(
+                  children: [
+                    GestureDetector(
+                      behavior: HitTestBehavior.translucent,
+                      onPanDown: (details) {
+                        workspaceProvider.onPanDown(details);
+                      },
+                      onPanUpdate: (details) =>
+                          workspaceProvider.onPanUpdate(details),
+                      onPanEnd: (details) =>
+                          workspaceProvider.onPanEnd(details),
+                      onPanCancel: () => workspaceProvider.onPanClear(),
+                      child: Stack(
+                        key: workspaceStackKey,
+                        alignment: Alignment.bottomLeft,
+                        fit: StackFit.expand,
+                        children: [
+                          // Keyboard widget takes a zoom scale which is applied to all keys.
+                          // This ensures seamless zooming of the entire keyboard.
+                          Positioned(
+                            left: workspaceProvider.keyboardPosLeft,
+                            top: workspaceProvider.keyboardPosTop,
+                            // alignment: Alignment.center,
+                            child: Keyboard(zoomScale: _zoomScale),
                           ),
+
+                          if (workspaceProvider.isModalNotify)
+                            ModalNotification(
+                              closeHandler: workspaceProvider.toggleModal,
+                              children: workspaceProvider.modalWidgets,
+                            ),
+                        ],
+                      ),
+                    ),
+
+                    // Vertical custom scrollbar
+                    Consumer<ScrollbarProvider>(
+                        builder: (context, scrollProvider, child) {
+                      // initialize vertical scroll offset
+                      scrollProvider.initVerticalScroll(constraints,
+                          workspaceProvider.scrollOffset, _zoomScale);
+
+                      return CustomVScrollbar(
+                        top: 0,
+                        end: 0,
+                        bottom: workspaceProvider.scrollOffset,
+                        buttonSize: workspaceProvider.scrollOffset,
+                        thumbSize: scrollProvider.thumbSizeV,
+                        thumbOffset: scrollProvider.top,
+                        primaryColor: themeData.primaryColor,
+                        secondaryColor: themeData.primaryColorLight,
+                        onPanVertical: (details, name) {
+                          // update scrollbar and keyboard top position
+                          final isScroll =
+                              scrollProvider.onPanVertical(details);
+                          workspaceProvider.updateKeyboardPosTop(
+                              isScroll, details);
+                        },
+                        onTapMinus: () {
+                          final scrollDetails = scrollProvider.onTapUp();
+                          workspaceProvider.updateKeyboardPosTop(
+                              scrollDetails.scrolling, scrollDetails.details);
+                        },
+                        onTapPlus: () {
+                          final scrollDetails = scrollProvider.onTapDown();
+                          workspaceProvider.updateKeyboardPosTop(
+                              scrollDetails.scrolling, scrollDetails.details);
+                        },
+                      );
+                    }),
+
+                    // Horizontal custom scrollbar
+                    Consumer<ScrollbarProvider>(
+                        builder: (context, scrollProvider, child) {
+                      // initialize horizontal scroll offset
+                      scrollProvider.initHorizontalScroll(constraints,
+                          workspaceProvider.scrollOffset, _zoomScale);
+
+                      return CustomHScrollbar(
+                        start: 0,
+                        end: workspaceProvider.scrollOffset,
+                        bottom: 0,
+                        buttonSize: workspaceProvider.scrollOffset,
+                        thumbSize: scrollProvider.thumbSizeH,
+                        thumbOffset: scrollProvider.left,
+                        primaryColor: themeData.primaryColor,
+                        secondaryColor: themeData.primaryColorLight,
+                        onPanHorizontal: (details, name) {
+                          // update scrollbar and keyboard left position
+                          final isScroll =
+                              scrollProvider.onPanHorizontal(details);
+                          workspaceProvider.updateKeyboardPosLeft(
+                              isScroll, details);
+                        },
+                        onTapMinus: () {
+                          final scrollDetails = scrollProvider.onTapLeft();
+                          workspaceProvider.updateKeyboardPosLeft(
+                              scrollDetails.scrolling, scrollDetails.details);
+                        },
+                        onTapPlus: () {
+                          final scrollDetails = scrollProvider.onTapRight();
+                          workspaceProvider.updateKeyboardPosLeft(
+                              scrollDetails.scrolling, scrollDetails.details);
+                        },
+                      );
+                    }),
+
+                    // zoom toolbar
+                    Positioned(
+                      bottom: workspaceProvider.scrollOffset,
+                      left: 0,
+                      right: 0,
+                      child: Center(
+                        child: ZoomToolbar(
+                          onSubmitted: zoomTextSubmitted,
+                          zoomTextController: _zoomTextCtrl,
+                          zoomInHandler: zoomIn,
+                          zoomExpandHandler: zoomExpand,
+                          zoomOutHandler: zoomOut,
+                          zoomCollapseHandler: zoomCollapse,
+                          zoomEndHandler: zoomEnd,
                         ),
                       ),
-
-                      if (workspaceProvider.isModalNotify)
-                        ModalNotification(
-                          closeHandler: workspaceProvider.toggleModal,
-                          children: workspaceProvider.modalWidgets,
-                        ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  bottom: workspaceProvider.scrollOffset,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: ZoomToolbar(
-                      onSubmitted: zoomTextSubmitted,
-                      zoomTextController: _zoomTextCtrl,
-                      zoomInHandler: zoomIn,
-                      zoomExpandHandler: zoomExpand,
-                      zoomOutHandler: zoomOut,
-                      zoomCollapseHandler: zoomCollapse,
-                      zoomEndHandler: zoomEnd,
                     ),
-                  ),
-                ),
-                OverlaySelector(
-                  showCrossHair: workspaceProvider.isDragModeResizable,
-                  onPanDown: workspaceProvider.onPanDown,
-                  onPanUpdate: workspaceProvider.onPanUpdate,
-                  onPanEnd: workspaceProvider.onPanEnd,
-                  isVisible: workspaceProvider.selectorVisible,
-                ),
-              ],
+                    OverlaySelector(
+                      showCrossHair: workspaceProvider.isDragModeResizable,
+                      onPanDown: workspaceProvider.onPanDown,
+                      onPanUpdate: workspaceProvider.onPanUpdate,
+                      onPanEnd: workspaceProvider.onPanEnd,
+                      isVisible: workspaceProvider.selectorVisible,
+                    ),
+                  ],
+                );
+              },
             ),
           ),
         )

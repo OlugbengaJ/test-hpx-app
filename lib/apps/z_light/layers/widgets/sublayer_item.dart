@@ -20,6 +20,7 @@ class _SublayerItemState extends State<SublayerItem> {
   bool _editing = false;
   final double _iconSize = 16;
   TextEditingController _layerNameController = TextEditingController(text: "");
+  GlobalKey<FormFieldState> editLayerKey = GlobalKey<FormFieldState>(); // Each layer should have a key for its editing field
 
   _onHover(isHovering) {
     setState(() {
@@ -27,19 +28,34 @@ class _SublayerItemState extends State<SublayerItem> {
     });
   }
 
+  /// Save the current editing layer if the textfield loses focus
+  _onFocusChange(LayersProvider provider) {
+    provider.saveEditingSubLayer();
+  }
+
   _toggleLayer(LayersProvider provider) {
     LayerItemModel layerItemModel = widget.layerItemModel;
     layerItemModel.visible = !layerItemModel.visible;
     provider.toggleSublayerVisibility(layerItemModel, widget.layerIndex);
-    print(widget.layerIndex);
   }
 
-  _toggleEditing(value) {
-    setState(() {
-      _editing = !_editing;
-      _layerNameController =
-          TextEditingController(text: widget.layerItemModel.layerText);
-    });
+
+  _toggleEditing(LayersProvider provider) {
+    /// Check if the layer is not already in edit mode
+    if (!provider.isLayerEditing) {
+      provider.setEditingSubLayerKey(editLayerKey, widget.layerItemModel.id);
+      setState(() {
+        _editing = provider.isTheCurrentSubLayerEditing(editLayerKey);
+        _layerNameController = TextEditingController(
+            text: widget.layerItemModel.layerText);
+      });
+      provider.toggleEditMode(true);
+    } else {
+      /// Save the already editing layer and if the new layer to edit is different then retoggle it
+      provider.saveEditingSubLayer();
+      provider.setEditingLayerKey(editLayerKey, widget.layerItemModel.id);
+      _toggleEditing(provider);
+    }
   }
 
   _deleteLayer(LayersProvider provider) {
@@ -55,6 +71,7 @@ class _SublayerItemState extends State<SublayerItem> {
       _editing = !_editing;
     });
     provider.updateSublayer(widget.layerItemModel, value);
+    provider.toggleEditMode(false);
   }
 
   @override
@@ -97,7 +114,7 @@ class _SublayerItemState extends State<SublayerItem> {
                         children: [
                           Row(
                             children: [
-                              (_editing)
+                              (_editing  && _value.isLayerEditing)
                                   ? Container(
                                       height: 30,
                                       constraints: const BoxConstraints(
@@ -110,20 +127,28 @@ class _SublayerItemState extends State<SublayerItem> {
                                                 _value);
                                           }
                                         },
-                                        child: TextFormField(
-                                          controller: _layerNameController,
-                                          autofocus: true,
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                            overflow: TextOverflow.ellipsis,
+                                        child: Focus(
+                                          onFocusChange: (hasFocus) {
+                                            if (!hasFocus) {
+                                              _onFocusChange(_value);
+                                            }
+                                          },
+                                          child: TextFormField(
+                                            key: editLayerKey,
+                                            controller: _layerNameController,
+                                            autofocus: true,
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            decoration: const InputDecoration(
+                                                focusColor: Colors.white,
+                                                border: OutlineInputBorder(),
+                                                contentPadding:
+                                                    EdgeInsets.all(8)),
+                                            onFieldSubmitted: (value) =>
+                                                _onSubmit(value, _value),
                                           ),
-                                          decoration: const InputDecoration(
-                                              focusColor: Colors.white,
-                                              border: OutlineInputBorder(),
-                                              contentPadding:
-                                                  EdgeInsets.all(8)),
-                                          onFieldSubmitted: (value) =>
-                                              _onSubmit(value, _value),
                                         ),
                                       ),
                                     )
