@@ -322,16 +322,6 @@ class _WorkspaceState extends State<Workspace>
                               scrollDetails.details,
                               _zoomScale / _zoomScaleFactor);
                         },
-                        onTapMinus: () {
-                          final scrollDetails = scrollProvider.onTapUp();
-                          workspaceProvider.updateKeyboardPosTop(
-                              scrollDetails.scrolling, scrollDetails.details);
-                        },
-                        onTapPlus: () {
-                          final scrollDetails = scrollProvider.onTapDown();
-                          workspaceProvider.updateKeyboardPosTop(
-                              scrollDetails.scrolling, scrollDetails.details);
-                        },
                       );
                     }),
 
@@ -382,16 +372,6 @@ class _WorkspaceState extends State<Workspace>
                               scrollDetails.scrolling,
                               scrollDetails.details,
                               _zoomScale / _zoomScaleFactor);
-                        },
-                        onTapMinus: () {
-                          final scrollDetails = scrollProvider.onTapLeft();
-                          workspaceProvider.updateKeyboardPosLeft(
-                              scrollDetails.scrolling, scrollDetails.details);
-                        },
-                        onTapPlus: () {
-                          final scrollDetails = scrollProvider.onTapRight();
-                          workspaceProvider.updateKeyboardPosLeft(
-                              scrollDetails.scrolling, scrollDetails.details);
                         },
                       );
                     }),
