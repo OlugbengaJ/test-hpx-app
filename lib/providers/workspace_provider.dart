@@ -144,12 +144,10 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [_setAnimDuration] updates the animation duration by [speed] factor.
   void _setAnimDuration(double? speed) {
-    // avoid divide by zero so set speed to max value.
-    if (speed == 0) speed = 1;
-
     if (speed != null) {
-      // speed exists so check if it has changed
-      final ms = 40000 / speed;
+      // speed exists so check if it has changed and avoid divide by zero.
+      final ms = speed == 0.0 ? speed : 40000 / speed;
+
       if (ms != _animSpeed) {
         // update the controller duration
         _animSpeed = ms;
@@ -161,7 +159,9 @@ class WorkspaceProvider with ChangeNotifier {
   /// [animValue] returns a value of the anim controller.
   double? animValue({double? speed}) {
     _setAnimDuration(speed);
-    _checkAnimStatus();
+
+    // animate only when speed greater than 0.
+    if (speed != null && speed > 0) _replayAnimation();
 
     return _controller.value;
   }
@@ -170,10 +170,10 @@ class WorkspaceProvider with ChangeNotifier {
   Color? animColor(Color beginColor, Color endColor,
       {double? speed, EnumModes? effect}) {
     if (effect == EnumModes.blinking) {
-      return animColorTween([beginColor, null, endColor]);
+      return animColorTween([beginColor, null, endColor], speed: speed);
     }
 
-    return animColorTween([beginColor, endColor]);
+    return animColorTween([beginColor, endColor], speed: speed);
   }
 
   /// [animColorTween] returns an animation color from a tween of colors.
@@ -188,16 +188,18 @@ class WorkspaceProvider with ChangeNotifier {
         weight: 1,
       ));
     }
-    _animationColor = TweenSequence<Color?>(tween).animate(controller);
 
     _setAnimDuration(speed);
-    _checkAnimStatus();
+    _animationColor = TweenSequence<Color?>(tween).animate(controller);
+
+    // animate only when speed greater than 0.
+    if (speed != null && speed > 0.0) _replayAnimation();
 
     return _animationColor.value;
   }
 
-  /// [_checkAnimStatus] this ensures the animation controller is always active.
-  void _checkAnimStatus() {
+  /// [_replayAnimation] this ensures the animation controller is always active.
+  void _replayAnimation() {
     switch (_controller.status) {
       case AnimationStatus.completed:
         _controller.reverse();
