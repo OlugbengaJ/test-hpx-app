@@ -374,6 +374,7 @@ class WorkspaceProvider with ChangeNotifier {
           DragUpdateDetails(globalPosition: details.globalPosition);
 
       _isPanning = true;
+      notifyListeners();
     }
   }
 
@@ -486,8 +487,8 @@ class WorkspaceProvider with ChangeNotifier {
         default:
       }
     }
-    _panUpdateDetails = details;
 
+    _panUpdateDetails = details;
     notifyListeners();
   }
 
@@ -666,6 +667,9 @@ class WorkspaceProvider with ChangeNotifier {
               ltwh.highlightLTWH!.width!,
               ltwh.highlightLTWH!.height!,
             );
+
+            debugPrint(
+                '${Rect.fromPoints(_panDownDetails!.globalPosition, _panUpdateDetails!.globalPosition)} \t $selectorRect');
           }
 
           final Rect boxRect = box!.localToGlobal(Offset.zero) & box.size;
