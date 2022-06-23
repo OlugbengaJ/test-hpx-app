@@ -231,6 +231,8 @@ KeyModel _updateKeyInfo(
               chip.color = rowColors[colIndex];
             }
             break;
+          case EnumModes.shortcut:
+            break;
           default:
             break;
         }
