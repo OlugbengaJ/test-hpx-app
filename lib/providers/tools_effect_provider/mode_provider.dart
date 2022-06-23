@@ -8,6 +8,7 @@ import 'package:hpx/apps/z_light/tools_effects/widgets/effects/color_cycle.dart'
 import 'package:hpx/apps/z_light/tools_effects/widgets/effects/image.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/effects/interactive.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/effects/wave.dart';
+import 'package:hpx/apps/z_light/tools_effects/widgets/preconfigured/contactsupport.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/tools/color_production.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/tools/moods.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/tools/shortcut_colors.dart';
@@ -133,6 +134,20 @@ List<PickerModel> moodList = [
       enabled: true,
       value: EnumModes.ambient,
       icon: Icons.layers_outlined),
+  PickerModel(
+    title: 'Preconfigured Tools',
+    enabled: false,
+  ),
+  PickerModel(
+      title: 'Contact Support',
+      enabled: true,
+      value: EnumModes.contactsupport,
+      icon: Icons.contact_support),
+  PickerModel(
+      title: 'Application Hotkeys',
+      enabled: true,
+      value: EnumModes.hotkeys,
+      icon: Icons.keyboard_sharp),
 ];
 
 // Mode provider to manage the current colors or effects of a mode been selected
@@ -300,6 +315,10 @@ class ModeProvider extends ChangeNotifier {
         effects.imageQuality = 50.0;
         effects.updatePerSecond = 40.0;
         preset = const AmbeintPreset();
+        break;
+      case EnumModes.contactsupport:
+        currentColors.add(Colors.transparent);
+        preset = const ContactSupportPreset();
         break;
       default:
         currentColors.add(Colors.transparent);
