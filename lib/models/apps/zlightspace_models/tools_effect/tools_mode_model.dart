@@ -75,6 +75,8 @@ enum EnumModes {
   interactive,
   image,
   ambient,
+  contactsupport,
+  hotkeys,
 }
 
 //// enum value for audio visual  picker
