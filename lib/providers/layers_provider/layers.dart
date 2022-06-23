@@ -5,7 +5,7 @@ import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 
-import '../../utils/KeyboardController.dart';
+import 'package:hpx/utils/KeyboardController.dart';
 
 ///[LayersProvider] to controle the layers state
 
@@ -21,6 +21,7 @@ class LayersProvider extends ChangeNotifier {
   LayersProvider() {
     physicalKeyboardController = KeyboardController(this);
   }
+
 
 
 
@@ -108,16 +109,19 @@ class LayersProvider extends ChangeNotifier {
           notifyListeners();
         }
       }
-
     }
 
+    if(item.mode!.name != _modeProvider!.currentMode.name){
+      item.layerText = _modeProvider!.currentMode.name;
+    }
+    
     item.mode =  _modeProvider!.getModeInformation();
-    item.layerText = _modeProvider!.currentMode.name;
+
+    
+    
     _layeritems[listIndex] = item;
 
     if (item.mode!.name == "Shortcut Colors") {
-
-
       if(subLayers.isEmpty){
         duplicateOrCreatSubLayer(
             item,
@@ -126,8 +130,6 @@ class LayersProvider extends ChangeNotifier {
             sublayer: true
         );
       }
-
-
       // debugPrint('$subLayers');
     }
     // for (var i = 0; i < length; i++) {
