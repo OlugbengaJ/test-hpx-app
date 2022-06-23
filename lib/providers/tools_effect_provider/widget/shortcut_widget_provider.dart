@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/widgets/theme.dart';
 
 // Mode provider to manage the current colors or effects of a mode been selected
 class ShortcutWidgetProvider extends ChangeNotifier {
@@ -32,20 +33,21 @@ class ShortcutWidgetProvider extends ChangeNotifier {
               child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                  width: 100,
-                  height: 25,
-                  child: TextField(
-                      controller: labelController.last,
-                      obscureText: false,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.zero)),
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 0, horizontal: 5),
-                        hintStyle: TextStyle(color: Colors.white),
-                      ),
-                      style: const TextStyle(fontSize: 14)))
+              Text('Enter Text', textAlign: TextAlign.left, style: labelStyle),
+              // SizedBox(
+              //     width: 100,
+              //     height: 25,
+              //     child: TextField(
+              //         controller: labelController.last,
+              //         obscureText: false,
+              //         decoration: const InputDecoration(
+              //           border: OutlineInputBorder(
+              //               borderRadius: BorderRadius.all(Radius.zero)),
+              //           contentPadding:
+              //               EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+              //           hintStyle: TextStyle(color: Colors.white),
+              //         ),
+              //         style: const TextStyle(fontSize: 14)))
             ],
           )),
           Expanded(
