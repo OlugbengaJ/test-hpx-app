@@ -3,6 +3,7 @@ import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/draggable_region.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
+import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/box_zone.dart';
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/selection_offset.dart';
@@ -369,11 +370,19 @@ class WorkspaceProvider with ChangeNotifier {
     _workspaceOffset = null;
 
     if (_keyDragMode == WorkspaceDragMode.highlight) {
+      // initialize panDown and panUpdate details to avoid positions null errors.
       _panDownDetails = details;
       _panUpdateDetails =
           DragUpdateDetails(globalPosition: details.globalPosition);
 
       _isPanning = true;
+
+      // call onPanUpdate in shortcut mode which
+      // allows box zone update on click of a key.
+      if (_currentLayer?.mode?.value == EnumModes.shortcut) {
+        onPanUpdate(_panUpdateDetails!);
+      }
+
       notifyListeners();
     }
   }
@@ -667,9 +676,6 @@ class WorkspaceProvider with ChangeNotifier {
               ltwh.highlightLTWH!.width!,
               ltwh.highlightLTWH!.height!,
             );
-
-            debugPrint(
-                '${Rect.fromPoints(_panDownDetails!.globalPosition, _panUpdateDetails!.globalPosition)} \t $selectorRect');
           }
 
           final Rect boxRect = box!.localToGlobal(Offset.zero) & box.size;
@@ -719,11 +725,14 @@ class WorkspaceProvider with ChangeNotifier {
   /// - resizableLTWH: to track the resizable offsets for a layer.
   late Map<String, SelectionOffset> layersLTWH = {};
 
-  /// [_currentLayerId] is a convenient getter that returns the current layer id.
-  int? get _currentLayerId {
+  /// [_currentLayer] is a convenient getter that returns the current layer.
+  LayerItemModel? get _currentLayer {
     if (_layersProvider!.layeritems.isEmpty) return null;
-    return _layersProvider!.layeritems[_layersProvider!.listIndex].id;
+    return _layersProvider!.layeritems[_layersProvider!.listIndex];
   }
+
+  /// [_currentLayerId] is a convenient getter that returns the current layer id.
+  int? get _currentLayerId => _currentLayer?.id;
 
   /// [_getLayerLTWH] returns a [SelectionOffset] entry
   /// whose key matches [id] in [layersLTWH].
@@ -768,9 +777,29 @@ class WorkspaceProvider with ChangeNotifier {
       _addLayerLTWH(layerLTWH);
 
       if (_currentLayerId == layer.id) {
+        final curentLayerLTWH = _getLayerLTWH(_currentLayerId);
+
+        // set highlight selector for shortcut colors
+        switch (layer.mode?.value) {
+          case EnumModes.shortcut:
+            _selectorVisible = _isPanning;
+            _keyDragMode = WorkspaceDragMode.highlight;
+            curentLayerLTWH?.dragMode = _keyDragMode;
+
+            // disable zone selection icons
+            _disableZoneResizable = true;
+            _disableZoneClick = true;
+            break;
+
+          default:
+            // enable zone selection icons
+            _disableZoneClick = false;
+            _disableZoneResizable = false;
+        }
+
         // set workspace drag mode to the current layer's last drag mode
         if (_keyDragMode != null) {
-          _keyDragMode = _getLayerLTWH(_currentLayerId)?.dragMode;
+          _keyDragMode = curentLayerLTWH?.dragMode;
         }
 
         if (isDragModeResizable) {
@@ -782,23 +811,6 @@ class WorkspaceProvider with ChangeNotifier {
         } else {
           // show the selector when drag mode is highlight.
           _selectorVisible = _isPanning;
-        }
-
-        // set highlight selector for shortcut colors
-        switch (layer.mode?.value) {
-          case EnumModes.shortcut:
-            _keyDragMode = WorkspaceDragMode.highlight;
-            _selectorVisible = _isPanning;
-
-            // disable zone selection icons
-            _disableZoneResizable = true;
-            _disableZoneClick = true;
-            break;
-
-          default:
-            // enable zone selection icons
-            _disableZoneClick = false;
-            _disableZoneResizable = false;
         }
       }
     }

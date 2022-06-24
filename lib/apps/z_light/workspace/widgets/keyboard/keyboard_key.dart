@@ -100,6 +100,17 @@ KeyModel _updateKeyInfo(
     }
   }
 
+  // void clearChips(String key) {
+  //   // remove all chip layers in key
+  //   if (layersChipKeys.isNotEmpty & keyModel.keyCode.name.contains('kG')) {
+  //     // debugPrint(
+  //     //     'before ${keyModel.getChip(key)?.chipKey} rect ${krect.map((e) => e.chipKey)}');
+  //     keyModel.removeChip(key);
+  //     // debugPrint(
+  //     //     'after ${keyModel.getChip(key)?.chipKey} rect ${krect.map((e) => e.chipKey)}');
+  //   }
+  // }
+
   if (layers.isNotEmpty) {
     // add new chip layers in reverse order
     // get the current index id as we need to update its properties
@@ -112,7 +123,12 @@ KeyModel _updateKeyInfo(
       final boxZone = provider.boxZone(renderBox, layerId);
 
       // remove key in layer
-      layer.removeKey(keyModel);
+      // TODO: keep the keymodels of shorcut to use them later in the view if already exists
+      // i.e. add the same keymodel back to the view if it's not boxed
+      // may need to delete the if statement.
+      if (layer.mode?.value != EnumModes.shortcut) {
+        layer.removeKey(keyModel);
+      }
 
       if (boxZone != null) {
         // insert new chip with the layer id as key
@@ -130,8 +146,6 @@ KeyModel _updateKeyInfo(
             chip.showOutline = false;
           }
         }
-
-        // placeholder for column and row index
 
         // get the current chip in layers
         switch (layer.mode?.value) {
@@ -232,6 +246,12 @@ KeyModel _updateKeyInfo(
             }
             break;
           case EnumModes.shortcut:
+            // if there's existing rect with matching id, don't add it
+            final rectExist = krect.where((k) => k.chipKey == '$layerId');
+
+            debugPrint(
+                '====>>>rectExist ${keyModel.keyCode} $rectExist ${layer.keys.length} kIndex: ${layer.getKeyIndex(keyModel)}');
+
             break;
           default:
             break;
@@ -242,6 +262,14 @@ KeyModel _updateKeyInfo(
 
         // add the chip
         keyModel.addChip(chip);
+      } else {
+        // TODO: shortcut mode => krect still has the value of the selected key
+        // hence need to add again if the selection exists but need to find a way
+        // to track if this was a second click in which case we need to remove it.
+        final rectExist = krect.where((k) => k.chipKey == '$layerId');
+        if (rectExist.isNotEmpty) {
+          // keyModel.addChip(rectExist.first);
+        }
       }
     }
   }

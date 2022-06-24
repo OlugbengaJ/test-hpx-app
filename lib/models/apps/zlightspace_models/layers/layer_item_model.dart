@@ -40,8 +40,8 @@ class LayerItemModel {
     _keys = [...keys];
   }
 
-  /// [_getKeyIndex] returns the index of the key in [_keys]
-  int _getKeyIndex(KeyModel key) {
+  /// [getKeyIndex] returns the index of the key in [_keys]
+  int getKeyIndex(KeyModel key) {
     return _keys.indexWhere((k) => k.keyCode == key.keyCode);
   }
 
@@ -58,7 +58,7 @@ class LayerItemModel {
   /// [removeKey] removes an existing key
   void removeKey(KeyModel key) {
     // check if key exists, then remove existing key
-    final index = _getKeyIndex(key);
+    final index = getKeyIndex(key);
 
     if (index != -1) {
       // remove existing key
