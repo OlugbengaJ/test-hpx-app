@@ -17,6 +17,7 @@ import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/widget/contact_support_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/image_mode_provder.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/shortcut_widget_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
@@ -317,8 +318,13 @@ class ModeProvider extends ChangeNotifier {
         preset = const AmbeintPreset();
         break;
       case EnumModes.contactsupport:
-        currentColors.add(Colors.transparent);
+        for (var element in contactsupportlist) {
+          currentColors.add(element.colorCode[0]);
+        }
         preset = const ContactSupportPreset();
+        ContactSupportWidgetProvider contactsupportProvider =
+            Provider.of<ContactSupportWidgetProvider>(context, listen: false);
+        contactsupportProvider.showContactOptionsDialog(context);
         break;
       default:
         currentColors.add(Colors.transparent);

@@ -8,6 +8,7 @@ import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/audiovisualizer_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/widget/contact_support_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/image_mode_provder.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/shortcut_widget_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
@@ -22,6 +23,7 @@ void main() => runApp(
           ChangeNotifierProvider(create: (_) => ModeProvider()),
           ChangeNotifierProvider(create: (_) => ShortcutWidgetProvider()),
           ChangeNotifierProvider(create: (_) => ImageModeProvider()),
+          ChangeNotifierProvider(create: (_) => ContactSupportWidgetProvider()),
           ChangeNotifierProvider(create: (_) => AudioVisualizerModeProvider()),
           ChangeNotifierProvider(create: (_) => EffectProvider()),
           ChangeNotifierProvider(create: (context) => KeysProvider()),
