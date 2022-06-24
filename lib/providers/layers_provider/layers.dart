@@ -15,6 +15,9 @@ class LayersProvider extends ChangeNotifier {
   ModeProvider? _modeProvider;
   bool isLayerEditing = false; // Used to check wether a layer is in edit mode
   int currentEditingID = 0; // if the ID is 0 then no layer is in edit mode
+  int currentSublayerID = 0; /// if the currentSubLayerID is 0 that means there is no sublayer selected
+  bool isSublayerSelected = false; 
+  late LayerItemModel _currentSublayer;
   GlobalKey<FormFieldState>? editLayerKey;
   late KeyboardController physicalKeyboardController;
 
@@ -22,7 +25,13 @@ class LayersProvider extends ChangeNotifier {
     physicalKeyboardController = KeyboardController(this);
   }
 
-
+  /// retrieve [_currentSublayer] only if [isSublayerSelected] is true
+  LayerItemModel? getCurrentSublayer(){
+    if(isSublayerSelected){
+      return _currentSublayer;
+    }
+    return null;    
+  }
 
 
   /// [hideDraggable] use to show or hide the stack layers for resizable widget
@@ -270,13 +279,19 @@ class LayersProvider extends ChangeNotifier {
       //_modeProvider!.setModeType(true);
     }
     toggleHideStackedLayers(!item.visible);
+    isSublayerSelected = false;
     notifyListeners();
   }
 
   void changeSublayerIndex(int subIndex) {
     _modeProvider!.setModeType(true);
+    LayerItemModel sublayer = sublayerItems[subIndex];
+    _currentSublayer = sublayer;
+    isSublayerSelected = true;
     notifyListeners();
   }
+
+
 
   /// Update the layerText using its ID
   void update(int id, String text) {

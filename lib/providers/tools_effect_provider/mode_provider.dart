@@ -8,6 +8,7 @@ import 'package:hpx/apps/z_light/tools_effects/widgets/effects/color_cycle.dart'
 import 'package:hpx/apps/z_light/tools_effects/widgets/effects/image.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/effects/interactive.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/effects/wave.dart';
+import 'package:hpx/apps/z_light/tools_effects/widgets/preconfigured/contactsupport.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/tools/color_production.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/tools/moods.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/tools/shortcut_colors.dart';
@@ -16,6 +17,7 @@ import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/widget/contact_support_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/image_mode_provder.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/shortcut_widget_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
@@ -133,6 +135,20 @@ List<PickerModel> moodList = [
       enabled: true,
       value: EnumModes.ambient,
       icon: Icons.layers_outlined),
+  PickerModel(
+    title: 'Preconfigured Tools',
+    enabled: false,
+  ),
+  PickerModel(
+      title: 'Contact Support',
+      enabled: true,
+      value: EnumModes.contactsupport,
+      icon: Icons.contact_support),
+  PickerModel(
+      title: 'Application Hotkeys',
+      enabled: true,
+      value: EnumModes.hotkeys,
+      icon: Icons.keyboard_sharp),
 ];
 
 // Mode provider to manage the current colors or effects of a mode been selected
@@ -300,6 +316,15 @@ class ModeProvider extends ChangeNotifier {
         effects.imageQuality = 50.0;
         effects.updatePerSecond = 40.0;
         preset = const AmbeintPreset();
+        break;
+      case EnumModes.contactsupport:
+        for (var element in contactsupportlist) {
+          currentColors.add(element.colorCode[0]);
+        }
+        preset = const ContactSupportPreset();
+        ContactSupportWidgetProvider contactsupportProvider =
+            Provider.of<ContactSupportWidgetProvider>(context, listen: false);
+        contactsupportProvider.showContactOptionsDialog(context);
         break;
       default:
         currentColors.add(Colors.transparent);

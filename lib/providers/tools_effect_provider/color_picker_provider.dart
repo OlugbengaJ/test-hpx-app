@@ -221,6 +221,17 @@ List<ColorPickerWidgetModel> shortcutList = [
   )
 ];
 
+// shortcut pickermodel lists
+List<ColorPickerWidgetModel> contactsupportlist = [
+  ColorPickerWidgetModel(
+    label: "",
+    action: '',
+    canEdit: true,
+    name: "",
+    colorCode: [Colors.blue],
+  )
+];
+
 // color production pickermodel lists
 List<ColorPickerWidgetModel> colorProductionList = [
   ColorPickerWidgetModel(
