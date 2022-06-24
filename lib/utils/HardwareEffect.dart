@@ -13,9 +13,13 @@ abstract class HardwareEffect {
   HardwareEffect(this._layerID, this._layersProvider);
   int get layerID => this._layerID;
 
-  Map<String, Map<String, Object>> updateKeyboardInfo(Map<String, Map<String, Object>> keyboard);
+  Map<String, Map<String, Object>> updateKeyboardInfo(
+      Map<String, Map<String, Object>> keyboard);
 
-  updateKeyColorInfo({required Map<String, Map<String, Object>> keyboard, required String keyName, required Color color}) {
+  updateKeyColorInfo(
+      {required Map<String, Map<String, Object>> keyboard,
+      required String keyName,
+      required Color color}) {
     keyboard[keyName]!["redOpacity"] = color.red;
     keyboard[keyName]!["greenOpacity"] = color.green;
     keyboard[keyName]!["blueOpacity"] = color.blue;
@@ -23,13 +27,21 @@ abstract class HardwareEffect {
 }
 
 class ModeEffect extends HardwareEffect {
-  ModeEffect(int layerID, LayersProvider layersProvider) : super(layerID, layersProvider);
+  ModeEffect(int layerID, LayersProvider layersProvider)
+      : super(layerID, layersProvider);
 
   @override
-  Map<String, Map<String, Object>> updateKeyboardInfo(Map<String, Map<String, Object>> keyboard) {
-    var layer = this._layersProvider.layeritems.firstWhere((element) => element.id == this._layerID);
+  Map<String, Map<String, Object>> updateKeyboardInfo(
+      Map<String, Map<String, Object>> keyboard) {
+    var layer = this
+        ._layersProvider
+        .layeritems
+        .firstWhere((element) => element.id == this._layerID);
     layer.keys.forEach((key) {
-      updateKeyColorInfo(keyboard: keyboard, keyName: key.keyCode.name, color: layer.mode?.currentColor.last);
+      updateKeyColorInfo(
+          keyboard: keyboard,
+          keyName: key.keyCode.name,
+          color: layer.mode?.currentColor.last);
     });
 
     return keyboard;
@@ -38,15 +50,21 @@ class ModeEffect extends HardwareEffect {
 
 class BreathingEffect extends HardwareEffect {
   var currentColor;
-  BreathingEffect(int layerID, LayersProvider layersProvider) : super(layerID, layersProvider) {
+  BreathingEffect(int layerID, LayersProvider layersProvider)
+      : super(layerID, layersProvider) {
     this.run();
   }
 
   @override
-  Map<String, Map<String, Object>> updateKeyboardInfo(Map<String, Map<String, Object>> keyboard) {
-    var layer = this._layersProvider.layeritems.firstWhere((element) => element.id == this._layerID);
+  Map<String, Map<String, Object>> updateKeyboardInfo(
+      Map<String, Map<String, Object>> keyboard) {
+    var layer = this
+        ._layersProvider
+        .layeritems
+        .firstWhere((element) => element.id == this._layerID);
     layer.keys.forEach((key) {
-      updateKeyColorInfo(keyboard: keyboard, keyName: key.keyCode.name, color: currentColor);
+      updateKeyColorInfo(
+          keyboard: keyboard, keyName: key.keyCode.name, color: currentColor);
     });
     return keyboard;
   }
@@ -56,7 +74,9 @@ class BreathingEffect extends HardwareEffect {
     int incomingGreen = fromColor.green;
     int incomingBlue = fromColor.blue;
 
-    while (incomingRed != toColor.red || incomingGreen != toColor.green || incomingBlue != toColor.blue) {
+    while (incomingRed != toColor.red ||
+        incomingGreen != toColor.green ||
+        incomingBlue != toColor.blue) {
       if (incomingRed > toColor.red) {
         incomingRed -= 1;
       } else if (incomingRed < toColor.red) {
@@ -75,18 +95,22 @@ class BreathingEffect extends HardwareEffect {
         incomingBlue += 1;
       }
 
-      this.currentColor = Color.fromRGBO(incomingRed, incomingGreen, incomingBlue, 100);
+      this.currentColor =
+          Color.fromRGBO(incomingRed, incomingGreen, incomingBlue, 100);
       await Future.delayed(Duration(microseconds: 300), () => null);
     }
   }
 
   run() async {
     var reverse = false;
-    while(true) {
-      var layer = this._layersProvider.layeritems.firstWhere((element) => element.id == this._layerID);
+    while (true) {
+      var layer = this
+          ._layersProvider
+          .layeritems
+          .firstWhere((element) => element.id == this._layerID);
       var primaryColor = layer.mode?.currentColor.last;
       var secondaryColor = layer.mode?.currentColor.first;
-      if(reverse) {
+      if (reverse) {
         await fadeTransition(secondaryColor, primaryColor);
         reverse = !reverse;
       } else {
@@ -98,25 +122,37 @@ class BreathingEffect extends HardwareEffect {
 }
 
 class ColorProductionEffect extends HardwareEffect {
-  ColorProductionEffect(int layerID, LayersProvider layersProvider) : super(layerID, layersProvider);
+  ColorProductionEffect(int layerID, LayersProvider layersProvider)
+      : super(layerID, layersProvider);
 
   @override
-  Map<String, Map<String, Object>> updateKeyboardInfo(Map<String, Map<String, Object>> keyboard) {
-    var layer = this._layersProvider.layeritems.firstWhere((element) => element.id == this._layerID);
+  Map<String, Map<String, Object>> updateKeyboardInfo(
+      Map<String, Map<String, Object>> keyboard) {
+    var layer = this
+        ._layersProvider
+        .layeritems
+        .firstWhere((element) => element.id == this._layerID);
     layer.keys.forEach((key) {
-      updateKeyColorInfo(keyboard: keyboard, keyName: key.keyCode.name, color: layer.mode?.currentColor.last);
+      updateKeyColorInfo(
+          keyboard: keyboard,
+          keyName: key.keyCode.name,
+          color: layer.mode?.currentColor.last);
     });
     return keyboard;
   }
 }
 
-
 class WaveEffect extends HardwareEffect {
-  WaveEffect(int layerID, LayersProvider layersProvider) : super(layerID, layersProvider);
+  WaveEffect(int layerID, LayersProvider layersProvider)
+      : super(layerID, layersProvider);
 
   @override
-  Map<String, Map<String, Object>> updateKeyboardInfo(Map<String, Map<String, Object>> keyboard) {
-    var layer = this._layersProvider.layeritems.firstWhere((element) => element.id == this._layerID);
+  Map<String, Map<String, Object>> updateKeyboardInfo(
+      Map<String, Map<String, Object>> keyboard) {
+    var layer = this
+        ._layersProvider
+        .layeritems
+        .firstWhere((element) => element.id == this._layerID);
     return keyboard;
   }
 
@@ -135,47 +171,63 @@ class WaveEffect extends HardwareEffect {
 
     */
 
-
 }
-
 
 class ColorCycleEffect extends HardwareEffect {
   var currentColor;
-  ColorCycleEffect(int layerID, LayersProvider layersProvider) : super(layerID, layersProvider) {
+  ColorCycleEffect(int layerID, LayersProvider layersProvider)
+      : super(layerID, layersProvider) {
     this.run();
   }
 
   @override
-  Map<String, Map<String, Object>> updateKeyboardInfo(Map<String, Map<String, Object>> keyboard) {
-    var layer = this._layersProvider.layeritems.firstWhere((element) => element.id == this._layerID);
+  Map<String, Map<String, Object>> updateKeyboardInfo(
+      Map<String, Map<String, Object>> keyboard) {
+    var layer = this
+        ._layersProvider
+        .layeritems
+        .firstWhere((element) => element.id == this._layerID);
     layer.keys.forEach((key) {
-      updateKeyColorInfo(keyboard: keyboard, keyName: key.keyCode.name, color: currentColor);
+      updateKeyColorInfo(
+          keyboard: keyboard, keyName: key.keyCode.name, color: currentColor);
     });
     return keyboard;
   }
 
   run() async {
-    while(true) {
-      var layer = await this._layersProvider.layeritems.firstWhere((element) => element.id == this._layerID);
+    while (true) {
+      var layer = await this
+          ._layersProvider
+          .layeritems
+          .firstWhere((element) => element.id == this._layerID);
       for (var color in layer.mode?.currentColor as List<Color>) {
-        var speedTemp = layer.mode?.effects?.speed?.round();
+        var speedTemp = layer.mode?.effects.speed?.round();
         var speed = 0;
 
-        if(speedTemp != null && speedTemp <= 0) speed = 0;
-        else if(speedTemp != null && speedTemp <= 10) speed = 300;
-        else if(speedTemp != null && speedTemp <= 20) speed = 600;
-        else if(speedTemp != null && speedTemp <= 30) speed = 900;
-        else if(speedTemp != null && speedTemp <= 40) speed = 1200;
-        else if(speedTemp != null && speedTemp <= 50) speed = 1500;
-        else if(speedTemp != null && speedTemp <= 60) speed = 1800;
-        else if(speedTemp != null && speedTemp <= 70) speed = 2100;
-        else if(speedTemp != null && speedTemp <= 80) speed = 2400;
-        else if(speedTemp != null && speedTemp <= 90) speed = 2700;
-        else if(speedTemp != null && speedTemp <= 100) speed = 3000;
+        if (speedTemp != null && speedTemp <= 0)
+          speed = 0;
+        else if (speedTemp != null && speedTemp <= 10)
+          speed = 300;
+        else if (speedTemp != null && speedTemp <= 20)
+          speed = 600;
+        else if (speedTemp != null && speedTemp <= 30)
+          speed = 900;
+        else if (speedTemp != null && speedTemp <= 40)
+          speed = 1200;
+        else if (speedTemp != null && speedTemp <= 50)
+          speed = 1500;
+        else if (speedTemp != null && speedTemp <= 60)
+          speed = 1800;
+        else if (speedTemp != null && speedTemp <= 70)
+          speed = 2100;
+        else if (speedTemp != null && speedTemp <= 80)
+          speed = 2400;
+        else if (speedTemp != null && speedTemp <= 90)
+          speed = 2700;
+        else if (speedTemp != null && speedTemp <= 100) speed = 3000;
 
-        if(speed > 0) currentColor = color;
-        await Future.delayed(
-            Duration(milliseconds: 3300 - speed), () => null);
+        if (speed > 0) currentColor = color;
+        await Future.delayed(Duration(milliseconds: 3300 - speed), () => null);
       }
     }
   }
@@ -183,74 +235,112 @@ class ColorCycleEffect extends HardwareEffect {
 
 class BlinkingEffect extends HardwareEffect {
   var currentColor;
-  BlinkingEffect(int layerID, LayersProvider layersProvider) : super(layerID, layersProvider) {
+  BlinkingEffect(int layerID, LayersProvider layersProvider)
+      : super(layerID, layersProvider) {
     this.run();
   }
 
   @override
-  Map<String, Map<String, Object>> updateKeyboardInfo(Map<String, Map<String, Object>> keyboard) {
-    var layer = this._layersProvider.layeritems.firstWhere((element) => element.id == this._layerID);
+  Map<String, Map<String, Object>> updateKeyboardInfo(
+      Map<String, Map<String, Object>> keyboard) {
+    var layer = this
+        ._layersProvider
+        .layeritems
+        .firstWhere((element) => element.id == this._layerID);
     layer.keys.forEach((key) {
-      updateKeyColorInfo(keyboard: keyboard, keyName: key.keyCode.name, color: currentColor);
+      updateKeyColorInfo(
+          keyboard: keyboard, keyName: key.keyCode.name, color: currentColor);
     });
     return keyboard;
   }
 
   run() async {
-    while(true) {
-      var layer = await this._layersProvider.layeritems.firstWhere((element) => element.id == this._layerID);
+    while (true) {
+      var layer = await this
+          ._layersProvider
+          .layeritems
+          .firstWhere((element) => element.id == this._layerID);
       currentColor = layer.mode?.currentColor.last;
-      var speedTemp = layer.mode?.effects?.speed?.round();
+      var speedTemp = layer.mode?.effects.speed?.round();
       var speed = 0;
 
-      if(speedTemp != null && speedTemp <= 0) speed = 0;
-      else if(speedTemp != null && speedTemp <= 10) speed = 300;
-      else if(speedTemp != null && speedTemp <= 20) speed = 600;
-      else if(speedTemp != null && speedTemp <= 30) speed = 900;
-      else if(speedTemp != null && speedTemp <= 40) speed = 1200;
-      else if(speedTemp != null && speedTemp <= 50) speed = 1500;
-      else if(speedTemp != null && speedTemp <= 60) speed = 1800;
-      else if(speedTemp != null && speedTemp <= 70) speed = 2100;
-      else if(speedTemp != null && speedTemp <= 80) speed = 2400;
-      else if(speedTemp != null && speedTemp <= 90) speed = 2700;
-      else if(speedTemp != null && speedTemp <= 100) speed = 3000;
+      if (speedTemp != null && speedTemp <= 0)
+        speed = 0;
+      else if (speedTemp != null && speedTemp <= 10)
+        speed = 300;
+      else if (speedTemp != null && speedTemp <= 20)
+        speed = 600;
+      else if (speedTemp != null && speedTemp <= 30)
+        speed = 900;
+      else if (speedTemp != null && speedTemp <= 40)
+        speed = 1200;
+      else if (speedTemp != null && speedTemp <= 50)
+        speed = 1500;
+      else if (speedTemp != null && speedTemp <= 60)
+        speed = 1800;
+      else if (speedTemp != null && speedTemp <= 70)
+        speed = 2100;
+      else if (speedTemp != null && speedTemp <= 80)
+        speed = 2400;
+      else if (speedTemp != null && speedTemp <= 90)
+        speed = 2700;
+      else if (speedTemp != null && speedTemp <= 100) speed = 3000;
 
-      await Future.delayed(
-          Duration(milliseconds:600),
-              () => currentColor = layer.mode?.currentColor.first);
+      await Future.delayed(Duration(milliseconds: 600),
+          () => currentColor = layer.mode?.currentColor.first);
       await Future.delayed(Duration(milliseconds: 3300 - speed), () => null);
     }
   }
 }
 
 class ShortcutColorsEffect extends HardwareEffect {
-  ShortcutColorsEffect(int layerID, LayersProvider layersProvider) : super(layerID, layersProvider);
+  ShortcutColorsEffect(int layerID, LayersProvider layersProvider)
+      : super(layerID, layersProvider);
 
   @override
-  Map<String, Map<String, Object>> updateKeyboardInfo(Map<String, Map<String, Object>> keyboard) {
-    var layer = this._layersProvider.layeritems.firstWhere((element) => element.id == this._layerID);
+  Map<String, Map<String, Object>> updateKeyboardInfo(
+      Map<String, Map<String, Object>> keyboard) {
+    var layer = this
+        ._layersProvider
+        .layeritems
+        .firstWhere((element) => element.id == this._layerID);
     return keyboard;
   }
 }
 
 class ImageEffect extends HardwareEffect {
-  ImageEffect(int layerID, LayersProvider layersProvider) : super(layerID, layersProvider);
+  ImageEffect(int layerID, LayersProvider layersProvider)
+      : super(layerID, layersProvider);
 
   @override
-  Map<String, Map<String, Object>> updateKeyboardInfo(Map<String, Map<String, Object>> keyboard) {
-    var layer = this._layersProvider.layeritems.firstWhere((element) => element.id == this._layerID);
+  Map<String, Map<String, Object>> updateKeyboardInfo(
+      Map<String, Map<String, Object>> keyboard) {
+    var layer = this
+        ._layersProvider
+        .layeritems
+        .firstWhere((element) => element.id == this._layerID);
 
     late int noOfPixelsPerAxis;
-    if(layer.keys.length > 64) noOfPixelsPerAxis = 9;
-    else if(layer.keys.length > 49) noOfPixelsPerAxis = 8;
-    else if(layer.keys.length > 36) noOfPixelsPerAxis = 7;
-    else if(layer.keys.length > 25) noOfPixelsPerAxis = 6;
-    else if(layer.keys.length > 16) noOfPixelsPerAxis = 5;
-    else noOfPixelsPerAxis = 3;
-    var imageColors = extractPixelsColors(layer.mode?.effects.imageBytes, noOfPixelsPerAxis);
+    if (layer.keys.length > 64)
+      noOfPixelsPerAxis = 9;
+    else if (layer.keys.length > 49)
+      noOfPixelsPerAxis = 8;
+    else if (layer.keys.length > 36)
+      noOfPixelsPerAxis = 7;
+    else if (layer.keys.length > 25)
+      noOfPixelsPerAxis = 6;
+    else if (layer.keys.length > 16)
+      noOfPixelsPerAxis = 5;
+    else
+      noOfPixelsPerAxis = 3;
+    var imageColors =
+        extractPixelsColors(layer.mode?.effects.imageBytes, noOfPixelsPerAxis);
 
-    for(int i = 0; i < layer.keys.length; i++) {
-      updateKeyColorInfo(keyboard: keyboard, keyName: layer.keys[i].keyCode.name, color: imageColors[i]);
+    for (int i = 0; i < layer.keys.length; i++) {
+      updateKeyColorInfo(
+          keyboard: keyboard,
+          keyName: layer.keys[i].keyCode.name,
+          color: imageColors[i]);
     }
     return keyboard;
   }
@@ -285,12 +375,13 @@ class ImageEffect extends HardwareEffect {
 }
 
 class AmbientEffect extends HardwareEffect {
-  AmbientEffect(int layerID, LayersProvider layersProvider) : super(layerID, layersProvider);
+  AmbientEffect(int layerID, LayersProvider layersProvider)
+      : super(layerID, layersProvider);
 
   @override
-  Map<String, Map<String, Object>> updateKeyboardInfo(Map<String, Map<String, Object>> keyboard) {
+  Map<String, Map<String, Object>> updateKeyboardInfo(
+      Map<String, Map<String, Object>> keyboard) {
     // TODO: implement updateKeyboardInfo
     throw UnimplementedError();
   }
-
 }
