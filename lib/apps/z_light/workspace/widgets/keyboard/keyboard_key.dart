@@ -100,6 +100,17 @@ KeyModel _updateKeyInfo(
     }
   }
 
+  // void clearChips(String key) {
+  //   // remove all chip layers in key
+  //   if (layersChipKeys.isNotEmpty & keyModel.keyCode.name.contains('kG')) {
+  //     // debugPrint(
+  //     //     'before ${keyModel.getChip(key)?.chipKey} rect ${krect.map((e) => e.chipKey)}');
+  //     keyModel.removeChip(key);
+  //     // debugPrint(
+  //     //     'after ${keyModel.getChip(key)?.chipKey} rect ${krect.map((e) => e.chipKey)}');
+  //   }
+  // }
+
   if (layers.isNotEmpty) {
     // add new chip layers in reverse order
     // get the current index id as we need to update its properties
@@ -112,7 +123,12 @@ KeyModel _updateKeyInfo(
       final boxZone = provider.boxZone(renderBox, layerId);
 
       // remove key in layer
-      layer.removeKey(keyModel);
+      // TODO: keep the keymodels of shorcut to use them later in the view if already exists
+      // i.e. add the same keymodel back to the view if it's not boxed
+      // may need to delete the if statement.
+      if (layer.mode?.value != EnumModes.shortcut) {
+        layer.removeKey(keyModel);
+      }
 
       if (boxZone != null) {
         // insert new chip with the layer id as key
@@ -157,29 +173,51 @@ KeyModel _updateKeyInfo(
             if (layer.mode?.currentColor != null) {
               final colorLength = layer.mode!.currentColor.length;
 
-              int colIndex = getColorIndex(
-                boxZone.selectorRect.width,
-                boxZone.selectorRect.left,
-                boxZone.boxRect.left,
-                colorLength,
-              );
+              // determines the index of color to use
+              int index;
+              final int colIndex = getColorIndex(boxZone.selectorRect.width,
+                  boxZone.selectorRect.left, boxZone.boxRect.left, colorLength);
 
-              try {
-                // get total chunks posible by dividing 1 by total colors
-                final chunkSize = 1 / colorLength;
-                final animValue =
-                    provider.animValue(speed: layer.mode?.effects.speed);
+              final int rowIndex = getColorIndex(boxZone.selectorRect.height,
+                  boxZone.selectorRect.top, boxZone.boxRect.top, colorLength);
 
-                // offset the column index by the animation value and chunk
-                final shiftIndex = (animValue! / chunkSize).floor();
-                colIndex = (colIndex + shiftIndex) % colorLength;
+              final animValue =
+                  provider.animValue(speed: layer.mode?.effects.speed);
 
-                debugPrint('${layer.mode!.currentColor}');
+              // offset column index by the animation value and color length
+              final shiftIndex = (animValue! * colorLength).ceil();
 
-                chip.color = layer.mode!.currentColor[colIndex];
-              } catch (e) {
-                // color cast failed.
+              if (lastShiftIndex != shiftIndex) {
+                lastShiftIndex = shiftIndex;
+
+                if (incrementer < colorLength - 1) {
+                  incrementer++;
+                } else {
+                  incrementer = 0;
+                }
               }
+
+              final direction = layer.mode!.effects.degree!;
+              if (direction > 225 && direction < 315) {
+                // TODO: rowIndex +/- colIndex creates a directional wave
+                // index = (rowIndex + colIndex + incrementer).abs() % colorLength;
+
+                // wave flows along negative y axis.
+                index = (rowIndex + incrementer).abs() % colorLength;
+              } else if (direction > 45 && direction < 135) {
+                // wave flows along positive y axis.
+                index = (rowIndex - incrementer).abs() % colorLength;
+              } else if (direction > 90 && direction < 270) {
+                // wave flows along negative x axis.
+                index = (colIndex + incrementer).abs() % colorLength;
+              } else {
+                // wave flows along positive x axis.
+                index = (colIndex - incrementer).abs() % colorLength;
+              }
+
+              chip.color = colors[index];
+              // layer.mode!.currentColor[index];
+
             }
             break;
           case EnumModes.image:
@@ -204,12 +242,16 @@ KeyModel _updateKeyInfo(
                 rowColors.length,
               );
 
-              try {
-                chip.color = rowColors[colIndex];
-              } catch (e) {
-                // color cast failed.
-              }
+              chip.color = rowColors[colIndex];
             }
+            break;
+          case EnumModes.shortcut:
+            // if there's existing rect with matching id, don't add it
+            final rectExist = krect.where((k) => k.chipKey == '$layerId');
+
+            debugPrint(
+                '====>>>rectExist ${keyModel.keyCode} $rectExist ${layer.keys.length} kIndex: ${layer.getKeyIndex(keyModel)}');
+
             break;
           default:
             break;
@@ -220,12 +262,32 @@ KeyModel _updateKeyInfo(
 
         // add the chip
         keyModel.addChip(chip);
+      } else {
+        // TODO: shortcut mode => krect still has the value of the selected key
+        // hence need to add again if the selection exists but need to find a way
+        // to track if this was a second click in which case we need to remove it.
+        final rectExist = krect.where((k) => k.chipKey == '$layerId');
+        if (rectExist.isNotEmpty) {
+          // keyModel.addChip(rectExist.first);
+        }
       }
     }
   }
 
   return keyModel;
 }
+
+int lastShiftIndex = -1;
+int incrementer = -1;
+
+List<Color> get colors => [
+      Colors.red,
+      Colors.blue,
+      Colors.brown,
+      Colors.purple,
+      Colors.green,
+      Colors.yellow
+    ];
 
 /// [getColorIndex] is a helper function that finds an index
 /// that corresponds to the image colors matrix.
@@ -246,7 +308,7 @@ int getColorIndex(
   final chunkSize = selectorWH / divider;
 
   double diff = selectorLT - boxLT;
-  int index = 0;
+  int index = -1;
 
   while (diff < 0) {
     diff += chunkSize;
@@ -254,7 +316,8 @@ int getColorIndex(
     index++;
   }
 
-  // return index or last index of m or n when
-  // index is not less than divider to avoid array overflow error.
-  return math.min(index, divider - 1);
+  // reset index if less than zero to avoid array overflow error.
+  if (index < 0) index = 0;
+
+  return index;
 }

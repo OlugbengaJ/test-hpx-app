@@ -3,6 +3,7 @@ import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/draggable_region.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
+import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/box_zone.dart';
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/selection_offset.dart';
@@ -123,8 +124,8 @@ class WorkspaceProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  /// [_animMillisecond] is the animation duration in milliseconds and defaults to 1s.
-  double _animMillisecond = 1000.0;
+  /// [_animSpeed] is the animation speed in milliseconds and defaults to 0s.
+  double _animSpeed = 0.0;
 
   /// [_animationColor] is used to create a ColorTween animation.
   late Animation<Color?> _animationColor;
@@ -144,15 +145,13 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [_setAnimDuration] updates the animation duration by [speed] factor.
   void _setAnimDuration(double? speed) {
-    // avoid divide by zero so set speed to max value.
-    if (speed == 0) speed = 100;
-
     if (speed != null) {
-      // speed exists so check if it has changed
-      final ms = 100000 / speed;
-      if (ms != _animMillisecond) {
+      // speed exists so check if it has changed and avoid divide by zero.
+      final ms = speed == 0.0 ? speed : 40000 / speed;
+
+      if (ms != _animSpeed) {
         // update the controller duration
-        _animMillisecond = ms;
+        _animSpeed = ms;
         _controller.duration = Duration(milliseconds: ms.toInt());
       }
     }
@@ -161,7 +160,9 @@ class WorkspaceProvider with ChangeNotifier {
   /// [animValue] returns a value of the anim controller.
   double? animValue({double? speed}) {
     _setAnimDuration(speed);
-    _checkAnimStatus();
+
+    // animate only when speed greater than 0.
+    if (speed != null && speed > 0) _replayAnimation();
 
     return _controller.value;
   }
@@ -170,10 +171,10 @@ class WorkspaceProvider with ChangeNotifier {
   Color? animColor(Color beginColor, Color endColor,
       {double? speed, EnumModes? effect}) {
     if (effect == EnumModes.blinking) {
-      return animColorTween([beginColor, null, endColor]);
+      return animColorTween([beginColor, null, endColor], speed: speed);
     }
 
-    return animColorTween([beginColor, endColor]);
+    return animColorTween([beginColor, endColor], speed: speed);
   }
 
   /// [animColorTween] returns an animation color from a tween of colors.
@@ -188,16 +189,18 @@ class WorkspaceProvider with ChangeNotifier {
         weight: 1,
       ));
     }
-    _animationColor = TweenSequence<Color?>(tween).animate(controller);
 
     _setAnimDuration(speed);
-    _checkAnimStatus();
+    _animationColor = TweenSequence<Color?>(tween).animate(controller);
+
+    // animate only when speed greater than 0.
+    if (speed != null && speed > 0.0) _replayAnimation();
 
     return _animationColor.value;
   }
 
-  /// [_checkAnimStatus] this ensures the animation controller is always active.
-  void _checkAnimStatus() {
+  /// [_replayAnimation] this ensures the animation controller is always active.
+  void _replayAnimation() {
     switch (_controller.status) {
       case AnimationStatus.completed:
         _controller.reverse();
@@ -367,11 +370,20 @@ class WorkspaceProvider with ChangeNotifier {
     _workspaceOffset = null;
 
     if (_keyDragMode == WorkspaceDragMode.highlight) {
+      // initialize panDown and panUpdate details to avoid positions null errors.
       _panDownDetails = details;
       _panUpdateDetails =
           DragUpdateDetails(globalPosition: details.globalPosition);
 
       _isPanning = true;
+
+      // call onPanUpdate in shortcut mode which
+      // allows box zone update on click of a key.
+      if (_currentLayer?.mode?.value == EnumModes.shortcut) {
+        onPanUpdate(_panUpdateDetails!);
+      }
+
+      notifyListeners();
     }
   }
 
@@ -484,8 +496,8 @@ class WorkspaceProvider with ChangeNotifier {
         default:
       }
     }
-    _panUpdateDetails = details;
 
+    _panUpdateDetails = details;
     notifyListeners();
   }
 
@@ -713,11 +725,14 @@ class WorkspaceProvider with ChangeNotifier {
   /// - resizableLTWH: to track the resizable offsets for a layer.
   late Map<String, SelectionOffset> layersLTWH = {};
 
-  /// [_currentLayerId] is a convenient getter that returns the current layer id.
-  int? get _currentLayerId {
+  /// [_currentLayer] is a convenient getter that returns the current layer.
+  LayerItemModel? get _currentLayer {
     if (_layersProvider!.layeritems.isEmpty) return null;
-    return _layersProvider!.layeritems[_layersProvider!.listIndex].id;
+    return _layersProvider!.layeritems[_layersProvider!.listIndex];
   }
+
+  /// [_currentLayerId] is a convenient getter that returns the current layer id.
+  int? get _currentLayerId => _currentLayer?.id;
 
   /// [_getLayerLTWH] returns a [SelectionOffset] entry
   /// whose key matches [id] in [layersLTWH].
@@ -762,9 +777,29 @@ class WorkspaceProvider with ChangeNotifier {
       _addLayerLTWH(layerLTWH);
 
       if (_currentLayerId == layer.id) {
+        final curentLayerLTWH = _getLayerLTWH(_currentLayerId);
+
+        // set highlight selector for shortcut colors
+        switch (layer.mode?.value) {
+          case EnumModes.shortcut:
+            _selectorVisible = _isPanning;
+            _keyDragMode = WorkspaceDragMode.highlight;
+            curentLayerLTWH?.dragMode = _keyDragMode;
+
+            // disable zone selection icons
+            _disableZoneResizable = true;
+            _disableZoneClick = true;
+            break;
+
+          default:
+            // enable zone selection icons
+            _disableZoneClick = false;
+            _disableZoneResizable = false;
+        }
+
         // set workspace drag mode to the current layer's last drag mode
         if (_keyDragMode != null) {
-          _keyDragMode = _getLayerLTWH(_currentLayerId)?.dragMode;
+          _keyDragMode = curentLayerLTWH?.dragMode;
         }
 
         if (isDragModeResizable) {
@@ -776,23 +811,6 @@ class WorkspaceProvider with ChangeNotifier {
         } else {
           // show the selector when drag mode is highlight.
           _selectorVisible = _isPanning;
-        }
-
-        // set highlight selector for shortcut colors
-        switch (layer.mode?.value) {
-          case EnumModes.shortcut:
-            _keyDragMode = WorkspaceDragMode.highlight;
-            _selectorVisible = _isPanning;
-
-            // disable zone selection icons
-            _disableZoneResizable = true;
-            _disableZoneClick = true;
-            break;
-
-          default:
-            // enable zone selection icons
-            _disableZoneClick = false;
-            _disableZoneResizable = false;
         }
       }
     }
@@ -809,8 +827,8 @@ class WorkspaceProvider with ChangeNotifier {
   }
 
   /// [recenter] sets the left and top position of the workspace children
-  void recenter(BoxConstraints constraints) {
-    if (keyboardPosLeft == null || keyboardPosTop == null) {
+  void recenter(BoxConstraints constraints, bool reset) {
+    if (keyboardPosLeft == null || keyboardPosTop == null || reset) {
       keyboardPosLeft = (constraints.maxWidth - scrollOffset!) / 5;
       keyboardPosTop = (constraints.maxHeight - scrollOffset!) / 8;
     }
@@ -820,23 +838,23 @@ class WorkspaceProvider with ChangeNotifier {
   ///
   /// [keyboardPosLeft] is consumed by the keyboard portion of the workspace
   /// to position its children's left i.e. keyboard and overlay selectors.
-  void updateKeyboardPosLeft(bool scrolling, DragUpdateDetails details) {
+  void updateKeyboardPosLeft(
+      bool scrolling, DragUpdateDetails details, double scale) {
     if (scrolling) {
-      keyboardPosLeft = keyboardPosLeft! - details.delta.dx;
+      final dx = details.delta.dx * scale;
+      keyboardPosLeft = keyboardPosLeft! - dx;
 
       // update layers overlay selector position
       layersLTWH.forEach(
         (key, value) {
           // update highlight left position
           if (value.highlightLTWH != null) {
-            value.highlightLTWH?.left =
-                value.highlightLTWH!.left! - details.delta.dx;
+            value.highlightLTWH?.left = value.highlightLTWH!.left! - dx;
           }
 
           // update resizable left position
           if (value.resizableLTWH != null) {
-            value.resizableLTWH?.left =
-                value.resizableLTWH!.left! - details.delta.dx;
+            value.resizableLTWH?.left = value.resizableLTWH!.left! - dx;
           }
         },
       );
@@ -849,23 +867,23 @@ class WorkspaceProvider with ChangeNotifier {
   ///
   /// [keyboardPosTop] is consumed by the keyboard portion of the workspace
   /// to position its children's top i.e. keyboard and overlay selectors.
-  void updateKeyboardPosTop(bool scrolling, DragUpdateDetails details) {
+  void updateKeyboardPosTop(
+      bool scrolling, DragUpdateDetails details, double scale) {
     if (scrolling) {
-      keyboardPosTop = keyboardPosTop! - details.delta.dy;
+      final dy = details.delta.dy * scale;
+      keyboardPosTop = keyboardPosTop! - dy;
 
       // update layers overlay selector position
       layersLTWH.forEach(
         (key, value) {
           // update highlight top position
           if (value.highlightLTWH != null) {
-            value.highlightLTWH?.top =
-                value.highlightLTWH!.top! - details.delta.dy;
+            value.highlightLTWH?.top = value.highlightLTWH!.top! - dy;
           }
 
           // update resizable top position
           if (value.resizableLTWH != null) {
-            value.resizableLTWH?.top =
-                value.resizableLTWH!.top! - details.delta.dy;
+            value.resizableLTWH?.top = value.resizableLTWH!.top! - dy;
           }
         },
       );
