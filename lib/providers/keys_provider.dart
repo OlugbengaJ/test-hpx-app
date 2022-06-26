@@ -648,14 +648,78 @@ class KeysProvider with ChangeNotifier {
         .toList();
   }
 
-  /// [getTopLayeredKeys] returns a list of [KeyModel] with
+  /// [getTopLayeredKeys] returns a new instance of list of [KeyModel] with
   /// top level layered chips from [getLayeredKeys].
   List<KeyModel> getTopLayeredKeys() {
     return [
       ...getLayeredKeys().map((e) {
-        e.topChip = e.getLayeredChips().last;
-        return e;
+        return e.copyWith();
       })
     ];
+  }
+
+  /// [_shortcutKeys] preserves shortcut keys.
+  final Map<String, List<KeyModel>> _shortcutKeys = {};
+
+  bool shortcutKeyExist(KeyModel keyModel) {
+    for (var e in _shortcutKeys.entries) {
+      final keyFound =
+          e.value.any((element) => element.keyCode == keyModel.keyCode);
+
+      if (keyFound) return keyFound;
+    }
+
+    return false;
+  }
+
+  MapEntry<String, KeyModel>? getShortcutKey(KeyModel keyModel) {
+    if (!shortcutKeyExist(keyModel)) return null;
+
+    final map = _shortcutKeys.entries
+        .firstWhere((m) => m.value.any((k) => k.keyCode == keyModel.keyCode));
+    return MapEntry(map.key,
+        map.value.firstWhere((k) => k.keyCode == keyModel.keyCode).copyWith());
+
+    // _shortcutKeys.values
+    //     .firstWhere((l) => l.any((k) => k.keyCode == keyModel.keyCode))
+    //     .first
+    //     .copyWith();
+  }
+
+  List<KeyModel>? getShortcutKeys(String id) {
+    return _shortcutKeys[id];
+  }
+
+  /// [addShortcutKey] adds a [KeyModel] to a shortut layer for a specific [id].
+  ///
+  /// If the shortcut layer id does not exist, a new map entry is created, and
+  /// the [KeyModel] object is always replaced.
+  void addShortcutKey(String id, KeyModel keyModel) {
+    final shortcutKeys = getShortcutKeys(id);
+
+    if (shortcutKeys == null) {
+      // add new shortcut layer id
+      _shortcutKeys.putIfAbsent(id, () => []);
+    } else {
+      // remove the key model
+      removeShortcutKey(id, keyModel);
+    }
+
+    // add the key model
+    _shortcutKeys[id]?.add(keyModel);
+  }
+
+  /// [removeShortcutKey] removes a [KeyModel] from a shortut layer with map key [id].
+  ///
+  /// If the shortcut layer id does not exist, nothing is done.
+  void removeShortcutKey(String id, KeyModel keyModel) {
+    // check if key exists, then remove existing key
+    getShortcutKeys(id)?.removeWhere((k) => k.keyCode == keyModel.keyCode);
+  }
+
+  /// [removeShortcut] removes an existing shortcut layer
+  void removeShortcut(String id) {
+    // check if key exists, then remove existing key
+    _shortcutKeys.removeWhere((key, value) => key == id);
   }
 }
