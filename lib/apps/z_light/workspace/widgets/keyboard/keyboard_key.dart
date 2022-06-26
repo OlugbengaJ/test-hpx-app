@@ -253,8 +253,6 @@ KeyModel _updateKeyInfo(
             updateKeyAndLayer(keyModel, chip, layer);
             break;
           case EnumModes.shortcut:
-            // if there's existing rect with matching id, don't add it
-
             final sublayer = layersProvider.getCurrentSublayer();
             if (sublayer != null) {
               // update key only when sublayer is active
