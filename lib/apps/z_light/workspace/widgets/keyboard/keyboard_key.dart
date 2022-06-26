@@ -117,17 +117,6 @@ KeyModel _updateKeyInfo(
     }
   }
 
-  // void clearChips(String key) {
-  //   // remove all chip layers in key
-  //   if (layersChipKeys.isNotEmpty & keyModel.keyCode.name.contains('kG')) {
-  //     // debugPrint(
-  //     //     'before ${keyModel.getChip(key)?.chipKey} rect ${krect.map((e) => e.chipKey)}');
-  //     keyModel.removeChip(key);
-  //     // debugPrint(
-  //     //     'after ${keyModel.getChip(key)?.chipKey} rect ${krect.map((e) => e.chipKey)}');
-  //   }
-  // }
-
   if (layers.isNotEmpty) {
     // add new chip layers in reverse order
     // get the current index id as we need to update its properties
@@ -293,14 +282,6 @@ KeyModel _updateKeyInfo(
                 }
               }
             }
-
-            break;
-          case EnumModes.shortcut:
-            // if there's existing rect with matching id, don't add it
-            final rectExist = krect.where((k) => k.chipKey == '$layerId');
-
-            debugPrint(
-                '====>>>rectExist ${keyModel.keyCode} $rectExist ${layer.keys.length} kIndex: ${layer.getKeyIndex(keyModel)}');
 
             break;
           default:
