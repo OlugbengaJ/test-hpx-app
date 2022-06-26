@@ -658,9 +658,18 @@ class KeysProvider with ChangeNotifier {
     ];
   }
 
+  /// [shortcutKeys] returns the private instance [_shortcutKeys].
+  ///
+  /// Shortcut keys are used to store all keys selected in the shortcut mode
+  /// which makes each key selection global regardless of the number
+  /// of shortcut layers or sublayers.
+  Map<String, List<KeyModel>> get shortcutKeys => _shortcutKeys;
+
   /// [_shortcutKeys] preserves shortcut keys.
   final Map<String, List<KeyModel>> _shortcutKeys = {};
 
+  /// [shortcutKeyExist] returns a boolean value indicating
+  /// if a [KeyModel] already exists in shortcut selections.
   bool shortcutKeyExist(KeyModel keyModel) {
     for (var e in _shortcutKeys.entries) {
       final keyFound =
@@ -672,6 +681,8 @@ class KeysProvider with ChangeNotifier {
     return false;
   }
 
+  /// [getShortcutKey] returns a map entry with the sublayer id as key while
+  /// value is a [KeyModel] whose keyCode matches the argument [keyModel] keyCode.
   MapEntry<String, KeyModel>? getShortcutKey(KeyModel keyModel) {
     if (!shortcutKeyExist(keyModel)) return null;
 
@@ -679,13 +690,9 @@ class KeysProvider with ChangeNotifier {
         .firstWhere((m) => m.value.any((k) => k.keyCode == keyModel.keyCode));
     return MapEntry(map.key,
         map.value.firstWhere((k) => k.keyCode == keyModel.keyCode).copyWith());
-
-    // _shortcutKeys.values
-    //     .firstWhere((l) => l.any((k) => k.keyCode == keyModel.keyCode))
-    //     .first
-    //     .copyWith();
   }
 
+  /// [getShortcutKeys] returns a list of [KeyModel] with matching sublayer [id].
   List<KeyModel>? getShortcutKeys(String id) {
     return _shortcutKeys[id];
   }

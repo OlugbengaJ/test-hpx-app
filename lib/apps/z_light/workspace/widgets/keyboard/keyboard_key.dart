@@ -86,8 +86,6 @@ KeyModel _updateKeyInfo(
   final layersChipKeys = keyModel.getLayeredChipsKeys();
 
   if (layersChipKeys.isNotEmpty) {
-    // TODO: using workspace provider layers selection map could be useful.
-
     // check if the key is selected for each layer, then paint if true
     // key has existing chips; preserve their properties
     for (var k in layersChipKeys) {
@@ -102,7 +100,21 @@ KeyModel _updateKeyInfo(
       keyModel.removeChip(k);
     }
 
-    // TODO: remove sublayers in shortcut mode
+    // remove sublayers that don't exist in shortcut mode.
+    if (layers.isNotEmpty) {
+      final sublayers = layersProvider.sublayerItems;
+      final shortcutKeys = keysProvider.shortcutKeys.keys.toSet();
+
+      for (var key in shortcutKeys) {
+        // remove all shortcuts since none exists in layer
+        if (sublayers.isEmpty) keysProvider.removeShortcut(key);
+
+        if (!sublayers.any((s) => '${s.id}' == key)) {
+          // shortcut key does not exist in sublayer, hence remove.
+          keysProvider.removeShortcut(key);
+        }
+      }
+    }
   }
 
   if (layers.isNotEmpty) {
@@ -127,7 +139,7 @@ KeyModel _updateKeyInfo(
           chip.showOutline = true;
         } else {
           // use existing color for non-current layer
-          final foundKeys = krect.where((e) => e.chipKey == chip?.chipKey);
+          final foundKeys = krect.where((e) => e.chipKey == chip.chipKey);
           if (foundKeys.isNotEmpty) {
             chip.color = foundKeys.first.color;
             chip.showOutline = false;
