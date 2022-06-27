@@ -12,6 +12,7 @@ class KeyModel with ChangeNotifier {
     required this.keyRadius,
     this.keyLeft = 0,
     this.keyTop = 0,
+    required this.keyColumn
   });
 
   /// [keyRow] indicates the row of the key
@@ -19,6 +20,7 @@ class KeyModel with ChangeNotifier {
   /// e.g. keyRow = 1 means the key is on the first row i.e. function key row,
   /// keyRow = 2 means the key in on the second row.
   final int keyRow;
+  final int keyColumn;
 
   /// [keyCode] uniquely identifies a key and is fixed regarless of language.
   final KeyCode keyCode;
@@ -50,9 +52,9 @@ class KeyModel with ChangeNotifier {
 
   /// [addChipIcon] adds an icon layer to chips.
   void addChipIcon(
-    List<KeyIconPath>? iconPath, {
-    Color? color,
-  }) {
+      List<KeyIconPath>? iconPath, {
+        Color? color,
+      }) {
     final icon = KeyPaintIcon(pathsValue: iconPath)
       ..chipKey = '${ChipKey.overlay}';
 
@@ -63,10 +65,10 @@ class KeyModel with ChangeNotifier {
 
   /// [addChipText] adds a text layer to chips.
   void addChipText(
-    String keyText, {
-    Color? color,
-    TextDirection? textDirection,
-  }) {
+      String keyText, {
+        Color? color,
+        TextDirection? textDirection,
+      }) {
     final text = KeyPaintText(textValue: keyText)
       ..chipKey = '${ChipKey.overlay}';
 
@@ -196,14 +198,14 @@ class KeyPaintText with KeyPaintChip {
 class KeyPaintRect with KeyPaintChip {
   /// [KeyPaintRect] intended to draw a RRect on a canvas.
   KeyPaintRect(
-    String key, {
-    Color rectColor = Colors.black,
-    double rectOpacity = 1.0,
-    PaintingStyle rectPaintingStyle = PaintingStyle.fill,
-    StrokeCap rectStrokeCap = StrokeCap.round,
-    StrokeJoin rectStrokeJoin = StrokeJoin.round,
-    double rectStrokeWidthFactor = 50,
-  }) {
+      String key, {
+        Color rectColor = Colors.black,
+        double rectOpacity = 1.0,
+        PaintingStyle rectPaintingStyle = PaintingStyle.fill,
+        StrokeCap rectStrokeCap = StrokeCap.round,
+        StrokeJoin rectStrokeJoin = StrokeJoin.round,
+        double rectStrokeWidthFactor = 50,
+      }) {
     chipKey = key;
     isOverlay = false;
     showOutline = false;

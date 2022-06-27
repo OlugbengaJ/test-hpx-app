@@ -5,7 +5,7 @@ import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 
-import 'package:hpx/utils/KeyboardController.dart';
+import '../../utils/KeyboardController.dart';
 
 ///[LayersProvider] to controle the layers state
 
@@ -25,6 +25,7 @@ class LayersProvider extends ChangeNotifier {
     physicalKeyboardController = KeyboardController(this);
   }
 
+  
   /// retrieve [_currentSublayer] only if [isSublayerSelected] is true
   LayerItemModel? getCurrentSublayer(){
     if(isSublayerSelected){
@@ -32,7 +33,6 @@ class LayersProvider extends ChangeNotifier {
     }
     return null;    
   }
-
 
   /// [hideDraggable] use to show or hide the stack layers for resizable widget
   bool hideDraggable = false;
@@ -43,6 +43,7 @@ class LayersProvider extends ChangeNotifier {
   int _listIndex = 0;
   int get length => _layeritems.length;
   int get listIndex => _listIndex;
+  ModeProvider? get modeProvider => _modeProvider;
 
   List<LayerItemModel> get layeritems =>
       _layeritems; // Should return only mainlayers
@@ -118,6 +119,7 @@ class LayersProvider extends ChangeNotifier {
           notifyListeners();
         }
       }
+
     }
 
     if(item.mode!.name != _modeProvider!.currentMode.name){
@@ -125,9 +127,6 @@ class LayersProvider extends ChangeNotifier {
     }
     
     item.mode =  _modeProvider!.getModeInformation();
-
-    
-    
     _layeritems[listIndex] = item;
 
     if (item.mode!.name == "Shortcut Colors") {
@@ -139,6 +138,8 @@ class LayersProvider extends ChangeNotifier {
             sublayer: true
         );
       }
+      
+      
       // debugPrint('$subLayers');
     }
     // for (var i = 0; i < length; i++) {
