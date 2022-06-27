@@ -581,43 +581,43 @@ class KeysProvider with ChangeNotifier {
       keyHeight: 0.1312806,
       keyRadius: 0.063100338,
     )..addChipIcon([
-      KeyIconPath()
-        ..x = 0.4198938
-        ..y = 0.1429925
-        ..keyIconLines = [
-          const KeyIconLine(0.06250000, 0.2045453),
-          const KeyIconLine(0.06250000, 0.4507563),
-          const KeyIconLine(0.4198938, 0.4507563),
-          const KeyIconLine(0.4198938, 0.1429925),
-        ],
-      KeyIconPath()
-        ..x = 0.9375000
-        ..y = 0.09375000
-        ..keyIconLines = [
-          const KeyIconLine(0.4938375, 0.1429925),
-          const KeyIconLine(0.4938375, 0.4507563),
-          const KeyIconLine(0.9375000, 0.4507563),
-          const KeyIconLine(0.9375000, 0.09375000),
-        ],
-      KeyIconPath()
-        ..x = 0.4198938
-        ..y = 0.5123094
-        ..keyIconLines = [
-          const KeyIconLine(0.06250000, 0.5123094),
-          const KeyIconLine(0.06250000, 0.7831438),
-          const KeyIconLine(0.4198938, 0.8323875),
-          const KeyIconLine(0.4198938, 0.5123094),
-        ],
-      KeyIconPath()
-        ..x = 0.9375000
-        ..y = 0.5123094
-        ..keyIconLines = [
-          const KeyIconLine(0.4938375, 0.5123094),
-          const KeyIconLine(0.4938375, 0.8323875),
-          const KeyIconLine(0.9375000, 0.9062500),
-          const KeyIconLine(0.9375000, 0.5123094),
-        ],
-    ]),
+        KeyIconPath()
+          ..x = 0.4198938
+          ..y = 0.1429925
+          ..keyIconLines = [
+            const KeyIconLine(0.06250000, 0.2045453),
+            const KeyIconLine(0.06250000, 0.4507563),
+            const KeyIconLine(0.4198938, 0.4507563),
+            const KeyIconLine(0.4198938, 0.1429925),
+          ],
+        KeyIconPath()
+          ..x = 0.9375000
+          ..y = 0.09375000
+          ..keyIconLines = [
+            const KeyIconLine(0.4938375, 0.1429925),
+            const KeyIconLine(0.4938375, 0.4507563),
+            const KeyIconLine(0.9375000, 0.4507563),
+            const KeyIconLine(0.9375000, 0.09375000),
+          ],
+        KeyIconPath()
+          ..x = 0.4198938
+          ..y = 0.5123094
+          ..keyIconLines = [
+            const KeyIconLine(0.06250000, 0.5123094),
+            const KeyIconLine(0.06250000, 0.7831438),
+            const KeyIconLine(0.4198938, 0.8323875),
+            const KeyIconLine(0.4198938, 0.5123094),
+          ],
+        KeyIconPath()
+          ..x = 0.9375000
+          ..y = 0.5123094
+          ..keyIconLines = [
+            const KeyIconLine(0.4938375, 0.5123094),
+            const KeyIconLine(0.4938375, 0.8323875),
+            const KeyIconLine(0.9375000, 0.9062500),
+            const KeyIconLine(0.9375000, 0.5123094),
+          ],
+      ]),
     KeyModel(
       keyRow: 5,
       keyColumn: 1,
@@ -700,7 +700,7 @@ class KeysProvider with ChangeNotifier {
   /// [replace] replaces an existing [KeyModel]
   void replace(KeyModel key) {
     int keyIndex =
-    _keys.indexWhere((element) => element.keyCode == key.keyCode);
+        _keys.indexWhere((element) => element.keyCode == key.keyCode);
     _keys.removeAt(keyIndex);
     _keys.insert(keyIndex, key);
 
@@ -728,14 +728,85 @@ class KeysProvider with ChangeNotifier {
         .toList();
   }
 
-  /// [getTopLayeredKeys] returns a list of [KeyModel] with
+  /// [getTopLayeredKeys] returns a new instance of list of [KeyModel] with
   /// top level layered chips from [getLayeredKeys].
   List<KeyModel> getTopLayeredKeys() {
     return [
       ...getLayeredKeys().map((e) {
-        e.topChip = e.getLayeredChips().last;
-        return e;
+        return e.copyWith();
       })
     ];
+  }
+
+  /// [shortcutKeys] returns the private instance [_shortcutKeys].
+  ///
+  /// Shortcut keys are used to store all keys selected in the shortcut mode
+  /// which makes each key selection global regardless of the number
+  /// of shortcut layers or sublayers.
+  Map<String, List<KeyModel>> get shortcutKeys => _shortcutKeys;
+
+  /// [_shortcutKeys] preserves shortcut keys.
+  final Map<String, List<KeyModel>> _shortcutKeys = {};
+
+  /// [shortcutKeyExist] returns a boolean value indicating
+  /// if a [KeyModel] already exists in shortcut selections.
+  bool shortcutKeyExist(KeyModel keyModel) {
+    for (var e in _shortcutKeys.entries) {
+      final keyFound =
+          e.value.any((element) => element.keyCode == keyModel.keyCode);
+
+      if (keyFound) return keyFound;
+    }
+
+    return false;
+  }
+
+  /// [getShortcutKey] returns a map entry with the sublayer id as key while
+  /// value is a [KeyModel] whose keyCode matches the argument [keyModel] keyCode.
+  MapEntry<String, KeyModel>? getShortcutKey(KeyModel keyModel) {
+    if (!shortcutKeyExist(keyModel)) return null;
+
+    final map = _shortcutKeys.entries
+        .firstWhere((m) => m.value.any((k) => k.keyCode == keyModel.keyCode));
+    return MapEntry(map.key,
+        map.value.firstWhere((k) => k.keyCode == keyModel.keyCode).copyWith());
+  }
+
+  /// [getShortcutKeys] returns a list of [KeyModel] with matching sublayer [id].
+  List<KeyModel>? getShortcutKeys(String id) {
+    return _shortcutKeys[id];
+  }
+
+  /// [addShortcutKey] adds a [KeyModel] to a shortut layer for a specific [id].
+  ///
+  /// If the shortcut layer id does not exist, a new map entry is created, and
+  /// the [KeyModel] object is always replaced.
+  void addShortcutKey(String id, KeyModel keyModel) {
+    final shortcutKeys = getShortcutKeys(id);
+
+    if (shortcutKeys == null) {
+      // add new shortcut layer id
+      _shortcutKeys.putIfAbsent(id, () => []);
+    } else {
+      // remove the key model
+      removeShortcutKey(id, keyModel);
+    }
+
+    // add the key model
+    _shortcutKeys[id]?.add(keyModel);
+  }
+
+  /// [removeShortcutKey] removes a [KeyModel] from a shortut layer with map key [id].
+  ///
+  /// If the shortcut layer id does not exist, nothing is done.
+  void removeShortcutKey(String id, KeyModel keyModel) {
+    // check if key exists, then remove existing key
+    getShortcutKeys(id)?.removeWhere((k) => k.keyCode == keyModel.keyCode);
+  }
+
+  /// [removeShortcut] removes an existing shortcut layer
+  void removeShortcut(String id) {
+    // check if key exists, then remove existing key
+    _shortcutKeys.removeWhere((key, value) => key == id);
   }
 }

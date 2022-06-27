@@ -6,13 +6,13 @@ import 'package:hpx/models/apps/zlightspace_models/workspace_models/key_code.dar
 class KeyModel with ChangeNotifier {
   KeyModel({
     required this.keyRow,
+    required this.keyColumn,
     required this.keyCode,
     required this.keyWidth,
     required this.keyHeight,
     required this.keyRadius,
     this.keyLeft = 0,
     this.keyTop = 0,
-    required this.keyColumn
   });
 
   /// [keyRow] indicates the row of the key
@@ -20,6 +20,7 @@ class KeyModel with ChangeNotifier {
   /// e.g. keyRow = 1 means the key is on the first row i.e. function key row,
   /// keyRow = 2 means the key in on the second row.
   final int keyRow;
+
   final int keyColumn;
 
   /// [keyCode] uniquely identifies a key and is fixed regarless of language.
@@ -31,30 +32,54 @@ class KeyModel with ChangeNotifier {
   final double keyHeight;
   final double keyRadius;
 
+  /// [copyWith] returns a new instance of [KeyModel].
+  KeyModel copyWith({
+    Map<String, KeyPaintChip>? chips,
+    int? keyRow,
+    KeyCode? keyCode,
+    double? keyWidth,
+    double? keyHeight,
+    double? keyRadius,
+    double? keyLeft,
+    double? keyTop,
+  }) {
+    return KeyModel(
+      keyRow: keyRow ?? this.keyRow,
+      keyColumn: keyColumn,
+      keyCode: keyCode ?? this.keyCode,
+      keyWidth: keyWidth ?? this.keyWidth,
+      keyHeight: keyHeight ?? this.keyHeight,
+      keyRadius: keyRadius ?? this.keyRadius,
+      keyLeft: keyLeft ?? this.keyLeft,
+      keyTop: keyTop ?? this.keyTop,
+    ).._chips = chips ?? this.chips;
+  }
+
   /// [_chips] holds multiple layers of a key
   /// e.g. a key could have only 1 base color, multiple layers with unique keys,
   /// and only 1 overlay (text or icon layer).
   ///
   /// Each layer of the chip will be rendered from first to last and by default,
   /// a chip is initialized with a [KeyPaintRect] base.
-  final Map<String, KeyPaintChip> _chips = {
+  Map<String, KeyPaintChip> _chips = {
     ChipKey.base.toString(): KeyPaintRect(ChipKey.base.toString()),
   };
 
   /// [chips] returns the values of [_chips] as a new list.
-  Map<String, KeyPaintChip> get chips => _chips;
+  Map<String, KeyPaintChip> get chips =>
+      _chips.map((key, value) => MapEntry(key, value));
 
   /// [chipsValues] returns the values of [_chips] as a new list.
   List<KeyPaintChip> get chipsValues => [..._chips.values];
 
-  /// [topChip] sets the topmost paint of this key.
-  KeyPaintRect? topChip;
+  /// [topChip] returns the topmost layered paint of this key.
+  KeyPaintRect? get topChip => getLayeredChips().last;
 
   /// [addChipIcon] adds an icon layer to chips.
   void addChipIcon(
-      List<KeyIconPath>? iconPath, {
-        Color? color,
-      }) {
+    List<KeyIconPath>? iconPath, {
+    Color? color,
+  }) {
     final icon = KeyPaintIcon(pathsValue: iconPath)
       ..chipKey = '${ChipKey.overlay}';
 
@@ -65,10 +90,10 @@ class KeyModel with ChangeNotifier {
 
   /// [addChipText] adds a text layer to chips.
   void addChipText(
-      String keyText, {
-        Color? color,
-        TextDirection? textDirection,
-      }) {
+    String keyText, {
+    Color? color,
+    TextDirection? textDirection,
+  }) {
     final text = KeyPaintText(textValue: keyText)
       ..chipKey = '${ChipKey.overlay}';
 
@@ -110,7 +135,7 @@ class KeyModel with ChangeNotifier {
   /// [getLayeredChips] returns chips other than base, overlay, and icon
   List<KeyPaintRect?> getLayeredChips() {
     return [
-      ..._chips.entries.map((e) {
+      ...chips.entries.map((e) {
         if (_isLayerChip(e.key)) {
           return e.value as KeyPaintRect;
         } else {
@@ -198,14 +223,14 @@ class KeyPaintText with KeyPaintChip {
 class KeyPaintRect with KeyPaintChip {
   /// [KeyPaintRect] intended to draw a RRect on a canvas.
   KeyPaintRect(
-      String key, {
-        Color rectColor = Colors.black,
-        double rectOpacity = 1.0,
-        PaintingStyle rectPaintingStyle = PaintingStyle.fill,
-        StrokeCap rectStrokeCap = StrokeCap.round,
-        StrokeJoin rectStrokeJoin = StrokeJoin.round,
-        double rectStrokeWidthFactor = 50,
-      }) {
+    String key, {
+    Color rectColor = Colors.black,
+    double rectOpacity = 1.0,
+    PaintingStyle rectPaintingStyle = PaintingStyle.fill,
+    StrokeCap rectStrokeCap = StrokeCap.round,
+    StrokeJoin rectStrokeJoin = StrokeJoin.round,
+    double rectStrokeWidthFactor = 50,
+  }) {
     chipKey = key;
     isOverlay = false;
     showOutline = false;

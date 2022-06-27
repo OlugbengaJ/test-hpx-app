@@ -258,7 +258,7 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [getKeyDragMode] returns the current mode of the [Workspace].
   WorkspaceDragMode? get getKeyDragMode => _keyDragMode;
-  bool _isCurrentDeviceSelected = false;
+  // bool _isCurrentDeviceSelected = false;
 
   /// [_disableZoneClick] tracks the disabled state of the highlight icon.
   bool _disableZoneClick = false;
@@ -307,7 +307,7 @@ class WorkspaceProvider with ChangeNotifier {
     switch (_keyDragMode) {
       case WorkspaceDragMode.click:
         // set to true to enable selection of the entire keys
-        _isCurrentDeviceSelected = true;
+        // _isCurrentDeviceSelected = true;
 
         // set the current layer's drag mode
         _getLayerLTWH(_currentLayerId)!.dragMode = WorkspaceDragMode.click;
@@ -328,7 +328,7 @@ class WorkspaceProvider with ChangeNotifier {
 
         break;
       default:
-        _isCurrentDeviceSelected = false;
+      // _isCurrentDeviceSelected = false;
     }
 
     notifyListeners();
