@@ -25,6 +25,7 @@ import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // default varaible for the profile dropdown picker
 List<PickerModel> profileList = [
@@ -401,5 +402,19 @@ class ModeProvider extends ChangeNotifier {
         (isSubLayer) ? EnumModeType.sublayer : EnumModeType.layers;
     // print(currentMode.modeType);
     notifyListeners();
+  }
+
+  void activateContactSupportDialog() {
+    this.isLost = true;
+    notifyListeners();
+  }
+
+  void openBrowser() async {
+    var url = Uri(scheme: 'https', host: 'support.hp.com', path: '/us-en/contact/');
+    if ( await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

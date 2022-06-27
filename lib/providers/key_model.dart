@@ -6,6 +6,7 @@ import 'package:hpx/models/apps/zlightspace_models/workspace_models/key_code.dar
 class KeyModel with ChangeNotifier {
   KeyModel({
     required this.keyRow,
+    required this.keyColumn,
     required this.keyCode,
     required this.keyWidth,
     required this.keyHeight,
@@ -19,6 +20,8 @@ class KeyModel with ChangeNotifier {
   /// e.g. keyRow = 1 means the key is on the first row i.e. function key row,
   /// keyRow = 2 means the key in on the second row.
   final int keyRow;
+
+  final int keyColumn;
 
   /// [keyCode] uniquely identifies a key and is fixed regarless of language.
   final KeyCode keyCode;
@@ -42,6 +45,7 @@ class KeyModel with ChangeNotifier {
   }) {
     return KeyModel(
       keyRow: keyRow ?? this.keyRow,
+      keyColumn: keyColumn,
       keyCode: keyCode ?? this.keyCode,
       keyWidth: keyWidth ?? this.keyWidth,
       keyHeight: keyHeight ?? this.keyHeight,

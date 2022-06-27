@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/utils/HardwareEffect.dart';
 import 'dart:isolate';
@@ -589,7 +588,7 @@ class KeyboardController {
       case "Mood": { runningEffects.add(ModeEffect(layer.id, layersProvider)); }
       break;
 
-      case "Wave": { runningEffects.add(WaveEffect(layer.id, layersProvider));}
+      case "Wave": {runningEffects.add(WaveEffect(layer.id, layersProvider));}
       break;
 
       case "Color Cycle": {runningEffects.add(ColorCycleEffect(layer.id, layersProvider)); }
@@ -607,7 +606,7 @@ class KeyboardController {
       case "Image": { runningEffects.add(ImageEffect(layer.id, layersProvider)); }
       break;
 
-      case "Ambient": { runningEffects.add(AmbientEffect(layer.id, layersProvider));}
+      case "Contact Support": { runningEffects.add(SupportContactEffect(layer.id, layersProvider));}
       break;
 
       default: { }
