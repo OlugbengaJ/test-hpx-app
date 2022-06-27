@@ -119,12 +119,15 @@ class LayersProvider extends ChangeNotifier {
 
   /// listen to any change from the tools and effects so the current layers can be updated
   Future<void> toolsEffectsUpdated({bool modeChanged = false}) async {
+    print("Mode changed: $modeChanged");
     LayerItemModel item = getItem(listIndex);
     var subLayers = getSublayers(item.id);
 
+    print("Shortcut available: $shortcutAvalaible");
+
     
     /// check if there is already a layer with shortcut mode
-    if(shortcutAvalaible && !creatingNewLayer){
+    if(modeChanged){
       layerAlertDialog(_context!);      
     }else{
       if(_modeProvider!.getModeInformation().name == "Shortcut Colors"){
