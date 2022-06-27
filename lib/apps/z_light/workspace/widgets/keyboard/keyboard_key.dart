@@ -1,9 +1,9 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/key_rrect.dart';
+import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/key_model.dart';
+import 'package:hpx/providers/keys_provider.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +29,7 @@ class KeyboardKey extends StatelessWidget {
     // Gets access to the widget's position (offset) in the widget tree.
     final box = context.findRenderObject() as RenderBox?;
     final layersProvider = Provider.of<LayersProvider>(context);
+    final keysProvider = Provider.of<KeysProvider>(context);
 
     return Stack(
       children: [
@@ -37,7 +38,7 @@ class KeyboardKey extends StatelessWidget {
           child: Consumer<WorkspaceProvider>(
             builder: (context, workspaceProvider, child) {
               return InkWell(
-                onTap: onTapHandler,
+                onTap: null, //onTapHandler,
 
                 // listens to key changes and allows updating this key instance
                 child: AnimatedBuilder(
@@ -48,6 +49,7 @@ class KeyboardKey extends StatelessWidget {
                       keyModel: _updateKeyInfo(
                         workspaceProvider,
                         layersProvider,
+                        keysProvider,
                         keyModel,
                         box,
                       ),
@@ -70,6 +72,7 @@ class KeyboardKey extends StatelessWidget {
 KeyModel _updateKeyInfo(
   WorkspaceProvider provider,
   LayersProvider layersProvider,
+  KeysProvider keysProvider,
   KeyModel keyModel,
   RenderBox? renderBox,
 ) {
@@ -83,8 +86,6 @@ KeyModel _updateKeyInfo(
   final layersChipKeys = keyModel.getLayeredChipsKeys();
 
   if (layersChipKeys.isNotEmpty) {
-    // TODO: using workspace provider layers selection map could be useful.
-
     // check if the key is selected for each layer, then paint if true
     // key has existing chips; preserve their properties
     for (var k in layersChipKeys) {
@@ -98,18 +99,23 @@ KeyModel _updateKeyInfo(
     for (var k in layersChipKeys) {
       keyModel.removeChip(k);
     }
-  }
 
-  // void clearChips(String key) {
-  //   // remove all chip layers in key
-  //   if (layersChipKeys.isNotEmpty & keyModel.keyCode.name.contains('kG')) {
-  //     // debugPrint(
-  //     //     'before ${keyModel.getChip(key)?.chipKey} rect ${krect.map((e) => e.chipKey)}');
-  //     keyModel.removeChip(key);
-  //     // debugPrint(
-  //     //     'after ${keyModel.getChip(key)?.chipKey} rect ${krect.map((e) => e.chipKey)}');
-  //   }
-  // }
+    // remove sublayers that don't exist in shortcut mode.
+    if (layers.isNotEmpty) {
+      final sublayers = layersProvider.sublayerItems;
+      final shortcutKeys = keysProvider.shortcutKeys.keys.toSet();
+
+      for (var key in shortcutKeys) {
+        // remove all shortcuts since none exists in layer
+        if (sublayers.isEmpty) keysProvider.removeShortcut(key);
+
+        if (!sublayers.any((s) => '${s.id}' == key)) {
+          // shortcut key does not exist in sublayer, hence remove.
+          keysProvider.removeShortcut(key);
+        }
+      }
+    }
+  }
 
   if (layers.isNotEmpty) {
     // add new chip layers in reverse order
@@ -119,20 +125,13 @@ KeyModel _updateKeyInfo(
     for (var i = layers.length - 1; i >= 0; i--) {
       final layer = layers[i];
       final layerId = layer.id;
-
       final boxZone = provider.boxZone(renderBox, layerId);
 
-      // remove key in layer
-      // TODO: keep the keymodels of shorcut to use them later in the view if already exists
-      // i.e. add the same keymodel back to the view if it's not boxed
-      // may need to delete the if statement.
-      if (layer.mode?.value != EnumModes.shortcut) {
-        layer.removeKey(keyModel);
-      }
+      layer.removeKey(keyModel);
 
       if (boxZone != null) {
         // insert new chip with the layer id as key
-        final chip = KeyPaintRect('$layerId');
+        KeyPaintRect chip = KeyPaintRect('$layerId');
 
         if ('${currentLayer.id}' == chip.chipKey) {
           // use the default color for current layer
@@ -161,6 +160,8 @@ KeyModel _updateKeyInfo(
             );
 
             chip.color = animColor!;
+
+            updateKeyAndLayer(keyModel, chip, layer);
             break;
           case EnumModes.colorcycle:
             final animColor = provider.animColorTween(
@@ -168,6 +169,8 @@ KeyModel _updateKeyInfo(
                 speed: layer.mode?.effects.speed);
 
             chip.color = animColor!;
+
+            updateKeyAndLayer(keyModel, chip, layer);
             break;
           case EnumModes.wave:
             if (layer.mode?.currentColor != null) {
@@ -219,6 +222,8 @@ KeyModel _updateKeyInfo(
               // layer.mode!.currentColor[index];
 
             }
+
+            updateKeyAndLayer(keyModel, chip, layer);
             break;
           case EnumModes.image:
             // paint all keys based on color matrix (m x n)
@@ -244,37 +249,73 @@ KeyModel _updateKeyInfo(
 
               chip.color = rowColors[colIndex];
             }
+
+            updateKeyAndLayer(keyModel, chip, layer);
             break;
           case EnumModes.shortcut:
-            // if there's existing rect with matching id, don't add it
-            final rectExist = krect.where((k) => k.chipKey == '$layerId');
+            final sublayer = layersProvider.getCurrentSublayer();
+            if (sublayer != null) {
+              // update key only when sublayer is active
+              // TODO: fix the shortcut color. this returns black color
+              final sublayerId = sublayer.id;
+              chip = KeyPaintRect('$sublayerId');
+              // sublayer.mode?.currentColor.first;
 
-            debugPrint(
-                '====>>>rectExist ${keyModel.keyCode} $rectExist ${layer.keys.length} kIndex: ${layer.getKeyIndex(keyModel)}');
+              if (!keysProvider.shortcutKeyExist(keyModel)) {
+                // add shortcut key since it does not exist in shortcut.
+                updateKeyAndLayer(keyModel, chip, layer);
+                keysProvider.addShortcutKey('$sublayerId', keyModel.copyWith());
+              } else {
+                // key already exist in shortcut
+                final shortcutKey = keysProvider.getShortcutKey(keyModel);
+
+                if (shortcutKey?.key == chip.chipKey) {
+                  // update key color if current chip key equals the shortcut key.
+                  final topChip = shortcutKey?.value.topChip;
+
+                  topChip?.color = layer.mode?.currentColor.last;
+                  keyModel.addChip(shortcutKey?.value.topChip);
+                } else {
+                  keyModel.addChip(shortcutKey?.value.topChip);
+                }
+              }
+            }
 
             break;
           default:
+            updateKeyAndLayer(keyModel, chip, layer);
             break;
         }
+      } else if (layer.mode?.value == EnumModes.shortcut) {
+        // paint previously selected shortcut keys.
+        final keyCopy = keysProvider.getShortcutKey(keyModel);
 
-        chip.opacity = layer.visible ? 1 : 0;
-        layer.addKey(keyModel);
+        if (keyCopy != null) {
+          // update key color if sublayer id equals key copy id
+          final sublayer = layersProvider.getCurrentSublayer();
+          if (keyCopy.key == '${sublayer?.id}') {
+            keyCopy.value.topChip?.color = layer.mode?.currentColor.last;
+          }
 
-        // add the chip
-        keyModel.addChip(chip);
-      } else {
-        // TODO: shortcut mode => krect still has the value of the selected key
-        // hence need to add again if the selection exists but need to find a way
-        // to track if this was a second click in which case we need to remove it.
-        final rectExist = krect.where((k) => k.chipKey == '$layerId');
-        if (rectExist.isNotEmpty) {
-          // keyModel.addChip(rectExist.first);
+          // add the key copy top chip.
+          keyModel.addChip(keyCopy.value.topChip);
         }
       }
     }
   }
 
   return keyModel;
+}
+
+void updateKeyAndLayer(
+    KeyModel keyModel, KeyPaintRect chip, LayerItemModel layer) {
+  chip.opacity = layer.visible ? 1 : 0;
+
+  // add key model to layer
+  layer.addKey(keyModel);
+
+  // add the chip
+  keyModel.addChip(chip);
 }
 
 int lastShiftIndex = -1;
