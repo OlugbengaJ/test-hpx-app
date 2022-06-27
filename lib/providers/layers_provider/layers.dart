@@ -117,7 +117,7 @@ class LayersProvider extends ChangeNotifier {
   }
 
   /// listen to any change from the tools and effects so the current layers can be updated
-  Future<void> toolsEffectsUpdated() async {
+  Future<void> toolsEffectsUpdated({bool modeChanged = false}) async {
     LayerItemModel item = getItem(listIndex);
     var subLayers = getSublayers(item.id);
 
