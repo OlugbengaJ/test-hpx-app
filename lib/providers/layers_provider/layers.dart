@@ -119,24 +119,24 @@ class LayersProvider extends ChangeNotifier {
 
   /// listen to any change from the tools and effects so the current layers can be updated
   Future<void> toolsEffectsUpdated({bool modeChanged = false}) async {
-    print("Mode changed: $modeChanged");
+    debugPrint("Mode changed: $modeChanged");
     LayerItemModel item = getItem(listIndex);
     var subLayers = getSublayers(item.id);
 
-    print("Shortcut available: $shortcutAvalaible");
+    debugPrint("Shortcut available: $shortcutAvalaible");
 
     
     /// check if there is already a layer with shortcut mode
     if(modeChanged){
       layerAlertDialog(_context!);      
     }else{
-      if(_modeProvider!.getModeInformation().name == "Shortcut Colors"){
+      if(_modeProvider!.getModeInformation().value == EnumModes.shortcut){
         shortcutAvalaible = true;
       }
 
       // Check the if the current mode is shortcut colors
-      if(item.mode!.name == "Shortcut Colors"){
-        if(_modeProvider!.getModeInformation().name != "Shortcut Colors"){
+      if(item.mode!.value == EnumModes.shortcut){
+        if(_modeProvider!.getModeInformation().value != EnumModes.shortcut){
           
           if(sublayerItems.isNotEmpty){
             _sublayers.removeWhere((layer) => layer.parentID==item.id);
@@ -156,7 +156,7 @@ class LayersProvider extends ChangeNotifier {
       
       _layeritems[listIndex] = item;
 
-      if (item.mode!.name == "Shortcut Colors") {
+      if (item.mode!.value == EnumModes.shortcut) {
         if(subLayers.isEmpty){
           duplicateOrCreatSubLayer(
               item,
@@ -312,7 +312,7 @@ class LayersProvider extends ChangeNotifier {
     _layeritems[_listIndex] = item;
 
 
-    if (item.mode!.name == "Shortcut Colors") {
+    if (item.mode!.value == EnumModes.shortcut) {
       //_modeProvider!.setModeType(true);
     }
     toggleHideStackedLayers(!item.visible);
@@ -404,7 +404,7 @@ class LayersProvider extends ChangeNotifier {
 
     shortcutAvalaible = false;
     for (var layer in layeritems) {
-      if(layer.mode!.name == "Shortcut Colors"){
+      if(layer.mode!.value == EnumModes.shortcut){
         shortcutAvalaible = true;
         break;
       }
