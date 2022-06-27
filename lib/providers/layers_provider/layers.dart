@@ -8,6 +8,7 @@ import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/utils/KeyboardController.dart';
 import 'package:hpx/widgets/components/layers.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
+import '../../utils/KeyboardController.dart';
 
 ///[LayersProvider] to controle the layers state
 
@@ -44,7 +45,6 @@ class LayersProvider extends ChangeNotifier {
     return null;    
   }
 
-
   /// [hideDraggable] use to show or hide the stack layers for resizable widget
   bool hideDraggable = false;
   bool isLayerVisible = true;
@@ -54,6 +54,7 @@ class LayersProvider extends ChangeNotifier {
   int _listIndex = 0;
   int get length => _layeritems.length;
   int get listIndex => _listIndex;
+  ModeProvider? get modeProvider => _modeProvider;
 
   List<LayerItemModel> get layeritems =>
       _layeritems; // Should return only mainlayers
