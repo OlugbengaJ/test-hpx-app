@@ -422,7 +422,7 @@ class Device extends Comparer {
   bool enabled;
 }
 
-// TODO: this may need to be refactored and retrieved from storage or an API.
+// TODO: devices may be refactored and retrieved from storage or an API.
 
 /// [devices] returns the list of supported devices and their sub devices.
 List<Device> devices() {
