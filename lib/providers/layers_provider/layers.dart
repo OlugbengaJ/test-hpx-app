@@ -5,6 +5,9 @@ import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 
+import 'package:hpx/utils/KeyboardController.dart';
+import 'package:hpx/widgets/components/layers.dart';
+import 'package:hpx/widgets/components/picker_dropdown.dart';
 import '../../utils/KeyboardController.dart';
 
 ///[LayersProvider] to controle the layers state
@@ -17,15 +20,23 @@ class LayersProvider extends ChangeNotifier {
   int currentEditingID = 0; // if the ID is 0 then no layer is in edit mode
   int currentSublayerID = 0; /// if the currentSubLayerID is 0 that means there is no sublayer selected
   bool isSublayerSelected = false; 
+  bool shortcutAvalaible = false;
+  bool creatingNewLayer = false;
   late LayerItemModel _currentSublayer;
   GlobalKey<FormFieldState>? editLayerKey;
   late KeyboardController physicalKeyboardController;
+  BuildContext? _context;
+
 
   LayersProvider() {
     physicalKeyboardController = KeyboardController(this);
   }
 
-  
+  setBuildContext(BuildContext context){
+    _context = context;
+    notifyListeners();
+  }
+
   /// retrieve [_currentSublayer] only if [isSublayerSelected] is true
   LayerItemModel? getCurrentSublayer(){
     if(isSublayerSelected){
@@ -106,45 +117,68 @@ class LayersProvider extends ChangeNotifier {
     _modeProvider = modeProvider;
   }
 
+
+
+
   /// listen to any change from the tools and effects so the current layers can be updated
-  Future<void> toolsEffectsUpdated() async {
+  Future<void> toolsEffectsUpdated({bool modeChanged = false}) async {
+    debugPrint("Mode changed: $modeChanged");
     LayerItemModel item = getItem(listIndex);
+    if(isSublayerSelected & !creatingNewLayer){
+      item = getCurrentSublayer()!;
+    }
     var subLayers = getSublayers(item.id);
 
-    // Check the if the current mode is shortcut colors
-    if(item.mode!.name == "Shortcut Colors"){
-      if(_modeProvider!.getModeInformation().name != "Shortcut Colors"){
-        if(sublayerItems.isNotEmpty){
-          _sublayers.removeWhere((layer) => layer.parentID==item.id);
-          notifyListeners();
-        }
+    
+    /// check if there is already a layer with shortcut mode
+    if(modeChanged){
+      if(shortcutAvalaible){
+        layerAlertDialog(_context!);
+      }
+          
+    }else{
+      if(_modeProvider!.getModeInformation().value == EnumModes.shortcut){
+        shortcutAvalaible = true;
       }
 
-    }
+      // Check the if the current mode is shortcut colors
+      if(item.mode!.value == EnumModes.shortcut){
+        if(_modeProvider!.getModeInformation().value != EnumModes.shortcut){
+          
+          if(sublayerItems.isNotEmpty){
+            _sublayers.removeWhere((layer) => layer.parentID==item.id);
+            notifyListeners();
+          }
+        }      
 
-    if(item.mode!.name != _modeProvider!.currentMode.name){
-      item.layerText = _modeProvider!.currentMode.name;
+      }
+
+      if(item.mode!.name != _modeProvider!.currentMode.name){
+        item.layerText = _modeProvider!.currentMode.name;
+      }
+      
+      item.mode =  _modeProvider!.getModeInformation();      
+      if(isSublayerSelected & !creatingNewLayer){
+        //_sublayers[listIndex] = item;
+      }else{
+        _layeritems[listIndex] = item;
+      }
+      
+
+      if (item.mode!.value == EnumModes.shortcut) {
+        if(subLayers.isEmpty){
+          duplicateOrCreatSubLayer(
+              item,
+              listIndex,
+              _modeProvider!,
+              sublayer: true
+          );
+        }
+        // debugPrint('$subLayers');
+      }
+
     }
     
-    item.mode =  _modeProvider!.getModeInformation();
-    _layeritems[listIndex] = item;
-
-    if (item.mode!.name == "Shortcut Colors") {
-      if(subLayers.isEmpty){
-        duplicateOrCreatSubLayer(
-            item,
-            listIndex,
-            _modeProvider!,
-            sublayer: true
-        );
-      }
-      
-      
-      // debugPrint('$subLayers');
-    }
-    // for (var i = 0; i < length; i++) {
-    //   debugPrint('${layeritems[i].mode?.currentColor.first}');
-    // }
     physicalKeyboardController.addLayer(item);
     notifyListeners();
   }
@@ -201,8 +235,14 @@ class LayersProvider extends ChangeNotifier {
     return layers;
   }
 
+  disableCreatingNewLayerMode(){
+    creatingNewLayer = false;
+    notifyListeners();
+  }
+
   /// Add a new layer. By default new added layers use the mood mode
   void add(LayerItemModel item) {
+    creatingNewLayer = true;
     ToolsModeModel mode = ToolsModeModel(
         currentColor: moodThemesList.first.colorCode,
         effects: EffectsModel(effectName: EnumModes.mood),
@@ -238,6 +278,10 @@ class LayersProvider extends ChangeNotifier {
 
     duplicatedItem.mode = item.mode;
 
+    for (var element in _sublayers) {
+      element.listDisplayColor = Colors.grey;
+    }
+
     if (sublayer) {
       modeProvider.setModeType(true);
       item.hasSublayer = true;
@@ -258,8 +302,8 @@ class LayersProvider extends ChangeNotifier {
   }
 
 
-  void setShortuctKeys(BuildContext context, List<List<String>> keys){
-    _modeProvider!.setShortcutKeys(context, keys);
+  void setShortuctKeys(List<List<String>> keys){
+    _modeProvider!.setShortcutKeys(_context, keys);
     notifyListeners();
   }
 
@@ -276,7 +320,7 @@ class LayersProvider extends ChangeNotifier {
     _layeritems[_listIndex] = item;
 
 
-    if (item.mode!.name == "Shortcut Colors") {
+    if (item.mode!.value == EnumModes.shortcut) {
       //_modeProvider!.setModeType(true);
     }
     toggleHideStackedLayers(!item.visible);
@@ -285,8 +329,17 @@ class LayersProvider extends ChangeNotifier {
   }
 
   void changeSublayerIndex(int subIndex) {
+    for (var element in _layeritems) {
+      element.listDisplayColor = Colors.grey;
+    }
+
+    for (var element in _sublayers) {
+      element.listDisplayColor = Colors.grey;
+    }
+
     _modeProvider!.setModeType(true);
     LayerItemModel sublayer = sublayerItems[subIndex];
+    sublayer.listDisplayColor = Colors.white;
     _currentSublayer = sublayer;
     isSublayerSelected = true;
     notifyListeners();
@@ -363,6 +416,14 @@ class LayersProvider extends ChangeNotifier {
         if (_layeritems.isNotEmpty) {
           changeIndex(0);
         }
+      }
+    }
+
+    shortcutAvalaible = false;
+    for (var layer in layeritems) {
+      if(layer.mode!.value == EnumModes.shortcut){
+        shortcutAvalaible = true;
+        break;
       }
     }
 
