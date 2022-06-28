@@ -218,7 +218,7 @@ KeyModel _updateKeyInfo(
                 index = (colIndex - incrementer).abs() % colorLength;
               }
 
-              chip.color = colors[index];
+              chip.color = layer.mode!.currentColor[index]; //colors[index];
               // layer.mode!.currentColor[index];
 
             }
@@ -256,7 +256,7 @@ KeyModel _updateKeyInfo(
             final sublayer = layersProvider.getCurrentSublayer();
             if (sublayer != null) {
               // update key only when sublayer is active
-              // TODO: fix the shortcut color. this returns black color
+              // TODO: fix the shortcut color. returns black color
               final sublayerId = sublayer.id;
               chip = KeyPaintRect('$sublayerId');
               // sublayer.mode?.currentColor.first;
@@ -265,6 +265,11 @@ KeyModel _updateKeyInfo(
                 // add shortcut key since it does not exist in shortcut.
                 updateKeyAndLayer(keyModel, chip, layer);
                 keysProvider.addShortcutKey('$sublayerId', keyModel.copyWith());
+
+                // TODO: add the shortcut in tools & effect
+                // sublayer.mode?.shortcutKeys?.add(['${keyModel.keyCode}']);
+                // List<List<String>> example = [['open whatsapp'], ['cmd + w']];
+                // modeprovider.setShortcutKeys(context, example);
               } else {
                 // key already exist in shortcut
                 final shortcutKey = keysProvider.getShortcutKey(keyModel);
