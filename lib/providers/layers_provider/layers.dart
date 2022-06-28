@@ -117,18 +117,25 @@ class LayersProvider extends ChangeNotifier {
     _modeProvider = modeProvider;
   }
 
+
+
+
   /// listen to any change from the tools and effects so the current layers can be updated
   Future<void> toolsEffectsUpdated({bool modeChanged = false}) async {
     debugPrint("Mode changed: $modeChanged");
     LayerItemModel item = getItem(listIndex);
+    if(isSublayerSelected & !creatingNewLayer){
+      item = getCurrentSublayer()!;
+    }
     var subLayers = getSublayers(item.id);
-
-    debugPrint("Shortcut available: $shortcutAvalaible");
 
     
     /// check if there is already a layer with shortcut mode
     if(modeChanged){
-      layerAlertDialog(_context!);      
+      if(shortcutAvalaible){
+        layerAlertDialog(_context!);
+      }
+          
     }else{
       if(_modeProvider!.getModeInformation().value == EnumModes.shortcut){
         shortcutAvalaible = true;
@@ -150,11 +157,13 @@ class LayersProvider extends ChangeNotifier {
         item.layerText = _modeProvider!.currentMode.name;
       }
       
-      item.mode =  _modeProvider!.getModeInformation();
-
+      item.mode =  _modeProvider!.getModeInformation();      
+      if(isSublayerSelected & !creatingNewLayer){
+        //_sublayers[listIndex] = item;
+      }else{
+        _layeritems[listIndex] = item;
+      }
       
-      
-      _layeritems[listIndex] = item;
 
       if (item.mode!.value == EnumModes.shortcut) {
         if(subLayers.isEmpty){
@@ -170,11 +179,6 @@ class LayersProvider extends ChangeNotifier {
 
     }
     
-
-    
-    // for (var i = 0; i < length; i++) {
-    //   debugPrint('${layeritems[i].mode?.currentColor.first}');
-    // }
     physicalKeyboardController.addLayer(item);
     notifyListeners();
   }
@@ -274,6 +278,10 @@ class LayersProvider extends ChangeNotifier {
 
     duplicatedItem.mode = item.mode;
 
+    for (var element in _sublayers) {
+      element.listDisplayColor = Colors.grey;
+    }
+
     if (sublayer) {
       modeProvider.setModeType(true);
       item.hasSublayer = true;
@@ -294,8 +302,8 @@ class LayersProvider extends ChangeNotifier {
   }
 
 
-  void setShortuctKeys(BuildContext context, List<List<String>> keys){
-    _modeProvider!.setShortcutKeys(context, keys);
+  void setShortuctKeys(List<List<String>> keys){
+    _modeProvider!.setShortcutKeys(_context, keys);
     notifyListeners();
   }
 
@@ -321,8 +329,17 @@ class LayersProvider extends ChangeNotifier {
   }
 
   void changeSublayerIndex(int subIndex) {
+    for (var element in _layeritems) {
+      element.listDisplayColor = Colors.grey;
+    }
+
+    for (var element in _sublayers) {
+      element.listDisplayColor = Colors.grey;
+    }
+
     _modeProvider!.setModeType(true);
     LayerItemModel sublayer = sublayerItems[subIndex];
+    sublayer.listDisplayColor = Colors.white;
     _currentSublayer = sublayer;
     isSublayerSelected = true;
     notifyListeners();
