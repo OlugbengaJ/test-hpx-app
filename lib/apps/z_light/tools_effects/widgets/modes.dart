@@ -108,7 +108,8 @@ class _ToolModesState extends State<ToolModes> {
                 width: MediaQuery.of(context).size.width * 0.45,
                 child: PickerDropdown(
                   onChange: (PickerModel? returnValue) {
-                    if (modeProvider.currentMode.value == EnumModes.shortcut) {
+                    if (modeProvider.currentMode.value == EnumModes.shortcut &&
+                        returnValue?.value != EnumModes.shortcut) {
                       shortcutAlertDialogOnChangeMode(returnValue!);
                     } else {
                       setState(() {
