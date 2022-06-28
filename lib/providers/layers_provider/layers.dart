@@ -128,7 +128,10 @@ class LayersProvider extends ChangeNotifier {
     
     /// check if there is already a layer with shortcut mode
     if(modeChanged){
-      layerAlertDialog(_context!);      
+      if(shortcutAvalaible){
+        layerAlertDialog(_context!);  
+      }
+          
     }else{
       if(_modeProvider!.getModeInformation().value == EnumModes.shortcut){
         shortcutAvalaible = true;
@@ -150,9 +153,7 @@ class LayersProvider extends ChangeNotifier {
         item.layerText = _modeProvider!.currentMode.name;
       }
       
-      item.mode =  _modeProvider!.getModeInformation();
-
-      
+      item.mode =  _modeProvider!.getModeInformation();      
       
       _layeritems[listIndex] = item;
 
@@ -170,11 +171,6 @@ class LayersProvider extends ChangeNotifier {
 
     }
     
-
-    
-    // for (var i = 0; i < length; i++) {
-    //   debugPrint('${layeritems[i].mode?.currentColor.first}');
-    // }
     physicalKeyboardController.addLayer(item);
     notifyListeners();
   }
