@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/globals.dart';
 
 class ScrollbarProvider with ChangeNotifier {
