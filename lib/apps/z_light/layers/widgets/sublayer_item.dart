@@ -107,6 +107,7 @@ class _SublayerItemState extends State<SublayerItem> {
   }
 
   _onTap(LayersProvider provider) {
+    print("Sublayer item");
     provider.changeSublayerIndex(widget.layerIndex);
   }
 

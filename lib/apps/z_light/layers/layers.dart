@@ -33,11 +33,15 @@ class _LayersState extends State<Layers> {
     });
   }
 
+
+  
+
   /// [initialLayer] add a default layer to the workspace if there no layer available
   void initialLayer() {
     ModeProvider modeProvider = context.read<ModeProvider>();
 
     LayersProvider provider = context.read<LayersProvider>();
+    provider.setBuildContext(context);
     provider.setModeProvider(modeProvider);
     if (provider.length < 1) {
       _addLayer();
@@ -79,11 +83,12 @@ class _LayersState extends State<Layers> {
               icon: itemModel.mode!.icon),
           context,
           false);
+      provider.disableCreatingNewLayerMode();
     }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {    
     //_addLayer();
     return Consumer<LayersProvider>(
       builder: (context, provider, child) {
