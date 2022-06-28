@@ -278,6 +278,10 @@ class LayersProvider extends ChangeNotifier {
 
     duplicatedItem.mode = item.mode;
 
+    for (var element in _sublayers) {
+      element.listDisplayColor = Colors.grey;
+    }
+
     if (sublayer) {
       modeProvider.setModeType(true);
       item.hasSublayer = true;
@@ -325,8 +329,17 @@ class LayersProvider extends ChangeNotifier {
   }
 
   void changeSublayerIndex(int subIndex) {
+    for (var element in _layeritems) {
+      element.listDisplayColor = Colors.grey;
+    }
+
+    for (var element in _sublayers) {
+      element.listDisplayColor = Colors.grey;
+    }
+
     _modeProvider!.setModeType(true);
     LayerItemModel sublayer = sublayerItems[subIndex];
+    sublayer.listDisplayColor = Colors.white;
     _currentSublayer = sublayer;
     isSublayerSelected = true;
     notifyListeners();
