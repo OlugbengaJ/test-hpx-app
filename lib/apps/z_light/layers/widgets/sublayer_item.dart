@@ -153,6 +153,16 @@ class _SublayerItemState extends State<SublayerItem> {
                     const SizedBox(
                       width: 2,
                     ),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        child: Icon(
+                          Icons.circle,
+                          size: 5,
+                          color: widget.layerItemModel.mode!.currentColor[0],                      
+                        )
+                      ),
+                    ),
                     Expanded(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,

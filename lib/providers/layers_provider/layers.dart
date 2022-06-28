@@ -117,19 +117,24 @@ class LayersProvider extends ChangeNotifier {
     _modeProvider = modeProvider;
   }
 
+
+
+
   /// listen to any change from the tools and effects so the current layers can be updated
   Future<void> toolsEffectsUpdated({bool modeChanged = false}) async {
     debugPrint("Mode changed: $modeChanged");
-    LayerItemModel item = getItem(listIndex);
-    var subLayers = getSublayers(item.id);
 
-    debugPrint("Shortcut available: $shortcutAvalaible");
+    LayerItemModel item = getItem(listIndex);
+    if(isSublayerSelected & !creatingNewLayer){
+      item = getCurrentSublayer()!;
+    }
+    var subLayers = getSublayers(item.id);
 
     
     /// check if there is already a layer with shortcut mode
     if(modeChanged){
       if(shortcutAvalaible){
-        layerAlertDialog(_context!);  
+        layerAlertDialog(_context!);
       }
           
     }else{
@@ -154,8 +159,12 @@ class LayersProvider extends ChangeNotifier {
       }
       
       item.mode =  _modeProvider!.getModeInformation();      
+      if(isSublayerSelected & !creatingNewLayer){
+        //_sublayers[listIndex] = item;
+      }else{
+        _layeritems[listIndex] = item;
+      }
       
-      _layeritems[listIndex] = item;
 
       if (item.mode!.value == EnumModes.shortcut) {
         if(subLayers.isEmpty){
@@ -290,8 +299,8 @@ class LayersProvider extends ChangeNotifier {
   }
 
 
-  void setShortuctKeys(BuildContext context, List<List<String>> keys){
-    _modeProvider!.setShortcutKeys(context, keys);
+  void setShortuctKeys(List<List<String>> keys){
+    _modeProvider!.setShortcutKeys(_context, keys);
     notifyListeners();
   }
 
