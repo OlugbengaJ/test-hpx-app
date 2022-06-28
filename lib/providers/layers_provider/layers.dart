@@ -123,7 +123,6 @@ class LayersProvider extends ChangeNotifier {
   /// listen to any change from the tools and effects so the current layers can be updated
   Future<void> toolsEffectsUpdated({bool modeChanged = false}) async {
     debugPrint("Mode changed: $modeChanged");
-
     LayerItemModel item = getItem(listIndex);
     if(isSublayerSelected & !creatingNewLayer){
       item = getCurrentSublayer()!;
