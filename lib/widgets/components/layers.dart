@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 Future<void> layerAlertDialog(BuildContext context) async {
-  print("Alert dialod");
+  debugPrint("Alert dialod");
   return showDialog<void>(
     context: context,
     barrierDismissible: false, // user must tap button!
