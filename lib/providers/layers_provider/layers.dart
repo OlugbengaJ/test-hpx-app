@@ -8,8 +8,7 @@ import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/utils/KeyboardController.dart';
 import 'package:hpx/widgets/components/layers.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
-import '../../utils/KeyboardController.dart';
-
+// 
 ///[LayersProvider] to controle the layers state
 
 class LayersProvider extends ChangeNotifier {
@@ -122,7 +121,6 @@ class LayersProvider extends ChangeNotifier {
 
   /// listen to any change from the tools and effects so the current layers can be updated
   Future<void> toolsEffectsUpdated({bool modeChanged = false}) async {
-    debugPrint("Mode changed: $modeChanged");
     LayerItemModel item = getItem(listIndex);
     if(isSublayerSelected & !creatingNewLayer){
       item = getCurrentSublayer()!;
@@ -131,11 +129,8 @@ class LayersProvider extends ChangeNotifier {
 
     
     /// check if there is already a layer with shortcut mode
-    if(modeChanged){
-      if(shortcutAvalaible){
-        layerAlertDialog(_context!);
-      }
-          
+    if(modeChanged & shortcutAvalaible & (_modeProvider!.getModeInformation().value == EnumModes.shortcut)){
+      layerAlertDialog(_context!);          
     }else{
       if(_modeProvider!.getModeInformation().value == EnumModes.shortcut){
         shortcutAvalaible = true;
@@ -157,13 +152,12 @@ class LayersProvider extends ChangeNotifier {
         item.layerText = _modeProvider!.currentMode.name;
       }
       
-      item.mode =  _modeProvider!.getModeInformation();      
+      item.mode =  _modeProvider!.getModeInformation();   
       if(isSublayerSelected & !creatingNewLayer){
         //_sublayers[listIndex] = item;
       }else{
         _layeritems[listIndex] = item;
-      }
-      
+      }      
 
       if (item.mode!.value == EnumModes.shortcut) {
         if(subLayers.isEmpty){
