@@ -38,7 +38,8 @@ class KeyboardKey extends StatelessWidget {
           child: Consumer<WorkspaceProvider>(
             builder: (context, workspaceProvider, child) {
               return InkWell(
-                onTap: null, //onTapHandler,
+                onTap:
+                    workspaceProvider.isDragModeHighlight ? onTapHandler : null,
 
                 // listens to key changes and allows updating this key instance
                 child: AnimatedBuilder(
@@ -218,9 +219,7 @@ KeyModel _updateKeyInfo(
                 index = (colIndex - incrementer).abs() % colorLength;
               }
 
-              chip.color = colors[index];
-              // layer.mode!.currentColor[index];
-
+              chip.color = layer.mode!.currentColor[index];
             }
 
             updateKeyAndLayer(keyModel, chip, layer);
@@ -256,28 +255,39 @@ KeyModel _updateKeyInfo(
             final sublayer = layersProvider.getCurrentSublayer();
             if (sublayer != null) {
               // update key only when sublayer is active
-              // TODO: fix the shortcut color. this returns black color
               final sublayerId = sublayer.id;
-              chip = KeyPaintRect('$sublayerId');
-              // sublayer.mode?.currentColor.first;
+              chip = KeyPaintRect('$sublayerId')
+                ..color = sublayer.mode?.currentColor.last
+                ..showOutline = true;
 
               if (!keysProvider.shortcutKeyExist(keyModel)) {
                 // add shortcut key since it does not exist in shortcut.
                 updateKeyAndLayer(keyModel, chip, layer);
                 keysProvider.addShortcutKey('$sublayerId', keyModel.copyWith());
+
+                break;
+
+                // TODO: add the shortcut in tools & effect
+                // shortcutProvider.addNewCommand(
+                //     'Enter text', keyModel.keyCode.toString());
+
+                // layersProvider.setShortuctKeys([
+                //   ['open whatsapp'],
+                //   ['${keyModel.keyCode}']
+                // ]);
+              }
+
+              // key already exist in shortcut
+              final shortcutKey = keysProvider.getShortcutKey(keyModel);
+
+              if (shortcutKey?.key == chip.chipKey) {
+                // update key color if current chip key equals the shortcut key.
+                final topChip = shortcutKey?.value.topChip;
+                topChip?.color = sublayer.mode?.currentColor.last;
+
+                keyModel.addChip(shortcutKey?.value.topChip);
               } else {
-                // key already exist in shortcut
-                final shortcutKey = keysProvider.getShortcutKey(keyModel);
-
-                if (shortcutKey?.key == chip.chipKey) {
-                  // update key color if current chip key equals the shortcut key.
-                  final topChip = shortcutKey?.value.topChip;
-
-                  topChip?.color = layer.mode?.currentColor.last;
-                  keyModel.addChip(shortcutKey?.value.topChip);
-                } else {
-                  keyModel.addChip(shortcutKey?.value.topChip);
-                }
+                keyModel.addChip(shortcutKey?.value.topChip);
               }
             }
 
@@ -294,7 +304,10 @@ KeyModel _updateKeyInfo(
           // update key color if sublayer id equals key copy id
           final sublayer = layersProvider.getCurrentSublayer();
           if (keyCopy.key == '${sublayer?.id}') {
-            keyCopy.value.topChip?.color = layer.mode?.currentColor.last;
+            keyCopy.value.topChip?.color = sublayer?.mode?.currentColor.last;
+            keyCopy.value.topChip?.showOutline = true;
+          } else {
+            keyCopy.value.topChip?.showOutline = false;
           }
 
           // add the key copy top chip.
@@ -320,15 +333,6 @@ void updateKeyAndLayer(
 
 int lastShiftIndex = -1;
 int incrementer = -1;
-
-List<Color> get colors => [
-      Colors.red,
-      Colors.blue,
-      Colors.brown,
-      Colors.purple,
-      Colors.green,
-      Colors.yellow
-    ];
 
 /// [getColorIndex] is a helper function that finds an index
 /// that corresponds to the image colors matrix.
