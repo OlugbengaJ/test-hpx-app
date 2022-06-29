@@ -26,7 +26,8 @@ class _ToolModesState extends State<ToolModes> {
         Provider.of<ModeProvider>(context, listen: false);
     await Future.delayed(const Duration(seconds: 0));
     setState(() {
-      modeProvider.changeModeComponent(modeProvider.modePicker, context, false);
+      modeProvider.changeModeComponent(modeProvider.modePicker, context, false,
+          changeComp: true);
     });
   }
 
@@ -37,9 +38,8 @@ class _ToolModesState extends State<ToolModes> {
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
     setState(() {
-      modeProvider.changeModeComponent(value, context, false);
+      modeProvider.changeModeComponent(value, context, false, changeComp: true);
     });
-    layerProvider.toolsEffectsUpdated();
   }
 
   shortcutAlertDialogOnChangeMode(PickerModel value) {
@@ -114,7 +114,8 @@ class _ToolModesState extends State<ToolModes> {
                     } else {
                       setState(() {
                         modeProvider.changeModeComponent(
-                            returnValue, context, false);
+                            returnValue, context, false,
+                            changeComp: true);
                       });
                     }
                   },
