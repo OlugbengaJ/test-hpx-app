@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/contact_support_model.dart';
 import 'package:hpx/widgets/theme.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // Contact Support provider to manage the contact support process
 class ContactSupportWidgetProvider extends ChangeNotifier {
@@ -80,23 +81,27 @@ class ContactSupportWidgetProvider extends ChangeNotifier {
         });
   }
 
-  chooseContactType(SupportTypesEnum choice) {
+  chooseContactType(SupportTypesEnum choice) async {
     isChoice = choice;
-    switch (choice) {
-      case SupportTypesEnum.browser:
-        openBrowserSupport();
-        break;
-      case SupportTypesEnum.audio:
-        openAudioCallSupport();
-        break;
-      case SupportTypesEnum.video:
-        openVideoCallSupport();
-        break;
-      default:
+    try {
+      switch (choice) {
+        case SupportTypesEnum.browser:
+          var url = Uri(
+              scheme: 'https', host: 'support.hp.com', path: '/us-en/contact/');
+          if (await canLaunchUrl(url)) {
+            await launchUrl(url);
+          } else {
+            throw 'Could not launch $url';
+          }
+          break;
+        case SupportTypesEnum.audio:
+          break;
+        case SupportTypesEnum.video:
+          break;
+        default:
+      }
+    } catch (e) {
+      print(e.toString());
     }
   }
-
-  openBrowserSupport() {}
-  openAudioCallSupport() {}
-  openVideoCallSupport() {}
 }
