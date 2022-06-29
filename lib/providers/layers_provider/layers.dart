@@ -124,18 +124,15 @@ class LayersProvider extends ChangeNotifier {
   Future<void> toolsEffectsUpdated({bool modeChanged = false}) async {
     debugPrint("Mode changed: $modeChanged");
     LayerItemModel item = getItem(listIndex);
-    if(isSublayerSelected & !creatingNewLayer){
-      item = getCurrentSublayer()!;
-    }
+    // if(isSublayerSelected & !creatingNewLayer){
+    //   item = getCurrentSublayer()!;
+    // }
     var subLayers = getSublayers(item.id);
 
     
     /// check if there is already a layer with shortcut mode
-    if(modeChanged){
-      if(shortcutAvalaible){
-        layerAlertDialog(_context!);
-      }
-          
+    if(modeChanged & shortcutAvalaible & (_modeProvider!.getModeInformation().value == EnumModes.shortcut)){
+      layerAlertDialog(_context!);          
     }else{
       if(_modeProvider!.getModeInformation().value == EnumModes.shortcut){
         shortcutAvalaible = true;
@@ -157,12 +154,15 @@ class LayersProvider extends ChangeNotifier {
         item.layerText = _modeProvider!.currentMode.name;
       }
       
-      item.mode =  _modeProvider!.getModeInformation();      
+      item.mode =  _modeProvider!.getModeInformation();   
+      debugPrint(item.mode!.name);   
       if(isSublayerSelected & !creatingNewLayer){
         //_sublayers[listIndex] = item;
       }else{
         _layeritems[listIndex] = item;
       }
+
+      _layeritems[listIndex] = item;
       
 
       if (item.mode!.value == EnumModes.shortcut) {
