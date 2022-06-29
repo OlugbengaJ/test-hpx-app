@@ -107,7 +107,7 @@ class _SublayerItemState extends State<SublayerItem> {
   }
 
   _onTap(LayersProvider provider) {
-    print("Sublayer item");
+    debugPrint("Sublayer item");
     provider.changeSublayerIndex(widget.layerIndex);
   }
 
@@ -152,6 +152,16 @@ class _SublayerItemState extends State<SublayerItem> {
                         )),
                     const SizedBox(
                       width: 2,
+                    ),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        child: Icon(
+                          Icons.circle,
+                          size: 5,
+                          color: widget.layerItemModel.mode!.currentColor[0],                      
+                        )
+                      ),
                     ),
                     Expanded(
                       child: Column(
