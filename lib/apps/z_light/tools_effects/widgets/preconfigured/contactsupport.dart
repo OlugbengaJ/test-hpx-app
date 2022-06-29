@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/contact_support_provider.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
@@ -12,19 +13,17 @@ class ContactSupportPreset extends StatefulWidget {
 }
 
 class _ContactSupportPresetState extends State<ContactSupportPreset> {
-  //// this function sets the default effect degree value to the degree knob
-  @override
-  void initState() {
-    ContactSupportWidgetProvider contactsupportProvider =
-        Provider.of<ContactSupportWidgetProvider>(context, listen: false);
-    // contactsupportProvider.showContactOptionsDialog(context);
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     ColorPickerProvider colorPickerProvider =
         Provider.of<ColorPickerProvider>(context, listen: false);
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
+    ContactSupportWidgetProvider contacProvider =
+        Provider.of<ContactSupportWidgetProvider>(context, listen: false);
+    if (modeProvider.isLost) {
+      contacProvider.showContactOptionsDialog(context);
+    }
     // print(modeProvider.currentMode.shortcutKeys);
     return Container(
       margin: const EdgeInsets.only(top: 30),
@@ -87,7 +86,7 @@ class _ContactSupportPresetState extends State<ContactSupportPreset> {
                           child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
-                          Text('CMD + FN + F10',
+                          Text('FN + F10',
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                   fontSize: 14,

@@ -200,7 +200,8 @@ class ModeProvider extends ChangeNotifier {
   /// function designed to change the tools and effects mode widget and return the chosen widget
   /// also sets the default colors and mode information
   changeModeComponent(
-      PickerModel? pickerChoice, BuildContext context, bool isChange) async {
+      PickerModel? pickerChoice, BuildContext context, bool isChange,
+      {bool changeComp: false}) async {
     // default variable for settin currentcolors in this function
     List<Color> currentColors = [];
     // default variable for settin effects in this function
@@ -323,9 +324,6 @@ class ModeProvider extends ChangeNotifier {
           currentColors.add(element.colorCode[0]);
         }
         preset = const ContactSupportPreset();
-        ContactSupportWidgetProvider contactsupportProvider =
-            Provider.of<ContactSupportWidgetProvider>(context, listen: false);
-        contactsupportProvider.showContactOptionsDialog(context);
         break;
       default:
         currentColors.add(Colors.transparent);
@@ -374,7 +372,7 @@ class ModeProvider extends ChangeNotifier {
             : (currentMode.value == pickerChoice.value)
                 ? currentMode.name
                 : pickerChoice.title));
-    layerProvider.toolsEffectsUpdated();
+    layerProvider.toolsEffectsUpdated(modeChanged: changeComp);
   }
 
   // get current mode information
@@ -407,14 +405,5 @@ class ModeProvider extends ChangeNotifier {
   void activateContactSupportDialog() {
     this.isLost = true;
     notifyListeners();
-  }
-
-  void openBrowser() async {
-    var url = Uri(scheme: 'https', host: 'support.hp.com', path: '/us-en/contact/');
-    if ( await canLaunchUrl(url)) {
-      await launchUrl(url);
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 }
