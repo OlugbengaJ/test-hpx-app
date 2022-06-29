@@ -78,5 +78,11 @@ enum KeyCode {
   kArrowLeft,
   kArrowUp,
   kArrowDown,
-  kArrowRight,
+  kArrowRight;
+
+  @override
+  String toString() {
+    // return name without the k prefix.
+    return name.substring(1).toUpperCase();
+  }
 }
