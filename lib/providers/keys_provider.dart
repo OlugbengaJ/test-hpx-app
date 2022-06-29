@@ -774,26 +774,42 @@ class KeysProvider with ChangeNotifier {
 
   /// [getShortcutKeys] returns a list of [KeyModel] with matching sublayer [id].
   List<KeyModel>? getShortcutKeys(String id) {
-    return _shortcutKeys[id];
+    return _shortcutKeys[id] ?? [];
+  }
+
+  /// [getAllShortcutKeys] returns a list of all [KeyModel] in shortcut.
+  List<KeyModel> get getAllShortcutKeys {
+    List<KeyModel> result = [];
+    for (var k in _shortcutKeys.values) {
+      result.addAll(k);
+    }
+
+    return result;
   }
 
   /// [addShortcutKey] adds a [KeyModel] to a shortut layer for a specific [id].
   ///
   /// If the shortcut layer id does not exist, a new map entry is created, and
   /// the [KeyModel] object is always replaced.
-  void addShortcutKey(String id, KeyModel keyModel) {
-    final shortcutKeys = getShortcutKeys(id);
+  void addShortcutKey(String id, KeyModel keyModel) async {
+    // add key only if it doesn't exist.
+    if (!shortcutKeyExist(keyModel)) {
+      final shortcutKeys = getShortcutKeys(id);
 
-    if (shortcutKeys == null) {
-      // add new shortcut layer id
-      _shortcutKeys.putIfAbsent(id, () => []);
-    } else {
-      // remove the key model
-      removeShortcutKey(id, keyModel);
+      if (shortcutKeys == null || shortcutKeys.isEmpty) {
+        // add new shortcut layer id
+        _shortcutKeys.putIfAbsent(id, () => []);
+      } else {
+        // remove the key model
+        removeShortcutKey(id, keyModel);
+      }
+
+      // add the key model
+      _shortcutKeys[id]?.add(keyModel);
+      await Future.delayed(const Duration(milliseconds: 1));
+
+      notifyListeners();
     }
-
-    // add the key model
-    _shortcutKeys[id]?.add(keyModel);
   }
 
   /// [removeShortcutKey] removes a [KeyModel] from a shortut layer with map key [id].
