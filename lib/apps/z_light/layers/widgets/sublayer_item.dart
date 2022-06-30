@@ -105,7 +105,9 @@ class _SublayerItemState extends State<SublayerItem> {
   }
 
   _deleteLayer(LayersProvider provider) {
-    _deleteLayerDialog(provider);
+    if(provider.getSublayers(widget.layerItemModel.parentID).length>=2){
+      _deleteLayerDialog(provider);
+    }    
   }
 
   _onTap(LayersProvider provider) {
