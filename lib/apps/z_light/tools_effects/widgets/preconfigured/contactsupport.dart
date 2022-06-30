@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
-import 'package:hpx/providers/tools_effect_provider/widget/contact_support_provider.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +18,6 @@ class _ContactSupportPresetState extends State<ContactSupportPreset> {
         Provider.of<ColorPickerProvider>(context, listen: false);
     ModeProvider modeProvider =
         Provider.of<ModeProvider>(context, listen: false);
-
     // print(modeProvider.currentMode.shortcutKeys);
     return Container(
       margin: const EdgeInsets.only(top: 30),
