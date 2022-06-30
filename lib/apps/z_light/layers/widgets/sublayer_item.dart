@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
+import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
+import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
@@ -107,8 +109,10 @@ class _SublayerItemState extends State<SublayerItem> {
   }
 
   _onTap(LayersProvider provider) {
-    debugPrint("Sublayer item");
     provider.changeSublayerIndex(widget.layerIndex);
+    ModeProvider modeProvider = context.read<ModeProvider>();
+    modeProvider.setCurrentMode(widget.layerItemModel.mode!);
+    modeProvider.setModeType(true);    
   }
 
   _onSubmit(value, LayersProvider provider) {
