@@ -21,6 +21,8 @@ class KeyModel with ChangeNotifier {
   /// keyRow = 2 means the key in on the second row.
   final int keyRow;
 
+  /// [keyColumn] is used to divide the keys into columns so that
+  /// different colors can be applied to each column while using wave effect.
   final int keyColumn;
 
   /// [keyCode] uniquely identifies a key and is fixed regarless of language.
