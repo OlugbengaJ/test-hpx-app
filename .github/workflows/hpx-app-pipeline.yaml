@@ -175,6 +175,13 @@ jobs:
           sudo apt-get install clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
       - run: flutter config --enable-linux-desktop
       - run: flutter build linux
+      - name: Generate .deb
+        run: |
+          dart pub global activate flutter_to_debian
+          flutter_to_debian
+
+          DEB=$(ls debian/packages/hpx*.deb)
+          # TODO: upload deb to nanabenz repo
 
       - name: Publish Linux Build
         if: |
