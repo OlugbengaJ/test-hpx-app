@@ -3,10 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/color_picker_model.dart';
-import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
-import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
-import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/widgets/colors.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
@@ -381,6 +378,11 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
     );
   }
 
+  proccessRandom() {
+    Color color = Colors.transparent;
+    return color;
+  }
+
   @override
   Widget build(BuildContext context) {
     ColorPickerProvider colorPickerProviderInstance =
@@ -489,13 +491,18 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                                     widget.hasBorder = (!_value) ? true : false;
                                     widget.picker = (!_value) ? true : false;
 
-                                    List<Color> selectedColor = (!_value)
-                                        ? [widget.color]
-                                        : [
-                                            colorPickerProviderInstance
-                                                .generateRandomColor() as Color
-                                          ];
-                                    widget.onchange!(selectedColor);
+                                    if (value == true) {
+                                      time = Timer.periodic(
+                                          const Duration(seconds: 1), (timer) {
+                                        widget.onchange!([
+                                          colorPickerProviderInstance
+                                              .generateRandomColor()
+                                        ]);
+                                      });
+                                    } else {
+                                      time!.cancel();
+                                      widget.onchange!([widget.color]);
+                                    }
                                   });
                                 },
                               )

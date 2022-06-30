@@ -58,7 +58,7 @@ class CustomVScrollbar extends StatelessWidget {
                 child: InkWell(
                   onTap: onTapMinus,
                   splashColor: primaryColor,
-                  child: Icon(Icons.arrow_drop_up, size: buttonSize),
+                  child: Icon(Icons.arrow_upward, size: buttonSize),
                 ),
               ),
             ),
@@ -91,7 +91,7 @@ class CustomVScrollbar extends StatelessWidget {
                   onTap: onTapPlus,
                   splashColor: primaryColor,
                   child: Icon(
-                    Icons.arrow_drop_down,
+                    Icons.arrow_downward,
                     size: buttonSize,
                   ),
                 ),

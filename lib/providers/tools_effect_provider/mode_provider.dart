@@ -8,6 +8,7 @@ import 'package:hpx/apps/z_light/tools_effects/widgets/effects/color_cycle.dart'
 import 'package:hpx/apps/z_light/tools_effects/widgets/effects/image.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/effects/interactive.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/effects/wave.dart';
+import 'package:hpx/apps/z_light/tools_effects/widgets/preconfigured/contactsupport.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/tools/color_production.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/tools/moods.dart';
 import 'package:hpx/apps/z_light/tools_effects/widgets/tools/shortcut_colors.dart';
@@ -16,6 +17,7 @@ import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/widget/contact_support_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/image_mode_provder.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/shortcut_widget_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
@@ -133,6 +135,20 @@ List<PickerModel> moodList = [
       enabled: true,
       value: EnumModes.ambient,
       icon: Icons.layers_outlined),
+  PickerModel(
+    title: 'Preconfigured Tools',
+    enabled: false,
+  ),
+  PickerModel(
+      title: 'Contact Support',
+      enabled: true,
+      value: EnumModes.contactsupport,
+      icon: Icons.contact_support),
+  PickerModel(
+      title: 'Application Hotkeys',
+      enabled: true,
+      value: EnumModes.hotkeys,
+      icon: Icons.keyboard_sharp),
 ];
 
 // Mode provider to manage the current colors or effects of a mode been selected
@@ -153,6 +169,9 @@ class ModeProvider extends ChangeNotifier {
   // default variable for settin tools and effects widget in this function
   PickerModel modePicker =
       PickerModel(title: 'Mood', value: EnumModes.mood, enabled: true);
+
+  late ContactSupportWidgetProvider contacProvider;
+  late BuildContext appContext;
 
   /// function set the current mode information to the provider mode variable
   void setCurrentMode(ToolsModeModel data) {
@@ -183,7 +202,8 @@ class ModeProvider extends ChangeNotifier {
   /// function designed to change the tools and effects mode widget and return the chosen widget
   /// also sets the default colors and mode information
   changeModeComponent(
-      PickerModel? pickerChoice, BuildContext context, bool isChange) async {
+      PickerModel? pickerChoice, BuildContext context, bool isChange,
+      {bool changeComp: false}) async {
     // default variable for settin currentcolors in this function
     List<Color> currentColors = [];
     // default variable for settin effects in this function
@@ -301,6 +321,15 @@ class ModeProvider extends ChangeNotifier {
         effects.updatePerSecond = 40.0;
         preset = const AmbeintPreset();
         break;
+      case EnumModes.contactsupport:
+        for (var element in contactsupportlist) {
+          currentColors.add(element.colorCode[0]);
+        }
+        contacProvider =
+            Provider.of<ContactSupportWidgetProvider>(context, listen: false);
+        appContext = context;
+        preset = const ContactSupportPreset();
+        break;
       default:
         currentColors.add(Colors.transparent);
         preset = Container();
@@ -348,7 +377,7 @@ class ModeProvider extends ChangeNotifier {
             : (currentMode.value == pickerChoice.value)
                 ? currentMode.name
                 : pickerChoice.title));
-    layerProvider.toolsEffectsUpdated();
+    layerProvider.toolsEffectsUpdated(modeChanged: changeComp);
   }
 
   // get current mode information
@@ -356,25 +385,19 @@ class ModeProvider extends ChangeNotifier {
     return currentMode;
   }
 
-  setShortcutKeys(context, List<List<String>> keys) {
-    ShortcutWidgetProvider shortcutWidgetProvider =
-        Provider.of<ShortcutWidgetProvider>(context, listen: false);
-    for (var element in shortcutWidgetProvider.keys) {
-      shortcutWidgetProvider.addNewCommand(element.first, element.last);
-    }
-    currentMode.shortcutKeys = keys;
-    setCurrentMode(currentMode);
-
-    LayersProvider layerProvider =
-        Provider.of<LayersProvider>(context, listen: false);
-    layerProvider.toolsEffectsUpdated();
-  }
-
   // change the mode type for the current mode between sublayer and layer based on the value passed
   setModeType(bool isSubLayer) {
     currentMode.modeType =
         (isSubLayer) ? EnumModeType.sublayer : EnumModeType.layers;
     // print(currentMode.modeType);
+    notifyListeners();
+  }
+
+  void activateContactSupportDialog() {
+    isLost = true;
+    if (isLost == true) {
+      contacProvider.showContactOptionsDialog(appContext);
+    }
     notifyListeners();
   }
 }

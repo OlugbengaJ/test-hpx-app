@@ -33,8 +33,7 @@ class _WorkspaceState extends State<Workspace>
   static const double _zoomOutThreshold = 60;
   static const double _buttonSize = 32.0;
 
-  // static const Duration _duration = Duration(milliseconds: 50);
-  // Timer _timer = Timer.periodic(Duration.zero, ((t) {}));
+  bool _resetZoom = false;
 
   /// [zoomTextSubmitted] is called when user hits the Enter key.
   /// This updates the zoom value and resets the value when outside
@@ -45,6 +44,7 @@ class _WorkspaceState extends State<Workspace>
     if (value != null) {
       if (value < _zoomOutThreshold) {
         value = _zoomOutThreshold;
+        _resetZoom = true;
       } else if (value > _zoomInThreshold) {
         value = _zoomInThreshold;
       }
@@ -58,8 +58,6 @@ class _WorkspaceState extends State<Workspace>
   }
 
   /// [zoomEnd] terminates continuous zoom
-  ///
-  /// timer is canceled to stop zooming by the duration specified
   void zoomEnd() {
     // _timer.cancel();
   }
@@ -72,41 +70,30 @@ class _WorkspaceState extends State<Workspace>
   /// [zoomIn] increases the zoomValue only up to the zoomIn threshold
   /// preventing scenario where content is unnecessarily large.
   void zoomIn() {
-    // _timer = Timer.periodic(_duration, (t) {
-    //   if (_zoomValue == _zoomInThreshold) {
-    //     _timer.cancel();
-    //     return;
-    //   }
-
-    //   zoomTextSubmitted('${_zoomValue + 1}');
-    // });
-
     if (_zoomValue == _zoomInThreshold) return;
+
+    _resetZoom = false;
     zoomTextSubmitted('${_zoomValue + 10}');
   }
 
   /// [zoomExpand] sets the zoomValue to half the zoomIn threshold.
   void zoomExpand() {
+    _resetZoom = false;
     zoomTextSubmitted('${_zoomInThreshold / 1.5}');
   }
 
   /// [zoomOut] decreases the zoomValue only up to the zoomOut threshold
   /// preventing scenario where content is completely not visible.
   void zoomOut() {
-    // _timer = Timer.periodic(_duration, (t) {
-    //   if (_zoomValue == _zoomOutThreshold) {
-    //     _timer.cancel();
-    //     return;
-    //   }
-
-    //   zoomTextSubmitted('${_zoomValue - 1}');
-    // });
     if (_zoomValue == _zoomOutThreshold) return;
+
+    _resetZoom = false;
     zoomTextSubmitted('${_zoomValue - 10}');
   }
 
   /// [zoomCollapse] sets the zoomValue to the zoomOut threshold.
   void zoomCollapse() {
+    _resetZoom = true;
     zoomTextSubmitted('$_zoomOutThreshold');
   }
 
@@ -128,7 +115,6 @@ class _WorkspaceState extends State<Workspace>
   void dispose() {
     _zoomTextCtrl.dispose();
     _controller.dispose();
-    // _timer.cancel();
     super.dispose();
   }
 
@@ -250,7 +236,7 @@ class _WorkspaceState extends State<Workspace>
             child: LayoutBuilder(
               builder: (_, constraints) {
                 // set the keyboard center
-                workspaceProvider.recenter(constraints);
+                workspaceProvider.recenter(constraints, _resetZoom);
 
                 return Stack(
                   children: [
@@ -291,8 +277,13 @@ class _WorkspaceState extends State<Workspace>
                     Consumer<ScrollbarProvider>(
                         builder: (context, scrollProvider, child) {
                       // initialize vertical scroll offset
-                      scrollProvider.initVerticalScroll(constraints,
-                          workspaceProvider.scrollOffset, _zoomScale);
+                      scrollProvider.initVerticalScroll(
+                          constraints,
+                          workspaceProvider.scrollOffset,
+                          _zoomValue,
+                          _zoomOutThreshold,
+                          _zoomInThreshold,
+                          reset: _resetZoom);
 
                       return CustomVScrollbar(
                         top: 0,
@@ -304,21 +295,31 @@ class _WorkspaceState extends State<Workspace>
                         primaryColor: themeData.primaryColor,
                         secondaryColor: themeData.primaryColorLight,
                         onPanVertical: (details, name) {
+                          _resetZoom = false;
+
                           // update scrollbar and keyboard top position
                           final isScroll =
                               scrollProvider.onPanVertical(details);
                           workspaceProvider.updateKeyboardPosTop(
-                              isScroll, details);
+                              isScroll, details, _zoomScale / _zoomScaleFactor);
                         },
                         onTapMinus: () {
+                          _resetZoom = false;
+
                           final scrollDetails = scrollProvider.onTapUp();
                           workspaceProvider.updateKeyboardPosTop(
-                              scrollDetails.scrolling, scrollDetails.details);
+                              scrollDetails.scrolling,
+                              scrollDetails.details,
+                              _zoomScale / _zoomScaleFactor);
                         },
                         onTapPlus: () {
+                          _resetZoom = false;
+
                           final scrollDetails = scrollProvider.onTapDown();
                           workspaceProvider.updateKeyboardPosTop(
-                              scrollDetails.scrolling, scrollDetails.details);
+                              scrollDetails.scrolling,
+                              scrollDetails.details,
+                              _zoomScale / _zoomScaleFactor);
                         },
                       );
                     }),
@@ -327,8 +328,13 @@ class _WorkspaceState extends State<Workspace>
                     Consumer<ScrollbarProvider>(
                         builder: (context, scrollProvider, child) {
                       // initialize horizontal scroll offset
-                      scrollProvider.initHorizontalScroll(constraints,
-                          workspaceProvider.scrollOffset, _zoomScale);
+                      scrollProvider.initHorizontalScroll(
+                          constraints,
+                          workspaceProvider.scrollOffset,
+                          _zoomValue,
+                          _zoomOutThreshold,
+                          _zoomInThreshold,
+                          reset: _resetZoom);
 
                       return CustomHScrollbar(
                         start: 0,
@@ -340,21 +346,31 @@ class _WorkspaceState extends State<Workspace>
                         primaryColor: themeData.primaryColor,
                         secondaryColor: themeData.primaryColorLight,
                         onPanHorizontal: (details, name) {
+                          _resetZoom = false;
+
                           // update scrollbar and keyboard left position
                           final isScroll =
                               scrollProvider.onPanHorizontal(details);
                           workspaceProvider.updateKeyboardPosLeft(
-                              isScroll, details);
+                              isScroll, details, _zoomScale / _zoomScaleFactor);
                         },
                         onTapMinus: () {
+                          _resetZoom = false;
+
                           final scrollDetails = scrollProvider.onTapLeft();
                           workspaceProvider.updateKeyboardPosLeft(
-                              scrollDetails.scrolling, scrollDetails.details);
+                              scrollDetails.scrolling,
+                              scrollDetails.details,
+                              _zoomScale / _zoomScaleFactor);
                         },
                         onTapPlus: () {
+                          _resetZoom = false;
+
                           final scrollDetails = scrollProvider.onTapRight();
                           workspaceProvider.updateKeyboardPosLeft(
-                              scrollDetails.scrolling, scrollDetails.details);
+                              scrollDetails.scrolling,
+                              scrollDetails.details,
+                              _zoomScale / _zoomScaleFactor);
                         },
                       );
                     }),
@@ -405,7 +421,7 @@ class Device extends Comparer {
   bool enabled;
 }
 
-// TODO: this may need to be refactored and retrieved from storage or an API.
+// TODO: devices may be refactored and retrieved from storage or an API.
 
 /// [devices] returns the list of supported devices and their sub devices.
 List<Device> devices() {

@@ -38,6 +38,7 @@ class _LayersState extends State<Layers> {
     ModeProvider modeProvider = context.read<ModeProvider>();
 
     LayersProvider provider = context.read<LayersProvider>();
+    provider.setBuildContext(context);
     provider.setModeProvider(modeProvider);
     if (provider.length < 1) {
       _addLayer();
@@ -79,6 +80,7 @@ class _LayersState extends State<Layers> {
               icon: itemModel.mode!.icon),
           context,
           false);
+      provider.disableCreatingNewLayerMode();
     }
   }
 

@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/globals.dart';
 
 class ScrollbarProvider with ChangeNotifier {
@@ -16,9 +16,11 @@ class ScrollbarProvider with ChangeNotifier {
 
   /// [thumbSizeH] size of the horizontal thumb.
   double? thumbSizeH;
+  double? initThumbSizeH;
 
   /// [thumbSizeV] size of the vertical thumb.
   double? thumbSizeV;
+  double? initThumbSizeV;
 
   /// [scaleFactorH] scales the horizontal thumb to update [thumbSizeH].
   double? scaleFactorH;
@@ -26,70 +28,114 @@ class ScrollbarProvider with ChangeNotifier {
   /// [scaleFactorV] scales the vertical thumb to update [thumbSizeV].
   double? scaleFactorV;
 
-  /// [_scaleChange] gets the ratio of change between old scale and new scale.
-  double _scaleChange(double scale, double? scaleFactor) {
-    return (scale - (scaleFactor ?? scale)) / (scaleFactor ?? scale);
-  }
-
   /// [initHorizontalScroll] sets the horizontal thumb and offset on changes.
-  void initHorizontalScroll(
-      BoxConstraints constraints, double? offset, double scale) {
+  void initHorizontalScroll(BoxConstraints constraints, double? offset,
+      double scale, double minScale, double maxScale,
+      {bool? reset}) {
     final width = constraints.maxWidth - (3 * offset!);
 
+    if (scaleFactorH == null || reset == true) {
+      scaleFactorH = maxScale - minScale;
+      initThumbSizeH = width * 0.4;
+      _left = (width - initThumbSizeH!) / 2;
+    }
+
     // determine the ratio change in scale
-    final scaleRatio = _scaleChange(scale, scaleFactorH);
+    // double scaleRatio = _scaleChange(scale, scaleFactorH);
 
-    if (scale != scaleFactorH) {
-      scaleFactorH = scale;
+    final scaleDiff = (scale - minScale);
+    thumbSizeH = initThumbSizeH! - scaleDiff;
 
-      if (scaleRatio == 0) {
-        // set thumb to scale fraction of width.
-        thumbSizeH = width * scale;
-        _left = (width - thumbSizeH!) / 2;
-      } else if (scaleRatio > 0) {
-        thumbSizeH = (thumbSizeH! - (thumbSizeH! * scaleRatio)).abs();
-      } else {
-        thumbSizeH = thumbSizeH! + (thumbSizeH! * scaleRatio).abs();
-      }
-    }
+    // if (scale != scaleFactorH) {
+    // if (scaleRatio == 0) {
+    //   // set thumb to scale fraction of width.
+    //   thumbSizeH = initThumbSizeH;
+    //   _left = (width - thumbSizeH!) / 2;
+    // } else {
+    //   int multiplier = 1;
 
-    if (_left! > width - thumbSizeH!) {
-      _left = (width - thumbSizeH!) / 2;
-    }
+    //   if (scaleRatio > 0) {
+    //     // positive change
+    //     while (true) {
+    //       scaleRatio--;
+    //       if (scaleRatio < 1) break;
+    //       multiplier++;
+    //     }
+
+    //     thumbSizeH = (thumbSizeH! / multiplier) -
+    //         (thumbSizeH! * (multiplier + scaleRatio));
+    //   } else if (scaleRatio < 0) {
+    //     // negative change
+    //     while (true) {
+    //       scaleRatio++;
+    //       multiplier++;
+
+    //       if (scaleRatio > 0) break;
+    //     }
+
+    //     thumbSizeH = (thumbSizeH! * multiplier) + (thumbSizeH! / scaleRatio);
+    //   }
+
+    //   // if (scaleRatio >= 1) {
+    //   //   final s = g - 1;
+    //   //   thumbSizeH = thumbSizeH! + (thumbSizeH! * s);
+    //   // } else {
+    //   //   thumbSizeH = thumbSizeH! + (thumbSizeH! - g);
+    //   // }
+    //   // thumbSizeH = thumbSizeH! + (thumbSizeH! * scaleRatio).abs();
+    // }
+    // // }
+
+    // if (_left! > width - thumbSizeH!) {
+    //   _left = (width - thumbSizeH!) / 2;
+    // }
 
     // debugPrint(
     //     'Hscroll scale $scale, percent $scaleRatio, thumb $thumbSizeH, left $left, width $width');
   }
 
   /// [initVerticalScroll] sets the vertical thumb and offset on changes.
-  void initVerticalScroll(
-      BoxConstraints constraints, double? offset, double scale) {
+  void initVerticalScroll(BoxConstraints constraints, double? offset,
+      double scale, double minScale, double maxScale,
+      {bool? reset}) {
     final height = constraints.maxHeight - (3 * offset!);
 
+    if (scaleFactorV == null || reset == true) {
+      scaleFactorV = maxScale - minScale;
+      initThumbSizeV = height * 0.6;
+      _top = (height - initThumbSizeV!) / 2;
+    }
+
     // determine the ratio change in scale
-    final scaleRatio = _scaleChange(scale, scaleFactorV);
+    // double scaleRatio = _scaleChange(scale, scaleFactorH);
 
-    if (scale != scaleFactorV) {
-      scaleFactorV = scale;
+    final scaleDiff = (scale - minScale);
+    thumbSizeV = initThumbSizeV! - scaleDiff;
 
-      if (scaleRatio == 0) {
-        // set thumb to scale fraction of height.
-        thumbSizeV = height * scale;
-        _top = (height - thumbSizeV!) / 2;
-      } else if (scaleRatio > 0) {
-        thumbSizeV = (thumbSizeV! - (thumbSizeV! * scaleRatio)).abs();
-        // _top = _top! - (_top! * percent);
-      } else {
-        thumbSizeV = thumbSizeV! + (thumbSizeV! * scaleRatio).abs();
-        // _top = _top! + (_top! * percent);
-      }
-    }
+    // // determine the ratio change in scale
+    // final scaleRatio = _scaleChange(scale, scaleFactorV);
 
-    // _top ??= (height - thumbSizeV!) / 2;
+    // if (scale != scaleFactorV) {
+    //   scaleFactorV = scale;
 
-    if (_top! > height - thumbSizeV!) {
-      _top = (height - thumbSizeV!) / 2;
-    }
+    //   if (scaleRatio == 0) {
+    //     // set thumb to scale fraction of height.
+    //     thumbSizeV = height * scale;
+    //     _top = (height - thumbSizeV!) / 2;
+    //   } else if (scaleRatio > 0) {
+    //     thumbSizeV = (thumbSizeV! - (thumbSizeV! * scaleRatio)).abs();
+    //     // _top = _top! - (_top! * percent);
+    //   } else {
+    //     thumbSizeV = thumbSizeV! + (thumbSizeV! * scaleRatio).abs();
+    //     // _top = _top! + (_top! * percent);
+    //   }
+    // }
+
+    // // _top ??= (height - thumbSizeV!) / 2;
+
+    // if (_top! > height - thumbSizeV!) {
+    //   _top = (height - thumbSizeV!) / 2;
+    // }
 
     // debugPrint(
     //     'Vscroll scale $scale, percent $scaleRatio, thumb $thumbSizeV, top $top, height $height');

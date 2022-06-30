@@ -7,3 +7,4 @@ final workspaceStackKey = GlobalKey();
 final hScrollbarKey = GlobalKey();
 final vScrollbarKey = GlobalKey();
 final workspaceZoneToolsKey = GlobalKey();
+final navigatorKeys = GlobalKey<NavigatorState>();

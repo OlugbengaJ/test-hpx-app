@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -221,6 +222,17 @@ List<ColorPickerWidgetModel> shortcutList = [
   )
 ];
 
+// shortcut pickermodel lists
+List<ColorPickerWidgetModel> contactsupportlist = [
+  ColorPickerWidgetModel(
+    label: "",
+    action: '',
+    canEdit: true,
+    name: "",
+    colorCode: [Colors.blue],
+  )
+];
+
 // color production pickermodel lists
 List<ColorPickerWidgetModel> colorProductionList = [
   ColorPickerWidgetModel(
@@ -342,6 +354,8 @@ List<ColorPickerWidgetModel> audioVisualGradientList = [
 class ColorPickerProvider extends ChangeNotifier {
   ColorPickerWidgetModel? currentColor;
   bool hasBorder = false;
+  Timer? timer;
+  Color color = Colors.transparent;
 
   /// current color
   List<Color> lastColors = [
@@ -449,7 +463,7 @@ class ColorPickerProvider extends ChangeNotifier {
   }
 
   /// function to generate random colors
-  generateRandomColor() {
+  Color generateRandomColor() {
     return Color(0xffffffff & Random().nextInt(0xffffffff));
   }
 }

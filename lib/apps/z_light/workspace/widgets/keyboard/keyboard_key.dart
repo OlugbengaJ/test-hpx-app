@@ -2,8 +2,10 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/key_rrect.dart';
+import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/key_model.dart';
+import 'package:hpx/providers/keys_provider.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +31,7 @@ class KeyboardKey extends StatelessWidget {
     // Gets access to the widget's position (offset) in the widget tree.
     final box = context.findRenderObject() as RenderBox?;
     final layersProvider = Provider.of<LayersProvider>(context);
+    final keysProvider = Provider.of<KeysProvider>(context);
 
     return Stack(
       children: [
@@ -37,7 +40,8 @@ class KeyboardKey extends StatelessWidget {
           child: Consumer<WorkspaceProvider>(
             builder: (context, workspaceProvider, child) {
               return InkWell(
-                onTap: onTapHandler,
+                onTap:
+                    workspaceProvider.isDragModeHighlight ? onTapHandler : null,
 
                 // listens to key changes and allows updating this key instance
                 child: AnimatedBuilder(
@@ -48,6 +52,7 @@ class KeyboardKey extends StatelessWidget {
                       keyModel: _updateKeyInfo(
                         workspaceProvider,
                         layersProvider,
+                        keysProvider,
                         keyModel,
                         box,
                       ),
@@ -70,6 +75,7 @@ class KeyboardKey extends StatelessWidget {
 KeyModel _updateKeyInfo(
   WorkspaceProvider provider,
   LayersProvider layersProvider,
+  KeysProvider keysProvider,
   KeyModel keyModel,
   RenderBox? renderBox,
 ) {
@@ -83,8 +89,6 @@ KeyModel _updateKeyInfo(
   final layersChipKeys = keyModel.getLayeredChipsKeys();
 
   if (layersChipKeys.isNotEmpty) {
-    // TODO: using workspace provider layers selection map could be useful.
-
     // check if the key is selected for each layer, then paint if true
     // key has existing chips; preserve their properties
     for (var k in layersChipKeys) {
@@ -98,6 +102,22 @@ KeyModel _updateKeyInfo(
     for (var k in layersChipKeys) {
       keyModel.removeChip(k);
     }
+
+    // remove sublayers that don't exist in shortcut mode.
+    if (layers.isNotEmpty) {
+      final sublayers = layersProvider.sublayerItems;
+      final shortcutKeys = keysProvider.shortcutKeys.keys.toSet();
+
+      for (var key in shortcutKeys) {
+        // remove all shortcuts since none exists in layer
+        if (sublayers.isEmpty) keysProvider.removeShortcut(key);
+
+        if (!sublayers.any((s) => '${s.id}' == key)) {
+          // shortcut key does not exist in sublayer, hence remove.
+          keysProvider.removeShortcut(key);
+        }
+      }
+    }
   }
 
   if (layers.isNotEmpty) {
@@ -108,15 +128,13 @@ KeyModel _updateKeyInfo(
     for (var i = layers.length - 1; i >= 0; i--) {
       final layer = layers[i];
       final layerId = layer.id;
-
       final boxZone = provider.boxZone(renderBox, layerId);
 
-      // remove key in layer
       layer.removeKey(keyModel);
 
       if (boxZone != null) {
         // insert new chip with the layer id as key
-        final chip = KeyPaintRect('$layerId');
+        KeyPaintRect chip = KeyPaintRect('$layerId');
 
         if ('${currentLayer.id}' == chip.chipKey) {
           // use the default color for current layer
@@ -145,6 +163,8 @@ KeyModel _updateKeyInfo(
             );
 
             chip.color = animColor!;
+
+            updateKeyAndLayer(keyModel, chip, layer);
             break;
           case EnumModes.colorcycle:
             final animColor = provider.animColorTween(
@@ -152,35 +172,8 @@ KeyModel _updateKeyInfo(
                 speed: layer.mode?.effects.speed);
 
             chip.color = animColor!;
-            break;
-          case EnumModes.wave:
-            if (layer.mode?.currentColor != null) {
-              final colorLength = layer.mode!.currentColor.length;
 
-              int colIndex = getColorIndex(
-                boxZone.selectorRect.width,
-                boxZone.selectorRect.left,
-                boxZone.boxRect.left,
-                colorLength,
-              );
-
-              try {
-                // get total chunks posible by dividing 1 by total colors
-                final chunkSize = 1 / colorLength;
-                final animValue =
-                    provider.animValue(speed: layer.mode?.effects.speed);
-
-                // offset the column index by the animation value and chunk
-                final shiftIndex = (animValue! / chunkSize).floor();
-                colIndex = (colIndex + shiftIndex) % colorLength;
-
-                debugPrint('${layer.mode!.currentColor}');
-
-                chip.color = layer.mode!.currentColor[colIndex];
-              } catch (e) {
-                // color cast failed.
-              }
-            }
+            updateKeyAndLayer(keyModel, chip, layer);
             break;
           case EnumModes.image:
             // paint all keys based on color matrix (m x n)
@@ -204,28 +197,147 @@ KeyModel _updateKeyInfo(
                 rowColors.length,
               );
 
-              try {
-                chip.color = rowColors[colIndex];
-              } catch (e) {
-                // color cast failed.
+              chip.color = rowColors[colIndex];
+            }
+
+            updateKeyAndLayer(keyModel, chip, layer);
+            break;
+          case EnumModes.shortcut:
+            final sublayer = layersProvider.getCurrentSublayer();
+            if (sublayer != null) {
+              // update key only when sublayer is active
+              final sublayerId = sublayer.id;
+              chip = KeyPaintRect('$sublayerId')
+                ..color = sublayer.mode?.currentColor.last
+                ..showOutline = true;
+
+              if (!keysProvider.shortcutKeyExist(keyModel)) {
+                // add shortcut key since it does not exist in shortcut.
+                updateKeyAndLayer(keyModel, chip, layer);
+                keysProvider.addShortcutKey('$sublayerId', keyModel.copyWith());
+
+                break;
+
+                // TODO: add the shortcut in tools & effect
+                // shortcutProvider.addNewCommand(
+                //     'Enter text', keyModel.keyCode.toString());
+
+                // layersProvider.setShortuctKeys([
+                //   ['open whatsapp'],
+                //   ['${keyModel.keyCode}']
+                // ]);
+              }
+
+              // key already exist in shortcut
+              final shortcutKey = keysProvider.getShortcutKey(keyModel);
+
+              if (shortcutKey?.key == chip.chipKey) {
+                // update key color if current chip key equals the shortcut key.
+                final topChip = shortcutKey?.value.topChip;
+                topChip?.color = sublayer.mode?.currentColor.last;
+
+                keyModel.addChip(shortcutKey?.value.topChip);
+              } else {
+                keyModel.addChip(shortcutKey?.value.topChip);
               }
             }
+
+            break;
+          case EnumModes.wave:
+            if (layer.mode?.currentColor != null) {
+              final colorLength = layer.mode!.currentColor.length;
+
+              // determines the index of color to use
+              int index;
+              final int colIndex = getColorIndex(boxZone.selectorRect.width,
+                  boxZone.selectorRect.left, boxZone.boxRect.left, colorLength);
+
+              final int rowIndex = getColorIndex(boxZone.selectorRect.height,
+                  boxZone.selectorRect.top, boxZone.boxRect.top, colorLength);
+
+              final animValue =
+                  provider.animValue(speed: layer.mode?.effects.speed);
+
+              // offset column index by the animation value and color length
+              final shiftIndex = (animValue! * colorLength).ceil();
+
+              if (lastShiftIndex != shiftIndex) {
+                lastShiftIndex = shiftIndex;
+
+                if (incrementer < colorLength - 1) {
+                  incrementer++;
+                } else {
+                  incrementer = 0;
+                }
+              }
+
+              final direction = layer.mode!.effects.degree!;
+              if (direction > 225 && direction < 315) {
+                // TODO: rowIndex +/- colIndex creates a directional wave
+                // index = (rowIndex + colIndex + incrementer).abs() % colorLength;
+
+                // wave flows along negative y axis.
+                index = (rowIndex + incrementer).abs() % colorLength;
+              } else if (direction > 45 && direction < 135) {
+                // wave flows along positive y axis.
+                index = (rowIndex - incrementer).abs() % colorLength;
+              } else if (direction > 90 && direction < 270) {
+                // wave flows along negative x axis.
+                index = (colIndex + incrementer).abs() % colorLength;
+              } else {
+                // wave flows along positive x axis.
+                index = (colIndex - incrementer).abs() % colorLength;
+              }
+
+              // final dir = math.tan(direction).floor();
+              // index = (colIndex - (rowIndex * dir) + incrementer).abs() %
+              //     colorLength;
+              chip.color = layer.mode!.currentColor[index];
+            }
+
+            updateKeyAndLayer(keyModel, chip, layer);
             break;
           default:
+            updateKeyAndLayer(keyModel, chip, layer);
             break;
         }
+      } else if (layer.mode?.value == EnumModes.shortcut) {
+        // paint previously selected shortcut keys.
+        final keyCopy = keysProvider.getShortcutKey(keyModel);
 
-        chip.opacity = layer.visible ? 1 : 0;
-        layer.addKey(keyModel);
+        if (keyCopy != null) {
+          // update key color if sublayer id equals key copy id
+          final sublayer = layersProvider.getCurrentSublayer();
+          if (keyCopy.key == '${sublayer?.id}') {
+            keyCopy.value.topChip?.color = sublayer?.mode?.currentColor.last;
+            keyCopy.value.topChip?.showOutline = true;
+          } else {
+            keyCopy.value.topChip?.showOutline = false;
+          }
 
-        // add the chip
-        keyModel.addChip(chip);
+          // add the key copy top chip.
+          keyModel.addChip(keyCopy.value.topChip);
+        }
       }
     }
   }
 
   return keyModel;
 }
+
+void updateKeyAndLayer(
+    KeyModel keyModel, KeyPaintRect chip, LayerItemModel layer) {
+  chip.opacity = layer.visible ? 1 : 0;
+
+  // add key model to layer
+  layer.addKey(keyModel);
+
+  // add the chip
+  keyModel.addChip(chip);
+}
+
+int lastShiftIndex = -1;
+int incrementer = -1;
 
 /// [getColorIndex] is a helper function that finds an index
 /// that corresponds to the image colors matrix.
@@ -246,7 +358,7 @@ int getColorIndex(
   final chunkSize = selectorWH / divider;
 
   double diff = selectorLT - boxLT;
-  int index = 0;
+  int index = -1;
 
   while (diff < 0) {
     diff += chunkSize;
@@ -254,7 +366,8 @@ int getColorIndex(
     index++;
   }
 
-  // return index or last index of m or n when
-  // index is not less than divider to avoid array overflow error.
-  return math.min(index, divider - 1);
+  // reset index if less than zero to avoid array overflow error.
+  if (index < 0) index = 0;
+
+  return index;
 }

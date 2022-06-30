@@ -49,6 +49,19 @@ ButtonStyle textBtnStyleWhite = ButtonStyle(
   ),
 );
 
+ButtonStyle textBtnStyleSupportDefault = TextButton.styleFrom(
+  side: const BorderSide(color: Colors.white, width: 1),
+  primary: Colors.white,
+  minimumSize: const Size(200, 100),
+);
+
+ButtonStyle textBtnStyleSupportActive = TextButton.styleFrom(
+  side: const BorderSide(color: Colors.white, width: 1),
+  backgroundColor: Colors.blue,
+  primary: Colors.white,
+  minimumSize: const Size(200, 100),
+);
+
 ButtonStyle textBtnStyleBlack = ButtonStyle(
   foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
   backgroundColor: MaterialStateProperty.all<Color>(Colors.black),

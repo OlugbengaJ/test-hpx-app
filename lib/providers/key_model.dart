@@ -6,6 +6,7 @@ import 'package:hpx/models/apps/zlightspace_models/workspace_models/key_code.dar
 class KeyModel with ChangeNotifier {
   KeyModel({
     required this.keyRow,
+    required this.keyColumn,
     required this.keyCode,
     required this.keyWidth,
     required this.keyHeight,
@@ -20,6 +21,10 @@ class KeyModel with ChangeNotifier {
   /// keyRow = 2 means the key in on the second row.
   final int keyRow;
 
+  /// [keyColumn] is used to divide the keys into columns so that
+  /// different colors can be applied to each column while using wave effect.
+  final int keyColumn;
+
   /// [keyCode] uniquely identifies a key and is fixed regarless of language.
   final KeyCode keyCode;
 
@@ -29,24 +34,48 @@ class KeyModel with ChangeNotifier {
   final double keyHeight;
   final double keyRadius;
 
+  /// [copyWith] returns a new instance of [KeyModel].
+  KeyModel copyWith({
+    Map<String, KeyPaintChip>? chips,
+    int? keyRow,
+    KeyCode? keyCode,
+    double? keyWidth,
+    double? keyHeight,
+    double? keyRadius,
+    double? keyLeft,
+    double? keyTop,
+  }) {
+    return KeyModel(
+      keyRow: keyRow ?? this.keyRow,
+      keyColumn: keyColumn,
+      keyCode: keyCode ?? this.keyCode,
+      keyWidth: keyWidth ?? this.keyWidth,
+      keyHeight: keyHeight ?? this.keyHeight,
+      keyRadius: keyRadius ?? this.keyRadius,
+      keyLeft: keyLeft ?? this.keyLeft,
+      keyTop: keyTop ?? this.keyTop,
+    ).._chips = chips ?? this.chips;
+  }
+
   /// [_chips] holds multiple layers of a key
   /// e.g. a key could have only 1 base color, multiple layers with unique keys,
   /// and only 1 overlay (text or icon layer).
   ///
   /// Each layer of the chip will be rendered from first to last and by default,
   /// a chip is initialized with a [KeyPaintRect] base.
-  final Map<String, KeyPaintChip> _chips = {
+  Map<String, KeyPaintChip> _chips = {
     ChipKey.base.toString(): KeyPaintRect(ChipKey.base.toString()),
   };
 
   /// [chips] returns the values of [_chips] as a new list.
-  Map<String, KeyPaintChip> get chips => _chips;
+  Map<String, KeyPaintChip> get chips =>
+      _chips.map((key, value) => MapEntry(key, value));
 
   /// [chipsValues] returns the values of [_chips] as a new list.
   List<KeyPaintChip> get chipsValues => [..._chips.values];
 
-  /// [topChip] sets the topmost paint of this key.
-  KeyPaintRect? topChip;
+  /// [topChip] returns the topmost layered paint of this key.
+  KeyPaintRect? get topChip => getLayeredChips().last;
 
   /// [addChipIcon] adds an icon layer to chips.
   void addChipIcon(
@@ -108,7 +137,7 @@ class KeyModel with ChangeNotifier {
   /// [getLayeredChips] returns chips other than base, overlay, and icon
   List<KeyPaintRect?> getLayeredChips() {
     return [
-      ..._chips.entries.map((e) {
+      ...chips.entries.map((e) {
         if (_isLayerChip(e.key)) {
           return e.value as KeyPaintRect;
         } else {

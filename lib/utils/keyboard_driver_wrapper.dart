@@ -17,15 +17,19 @@ class KeyboardDriverWrapper {
 
   ///Turns the keyboard light on
   static powerKeyboardOn() async {
-    await outputFile.writeAsString("SPO", flush: true);
+    await outputFile
+        .writeAsString("SPO", flush: true)
+        .catchError((err) => File(''));
   }
 
   ///Turns the keyboard light off
   static powerKeyboardOff() async {
-    await outputFile.writeAsString("SPF", flush: true);
+    await outputFile
+        .writeAsString("SPF", flush: true)
+        .catchError((err) => File(''));
   }
 
   static writeCombinedCommand(command) {
-    outputFile.writeAsBytes(command);
+    outputFile.writeAsBytes(command).catchError((err) => File(''));
   }
 }
