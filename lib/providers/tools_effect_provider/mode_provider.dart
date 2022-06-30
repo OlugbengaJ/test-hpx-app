@@ -25,7 +25,6 @@ import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 // default varaible for the profile dropdown picker
 List<PickerModel> profileList = [
@@ -326,7 +325,8 @@ class ModeProvider extends ChangeNotifier {
         for (var element in contactsupportlist) {
           currentColors.add(element.colorCode[0]);
         }
-        contacProvider = Provider.of<ContactSupportWidgetProvider>(context, listen: false);
+        contacProvider =
+            Provider.of<ContactSupportWidgetProvider>(context, listen: false);
         appContext = context;
         preset = const ContactSupportPreset();
         break;
@@ -383,20 +383,6 @@ class ModeProvider extends ChangeNotifier {
   // get current mode information
   getModeInformation() {
     return currentMode;
-  }
-
-  setShortcutKeys(context, List<List<String>> keys) {
-    ShortcutWidgetProvider shortcutWidgetProvider =
-        Provider.of<ShortcutWidgetProvider>(context, listen: false);
-    for (var element in shortcutWidgetProvider.keys) {
-      shortcutWidgetProvider.addNewCommand(element.first, element.last);
-    }
-    currentMode.shortcutKeys = keys;
-    setCurrentMode(currentMode);
-
-    LayersProvider layerProvider =
-        Provider.of<LayersProvider>(context, listen: false);
-    layerProvider.toolsEffectsUpdated();
   }
 
   // change the mode type for the current mode between sublayer and layer based on the value passed
