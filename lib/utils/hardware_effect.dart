@@ -335,7 +335,7 @@ class ColorCycleEffect extends HardwareEffect {
       var layer = _layersProvider.layeritems
           .firstWhere((element) => element.id == _layerID);
       for (var color in layer.mode?.currentColor as List<Color>) {
-        var speedTemp = layer.mode?.effects?.speed?.round();
+        var speedTemp = layer.mode?.effects.speed?.round();
         var speed = 0;
 
         if (speedTemp != null && speedTemp <= 0) {
@@ -393,7 +393,7 @@ class BlinkingEffect extends HardwareEffect {
       var layer = _layersProvider.layeritems
           .firstWhere((element) => element.id == _layerID);
       currentColor = layer.mode?.currentColor.last;
-      var speedTemp = layer.mode?.effects?.speed?.round();
+      var speedTemp = layer.mode?.effects.speed?.round();
       var speed = 0;
 
       if (speedTemp != null && speedTemp <= 0) {
