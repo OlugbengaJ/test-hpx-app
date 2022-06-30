@@ -171,6 +171,9 @@ class ModeProvider extends ChangeNotifier {
   PickerModel modePicker =
       PickerModel(title: 'Mood', value: EnumModes.mood, enabled: true);
 
+  late ContactSupportWidgetProvider contacProvider;
+  late BuildContext appContext;
+
   /// function set the current mode information to the provider mode variable
   void setCurrentMode(ToolsModeModel data) {
     currentMode = data;
@@ -323,6 +326,8 @@ class ModeProvider extends ChangeNotifier {
         for (var element in contactsupportlist) {
           currentColors.add(element.colorCode[0]);
         }
+        contacProvider = Provider.of<ContactSupportWidgetProvider>(context, listen: false);
+        appContext = context;
         preset = const ContactSupportPreset();
         break;
       default:
@@ -403,7 +408,10 @@ class ModeProvider extends ChangeNotifier {
   }
 
   void activateContactSupportDialog() {
-    this.isLost = true;
+    isLost = true;
+    if (isLost == true) {
+      contacProvider.showContactOptionsDialog(appContext);
+    }
     notifyListeners();
   }
 }
