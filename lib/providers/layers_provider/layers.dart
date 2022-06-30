@@ -173,8 +173,8 @@ class LayersProvider extends ChangeNotifier {
       }else{
         int index = _sublayers.indexWhere((item) => item.id == _currentSublayer.id);
         item = _currentSublayer;
-        
-        debugPrint("${item.layerText}");
+
+        //debugPrint("${item.layerText}");
         item.mode =  _modeProvider!.getModeInformation();
         _sublayers[index] = item;
       }
