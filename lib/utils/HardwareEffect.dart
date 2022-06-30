@@ -2,10 +2,15 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:hpx/providers/keys_provider.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:image/image.dart' as imageLib;
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
+
+import '../apps/z_light/globals.dart';
 
 abstract class HardwareEffect {
   int _layerID;
@@ -367,7 +372,13 @@ class ShortcutColorsEffect extends HardwareEffect {
 
   @override
   Map<String, Map<String, Object>> updateKeyboardInfo(Map<String, Map<String, Object>> keyboard) {
-    var layer = this._layersProvider.layeritems.firstWhere((element) => element.id == this._layerID);
+    var keysProvider = Provider.of<KeysProvider>(navigatorKeys.currentContext!, listen: false);
+    keysProvider.shortcutKeys.forEach((key, value) {
+      value.forEach((element) {
+        updateKeyColorInfo(keyboard: keyboard, keyName: element.keyCode.name, color: element.chipsValues.last.color);
+      });
+    });
+
     return keyboard;
   }
 }

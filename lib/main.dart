@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKeys,
       scaffoldMessengerKey: scaffoldKey,
       darkTheme: darkTheme.copyWith(
         sliderTheme: SliderTheme.of(context).copyWith(
