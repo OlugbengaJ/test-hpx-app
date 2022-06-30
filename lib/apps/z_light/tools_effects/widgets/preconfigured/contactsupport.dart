@@ -19,11 +19,7 @@ class _ContactSupportPresetState extends State<ContactSupportPreset> {
         Provider.of<ColorPickerProvider>(context, listen: false);
     ModeProvider modeProvider =
         Provider.of<ModeProvider>(context, listen: false);
-    ContactSupportWidgetProvider contacProvider =
-        Provider.of<ContactSupportWidgetProvider>(context, listen: false);
-    if (modeProvider.isLost) {
-      contacProvider.showContactOptionsDialog(context);
-    }
+
     // print(modeProvider.currentMode.shortcutKeys);
     return Container(
       margin: const EdgeInsets.only(top: 30),
