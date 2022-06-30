@@ -609,6 +609,9 @@ class KeyboardController {
       case "Contact Support": { runningEffects.add(SupportContactEffect(layer.id, layersProvider));}
       break;
 
+      case "Shortcut Colors": { runningEffects.add(ShortcutColorsEffect(layer.id, layersProvider));}
+      break;
+
       default: { }
       break;
     }

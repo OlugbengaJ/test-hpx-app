@@ -128,7 +128,10 @@ class _LayerListItemState extends State<LayerListItem> {
 
   /// Use to delete a layer from the list
   _deleteLayer(LayersProvider provider) {
-    _deleteLayerDialog(provider);
+    if(provider.length>=2){
+      _deleteLayerDialog(provider);
+    }
+    
     //provider.removeItem(widget.layerIndex);
     // final dynamic tooltip = deleteKey.currentState;
     // tooltip?.ensureTooltipVisible();
