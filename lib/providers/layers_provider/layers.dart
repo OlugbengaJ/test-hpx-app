@@ -127,7 +127,6 @@ class LayersProvider extends ChangeNotifier {
       if (_modeProvider!.getModeInformation().value == EnumModes.shortcut) {
         shortcutAvalaible = true;
       }
-
       // Check the if the current mode is shortcut colors
       if (item.mode!.value == EnumModes.shortcut) {
         if (_modeProvider!.getModeInformation().value != EnumModes.shortcut) {
@@ -138,23 +137,33 @@ class LayersProvider extends ChangeNotifier {
         }
       }
 
-      if (item.mode!.name != _modeProvider!.currentMode.name) {
-        item.layerText = _modeProvider!.currentMode.name;
-      }
-
-      item.mode = _modeProvider!.getModeInformation();
-      if (isSublayerSelected & !creatingNewLayer) {
-        //_sublayers[listIndex] = item;
-      } else {
-        _layeritems[listIndex] = item;
-      }
-
-      if (item.mode!.value == EnumModes.shortcut) {
-        if (subLayers.isEmpty) {
-          duplicateOrCreatSubLayer(item, listIndex, _modeProvider!,
-              sublayer: true);
+      if (!isSublayerSelected) {
+        if (item.mode!.name != _modeProvider!.currentMode.name) {
+          item.layerText = _modeProvider!.currentMode.name;
         }
-        // debugPrint('$subLayers');
+
+        item.mode = _modeProvider!.getModeInformation();
+        if (isSublayerSelected & !creatingNewLayer) {
+          //_sublayers[listIndex] = item;
+        } else {
+          _layeritems[listIndex] = item;
+        }
+
+        if (item.mode!.value == EnumModes.shortcut) {
+          if (subLayers.isEmpty) {
+            duplicateOrCreatSubLayer(item, listIndex, _modeProvider!,
+                sublayer: true);
+          }
+          // debugPrint('$subLayers');
+        }
+      } else {
+        int index =
+            _sublayers.indexWhere((item) => item.id == _currentSublayer.id);
+        item = _currentSublayer;
+
+        //debugPrint("${item.layerText}");
+        item.mode = _modeProvider!.getModeInformation();
+        _sublayers[index] = item;
       }
     }
 
@@ -310,6 +319,7 @@ class LayersProvider extends ChangeNotifier {
     LayerItemModel sublayer = sublayerItems[subIndex];
     sublayer.listDisplayColor = Colors.white;
     _currentSublayer = sublayer;
+
     isSublayerSelected = true;
     notifyListeners();
   }
