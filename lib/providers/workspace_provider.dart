@@ -264,7 +264,7 @@ class WorkspaceProvider with ChangeNotifier {
   bool _disableZoneClick = false;
 
   /// [_disableZoneHighlight] tracks the disabled state of the highlight icon.
-  final bool _disableZoneHighlight = false;
+  bool _disableZoneHighlight = false;
 
   /// [_disableZoneResizable] tracks the disabled state of the resizable icon.
   bool _disableZoneResizable = false;
@@ -781,18 +781,28 @@ class WorkspaceProvider with ChangeNotifier {
 
         // set highlight selector for shortcut colors
         switch (layer.mode?.value) {
+          case EnumModes.contactsupport:
+            curentLayerLTWH?.dragMode = _keyDragMode = null;
+
+            // disable zone selection icons
+            _disableZoneHighlight = true;
+            _disableZoneResizable = true;
+            _disableZoneClick = true;
+            break;
           case EnumModes.shortcut:
             _selectorVisible = _isPanning;
             _keyDragMode = WorkspaceDragMode.highlight;
             curentLayerLTWH?.dragMode = _keyDragMode;
 
             // disable zone selection icons
+            _disableZoneHighlight = false;
             _disableZoneResizable = true;
             _disableZoneClick = true;
             break;
 
           default:
             // enable zone selection icons
+            _disableZoneHighlight = false;
             _disableZoneClick = false;
             _disableZoneResizable = false;
         }
