@@ -140,17 +140,7 @@ class _LayerListItemState extends State<LayerListItem> {
   // Tap on a layer to select it
   _onTap(LayersProvider provider) {
     provider.changeIndex(widget.layerIndex);
-    ModeProvider modeProvider = context.read<ModeProvider>();
-    modeProvider.setCurrentMode(widget.layerItemModel.mode!);
-
-    modeProvider.changeModeComponent(
-        PickerModel(
-            title: widget.layerItemModel.mode!.name,
-            value: widget.layerItemModel.mode!.value,
-            enabled: true,
-            icon: widget.layerItemModel.mode!.icon),
-        context,
-        true);
+    //provider.changeToolsEffectMode(widget.layerItemModel.mode!);
   }
 
   /// Save the layer's new text
