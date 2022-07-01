@@ -16,6 +16,7 @@ class LayerItemModel {
     this.hasSublayer = false,
     this.listDisplayColor = defaultColor,
     this.paintColor = defaultPaintColor,
+    this.shortcutColor = defaultPaintColor,
     this.top = 0,
     this.bottom = 0,
     this.left = 0,
@@ -32,6 +33,7 @@ class LayerItemModel {
   bool visibleOnStack;
   Color listDisplayColor;
   Color paintColor;
+  Color shortcutColor;
   ToolsModeModel? mode;
   List<KeyModel> _keys = [];
 
