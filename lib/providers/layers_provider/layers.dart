@@ -121,7 +121,6 @@ class LayersProvider extends ChangeNotifier {
 
   /// listen to any change from the tools and effects so the current layers can be updated
   Future<void> toolsEffectsUpdated({bool modeChanged = false}) async {
-    print("Tools effects updated");
     LayerItemModel item = getItem(listIndex);
     if (isSublayerSelected & !creatingNewLayer) {
       item = getCurrentSublayer()!;
@@ -180,9 +179,7 @@ class LayersProvider extends ChangeNotifier {
         _sublayers[index] = item;
       }
 
-      if(isSublayerSelected){
-        //changeToolsEffectMode(getItemByID(item.parentID).mode!);
-      }
+      
 
       
     }
@@ -193,6 +190,12 @@ class LayersProvider extends ChangeNotifier {
         shortcutAvalaible = true;
         break;
       }
+    }
+
+    if(isSublayerSelected){
+      //changeToolsEffectMode(getItemByID(item.parentID).mode!);
+      int parentIndex = _layeritems.indexWhere((layer) => layer.id==item.parentID);
+      //changeIndex(parentIndex);
     }
 
     physicalKeyboardController.addLayer(item);

@@ -161,7 +161,7 @@ class _SublayerItemState extends State<SublayerItem> {
                         child: Icon(
                           Icons.circle,
                           size: 5,
-                          color: widget.layerItemModel.mode!.currentColor[0],                      
+                          color: widget.layerItemModel.mode!.currentColor[0],
                         )
                       ),
                     ),
