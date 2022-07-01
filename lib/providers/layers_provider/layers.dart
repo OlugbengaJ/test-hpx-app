@@ -355,7 +355,8 @@ class LayersProvider extends ChangeNotifier {
     LayerItemModel sublayer = _sublayers[subIndex];
     sublayer.listDisplayColor = Colors.white;
     _currentSublayer = sublayer;
-
+    //LayerItemModel parentModel = getItemByID(sublayer.parentID);
+    //parentModel.mode = sublayer.mode;
     isSublayerSelected = true;
     notifyListeners();
   }
