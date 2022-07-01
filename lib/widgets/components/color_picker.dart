@@ -486,7 +486,6 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                                       colorPickerProviderInstance =
                                       Provider.of<ColorPickerProvider>(context,
                                           listen: false);
-
                                   setState(() {
                                     _value = value!;
                                     widget.hasBorder = (!_value) ? true : false;

@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/key_rrect.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
@@ -173,57 +175,6 @@ KeyModel _updateKeyInfo(
 
             updateKeyAndLayer(keyModel, chip, layer);
             break;
-          case EnumModes.wave:
-            if (layer.mode?.currentColor != null) {
-              final colorLength = layer.mode!.currentColor.length;
-
-              // determines the index of color to use
-              int index;
-              final int colIndex = getColorIndex(boxZone.selectorRect.width,
-                  boxZone.selectorRect.left, boxZone.boxRect.left, colorLength);
-
-              final int rowIndex = getColorIndex(boxZone.selectorRect.height,
-                  boxZone.selectorRect.top, boxZone.boxRect.top, colorLength);
-
-              final animValue =
-                  provider.animValue(speed: layer.mode?.effects.speed);
-
-              // offset column index by the animation value and color length
-              final shiftIndex = (animValue! * colorLength).ceil();
-
-              if (lastShiftIndex != shiftIndex) {
-                lastShiftIndex = shiftIndex;
-
-                if (incrementer < colorLength - 1) {
-                  incrementer++;
-                } else {
-                  incrementer = 0;
-                }
-              }
-
-              final direction = layer.mode!.effects.degree!;
-              if (direction > 225 && direction < 315) {
-                // TODO: rowIndex +/- colIndex creates a directional wave
-                // index = (rowIndex + colIndex + incrementer).abs() % colorLength;
-
-                // wave flows along negative y axis.
-                index = (rowIndex + incrementer).abs() % colorLength;
-              } else if (direction > 45 && direction < 135) {
-                // wave flows along positive y axis.
-                index = (rowIndex - incrementer).abs() % colorLength;
-              } else if (direction > 90 && direction < 270) {
-                // wave flows along negative x axis.
-                index = (colIndex + incrementer).abs() % colorLength;
-              } else {
-                // wave flows along positive x axis.
-                index = (colIndex - incrementer).abs() % colorLength;
-              }
-
-              chip.color = layer.mode!.currentColor[index];
-            }
-
-            updateKeyAndLayer(keyModel, chip, layer);
-            break;
           case EnumModes.image:
             // paint all keys based on color matrix (m x n)
 
@@ -291,6 +242,60 @@ KeyModel _updateKeyInfo(
               }
             }
 
+            break;
+          case EnumModes.wave:
+            if (layer.mode?.currentColor != null) {
+              final colorLength = layer.mode!.currentColor.length;
+
+              // determines the index of color to use
+              int index;
+              final int colIndex = getColorIndex(boxZone.selectorRect.width,
+                  boxZone.selectorRect.left, boxZone.boxRect.left, colorLength);
+
+              final int rowIndex = getColorIndex(boxZone.selectorRect.height,
+                  boxZone.selectorRect.top, boxZone.boxRect.top, colorLength);
+
+              final animValue =
+                  provider.animValue(speed: layer.mode?.effects.speed);
+
+              // offset column index by the animation value and color length
+              final shiftIndex = (animValue! * colorLength).ceil();
+
+              if (lastShiftIndex != shiftIndex) {
+                lastShiftIndex = shiftIndex;
+
+                if (incrementer < colorLength - 1) {
+                  incrementer++;
+                } else {
+                  incrementer = 0;
+                }
+              }
+
+              final direction = layer.mode!.effects.degree!;
+              if (direction > 225 && direction < 315) {
+                // TODO: rowIndex +/- colIndex creates a directional wave
+                // index = (rowIndex + colIndex + incrementer).abs() % colorLength;
+
+                // wave flows along negative y axis.
+                index = (rowIndex + incrementer).abs() % colorLength;
+              } else if (direction > 45 && direction < 135) {
+                // wave flows along positive y axis.
+                index = (rowIndex - incrementer).abs() % colorLength;
+              } else if (direction > 90 && direction < 270) {
+                // wave flows along negative x axis.
+                index = (colIndex + incrementer).abs() % colorLength;
+              } else {
+                // wave flows along positive x axis.
+                index = (colIndex - incrementer).abs() % colorLength;
+              }
+
+              // final dir = math.tan(direction).floor();
+              // index = (colIndex - (rowIndex * dir) + incrementer).abs() %
+              //     colorLength;
+              chip.color = layer.mode!.currentColor[index];
+            }
+
+            updateKeyAndLayer(keyModel, chip, layer);
             break;
           default:
             updateKeyAndLayer(keyModel, chip, layer);

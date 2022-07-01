@@ -1,9 +1,8 @@
-import 'dart:convert';
 import 'package:hpx/providers/layers_provider/layers.dart';
-import 'package:hpx/utils/HardwareEffect.dart';
+import 'package:hpx/utils/hardware_effect.dart';
 import 'dart:isolate';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
-import 'KeyboardDriverWrapper.dart';
+import 'package:hpx/utils/keyboard_driver_wrapper.dart';
 
 class KeyboardController {
   Isolate? isolate;
@@ -580,40 +579,64 @@ class KeyboardController {
   addLayer(LayerItemModel layer) {
     removeLayer(layer);
 
-    switch(layer.mode?.name) {
+    switch (layer.mode?.name) {
+      case "Color Production":
+        {
+          runningEffects.add(ColorProductionEffect(layer.id, layersProvider));
+        }
+        break;
 
-      case "Color Production": { runningEffects.add(ColorProductionEffect(layer.id, layersProvider));; }
-      break;
+      case "Mood":
+        {
+          runningEffects.add(ModeEffect(layer.id, layersProvider));
+        }
+        break;
 
-      case "Mood": { runningEffects.add(ModeEffect(layer.id, layersProvider)); }
-      break;
+      case "Wave":
+        {
+          runningEffects.add(WaveEffect(layer.id, layersProvider));
+        }
+        break;
 
-      case "Wave": {runningEffects.add(WaveEffect(layer.id, layersProvider));}
-      break;
+      case "Color Cycle":
+        {
+          runningEffects.add(ColorCycleEffect(layer.id, layersProvider));
+        }
+        break;
 
-      case "Color Cycle": {runningEffects.add(ColorCycleEffect(layer.id, layersProvider)); }
-      break;
+      case "Breathing":
+        {
+          runningEffects.add(BreathingEffect(layer.id, layersProvider));
+        }
+        break;
 
-      case "Breathing": { runningEffects.add(BreathingEffect(layer.id, layersProvider));}
-      break;
+      case "Blinking":
+        {
+          runningEffects.add(BlinkingEffect(layer.id, layersProvider));
+        }
+        break;
 
-      case "Blinking": { runningEffects.add(BlinkingEffect(layer.id, layersProvider)); }
-      break;
+      case "Shortcut Colors":
+        {
+          runningEffects.add(ShortcutColorsEffect(layer.id, layersProvider));
+        }
+        break;
 
-      case "Shortcut Colors": { runningEffects.add(ShortcutColorsEffect(layer.id, layersProvider)); }
-      break;
+      case "Image":
+        {
+          runningEffects.add(ImageEffect(layer.id, layersProvider));
+        }
+        break;
 
-      case "Image": { runningEffects.add(ImageEffect(layer.id, layersProvider)); }
-      break;
+      case "Contact Support":
+        {
+          runningEffects.add(SupportContactEffect(layer.id, layersProvider));
+        }
+        break;
 
-      case "Contact Support": { runningEffects.add(SupportContactEffect(layer.id, layersProvider));}
-      break;
-
-      case "Shortcut Colors": { runningEffects.add(ShortcutColorsEffect(layer.id, layersProvider));}
-      break;
-
-      default: { }
-      break;
+      default:
+        {}
+        break;
     }
   }
 
@@ -622,9 +645,9 @@ class KeyboardController {
   }
 
   applyEffectToKeys() {
-    runningEffects.forEach((effect) {
+    for (var effect in runningEffects) {
       keyboardKeys = effect.updateKeyboardInfo(keyboardKeys);
-    });
+    }
   }
 
   sendCombinedCommandToDriver() {
@@ -637,21 +660,15 @@ class KeyboardController {
     completeByteArray.add(83);
     completeByteArray.add(65);
     completeByteArray.add(67);
-    completeByteArray = [
-      ...completeByteArray,
-      ...composeCombinedCommand()
-    ];
+    completeByteArray = [...completeByteArray, ...composeCombinedCommand()];
     return completeByteArray;
   }
 
   composeCombinedCommand() {
     var completePacketByteArray = [];
-    completePacketByteArray
-        .addAll(composeSubCommand(colorName: "red"));
-    completePacketByteArray
-        .addAll(composeSubCommand(colorName: "green"));
-    completePacketByteArray
-        .addAll(composeSubCommand(colorName: "blue"));
+    completePacketByteArray.addAll(composeSubCommand(colorName: "red"));
+    completePacketByteArray.addAll(composeSubCommand(colorName: "green"));
+    completePacketByteArray.addAll(composeSubCommand(colorName: "blue"));
 
     return completePacketByteArray;
   }
@@ -662,10 +679,11 @@ class KeyboardController {
       for (int index in value["index"] as List) {
         if (colorName == "red") {
           subPacketByteArray[index] = value["redOpacity"] as int;
-        } else if (colorName == "green")
+        } else if (colorName == "green") {
           subPacketByteArray[index] = value["greenOpacity"] as int;
-        else if (colorName == "blue")
+        } else if (colorName == "blue") {
           subPacketByteArray[index] = value["blueOpacity"] as int;
+        }
       }
     });
 
@@ -673,11 +691,10 @@ class KeyboardController {
   }
 
   Future<void> run(int speed) async {
-    while(true) {
+    while (true) {
       await sendCombinedCommandToDriver();
       resetKeysForNewCommand();
-      await Future.delayed(
-          Duration(milliseconds: 1000 - speed as int), () => null);
+      await Future.delayed(Duration(milliseconds: 1000 - speed), () => null);
     }
   }
 
