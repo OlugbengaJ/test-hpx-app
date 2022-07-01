@@ -115,7 +115,6 @@ class _WorkspaceState extends State<Workspace>
   void dispose() {
     _zoomTextCtrl.dispose();
     _controller.dispose();
-
     super.dispose();
   }
 

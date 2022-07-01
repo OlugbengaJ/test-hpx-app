@@ -23,7 +23,8 @@ class _SublayerItemState extends State<SublayerItem> {
   bool _editing = false;
   final double _iconSize = 16;
   TextEditingController _layerNameController = TextEditingController(text: "");
-  GlobalKey<FormFieldState> editLayerKey = GlobalKey<FormFieldState>(); // Each layer should have a key for its editing field
+  GlobalKey<FormFieldState> editLayerKey = GlobalKey<
+      FormFieldState>(); // Each layer should have a key for its editing field
 
   Future<void> _deleteLayerDialog(LayersProvider provider) async {
     return showDialog<void>(
@@ -37,19 +38,18 @@ class _SublayerItemState extends State<SublayerItem> {
               children: <Widget>[
                 const Text('Do you wish to delete this layer?'),
                 Padding(
-                  padding: const EdgeInsets.only(top:8.0),
+                  padding: const EdgeInsets.only(top: 8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextButton(
-                        onPressed: (){
+                        onPressed: () {
                           Navigator.of(context).pop();
                         },
                         child: const Text("Cancel"),
-                        
                       ),
                       TextButton(
-                        onPressed: (){
+                        onPressed: () {
                           provider.removeSubItem(widget.layerItemModel);
                           Navigator.of(context).pop();
                         },
@@ -62,7 +62,6 @@ class _SublayerItemState extends State<SublayerItem> {
               ],
             ),
           ),
-          
         );
       },
     );
@@ -85,15 +84,14 @@ class _SublayerItemState extends State<SublayerItem> {
     provider.toggleSublayerVisibility(layerItemModel, widget.layerIndex);
   }
 
-
   _toggleEditing(LayersProvider provider) {
     /// Check if the layer is not already in edit mode
     if (!provider.isLayerEditing) {
       provider.setEditingSubLayerKey(editLayerKey, widget.layerItemModel.id);
       setState(() {
         _editing = provider.isTheCurrentSubLayerEditing(editLayerKey);
-        _layerNameController = TextEditingController(
-            text: widget.layerItemModel.layerText);
+        _layerNameController =
+            TextEditingController(text: widget.layerItemModel.layerText);
       });
       provider.toggleEditMode(true);
     } else {
@@ -105,16 +103,16 @@ class _SublayerItemState extends State<SublayerItem> {
   }
 
   _deleteLayer(LayersProvider provider) {
-    if(provider.getSublayers(widget.layerItemModel.parentID).length>=2){
+    if (provider.getSublayers(widget.layerItemModel.parentID).length >= 2) {
       _deleteLayerDialog(provider);
-    }    
+    }
   }
 
   _onTap(LayersProvider provider) {
     provider.changeSublayerIndex(widget.layerIndex);
     ModeProvider modeProvider = context.read<ModeProvider>();
     modeProvider.setCurrentMode(widget.layerItemModel.mode!);
-    modeProvider.setModeType(true);    
+    modeProvider.setModeType(true);
   }
 
   _onSubmit(value, LayersProvider provider) {
@@ -161,13 +159,12 @@ class _SublayerItemState extends State<SublayerItem> {
                     ),
                     Center(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: Icon(
-                          Icons.circle,
-                          size: 5,
-                          color: widget.layerItemModel.mode!.currentColor[0],                      
-                        )
-                      ),
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          child: Icon(
+                            Icons.circle,
+                            size: 5,
+                            color: widget.layerItemModel.mode!.currentColor[0],
+                          )),
                     ),
                     Expanded(
                       child: Column(
@@ -175,7 +172,7 @@ class _SublayerItemState extends State<SublayerItem> {
                         children: [
                           Row(
                             children: [
-                              (_editing  && provider.isLayerEditing)
+                              (_editing && provider.isLayerEditing)
                                   ? Container(
                                       height: 30,
                                       constraints: const BoxConstraints(
