@@ -8,7 +8,7 @@ import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/utils/KeyboardController.dart';
 import 'package:hpx/widgets/components/layers.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
-// 
+//
 ///[LayersProvider] to controle the layers state
 
 class LayersProvider extends ChangeNotifier {
@@ -17,8 +17,10 @@ class LayersProvider extends ChangeNotifier {
   ModeProvider? _modeProvider;
   bool isLayerEditing = false; // Used to check wether a layer is in edit mode
   int currentEditingID = 0; // if the ID is 0 then no layer is in edit mode
-  int currentSublayerID = 0; /// if the currentSubLayerID is 0 that means there is no sublayer selected
-  bool isSublayerSelected = false; 
+  int currentSublayerID = 0;
+
+  /// if the currentSubLayerID is 0 that means there is no sublayer selected
+  bool isSublayerSelected = false;
   bool shortcutAvalaible = false;
   bool creatingNewLayer = false;
   late LayerItemModel _currentSublayer;
@@ -26,22 +28,21 @@ class LayersProvider extends ChangeNotifier {
   late KeyboardController physicalKeyboardController;
   BuildContext? _context;
 
-
   LayersProvider() {
     physicalKeyboardController = KeyboardController(this);
   }
 
-  setBuildContext(BuildContext context){
+  setBuildContext(BuildContext context) {
     _context = context;
     notifyListeners();
   }
 
   /// retrieve [_currentSublayer] only if [isSublayerSelected] is true
-  LayerItemModel? getCurrentSublayer(){
-    if(isSublayerSelected){
+  LayerItemModel? getCurrentSublayer() {
+    if (isSublayerSelected) {
       return _currentSublayer;
     }
-    return null;    
+    return null;
   }
 
   /// [hideDraggable] use to show or hide the stack layers for resizable widget
@@ -66,81 +67,81 @@ class LayersProvider extends ChangeNotifier {
     return _layeritems[i];
   }
 
+  /// [getItem] retrieve the layer using the index.
+  /// This is to get the layer's informations
+  LayerItemModel getItemByID(int id) {
+    return _layeritems.singleWhere((layer) => layer.id==id);
+  }
+
+
+
   /// [toggleHideStackedLayers] toggle hide or show of the resizable
   void toggleHideStackedLayers(bool show) {
     hideDraggable = show;
     notifyListeners();
   }
 
-  setEditingLayerKey(GlobalKey<FormFieldState> key, int layerID){
+  setEditingLayerKey(GlobalKey<FormFieldState> key, int layerID) {
     editLayerKey = key;
     currentEditingID = layerID;
     notifyListeners();
   }
 
-
   /// To check if the layer is the one on edit mode
-  bool isTheCurrentLayerEditing(GlobalKey<FormFieldState> key){
-    if(editLayerKey==key){
+  bool isTheCurrentLayerEditing(GlobalKey<FormFieldState> key) {
+    if (editLayerKey == key) {
       return true;
-    }else{
+    } else {
       return false;
     }
-
   }
 
-
-  toggleEditMode(bool editing){
+  toggleEditMode(bool editing) {
     isLayerEditing = editing;
     notifyListeners();
   }
 
-  saveEditingLayer(){
-    if(editLayerKey!.currentState!.value.toString().isNotEmpty){
+  saveEditingLayer() {
+    if (editLayerKey!.currentState!.value.toString().isNotEmpty) {
       editLayerKey!.currentState!.save();
-      if(currentEditingID!=0){
+      if (currentEditingID != 0) {
         update(currentEditingID, editLayerKey!.currentState!.value.toString());
       }
-
-
-    }else{
+    } else {
       update(currentEditingID, "$currentEditingID - No name");
     }
     isLayerEditing = false;
     notifyListeners();
   }
 
-
   /// [setModeProvider] to set the mode provider to use on layers
-  void setModeProvider(ModeProvider modeProvider){
+  void setModeProvider(ModeProvider modeProvider) {
     _modeProvider = modeProvider;
   }
 
-
-
-
   /// listen to any change from the tools and effects so the current layers can be updated
   Future<void> toolsEffectsUpdated({bool modeChanged = false}) async {
+    print("Tools effects updated");
     LayerItemModel item = getItem(listIndex);
-    if(isSublayerSelected & !creatingNewLayer){
+    if (isSublayerSelected & !creatingNewLayer) {
       item = getCurrentSublayer()!;
     }
     var subLayers = getSublayers(item.id);
 
-    
     /// check if there is already a layer with shortcut mode
-    if(modeChanged & shortcutAvalaible & (_modeProvider!.getModeInformation().value == EnumModes.shortcut)){
-      layerAlertDialog(_context!);          
-    }else{
-      if(_modeProvider!.getModeInformation().value == EnumModes.shortcut){
+    if (modeChanged &
+        shortcutAvalaible &
+        (_modeProvider!.getModeInformation().value == EnumModes.shortcut)) {
+      layerAlertDialog(_context!);
+    } else {
+      if (_modeProvider!.getModeInformation().value == EnumModes.shortcut) {
         shortcutAvalaible = true;
       }
       // Check the if the current mode is shortcut colors
-      if(item.mode!.value == EnumModes.shortcut){
-        if(_modeProvider!.getModeInformation().value != EnumModes.shortcut){
-          
-          if(sublayerItems.isNotEmpty){
-            _sublayers.removeWhere((layer) => layer.parentID==item.id);
+      if (item.mode!.value == EnumModes.shortcut) {
+        if (_modeProvider!.getModeInformation().value != EnumModes.shortcut) {
+          if (sublayerItems.isNotEmpty) {
+            _sublayers.removeWhere((layer) => layer.parentID == item.id);
             notifyListeners();
           }
         }      
@@ -175,17 +176,30 @@ class LayersProvider extends ChangeNotifier {
         item = _currentSublayer;
 
         //debugPrint("${item.layerText}");
-        item.mode =  _modeProvider!.getModeInformation();
+        item.mode = _modeProvider!.getModeInformation();
         _sublayers[index] = item;
       }
 
+      if(isSublayerSelected){
+        //changeToolsEffectMode(getItemByID(item.parentID).mode!);
+      }
+
+      
     }
-    
+
+    shortcutAvalaible = false;
+    for (var layer in layeritems) {
+      if (layer.mode!.value == EnumModes.shortcut) {
+        shortcutAvalaible = true;
+        break;
+      }
+    }
+
     physicalKeyboardController.addLayer(item);
     notifyListeners();
   }
 
-
+  
 
   /// [updateView] use to update the item position when the resizable-draggable stop dragging
   /// This method is called from the [ResizableProvider]
@@ -237,7 +251,7 @@ class LayersProvider extends ChangeNotifier {
     return layers;
   }
 
-  disableCreatingNewLayerMode(){
+  disableCreatingNewLayerMode() {
     creatingNewLayer = false;
     notifyListeners();
   }
@@ -251,8 +265,7 @@ class LayersProvider extends ChangeNotifier {
         name: "Mood",
         value: EnumModes.mood,
         modeType: EnumModeType.layers,
-        icon: Icons.mood
-    );
+        icon: Icons.mood);
 
     item.mode = mode;
 
@@ -303,12 +316,6 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-  void setShortuctKeys(List<List<String>> keys){
-    _modeProvider!.setShortcutKeys(_context, keys);
-    notifyListeners();
-  }
-
   /// [changeIndex] set index when tap on the layer in the [_layeritems]
   void changeIndex(int index) {
     for (var element in _layeritems) {
@@ -321,10 +328,10 @@ class LayersProvider extends ChangeNotifier {
     item.listDisplayColor = Colors.white;
     _layeritems[_listIndex] = item;
 
-
     if (item.mode!.value == EnumModes.shortcut) {
       //_modeProvider!.setModeType(true);
     }
+    changeToolsEffectMode(item.mode!);
     toggleHideStackedLayers(!item.visible);
     isSublayerSelected = false;
     notifyListeners();
@@ -348,8 +355,6 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-
   /// Update the layerText using its ID
   void update(int id, String text) {
     LayerItemModel item = layeritems.singleWhere((item) => item.id == id);
@@ -358,8 +363,6 @@ class LayersProvider extends ChangeNotifier {
     _layeritems[editingIndex] = item;
     notifyListeners();
   }
-
-  
 
   /// [toggleVisibility] toggle visiblity for a layers
   void toggleVisibility(LayerItemModel item, int index) {
@@ -373,7 +376,6 @@ class LayersProvider extends ChangeNotifier {
     toggleHideStackedLayers(!item.visible);
     notifyListeners();
   }
-
 
   /// [toggleVisibility] toggle visiblity for a layers
   void toggleSublayerVisibility(LayerItemModel item, int index) {
@@ -391,7 +393,7 @@ class LayersProvider extends ChangeNotifier {
   /// [reorder] is called to rearrange layers
   void reorder(int oldIndex, int newIndex) {
     /// Save any editing layer before rearrange
-    if(isLayerEditing){
+    if (isLayerEditing) {
       saveEditingLayer();
     }
     if (newIndex > oldIndex) {
@@ -405,11 +407,12 @@ class LayersProvider extends ChangeNotifier {
   /// [removeItem] is used to remove a layer from the [layeritems]
   void removeItem(int index) {
     /// Save any editing layer before delete
-    if(isLayerEditing){
+    if (isLayerEditing) {
       saveEditingLayer();
     }
+
     /// Still check if there is no editing layer
-    if(!isLayerEditing){
+    if (!isLayerEditing) {
       if (length > 1) {
         final item = _layeritems[index];
 
@@ -424,7 +427,7 @@ class LayersProvider extends ChangeNotifier {
 
     shortcutAvalaible = false;
     for (var layer in layeritems) {
-      if(layer.mode!.value == EnumModes.shortcut){
+      if (layer.mode!.value == EnumModes.shortcut) {
         shortcutAvalaible = true;
         break;
       }
@@ -441,7 +444,6 @@ class LayersProvider extends ChangeNotifier {
 
     notifyListeners();
   }
-
 
   setEditingSubLayerKey(GlobalKey<FormFieldState> key, int layerID) {
     editLayerKey = key;
@@ -473,29 +475,43 @@ class LayersProvider extends ChangeNotifier {
     if (editLayerKey!.currentState!.value.toString().isNotEmpty) {
       //editLayerKey!.currentState!.save();
       if (currentEditingID != 0) {
-        updateSublayerWithID(currentEditingID, editLayerKey!.currentState!.value.toString());
+        updateSublayerWithID(
+            currentEditingID, editLayerKey!.currentState!.value.toString());
       }
     } else {
-      updateSublayerWithID(currentEditingID, "$currentEditingID -Sub layer No name");
+      updateSublayerWithID(
+          currentEditingID, "$currentEditingID -Sub layer No name");
     }
     notifyListeners();
   }
-
 
   /// Update a sublayer text
   void updateSublayer(LayerItemModel item, String value) {
     for (var subItem in sublayerItems) {
       if (item.id == subItem.id) {
-        if(value.isNotEmpty){
+        if (value.isNotEmpty) {
           subItem.layerText = value;
-        }else{
+        } else {
           subItem.layerText = "$currentEditingID -Sub layer No name";
         }
-        
       }
     }
     isLayerEditing = false;
     notifyListeners();
   }
 
+  void changeToolsEffectMode(ToolsModeModel mode){
+    _modeProvider!.setCurrentMode(mode);
+
+    _modeProvider!.changeModeComponent(
+      PickerModel(
+        title: mode.name,
+        value: mode.value,
+        enabled: true,
+        icon: mode.icon
+      ),
+      _context!,
+      true
+    );
+  }
 }
