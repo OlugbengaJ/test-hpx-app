@@ -80,7 +80,7 @@ class _ContactSupportPresetState extends State<ContactSupportPreset> {
                           child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
-                          Text('FN + F10',
+                          Text('FN + F12',
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                   fontSize: 14,

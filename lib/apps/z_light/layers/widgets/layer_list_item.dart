@@ -27,8 +27,8 @@ class _LayerListItemState extends State<LayerListItem> {
   final double _iconSize = 16;
   TextEditingController _layerNameController = TextEditingController(text: '');
   GlobalKey deleteKey = GlobalKey<State<Tooltip>>();
-  GlobalKey<FormFieldState> editLayerKey = GlobalKey<FormFieldState>(); // Each layer should have a key for its editing field
-
+  GlobalKey<FormFieldState> editLayerKey = GlobalKey<
+      FormFieldState>(); // Each layer should have a key for its editing field
 
   Future<void> _deleteLayerDialog(LayersProvider provider) async {
     return showDialog<void>(
@@ -42,19 +42,18 @@ class _LayerListItemState extends State<LayerListItem> {
               children: <Widget>[
                 const Text('Do you wish to delete this layer?'),
                 Padding(
-                  padding: const EdgeInsets.only(top:8.0),
+                  padding: const EdgeInsets.only(top: 8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       TextButton(
-                        onPressed: (){
+                        onPressed: () {
                           Navigator.of(context).pop();
                         },
                         child: const Text("Cancel"),
-                        
                       ),
                       TextButton(
-                        onPressed: (){
+                        onPressed: () {
                           provider.removeItem(widget.layerIndex);
                           Navigator.of(context).pop();
                         },
@@ -67,12 +66,10 @@ class _LayerListItemState extends State<LayerListItem> {
               ],
             ),
           ),
-          
         );
       },
     );
   }
-
 
   _onHover(isHovering) {
     if (!_showDeleteTooltip) {
@@ -128,10 +125,10 @@ class _LayerListItemState extends State<LayerListItem> {
 
   /// Use to delete a layer from the list
   _deleteLayer(LayersProvider provider) {
-    if(provider.length>=2){
+    if (provider.length >= 2) {
       _deleteLayerDialog(provider);
     }
-    
+
     //provider.removeItem(widget.layerIndex);
     // final dynamic tooltip = deleteKey.currentState;
     // tooltip?.ensureTooltipVisible();
@@ -143,17 +140,7 @@ class _LayerListItemState extends State<LayerListItem> {
   // Tap on a layer to select it
   _onTap(LayersProvider provider) {
     provider.changeIndex(widget.layerIndex);
-    ModeProvider modeProvider = context.read<ModeProvider>();
-    modeProvider.setCurrentMode(widget.layerItemModel.mode!);
-
-    modeProvider.changeModeComponent(
-        PickerModel(
-            title: widget.layerItemModel.mode!.name,
-            value: widget.layerItemModel.mode!.value,
-            enabled: true,
-            icon: widget.layerItemModel.mode!.icon),
-        context,
-        true);
+    //provider.changeToolsEffectMode(widget.layerItemModel.mode!);
   }
 
   /// Save the layer's new text

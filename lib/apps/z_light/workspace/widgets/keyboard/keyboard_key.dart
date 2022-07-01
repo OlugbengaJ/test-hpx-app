@@ -209,7 +209,7 @@ KeyModel _updateKeyInfo(
               // update key only when sublayer is active
               final sublayerId = sublayer.id;
               chip = KeyPaintRect('$sublayerId')
-                ..color = sublayer.mode?.currentColor.last
+                ..color = layer.shortcutColor
                 ..showOutline = true;
 
               if (!keysProvider.shortcutKeyExist(keyModel)) {
@@ -226,7 +226,7 @@ KeyModel _updateKeyInfo(
               if (shortcutKey?.key == chip.chipKey) {
                 // update key color if current chip key equals the shortcut key.
                 final topChip = shortcutKey?.value.topChip;
-                topChip?.color = sublayer.mode?.currentColor.last;
+                topChip?.color = layer.shortcutColor;
 
                 keyModel.addChip(shortcutKey?.value.topChip);
               } else {

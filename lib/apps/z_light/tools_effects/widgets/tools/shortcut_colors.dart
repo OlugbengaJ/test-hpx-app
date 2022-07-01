@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/keys_provider.dart';
-import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/shortcut_widget_provider.dart';
@@ -24,7 +23,6 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
         Provider.of<ShortcutWidgetProvider>(context, listen: false);
     ColorPickerProvider colorPickerProvider =
         Provider.of<ColorPickerProvider>(context, listen: false);
-
     // print(modeProvider.currentMode.shortcutKeys);
     return (modeProvider.currentMode.modeType == EnumModeType.layers)
         ? Container()
@@ -66,26 +64,14 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
                           ],
                         ))
                       ]),
-                      Container(
-                          decoration:
-                              BoxDecoration(color: Colors.grey.shade800),
-                          padding: const EdgeInsets.only(
-                              top: 5, bottom: 5, left: 10),
-                          margin:
-                              const EdgeInsets.only(top: 5, left: 0, right: 10),
-                          child: Column(
-                            children: [
-                              ...Provider.of<KeysProvider>(context)
-                                  .getAllShortcutKeys
-                                  .map(
-                                    (e) => ChangeNotifierProvider.value(
-                                        value: e,
-                                        builder: (context, child) =>
-                                            shortcutProvider.addNewCommand(
-                                                e.keyCode.toString())),
-                                  )
-                            ],
-                          ))
+                      ...Provider.of<KeysProvider>(context)
+                          .getAllShortcutKeys
+                          .map(
+                            (e) => ChangeNotifierProvider.value(
+                                value: e,
+                                builder: (context, child) => shortcutProvider
+                                    .addNewCommand(e.keyCode.toString())),
+                          )
                     ],
                   ),
                 ),

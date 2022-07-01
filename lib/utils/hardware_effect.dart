@@ -335,7 +335,7 @@ class ColorCycleEffect extends HardwareEffect {
       var layer = _layersProvider.layeritems
           .firstWhere((element) => element.id == _layerID);
       for (var color in layer.mode?.currentColor as List<Color>) {
-        var speedTemp = layer.mode?.effects?.speed?.round();
+        var speedTemp = layer.mode?.effects.speed?.round();
         var speed = 0;
 
         if (speedTemp != null && speedTemp <= 0) {
@@ -393,7 +393,7 @@ class BlinkingEffect extends HardwareEffect {
       var layer = _layersProvider.layeritems
           .firstWhere((element) => element.id == _layerID);
       currentColor = layer.mode?.currentColor.last;
-      var speedTemp = layer.mode?.effects?.speed?.round();
+      var speedTemp = layer.mode?.effects.speed?.round();
       var speed = 0;
 
       if (speedTemp != null && speedTemp <= 0) {
@@ -542,7 +542,11 @@ class SupportContactEffect extends HardwareEffect {
   @override
   Map<String, Map<String, Object>> updateKeyboardInfo(
       Map<String, Map<String, Object>> keyboard) {
-    // TODO: implement updateKeyboardInfo
+    var layer = this._layersProvider.layeritems.firstWhere((element) => element.id == this._layerID);
+    var keys = ["kFn", "kF12"];
+    keys.forEach((key) {
+      updateKeyColorInfo(keyboard: keyboard, keyName: key, color: layer.mode?.currentColor.last);
+    });
     return keyboard;
   }
 

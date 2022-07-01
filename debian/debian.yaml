@@ -1,0 +1,14 @@
+flutter_app:
+  command: hpx_app
+  arch: x64
+
+control:
+  Package: hpx
+  Version: 1.0.0
+  Architecture: amd64
+  Essential: no
+  Priority: optional
+  Depends:
+  Maintainer: Komlan KEDJI
+  Section: utils
+  Description: hpOS configuration application

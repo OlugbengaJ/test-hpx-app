@@ -381,7 +381,7 @@ class ModeProvider extends ChangeNotifier {
   }
 
   // get current mode information
-  getModeInformation() {
+  ToolsModeModel getModeInformation() {
     return currentMode;
   }
 
