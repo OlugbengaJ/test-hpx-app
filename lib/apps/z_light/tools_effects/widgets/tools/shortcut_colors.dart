@@ -64,26 +64,14 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
                           ],
                         ))
                       ]),
-                      Container(
-                          decoration:
-                              BoxDecoration(color: Colors.grey.shade800),
-                          padding: const EdgeInsets.only(
-                              top: 5, bottom: 5, left: 10),
-                          margin:
-                              const EdgeInsets.only(top: 5, left: 0, right: 10),
-                          child: Column(
-                            children: [
-                              ...Provider.of<KeysProvider>(context)
-                                  .getAllShortcutKeys
-                                  .map(
-                                    (e) => ChangeNotifierProvider.value(
-                                        value: e,
-                                        builder: (context, child) =>
-                                            shortcutProvider.addNewCommand(
-                                                e.keyCode.toString())),
-                                  )
-                            ],
-                          ))
+                      ...Provider.of<KeysProvider>(context)
+                          .getAllShortcutKeys
+                          .map(
+                            (e) => ChangeNotifierProvider.value(
+                                value: e,
+                                builder: (context, child) => shortcutProvider
+                                    .addNewCommand(e.keyCode.toString())),
+                          )
                     ],
                   ),
                 ),
