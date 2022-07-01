@@ -73,6 +73,29 @@ class LayersProvider extends ChangeNotifier {
     return _layeritems.singleWhere((layer) => layer.id==id);
   }
 
+  getPresetKeys(){
+    List<dynamic> listOfPresets = [
+      {
+        "name": "Copy",
+        "keys":  ["CTRL", "C"]
+      },
+      {
+        "name": "Paste",
+        "keys":  ["CTRL", "V"]
+      },
+      {
+        "name": "Open",
+        "keys":  ["CTRL", "O"]
+      },
+      {
+        "name": "New File",
+        "keys":  ["CTRL", "N"]
+      },
+    ];
+    
+
+    return  listOfPresets;
+  }
 
 
   /// [toggleHideStackedLayers] toggle hide or show of the resizable
@@ -355,7 +378,8 @@ class LayersProvider extends ChangeNotifier {
     LayerItemModel sublayer = _sublayers[subIndex];
     sublayer.listDisplayColor = Colors.white;
     _currentSublayer = sublayer;
-
+    //LayerItemModel parentModel = getItemByID(sublayer.parentID);
+    //parentModel.mode = sublayer.mode;
     isSublayerSelected = true;
     notifyListeners();
   }
