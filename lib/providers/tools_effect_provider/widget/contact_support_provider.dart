@@ -37,7 +37,7 @@ class ContactSupportWidgetProvider extends ChangeNotifier {
                     children: [
                       TextButton(
                         onHover: (value) {
-                          chooseContactType(SupportTypesEnum.browser);
+                          isChoice = SupportTypesEnum.browser;
                         },
                         onPressed: () {
                           chooseContactType(SupportTypesEnum.browser);
@@ -50,7 +50,7 @@ class ContactSupportWidgetProvider extends ChangeNotifier {
                       ),
                       TextButton(
                         onHover: (value) {
-                          chooseContactType(SupportTypesEnum.audio);
+                          isChoice = SupportTypesEnum.audio;
                         },
                         onPressed: () {
                           chooseContactType(SupportTypesEnum.audio);
@@ -63,7 +63,7 @@ class ContactSupportWidgetProvider extends ChangeNotifier {
                       ),
                       TextButton(
                         onHover: (value) {
-                          chooseContactType(SupportTypesEnum.video);
+                          isChoice = SupportTypesEnum.video;
                         },
                         onPressed: () {
                           chooseContactType(SupportTypesEnum.video);
