@@ -108,7 +108,7 @@ class _SublayerItemState extends State<SublayerItem> {
 
   _onTap(LayersProvider provider) {
     provider.changeSublayerIndex(widget.layerIndex);
-    provider.changeToolsEffectMode(provider.getItemByID(widget.layerItemModel.parentID).mode!);
+    //provider.changeToolsEffectMode(provider.getItemByID(widget.layerItemModel.parentID).mode!);
   }
 
   _onSubmit(value, LayersProvider provider) {
@@ -159,7 +159,7 @@ class _SublayerItemState extends State<SublayerItem> {
                         child: Icon(
                           Icons.circle,
                           size: 5,
-                          color: widget.layerItemModel.mode!.currentColor[0],
+                          color: widget.layerItemModel.shortcutColor,
                         )
                       ),
                     ),

@@ -176,6 +176,7 @@ class LayersProvider extends ChangeNotifier {
 
         //debugPrint("${item.layerText}");
         item.mode = _modeProvider!.getModeInformation();
+        item.shortcutColor = _modeProvider!.getModeInformation().currentColor[0];
         _sublayers[index] = item;
       }
 
@@ -262,6 +263,7 @@ class LayersProvider extends ChangeNotifier {
   /// Add a new layer. By default new added layers use the mood mode
   void add(LayerItemModel item) {
     creatingNewLayer = true;
+    isSublayerSelected = false;
     ToolsModeModel mode = ToolsModeModel(
         currentColor: moodThemesList.first.colorCode,
         effects: EffectsModel(effectName: EnumModes.mood),
@@ -350,7 +352,7 @@ class LayersProvider extends ChangeNotifier {
     }
 
     _modeProvider!.setModeType(true);
-    LayerItemModel sublayer = sublayerItems[subIndex];
+    LayerItemModel sublayer = _sublayers[subIndex];
     sublayer.listDisplayColor = Colors.white;
     _currentSublayer = sublayer;
 
@@ -504,6 +506,7 @@ class LayersProvider extends ChangeNotifier {
   }
 
   void changeToolsEffectMode(ToolsModeModel mode){
+    _modeProvider!.setModeType(true);
     _modeProvider!.setCurrentMode(mode);
 
     _modeProvider!.changeModeComponent(
