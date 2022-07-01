@@ -246,6 +246,8 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                               backgroundColor: Colors.red,
                             ),
                             onPressed: () {
+                              setCurrentColor(
+                                  colorPickerProviderInstance.lastColors.last);
                               closeDialog(context);
                             })
                       ])),
