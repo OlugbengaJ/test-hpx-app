@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/widgets/theme.dart';
 
 // Mode provider to manage the current colors or effects of a mode been selected
@@ -6,12 +8,18 @@ class ShortcutWidgetProvider extends ChangeNotifier {
   /// variable containing all generated shorcut commands widgets
   List<Widget> commandsList = [];
   List<List<String>> keys = [];
+  LayersProvider? layerProvider;
+  LayerItemModel? sublayerInfo;
 
   /// variable for managing keys input been set to the for the input field
   List<TextEditingController> keyController = [];
 
   /// variable for managing label input been set to the for the label field
   List<TextEditingController> labelController = [];
+
+  getSubLayerInfo() {
+    return layerProvider?.getCurrentSublayer();
+  }
 
   /// function to generate the shortcut widget with the text controller and input field
   /// also sets the default input field if passed as an argument in the function or defaults to 'esc'
