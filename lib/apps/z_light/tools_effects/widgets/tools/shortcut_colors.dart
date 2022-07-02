@@ -23,9 +23,43 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
 
   activationDialog() {}
 
+  List<Widget> generatePreset() {
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
+    var presets = layerProvider.getPresetKeys();
+    List<Widget> ui = [];
+    for (var element in presets) {
+      String name = element['name'];
+      String keys = element['keys'].first + ' + ' + element['keys'].last;
+      ui.add(Container(
+        decoration: BoxDecoration(color: Colors.grey.shade800),
+        padding: const EdgeInsets.only(top: 5, bottom: 5, left: 10),
+        margin: const EdgeInsets.only(top: 5, left: 0, right: 10),
+        child: Row(children: [
+          Expanded(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(name, textAlign: TextAlign.left, style: labelStyle),
+            ],
+          )),
+          Expanded(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(keys, textAlign: TextAlign.left, style: labelStyle),
+            ],
+          ))
+        ]),
+      ));
+    }
+    return ui;
+  }
+
   Widget presetSubLayer() {
     return Container(
       decoration: BoxDecoration(color: Colors.grey.shade900),
+      margin: const EdgeInsets.only(top: 20),
       padding: const EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -52,38 +86,7 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
               ),
             ))
           ]),
-          Container(
-              decoration: const BoxDecoration(color: Colors.white),
-              padding: const EdgeInsets.only(top: 5, bottom: 5, left: 10),
-              margin: const EdgeInsets.only(top: 5, left: 0, right: 10),
-              child: Row(children: [
-                Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text('Contact Support',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                            fontFamily: "GoogleSans")),
-                  ],
-                )),
-                Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text('FN + F12',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                            fontFamily: "GoogleSans")),
-                  ],
-                ))
-              ]))
+          Wrap(children: generatePreset())
         ],
       ),
     );
@@ -94,6 +97,26 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
         Provider.of<ShortcutWidgetProvider>(context, listen: false);
     return Wrap(
       children: [
+        Container(
+          margin: const EdgeInsets.only(top: 5, bottom: 20),
+          child: ColorPickerWidget(
+            color: (subLayer != null)
+                ? subLayer!.shortcutColor
+                : shortcutList[0].colorCode.first,
+            colors: shortcutList[0].colorCode,
+            title:
+                (subLayer != null) ? subLayer!.layerText : shortcutList[0].name,
+            label: shortcutList[0].label,
+            picker: shortcutList[0].canEdit,
+            leftTitle: shortcutList[0].action!,
+            onchange: (colors) {
+              setState(() {
+                // subLayer = layerProvider.getCurrentSublayer();
+                subLayer?.shortcutColor = colors.first;
+              });
+            },
+          ),
+        ),
         Container(
           decoration: BoxDecoration(color: Colors.grey.shade900),
           padding: const EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 10),
@@ -215,7 +238,7 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
                         TextButton(
                           onPressed: () {
                             setState(() {
-                              activatedButton = "Themes";
+                              activatedButton = "Preset";
                             });
                           },
                           style: (activatedButton == 'Custom')
@@ -229,7 +252,7 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                    'THEMES',
+                                    'PRESETS',
                                     style: TextStyle(
                                         color: (activatedButton == 'Custom')
                                             ? Colors.white
@@ -243,27 +266,6 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
                       ]),
                 ),
               ],
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(top: 5, bottom: 20),
-            child: ColorPickerWidget(
-              color: (subLayer != null)
-                  ? subLayer!.shortcutColor
-                  : shortcutList[0].colorCode.first,
-              colors: shortcutList[0].colorCode,
-              title: (subLayer != null)
-                  ? subLayer!.layerText
-                  : shortcutList[0].name,
-              label: shortcutList[0].label,
-              picker: shortcutList[0].canEdit,
-              leftTitle: shortcutList[0].action!,
-              onchange: (colors) {
-                setState(() {
-                  // subLayer = layerProvider.getCurrentSublayer();
-                  subLayer?.shortcutColor = colors.first;
-                });
-              },
             ),
           ),
           (activatedButton == 'Custom') ? processSubLayer() : presetSubLayer()
