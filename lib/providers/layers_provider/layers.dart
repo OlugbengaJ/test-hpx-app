@@ -70,10 +70,31 @@ class LayersProvider extends ChangeNotifier {
   /// [getItem] retrieve the layer using the index.
   /// This is to get the layer's informations
   LayerItemModel getItemByID(int id) {
-    return _layeritems.singleWhere((layer) => layer.id==id);
+    return _layeritems.singleWhere((layer) => layer.id == id);
   }
 
+  getPresetKeys() {
+    List<dynamic> listOfPresets = [
+      {
+        "name": "Copy",
+        "keys": ["CTRL", "C"]
+      },
+      {
+        "name": "Paste",
+        "keys": ["CTRL", "V"]
+      },
+      {
+        "name": "Open",
+        "keys": ["CTRL", "O"]
+      },
+      {
+        "name": "New File",
+        "keys": ["CTRL", "N"]
+      },
+    ];
 
+    return listOfPresets;
+  }
 
   /// [toggleHideStackedLayers] toggle hide or show of the resizable
   void toggleHideStackedLayers(bool show) {
@@ -143,46 +164,39 @@ class LayersProvider extends ChangeNotifier {
             _sublayers.removeWhere((layer) => layer.parentID == item.id);
             notifyListeners();
           }
-        }      
-
+        }
       }
 
-      if(!isSublayerSelected){
-        if(item.mode!.name != _modeProvider!.currentMode.name){
-         item.layerText = _modeProvider!.currentMode.name;
+      if (!isSublayerSelected) {
+        if (item.mode!.name != _modeProvider!.currentMode.name) {
+          item.layerText = _modeProvider!.currentMode.name;
         }
-        
-        item.mode =  _modeProvider!.getModeInformation();   
-        if(isSublayerSelected & !creatingNewLayer){
+
+        item.mode = _modeProvider!.getModeInformation();
+        if (isSublayerSelected & !creatingNewLayer) {
           //_sublayers[listIndex] = item;
-        }else{
+        } else {
           _layeritems[listIndex] = item;
-        }      
+        }
 
         if (item.mode!.value == EnumModes.shortcut) {
-          if(subLayers.isEmpty){
-            duplicateOrCreatSubLayer(
-                item,
-                listIndex,
-                _modeProvider!,
-                sublayer: true
-            );
+          if (subLayers.isEmpty) {
+            duplicateOrCreatSubLayer(item, listIndex, _modeProvider!,
+                sublayer: true);
           }
           // debugPrint('$subLayers');
         }
-      }else{
-        int index = _sublayers.indexWhere((item) => item.id == _currentSublayer.id);
+      } else {
+        int index =
+            _sublayers.indexWhere((item) => item.id == _currentSublayer.id);
         item = _currentSublayer;
 
         //debugPrint("${item.layerText}");
         item.mode = _modeProvider!.getModeInformation();
-        item.shortcutColor = _modeProvider!.getModeInformation().currentColor[0];
+        item.shortcutColor =
+            _modeProvider!.getModeInformation().currentColor[0];
         _sublayers[index] = item;
       }
-
-      
-
-      
     }
 
     shortcutAvalaible = false;
@@ -193,17 +207,16 @@ class LayersProvider extends ChangeNotifier {
       }
     }
 
-    if(isSublayerSelected){
+    if (isSublayerSelected) {
       //changeToolsEffectMode(getItemByID(item.parentID).mode!);
-      int parentIndex = _layeritems.indexWhere((layer) => layer.id==item.parentID);
+      int parentIndex =
+          _layeritems.indexWhere((layer) => layer.id == item.parentID);
       //changeIndex(parentIndex);
     }
 
     physicalKeyboardController.addLayer(item);
     notifyListeners();
   }
-
-  
 
   /// [updateView] use to update the item position when the resizable-draggable stop dragging
   /// This method is called from the [ResizableProvider]
@@ -355,7 +368,8 @@ class LayersProvider extends ChangeNotifier {
     LayerItemModel sublayer = _sublayers[subIndex];
     sublayer.listDisplayColor = Colors.white;
     _currentSublayer = sublayer;
-
+    //LayerItemModel parentModel = getItemByID(sublayer.parentID);
+    //parentModel.mode = sublayer.mode;
     isSublayerSelected = true;
     notifyListeners();
   }
@@ -505,19 +519,17 @@ class LayersProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeToolsEffectMode(ToolsModeModel mode){
+  void changeToolsEffectMode(ToolsModeModel mode) {
     _modeProvider!.setModeType(true);
     _modeProvider!.setCurrentMode(mode);
 
     _modeProvider!.changeModeComponent(
-      PickerModel(
-        title: mode.name,
-        value: mode.value,
-        enabled: true,
-        icon: mode.icon
-      ),
-      _context!,
-      true
-    );
+        PickerModel(
+            title: mode.name,
+            value: mode.value,
+            enabled: true,
+            icon: mode.icon),
+        _context!,
+        true);
   }
 }
