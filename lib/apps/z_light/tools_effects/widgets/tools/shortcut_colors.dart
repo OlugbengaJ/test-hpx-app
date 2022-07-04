@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
-import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/keys_provider.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
-import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/shortcut_widget_provider.dart';
 import 'package:hpx/widgets/components/color_picker.dart';
 import 'package:hpx/widgets/theme.dart';
@@ -19,6 +17,7 @@ class ShortcutColorsPreset extends StatefulWidget {
 
 class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
   String activatedButton = "Custom";
+
   LayerItemModel? subLayer;
 
   activationDialog() {}
@@ -95,24 +94,24 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
   Widget processSubLayer() {
     ShortcutWidgetProvider shortcutProvider =
         Provider.of<ShortcutWidgetProvider>(context, listen: false);
+    subLayer = Provider.of<LayersProvider>(context).getCurrentSublayer();
     return Wrap(
       children: [
         Container(
           margin: const EdgeInsets.only(top: 5, bottom: 20),
           child: ColorPickerWidget(
-            color: (subLayer != null)
+            color: subLayer != null
                 ? subLayer!.shortcutColor
                 : shortcutList[0].colorCode.first,
             colors: shortcutList[0].colorCode,
             title:
-                (subLayer != null) ? subLayer!.layerText : shortcutList[0].name,
+                subLayer != null ? subLayer!.layerText : shortcutList[0].name,
             label: shortcutList[0].label,
             picker: shortcutList[0].canEdit,
             leftTitle: shortcutList[0].action!,
             onchange: (colors) {
               setState(() {
-                // subLayer = layerProvider.getCurrentSublayer();
-                subLayer?.shortcutColor = colors.first;
+                subLayer!.shortcutColor = colors.first;
               });
             },
           ),
@@ -276,13 +275,7 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
 
   @override
   Widget build(BuildContext context) {
-    ModeProvider modeProvider =
-        Provider.of<ModeProvider>(context, listen: false);
-    ShortcutWidgetProvider shortcutProvider =
-        Provider.of<ShortcutWidgetProvider>(context, listen: false);
-    subLayer = shortcutProvider.getSubLayerInfo();
-
-    return (modeProvider.currentMode.modeType == EnumModeType.layers)
+    return (Provider.of<LayersProvider>(context).isSublayerSelected == false)
         ? Container()
         : generateCustomWidget();
   }
