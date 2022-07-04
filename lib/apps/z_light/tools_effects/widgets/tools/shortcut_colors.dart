@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
-import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/keys_provider.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
-import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/shortcut_widget_provider.dart';
 import 'package:hpx/widgets/components/color_picker.dart';
 import 'package:hpx/widgets/theme.dart';
@@ -277,10 +275,7 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
 
   @override
   Widget build(BuildContext context) {
-    ModeProvider modeProvider =
-        Provider.of<ModeProvider>(context, listen: false);
-
-    return (modeProvider.currentMode.modeType == EnumModeType.layers)
+    return (Provider.of<LayersProvider>(context).isSublayerSelected == false)
         ? Container()
         : generateCustomWidget();
   }
