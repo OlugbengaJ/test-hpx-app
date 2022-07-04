@@ -367,6 +367,7 @@ class LayersProvider extends ChangeNotifier {
     _modeProvider!.setModeType(true);
     LayerItemModel sublayer = _sublayers[subIndex];
     sublayer.listDisplayColor = Colors.white;
+    sublayer.visible = true;
     _currentSublayer = sublayer;
     //LayerItemModel parentModel = getItemByID(sublayer.parentID);
     //parentModel.mode = sublayer.mode;
