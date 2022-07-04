@@ -223,6 +223,9 @@ KeyModel _updateKeyInfo(
               // key already exist in shortcut
               final shortcutKey = keysProvider.getShortcutKey(keyModel);
 
+              // set opacity based on layer visibility
+              shortcutKey?.value.topChip?.opacity = sublayer.visible ? 1 : 0;
+
               if (shortcutKey?.key == chip.chipKey) {
                 // update key color if current chip key equals the shortcut key.
                 final topChip = shortcutKey?.value.topChip;
@@ -308,6 +311,9 @@ KeyModel _updateKeyInfo(
           } else {
             keyCopy.value.topChip?.showOutline = false;
           }
+
+          // set opacity based on layer visibility
+          keyCopy.value.topChip?.opacity = sublayer!.visible ? 1 : 0;
 
           // add the key copy top chip.
           keyModel.addChip(keyCopy.value.topChip);
