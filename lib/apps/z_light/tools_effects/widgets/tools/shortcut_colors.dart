@@ -147,7 +147,6 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
               ]),
               ...Provider.of<KeysProvider>(context)
                   .getShortcutKeys(subLayer!.id.toString())!
-                  // .getAllShortcutKeys
                   .map(
                     (e) => ChangeNotifierProvider.value(
                         value: e,
