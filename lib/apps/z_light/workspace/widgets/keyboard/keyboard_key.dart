@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/key_rrect.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/workspace_models/key_code.dart';
 import 'package:hpx/providers/key_model.dart';
 import 'package:hpx/providers/keys_provider.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
@@ -132,22 +133,22 @@ KeyModel _updateKeyInfo(
 
       layer.removeKey(keyModel);
 
+      KeyPaintRect chip = KeyPaintRect('$layerId');
+      if ('${currentLayer.id}' == chip.chipKey) {
+        // use the default color for current layer
+        chip.color = currentLayer.mode?.currentColor.last;
+        chip.showOutline = true;
+      } else {
+        // use existing color for non-current layer
+        final foundKeys = krect.where((e) => e.chipKey == chip.chipKey);
+        if (foundKeys.isNotEmpty) {
+          chip.color = foundKeys.first.color;
+          chip.showOutline = false;
+        }
+      }
+
       if (boxZone != null) {
         // insert new chip with the layer id as key
-        KeyPaintRect chip = KeyPaintRect('$layerId');
-
-        if ('${currentLayer.id}' == chip.chipKey) {
-          // use the default color for current layer
-          chip.color = currentLayer.mode?.currentColor.last;
-          chip.showOutline = true;
-        } else {
-          // use existing color for non-current layer
-          final foundKeys = krect.where((e) => e.chipKey == chip.chipKey);
-          if (foundKeys.isNotEmpty) {
-            chip.color = foundKeys.first.color;
-            chip.showOutline = false;
-          }
-        }
 
         // get the current chip in layers
         switch (layer.mode?.value) {
@@ -208,7 +209,7 @@ KeyModel _updateKeyInfo(
               // update key only when sublayer is active
               final sublayerId = sublayer.id;
               chip = KeyPaintRect('$sublayerId')
-                ..color = sublayer.mode?.currentColor.last
+                ..color = sublayer.shortcutColor
                 ..showOutline = true;
 
               if (!keysProvider.shortcutKeyExist(keyModel)) {
@@ -217,24 +218,18 @@ KeyModel _updateKeyInfo(
                 keysProvider.addShortcutKey('$sublayerId', keyModel.copyWith());
 
                 break;
-
-                // TODO: add the shortcut in tools & effect
-                // shortcutProvider.addNewCommand(
-                //     'Enter text', keyModel.keyCode.toString());
-
-                // layersProvider.setShortuctKeys([
-                //   ['open whatsapp'],
-                //   ['${keyModel.keyCode}']
-                // ]);
               }
 
               // key already exist in shortcut
               final shortcutKey = keysProvider.getShortcutKey(keyModel);
 
+              // set opacity based on layer visibility
+              shortcutKey?.value.topChip?.opacity = sublayer.visible ? 1 : 0;
+
               if (shortcutKey?.key == chip.chipKey) {
                 // update key color if current chip key equals the shortcut key.
                 final topChip = shortcutKey?.value.topChip;
-                topChip?.color = sublayer.mode?.currentColor.last;
+                topChip?.color = sublayer.shortcutColor;
 
                 keyModel.addChip(shortcutKey?.value.topChip);
               } else {
@@ -301,7 +296,9 @@ KeyModel _updateKeyInfo(
             updateKeyAndLayer(keyModel, chip, layer);
             break;
         }
-      } else if (layer.mode?.value == EnumModes.shortcut) {
+      }
+      // no boxing is happening beyond this point.
+      else if (layer.mode?.value == EnumModes.shortcut) {
         // paint previously selected shortcut keys.
         final keyCopy = keysProvider.getShortcutKey(keyModel);
 
@@ -309,14 +306,22 @@ KeyModel _updateKeyInfo(
           // update key color if sublayer id equals key copy id
           final sublayer = layersProvider.getCurrentSublayer();
           if (keyCopy.key == '${sublayer?.id}') {
-            keyCopy.value.topChip?.color = sublayer?.mode?.currentColor.last;
+            keyCopy.value.topChip?.color = sublayer!.shortcutColor;
             keyCopy.value.topChip?.showOutline = true;
           } else {
             keyCopy.value.topChip?.showOutline = false;
           }
 
+          // set opacity based on layer visibility
+          keyCopy.value.topChip?.opacity = sublayer!.visible ? 1 : 0;
+
           // add the key copy top chip.
           keyModel.addChip(keyCopy.value.topChip);
+        }
+      } else if (layer.mode?.value == EnumModes.contactsupport) {
+        if (keyModel.keyCode == KeyCode.kFn ||
+            keyModel.keyCode == KeyCode.kF12) {
+          updateKeyAndLayer(keyModel, chip, layer);
         }
       }
     }

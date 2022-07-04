@@ -7,6 +7,7 @@ import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 
 import 'package:hpx/utils/keyboard_controller.dart';
 import 'package:hpx/widgets/components/layers.dart';
+import 'package:hpx/widgets/components/picker_dropdown.dart';
 //
 ///[LayersProvider] to controle the layers state
 
@@ -64,6 +65,35 @@ class LayersProvider extends ChangeNotifier {
   /// This is to get the layer's informations
   LayerItemModel getItem(int i) {
     return _layeritems[i];
+  }
+
+  /// [getItem] retrieve the layer using the index.
+  /// This is to get the layer's informations
+  LayerItemModel getItemByID(int id) {
+    return _layeritems.singleWhere((layer) => layer.id == id);
+  }
+
+  getPresetKeys() {
+    List<dynamic> listOfPresets = [
+      {
+        "name": "Copy",
+        "keys": ["CTRL", "C"]
+      },
+      {
+        "name": "Paste",
+        "keys": ["CTRL", "V"]
+      },
+      {
+        "name": "Open",
+        "keys": ["CTRL", "O"]
+      },
+      {
+        "name": "New File",
+        "keys": ["CTRL", "N"]
+      },
+    ];
+
+    return listOfPresets;
   }
 
   /// [toggleHideStackedLayers] toggle hide or show of the resizable
@@ -163,8 +193,25 @@ class LayersProvider extends ChangeNotifier {
 
         //debugPrint("${item.layerText}");
         item.mode = _modeProvider!.getModeInformation();
+        item.shortcutColor =
+            _modeProvider!.getModeInformation().currentColor[0];
         _sublayers[index] = item;
       }
+    }
+
+    shortcutAvalaible = false;
+    for (var layer in layeritems) {
+      if (layer.mode!.value == EnumModes.shortcut) {
+        shortcutAvalaible = true;
+        break;
+      }
+    }
+
+    if (isSublayerSelected) {
+      //changeToolsEffectMode(getItemByID(item.parentID).mode!);
+      int parentIndex =
+          _layeritems.indexWhere((layer) => layer.id == item.parentID);
+      //changeIndex(parentIndex);
     }
 
     physicalKeyboardController.addLayer(item);
@@ -229,6 +276,7 @@ class LayersProvider extends ChangeNotifier {
   /// Add a new layer. By default new added layers use the mood mode
   void add(LayerItemModel item) {
     creatingNewLayer = true;
+    isSublayerSelected = false;
     ToolsModeModel mode = ToolsModeModel(
         currentColor: moodThemesList.first.colorCode,
         effects: EffectsModel(effectName: EnumModes.mood),
@@ -301,6 +349,7 @@ class LayersProvider extends ChangeNotifier {
     if (item.mode!.value == EnumModes.shortcut) {
       //_modeProvider!.setModeType(true);
     }
+    changeToolsEffectMode(item.mode!);
     toggleHideStackedLayers(!item.visible);
     isSublayerSelected = false;
     notifyListeners();
@@ -316,10 +365,12 @@ class LayersProvider extends ChangeNotifier {
     }
 
     _modeProvider!.setModeType(true);
-    LayerItemModel sublayer = sublayerItems[subIndex];
+    LayerItemModel sublayer = _sublayers[subIndex];
     sublayer.listDisplayColor = Colors.white;
+    sublayer.visible = true;
     _currentSublayer = sublayer;
-
+    //LayerItemModel parentModel = getItemByID(sublayer.parentID);
+    //parentModel.mode = sublayer.mode;
     isSublayerSelected = true;
     notifyListeners();
   }
@@ -467,5 +518,19 @@ class LayersProvider extends ChangeNotifier {
     }
     isLayerEditing = false;
     notifyListeners();
+  }
+
+  void changeToolsEffectMode(ToolsModeModel mode) {
+    _modeProvider!.setModeType(true);
+    _modeProvider!.setCurrentMode(mode);
+
+    _modeProvider!.changeModeComponent(
+        PickerModel(
+            title: mode.name,
+            value: mode.value,
+            enabled: true,
+            icon: mode.icon),
+        _context!,
+        true);
   }
 }

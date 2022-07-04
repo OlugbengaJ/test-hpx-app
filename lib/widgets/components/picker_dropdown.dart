@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/utils/comparer.dart';
 import 'package:hpx/widgets/theme.dart';
@@ -45,6 +46,9 @@ class _PickerDropdownState extends State<PickerDropdown> {
 
   @override
   Widget build(BuildContext context) {
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
+
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.10,
       child: Container(
@@ -84,7 +88,9 @@ class _PickerDropdownState extends State<PickerDropdown> {
           items: widget.pickerList
               .map<DropdownMenuItem<PickerModel>>((PickerModel value) {
             return DropdownMenuItem<PickerModel>(
-              enabled: value.enabled,
+              enabled: (layerProvider.isSublayerSelected == true)
+                  ? !layerProvider.isSublayerSelected
+                  : value.enabled,
               value: value,
               child: Container(
                 padding: EdgeInsets.only(
@@ -101,9 +107,11 @@ class _PickerDropdownState extends State<PickerDropdown> {
                           ),
                     Text(
                       value.title,
-                      style: value.enabled == true
-                          ? const TextStyle()
-                          : labelStyle,
+                      style: (layerProvider.isSublayerSelected == true)
+                          ? labelStyle
+                          : value.enabled == true
+                              ? const TextStyle()
+                              : labelStyle,
                     ),
                   ],
                 ),

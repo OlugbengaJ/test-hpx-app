@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/providers/keys_provider.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
-import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/shortcut_widget_provider.dart';
+import 'package:hpx/widgets/components/color_picker.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -15,107 +16,265 @@ class ShortcutColorsPreset extends StatefulWidget {
 }
 
 class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
-  @override
-  Widget build(BuildContext context) {
-    ModeProvider modeProvider =
-        Provider.of<ModeProvider>(context, listen: false);
+  String activatedButton = "Custom";
+
+  LayerItemModel? subLayer;
+
+  activationDialog() {}
+
+  List<Widget> generatePreset() {
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
+    var presets = layerProvider.getPresetKeys();
+    List<Widget> ui = [];
+    for (var element in presets) {
+      String name = element['name'];
+      String keys = element['keys'].first + ' + ' + element['keys'].last;
+      ui.add(Container(
+        decoration: BoxDecoration(color: Colors.grey.shade800),
+        padding: const EdgeInsets.only(top: 5, bottom: 5, left: 10),
+        margin: const EdgeInsets.only(top: 5, left: 0, right: 10),
+        child: Row(children: [
+          Expanded(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(name, textAlign: TextAlign.left, style: labelStyle),
+            ],
+          )),
+          Expanded(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(keys, textAlign: TextAlign.left, style: labelStyle),
+            ],
+          ))
+        ]),
+      ));
+    }
+    return ui;
+  }
+
+  Widget presetSubLayer() {
+    return Container(
+      decoration: BoxDecoration(color: Colors.grey.shade900),
+      margin: const EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(children: [
+            Expanded(
+                child: Container(
+              padding: const EdgeInsets.only(top: 5, bottom: 5, left: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Command', textAlign: TextAlign.left, style: labelStyle),
+                ],
+              ),
+            )),
+            Expanded(
+                child: Container(
+              padding: const EdgeInsets.only(top: 5, bottom: 5, left: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Key', textAlign: TextAlign.left, style: labelStyle),
+                ],
+              ),
+            ))
+          ]),
+          Wrap(children: generatePreset())
+        ],
+      ),
+    );
+  }
+
+  Widget processSubLayer() {
     ShortcutWidgetProvider shortcutProvider =
         Provider.of<ShortcutWidgetProvider>(context, listen: false);
-    ColorPickerProvider colorPickerProvider =
-        Provider.of<ColorPickerProvider>(context, listen: false);
-    // print(modeProvider.currentMode.shortcutKeys);
-    return (modeProvider.currentMode.modeType == EnumModeType.layers)
-        ? Container()
-        : Container(
-            margin: const EdgeInsets.only(top: 30),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text("Shortcut Group",
-                    textAlign: TextAlign.left, style: h5Style),
-                Container(
-                  margin: const EdgeInsets.only(top: 5, bottom: 20),
-                  child: Wrap(
-                      children: colorPickerProvider.generateColorPickerWidget(
-                          shortcutList, context)),
-                ),
-                Container(
-                  decoration: BoxDecoration(color: Colors.grey.shade900),
-                  padding: const EdgeInsets.only(
-                      top: 5, bottom: 5, left: 5, right: 10),
+    subLayer = Provider.of<LayersProvider>(context).getCurrentSublayer();
+    return Wrap(
+      children: [
+        Container(
+          margin: const EdgeInsets.only(top: 5, bottom: 20),
+          child: ColorPickerWidget(
+            color: subLayer != null
+                ? subLayer!.shortcutColor
+                : shortcutList[0].colorCode.first,
+            colors: shortcutList[0].colorCode,
+            title:
+                subLayer != null ? subLayer!.layerText : shortcutList[0].name,
+            label: shortcutList[0].label,
+            picker: shortcutList[0].canEdit,
+            leftTitle: shortcutList[0].action!,
+            onchange: (colors) {
+              setState(() {
+                subLayer?.shortcutColor = colors.first;
+              });
+            },
+          ),
+        ),
+        Container(
+          decoration: BoxDecoration(color: Colors.grey.shade900),
+          padding: const EdgeInsets.only(top: 5, bottom: 5, left: 5, right: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(children: [
+                Expanded(
+                    child: Container(
+                  padding: const EdgeInsets.only(top: 5, bottom: 5, left: 10),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(children: [
-                        Expanded(
-                            child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Command',
-                                textAlign: TextAlign.left, style: labelStyle),
-                          ],
-                        )),
-                        Expanded(
-                            child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Key',
-                                textAlign: TextAlign.left, style: labelStyle),
-                          ],
-                        ))
-                      ]),
-                      Container(
-                          decoration:
-                              BoxDecoration(color: Colors.grey.shade800),
-                          padding: const EdgeInsets.only(
-                              top: 5, bottom: 5, left: 10),
-                          margin:
-                              const EdgeInsets.only(top: 5, left: 0, right: 10),
-                          child: Column(
-                            children: [
-                              ...Provider.of<KeysProvider>(context)
-                                  .getAllShortcutKeys
-                                  .map(
-                                    (e) => ChangeNotifierProvider.value(
-                                        value: e,
-                                        builder: (context, child) =>
-                                            shortcutProvider.addNewCommand(
-                                                e.keyCode.toString())),
-                                  )
-                            ],
-                          ))
+                      Text('Command',
+                          textAlign: TextAlign.left, style: labelStyle),
                     ],
                   ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    // setState(() {
-                    //   shortcutProvider.addNewCommand('', '');
-                    //   // /// initialize the layers provider to use to send notification accross the layers
-                    //   LayersProvider layerProvider =
-                    //       Provider.of<LayersProvider>(context, listen: false);
-                    //   layerProvider.toolsEffectsUpdated();
-                    // });
-                  },
-                  style: textBtnStyleWhite,
-                  child: SizedBox(
-                    height: 40,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'Add Shortcut',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      ],
-                    ),
+                )),
+                Expanded(
+                    child: Container(
+                  padding: const EdgeInsets.only(top: 5, bottom: 5, left: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Key', textAlign: TextAlign.left, style: labelStyle),
+                    ],
+                  ),
+                ))
+              ]),
+              ...Provider.of<KeysProvider>(context)
+                  .getShortcutKeys(subLayer!.id.toString())!
+                  .map(
+                    (e) => ChangeNotifierProvider.value(
+                        value: e,
+                        builder: (context, child) => shortcutProvider
+                            .addNewCommand(e.keyCode.toString())),
+                  )
+            ],
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            activationDialog();
+          },
+          style: textBtnStyleWhite,
+          child: SizedBox(
+            height: 40,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    'Add Shortcut',
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
               ],
             ),
-          );
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget generateCustomWidget() {
+    ShortcutWidgetProvider shortcutProvider =
+        Provider.of<ShortcutWidgetProvider>(context, listen: false);
+    return Container(
+      margin: const EdgeInsets.only(top: 30),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text("Shortcut Group", textAlign: TextAlign.left, style: h5Style),
+          Container(
+            margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              activatedButton = "Custom";
+                            });
+                          },
+                          style: (activatedButton != 'Custom')
+                              ? textBtnStyleBlack
+                              : textBtnStyleWhite,
+                          child: SizedBox(
+                            height: 40,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'CUSTOM',
+                                    style: TextStyle(
+                                        color: (activatedButton != 'Custom')
+                                            ? Colors.white
+                                            : Colors.black),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ]),
+                ),
+                Expanded(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            setState(() {
+                              activatedButton = "Preset";
+                            });
+                          },
+                          style: (activatedButton == 'Custom')
+                              ? textBtnStyleBlack
+                              : textBtnStyleWhite,
+                          child: SizedBox(
+                            height: 40,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'PRESETS',
+                                    style: TextStyle(
+                                        color: (activatedButton == 'Custom')
+                                            ? Colors.white
+                                            : Colors.black),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ]),
+                ),
+              ],
+            ),
+          ),
+          (activatedButton == 'Custom') ? processSubLayer() : presetSubLayer()
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return (Provider.of<LayersProvider>(context).isSublayerSelected == false)
+        ? Container()
+        : generateCustomWidget();
   }
 }

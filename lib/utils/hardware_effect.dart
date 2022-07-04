@@ -434,16 +434,19 @@ class ShortcutColorsEffect extends HardwareEffect {
   @override
   Map<String, Map<String, Object>> updateKeyboardInfo(
       Map<String, Map<String, Object>> keyboard) {
+    var sublayer = this._layersProvider.getCurrentSublayer();
     var keysProvider =
         Provider.of<KeysProvider>(navigatorKeys.currentContext!, listen: false);
-    keysProvider.shortcutKeys.forEach((key, value) {
-      for (var element in value) {
-        updateKeyColorInfo(
-            keyboard: keyboard,
-            keyName: element.keyCode.name,
-            color: element.chipsValues.last.color);
-      }
-    });
+    if (keysProvider.shortcutKeys != null) {
+      keysProvider.shortcutKeys.forEach((key, value) {
+        for (var element in value) {
+          updateKeyColorInfo(
+              keyboard: keyboard,
+              keyName: element.keyCode.name,
+              color: sublayer!.shortcutColor);
+        }
+      });
+    }
 
     return keyboard;
   }
@@ -542,7 +545,17 @@ class SupportContactEffect extends HardwareEffect {
   @override
   Map<String, Map<String, Object>> updateKeyboardInfo(
       Map<String, Map<String, Object>> keyboard) {
-    // TODO: implement updateKeyboardInfo
+    var layer = this
+        ._layersProvider
+        .layeritems
+        .firstWhere((element) => element.id == this._layerID);
+    var keys = ["kFn", "kF12"];
+    keys.forEach((key) {
+      updateKeyColorInfo(
+          keyboard: keyboard,
+          keyName: key,
+          color: layer.mode?.currentColor.last);
+    });
     return keyboard;
   }
 
