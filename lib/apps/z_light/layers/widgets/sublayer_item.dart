@@ -145,7 +145,7 @@ class _SublayerItemState extends State<SublayerItem> {
                         child: Tooltip(
                           message: "Toogle visibility",
                           child: Icon(
-                            Ionicons.eye,
+                            widget.layerItemModel.visible? Ionicons.eye: Ionicons.eye_off,
                             size: _iconSize,
                             color: widget.layerItemModel.listDisplayColor,
                           ),
