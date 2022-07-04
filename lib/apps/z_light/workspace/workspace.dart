@@ -107,7 +107,7 @@ class _WorkspaceState extends State<Workspace>
 
     // Initialize zoom value and scale.
     _zoomValue = 60;
-    _zoomScale = _zoomScaleFactor;
+    _zoomScale = _zoomScaleFactor * _zoomValue / _zoomValue;
     _zoomTextCtrl = TextEditingController(text: '${_zoomValue.ceil()}%');
   }
 
