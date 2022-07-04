@@ -19,6 +19,7 @@ class ShortcutColorsPreset extends StatefulWidget {
 
 class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
   String activatedButton = "Custom";
+
   LayerItemModel? subLayer;
 
   activationDialog() {}
