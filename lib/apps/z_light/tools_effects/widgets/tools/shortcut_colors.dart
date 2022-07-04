@@ -95,24 +95,24 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
   Widget processSubLayer() {
     ShortcutWidgetProvider shortcutProvider =
         Provider.of<ShortcutWidgetProvider>(context, listen: false);
+    subLayer = Provider.of<LayersProvider>(context).getCurrentSublayer();
     return Wrap(
       children: [
         Container(
           margin: const EdgeInsets.only(top: 5, bottom: 20),
           child: ColorPickerWidget(
-            color: (subLayer != null)
+            color: subLayer != null
                 ? subLayer!.shortcutColor
                 : shortcutList[0].colorCode.first,
             colors: shortcutList[0].colorCode,
             title:
-                (subLayer != null) ? subLayer!.layerText : shortcutList[0].name,
+                subLayer != null ? subLayer!.layerText : shortcutList[0].name,
             label: shortcutList[0].label,
             picker: shortcutList[0].canEdit,
             leftTitle: shortcutList[0].action!,
             onchange: (colors) {
               setState(() {
-                // subLayer = layerProvider.getCurrentSublayer();
-                subLayer?.shortcutColor = colors.first;
+                subLayer!.shortcutColor = colors.first;
               });
             },
           ),
@@ -278,9 +278,6 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
   Widget build(BuildContext context) {
     ModeProvider modeProvider =
         Provider.of<ModeProvider>(context, listen: false);
-    ShortcutWidgetProvider shortcutProvider =
-        Provider.of<ShortcutWidgetProvider>(context, listen: false);
-    subLayer = shortcutProvider.getSubLayerInfo();
 
     return (modeProvider.currentMode.modeType == EnumModeType.layers)
         ? Container()
