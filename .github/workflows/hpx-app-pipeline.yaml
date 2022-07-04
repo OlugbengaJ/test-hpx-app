@@ -1,4 +1,3 @@
-#
 name: hpx-pipe-pipeline
 on:
   pull_request:
@@ -32,7 +31,6 @@ jobs:
           java-version: '11'
       - uses: subosito/flutter-action@a93e024dfea2add254640576989cf8e6507ee7f9
         with:
-          #flutter-version: '2.10.4'
           channel: 'stable'
       - run: flutter pub get
       #- run: flutter test
@@ -66,7 +64,6 @@ jobs:
         uses: actions/checkout@d0651293c4a5a52e711f25b41b05b2212f385d28
       - uses: subosito/flutter-action@a93e024dfea2add254640576989cf8e6507ee7f9
         with:
-          #flutter-version: '2.10.4'
           channel: 'stable'
       - run: flutter pub get
       #- run: flutter test
@@ -181,7 +178,14 @@ jobs:
           flutter_to_debian
 
           DEB=$(ls debian/packages/hpx*.deb)
-          # TODO: upload deb to nanabenz repo
+          # TODO: upload deb to nanabenz repo --> Job: Upload-deb-package
+      
+      - name: cache .deb build
+        uses: actions/cache@661fd3eb7f2f20d8c7c84bc2b0509efd7a826628
+        id: restore-generate-hpx-deb-package
+        with:
+          path: debian/packages/hpx*.deb
+          key: ${{ github.sha }}
 
       - name: Publish Linux Build
         if: |
@@ -222,3 +226,52 @@ jobs:
             }
         env: 
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  
+  Upload-deb-package:
+    name: Upload deb-package
+    if: |
+      github.ref == 'refs/heads/qa' && 
+      github.event_name == 'push'
+    runs-on: ubuntu-latest
+    needs: [Linux]
+
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@74b568e8591fbb3115c70f3436a0c6b0909a8504
+        with:
+          egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
+
+      - name: Restore hpx deb package
+        uses: actions/cache@661fd3eb7f2f20d8c7c84bc2b0509efd7a826628
+        id: restore-generate-hpx-deb-package
+        with:
+          path: debian/packages/hpx*.deb
+          key: ${{ github.sha }}
+      - run: ls debian/packages/
+
+      - name: upload hpx debian package
+        run: |
+          set -x
+          DEB=$(ls debian/packages/hpx*.deb)
+          PACKAGE=hpx
+          OS_CODENAME=jammy
+          SSH_HOST=hp_vm2@51.12.90.239
+
+          # upload hpx debian package
+          TARGET_FILE=/tmp/$(basename "$DEB")
+          echo "==== Uploading $DEB to $SSH_HOST"
+          echo "${{ secrets.APT_REPO_SSH_PRIVATE_KEY }}" > apt-repo-key
+          chmod 600 apt-repo-key
+
+          # Reprepro doesn't allow updating a package with the same
+          # version. For this POC, wipe out the existing package first
+          ssh -i apt-repo-key -o StrictHostKeyChecking=no "$SSH_HOST" \
+            reprepro_expect -- -b /datadrive/var/debian-repositories remove "$OS_CODENAME" "$PACKAGE" || true \
+            reprepro_expect -- -b /datadrive/var/debian-repositories deleteunreferenced
+          
+          scp -i apt-repo-key -o StrictHostKeyChecking=no "$DEB" "$SSH_HOST":/tmp
+          
+          ssh -i apt-repo-key -o StrictHostKeyChecking=no "$SSH_HOST" \
+            reprepro_expect -- -b /datadrive/var/debian-repositories includedeb "$OS_CODENAME" "$TARGET_FILE"
+          
+          ssh -i apt-repo-key -o StrictHostKeyChecking=no "$SSH_HOST" rm "$TARGET_FILE"
