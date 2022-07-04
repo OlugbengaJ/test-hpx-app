@@ -111,7 +111,7 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
             leftTitle: shortcutList[0].action!,
             onchange: (colors) {
               setState(() {
-                subLayer!.shortcutColor = colors.first;
+                subLayer?.shortcutColor = colors.first;
               });
             },
           ),
@@ -146,9 +146,7 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
                 ))
               ]),
               ...Provider.of<KeysProvider>(context)
-                  // .getShortcutKeys(
-                  //     layerProvider.getCurrentSublayer()!.id.toString())!
-                  .getAllShortcutKeys
+                  .getShortcutKeys(subLayer!.id.toString())!
                   .map(
                     (e) => ChangeNotifierProvider.value(
                         value: e,
