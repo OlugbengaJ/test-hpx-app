@@ -165,7 +165,6 @@ KeyModel _updateKeyInfo(
 
             chip.color = animColor!;
 
-            keysProvider.clearShortcutKeys();
             updateKeyAndLayer(keyModel, chip, layer);
             break;
           case EnumModes.colorcycle:
@@ -175,12 +174,10 @@ KeyModel _updateKeyInfo(
 
             chip.color = animColor!;
 
-            keysProvider.clearShortcutKeys();
             updateKeyAndLayer(keyModel, chip, layer);
             break;
           case EnumModes.contactsupport:
             // do nothing here
-            keysProvider.clearShortcutKeys();
             break;
           case EnumModes.image:
             // paint all keys based on color matrix (m x n)
@@ -206,7 +203,6 @@ KeyModel _updateKeyInfo(
               chip.color = rowColors[colIndex];
             }
 
-            keysProvider.clearShortcutKeys();
             updateKeyAndLayer(keyModel, chip, layer);
             break;
           case EnumModes.shortcut:
@@ -296,12 +292,10 @@ KeyModel _updateKeyInfo(
               chip.color = layer.mode!.currentColor[index];
             }
 
-            keysProvider.clearShortcutKeys();
             updateKeyAndLayer(keyModel, chip, layer);
             break;
           default:
             // handles other modes
-            keysProvider.clearShortcutKeys();
             updateKeyAndLayer(keyModel, chip, layer);
             break;
         }
@@ -330,13 +324,10 @@ KeyModel _updateKeyInfo(
           keyModel.addChip(keyCopy.value.topChip);
         }
       } else if (layer.mode?.value == EnumModes.contactsupport) {
-        keysProvider.clearShortcutKeys();
         if (keyModel.keyCode == KeyCode.kFn ||
             keyModel.keyCode == KeyCode.kF12) {
           updateKeyAndLayer(keyModel, chip, layer);
         }
-      } else {
-        keysProvider.clearShortcutKeys();
       }
     }
   }

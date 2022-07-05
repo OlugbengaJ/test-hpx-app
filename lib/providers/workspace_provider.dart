@@ -789,6 +789,7 @@ class WorkspaceProvider with ChangeNotifier {
             break;
           case EnumModes.shortcut:
             if (currentLayerLTWH?.mode != EnumModes.shortcut.name) {
+              // clear key selection
               currentLayerLTWH?.highlightLTWH = LTWH(0.0, 0.0, 0.0, 0.0);
             }
 
