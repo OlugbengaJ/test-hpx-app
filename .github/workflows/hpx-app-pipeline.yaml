@@ -35,18 +35,18 @@ jobs:
       
       # Andriod app signing
       - name: Decode andriod/key.properties
-        run:  echo "${{ secrets.KEY_PROPERTIES_HPX }}" | base64 --decode > android/key.properties
+        run:  echo "${{ secrets.KEY_PROPERTIES_ANDROID }}" | base64 --decode > android/key.properties
       - name: Decode andriod/upload_key.jks
-        run: echo "${{ secrets.KEYSTORE_JKS_HPX }}" | base64 --decode > android/app/key.jks
+        run: echo "${{ secrets.KEYSTORE_JKS_ANDROID }}" | base64 --decode > android/app/key.jks
 
       - run: flutter pub get
       #- run: flutter test
 
       - name: Build APK
-        run: flutter build apk --split-per-abi --release
+        run: flutter build apk --obfuscate --split-debug-info=./debug/debug --split-per-abi --release
       
       - name: Build APPBUNDLE
-        run: flutter build appbundle --release
+        run: flutter build appbundle --obfuscate --split-debug-info=./debug/debug --release
 
       - name: Publish Andriod Build
         if: |
