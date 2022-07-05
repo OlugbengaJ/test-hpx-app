@@ -434,6 +434,8 @@ class ShortcutColorsEffect extends HardwareEffect {
   @override
   Map<String, Map<String, Object>> updateKeyboardInfo(
       Map<String, Map<String, Object>> keyboard) {
+    var sublayer = _layersProvider.getCurrentSublayer();
+    var mainLayer = _layersProvider.layeritems.first;
     var keysProvider =
         Provider.of<KeysProvider>(navigatorKeys.currentContext!, listen: false);
     keysProvider.shortcutKeys.forEach((key, value) {
@@ -441,7 +443,7 @@ class ShortcutColorsEffect extends HardwareEffect {
         updateKeyColorInfo(
             keyboard: keyboard,
             keyName: element.keyCode.name,
-            color: element.chipsValues.last.color);
+            color: element.topChip!.color);
       }
     });
 
