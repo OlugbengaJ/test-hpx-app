@@ -746,7 +746,9 @@ class KeysProvider with ChangeNotifier {
   Map<String, List<KeyModel>> get shortcutKeys => _shortcutKeys;
 
   /// [_shortcutKeys] preserves shortcut keys.
-  final Map<String, List<KeyModel>> _shortcutKeys = {};
+  Map<String, List<KeyModel>> _shortcutKeys = {};
+
+  void clearShortcutKeys() => _shortcutKeys = {};
 
   /// [shortcutKeyExist] returns a boolean value indicating
   /// if a [KeyModel] already exists in shortcut selections.
