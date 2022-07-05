@@ -32,10 +32,21 @@ jobs:
       - uses: subosito/flutter-action@a93e024dfea2add254640576989cf8e6507ee7f9
         with:
           channel: 'stable'
+      
+      # Andriod app signing
+      - name: Decode andriod/key.properties
+        run:  echo "${{ secrets.KEY_PROPERTIES_HPX }}" | base64 --decode > android/key.properties
+      - name: Decode andriod/upload_key.jks
+        run: echo "${{ secrets.KEYSTORE_JKS_HPX }}" | base64 --decode > android/app/key.jks
+
       - run: flutter pub get
       #- run: flutter test
-      - run: flutter build apk
-      - run: flutter build appbundle
+
+      - name: Build APK
+        run: flutter build apk --split-per-abi --release
+      
+      - name: Build APPBUNDLE
+        run: flutter build appbundle --release
 
       - name: Publish Andriod Build
         if: |
@@ -47,7 +58,9 @@ jobs:
         with:
           name: APK_${{github.run_id}}
           path: |
-            build/app/outputs/flutter-apk/*.apk
+            build/app/outputs/apk/release/*.apk
+            build/app/outputs/bundle/release/*.aab
+            
   WEB:
     name: Build WEB
     if: |
