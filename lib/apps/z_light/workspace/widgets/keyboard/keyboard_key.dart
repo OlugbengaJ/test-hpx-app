@@ -176,9 +176,11 @@ KeyModel _updateKeyInfo(
 
             updateKeyAndLayer(keyModel, chip, layer);
             break;
+          case EnumModes.contactsupport:
+            // do nothing here
+            break;
           case EnumModes.image:
             // paint all keys based on color matrix (m x n)
-
             // get column (n) values where row (m) matches key row index.
             final colorsMatrix = layer.mode?.effects.extractedColors;
 
@@ -293,6 +295,7 @@ KeyModel _updateKeyInfo(
             updateKeyAndLayer(keyModel, chip, layer);
             break;
           default:
+            // handles other modes
             updateKeyAndLayer(keyModel, chip, layer);
             break;
         }
@@ -313,7 +316,9 @@ KeyModel _updateKeyInfo(
           }
 
           // set opacity based on layer visibility
-          keyCopy.value.topChip?.opacity = sublayer!.visible ? 1 : 0;
+          if (sublayer != null) {
+            keyCopy.value.topChip?.opacity = sublayer.visible ? 1 : 0;
+          }
 
           // add the key copy top chip.
           keyModel.addChip(keyCopy.value.topChip);
