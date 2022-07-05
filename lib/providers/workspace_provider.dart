@@ -792,11 +792,11 @@ class WorkspaceProvider with ChangeNotifier {
               currentLayerLTWH?.highlightLTWH = LTWH(0.0, 0.0, 0.0, 0.0);
             }
 
-            currentLayerLTWH?.mode = EnumModes.shortcut.name;
+            _selectorVisible = _isPanning;
 
+            currentLayerLTWH?.mode = EnumModes.shortcut.name;
             final sublayer = _layersProvider?.getCurrentSublayer();
 
-            _selectorVisible = _isPanning;
             _keyDragMode =
                 sublayer == null ? null : WorkspaceDragMode.highlight;
             currentLayerLTWH?.dragMode = _keyDragMode;
