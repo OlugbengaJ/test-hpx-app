@@ -18,7 +18,6 @@ class SublayerItem extends StatefulWidget {
 
 class _SublayerItemState extends State<SublayerItem> {
   bool _showActions = false;
-  bool _editing = false;
   final double _iconSize = 16;
   TextEditingController _layerNameController = TextEditingController(text: "");
   GlobalKey<FormFieldState> editLayerKey = GlobalKey<
@@ -87,7 +86,6 @@ class _SublayerItemState extends State<SublayerItem> {
     if (!provider.isLayerEditing) {
       provider.setEditingSubLayerKey(editLayerKey, widget.layerItemModel.id);
       setState(() {
-        _editing = provider.isTheCurrentSubLayerEditing(editLayerKey);
         _layerNameController =
             TextEditingController(text: widget.layerItemModel.layerText);
       });
@@ -112,9 +110,6 @@ class _SublayerItemState extends State<SublayerItem> {
   }
 
   _onSubmit(value, LayersProvider provider) {
-    setState(() {
-      _editing = !_editing;
-    });
     provider.updateSublayer(widget.layerItemModel, value);
     provider.toggleEditMode(false);
   }
@@ -169,7 +164,7 @@ class _SublayerItemState extends State<SublayerItem> {
                         children: [
                           Row(
                             children: [
-                              (_editing && provider.isLayerEditing)
+                              (provider.isTheCurrentSubLayerEditing(editLayerKey) && provider.isLayerEditing)
                                   ? Container(
                                       height: 30,
                                       constraints: const BoxConstraints(
