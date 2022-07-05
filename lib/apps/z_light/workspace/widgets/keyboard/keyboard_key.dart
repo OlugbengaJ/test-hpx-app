@@ -324,7 +324,7 @@ KeyModel _updateKeyInfo(
           keyModel.addChip(keyCopy.value.topChip);
         }
       } else if (layer.mode?.value == EnumModes.contactsupport) {
-        keysProvider.clearShortcutKeys();
+        // keysProvider.clearShortcutKeys();
         if (keyModel.keyCode == KeyCode.kFn ||
             keyModel.keyCode == KeyCode.kF12) {
           updateKeyAndLayer(keyModel, chip, layer);
