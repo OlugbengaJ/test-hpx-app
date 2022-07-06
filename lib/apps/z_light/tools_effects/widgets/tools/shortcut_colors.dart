@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
+import 'package:hpx/models/apps/zlightspace_models/workspace_models/key_code.dart';
 import 'package:hpx/providers/keys_provider.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
@@ -25,31 +26,47 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
   List<Widget> generatePreset() {
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
+    KeysProvider keysProvider =
+        Provider.of<KeysProvider>(context, listen: false);
     var presets = layerProvider.getPresetKeys();
+    subLayer = Provider.of<LayersProvider>(context).getCurrentSublayer();
     List<Widget> ui = [];
     for (var element in presets) {
       String name = element['name'];
       String keys = element['keys'].first + ' + ' + element['keys'].last;
-      ui.add(Container(
-        decoration: BoxDecoration(color: Colors.grey.shade800),
-        padding: const EdgeInsets.only(top: 5, bottom: 5, left: 10),
-        margin: const EdgeInsets.only(top: 5, left: 0, right: 10),
-        child: Row(children: [
-          Expanded(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(name, textAlign: TextAlign.left, style: labelStyle),
-            ],
-          )),
-          Expanded(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(keys, textAlign: TextAlign.left, style: labelStyle),
-            ],
-          ))
-        ]),
+      ui.add(InkWell(
+        onTap: () {
+          switch (element['name']) {
+            case "Copy":
+              var key = keysProvider.getKey(KeyCode.kCtrlLeft);
+              keysProvider.addShortcutKey(subLayer!.id.toString(), key);
+              // Provider.of<KeysProvider>(context).addShortcutKey(
+              //     subLayer!.id.toString(),
+              //     Provider.of<KeysProvider>(context).getKey(KeyCode.kV));
+              break;
+          }
+        },
+        child: Container(
+          decoration: BoxDecoration(color: Colors.grey.shade800),
+          padding: const EdgeInsets.only(top: 5, bottom: 5, left: 10),
+          margin: const EdgeInsets.only(top: 5, left: 0, right: 10),
+          child: Row(children: [
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(name, textAlign: TextAlign.left, style: labelStyle),
+              ],
+            )),
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(keys, textAlign: TextAlign.left, style: labelStyle),
+              ],
+            ))
+          ]),
+        ),
       ));
     }
     return ui;
