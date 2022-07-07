@@ -207,81 +207,81 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text("Shortcut Group", textAlign: TextAlign.left, style: h5Style),
-          Container(
-            margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              activatedButton = "Custom";
-                            });
-                          },
-                          style: (activatedButton != 'Custom')
-                              ? textBtnStyleBlack
-                              : textBtnStyleWhite,
-                          child: SizedBox(
-                            height: 40,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'CUSTOM',
-                                    style: TextStyle(
-                                        color: (activatedButton != 'Custom')
-                                            ? Colors.white
-                                            : Colors.black),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ]),
-                ),
-                Expanded(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              activatedButton = "Preset";
-                            });
-                          },
-                          style: (activatedButton == 'Custom')
-                              ? textBtnStyleBlack
-                              : textBtnStyleWhite,
-                          child: SizedBox(
-                            height: 40,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'PRESETS',
-                                    style: TextStyle(
-                                        color: (activatedButton == 'Custom')
-                                            ? Colors.white
-                                            : Colors.black),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ]),
-                ),
-              ],
-            ),
-          ),
+          // Container(
+          //   margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+          //   child: Row(
+          //     children: [
+          //       Expanded(
+          //         child: Column(
+          //             crossAxisAlignment: CrossAxisAlignment.stretch,
+          //             children: [
+          //               TextButton(
+          //                 onPressed: () {
+          //                   setState(() {
+          //                     activatedButton = "Custom";
+          //                   });
+          //                 },
+          //                 style: (activatedButton != 'Custom')
+          //                     ? textBtnStyleBlack
+          //                     : textBtnStyleWhite,
+          //                 child: SizedBox(
+          //                   height: 40,
+          //                   child: Row(
+          //                     mainAxisAlignment: MainAxisAlignment.center,
+          //                     children: [
+          //                       Padding(
+          //                         padding: const EdgeInsets.all(8.0),
+          //                         child: Text(
+          //                           'CUSTOM',
+          //                           style: TextStyle(
+          //                               color: (activatedButton != 'Custom')
+          //                                   ? Colors.white
+          //                                   : Colors.black),
+          //                         ),
+          //                       ),
+          //                     ],
+          //                   ),
+          //                 ),
+          //               ),
+          //             ]),
+          //       ),
+          //       Expanded(
+          //         child: Column(
+          //             crossAxisAlignment: CrossAxisAlignment.stretch,
+          //             children: [
+          //               TextButton(
+          //                 onPressed: () {
+          //                   setState(() {
+          //                     activatedButton = "Preset";
+          //                   });
+          //                 },
+          //                 style: (activatedButton == 'Custom')
+          //                     ? textBtnStyleBlack
+          //                     : textBtnStyleWhite,
+          //                 child: SizedBox(
+          //                   height: 40,
+          //                   child: Row(
+          //                     mainAxisAlignment: MainAxisAlignment.center,
+          //                     children: [
+          //                       Padding(
+          //                         padding: const EdgeInsets.all(8.0),
+          //                         child: Text(
+          //                           'PRESETS',
+          //                           style: TextStyle(
+          //                               color: (activatedButton == 'Custom')
+          //                                   ? Colors.white
+          //                                   : Colors.black),
+          //                         ),
+          //                       ),
+          //                     ],
+          //                   ),
+          //                 ),
+          //               ),
+          //             ]),
+          //       ),
+          //     ],
+          //   ),
+          // ),
           (activatedButton == 'Custom') ? processSubLayer() : presetSubLayer()
         ],
       ),
