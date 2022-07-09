@@ -27,6 +27,7 @@ class _AppLayoutState extends State<AppLayout> {
     TooltipTutorialProvider tutorialProvider =
         Provider.of<TooltipTutorialProvider>(context, listen: false);
     tutorialProvider.showTutorial = true;
+    tutorialProvider.direction = AxisDirection.down;
 
     // TODO: implement build
     return Scaffold(
@@ -62,15 +63,21 @@ class _AppLayoutState extends State<AppLayout> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 1.0, right: 50),
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 10.0),
-                // width: 220,
-                child: PickerDropdown(
-                  onChange: (PickerModel? returnValue) {},
-                  pickerList: _modeProvider.getPickerModes('profile'),
-                  defaultPicker: profileList.first,
-                ),
-              ),
+              child: tutorialProvider.generateTooltipTutorial(
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 10.0),
+                    // width: 220,
+                    child: PickerDropdown(
+                      onChange: (PickerModel? returnValue) {},
+                      pickerList: _modeProvider.getPickerModes('profile'),
+                      defaultPicker: profileList.first,
+                    ),
+                  ),
+                  'Selected Profile',
+                  'You can presave a lot of customizations as profiles for later use',
+                  'Close',
+                  'Next',
+                  100),
             ),
             WindowTitleBarBox(
               child: Row(
@@ -85,15 +92,22 @@ class _AppLayoutState extends State<AppLayout> {
             SizedBox(
               width: 60,
               child: Container(
-                  alignment: AlignmentDirectional.bottomCenter,
-                  padding: const EdgeInsets.only(bottom: 50.0),
-                  color: const Color.fromRGBO(18, 18, 18, 1),
-                  child: const IconButton(
-                    iconSize: 40,
-                    color: Colors.white,
-                    icon: Icon(Ionicons.help_circle_outline),
-                    onPressed: null,
-                  )),
+                alignment: AlignmentDirectional.bottomCenter,
+                padding: const EdgeInsets.only(bottom: 50.0),
+                color: const Color.fromRGBO(18, 18, 18, 1),
+                child: tutorialProvider.generateTooltipTutorial(
+                    const IconButton(
+                      iconSize: 40,
+                      color: Colors.white,
+                      icon: const Icon(Ionicons.help_circle_outline),
+                      onPressed: null,
+                    ),
+                    'Help Option',
+                    'Use the help otion to settle all your concerns about the Z Light space app. You can also speak to a live agent to onblock you',
+                    'Close',
+                    'Finish',
+                    115),
+              ),
             ),
             Expanded(
                 child: Column(

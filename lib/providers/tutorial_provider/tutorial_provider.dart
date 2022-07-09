@@ -6,6 +6,8 @@ import 'package:just_the_tooltip/just_the_tooltip.dart';
 class TooltipTutorialProvider extends ChangeNotifier {
   final tooltipController = JustTheController();
   bool showTutorial = false;
+  var direction = AxisDirection.down;
+  double width = 300;
 
   void showTutorialTooltip() {
     if (showTutorial == true) {
@@ -24,11 +26,11 @@ class TooltipTutorialProvider extends ChangeNotifier {
             tailLength: 15.0,
             controller: tooltipController,
             barrierDismissible: false,
-            preferredDirection: AxisDirection.down,
+            preferredDirection: direction,
             content: Padding(
               padding: const EdgeInsets.all(12.0),
               child: SizedBox(
-                width: 300,
+                width: width,
                 height: height,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
