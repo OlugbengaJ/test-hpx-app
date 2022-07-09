@@ -34,9 +34,6 @@ class _ToolModesState extends State<ToolModes> {
   changeMode(PickerModel value) {
     ModeProvider modeProvider =
         Provider.of<ModeProvider>(context, listen: false);
-    // /// initialize the layers provider to use to send notification accross the layers
-    LayersProvider layerProvider =
-        Provider.of<LayersProvider>(context, listen: false);
     setState(() {
       modeProvider.changeModeComponent(value, context, false, changeComp: true);
     });
