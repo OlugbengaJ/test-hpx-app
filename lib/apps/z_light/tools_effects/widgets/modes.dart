@@ -116,7 +116,7 @@ class _ToolModesState extends State<ToolModes> {
                       });
                     }
                   },
-                  pickerHintText: "Picker a tool or effect mode ....",
+                  pickerHintText: "Picker a tool or effect mode and manage ",
                   pickerList: modeProvider.getPickerModes('mood'),
                   defaultPicker: modeProvider.modePicker,
                 )),

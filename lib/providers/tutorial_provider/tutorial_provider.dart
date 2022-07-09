@@ -15,68 +15,70 @@ class TooltipTutorialProvider extends ChangeNotifier {
 
   Widget generateTooltipTutorial(Widget widget, String title, String text,
       String btn1Txt, String btn2Txt, double height) {
-    return JustTheTooltip(
-      backgroundColor: Colors.white,
-      borderRadius: const BorderRadius.all(Radius.circular(0)),
-      tailBaseWidth: 15.0,
-      tailLength: 15.0,
-      controller: tooltipController,
-      barrierDismissible: false,
-      preferredDirection: AxisDirection.down,
-      content: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: SizedBox(
-          width: 300,
-          height: height,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(title,
-                  style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      fontFamily: "Metropolis")),
-              Container(margin: const EdgeInsets.only(top: 10)),
-              Text(text,
-                  style: const TextStyle(
-                      height: 1.3,
-                      fontSize: 12,
-                      color: Colors.black,
-                      fontFamily: "Metropolis")),
-              Container(margin: const EdgeInsets.only(top: 10)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: Container(),
-                  ),
-                  Expanded(
-                      flex: 2,
-                      child: TextButton(
-                          onPressed: () {},
-                          style: textBtnStyleWhite,
-                          child: SizedBox(
-                            height: 20,
-                            child: Text(btn1Txt),
-                          ))),
-                  Expanded(
-                      flex: 2,
-                      child: TextButton(
-                          onPressed: () {},
-                          style: textBtnStyleBlack,
-                          child: SizedBox(
-                            height: 20,
-                            child: Text(btn2Txt),
-                          )))
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-      child: widget,
-    );
+    return (showTutorial == false)
+        ? Container(child: widget)
+        : JustTheTooltip(
+            backgroundColor: Colors.white,
+            borderRadius: const BorderRadius.all(Radius.circular(0)),
+            tailBaseWidth: 15.0,
+            tailLength: 15.0,
+            controller: tooltipController,
+            barrierDismissible: false,
+            preferredDirection: AxisDirection.down,
+            content: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: SizedBox(
+                width: 300,
+                height: height,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(title,
+                        style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                            fontFamily: "Metropolis")),
+                    Container(margin: const EdgeInsets.only(top: 10)),
+                    Text(text,
+                        style: const TextStyle(
+                            height: 1.3,
+                            fontSize: 12,
+                            color: Colors.black,
+                            fontFamily: "Metropolis")),
+                    Container(margin: const EdgeInsets.only(top: 10)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Container(),
+                        ),
+                        Expanded(
+                            flex: 2,
+                            child: TextButton(
+                                onPressed: () {},
+                                style: textBtnStyleWhite,
+                                child: SizedBox(
+                                  height: 20,
+                                  child: Text(btn1Txt),
+                                ))),
+                        Expanded(
+                            flex: 2,
+                            child: TextButton(
+                                onPressed: () {},
+                                style: textBtnStyleBlack,
+                                child: SizedBox(
+                                  height: 20,
+                                  child: Text(btn2Txt),
+                                )))
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+            child: widget,
+          );
   }
 }

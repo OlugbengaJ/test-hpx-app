@@ -8,6 +8,7 @@ import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
+import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 
 class AppLayout extends StatefulWidget {
@@ -23,9 +24,10 @@ class _AppLayoutState extends State<AppLayout> {
   @override
   Widget build(BuildContext context) {
     final workspaceProvider = Provider.of<WorkspaceProvider>(context);
-    final tutorialProvider = Provider.of<TooltipTutorialProvider>(context);
-    // tutorialProvider.showTutorial = true;
-    tutorialProvider.showTutorialTooltip();
+    TooltipTutorialProvider tutorialProvider =
+        Provider.of<TooltipTutorialProvider>(context, listen: false);
+    tutorialProvider.showTutorial = true;
+
     // TODO: implement build
     return Scaffold(
         appBar: AppBar(
@@ -36,7 +38,7 @@ class _AppLayoutState extends State<AppLayout> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                margin: EdgeInsets.only(top: 25),
+                margin: const EdgeInsets.only(top: 25),
                 width: 123,
                 height: 100,
                 decoration: const BoxDecoration(
@@ -59,40 +61,39 @@ class _AppLayoutState extends State<AppLayout> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 1.0, right: 10),
+              padding: const EdgeInsets.only(top: 1.0, right: 50),
               child: Container(
                 margin: const EdgeInsets.only(bottom: 10.0),
-                width: 250,
+                // width: 220,
                 child: PickerDropdown(
-                  onChange: (PickerModel? returnValue) {
-                    // if (modeProvider.currentMode.value == EnumModes.shortcut &&
-                    //     returnValue?.value != EnumModes.shortcut) {
-                    //   shortcutAlertDialogOnChangeMode(returnValue!);
-                    // } else {
-                    //   setState(() {
-                    //     modeProvider.changeModeComponent(
-                    //         returnValue, context, false,
-                    //         changeComp: true);
-                    //   });
-                    // }
-                  },
-                  pickerHintText: "Picker a tool or effect mode ....",
+                  onChange: (PickerModel? returnValue) {},
                   pickerList: _modeProvider.getPickerModes('profile'),
                   defaultPicker: profileList.first,
                 ),
               ),
             ),
-            // WindowButton(iconBuilder: iconBuilder)
+            WindowTitleBarBox(
+              child: Row(
+                children: const [WindowButtons()],
+              ),
+            )
           ],
         ),
         body: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(
               width: 60,
               child: Container(
-                color: const Color.fromRGBO(18, 18, 18, 1),
-                // child: Positioned(child: Container())
-              ),
+                  alignment: AlignmentDirectional.bottomCenter,
+                  padding: const EdgeInsets.only(bottom: 50.0),
+                  color: const Color.fromRGBO(18, 18, 18, 1),
+                  child: const IconButton(
+                    iconSize: 40,
+                    color: Colors.white,
+                    icon: Icon(Ionicons.help_circle_outline),
+                    onPressed: null,
+                  )),
             ),
             Expanded(
                 child: Column(
@@ -151,5 +152,20 @@ class _AppLayoutState extends State<AppLayout> {
             ))
           ],
         ));
+  }
+}
+
+class WindowButtons extends StatelessWidget {
+  const WindowButtons({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        MinimizeWindowButton(),
+        MaximizeWindowButton(),
+        CloseWindowButton()
+      ],
+    );
   }
 }
