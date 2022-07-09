@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/globals.dart';
-import 'package:hpx/apps/z_light/wrapper.dart';
 import 'package:hpx/providers/keys_provider.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/scrollbar_provider.dart';
@@ -11,7 +10,9 @@ import 'package:hpx/providers/tools_effect_provider/widget/audiovisualizer_provi
 import 'package:hpx/providers/tools_effect_provider/widget/contact_support_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/image_mode_provder.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/shortcut_widget_provider.dart';
+import 'package:hpx/providers/tutorial_provider/tutorial_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
+import 'package:hpx/widgets/layouts/app_layout.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -25,6 +26,7 @@ void main() => runApp(
           ChangeNotifierProvider(create: (_) => ImageModeProvider()),
           ChangeNotifierProvider(create: (_) => ContactSupportWidgetProvider()),
           ChangeNotifierProvider(create: (_) => AudioVisualizerModeProvider()),
+          ChangeNotifierProvider(create: (_) => TooltipTutorialProvider()),
           ChangeNotifierProvider(create: (_) => EffectProvider()),
           ChangeNotifierProvider(create: (context) => KeysProvider()),
           ChangeNotifierProvider(create: (context) => WorkspaceProvider()),
@@ -58,7 +60,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: "/",
       routes: {
-        "/": (context) => const Wrapper(),
+        "/": (context) => const AppLayout(),
       },
     );
   }
