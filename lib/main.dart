@@ -17,26 +17,27 @@ import 'package:hpx/widgets/layouts/app_layout.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
-void main()  {runApp(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => LayersProvider()),
-          ChangeNotifierProvider(create: (_) => ColorPickerProvider()),
-          ChangeNotifierProvider(create: (_) => ModeProvider()),
-          ChangeNotifierProvider(create: (_) => ShortcutWidgetProvider()),
-          ChangeNotifierProvider(create: (_) => ImageModeProvider()),
-          ChangeNotifierProvider(create: (_) => ContactSupportWidgetProvider()),
-          ChangeNotifierProvider(create: (_) => AudioVisualizerModeProvider()),
-          ChangeNotifierProvider(create: (_) => TooltipTutorialProvider()),
-          ChangeNotifierProvider(create: (_) => EffectProvider()),
-          ChangeNotifierProvider(create: (context) => KeysProvider()),
-          ChangeNotifierProvider(create: (context) => WorkspaceProvider()),
-          ChangeNotifierProvider(create: (context) => ScrollbarProvider()),
-        ],
-        child: const MyApp(),
-      ),
-    );
-    // Add this code below
+void main() {
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LayersProvider()),
+        ChangeNotifierProvider(create: (_) => ColorPickerProvider()),
+        ChangeNotifierProvider(create: (_) => ModeProvider()),
+        ChangeNotifierProvider(create: (_) => ShortcutWidgetProvider()),
+        ChangeNotifierProvider(create: (_) => ImageModeProvider()),
+        ChangeNotifierProvider(create: (_) => ContactSupportWidgetProvider()),
+        ChangeNotifierProvider(create: (_) => AudioVisualizerModeProvider()),
+        ChangeNotifierProvider(create: (_) => TooltipTutorialProvider()),
+        ChangeNotifierProvider(create: (_) => EffectProvider()),
+        ChangeNotifierProvider(create: (context) => KeysProvider()),
+        ChangeNotifierProvider(create: (context) => WorkspaceProvider()),
+        ChangeNotifierProvider(create: (context) => ScrollbarProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
+  // Add this code below
 
   doWhenWindowReady(() {
     const initialSize = Size(1280, 720);
@@ -45,7 +46,7 @@ void main()  {runApp(
     appWindow.alignment = Alignment.center;
     appWindow.show();
   });
-    }
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

@@ -64,20 +64,21 @@ class _AppLayoutState extends State<AppLayout> {
             Padding(
               padding: const EdgeInsets.only(top: 1.0, right: 50),
               child: tutorialProvider.generateTooltipTutorial(
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 10.0),
-                    // width: 220,
-                    child: PickerDropdown(
-                      onChange: (PickerModel? returnValue) {},
-                      pickerList: _modeProvider.getPickerModes('profile'),
-                      defaultPicker: profileList.first,
-                    ),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 10.0),
+                  // width: 150,
+                  child: PickerDropdown(
+                    onChange: (PickerModel? returnValue) {},
+                    pickerList: _modeProvider.getPickerModes('profile'),
+                    defaultPicker: profileList.first,
                   ),
-                  'Selected Profile',
-                  'You can presave a lot of customizations as profiles for later use',
-                  'Close',
-                  'Next',
-                  100),
+                ),
+                'Selected Profile',
+                'You can presave a lot of customizations as profiles for later use',
+                'Close',
+                'Next',
+                100,
+              ),
             ),
             WindowTitleBarBox(
               child: Row(
@@ -99,7 +100,7 @@ class _AppLayoutState extends State<AppLayout> {
                     const IconButton(
                       iconSize: 40,
                       color: Colors.white,
-                      icon: const Icon(Ionicons.help_circle_outline),
+                      icon: Icon(Ionicons.help_circle_outline),
                       onPressed: null,
                     ),
                     'Help Option',
