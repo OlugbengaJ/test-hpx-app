@@ -4,4 +4,5 @@ class Constants {
   static const String defaultImageMode = 'assets/images/logo_blue_sq.png';
 
   static const double zoomFactor = 800.0;
+  static const double defaultZoom = 100;
 }
