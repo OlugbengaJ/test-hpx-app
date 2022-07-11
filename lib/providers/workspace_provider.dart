@@ -9,6 +9,7 @@ import 'package:hpx/models/apps/zlightspace_models/workspace_models/box_zone.dar
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/selection_offset.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/utils/common.dart';
+import 'package:hpx/widgets/components/picker_dropdown.dart';
 
 /// [WorkspaceProvider] handles the workspace events.
 ///
@@ -20,8 +21,20 @@ class WorkspaceProvider with ChangeNotifier {
   /// [_stripNotificationText] holds text used by the strip notifcation.
   String? _stripNotificationText;
 
-  /// [_modalWidgets] holds widgets that are rendered in the modal notifcation.
+  /// [_modalWidgets] holds widgets that are rendered in the modal notification.
   List<Widget>? _modalWidgets;
+
+  PickerModel? _currentProfile;
+  PickerModel? get getProfile => _currentProfile;
+
+  void initProfile(PickerModel? value) => _currentProfile ??= value;
+
+  void setProfile(PickerModel? value) async {
+    _currentProfile = value;
+
+    await Future.delayed(const Duration(microseconds: 1));
+    notifyListeners();
+  }
 
   final double _resizableThreshold = 20;
 

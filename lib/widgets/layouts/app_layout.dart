@@ -5,6 +5,7 @@ import 'package:hpx/apps/z_light/wrapper.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/providers/tutorial_provider/tutorial_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
+import 'package:hpx/widgets/components/dropdown.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
@@ -29,7 +30,9 @@ class _AppLayoutState extends State<AppLayout> {
     tutorialProvider.showTutorial = true;
     tutorialProvider.direction = AxisDirection.down;
 
-    // TODO: implement build
+    workspaceProvider
+        .initProfile(_modeProvider.getPickerModes('profile').first);
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromRGBO(18, 18, 18, 1),
@@ -62,16 +65,35 @@ class _AppLayoutState extends State<AppLayout> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 1.0, right: 50),
+              padding: const EdgeInsets.only(top: 10.0, right: 50),
               child: tutorialProvider.generateTooltipTutorial(
                 Container(
                   margin: const EdgeInsets.only(bottom: 10.0),
                   // width: 150,
-                  child: PickerDropdown(
-                    onChange: (PickerModel? returnValue) {},
-                    pickerList: _modeProvider.getPickerModes('profile'),
-                    defaultPicker: profileList.first,
+                  child: DropDown<PickerModel>(
+                    hint: 'Select profile...',
+                    hintStyle: pStyle,
+                    dropdownValue: workspaceProvider.getProfile,
+                    isExpanded: false,
+                    items: [
+                      ..._modeProvider.getPickerModes('profile').map(
+                            (e) => DropdownMenuItem(
+                              enabled: e.enabled,
+                              value: e,
+                              child: GetProfileList(profile: e),
+                            ),
+                          )
+                    ],
+                    onChangedHandler: (o) {
+                      workspaceProvider.setProfile(o);
+                    },
                   ),
+
+                  //  PickerDropdown(
+                  //   onChange: (PickerModel? returnValue) {},
+                  //   pickerList: _modeProvider.getPickerModes('profile'),
+                  //   defaultPicker: profileList.first,
+                  // ),
                 ),
                 'Selected Profile',
                 'You can presave a lot of customizations as profiles for later use',
