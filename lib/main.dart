@@ -15,8 +15,9 @@ import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/widgets/layouts/app_layout.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 
-void main() => runApp(
+void main() {runApp(
       MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => LayersProvider()),
@@ -35,6 +36,17 @@ void main() => runApp(
         child: const MyApp(),
       ),
     );
+     doWhenWindowReady(() {
+    final win = appWindow;
+    const initialSize = Size(600, 450);
+    win.minSize = initialSize;
+    win.size = initialSize;
+    win.alignment = Alignment.center;
+    win.title = "Custom window with Flutter";
+    win.show();
+  });
+    
+    }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

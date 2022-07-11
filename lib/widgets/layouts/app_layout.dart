@@ -92,22 +92,43 @@ class _AppLayoutState extends State<AppLayout> {
             SizedBox(
               width: 60,
               child: Container(
-                alignment: AlignmentDirectional.bottomCenter,
-                padding: const EdgeInsets.only(bottom: 50.0),
-                color: const Color.fromRGBO(18, 18, 18, 1),
-                child: tutorialProvider.generateTooltipTutorial(
-                    const IconButton(
+                  alignment: AlignmentDirectional.bottomCenter,
+                  padding: const EdgeInsets.only(bottom: 50.0),
+                  color: const Color.fromRGBO(18, 18, 18, 1),
+                  child: CustomToolTip(
+                    tooltipController: tutorialProvider.tooltipControllerHelp,
+                    title: "Help me",
+                    description: "description",
+                    btn1Txt: "btn1Txt",
+                    btn2Txt: "btn2Txt",
+                    btn1Pressed: (){
+                      tutorialProvider.hideTutorialTooltipHelp(tipToHide: 'Help');
+                    },
+                    btn2Pressed: (){
+                      tutorialProvider.hideTutorialTooltipHelp(tipToHide: 'Help');
+
+                      tutorialProvider.showTutorialTooltipHelp(tipToShow: 'WorkSpace');
+                    },
+                    widget: const IconButton(
                       iconSize: 40,
                       color: Colors.white,
                       icon: const Icon(Ionicons.help_circle_outline),
                       onPressed: null,
                     ),
-                    'Help Option',
-                    'Use the help otion to settle all your concerns about the Z Light space app. You can also speak to a live agent to onblock you',
-                    'Close',
-                    'Finish',
-                    115),
-              ),
+                  )
+                  // tutorialProvider.generateTooltipTutorial(
+                  // const IconButton(
+                  //   iconSize: 40,
+                  //   color: Colors.white,
+                  //   icon: const Icon(Ionicons.help_circle_outline),
+                  //   onPressed: null,
+                  // ),
+                  //     'Help Option',
+                  //     'Use the help otion to settle all your concerns about the Z Light space app. You can also speak to a live agent to onblock you',
+                  //     'Close',
+                  //     'Finish',
+                  //     115),
+                  ),
             ),
             Expanded(
                 child: Column(
@@ -118,26 +139,43 @@ class _AppLayoutState extends State<AppLayout> {
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      tutorialProvider.generateTooltipTutorial(
-                          TextButton(
-                            style: TextButton.styleFrom(
-                                fixedSize: const Size(150, 50),
-                                primary: workspaceProvider.isWorkspaceView
-                                    ? Colors.white
-                                    : Colors.grey,
-                                backgroundColor: Colors.transparent,
-                                textStyle: h5Style),
-                            child: const Text('Workspace'),
-                            onPressed: () {
-                              workspaceProvider
-                                  .toggleView(WorkspaceView.workspace);
-                            },
-                          ),
-                          'Workspace',
-                          'The workspace we allow you move your device around for later customization',
-                          'No Thanks',
-                          'Let`s Go',
-                          100.0),
+                       CustomToolTip(
+                    tooltipController: tutorialProvider.tooltipControllerWorkSpace,
+                    title: "WorkSpace",
+                    description: "description",
+                    btn1Txt: "btn1Txt",
+                    btn2Txt: "btn2Txt",
+                    btn1Pressed: (){
+                      tutorialProvider.hideTutorialTooltipHelp(tipToHide: 'WorkSpace');
+                    },
+                    widget: const IconButton(
+                      iconSize: 40,
+                      color: Colors.white,
+                      icon: const Icon(Ionicons.help_circle_outline),
+                      onPressed: null,
+                    ),
+                  ),
+                      // tutorialProvider.generateTooltipTutorial(
+                      //     TextButton(
+                      //       style: TextButton.styleFrom(
+                      //           fixedSize: const Size(150, 50),
+                      //           primary: workspaceProvider.isWorkspaceView
+                      //               ? Colors.white
+                      //               : Colors.grey,
+                      //           backgroundColor: Colors.transparent,
+                      //           textStyle: h5Style),
+                      //       child: const Text('Workspace'),
+                      //       onPressed: () {
+                      //         workspaceProvider
+                      //             .toggleView(WorkspaceView.workspace);
+                      //         tutorialProvider.showTutorialTooltip();
+                      //       },
+                      //     ),
+                      //     'Workspace',
+                      //     'The workspace we allow you move your device around for later customization',
+                      //     'No Thanks',
+                      //     'Let`s Go',
+                      //     100.0),
                       tutorialProvider.generateTooltipTutorial(
                           TextButton(
                             style: TextButton.styleFrom(
