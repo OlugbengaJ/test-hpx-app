@@ -32,8 +32,11 @@ dependencies:
   mongo_dart: ^0.7.4+1
   path: ^1.8.0
   path_provider: ^2.0.9
-  process_run: ^0.12.3+2
   url_launcher: ^6.1.4
+  sqflite: ^2.0.3
+  sqflite_common: ^2.2.1+1
+  sqflite_common_ffi: ^2.1.1+1
+  sqlite3_flutter_libs: ^0.5.0
 
 
   # The following adds the Cupertino Icons font to your application.
