@@ -1,3 +1,4 @@
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/providers/keys_provider.dart';
@@ -16,7 +17,7 @@ import 'package:hpx/widgets/layouts/app_layout.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(
+void main()  {runApp(
       MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => LayersProvider()),
@@ -35,6 +36,16 @@ void main() => runApp(
         child: const MyApp(),
       ),
     );
+    // Add this code below
+
+  doWhenWindowReady(() {
+    const initialSize = Size(1280, 720);
+    appWindow.minSize = initialSize;
+    appWindow.size = initialSize;
+    appWindow.alignment = Alignment.center;
+    appWindow.show();
+  });
+    }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

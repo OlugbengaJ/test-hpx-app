@@ -1,5 +1,8 @@
 #include "my_application.h"
 
+#include <bitsdojo_window_windows/bitsdojo_window_plugin.h> //added for custom titlebar implementation
+
+
 #include <flutter_linux/flutter_linux.h>
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
@@ -47,7 +50,9 @@ static void my_application_activate(GApplication* application) {
     gtk_window_set_title(window, "hpx_app");
   }
 
-  gtk_window_set_default_size(window, 1280, 720);
+  auto bdw = bitsdojo_window_from(window);           //added for custom titlebar implementation
+  bdw->setCustomFrame(true);                          //added for custom titlebar implementation
+  //gtk_window_set_default_size(window, 1280, 720); 
   gtk_widget_show(GTK_WIDGET(window));
 
   g_autoptr(FlDartProject) project = fl_dart_project_new();
