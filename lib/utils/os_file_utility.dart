@@ -100,6 +100,8 @@ class OSFileUtility {
     }
   }
 
+  static final appInfo = <String, String>{};
+
   static void processFile(FilePickerResult? result) {
     if (isWindows) _processWindowsFile(result);
     if (isLinux) _processLinuxFile(result);
@@ -131,13 +133,12 @@ class OSFileUtility {
           List<Widget> widgets = [];
           f.readAsLines().then((value) {
             String section = '';
-            final sectionEntries = <String, String>{};
 
             for (var text in value) {
               if (section.contains('[Desktop Entry]')) {
                 final entry = text.split('=');
                 if (entry.length == 2) {
-                  sectionEntries.putIfAbsent(entry.first, () => entry.last);
+                  appInfo.putIfAbsent(entry.first, () => entry.last);
                 }
               }
 
@@ -151,7 +152,7 @@ class OSFileUtility {
             }
 
             widgets.addAll(
-                sectionEntries.entries.map((e) => Text('${e.key}:${e.value}')));
+                appInfo.entries.map((e) => Text('${e.key}:${e.value}')));
             workspaceProvider.toggleModal(widgets);
           });
         }
