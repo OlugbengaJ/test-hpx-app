@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hpx/apps/z_light/tools_effects/widgets/profile/profile_list_dialog.dart';
-import 'package:hpx/apps/z_light/tools_effects/widgets/profile/view_all_profile.dart';
+import 'package:hpx/apps/z_light/profile/profile_list_dialog.dart';
+import 'package:hpx/apps/z_light/profile/view_all_profile.dart';
 import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';

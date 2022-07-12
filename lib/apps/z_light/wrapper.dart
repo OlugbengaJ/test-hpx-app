@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/layers/layers.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_list_item.dart';
+import 'package:hpx/apps/z_light/profile/profile_dropdown.dart';
 import 'package:hpx/apps/z_light/tools_effects/tools_effects_wrapper.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
 import 'package:hpx/providers/workspace_provider.dart';
@@ -13,7 +14,6 @@ import 'package:hpx/widgets/layouts/three_columns.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
-import 'tools_effects/widgets/profile/profile_dropdown.dart';
 
 class Wrapper extends StatefulWidget {
   const Wrapper({Key? key}) : super(key: key);
