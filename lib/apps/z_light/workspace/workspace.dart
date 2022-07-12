@@ -264,6 +264,15 @@ class _WorkspaceState extends State<Workspace>
                             child: Keyboard(zoomScale: _zoomScale),
                           ),
 
+                          OverlaySelector(
+                            showCrossHair:
+                                workspaceProvider.isDragModeResizable,
+                            onPanDown: workspaceProvider.onPanDown,
+                            onPanUpdate: workspaceProvider.onPanUpdate,
+                            onPanEnd: workspaceProvider.onPanEnd,
+                            isVisible: workspaceProvider.selectorVisible,
+                          ),
+
                           if (workspaceProvider.isModalNotify)
                             ModalNotification(
                               closeHandler: workspaceProvider.toggleModal,
@@ -392,13 +401,8 @@ class _WorkspaceState extends State<Workspace>
                         ),
                       ),
                     ),
-                    OverlaySelector(
-                      showCrossHair: workspaceProvider.isDragModeResizable,
-                      onPanDown: workspaceProvider.onPanDown,
-                      onPanUpdate: workspaceProvider.onPanUpdate,
-                      onPanEnd: workspaceProvider.onPanEnd,
-                      isVisible: workspaceProvider.selectorVisible,
-                    ),
+
+                    // TODO: previous overlay location
                   ],
                 );
               },

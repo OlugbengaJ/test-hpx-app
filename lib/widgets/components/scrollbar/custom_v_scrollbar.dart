@@ -72,7 +72,7 @@ class CustomVScrollbar extends StatelessWidget {
                     top: thumbOffset,
                     child: DraggableRegion(
                       name: DraggableRegionName.center,
-                      cursor: SystemMouseCursors.grabbing,
+                      cursor: SystemMouseCursors.grab,
                       color: primaryColor,
                       width: buttonSize,
                       height: thumbSize,
