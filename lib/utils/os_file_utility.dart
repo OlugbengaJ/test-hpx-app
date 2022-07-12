@@ -2,7 +2,10 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:hpx/apps/z_light/globals.dart';
+import 'package:hpx/providers/workspace_provider.dart';
 import 'package:process_run/cmd_run.dart';
+import 'package:provider/provider.dart';
 
 class OSFileUtility {
   static bool get isWindows => Platform.isWindows;
@@ -120,8 +123,19 @@ class OSFileUtility {
 
         final f = File(file.path!);
         if (f.existsSync()) {
+          final workspaceProvider =
+              Provider.of<WorkspaceProvider>(navigatorKeys.currentContext!);
+
           debugPrint('\tReading file contents...');
-          f.readAsLines().then((value) => value.forEach(debugPrint));
+          List<Widget> widgets = [];
+          f.readAsLines().then((value) {
+            for (var text in value) {
+              debugPrint;
+              widgets.add(Text(text));
+            }
+          });
+
+          workspaceProvider.toggleModal(widgets);
         }
       }
     }
