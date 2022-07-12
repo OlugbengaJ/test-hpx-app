@@ -131,21 +131,27 @@ class OSFileUtility {
           List<Widget> widgets = [];
           f.readAsLines().then((value) {
             String section = '';
-            List<String> sectionEntry = [];
+            final sectionEntries = <String, String>{};
+
             for (var text in value) {
               if (section.contains('[Desktop Entry]')) {
-                sectionEntry.add(text);
+                final entry = text.split('=');
+                if (entry.length == 2) {
+                  sectionEntries.putIfAbsent(entry.first, () => entry.last);
+                }
               }
 
               if (text.startsWith('[')) {
-                // section has been set, quit
+                // quit on any other section
                 if (section.isNotEmpty) break;
 
+                // adds first section.
                 section = text;
               }
             }
 
-            widgets.addAll(sectionEntry.map((e) => Text(e)));
+            widgets.addAll(
+                sectionEntries.entries.map((e) => Text('${e.key}:${e.value}')));
             workspaceProvider.toggleModal(widgets);
           });
         }
