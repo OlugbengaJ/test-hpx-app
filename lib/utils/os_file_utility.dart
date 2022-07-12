@@ -113,14 +113,16 @@ class OSFileUtility {
     if (result != null) {
       for (var file in result.files) {
         debugPrint('\r\nfile path \t=> ${file.path}');
-        debugPrint('file id \t=> ${file.identifier}');
         debugPrint('file name \t=> ${file.name}');
         debugPrint('file ext \t=> ${file.extension}');
 
         Process.run('ls', ['-l', '${file.path}']).then((value) {
-          debugPrint('stdout ${value.stdout}');
-          debugPrint('stderr ${value.stderr}');
-          debugPrint('exit code: ${value.exitCode}');
+          if (value.exitCode == 0) {
+            debugPrint('stdout ${value.stdout}');
+          } else {
+            debugPrint('stderr ${value.stderr}');
+            debugPrint('exit code: ${value.exitCode}');
+          }
         });
 
         final f = File(file.path!);
@@ -186,7 +188,9 @@ class OSFileUtility {
     final f = File(path);
     if (f.existsSync()) {
       final stat = f.statSync();
-      debugPrint('icon type: ${stat.type}');
+      debugPrint('icon type: ${stat.type} ++ $path');
+    } else {
+      debugPrint('icon not found: $path');
     }
   }
 
