@@ -131,7 +131,6 @@ class OSFileUtility {
           List<Widget> widgets = [];
           f.readAsLines().then((value) {
             for (var text in value) {
-              debugPrint(text);
               widgets.add(Text(text));
             }
 
