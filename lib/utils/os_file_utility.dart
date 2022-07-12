@@ -127,9 +127,8 @@ class OSFileUtility {
 
         final f = File(file.path!);
         if (f.existsSync()) {
-          final workspaceProvider = Provider.of<WorkspaceProvider>(
-              navigatorKeys.currentContext!,
-              listen: false);
+          final workspaceProvider =
+              Provider.of<WorkspaceProvider>(navigatorKeys.currentContext!);
 
           debugPrint('\tReading file contents...');
           List<Widget> widgets = [];

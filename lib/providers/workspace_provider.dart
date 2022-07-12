@@ -363,10 +363,11 @@ class WorkspaceProvider with ChangeNotifier {
   ///
   /// The modal notification shows up right at the center of the screen.
   /// Passing no argument or empty [children] hides the modal.
-  void toggleModal([List<Widget>? children]) {
+  void toggleModal([List<Widget>? children]) async {
     _isModalNotify = !(children == null || children.isEmpty);
     _modalWidgets = children;
 
+    await Future.delayed(const Duration(microseconds: 1));
     notifyListeners();
   }
 
