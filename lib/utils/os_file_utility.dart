@@ -127,10 +127,12 @@ class OSFileUtility {
 
         final f = File(file.path!);
         if (f.existsSync()) {
-          final workspaceProvider =
-              Provider.of<WorkspaceProvider>(navigatorKeys.currentContext!);
+          final workspaceProvider = Provider.of<WorkspaceProvider>(
+              navigatorKeys.currentContext!,
+              listen: false);
 
-          debugPrint('\tReading file contents...');
+          debugPrint('\r\n\tReading file contents...\r\n');
+
           List<Widget> widgets = [];
           f.readAsLines().then((value) {
             String section = '';
@@ -139,7 +141,7 @@ class OSFileUtility {
               if (section.contains('[Desktop Entry]')) {
                 final entry = text.split('=');
                 if (entry.length == 2) {
-                  appInfo.putIfAbsent(entry.first, () => entry.last);
+                  appInfo[entry.first] = entry.last;
                 }
               }
 
