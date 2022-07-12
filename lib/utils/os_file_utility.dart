@@ -32,6 +32,7 @@ class OSFileUtility {
       }
 
       return AppDirInfo(
+        type: FileType.custom,
         extensions: ['exe'],
         initialDirectory: path,
       );
@@ -39,7 +40,7 @@ class OSFileUtility {
 
     // Linux app dir info
     if (isLinux) {
-      final dir = Directory('/usr/share/');
+      final dir = Directory('/usr/share/applications/');
 
       if (dir.existsSync()) {
         path = dir.path;
@@ -48,6 +49,7 @@ class OSFileUtility {
       }
 
       return AppDirInfo(
+        type: FileType.any,
         initialDirectory: path,
       );
     }
@@ -82,16 +84,18 @@ class OSFileUtility {
     return [];
   }
 
-  static void filePicker() async {
-    FilePicker.platform
-        .pickFiles(
-          dialogTitle: 'Select Application',
-          type: FileType.custom,
-          initialDirectory: appsDir?.initialDirectory,
-          allowedExtensions: appsDir?.extensions,
-        )
-        .then((result) => processFile(result))
-        .catchError((e) {});
+  static void openFilePicker() async {
+    if (appsDir != null) {
+      FilePicker.platform
+          .pickFiles(
+            dialogTitle: 'Select Application',
+            type: appsDir!.type,
+            initialDirectory: appsDir?.initialDirectory,
+            allowedExtensions: appsDir?.extensions,
+          )
+          .then((result) => processFile(result))
+          .catchError((e) {});
+    }
   }
 
   static void processFile(FilePickerResult? result) {
@@ -105,7 +109,7 @@ class OSFileUtility {
     if (result != null) {
       for (var file in result.files) {
         debugPrint(file.path);
-        Process.run('ls', ['-l ${file.path}']).then((value) {
+        Process.run('ls', ['l ${file.path}']).then((value) {
           debugPrint('stdout ${value.stdout}');
           debugPrint('stderr ${value.stderr}');
           debugPrint('exit code: ${value.exitCode}');
@@ -138,8 +142,13 @@ class OSFileUtility {
 }
 
 class AppDirInfo {
-  const AppDirInfo({this.extensions, this.initialDirectory});
+  const AppDirInfo({
+    this.extensions,
+    this.initialDirectory,
+    required this.type,
+  });
 
   final List<String>? extensions;
   final String? initialDirectory;
+  final FileType type;
 }

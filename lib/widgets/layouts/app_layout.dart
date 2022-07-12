@@ -62,7 +62,7 @@ class _AppLayoutState extends State<AppLayout> {
                 OSFileUtility.appsDir;
                 OSFileUtility.path;
                 OSFileUtility.osApps();
-                OSFileUtility.filePicker();
+                OSFileUtility.openFilePicker();
               },
               child: const Text('Click me'),
             ),

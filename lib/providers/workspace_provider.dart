@@ -430,9 +430,6 @@ class WorkspaceProvider with ChangeNotifier {
         case DraggableRegionName.center:
 
           // selector move hence update left and top limited to view.
-          debugPrint(
-              'dx $left ${ltwh.resizableLTWH!.left} ${details.delta.dx}');
-          debugPrint('dy $top ${ltwh.resizableLTWH!.top} ${details.delta.dy}');
           final leftPlusWidth = left + ltwh.resizableLTWH!.width!;
           final workspaceWidth = _workspaceRect.width - scrollOffset!;
           if (left > 0 && leftPlusWidth < workspaceWidth ||
