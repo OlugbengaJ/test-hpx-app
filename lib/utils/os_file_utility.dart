@@ -151,8 +151,15 @@ class OSFileUtility {
               }
             }
 
-            widgets.addAll(
-                appInfo.entries.map((e) => Text('${e.key}:${e.value}')));
+            widgets.addAll(appInfo.entries.map((e) {
+              if (e.key.toLowerCase() == 'icon') {
+                return Image.file(
+                  File(e.value),
+                  width: 100.0,
+                );
+              }
+              return Text('${e.key}: ${e.value}');
+            }));
             workspaceProvider.toggleModal(widgets);
           });
         }
