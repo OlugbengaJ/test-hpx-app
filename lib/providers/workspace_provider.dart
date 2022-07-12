@@ -761,28 +761,26 @@ class WorkspaceProvider with ChangeNotifier {
 
         layerLTWH = SelectionOffset()
           ..id = '${layer.id}'
+          ..mode = (layer.mode?.value as EnumModes).name
           ..dragMode = WorkspaceDragMode.resizable
           ..highlightLTWH = LTWH(0.0, 0.0, 0.0, 0.0)
           ..resizableLTWH = LTWH(left - halfSize, top - halfSize, size, size);
-
-        // debugPrint('layer null ${_layersProvider?.layeritems.length}');
       } else {
         // layer exist but need to reinsert as it's index may have changed.
         _deleteLayerLTWH(layer.id);
-
-        // debugPrint('layer exist ${_layersProvider?.layeritems.length}');
       }
 
       // add the layerLTHW to the map.
       _addLayerLTWH(layerLTWH);
 
       if (_currentLayerId == layer.id) {
-        final curentLayerLTWH = _getLayerLTWH(_currentLayerId);
+        final currentLayerLTWH = _getLayerLTWH(_currentLayerId);
 
         // set highlight selector for shortcut colors
         switch (layer.mode?.value) {
           case EnumModes.contactsupport:
-            curentLayerLTWH?.dragMode = _keyDragMode = null;
+            currentLayerLTWH?.mode = EnumModes.contactsupport.name;
+            currentLayerLTWH?.dragMode = _keyDragMode = null;
 
             // disable zone selection icons
             _disableZoneHighlight = true;
@@ -790,12 +788,22 @@ class WorkspaceProvider with ChangeNotifier {
             _disableZoneClick = true;
             break;
           case EnumModes.shortcut:
+            if (currentLayerLTWH?.mode != EnumModes.shortcut.name) {
+              // clear key selection
+              currentLayerLTWH?.highlightLTWH = LTWH(0.0, 0.0, 0.0, 0.0);
+            }
+
             _selectorVisible = _isPanning;
-            _keyDragMode = WorkspaceDragMode.highlight;
-            curentLayerLTWH?.dragMode = _keyDragMode;
+
+            currentLayerLTWH?.mode = EnumModes.shortcut.name;
+            final sublayer = _layersProvider?.getCurrentSublayer();
+
+            _keyDragMode =
+                sublayer == null ? null : WorkspaceDragMode.highlight;
+            currentLayerLTWH?.dragMode = _keyDragMode;
 
             // disable zone selection icons
-            _disableZoneHighlight = false;
+            _disableZoneHighlight = sublayer == null ? true : false;
             _disableZoneResizable = true;
             _disableZoneClick = true;
             break;
@@ -805,11 +813,13 @@ class WorkspaceProvider with ChangeNotifier {
             _disableZoneHighlight = false;
             _disableZoneClick = false;
             _disableZoneResizable = false;
+
+            currentLayerLTWH?.mode = (layer.mode?.value as EnumModes).name;
         }
 
         // set workspace drag mode to the current layer's last drag mode
         if (_keyDragMode != null) {
-          _keyDragMode = curentLayerLTWH?.dragMode;
+          _keyDragMode = currentLayerLTWH?.dragMode;
         }
 
         if (isDragModeResizable) {

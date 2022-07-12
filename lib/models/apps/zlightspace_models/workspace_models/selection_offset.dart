@@ -4,6 +4,8 @@ class SelectionOffset {
   /// [id] identity of this selection offset.
   late String id;
 
+  late String mode;
+
   /// Indicates the last selection used i.e. highlight, resizable or non.
   late WorkspaceDragMode? dragMode;
 

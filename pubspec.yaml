@@ -51,6 +51,8 @@ dependencies:
   knob_widget: ^1.0.0
   just_the_tooltip: ^0.0.12
   toggle_switch: ^2.0.1
+  bitsdojo_window: ^0.1.2
+  flutter_svg_provider: ^1.0.3
 
 dev_dependencies:
   flutter_test:
@@ -93,6 +95,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
+    - family: Metropolis
+      fonts:
+        - asset: assets/fonts/Metropolis-Regular.otf
     - family: GoogleSans
       fonts:
         - asset: assets/fonts/GoogleSans-Regular.woff2
