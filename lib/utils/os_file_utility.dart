@@ -32,7 +32,6 @@ class OSFileUtility {
       }
 
       return AppDirInfo(
-        type: FileType.custom,
         extensions: ['exe'],
         initialDirectory: path,
       );
@@ -49,7 +48,7 @@ class OSFileUtility {
       }
 
       return AppDirInfo(
-        type: FileType.any,
+        extensions: ['desktop'],
         initialDirectory: path,
       );
     }
@@ -89,7 +88,7 @@ class OSFileUtility {
       FilePicker.platform
           .pickFiles(
             dialogTitle: 'Select Application',
-            type: appsDir!.type,
+            type: FileType.custom,
             initialDirectory: appsDir?.initialDirectory,
             allowedExtensions: appsDir?.extensions,
           )
@@ -153,13 +152,8 @@ class OSFileUtility {
 }
 
 class AppDirInfo {
-  const AppDirInfo({
-    this.extensions,
-    this.initialDirectory,
-    required this.type,
-  });
+  const AppDirInfo({this.extensions, this.initialDirectory});
 
   final List<String>? extensions;
   final String? initialDirectory;
-  final FileType type;
 }
