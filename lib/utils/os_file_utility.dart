@@ -153,9 +153,12 @@ class OSFileUtility {
 
             widgets.addAll(appInfo.entries.map((e) {
               if (e.key.toLowerCase() == 'icon') {
-                return Image.file(
-                  File(e.value),
-                  width: 100.0,
+                return Container(
+                  margin: EdgeInsets.zero,
+                  child: Image.memory(
+                    File(e.value).readAsBytesSync(),
+                    width: 100.0,
+                  ),
                 );
               }
               return Text('${e.key}: ${e.value}');
