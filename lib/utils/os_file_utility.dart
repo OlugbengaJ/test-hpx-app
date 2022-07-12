@@ -130,10 +130,22 @@ class OSFileUtility {
           debugPrint('\tReading file contents...');
           List<Widget> widgets = [];
           f.readAsLines().then((value) {
+            String section = '';
+            List<String> sectionEntry = [];
             for (var text in value) {
-              widgets.add(Text(text));
+              if (section.contains('[Desktop Entry]')) {
+                sectionEntry.add(text);
+              }
+
+              if (text.startsWith('[')) {
+                // section has been set, quit
+                if (section.isNotEmpty) break;
+
+                section = text;
+              }
             }
 
+            widgets.addAll(sectionEntry.map((e) => Text(e)));
             workspaceProvider.toggleModal(widgets);
           });
         }
