@@ -5,6 +5,7 @@ import 'package:hpx/apps/z_light/wrapper.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/providers/tutorial_provider/tutorial_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
+import 'package:hpx/utils/os_file_utility.dart';
 import 'package:hpx/widgets/components/dropdown.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
@@ -56,6 +57,15 @@ class _AppLayoutState extends State<AppLayout> {
             ],
           ),
           actions: [
+            TextButton(
+              onPressed: () {
+                OSFileUtility.appsDir;
+                OSFileUtility.path;
+                OSFileUtility.osApps();
+                OSFileUtility.filePicker();
+              },
+              child: const Text('Click me'),
+            ),
             Container(
               margin: const EdgeInsets.only(top: 23, right: 10),
               child: Text(
