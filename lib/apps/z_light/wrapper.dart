@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/layers/layers.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_list_item.dart';
-import 'package:hpx/apps/z_light/profile/profile_dropdown.dart';
 import 'package:hpx/apps/z_light/tools_effects/tools_effects_wrapper.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';

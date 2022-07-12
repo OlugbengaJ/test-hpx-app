@@ -1,6 +1,7 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
+import 'package:hpx/apps/z_light/profile/profile_dropdown.dart';
 import 'package:hpx/apps/z_light/wrapper.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/providers/tutorial_provider/tutorial_provider.dart';
@@ -67,11 +68,13 @@ class _AppLayoutState extends State<AppLayout> {
                   Container(
                     margin: const EdgeInsets.only(bottom: 10.0),
                     // width: 220,
-                    child: PickerDropdown(
-                      onChange: (PickerModel? returnValue) {},
-                      pickerList: _modeProvider.getPickerModes('profile'),
-                      defaultPicker: profileList.first,
-                    ),
+                    child: ProfileDropdown(),
+                    
+                    // PickerDropdown(
+                    //   onChange: (PickerModel? returnValue) {},
+                    //   pickerList: _modeProvider.getPickerModes('profile'),
+                    //   defaultPicker: profileList.first,
+                    // ),
                   ),
                   'Selected Profile',
                   'You can presave a lot of customizations as profiles for later use',
