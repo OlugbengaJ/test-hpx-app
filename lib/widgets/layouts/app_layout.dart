@@ -41,52 +41,72 @@ class _AppLayoutState extends State<AppLayout> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              tutorialProvider.generateTooltipTutorial(
-                  Container(
-                    margin: const EdgeInsets.only(top: 25),
+              CustomToolTip(
+                  height: 130,
+                  tooltipController: tutorialProvider.tooltipController,
+                  title: 'Take a quick tour of your Z Light space application',
+                  description:
+                      'See how to customize your physical keyboard using the Z Light space app based on your mood, preferences and more',
+                  btn1Txt: "Close",
+                  btn2Txt: "Next",
+                  btn1Pressed: () {
+                    tutorialProvider.hideTutorialTooltip(tipToHide: 'App');
+                  },
+                  btn2Pressed: () {
+                    tutorialProvider.hideTutorialTooltip(tipToHide: 'App');
+                    tutorialProvider.showTutorialTooltip(
+                        tipToShow: 'WorkSpace');
+                  },
+                  widget: Container(
+                    margin: const EdgeInsets.only(top: 5),
                     width: 123,
-                    height: 100,
+                    height: 50,
                     decoration: const BoxDecoration(
                       image: DecorationImage(
                           image: Svg(
                             'assets/images/zlight_logo.svg',
                           ),
-                          fit: BoxFit.fill),
+                          fit: BoxFit.cover),
                     ),
-                  ),
-                  'Take a quick tour of your Z Light space application',
-                  'See how to customize your physical keyboard using the Z Light space app based on your mood, preferences and more',
-                  'Close',
-                  'Next',
-                  130.0)
+                  )),
             ],
           ),
           actions: [
-            Container(
-              margin: const EdgeInsets.only(top: 23, right: 10),
-              child: Text(
-                "Selected Profile",
-                textAlign: TextAlign.left,
-                style: h5Style,
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.only(top: 1.0, right: 50),
-              child: tutorialProvider.generateTooltipTutorial(
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 10.0),
-                    // width: 220,
-                    child: PickerDropdown(
-                      onChange: (PickerModel? returnValue) {},
-                      pickerList: _modeProvider.getPickerModes('profile'),
-                      defaultPicker: profileList.first,
+              child: Wrap(children: [
+                CustomToolTip(
+                  height: 100,
+                  tooltipController: tutorialProvider.tooltipControllerProfile,
+                  title: "Selected Profile",
+                  description:
+                      'You can presave a lot of customizations as profiles for later use',
+                  btn1Txt: "Close",
+                  btn2Txt: "Next",
+                  btn1Pressed: () {
+                    tutorialProvider.showTutorialTooltip(tipToShow: 'Light');
+                    tutorialProvider.hideTutorialTooltip(tipToHide: 'Profile');
+                  },
+                  btn2Pressed: () {
+                    tutorialProvider.hideTutorialTooltip(tipToHide: 'Profile');
+                    tutorialProvider.showTutorialTooltip(
+                        tipToShow: 'Tools_Effects');
+                  },
+                  widget: Container(
+                    margin: const EdgeInsets.only(top: 23, right: 30),
+                    child: Text(
+                      "Selected Profile",
+                      textAlign: TextAlign.left,
+                      style: h5Style,
                     ),
                   ),
-                  'Selected Profile',
-                  'You can presave a lot of customizations as profiles for later use',
-                  'No Thanks',
-                  'Let`s Go',
-                  100),
+                ),
+                PickerDropdown(
+                  onChange: (PickerModel? returnValue) {},
+                  pickerList: _modeProvider.getPickerModes('profile'),
+                  defaultPicker: profileList.first,
+                ),
+              ]),
             ),
             (TargetPlatform.macOS == true ||
                     TargetPlatform.linux == true ||
@@ -110,18 +130,29 @@ class _AppLayoutState extends State<AppLayout> {
                 alignment: AlignmentDirectional.bottomCenter,
                 padding: const EdgeInsets.only(bottom: 50.0),
                 color: const Color.fromRGBO(18, 18, 18, 1),
-                child: tutorialProvider.generateTooltipTutorial(
-                    const IconButton(
-                      iconSize: 40,
-                      color: Colors.white,
-                      icon: Icon(Ionicons.help_circle_outline),
-                      onPressed: null,
-                    ),
-                    'Help Option',
-                    'Use the help otion to settle all your concerns about the Z Light space app. You can also speak to a live agent to onblock you',
-                    'Close',
-                    'Finish',
-                    115),
+                child: CustomToolTip(
+                  height: 120,
+                  tooltipController: tutorialProvider.tooltipControllerHelp,
+                  title: "Help Option",
+                  description:
+                      'Use the help otion to settle all your concerns about the Z Light space app. You can also speak to a live agent to onblock you',
+                  btn1Txt: "Close",
+                  btn2Txt: "Finish",
+                  btn1Pressed: () {
+                    tutorialProvider.hideTutorialTooltip(tipToHide: 'Help');
+                    tutorialProvider.showTutorialTooltip(
+                        tipToShow: 'Tools_Effects');
+                  },
+                  btn2Pressed: () {
+                    tutorialProvider.hideTutorialTooltip(tipToHide: 'Help');
+                  },
+                  widget: const IconButton(
+                    iconSize: 40,
+                    color: Colors.white,
+                    icon: Icon(Ionicons.help_circle_outline),
+                    onPressed: null,
+                  ),
+                ),
               ),
             ),
             Expanded(
@@ -129,14 +160,34 @@ class _AppLayoutState extends State<AppLayout> {
               children: [
                 AppBar(
                   toolbarHeight: 70.0,
-                  backgroundColor: Color(0xff1E1E1E),
+                  backgroundColor: const Color(0xff1E1E1E),
                   bottomOpacity: 0.0,
                   elevation: 0.0,
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      tutorialProvider.generateTooltipTutorial(
-                          TextButton(
+                      CustomToolTip(
+                          height: 100,
+                          tooltipController:
+                              tutorialProvider.tooltipControllerWorkSpace,
+                          title: "WorkSpace",
+                          description:
+                              'The workspace we allow you move your device around for later customization',
+                          btn1Txt: "Close",
+                          btn2Txt: "Next",
+                          btn1Pressed: () {
+                            tutorialProvider.hideTutorialTooltip(
+                                tipToHide: 'WorkSpace');
+                            tutorialProvider.showTutorialTooltip(
+                                tipToShow: 'App');
+                          },
+                          btn2Pressed: () {
+                            tutorialProvider.hideTutorialTooltip(
+                                tipToHide: 'WorkSpace');
+                            tutorialProvider.showTutorialTooltip(
+                                tipToShow: 'Light');
+                          },
+                          widget: TextButton(
                             style: TextButton.styleFrom(
                                 fixedSize: const Size(150, 50),
                                 primary: workspaceProvider.isWorkspaceView
@@ -173,56 +224,67 @@ class _AppLayoutState extends State<AppLayout> {
                               workspaceProvider
                                   .toggleView(WorkspaceView.workspace);
                             },
-                          ),
-                          'Workspace',
-                          'The workspace we allow you move your device around for later customization',
-                          'Close',
-                          'Next',
-                          100.0),
-                      tutorialProvider.generateTooltipTutorial(
-                          TextButton(
-                            style: TextButton.styleFrom(
-                                fixedSize: const Size(150, 50),
-                                primary: workspaceProvider.isLightingView
-                                    ? Colors.white
-                                    : Colors.grey,
-                                backgroundColor: Colors.transparent,
-                                textStyle: h5Style),
-                            child: Stack(
-                                alignment: Alignment.topCenter,
-                                fit: StackFit.passthrough,
-                                children: [
-                                  const Positioned(
-                                      top: 10, child: Text('Lighting Options')),
-                                  Container(
-                                      height: 2,
-                                      margin: const EdgeInsets.only(top: 40.0),
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                            colors: workspaceProvider
-                                                        .isLightingView ==
-                                                    false
-                                                ? [
-                                                    Colors.transparent,
-                                                    Colors.transparent
-                                                  ]
-                                                : [
-                                                    Colors.lightBlue,
-                                                    Colors.blue.shade900,
-                                                    Colors.purple
-                                                  ]),
-                                      ))
-                                ]),
-                            onPressed: () {
-                              workspaceProvider
-                                  .toggleView(WorkspaceView.lighting);
-                            },
-                          ),
-                          'Lighthing options',
-                          'Our lighting option allows you full customization of your keyboard with a dazzling stack of ama- zing effects to help your productivity',
-                          'Close',
-                          'Next',
-                          130.0),
+                          )),
+                      CustomToolTip(
+                        height: 115,
+                        tooltipController:
+                            tutorialProvider.tooltipControllerLight,
+                        title: "Lighting Options",
+                        description:
+                            'Our lighting option allows you full customization of your keyboard with a dazzling stack of ama- zing effects to help your productivity',
+                        btn1Txt: "Close",
+                        btn2Txt: "Next",
+                        btn1Pressed: () {
+                          tutorialProvider.showTutorialTooltip(
+                              tipToShow: 'WorkSpace');
+                          tutorialProvider.hideTutorialTooltip(
+                              tipToHide: 'Light');
+                        },
+                        btn2Pressed: () {
+                          tutorialProvider.hideTutorialTooltip(
+                              tipToHide: 'Light');
+                          tutorialProvider.showTutorialTooltip(
+                              tipToShow: 'Profile');
+                        },
+                        widget: TextButton(
+                          style: TextButton.styleFrom(
+                              fixedSize: const Size(150, 50),
+                              primary: workspaceProvider.isLightingView
+                                  ? Colors.white
+                                  : Colors.grey,
+                              backgroundColor: Colors.transparent,
+                              textStyle: h5Style),
+                          child: Stack(
+                              alignment: Alignment.topCenter,
+                              fit: StackFit.passthrough,
+                              children: [
+                                const Positioned(
+                                    top: 10, child: Text('Lighting Options')),
+                                Container(
+                                    height: 2,
+                                    margin: const EdgeInsets.only(top: 40.0),
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                          colors: workspaceProvider
+                                                      .isLightingView ==
+                                                  false
+                                              ? [
+                                                  Colors.transparent,
+                                                  Colors.transparent
+                                                ]
+                                              : [
+                                                  Colors.lightBlue,
+                                                  Colors.blue.shade900,
+                                                  Colors.purple
+                                                ]),
+                                    ))
+                              ]),
+                          onPressed: () {
+                            workspaceProvider
+                                .toggleView(WorkspaceView.lighting);
+                          },
+                        ),
+                      ),
                     ],
                   ),
                 ),

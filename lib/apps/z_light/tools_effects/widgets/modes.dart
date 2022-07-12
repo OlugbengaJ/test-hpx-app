@@ -17,7 +17,7 @@ class ToolModes extends StatefulWidget {
 class _ToolModesState extends State<ToolModes> {
   @override
   void initState() {
-    setDefaultMode();
+    // setDefaultMode();
     super.initState();
   }
 
@@ -106,31 +106,44 @@ class _ToolModesState extends State<ToolModes> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text("Tools & Effects", textAlign: TextAlign.left, style: h5Style),
-            tutorialProvider.generateTooltipTutorial(
-                SizedBox(
-                    // width: MediaQuery.of(context).size.width * 0.45,
-                    child: PickerDropdown(
-                  onChange: (PickerModel? returnValue) {
-                    if (modeProvider.currentMode.value == EnumModes.shortcut &&
-                        returnValue?.value != EnumModes.shortcut) {
-                      shortcutAlertDialogOnChangeMode(returnValue!);
-                    } else {
-                      setState(() {
-                        modeProvider.changeModeComponent(
-                            returnValue, context, false,
-                            changeComp: true);
-                      });
-                    }
-                  },
-                  pickerHintText: "Picker a tool or effect mode and manage ",
-                  pickerList: modeProvider.getPickerModes('mood'),
-                  defaultPicker: modeProvider.modePicker,
-                )),
-                'Tools & Effects',
-                'Take the tool and effects for a spin and customize your work space to meet all preference',
-                'Close',
-                'Next',
-                100),
+            CustomToolTip(
+              height: 100,
+              tooltipController: tutorialProvider.tooltipControllerToolsEffects,
+              title: 'Tools & Effects',
+              description:
+                  'Take the tool and effects for a spin and customize your work space to meet all preference',
+              btn1Txt: "Close",
+              btn2Txt: "Next",
+              btn1Pressed: () {
+                tutorialProvider.showTutorialTooltip(tipToShow: 'Profile');
+                tutorialProvider.hideTutorialTooltip(
+                    tipToHide: 'Tools_Effects');
+              },
+              btn2Pressed: () {
+                tutorialProvider.hideTutorialTooltip(
+                    tipToHide: 'Tools_Effects');
+                tutorialProvider.showTutorialTooltip(tipToShow: 'Help');
+              },
+              widget: SizedBox(
+                  // width: MediaQuery.of(context).size.width * 0.45,
+                  child: PickerDropdown(
+                onChange: (PickerModel? returnValue) {
+                  if (modeProvider.currentMode.value == EnumModes.shortcut &&
+                      returnValue?.value != EnumModes.shortcut) {
+                    shortcutAlertDialogOnChangeMode(returnValue!);
+                  } else {
+                    setState(() {
+                      modeProvider.changeModeComponent(
+                          returnValue, context, false,
+                          changeComp: true);
+                    });
+                  }
+                },
+                pickerHintText: "Picker a tool or effect mode and manage ",
+                pickerList: modeProvider.getPickerModes('mood'),
+                defaultPicker: modeProvider.modePicker,
+              )),
+            ),
             Container(
               margin: const EdgeInsets.only(top: 0.0, bottom: 20.0),
               child: modeProvider.preset,
