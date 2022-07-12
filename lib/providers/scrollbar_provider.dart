@@ -28,17 +28,27 @@ class ScrollbarProvider with ChangeNotifier {
   /// [scaleFactorV] scales the vertical thumb to update [thumbSizeV].
   double? scaleFactorV;
 
+  /// [_scrollWidthIsError] is used to take care of constraints issue on linux.
+  ///
+  /// MaxWidth of LayoutContraint does not return the actual contraint values
+  /// of the workspace in the first call of [initVerticalScroll].
+  bool _scrollWidthIsError = true;
+
   /// [initHorizontalScroll] sets the horizontal thumb and offset on changes.
   void initHorizontalScroll(BoxConstraints constraints, double? offset,
       double scale, double minScale, double maxScale,
       {bool? reset}) {
-    final width = constraints.maxWidth - (3 * offset!);
+    final offsetMultiplier = 3 * offset!;
+    final width = constraints.maxWidth - offsetMultiplier;
+    final height = constraints.maxHeight - offsetMultiplier;
 
-    if (scaleFactorH == null || reset == true) {
+    if (_scrollWidthIsError || scaleFactorH == null || reset == true) {
       scaleFactorH = maxScale - minScale;
       initThumbSizeH = width * 0.4;
       _left = (width - initThumbSizeH!) / 2;
     }
+
+    if (height >= 0) _scrollWidthIsError = false;
 
     // determine the ratio change in scale
     // double scaleRatio = _scaleChange(scale, scaleFactorH);
@@ -94,17 +104,26 @@ class ScrollbarProvider with ChangeNotifier {
     //     'Hscroll scale $scale, percent $scaleRatio, thumb $thumbSizeH, left $left, width $width');
   }
 
+  /// [_scrollHeightIsError] is used to take care of constraints issue on linux.
+  ///
+  /// MaxHeight of LayoutContraint does not return the actual contraint values
+  /// of the workspace in the first call of [initVerticalScroll].
+  bool _scrollHeightIsError = true;
+
   /// [initVerticalScroll] sets the vertical thumb and offset on changes.
   void initVerticalScroll(BoxConstraints constraints, double? offset,
       double scale, double minScale, double maxScale,
       {bool? reset}) {
-    final height = constraints.maxHeight - (3 * offset!);
+    final offsetMultiplier = 3 * offset!;
+    final height = constraints.maxHeight - offsetMultiplier;
 
-    if (scaleFactorV == null || reset == true) {
+    if (_scrollHeightIsError || scaleFactorV == null || reset == true) {
       scaleFactorV = maxScale - minScale;
-      initThumbSizeV = height * 0.6;
-      _top = (height - initThumbSizeV!) / 2;
+      initThumbSizeV = height.abs() * 0.6;
+      _top = (height.abs() - initThumbSizeV!) / 2;
     }
+
+    if (height >= 0) _scrollHeightIsError = false;
 
     // determine the ratio change in scale
     // double scaleRatio = _scaleChange(scale, scaleFactorH);
