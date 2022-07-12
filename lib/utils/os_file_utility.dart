@@ -191,7 +191,13 @@ class OSFileUtility {
   static String _processLinuxIcon(String path) {
     final f = File(path);
     if (!f.existsSync()) {
-      // icon not found; find it from other dir.
+      // icon not found; find it from other dir based on dimentions mxn.
+      final List<String> iconDirs = [
+        '/usr/share/icons/hicolor/48x48/apps',
+        '/usr/share/icons/Humanity/48x48/apps',
+        '/usr/share/icons/gnome/48x48/apps',
+        '/usr/share/icons/Yaru/48x48/apps',
+      ];
       path = '';
     }
 
