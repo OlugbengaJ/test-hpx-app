@@ -136,6 +136,7 @@ class OSFileUtility {
           List<Widget> widgets = [];
           f.readAsLines().then((value) {
             String section = '';
+            appInfo.clear();
 
             for (var text in value) {
               if (section.contains('[Desktop Entry]')) {
@@ -157,18 +158,20 @@ class OSFileUtility {
             widgets.addAll(appInfo.entries.map((e) {
               if (e.key.toLowerCase() == 'icon') {
                 // get icon file
-                _processLinuxIcon(e.value);
+                final iconFound = _processLinuxIcon(e.value);
+
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    // Container(
-                    //   margin: EdgeInsets.zero,
-                    //   child: Image.memory(
-                    //     File(e.value).readAsBytesSync(),
-                    //     width: 50.0,
-                    //     height: 50.0,
-                    //   ),
-                    // ),
+                    if (iconFound.isNotEmpty)
+                      Container(
+                        margin: EdgeInsets.zero,
+                        child: Image.memory(
+                          File(e.value).readAsBytesSync(),
+                          width: 50.0,
+                          height: 50.0,
+                        ),
+                      ),
                     Text('${e.key}: ${e.value}'),
                   ],
                 );
@@ -185,14 +188,17 @@ class OSFileUtility {
     }
   }
 
-  static void _processLinuxIcon(String path) {
+  static String _processLinuxIcon(String path) {
     final f = File(path);
-    if (f.existsSync()) {
-      final stat = f.statSync();
-      debugPrint('icon type: ${stat.type} ++ $path');
-    } else {
-      debugPrint('icon not found: $path');
+    if (!f.existsSync()) {
+      // icon not found; find it from other dir.
+      path = '';
     }
+
+    // icon found
+    // final stat = f.statSync();
+
+    return path;
   }
 
   /// [_processWindowsFile] process Windows specific file
