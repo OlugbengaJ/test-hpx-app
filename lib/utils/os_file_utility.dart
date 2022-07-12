@@ -103,21 +103,32 @@ class OSFileUtility {
     if (isLinux) _processLinuxFile(result);
   }
 
-  /// [_processLinuxFile] process linux specific file
-  static void _processLinuxFile(FilePickerResult? result) {
+  /// [_processLinuxFile] process Linux specific file
+  static void _processLinuxFile(FilePickerResult? result) async {
     // process result
     if (result != null) {
       for (var file in result.files) {
-        debugPrint(file.path);
+        debugPrint('\r\nfile path \t=> ${file.path}');
+        debugPrint('file id \t=> ${file.identifier}');
+        debugPrint('file name \t=> ${file.name}');
+        debugPrint('file ext \t=> ${file.extension}');
+
         Process.run('ls', ['l ${file.path}']).then((value) {
           debugPrint('stdout ${value.stdout}');
           debugPrint('stderr ${value.stderr}');
           debugPrint('exit code: ${value.exitCode}');
         });
+
+        final f = File(file.path!);
+        if (f.existsSync()) {
+          debugPrint('\tReading file contents...');
+          f.readAsLines().then((value) => value.forEach(debugPrint));
+        }
       }
     }
   }
 
+  /// [_processWindowsFile] process Windows specific file
   static void _processWindowsFile(FilePickerResult? result) {
     if (result != null) {
       debugPrint('\r\npicker id ${result.files.map((e) => e.identifier)}');
