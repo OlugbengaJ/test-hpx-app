@@ -66,9 +66,9 @@ class _AppLayoutState extends State<AppLayout> {
               padding: const EdgeInsets.only(top: 1.0, right: 50),
               child: tutorialProvider.generateTooltipTutorial(
                   Container(
-                    margin: const EdgeInsets.only(bottom: 10.0),
+                    //margin: const EdgeInsets.only(bottom: 10.0),
                     // width: 220,
-                    child: ProfileDropdown(),
+                    child: const ProfileDropdown(),
                     
                     // PickerDropdown(
                     //   onChange: (PickerModel? returnValue) {},

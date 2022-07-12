@@ -137,7 +137,7 @@ class ProfileDropdown extends StatelessWidget {
       controller: tooltipController,
       borderRadius: BorderRadius.circular(0),      
       child: Material(
-        color: Colors.grey.shade800,
+        color: const Color.fromRGBO(18, 18, 18, 1),
         elevation: 1.0,
         child:  Padding(
           padding: const EdgeInsets.all(8.0),
@@ -152,12 +152,12 @@ class ProfileDropdown extends StatelessWidget {
               child: Row(
                 children: [
                   Image.asset(
-                    "assets/images/zlight_icon.jpg",
-                    height: 20,
+                    "assets/images/z.png",
+                    height: 16,
                   ),
                   Container(
                     padding: const EdgeInsets.only(left: 8),
-                    child: Text("Default"),
+                    child: const Text("Default"),
                   ),
                 ],
               ),
