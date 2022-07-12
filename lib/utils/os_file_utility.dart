@@ -115,7 +115,7 @@ class OSFileUtility {
         debugPrint('file name \t=> ${file.name}');
         debugPrint('file ext \t=> ${file.extension}');
 
-        Process.run('ls', ['l ${file.path}']).then((value) {
+        Process.run('ls', ['-l', '${file.path}']).then((value) {
           debugPrint('stdout ${value.stdout}');
           debugPrint('stderr ${value.stderr}');
           debugPrint('exit code: ${value.exitCode}');
@@ -123,8 +123,9 @@ class OSFileUtility {
 
         final f = File(file.path!);
         if (f.existsSync()) {
-          final workspaceProvider =
-              Provider.of<WorkspaceProvider>(navigatorKeys.currentContext!);
+          final workspaceProvider = Provider.of<WorkspaceProvider>(
+              navigatorKeys.currentContext!,
+              listen: false);
 
           debugPrint('\tReading file contents...');
           List<Widget> widgets = [];
