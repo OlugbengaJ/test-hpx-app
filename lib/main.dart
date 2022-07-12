@@ -1,6 +1,6 @@
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/globals.dart';
-import 'package:hpx/apps/z_light/wrapper.dart';
 import 'package:hpx/providers/keys_provider.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/scrollbar_provider.dart';
@@ -11,11 +11,13 @@ import 'package:hpx/providers/tools_effect_provider/widget/audiovisualizer_provi
 import 'package:hpx/providers/tools_effect_provider/widget/contact_support_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/image_mode_provder.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/shortcut_widget_provider.dart';
+import 'package:hpx/providers/tutorial_provider/tutorial_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
+import 'package:hpx/widgets/layouts/app_layout.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(
+void main()  {runApp(
       MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => LayersProvider()),
@@ -25,6 +27,7 @@ void main() => runApp(
           ChangeNotifierProvider(create: (_) => ImageModeProvider()),
           ChangeNotifierProvider(create: (_) => ContactSupportWidgetProvider()),
           ChangeNotifierProvider(create: (_) => AudioVisualizerModeProvider()),
+          ChangeNotifierProvider(create: (_) => TooltipTutorialProvider()),
           ChangeNotifierProvider(create: (_) => EffectProvider()),
           ChangeNotifierProvider(create: (context) => KeysProvider()),
           ChangeNotifierProvider(create: (context) => WorkspaceProvider()),
@@ -33,6 +36,16 @@ void main() => runApp(
         child: const MyApp(),
       ),
     );
+    // Add this code below
+
+  doWhenWindowReady(() {
+    const initialSize = Size(1280, 720);
+    appWindow.minSize = initialSize;
+    appWindow.size = initialSize;
+    appWindow.alignment = Alignment.center;
+    appWindow.show();
+  });
+    }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -58,7 +71,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: "/",
       routes: {
-        "/": (context) => const Wrapper(),
+        "/": (context) => const AppLayout(),
       },
     );
   }
