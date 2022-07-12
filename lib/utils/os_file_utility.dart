@@ -131,12 +131,12 @@ class OSFileUtility {
           List<Widget> widgets = [];
           f.readAsLines().then((value) {
             for (var text in value) {
-              debugPrint;
+              debugPrint(text);
               widgets.add(Text(text));
             }
-          });
 
-          workspaceProvider.toggleModal(widgets);
+            workspaceProvider.toggleModal(widgets);
+          });
         }
       }
     }
