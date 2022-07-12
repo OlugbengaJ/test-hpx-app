@@ -1,7 +1,8 @@
 #include <flutter/dart_project.h>
 #include <flutter/flutter_view_controller.h>
 #include <windows.h>
-
+#include <bitsdojo_window_windows/bitsdojo_window_plugin.h>  //added for custom titlebar implementation
+auto bdw = bitsdojo_window_configure(BDW_CUSTOM_FRAME | BDW_HIDE_ON_STARTUP);  //added for custom titlebar implementation
 #include "flutter_window.h"
 #include "utils.h"
 

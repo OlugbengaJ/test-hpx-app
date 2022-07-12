@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
 
 //// class interface model for Tools mode
@@ -60,6 +61,65 @@ class ToolsModeModel {
 
   /// effects holds the current effect been used by the effects provider and tools and effects mode
   late final EffectsModel effects;
+
+  //unique id for storing this object in database
+  int? id;
+
+  ToolsModeModel.fromJson(item)
+      : id = item['id'],
+        currentColor = transformToColors(item['currentColor']),
+        name = item['name'],
+        modeType = EnumModeType.values
+            .singleWhere((element) => element.toString() == item['modeType']),
+        subMode = EnumModeType.values
+          .firstWhereOrNull((element) => element.toString() == item['subMode']),
+        shortcutKeys = [(item['shortcutKeys'] as String).split(' ')],
+        display = EnumModeType.values
+            .firstWhereOrNull((element) => element.toString() == item['display']),
+        value = EnumModeType.values
+            .firstWhereOrNull((element) => element.toString() == item['value']),
+        effects = EffectsModel.fromJson(item),
+        icon = IconData(item['codePoint'],
+            fontFamily: item['fontFamily']);
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'currentColor': getCurrentColorAsMap(),
+      'name': name,
+      'modeType': modeType.toString(),
+      'subMode': subMode.toString(),
+      'shortcutKeys': getShortcutKeysAsMap(),
+      'display': display.toString(),
+      'value': value.toString(),
+      'effects': effects.toMap(),
+      'icon': {'codePoint': icon?.codePoint,
+        'fontFamily': icon?.fontFamily}
+    };
+  }
+
+  getCurrentColorAsMap() {
+    var colors = "";
+    for (var element in currentColor) {
+      colors += " ${(element as MaterialAccentColor).value}";
+    }
+    return colors;
+  }
+
+  getShortcutKeysAsMap() {
+    var keys = "";
+    shortcutKeys?.forEach((element) {
+      keys += '${element.first}';
+    });
+    return keys;
+  }
+
+  static transformToColors(String colors) {
+    List<String> colorsList = colors.split(", ");
+    //return colorsList.map((e) => Color(int.parse(e))).toList();
+    //TODO convert color string to actual color
+    return <dynamic>[];
+  }
 }
 
 //// enum value for mode  picker
