@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/layers/layers.dart';
@@ -13,6 +12,8 @@ import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/layouts/three_columns.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
+
+import 'tools_effects/widgets/profile/profile_dropdown.dart';
 
 class Wrapper extends StatefulWidget {
   const Wrapper({Key? key}) : super(key: key);
@@ -100,11 +101,12 @@ class _WrapperState extends State<Wrapper> {
               style: h5Style,
             ),
           ),
-          Padding(
+          const ProfileDropdown(),
+          /* Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
               margin: EdgeInsets.zero,
-              width: 180,
+              width: 300,
               child: DropDown(
                 hint: 'Select profile...',
                 hintStyle: pStyle,
@@ -117,12 +119,13 @@ class _WrapperState extends State<Wrapper> {
                           value: e,
                           child: GetProfileList(profile: e),
                         ),
-                      )
+                      ),
+                      
                 ],
                 onChangedHandler: (o) {},
               ),
             ),
-          ),
+          ), */
         ],
       ),
       body: SafeArea(

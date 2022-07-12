@@ -7,6 +7,8 @@ import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
+import 'package:just_the_tooltip/just_the_tooltip.dart';
+
 
 class LayerListItem extends StatefulWidget {
   const LayerListItem(
@@ -26,6 +28,7 @@ class _LayerListItemState extends State<LayerListItem> {
   bool _editing = false;
   final double _iconSize = 16;
   TextEditingController _layerNameController = TextEditingController(text: '');
+  final tooltipController = JustTheController();
   GlobalKey deleteKey = GlobalKey<State<Tooltip>>();
   GlobalKey<FormFieldState> editLayerKey = GlobalKey<
       FormFieldState>(); // Each layer should have a key for its editing field
@@ -126,7 +129,8 @@ class _LayerListItemState extends State<LayerListItem> {
   /// Use to delete a layer from the list
   _deleteLayer(LayersProvider provider) {
     if (provider.length >= 2) {
-      _deleteLayerDialog(provider);
+      tooltipController.hideTooltip();
+      //_deleteLayerDialog(provider);
     }
 
     //provider.removeItem(widget.layerIndex);
@@ -316,111 +320,58 @@ class _LayerListItemState extends State<LayerListItem> {
                                                           _toggleEditing(value),
                                                     ),
                                                   ),
-                                                  GestureDetector(
-                                                    child: Tooltip(
-                                                      message: 'Delete',
-                                                      child: InkWell(
-                                                        child: Icon(
-                                                          Ionicons.trash,
-                                                          size: _iconSize,
-                                                          color: widget
-                                                              .layerItemModel
-                                                              .listDisplayColor,
+                                                  JustTheTooltip(
+                                                    tailLength: 5,
+                                                    tailBaseWidth: 0,
+                                                    isModal: true,
+                                                    controller: tooltipController,
+                                                    content: GestureDetector(
+                                                      child: Tooltip(
+                                                        message: 'Delete',
+                                                        child: InkWell(
+                                                          child: Icon(
+                                                            Ionicons.trash,
+                                                            size: _iconSize,
+                                                            color: widget
+                                                                .layerItemModel
+                                                                .listDisplayColor,
+                                                          ),
+                                                          onTap: () =>
+                                                              _deleteLayer(value),
                                                         ),
-                                                        onTap: () =>
-                                                            _deleteLayer(value),
                                                       ),
                                                     ),
-                                                  ),
-                                                  Tooltip(
-                                                    key: deleteKey,
-                                                    showDuration:
-                                                        const Duration(
-                                                      seconds: 2,
-                                                    ),
-                                                    padding: EdgeInsets.zero,
-                                                    richMessage: TextSpan(
-                                                      children: [
-                                                        WidgetSpan(
-                                                          alignment:
-                                                              PlaceholderAlignment
-                                                                  .baseline,
-                                                          baseline: TextBaseline
-                                                              .alphabetic,
+                                                    child: Material(
+                                                      color: Colors.grey.shade800,
+                                                      elevation: 1.0,
+                                                      child:  Padding(
+                                                        padding: const EdgeInsets.all(8.0),
+                                                        child: InkWell(
                                                           child: Container(
-                                                            color: Colors.black,
-                                                            constraints:
-                                                                const BoxConstraints(
-                                                                    maxWidth:
-                                                                        150),
-                                                            child: Column(
+                                                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                                                            width: 200,
+                                                            decoration: BoxDecoration(
+                                                              border: Border.all(color: Colors.white, width: 1),
+                                                              borderRadius: BorderRadius.circular(0)
+                                                            ),
+                                                            child: Row(
                                                               children: [
-                                                                Container(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .all(4),
-                                                                  child:
-                                                                      const Center(
-                                                                    child: Text(
-                                                                      'Delete this layer',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        backgroundColor:
-                                                                            Colors.black,
-                                                                      ),
-                                                                    ),
-                                                                  ),
+                                                                Image.asset(
+                                                                  "assets/images/zlight_icon.jpg",
+                                                                  height: 20,
                                                                 ),
                                                                 Container(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .all(4),
-                                                                  child: Row(
-                                                                    children: [
-                                                                      Expanded(
-                                                                        child:
-                                                                            Column(
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.stretch,
-                                                                          children: [
-                                                                            GestureDetector(
-                                                                              child: const Text('Cancel'),
-                                                                              onTap: () {
-                                                                                debugPrint('OK');
-                                                                              },
-                                                                            )
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        child:
-                                                                            Column(
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.stretch,
-                                                                          children: [
-                                                                            TextButton(
-                                                                              style: TextButton.styleFrom(
-                                                                                primary: Colors.black,
-                                                                                backgroundColor: Colors.white,
-                                                                              ),
-                                                                              onPressed: () {},
-                                                                              child: const Text('Got It'),
-                                                                            )
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
+                                                                  padding: const EdgeInsets.only(left: 8),
+                                                                  child: Text("Default"),
                                                                 ),
                                                               ],
                                                             ),
                                                           ),
                                                         ),
-                                                      ],
+                                                      ),
                                                     ),
-                                                    preferBelow: false,
-                                                    child: Container(),
                                                   ),
+                                                  
                                                   Tooltip(
                                                     message: 'Rearrange',
                                                     child:

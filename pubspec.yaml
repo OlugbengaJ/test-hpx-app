@@ -49,6 +49,8 @@ dependencies:
   material_design_icons_flutter: ^5.0.6595
   flutter_svg: ^1.0.3
   knob_widget: ^1.0.0
+  just_the_tooltip: ^0.0.12
+  toggle_switch: ^2.0.1
 
 dev_dependencies:
   flutter_test:
