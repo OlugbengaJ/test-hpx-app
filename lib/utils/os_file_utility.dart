@@ -98,7 +98,20 @@ class OSFileUtility {
     if (isLinux) _processLinuxFile(result);
   }
 
-  static void _processLinuxFile(FilePickerResult? result) {}
+  /// [_processLinuxFile] process linux specific file
+  static void _processLinuxFile(FilePickerResult? result) {
+    // process result
+    if (result != null) {
+      for (var file in result.files) {
+        debugPrint(file.path);
+        Process.run('ls', ['-l ${file.path}']).then((value) {
+          debugPrint('stdout ${value.stdout}');
+          debugPrint('stderr ${value.stderr}');
+          debugPrint('exit code: ${value.exitCode}');
+        });
+      }
+    }
+  }
 
   static void _processWindowsFile(FilePickerResult? result) {
     if (result != null) {
