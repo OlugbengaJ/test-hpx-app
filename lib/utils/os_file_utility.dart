@@ -57,8 +57,9 @@ class OSFileUtility {
 
   static void osApps() {
     final dir = Directory(appsDir!.initialDirectory!);
-    final List<FileSystemEntity> list =
-        dir.listSync(recursive: true, followLinks: true);
+
+    List<FileSystemEntity> list =
+        dir.listSync(recursive: false, followLinks: true);
 
     for (var e in list) {
       debugPrint('file path ${e.path}');

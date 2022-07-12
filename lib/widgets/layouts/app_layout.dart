@@ -94,9 +94,7 @@ class _AppLayoutState extends State<AppLayout> {
                             ),
                           )
                     ],
-                    onChangedHandler: (o) {
-                      workspaceProvider.setProfile(o);
-                    },
+                    onChangedHandler: (o) => workspaceProvider.setProfile(o),
                   ),
 
                   //  PickerDropdown(
