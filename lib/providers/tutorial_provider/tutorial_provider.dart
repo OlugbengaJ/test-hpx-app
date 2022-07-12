@@ -7,6 +7,9 @@ import 'package:provider/provider.dart';
 // TooltipTutorial provider to manage the current colors or effects of a TooltipTutorial been selected
 class TooltipTutorialProvider extends ChangeNotifier {
   final tooltipControllerHelp = JustTheController();
+  final tooltipControllerHighlight = JustTheController();
+  final tooltipControllerResize = JustTheController();
+  final tooltipControllerClick = JustTheController();
   final tooltipControllerWorkSpace = JustTheController();
   final tooltipControllerProfile = JustTheController();
   final tooltipControllerToolsEffects = JustTheController();
@@ -22,6 +25,15 @@ class TooltipTutorialProvider extends ChangeNotifier {
     switch (tipToShow) {
       case "App":
         tooltipController.showTooltip();
+        break;
+      case "Click":
+        tooltipControllerClick.showTooltip();
+        break;
+      case "Resizable":
+        tooltipControllerResize.showTooltip();
+        break;
+      case "Highlight":
+        tooltipControllerHighlight.showTooltip();
         break;
       case "Light":
         tooltipControllerLight.showTooltip();
@@ -47,6 +59,15 @@ class TooltipTutorialProvider extends ChangeNotifier {
     switch (tipToHide) {
       case "App":
         tooltipController.hideTooltip();
+        break;
+      case "Click":
+        tooltipControllerClick.hideTooltip();
+        break;
+      case "Resizable":
+        tooltipControllerResize.hideTooltip();
+        break;
+      case "Highlight":
+        tooltipControllerHighlight.hideTooltip();
         break;
       case "Light":
         tooltipControllerLight.hideTooltip();

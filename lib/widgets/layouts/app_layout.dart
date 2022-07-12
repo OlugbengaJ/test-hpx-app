@@ -90,7 +90,7 @@ class _AppLayoutState extends State<AppLayout> {
                   btn2Pressed: () {
                     tutorialProvider.hideTutorialTooltip(tipToHide: 'Profile');
                     tutorialProvider.showTutorialTooltip(
-                        tipToShow: 'Tools_Effects');
+                        tipToShow: 'Highlight');
                   },
                   widget: Container(
                     margin: const EdgeInsets.only(top: 23, right: 30),
