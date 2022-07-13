@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/profile/profile_dropdown.dart';
 import 'package:hpx/apps/z_light/wrapper.dart';
-import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/widget/contact_support_provider.dart';
 import 'package:hpx/providers/tutorial_provider/tutorial_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
-import 'package:hpx/widgets/components/picker_dropdown.dart';
+import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:ionicons/ionicons.dart';
@@ -21,24 +21,20 @@ class AppLayout extends StatefulWidget {
 }
 
 class _AppLayoutState extends State<AppLayout> {
-  final _modeProvider = ModeProvider();
-  // final tutorialProvider = TooltipTutorialProvider();
-
+  // this function creates the dialog width for the help icons
   void openDialogOption() {
     final tutorialProvider =
         Provider.of<TooltipTutorialProvider>(context, listen: false);
+    final contacProvider =
+        Provider.of<ContactSupportWidgetProvider>(context, listen: false);
     showDialog(
         context: context,
-        // barrierColor: Colors.white.withOpacity(0),
-        // barrierDismissible: false,
         builder: (context) {
           return SimpleDialog(
               insetPadding: EdgeInsets.only(
                   bottom: 90, left: MediaQuery.of(context).size.width * 0.03),
               backgroundColor: Colors.white,
               alignment: Alignment.bottomLeft,
-              // contentPadding: const EdgeInsets.only(
-              //     top: 20, right: 10, bottom: 20, left: 10),
               children: <Widget>[
                 Container(
                   width: 150,
@@ -80,12 +76,18 @@ class _AppLayoutState extends State<AppLayout> {
                   width: 150,
                   padding: const EdgeInsets.only(left: 20.0),
                   height: 40,
-                  child: const Text(
-                    'Visit Support Page',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      contacProvider.showContactOptionsDialog(context);
+                    },
+                    child: const Text(
+                      'Visit Support Page',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700),
+                    ),
                   ),
                 ),
                 Container(
@@ -145,7 +147,7 @@ class _AppLayoutState extends State<AppLayout> {
                     decoration: const BoxDecoration(
                       image: DecorationImage(
                           image: Svg(
-                            'assets/images/zlight_logo.svg',
+                            Constants.zLightLogoSvg,
                           ),
                           fit: BoxFit.cover),
                     ),
@@ -153,36 +155,38 @@ class _AppLayoutState extends State<AppLayout> {
             ],
           ),
           actions: [
-            Wrap(children: [
-              CustomToolTip(
-                height: 100,
-                tooltipController: tutorialProvider.tooltipControllerProfile,
-                title: "Selected Profile",
-                description:
-                    'You can presave a lot of customizations as profiles for later use',
-                btn1Txt: "Close",
-                btn2Txt: "Next",
-                btn1Pressed: () {
-                  tutorialProvider.showTutorialTooltip(tipToShow: 'Light');
-                  tutorialProvider.hideTutorialTooltip(tipToHide: 'Profile');
-                },
-                btn2Pressed: () {
-                  tutorialProvider.hideTutorialTooltip(tipToHide: 'Profile');
-                  tutorialProvider.showTutorialTooltip(
-                      tipToShow: 'Highlight');
-                },
-                widget: Container(
-                  margin: const EdgeInsets.only(top: 23, right: 30),
-                  child: Text(
-                    "Selected Profile",
-                    textAlign: TextAlign.left,
-                    style: h5Style,
-                  ),
+            CustomToolTip(
+              height: 100,
+              tooltipController: tutorialProvider.tooltipControllerProfile,
+              title: "Selected Profile",
+              description:
+                  'You can presave a lot of customizations as profiles for later use',
+              btn1Txt: "Close",
+              btn2Txt: "Next",
+              btn1Pressed: () {
+                tutorialProvider.showTutorialTooltip(tipToShow: 'Light');
+                tutorialProvider.hideTutorialTooltip(tipToHide: 'Profile');
+              },
+              btn2Pressed: () {
+                tutorialProvider.hideTutorialTooltip(tipToHide: 'Profile');
+                tutorialProvider.showTutorialTooltip(tipToShow: 'Highlight');
+              },
+              widget: Container(
+                margin: const EdgeInsets.only(top: 23),
+                child: Text(
+                  "Selected Profile",
+                  textAlign: TextAlign.left,
+                  style: h5Style,
                 ),
               ),
-              
-            ]),
-            const ProfileDropdown(),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(4.0),
+              child: ProfileDropdown(),
+            ),
+            Container(
+              margin: const EdgeInsets.only(right: 50),
+            ),
             (TargetPlatform.macOS == true ||
                     TargetPlatform.linux == true ||
                     TargetPlatform.windows == true ||

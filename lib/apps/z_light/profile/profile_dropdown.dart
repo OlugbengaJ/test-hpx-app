@@ -6,7 +6,6 @@ import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 
-
 class ProfileDropdown extends StatelessWidget {
   const ProfileDropdown({Key? key}) : super(key: key);
 
@@ -15,17 +14,16 @@ class ProfileDropdown extends StatelessWidget {
     ProfileProvider profileProvider = Provider.of<ProfileProvider>(context);
     final tooltipController = JustTheController();
 
-    void closeTooltip(){
+    void closeTooltip() {
       tooltipController.hideTooltip();
     }
 
-    void newProfile(){
+    void newProfile() {
       tooltipController.hideTooltip();
       profileListDialog(context);
     }
 
-
-    void viewAllProfile(){
+    void viewAllProfile() {
       tooltipController.hideTooltip();
       viewAllProfileDialog(context);
     }
@@ -34,7 +32,7 @@ class ProfileDropdown extends StatelessWidget {
       tailLength: 5,
       tailBaseWidth: 0,
       isModal: true,
-      content:  Container(
+      content: Container(
         padding: const EdgeInsets.all(16),
         decoration: const BoxDecoration(
           color: Color(0xFF222222),
@@ -47,26 +45,27 @@ class ProfileDropdown extends StatelessWidget {
             children: [
               SizedBox(
                 height: 40,
-                child: Consumer<ProfileProvider>(
-                  builder: (_, provider, __) {
-                    return Row(
-                      children: [
-                        Image.asset(
+                child: Consumer<ProfileProvider>(builder: (_, provider, __) {
+                  return Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Image.asset(
                           "assets/images/z.png",
                           height: 20,
                         ),
-                        Container(
-                          padding: const EdgeInsets.only(left: 8),
-                          child: Text(provider.getCurrentProfile().name),
-                        ),
-                      ],
-                    );
-                  }
-                ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(left: 8),
+                        child: Text(provider.getCurrentProfile().name),
+                      ),
+                    ],
+                  );
+                }),
               ),
               SizedBox(
                 height: 50,
-                child:  Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Center(
@@ -74,14 +73,13 @@ class ProfileDropdown extends StatelessWidget {
                         width: 150,
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white, width: 1),
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(4)
-                        ),
+                            border: Border.all(color: Colors.white, width: 1),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(4)),
                         child: MouseRegion(
                           cursor: SystemMouseCursors.click,
                           child: GestureDetector(
-                             onTap: newProfile,
+                            onTap: newProfile,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: const [
@@ -91,9 +89,7 @@ class ProfileDropdown extends StatelessWidget {
                                 ),
                                 Text(
                                   "New Profile",
-                                  style: TextStyle(
-                                    color: Color(0xFF212121)
-                                  ),
+                                  style: TextStyle(color: Color(0xFF212121)),
                                 ),
                               ],
                             ),
@@ -106,19 +102,16 @@ class ProfileDropdown extends StatelessWidget {
                         width: 150,
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white, width: 1),
-                          borderRadius: BorderRadius.circular(4)
-                        ),
+                            border: Border.all(color: Colors.white, width: 1),
+                            borderRadius: BorderRadius.circular(4)),
                         child: MouseRegion(
                           cursor: SystemMouseCursors.click,
                           child: GestureDetector(
-                             onTap: viewAllProfile,
+                            onTap: viewAllProfile,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: const [
-                                Icon(
-                                  Icons.grid_view_outlined
-                                ),
+                                Icon(Icons.grid_view_outlined),
                                 Text("View All"),
                               ],
                             ),
@@ -134,39 +127,36 @@ class ProfileDropdown extends StatelessWidget {
         ),
       ),
       controller: tooltipController,
-      borderRadius: BorderRadius.circular(0),      
+      borderRadius: BorderRadius.circular(0),
       child: Material(
         color: const Color.fromRGBO(18, 18, 18, 1),
         elevation: 1.0,
-        child:  Padding(
+        child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: InkWell(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 4),
-              width: 200,
-              decoration: BoxDecoration(
+              child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            width: 200,
+            decoration: BoxDecoration(
                 border: Border.all(color: Colors.white, width: 1),
-                borderRadius: BorderRadius.circular(0)
-              ),
-              child: Consumer<ProfileProvider>(
-                builder: (_, provider, __){
-                  return Row(
-                    children: [
-                      Image.asset(
-                        "assets/images/z.png",
-                        height: 16,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: Text(provider.getCurrentProfile().name),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            )             
-              
-          ),
+                borderRadius: BorderRadius.circular(0)),
+            child: Consumer<ProfileProvider>(
+              builder: (_, provider, __) {
+                return Row(
+                  children: [
+                    Image.asset(
+                      "assets/images/z.png",
+                      height: 16,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: Text(provider.getCurrentProfile().name),
+                    ),
+                  ],
+                );
+              },
+            ),
+          )),
         ),
       ),
     );

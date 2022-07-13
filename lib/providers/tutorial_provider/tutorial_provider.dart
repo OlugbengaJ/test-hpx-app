@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg_provider/flutter_svg_provider.dart';
+import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:provider/provider.dart';
@@ -121,12 +122,10 @@ class TooltipTutorialProvider extends ChangeNotifier {
                       width: 200,
                       height: 200,
                       margin: const EdgeInsets.only(top: 70, bottom: 10),
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: Svg(
-                              'assets/images/tutorial_z.svg',
-                            ),
-                            fit: BoxFit.fill),
+                      child: Image.asset(
+                        Constants.zLightIconPng,
+                        height: 200,
+                        width: 200,
                       ),
                     ),
                     Container(
