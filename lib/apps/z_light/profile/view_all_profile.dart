@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
-
-void browse(BuildContext context){
+void browse(BuildContext context) {
   Navigator.pop(context);
 }
 
@@ -25,10 +25,7 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
           ),
           child: SingleChildScrollView(
             child: ListBody(
-              children:  <Widget>[
-
-                
-
+              children: <Widget>[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -45,14 +42,14 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                     ),
                   ],
                 ),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Expanded(
                       child: Container(
                         width: 800,
-                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -63,16 +60,17 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                     height: 28,
                                     width: 141,
                                     decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.white, width: 1),
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(4)
-                                    ),
+                                        border: Border.all(
+                                            color: Colors.white, width: 1),
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(4)),
                                     child: MouseRegion(
                                       cursor: SystemMouseCursors.click,
                                       child: GestureDetector(
                                         onTap: () => browse(context),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: const [
                                             Icon(
                                               Icons.add,
@@ -81,8 +79,7 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                             Text(
                                               "New Profile",
                                               style: TextStyle(
-                                                color: Color(0xFF212121)
-                                              ),
+                                                  color: Color(0xFF212121)),
                                             ),
                                           ],
                                         ),
@@ -90,37 +87,35 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                     ),
                                   ),
                                 ),
-                                
                                 const SizedBox(
                                   width: 30,
                                 ),
-                                
                                 Center(
                                   child: Container(
                                     height: 28,
                                     width: 141,
                                     decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.white, width: 1),
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(4)
-                                    ),
+                                        border: Border.all(
+                                            color: Colors.white, width: 1),
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(4)),
                                     child: MouseRegion(
                                       cursor: SystemMouseCursors.click,
                                       child: GestureDetector(
                                         onTap: () => browse(context),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: const [
                                             ImageIcon(
-                                                AssetImage("assets/images/icons/import.png"),
-                                                color: Color(0xFF212121),
+                                              AssetImage(
+                                                  "assets/images/icons/import.png"),
+                                              color: Color(0xFF212121),
                                             ),
-
                                             Text(
                                               "Import",
                                               style: TextStyle(
-                                                color: Color(0xFF212121)
-                                              ),
+                                                  color: Color(0xFF212121)),
                                             ),
                                           ],
                                         ),
@@ -130,7 +125,6 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                 ),
                               ],
                             ),
-
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -139,16 +133,20 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                                        child: const Text("Auto profile switching"),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16, vertical: 8),
+                                        child: const Text(
+                                            "Auto profile switching"),
                                       ),
-
                                       Container(
                                         height: 28,
                                         child: ToggleSwitch(
                                           minWidth: 50,
                                           cornerRadius: 100,
-                                          activeBgColors: const [[Colors.white], [Colors.white]],
+                                          activeBgColors: const [
+                                            [Colors.white],
+                                            [Colors.white]
+                                          ],
                                           activeFgColor: Colors.black,
                                           inactiveBgColor: Colors.grey,
                                           inactiveFgColor: Colors.black,
@@ -166,16 +164,17 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                 ),
                               ],
                             ),
-
                             InkWell(
                               child: Container(
                                 height: 28,
                                 width: 82,
                                 decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.white, width: 1),
+                                  border:
+                                      Border.all(color: Colors.white, width: 1),
                                 ),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: const [
                                     Padding(
                                       padding: EdgeInsets.all(2),
@@ -192,47 +191,44 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                     ),
                   ],
                 ),
-
                 Row(
-                  children: [              
+                  children: [
                     Expanded(
                       child: Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
                         width: 621,
                         height: 328,
                         color: const Color(0xFF212121),
                         child: ListView.builder(
-                          padding: const EdgeInsets.all(2),
-                          itemCount: entries.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Container(
-                              margin: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.white, width: 1),
-                              ),
-                              height: 70,
-                              child: Row(
-                                children: [
-                                  Image.asset(
-                                    "assets/images/z.png",
-                                    height: 40,
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.only(left: 8),
-                                    child: const Text("Default"),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }
-                        ),
+                            padding: const EdgeInsets.all(2),
+                            itemCount: entries.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Container(
+                                margin: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.white, width: 1),
+                                ),
+                                height: 70,
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      Constants.zImage,
+                                      height: 40,
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.only(left: 8),
+                                      child: const Text("Default"),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
                       ),
                     )
                   ],
                 ),
-
-                
-
                 Container(
                   padding: const EdgeInsets.all(8),
                   child: Row(
@@ -244,22 +240,19 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                           height: 38,
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            border: Border.all(color: Colors.white, width: 1),
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(4)
-                          ),
+                              border: Border.all(color: Colors.white, width: 1),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(4)),
                           child: MouseRegion(
                             cursor: SystemMouseCursors.click,
                             child: GestureDetector(
-                                onTap: () => Navigator.pop(context),
+                              onTap: () => Navigator.pop(context),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [                                
+                                children: const [
                                   Text(
                                     "Done",
-                                    style: TextStyle(
-                                      color: Color(0xFF212121)
-                                    ),
+                                    style: TextStyle(color: Color(0xFF212121)),
                                   ),
                                 ],
                               ),
@@ -270,7 +263,6 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                     ],
                   ),
                 ),
-
               ],
             ),
           ),

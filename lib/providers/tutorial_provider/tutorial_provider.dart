@@ -24,31 +24,31 @@ class TooltipTutorialProvider extends ChangeNotifier {
 
   void showTutorialTooltip({String? tipToShow}) {
     switch (tipToShow) {
-      case "App":
+      case Constants.app:
         tooltipController.showTooltip();
         break;
-      case "Click":
+      case Constants.click:
         tooltipControllerClick.showTooltip();
         break;
-      case "Resizable":
+      case Constants.resizable:
         tooltipControllerResize.showTooltip();
         break;
-      case "Highlight":
+      case Constants.highlight:
         tooltipControllerHighlight.showTooltip();
         break;
-      case "Light":
+      case Constants.light:
         tooltipControllerLight.showTooltip();
         break;
-      case "Help":
+      case Constants.help:
         tooltipControllerHelp.showTooltip();
         break;
-      case "Profile":
+      case Constants.profile:
         tooltipControllerProfile.showTooltip();
         break;
       case "Tools_Effects":
         tooltipControllerToolsEffects.showTooltip();
         break;
-      case "WorkSpace":
+      case Constants.workspace:
         tooltipControllerWorkSpace.showTooltip();
         break;
       default:
@@ -58,31 +58,31 @@ class TooltipTutorialProvider extends ChangeNotifier {
 
   void hideTutorialTooltip({String? tipToHide}) {
     switch (tipToHide) {
-      case "App":
+      case Constants.app:
         tooltipController.hideTooltip();
         break;
-      case "Click":
+      case Constants.click:
         tooltipControllerClick.hideTooltip();
         break;
-      case "Resizable":
+      case Constants.resizable:
         tooltipControllerResize.hideTooltip();
         break;
-      case "Highlight":
+      case Constants.highlight:
         tooltipControllerHighlight.hideTooltip();
         break;
-      case "Light":
+      case Constants.light:
         tooltipControllerLight.hideTooltip();
         break;
       case "Tools_Effects":
         tooltipControllerToolsEffects.hideTooltip();
         break;
-      case "Help":
+      case Constants.help:
         tooltipControllerHelp.hideTooltip();
         break;
-      case "Profile":
+      case Constants.profile:
         tooltipControllerProfile.hideTooltip();
         break;
-      case "WorkSpace":
+      case Constants.workspace:
         tooltipControllerWorkSpace.hideTooltip();
         break;
       default:

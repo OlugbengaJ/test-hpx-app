@@ -65,6 +65,7 @@ class _PickerDropdownState extends State<PickerDropdown> {
           focusColor: Colors.transparent,
           value: widget.defaultPicker ?? currentPickerValue,
           dropdownColor: Colors.grey.shade900,
+          isExpanded: true,
           hint: SizedBox(
             child: Row(
               children: [

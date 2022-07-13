@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/profile/profile_list_dialog.dart';
 import 'package:hpx/apps/z_light/profile/view_all_profile.dart';
 import 'package:hpx/providers/profile_provider/profile_provider.dart';
-import 'package:hpx/widgets/theme.dart';
+import 'package:hpx/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 
@@ -134,29 +134,30 @@ class ProfileDropdown extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: InkWell(
-              child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            width: 200,
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.white, width: 1),
-                borderRadius: BorderRadius.circular(0)),
-            child: Consumer<ProfileProvider>(
-              builder: (_, provider, __) {
-                return Row(
-                  children: [
-                    Image.asset(
-                      "assets/images/z.png",
-                      height: 16,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Text(provider.getCurrentProfile().name),
-                    ),
-                  ],
-                );
-              },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              width: 200,
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.white, width: 1),
+                  borderRadius: BorderRadius.circular(0)),
+              child: Consumer<ProfileProvider>(
+                builder: (_, provider, __) {
+                  return Row(
+                    children: [
+                      Image.asset(
+                        Constants.zImage,
+                        height: 16,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(left: 8),
+                        child: Text(provider.getCurrentProfile().name),
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
-          )),
+          ),
         ),
       ),
     );
