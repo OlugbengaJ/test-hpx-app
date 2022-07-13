@@ -40,8 +40,6 @@ class _AppLayoutState extends State<AppLayout> {
                 bottom: 90, left: MediaQuery.of(context).size.width * 0.03),
             backgroundColor: Colors.white,
             alignment: Alignment.bottomLeft,
-            // contentPadding: const EdgeInsets.only(
-            //     top: 20, right: 10, bottom: 20, left: 10),
             children: <Widget>[
               Container(
                 width: 150,
@@ -91,9 +89,9 @@ class _AppLayoutState extends State<AppLayout> {
                     },
                     child: const Text('Visit Support Page',
                         style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                        ))),
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700))),
               ),
               Container(
                 width: 150,
@@ -132,7 +130,7 @@ class _AppLayoutState extends State<AppLayout> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             CustomToolTip(
-              height: 130,
+              height: 140,
               tooltipController: tutorialProvider.tooltipController,
               title: 'Take a quick tour of your Z Light space application',
               description:
@@ -153,9 +151,7 @@ class _AppLayoutState extends State<AppLayout> {
                 height: 50,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: Svg(
-                      'assets/images/zlight_logo.svg',
-                    ),
+                    image: Svg(Constants.zLightLogoSvg),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -177,11 +173,11 @@ class _AppLayoutState extends State<AppLayout> {
                 tutorialProvider.showTutorialTooltip(
                     tipToShow: Constants.light);
                 tutorialProvider.hideTutorialTooltip(
-                    tipToHide: Constants.workspace);
+                    tipToHide: Constants.profile);
               },
               btn2Pressed: () {
                 tutorialProvider.hideTutorialTooltip(
-                    tipToHide: Constants.workspace);
+                    tipToHide: Constants.profile);
                 tutorialProvider.showTutorialTooltip(
                     tipToShow: Constants.highlight);
               },
@@ -332,7 +328,7 @@ class _AppLayoutState extends State<AppLayout> {
                         tutorialProvider.hideTutorialTooltip(
                             tipToHide: Constants.light);
                         tutorialProvider.showTutorialTooltip(
-                            tipToShow: Constants.workspace);
+                            tipToShow: Constants.profile);
                       },
                       widget: TextButton(
                         style: TextButton.styleFrom(

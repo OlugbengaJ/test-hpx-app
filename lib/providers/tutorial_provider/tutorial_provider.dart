@@ -240,17 +240,13 @@ class CustomToolTip extends StatelessWidget {
                   children: [
                     Text(title,
                         style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                            fontFamily: "Metropolis")),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black)),
                     Container(margin: const EdgeInsets.only(top: 10)),
                     Text(description,
                         style: const TextStyle(
-                            height: 1.3,
-                            fontSize: 12,
-                            color: Colors.black,
-                            fontFamily: "Metropolis")),
+                            height: 1.3, fontSize: 12, color: Colors.black)),
                     Container(margin: const EdgeInsets.only(top: 10)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
