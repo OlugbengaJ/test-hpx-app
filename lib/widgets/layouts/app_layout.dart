@@ -2,6 +2,7 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
+import 'package:hpx/apps/z_light/profile/profile_dropdown.dart';
 import 'package:hpx/apps/z_light/wrapper.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/providers/tutorial_provider/tutorial_provider.dart';
@@ -152,42 +153,36 @@ class _AppLayoutState extends State<AppLayout> {
             ],
           ),
           actions: [
-            Padding(
-              padding: const EdgeInsets.only(top: 1.0, right: 50),
-              child: Wrap(children: [
-                CustomToolTip(
-                  height: 100,
-                  tooltipController: tutorialProvider.tooltipControllerProfile,
-                  title: "Selected Profile",
-                  description:
-                      'You can presave a lot of customizations as profiles for later use',
-                  btn1Txt: "Close",
-                  btn2Txt: "Next",
-                  btn1Pressed: () {
-                    tutorialProvider.showTutorialTooltip(tipToShow: 'Light');
-                    tutorialProvider.hideTutorialTooltip(tipToHide: 'Profile');
-                  },
-                  btn2Pressed: () {
-                    tutorialProvider.hideTutorialTooltip(tipToHide: 'Profile');
-                    tutorialProvider.showTutorialTooltip(
-                        tipToShow: 'Highlight');
-                  },
-                  widget: Container(
-                    margin: const EdgeInsets.only(top: 23, right: 30),
-                    child: Text(
-                      "Selected Profile",
-                      textAlign: TextAlign.left,
-                      style: h5Style,
-                    ),
+            Wrap(children: [
+              CustomToolTip(
+                height: 100,
+                tooltipController: tutorialProvider.tooltipControllerProfile,
+                title: "Selected Profile",
+                description:
+                    'You can presave a lot of customizations as profiles for later use',
+                btn1Txt: "Close",
+                btn2Txt: "Next",
+                btn1Pressed: () {
+                  tutorialProvider.showTutorialTooltip(tipToShow: 'Light');
+                  tutorialProvider.hideTutorialTooltip(tipToHide: 'Profile');
+                },
+                btn2Pressed: () {
+                  tutorialProvider.hideTutorialTooltip(tipToHide: 'Profile');
+                  tutorialProvider.showTutorialTooltip(
+                      tipToShow: 'Highlight');
+                },
+                widget: Container(
+                  margin: const EdgeInsets.only(top: 23, right: 30),
+                  child: Text(
+                    "Selected Profile",
+                    textAlign: TextAlign.left,
+                    style: h5Style,
                   ),
                 ),
-                PickerDropdown(
-                  onChange: (PickerModel? returnValue) {},
-                  pickerList: _modeProvider.getPickerModes('profile'),
-                  defaultPicker: profileList.first,
-                ),
-              ]),
-            ),
+              ),
+              
+            ]),
+            const ProfileDropdown(),
             (TargetPlatform.macOS == true ||
                     TargetPlatform.linux == true ||
                     TargetPlatform.windows == true ||
