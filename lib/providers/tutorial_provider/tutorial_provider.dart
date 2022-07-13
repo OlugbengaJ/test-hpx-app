@@ -90,12 +90,12 @@ class TooltipTutorialProvider extends ChangeNotifier {
     // notifyListeners()
   }
 
-  generateDialogTurorial(BuildContext context) {
+  generateDialogTutorial(BuildContext context) {
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (context) {
-          return SimpleDialog(backgroundColor: Color(0xff121212),
+          return SimpleDialog(backgroundColor: const Color(0xff121212),
               // contentPadding: const EdgeInsets.only(
               //     top: 40, left: 20, right: 20, bottom: 30),
               children: [
@@ -228,6 +228,7 @@ class CustomToolTip extends StatelessWidget {
             tailLength: 15.0,
             controller: tooltipController,
             isModal: true,
+            triggerMode: TooltipTriggerMode.manual,
             barrierDismissible: false,
             preferredDirection: tutorialProvider.direction,
             content: Padding(

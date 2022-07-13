@@ -115,7 +115,7 @@ class _ToolModesState extends State<ToolModes> {
               btn1Txt: "Close",
               btn2Txt: "Next",
               btn1Pressed: () {
-                tutorialProvider.showTutorialTooltip(tipToShow: 'Profile');
+                tutorialProvider.showTutorialTooltip(tipToShow: 'Click');
                 tutorialProvider.hideTutorialTooltip(
                     tipToHide: 'Tools_Effects');
               },

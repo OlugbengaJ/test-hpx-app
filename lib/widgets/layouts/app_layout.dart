@@ -21,12 +21,92 @@ class AppLayout extends StatefulWidget {
 
 class _AppLayoutState extends State<AppLayout> {
   final _modeProvider = ModeProvider();
+  // final tutorialProvider = TooltipTutorialProvider();
+
+  void openDialogOption() {
+    final tutorialProvider =
+        Provider.of<TooltipTutorialProvider>(context, listen: false);
+    showDialog(
+        context: context,
+        // barrierColor: Colors.white.withOpacity(0),
+        // barrierDismissible: false,
+        builder: (context) {
+          return SimpleDialog(
+              insetPadding: EdgeInsets.only(
+                  bottom: 90, left: MediaQuery.of(context).size.width * 0.03),
+              backgroundColor: Colors.white,
+              alignment: Alignment.bottomLeft,
+              // contentPadding: const EdgeInsets.only(
+              //     top: 20, right: 10, bottom: 20, left: 10),
+              children: <Widget>[
+                Container(
+                  width: 150,
+                  padding: const EdgeInsets.only(left: 20.0),
+                  height: 40,
+                  child: InkWell(
+                    onTap: () {
+                      tutorialProvider.showTutorialTooltip(tipToShow: 'App');
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text(
+                      'Launch Tutorial',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 150,
+                  padding: const EdgeInsets.only(left: 20.0),
+                  height: 40,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      tutorialProvider.generateDialogTutorial(context);
+                    },
+                    child: const Text(
+                      'Reset Onboarding',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 150,
+                  padding: const EdgeInsets.only(left: 20.0),
+                  height: 40,
+                  child: const Text(
+                    'Visit Support Page',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700),
+                  ),
+                ),
+                Container(
+                  width: 150,
+                  padding: const EdgeInsets.only(left: 20.0),
+                  height: 40,
+                  child: const Text(
+                    'Request Help',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ]);
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
     WorkspaceProvider workspaceProvider =
         Provider.of<WorkspaceProvider>(context);
-    // final platformProvider = Provider.of<PlatformInfo>(context);
     TooltipTutorialProvider tutorialProvider =
         Provider.of<TooltipTutorialProvider>(context, listen: false);
     tutorialProvider.showTutorial = true;
@@ -146,11 +226,13 @@ class _AppLayoutState extends State<AppLayout> {
                   btn2Pressed: () {
                     tutorialProvider.hideTutorialTooltip(tipToHide: 'Help');
                   },
-                  widget: const IconButton(
+                  widget: IconButton(
                     iconSize: 40,
                     color: Colors.white,
-                    icon: Icon(Ionicons.help_circle_outline),
-                    onPressed: null,
+                    icon: const Icon(Ionicons.help_circle_outline),
+                    onPressed: () {
+                      openDialogOption();
+                    },
                   ),
                 ),
               ),
