@@ -14,7 +14,6 @@ class ProfileDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     ProfileProvider profileProvider = Provider.of<ProfileProvider>(context);
     final tooltipController = JustTheController();
-    final List<String> entries = <String>['A', 'B'];
 
     void closeTooltip(){
       tooltipController.hideTooltip();
@@ -36,70 +35,70 @@ class ProfileDropdown extends StatelessWidget {
       tailBaseWidth: 0,
       isModal: true,
       content:  Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.white, width: 2),
-          color: Colors.black,
+        padding: const EdgeInsets.all(16),
+        decoration: const BoxDecoration(
+          color: Color(0xFF222222),
         ),
         child: SizedBox(
-          width: 400,
-          height: 200,
+          width: 350,
+          height: 150,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(2),
-                  itemCount: entries.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return SizedBox(
-                      height: 40,
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            "assets/images/zlight_icon.jpg",
-                            height: 20,
-                          ),
-                          Container(
-                            padding: const EdgeInsets.only(left: 8),
-                            child: const Text("Default"),
-                          ),
-                        ],
-                      ),
+              SizedBox(
+                height: 40,
+                child: Consumer<ProfileProvider>(
+                  builder: (_, provider, __) {
+                    return Row(
+                      children: [
+                        Image.asset(
+                          "assets/images/z.png",
+                          height: 20,
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(left: 8),
+                          child: Text(provider.getCurrentProfile().name),
+                        ),
+                      ],
                     );
                   }
                 ),
               ),
-              Container(
-                color: Colors.grey.shade800,
+              SizedBox(
                 height: 50,
                 child:  Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Center(
-                      child: Row(
-                        children: [
-                          TextButton(
-                            onPressed: () => newProfile(),
-                            style: textBtnStyleWhite,
-                            child: SizedBox(
-                              height: 40,
-                              width: 150,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Icon(Icons.add),
-                                  Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'New Profile',
-                                      style: TextStyle(color: Colors.black),
-                                    ),
+                      child: Container(
+                        width: 150,
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.white, width: 1),
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(4)
+                        ),
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                             onTap: newProfile,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                Icon(
+                                  Icons.add,
+                                  color: Color(0xFF212121),
+                                ),
+                                Text(
+                                  "New Profile",
+                                  style: TextStyle(
+                                    color: Color(0xFF212121)
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
-                        ],
+                        ),
                       ),
                     ),
                     Center(
@@ -149,19 +148,24 @@ class ProfileDropdown extends StatelessWidget {
                 border: Border.all(color: Colors.white, width: 1),
                 borderRadius: BorderRadius.circular(0)
               ),
-              child: Row(
-                children: [
-                  Image.asset(
-                    "assets/images/z.png",
-                    height: 16,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: const Text("Default"),
-                  ),
-                ],
+              child: Consumer<ProfileProvider>(
+                builder: (_, provider, __){
+                  return Row(
+                    children: [
+                      Image.asset(
+                        "assets/images/z.png",
+                        height: 16,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(left: 8),
+                        child: Text(provider.getCurrentProfile().name),
+                      ),
+                    ],
+                  );
+                },
               ),
-            ),
+            )             
+              
           ),
         ),
       ),

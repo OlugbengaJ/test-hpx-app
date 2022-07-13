@@ -26,63 +26,9 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
           child: SingleChildScrollView(
             child: ListBody(
               children:  <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                            child: InkWell(
-                              onTap: (){
-                                Navigator.pop(context);
-                              },
-                              child: const Icon(
-                                Icons.close,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                            child: const Text("Auto profile switching"),
-                          ),
+                
 
-                          ToggleSwitch(
-                            minWidth: 90.0,
-                            cornerRadius: 8.0,
-                            activeBgColors: const [[Colors.white], [Colors.white]],
-                            activeFgColor: Colors.black,
-                            inactiveBgColor: Colors.grey,
-                            inactiveFgColor: Colors.black,
-                            initialLabelIndex: 0,
-                            totalSwitches: 2,
-                            labels: const ['OFF', 'ON'],
-                            radiusStyle: true,
-                            onToggle: (index) {
-                              print('switched to: $index');
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -101,51 +47,82 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                 ),
 
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(
-                      width: 800,
-                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            child: Row(
+                    Expanded(
+                      child: Container(
+                        width: 800,
+                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
                               children: [
-                                Container(
-                                  child: TextButton(
-                                    onPressed: () => browse(context),
-                                    style: textBtnStyleWhite,
-                                    child: const SizedBox(
-                                      width: 100,
-                                      child: Center(
-                                        child: Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Text(
-                                            'New Profile',
-                                            style: TextStyle(color: Colors.black),
-                                          ),
+                                Center(
+                                  child: Container(
+                                    height: 28,
+                                    width: 141,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.white, width: 1),
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(4)
+                                    ),
+                                    child: MouseRegion(
+                                      cursor: SystemMouseCursors.click,
+                                      child: GestureDetector(
+                                        onTap: () => browse(context),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: const [
+                                            Icon(
+                                              Icons.add,
+                                              color: Color(0xFF212121),
+                                            ),
+                                            Text(
+                                              "New Profile",
+                                              style: TextStyle(
+                                                color: Color(0xFF212121)
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
+                                
                                 const SizedBox(
                                   width: 30,
                                 ),
-                                Container(
-                                  child: TextButton(
-                                    onPressed: () => browse(context),
-                                    style: textBtnStyleWhite,
-                                    child: const SizedBox(
-                                      width: 100,
-                                      child: Center(
-                                        child: Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Text(
-                                            'Import',
-                                            style: TextStyle(color: Colors.black),
-                                          ),
+                                
+                                Center(
+                                  child: Container(
+                                    height: 28,
+                                    width: 141,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.white, width: 1),
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(4)
+                                    ),
+                                    child: MouseRegion(
+                                      cursor: SystemMouseCursors.click,
+                                      child: GestureDetector(
+                                        onTap: () => browse(context),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: const [
+                                            ImageIcon(
+                                                AssetImage("assets/images/icons/import.png"),
+                                                color: Color(0xFF212121),
+                                            ),
+
+                                            Text(
+                                              "Import",
+                                              style: TextStyle(
+                                                color: Color(0xFF212121)
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
@@ -153,27 +130,64 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                 ),
                               ],
                             ),
-                          ),
 
-                          InkWell(
-                            child: Container(
-                              width: 150,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.white, width: 1),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: const [
-                                  Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text("A - Z"),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                        child: const Text("Auto profile switching"),
+                                      ),
+
+                                      Container(
+                                        height: 28,
+                                        child: ToggleSwitch(
+                                          minWidth: 50,
+                                          cornerRadius: 100,
+                                          activeBgColors: const [[Colors.white], [Colors.white]],
+                                          activeFgColor: Colors.black,
+                                          inactiveBgColor: Colors.grey,
+                                          inactiveFgColor: Colors.black,
+                                          initialLabelIndex: 0,
+                                          totalSwitches: 2,
+                                          labels: const ['OFF', 'ON'],
+                                          radiusStyle: true,
+                                          onToggle: (index) {
+                                            print('switched to: $index');
+                                          },
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  Icon(Icons.arrow_drop_down)
-                                ],
+                                ),
+                              ],
+                            ),
+
+                            InkWell(
+                              child: Container(
+                                height: 28,
+                                width: 82,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.white, width: 1),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: const [
+                                    Padding(
+                                      padding: EdgeInsets.all(2),
+                                      child: Text("A - Z"),
+                                    ),
+                                    Icon(Icons.arrow_drop_down)
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -184,9 +198,9 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                     Expanded(
                       child: Container(
                         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        width: 600,
-                        height: 450,
-                        color: Colors.black,
+                        width: 621,
+                        height: 328,
+                        color: const Color(0xFF212121),
                         child: ListView.builder(
                           padding: const EdgeInsets.all(2),
                           itemCount: entries.length,
@@ -200,7 +214,7 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                               child: Row(
                                 children: [
                                   Image.asset(
-                                    "assets/images/zlight_icon.jpg",
+                                    "assets/images/z.png",
                                     height: 40,
                                   ),
                                   Container(
@@ -217,40 +231,44 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                   ],
                 ),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      width: 600,
-                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Container(
-                            child: TextButton(
-                              onPressed: (){
-                                Navigator.pop(context);
-                              },
-                              style: textBtnStyleWhite,
-                              child: const SizedBox(
-                                height: 40,
-                                width: 100,
-                                child: Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'Done',
-                                      style: TextStyle(color: Colors.black),
+                
+
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Center(
+                        child: Container(
+                          width: 124,
+                          height: 38,
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.white, width: 1),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(4)
+                          ),
+                          child: MouseRegion(
+                            cursor: SystemMouseCursors.click,
+                            child: GestureDetector(
+                                onTap: () => Navigator.pop(context),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [                                
+                                  Text(
+                                    "Done",
+                                    style: TextStyle(
+                                      color: Color(0xFF212121)
                                     ),
                                   ),
-                                ),
+                                ],
                               ),
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
 
               ],

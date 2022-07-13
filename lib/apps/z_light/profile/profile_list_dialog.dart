@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/widgets/theme.dart';
+import 'package:provider/provider.dart';
+
+import '../../../providers/profile_provider/profile_provider.dart';
 
 
 void browse(){
@@ -80,29 +83,37 @@ Future<void> profileListDialog(BuildContext context) async {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            child: TextButton(
-                              onPressed: () => browse(),
-                              style: textBtnStyleWhite,
-                              child: const SizedBox(
-                                height: 40,
-                                width: 100,
-                                child: Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'Browse',
-                                      style: TextStyle(color: Colors.black),
+                            width: 111,
+                            height: 28,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white, width: 1),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(4)
+                            ),
+                            child: MouseRegion(
+                              cursor: SystemMouseCursors.click,
+                              child: GestureDetector(
+                                  onTap: () => Navigator.pop(context),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [                                
+                                    Text(
+                                      "Browse",
+                                      style: TextStyle(
+                                        color: Color(0xFF212121)
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
                               ),
                             ),
                           ),
+                          
 
                           InkWell(
                             child: Container(
-                              height: 40,
-                              width: 150,
+                              height: 28,
+                              width: 82,
                               decoration: BoxDecoration(
                                 border: Border.all(color: Colors.white, width: 1),
                               ),
@@ -110,7 +121,7 @@ Future<void> profileListDialog(BuildContext context) async {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: const [
                                   Padding(
-                                    padding: EdgeInsets.all(8.0),
+                                    padding: EdgeInsets.all(4),
                                     child: Text("A - Z"),
                                   ),
                                   Icon(Icons.arrow_drop_down)
@@ -166,29 +177,58 @@ Future<void> profileListDialog(BuildContext context) async {
                       margin: const EdgeInsets.all(16),
                       width: 600,
                       height: 450,
-                      color: Colors.black,
-                      child: ListView.builder(
-                        padding: const EdgeInsets.all(2),
-                        itemCount: entries.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Container(
-                            margin: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white, width: 1),
-                            ),
-                            height: 70,
-                            child: Row(
-                              children: [
-                                Image.asset(
-                                  "assets/images/zlight_icon.jpg",
-                                  height: 40,
+                      color: const Color(0xFF212121),
+                      child: Consumer<ProfileProvider>(
+                        builder: (_, provider, __){
+                          return Column(
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.white, width: 1),
                                 ),
-                                Container(
-                                  padding: const EdgeInsets.only(left: 8),
-                                  child: const Text("Default"),
+                                height: 70,
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      "assets/images/z.png",
+                                      height: 40,
+                                    ),
+                                    Container(
+                                      padding: const EdgeInsets.only(left: 8),
+                                      child: const Text("Default"),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                              Expanded(
+                                child: ListView.builder(
+                                  padding: const EdgeInsets.all(2),
+                                  itemCount: provider.profiles.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return Container(
+                                      margin: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.white, width: 1),
+                                      ),
+                                      height: 70,
+                                      child: Row(
+                                        children: [
+                                          Image.asset(
+                                            "assets/images/z.png",
+                                            height: 40,
+                                          ),
+                                          Container(
+                                            padding: const EdgeInsets.only(left: 8),
+                                            child: const Text("Default"),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                ),
+                              ),
+                            ],
                           );
                         }
                       ),
