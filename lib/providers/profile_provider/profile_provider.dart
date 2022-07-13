@@ -1,17 +1,18 @@
-import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:hpx/models/apps/zlightspace_models/profiles/profiles_model.dart';
-import 'package:hpx/providers/layers_provider/layers.dart';
-import 'package:hpx/utils/database_manager.dart';
 
 import 'package:flutter/material.dart';
 ///[ProfileProvider] to controle the layers state
 
 
 class ProfileProvider extends ChangeNotifier {
-  List<Profile> _profiles = [];
+  final List<Profile> _profiles = [];
   List<Profile> get profiles => _profiles;
   late Profile currentProfile;
+  bool creatingProfile = false;
+  String profileName = "";
+  int profileID = 0;
+  
 
 
   Profile defaultProfile = Profile(
@@ -22,8 +23,19 @@ class ProfileProvider extends ChangeNotifier {
 
   );
 
+  void setProfileName(String name){
+    profileName = name;
+    notifyListeners();
+  }
 
-  
+
+  String getProfileName(){
+    if(profileName.isNotEmpty){
+      return profileName;
+    }else{
+      return defaultProfile.name;
+    }
+  }
 
 
   Profile getCurrentProfile(){

@@ -1,12 +1,44 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
+import 'package:file_picker/file_picker.dart';
 
-import '../../../providers/profile_provider/profile_provider.dart';
+
+void browse(BuildContext context) async{
+  ProfileProvider profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+  FilePickerResult? result = await FilePicker.platform.pickFiles();
+  String parentDir = "";
+  if (result != null) {
+    if(!kIsWeb){
+      if(Platform.isWindows){
+        File file = File(result.files.single.path!);
+        parentDir = file.parent.toString().split("\\").toList().last;      
+      }else if(Platform.isLinux){
+        File file = File(result.files.single.path!);
+        print(file.parent.toString());
+      }
+
+      if(parentDir.endsWith("'")){
+        parentDir = parentDir.substring(0, parentDir.length -1);
+      }
+      profileProvider.setProfileName(parentDir);
+    }else{
+      
+    }
+
+  } else {
+    // User canceled the picker
+  }
+  
+}
 
 
-void browse(){
-
+void addProfile(BuildContext context){
+  ProfileProvider profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+  profileProvider.addProfile();
 }
 
 Future<void> profileListDialog(BuildContext context) async {
@@ -34,31 +66,7 @@ Future<void> profileListDialog(BuildContext context) async {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                            child: InkWell(
-                              onTap: (){
-                                Navigator.pop(context);
-                              },
-                              child: const Icon(
-                                Icons.close,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
+                    SizedBox(
                       width: 600,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -78,7 +86,7 @@ Future<void> profileListDialog(BuildContext context) async {
                   children: [
                     Container(
                       width: 600,
-                      margin: EdgeInsets.all(16),
+                      margin: const EdgeInsets.all(16),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -93,7 +101,7 @@ Future<void> profileListDialog(BuildContext context) async {
                             child: MouseRegion(
                               cursor: SystemMouseCursors.click,
                               child: GestureDetector(
-                                  onTap: () => Navigator.pop(context),
+                                  onTap: () => browse(context),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: const [                                
@@ -168,7 +176,19 @@ Future<void> profileListDialog(BuildContext context) async {
                             ),
                             height: 40,
                             width: 200,
-                            child: const Center(child: Text("Default")),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children:  [
+                                 Consumer<ProfileProvider>(
+                                   builder: (_, provider, __) {
+                                     return Padding(
+                                       padding: EdgeInsets.all(8.0),
+                                       child: Text(provider.getProfileName()),
+                                     );
+                                   }
+                                 ),
+                              ],
+                            ),
                           )
                         ],
                       ),
@@ -241,7 +261,7 @@ Future<void> profileListDialog(BuildContext context) async {
                   children: [
                     Container(
                       width: 600,
-                      margin: EdgeInsets.all(16),
+                      margin: const EdgeInsets.all(16),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [                          
@@ -265,13 +285,11 @@ Future<void> profileListDialog(BuildContext context) async {
                             ),
                           ),
 
-                          SizedBox(
-                            width: 20,
-                          ),
+                          const SizedBox(width: 20,),
 
                           Container(
                             child: TextButton(
-                              onPressed: () => browse(),
+                              onPressed: () => {},
                               style: textBtnStyleWhite,
                               child: const SizedBox(
                                 height: 40,
