@@ -864,9 +864,20 @@ class WorkspaceProvider with ChangeNotifier {
     layersLTWH.remove('$id');
   }
 
+  /// [_workspaceConstraints] holds the contraints of the workspace,
+  /// which is used to position other widgets in the tree.
+  BoxConstraints? _workspaceConstraints;
+
   /// [recenter] sets the left and top position of the workspace children
   void recenter(BoxConstraints constraints, bool reset) {
-    if (keyboardPosLeft == null || keyboardPosTop == null || reset) {
+    if (_workspaceConstraints == null ||
+        _workspaceConstraints?.maxWidth != constraints.maxWidth ||
+        _workspaceConstraints?.maxHeight != constraints.maxHeight ||
+        reset) {
+      // update workspace contraints
+      _workspaceConstraints = constraints;
+
+      // recalculate keyboard position
       keyboardPosLeft = (constraints.maxWidth - scrollOffset!) / 5;
       keyboardPosTop = (constraints.maxHeight - scrollOffset!) / 8;
     }

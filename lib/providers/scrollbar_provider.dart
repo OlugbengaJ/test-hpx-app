@@ -34,21 +34,32 @@ class ScrollbarProvider with ChangeNotifier {
   /// of the workspace in the first call of [initVerticalScroll].
   bool _scrollWidthIsError = true;
 
+  /// [_workspaceConstraints] holds the contraints of the workspace,
+  /// which is used to position other widgets in the tree.
+  BoxConstraints? _workspaceConstraints;
+
   /// [initHorizontalScroll] sets the horizontal thumb and offset on changes.
   void initHorizontalScroll(BoxConstraints constraints, double? offset,
       double scale, double minScale, double maxScale,
       {bool? reset}) {
-    final offsetMultiplier = 3 * offset!;
-    final width = constraints.maxWidth - offsetMultiplier;
-    final height = constraints.maxHeight - offsetMultiplier;
+    // final offsetMultiplier = 2 * offset!;
+    final width = constraints.maxWidth + offset!; // - offsetMultiplier;
+    final height = constraints.maxHeight + offset;
 
-    if (_scrollWidthIsError || scaleFactorH == null || reset == true) {
+    if (_workspaceConstraints == null ||
+        initThumbSizeH == null ||
+        _workspaceConstraints?.maxWidth != constraints.maxWidth ||
+        _workspaceConstraints?.maxHeight != constraints.maxHeight ||
+        reset == true) {
+      // update workspace contraints
+      _workspaceConstraints = constraints;
+
       scaleFactorH = maxScale - minScale;
-      initThumbSizeH = width * 0.4;
+      initThumbSizeH = width * 0.5;
       _left = (width - initThumbSizeH!) / 2;
     }
 
-    if (height >= 0) _scrollWidthIsError = false;
+    // if (height >= 0) _scrollWidthIsError = false;
 
     // determine the ratio change in scale
     // double scaleRatio = _scaleChange(scale, scaleFactorH);
@@ -114,16 +125,24 @@ class ScrollbarProvider with ChangeNotifier {
   void initVerticalScroll(BoxConstraints constraints, double? offset,
       double scale, double minScale, double maxScale,
       {bool? reset}) {
-    final offsetMultiplier = 3 * offset!;
-    final height = constraints.maxHeight - offsetMultiplier;
+    // final offsetMultiplier = 3 * offset!;
+    final height = constraints.maxHeight + offset!; //- offsetMultiplier;
 
-    if (_scrollHeightIsError || scaleFactorV == null || reset == true) {
+    // if (_scrollHeightIsError || scaleFactorV == null || reset == true) {
+    if (_workspaceConstraints == null ||
+        initThumbSizeV == null ||
+        _workspaceConstraints?.maxWidth != constraints.maxWidth ||
+        _workspaceConstraints?.maxHeight != constraints.maxHeight ||
+        reset == true) {
+      // update workspace contraints
+      _workspaceConstraints = constraints;
+
       scaleFactorV = maxScale - minScale;
       initThumbSizeV = height.abs() * 0.6;
       _top = (height.abs() - initThumbSizeV!) / 2;
     }
 
-    if (height >= 0) _scrollHeightIsError = false;
+    // if (height >= 0) _scrollHeightIsError = false;
 
     // determine the ratio change in scale
     // double scaleRatio = _scaleChange(scale, scaleFactorH);
