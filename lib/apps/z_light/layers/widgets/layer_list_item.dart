@@ -320,12 +320,16 @@ class _LayerListItemState extends State<LayerListItem> {
                                                           _toggleEditing(value),
                                                     ),
                                                   ),
+
                                                   JustTheTooltip(
-                                                    tailLength: 5,
-                                                    tailBaseWidth: 0,
+                                                    
                                                     isModal: true,
                                                     controller: tooltipController,
-                                                    content: GestureDetector(
+                                                    content: Container(
+                                                      height: 50,
+                                                      child: Text("OK"),
+                                                    ),
+                                                    child: GestureDetector(
                                                       child: Tooltip(
                                                         message: 'Delete',
                                                         child: InkWell(
@@ -338,35 +342,6 @@ class _LayerListItemState extends State<LayerListItem> {
                                                           ),
                                                           onTap: () =>
                                                               _deleteLayer(value),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    child: Material(
-                                                      color: Colors.grey.shade800,
-                                                      elevation: 1.0,
-                                                      child:  Padding(
-                                                        padding: const EdgeInsets.all(8.0),
-                                                        child: InkWell(
-                                                          child: Container(
-                                                            padding: const EdgeInsets.symmetric(horizontal: 4),
-                                                            width: 200,
-                                                            decoration: BoxDecoration(
-                                                              border: Border.all(color: Colors.white, width: 1),
-                                                              borderRadius: BorderRadius.circular(0)
-                                                            ),
-                                                            child: Row(
-                                                              children: [
-                                                                Image.asset(
-                                                                  "assets/images/zlight_icon.jpg",
-                                                                  height: 20,
-                                                                ),
-                                                                Container(
-                                                                  padding: const EdgeInsets.only(left: 8),
-                                                                  child: Text("Default"),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
                                                         ),
                                                       ),
                                                     ),
