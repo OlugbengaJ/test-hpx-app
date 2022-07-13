@@ -28,29 +28,23 @@ class ScrollbarProvider with ChangeNotifier {
   /// [scaleFactorV] scales the vertical thumb to update [thumbSizeV].
   double? scaleFactorV;
 
-  /// [_scrollWidthIsError] is used to take care of constraints issue on linux.
-  ///
-  /// MaxWidth of LayoutContraint does not return the actual contraint values
-  /// of the workspace in the first call of [initVerticalScroll].
-  bool _scrollWidthIsError = true;
-
-  /// [_workspaceConstraints] holds the contraints of the workspace,
+  /// [_workspaceMaxWidth] holds the max width contraints of the workspace,
   /// which is used to position other widgets in the tree.
   double? _workspaceMaxWidth;
+
+  /// [_workspaceMaxHeight] holds the max height contraints of the workspace,
+  /// which is used to position other widgets in the tree.
   double? _workspaceMaxHeight;
 
   /// [initHorizontalScroll] sets the horizontal thumb and offset on changes.
   void initHorizontalScroll(BoxConstraints constraints, double? offset,
       double scale, double minScale, double maxScale,
       {bool? reset}) {
-    // final offsetMultiplier = 2 * offset!;
-    final width = constraints.maxWidth + offset!; // - offsetMultiplier;
-    final height = constraints.maxHeight + offset;
+    final width = constraints.maxWidth + offset!;
 
     if (_workspaceMaxWidth == null ||
         initThumbSizeH == null ||
         _workspaceMaxWidth != constraints.maxWidth ||
-        // _workspaceConstraints?.maxHeight != constraints.maxHeight ||
         reset == true) {
       // update workspace contraints
       _workspaceMaxWidth = constraints.maxWidth;
@@ -59,8 +53,6 @@ class ScrollbarProvider with ChangeNotifier {
       initThumbSizeH = width * 0.5;
       _left = (width - initThumbSizeH!) / 2;
     }
-
-    // if (height >= 0) _scrollWidthIsError = false;
 
     // determine the ratio change in scale
     // double scaleRatio = _scaleChange(scale, scaleFactorH);
@@ -116,23 +108,14 @@ class ScrollbarProvider with ChangeNotifier {
     //     'Hscroll scale $scale, percent $scaleRatio, thumb $thumbSizeH, left $left, width $width');
   }
 
-  /// [_scrollHeightIsError] is used to take care of constraints issue on linux.
-  ///
-  /// MaxHeight of LayoutContraint does not return the actual contraint values
-  /// of the workspace in the first call of [initVerticalScroll].
-  bool _scrollHeightIsError = true;
-
   /// [initVerticalScroll] sets the vertical thumb and offset on changes.
   void initVerticalScroll(BoxConstraints constraints, double? offset,
       double scale, double minScale, double maxScale,
       {bool? reset}) {
-    // final offsetMultiplier = 3 * offset!;
-    final height = constraints.maxHeight + offset!; //- offsetMultiplier;
+    final height = constraints.maxHeight + offset!;
 
-    // if (_scrollHeightIsError || scaleFactorV == null || reset == true) {
     if (_workspaceMaxHeight == null ||
         initThumbSizeV == null ||
-        // _workspaceConstraints?.maxWidth != constraints.maxWidth ||
         _workspaceMaxHeight != constraints.maxHeight ||
         reset == true) {
       // update workspace contraints
@@ -142,8 +125,6 @@ class ScrollbarProvider with ChangeNotifier {
       initThumbSizeV = height.abs() * 0.6;
       _top = (height.abs() - initThumbSizeV!) / 2;
     }
-
-    // if (height >= 0) _scrollHeightIsError = false;
 
     // determine the ratio change in scale
     // double scaleRatio = _scaleChange(scale, scaleFactorH);
