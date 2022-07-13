@@ -96,7 +96,7 @@ class ZoomToolbar extends StatelessWidget {
               flex: 1,
               fit: FlexFit.tight,
               child: Tooltip(
-                message: 'Collapse',
+                message: 'Recenter',
                 triggerMode: TooltipTriggerMode.tap,
                 child: RoundButton(
                   icon: Icons.center_focus_strong_sharp,

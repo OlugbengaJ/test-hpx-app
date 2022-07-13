@@ -28,7 +28,7 @@ class _WorkspaceState extends State<Workspace>
   late TextEditingController _zoomTextCtrl;
   late double _zoomValue;
   late double _zoomScale;
-  static const double _zoomScaleFactor = 0.4;
+  late double _zoomScaleFactor;
 
   static const double _zoomInThreshold = 250;
   static const double _zoomOutThreshold = 60;
@@ -52,7 +52,7 @@ class _WorkspaceState extends State<Workspace>
 
       setState(() {
         _zoomValue = value!;
-        _zoomScale = _zoomScaleFactor * _zoomValue / 60;
+        _zoomScale = _zoomScaleFactor * _zoomValue / 100;
         updateZoomText();
       });
     }
@@ -92,10 +92,10 @@ class _WorkspaceState extends State<Workspace>
     zoomTextSubmitted('${_zoomValue - 10}');
   }
 
-  /// [zoomCollapse] sets the zoomValue to the zoomOut threshold.
-  void zoomCollapse() {
+  /// [recenterView] sets the zoomValue to the zoomOut threshold.
+  void recenterView() {
     _resetZoom = true;
-    zoomTextSubmitted('$_zoomOutThreshold');
+    zoomTextSubmitted('100');
   }
 
   @override
@@ -107,7 +107,8 @@ class _WorkspaceState extends State<Workspace>
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
 
     // Initialize zoom value and scale.
-    _zoomValue = 60;
+    _zoomValue = 100;
+    _zoomScaleFactor = 0.5;
     _zoomScale = _zoomScaleFactor * _zoomValue / _zoomValue;
     _zoomTextCtrl = TextEditingController(text: '${_zoomValue.ceil()}%');
   }
@@ -334,6 +335,15 @@ class _WorkspaceState extends State<Workspace>
                             child: Keyboard(zoomScale: _zoomScale),
                           ),
 
+                          OverlaySelector(
+                            showCrossHair:
+                                workspaceProvider.isDragModeResizable,
+                            onPanDown: workspaceProvider.onPanDown,
+                            onPanUpdate: workspaceProvider.onPanUpdate,
+                            onPanEnd: workspaceProvider.onPanEnd,
+                            isVisible: workspaceProvider.selectorVisible,
+                          ),
+
                           if (workspaceProvider.isModalNotify)
                             ModalNotification(
                               closeHandler: workspaceProvider.toggleModal,
@@ -457,18 +467,13 @@ class _WorkspaceState extends State<Workspace>
                           zoomInHandler: zoomIn,
                           zoomExpandHandler: zoomExpand,
                           zoomOutHandler: zoomOut,
-                          zoomCollapseHandler: zoomCollapse,
+                          zoomCollapseHandler: recenterView,
                           zoomEndHandler: zoomEnd,
                         ),
                       ),
                     ),
-                    OverlaySelector(
-                      showCrossHair: workspaceProvider.isDragModeResizable,
-                      onPanDown: workspaceProvider.onPanDown,
-                      onPanUpdate: workspaceProvider.onPanUpdate,
-                      onPanEnd: workspaceProvider.onPanEnd,
-                      isVisible: workspaceProvider.selectorVisible,
-                    ),
+
+                    // TODO: previous overlay location
                   ],
                 );
               },
