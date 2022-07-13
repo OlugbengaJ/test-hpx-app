@@ -2,6 +2,8 @@ class Constants {
   static const String backdropImage = 'assets/images/backdrop.png';
   static const String laptopg9Image = 'assets/images/g9frame.png';
   static const String defaultImageMode = 'assets/images/logo_blue_sq.png';
+  static const String zImage = 'assets/images/z.png';
+  static const String zlightIcon = 'assets/images/zlight_icon.png';
 
   static const String app = 'App';
   static const String click = 'Click';
