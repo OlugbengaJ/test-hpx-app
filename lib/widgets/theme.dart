@@ -20,15 +20,15 @@ ThemeData lightTheme = ThemeData.light().copyWith(
 // });
 
 TextStyle h1Style = const TextStyle(
-    fontSize: 25, color: Colors.white70, fontFamily: "Metropolis");
+    fontSize: 25, color: Colors.white, fontFamily: "Metropolis");
 TextStyle h2Style = const TextStyle(
-    fontSize: 20, color: Colors.white70, fontFamily: "Metropolis");
+    fontSize: 20, color: Colors.white, fontFamily: "Metropolis");
 TextStyle h3Style = const TextStyle(
-    fontSize: 18, color: Colors.white70, fontFamily: "Metropolis");
+    fontSize: 18, color: Colors.white, fontFamily: "Metropolis");
 TextStyle h4Style = const TextStyle(
-    fontSize: 16, color: Colors.white70, fontFamily: "Metropolis");
+    fontSize: 16, color: Colors.white, fontFamily: "Metropolis");
 TextStyle h5Style = const TextStyle(
-    fontSize: 14, color: Colors.white70, fontFamily: "Metropolis");
+    fontSize: 14, color: Colors.white, fontFamily: "Metropolis");
 TextStyle labelStyle =
     const TextStyle(fontSize: 14, color: Colors.grey, fontFamily: "Metropolis");
 TextStyle pStyle =

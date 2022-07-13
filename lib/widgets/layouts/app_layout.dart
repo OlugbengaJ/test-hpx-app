@@ -1,4 +1,5 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/profile/profile_dropdown.dart';
@@ -24,7 +25,9 @@ class _AppLayoutState extends State<AppLayout> {
 
   @override
   Widget build(BuildContext context) {
-    final workspaceProvider = Provider.of<WorkspaceProvider>(context);
+    WorkspaceProvider workspaceProvider =
+        Provider.of<WorkspaceProvider>(context);
+    // final platformProvider = Provider.of<PlatformInfo>(context);
     TooltipTutorialProvider tutorialProvider =
         Provider.of<TooltipTutorialProvider>(context, listen: false);
     tutorialProvider.showTutorial = true;
@@ -39,18 +42,24 @@ class _AppLayoutState extends State<AppLayout> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
-                margin: const EdgeInsets.only(top: 25),
-                width: 123,
-                height: 100,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: Svg(
-                        'assets/images/zlight_logo.svg',
-                      ),
-                      fit: BoxFit.fill),
-                ),
-              )
+              tutorialProvider.generateTooltipTutorial(
+                  Container(
+                    margin: const EdgeInsets.only(top: 25),
+                    width: 123,
+                    height: 100,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: Svg(
+                            'assets/images/zlight_logo.svg',
+                          ),
+                          fit: BoxFit.fill),
+                    ),
+                  ),
+                  'Take a quick tour of your Z Light space application',
+                  'See how to customize your physical keyboard using the Z Light space app based on your mood, preferences and more',
+                  'Close',
+                  'Next',
+                  130.0)
             ],
           ),
           actions: [
@@ -78,15 +87,21 @@ class _AppLayoutState extends State<AppLayout> {
                   ),
                   'Selected Profile',
                   'You can presave a lot of customizations as profiles for later use',
-                  'Close',
-                  'Next',
+                  'No Thanks',
+                  'Let`s Go',
                   100),
             ),
-            WindowTitleBarBox(
-              child: Row(
-                children: const [WindowButtons()],
-              ),
-            )
+            (TargetPlatform.macOS == true ||
+                    TargetPlatform.linux == true ||
+                    TargetPlatform.windows == true ||
+                    TargetPlatform.android == false ||
+                    !kIsWeb)
+                ? WindowTitleBarBox(
+                    child: Row(
+                      children: const [WindowButtons()],
+                    ),
+                  )
+                : Container()
           ],
         ),
         body: Row(
@@ -102,7 +117,7 @@ class _AppLayoutState extends State<AppLayout> {
                     const IconButton(
                       iconSize: 40,
                       color: Colors.white,
-                      icon: const Icon(Ionicons.help_circle_outline),
+                      icon: Icon(Ionicons.help_circle_outline),
                       onPressed: null,
                     ),
                     'Help Option',
@@ -116,6 +131,8 @@ class _AppLayoutState extends State<AppLayout> {
                 child: Column(
               children: [
                 AppBar(
+                  toolbarHeight: 70.0,
+                  backgroundColor: Color(0xff1E1E1E),
                   bottomOpacity: 0.0,
                   elevation: 0.0,
                   title: Row(
@@ -130,7 +147,31 @@ class _AppLayoutState extends State<AppLayout> {
                                     : Colors.grey,
                                 backgroundColor: Colors.transparent,
                                 textStyle: h5Style),
-                            child: const Text('Workspace'),
+                            child: Stack(
+                                alignment: Alignment.topCenter,
+                                fit: StackFit.passthrough,
+                                children: [
+                                  const Positioned(
+                                      top: 10, child: Text('Workspace')),
+                                  Container(
+                                      height: 2,
+                                      margin: const EdgeInsets.only(top: 40.0),
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                            colors: workspaceProvider
+                                                        .isWorkspaceView ==
+                                                    false
+                                                ? [
+                                                    Colors.transparent,
+                                                    Colors.transparent
+                                                  ]
+                                                : [
+                                                    Colors.lightBlue,
+                                                    Colors.blue.shade900,
+                                                    Colors.purple
+                                                  ]),
+                                      ))
+                                ]),
                             onPressed: () {
                               workspaceProvider
                                   .toggleView(WorkspaceView.workspace);
@@ -138,8 +179,8 @@ class _AppLayoutState extends State<AppLayout> {
                           ),
                           'Workspace',
                           'The workspace we allow you move your device around for later customization',
-                          'No Thanks',
-                          'Let`s Go',
+                          'Close',
+                          'Next',
                           100.0),
                       tutorialProvider.generateTooltipTutorial(
                           TextButton(
@@ -150,14 +191,38 @@ class _AppLayoutState extends State<AppLayout> {
                                     : Colors.grey,
                                 backgroundColor: Colors.transparent,
                                 textStyle: h5Style),
-                            child: const Text('Lighting Options'),
+                            child: Stack(
+                                alignment: Alignment.topCenter,
+                                fit: StackFit.passthrough,
+                                children: [
+                                  const Positioned(
+                                      top: 10, child: Text('Lighting Options')),
+                                  Container(
+                                      height: 2,
+                                      margin: const EdgeInsets.only(top: 40.0),
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                            colors: workspaceProvider
+                                                        .isLightingView ==
+                                                    false
+                                                ? [
+                                                    Colors.transparent,
+                                                    Colors.transparent
+                                                  ]
+                                                : [
+                                                    Colors.lightBlue,
+                                                    Colors.blue.shade900,
+                                                    Colors.purple
+                                                  ]),
+                                      ))
+                                ]),
                             onPressed: () {
                               workspaceProvider
                                   .toggleView(WorkspaceView.lighting);
                             },
                           ),
-                          'Take a quick tour of your Z Light space application',
-                          'See how to customize your physical keyboard using the Z Light space app based on your mood, preferences and more',
+                          'Lighthing options',
+                          'Our lighting option allows you full customization of your keyboard with a dazzling stack of ama- zing effects to help your productivity',
                           'Close',
                           'Next',
                           130.0),
