@@ -12,7 +12,7 @@ class ContactSupportWidgetProvider extends ChangeNotifier {
   showContactOptionsDialog(BuildContext context) {
     showDialog(
         context: context,
-        barrierDismissible: false,
+        // barrierDismissible: false,
         builder: (context) {
           return SimpleDialog(
               // backgroundColor: Colors.black,

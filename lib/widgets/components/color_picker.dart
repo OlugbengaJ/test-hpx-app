@@ -307,8 +307,6 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
   }
 
   generatePreviewBox(bool? preview) {
-    ColorPickerProvider colorPickerProviderInstance =
-        Provider.of<ColorPickerProvider>(context, listen: false);
     return (widget.colors.length > 1 && preview == true)
         ? BoxDecoration(
             gradient: LinearGradient(colors: widget.colors),
