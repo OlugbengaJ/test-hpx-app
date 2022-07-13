@@ -2,52 +2,55 @@ import 'dart:io';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:hpx/providers/profile_provider/profile_provider.dart';
+import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
 
-
-void browse(BuildContext context) async{
-  ProfileProvider profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+void browse(BuildContext context) async {
+  ProfileProvider profileProvider =
+      Provider.of<ProfileProvider>(context, listen: false);
   FilePickerResult? result = await FilePicker.platform.pickFiles();
   String parentDir = "";
   if (result != null) {
-    if(!kIsWeb){
-      if(Platform.isWindows){
+    if (!kIsWeb) {
+      if (Platform.isWindows) {
         File file = File(result.files.single.path!);
-        parentDir = file.parent.toString().split("\\").toList().last;      
-      }else if(Platform.isLinux){
+        parentDir = file.parent.toString().split("\\").toList().last;
+      } else if (Platform.isLinux) {
         File file = File(result.files.single.path!);
       }
 
-      if(parentDir.endsWith("'")){
-        parentDir = parentDir.substring(0, parentDir.length -1);
+      if (parentDir.endsWith("'")) {
+        parentDir = parentDir.substring(0, parentDir.length - 1);
       }
       profileProvider.setProfileName(parentDir);
-    }else{
-      
-    }
-
+    } else {}
   } else {
     // User canceled the picker
   }
-  
 }
 
-
-void addProfile(BuildContext context){
-  ProfileProvider profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+void addProfile(BuildContext context) {
+  ProfileProvider profileProvider =
+      Provider.of<ProfileProvider>(context, listen: false);
   profileProvider.addProfile();
 }
 
 Future<void> profileListDialog(BuildContext context) async {
   final List<String> entries = <String>[
-    'A', 'B',
-    'A', 'B',
-    'A', 'B',
-    'A', 'B',
-    'A', 'B',
+    'A',
+    'B',
+    'A',
+    'B',
+    'A',
+    'B',
+    'A',
+    'B',
+    'A',
+    'B',
   ];
+
   return showDialog<void>(
     context: context,
     barrierDismissible: false, // user must tap button!
@@ -61,7 +64,7 @@ Future<void> profileListDialog(BuildContext context) async {
           ),
           child: SingleChildScrollView(
             child: ListBody(
-              children:  <Widget>[
+              children: <Widget>[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -79,7 +82,6 @@ Future<void> profileListDialog(BuildContext context) async {
                     ),
                   ],
                 ),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -93,39 +95,38 @@ Future<void> profileListDialog(BuildContext context) async {
                             width: 111,
                             height: 28,
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white, width: 1),
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(4)
-                            ),
+                                border:
+                                    Border.all(color: Colors.white, width: 1),
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(4)),
                             child: MouseRegion(
                               cursor: SystemMouseCursors.click,
                               child: GestureDetector(
-                                  onTap: () => browse(context),
+                                onTap: () => browse(context),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [                                
+                                  children: const [
                                     Text(
                                       "Browse",
-                                      style: TextStyle(
-                                        color: Color(0xFF212121)
-                                      ),
+                                      style:
+                                          TextStyle(color: Color(0xFF212121)),
                                     ),
                                   ],
                                 ),
                               ),
                             ),
                           ),
-                          
-
                           InkWell(
                             child: Container(
                               height: 28,
                               width: 82,
                               decoration: BoxDecoration(
-                                border: Border.all(color: Colors.white, width: 1),
+                                border:
+                                    Border.all(color: Colors.white, width: 1),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: const [
                                   Padding(
                                     padding: EdgeInsets.all(4),
@@ -141,7 +142,6 @@ Future<void> profileListDialog(BuildContext context) async {
                     ),
                   ],
                 ),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -156,7 +156,7 @@ Future<void> profileListDialog(BuildContext context) async {
                             height: 80,
                             width: 80,
                             child: Image.asset(
-                              "assets/images/zlight_icon.png",
+                              Constants.zlightIcon,
                               height: 40,
                             ),
                           ),
@@ -164,8 +164,7 @@ Future<void> profileListDialog(BuildContext context) async {
                             child: const Text(
                               "Upload a picture",
                               style: TextStyle(
-                                decoration: TextDecoration.underline
-                              ),
+                                  decoration: TextDecoration.underline),
                             ),
                           ),
                           Container(
@@ -177,15 +176,14 @@ Future<void> profileListDialog(BuildContext context) async {
                             width: 200,
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
-                              children:  [
-                                 Consumer<ProfileProvider>(
-                                   builder: (_, provider, __) {
-                                     return Padding(
-                                       padding: EdgeInsets.all(8.0),
-                                       child: Text(provider.getProfileName()),
-                                     );
-                                   }
-                                 ),
+                              children: [
+                                Consumer<ProfileProvider>(
+                                    builder: (_, provider, __) {
+                                  return Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(provider.getProfileName()),
+                                  );
+                                }),
                               ],
                             ),
                           )
@@ -197,64 +195,66 @@ Future<void> profileListDialog(BuildContext context) async {
                       width: 600,
                       height: 450,
                       color: const Color(0xFF212121),
-                      child: Consumer<ProfileProvider>(
-                        builder: (_, provider, __){
-                          return Column(
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.white, width: 1),
-                                ),
-                                height: 70,
-                                child: Row(
-                                  children: [
-                                    Image.asset(
-                                      "assets/images/z.png",
-                                      height: 40,
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.only(left: 8),
-                                      child: const Text("Default"),
-                                    ),
-                                  ],
-                                ),
+                      child:
+                          Consumer<ProfileProvider>(builder: (_, provider, __) {
+                        return Column(
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.white, width: 1),
                               ),
-                              Expanded(
-                                child: ListView.builder(
+                              height: 70,
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    Constants.zImage,
+                                    height: 40,
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: const Text("Default"),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: ListView.builder(
                                   padding: const EdgeInsets.all(2),
                                   itemCount: provider.profiles.length,
-                                  itemBuilder: (BuildContext context, int index) {
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
                                     return Container(
                                       margin: const EdgeInsets.all(8),
                                       decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.white, width: 1),
+                                        border: Border.all(
+                                            color: Colors.white, width: 1),
                                       ),
                                       height: 70,
                                       child: Row(
                                         children: [
                                           Image.asset(
-                                            "assets/images/z.png",
+                                            Constants.zImage,
                                             height: 40,
                                           ),
                                           Container(
-                                            padding: const EdgeInsets.only(left: 8),
-                                            child:  Text(provider.profiles[index].name),
+                                            padding:
+                                                const EdgeInsets.only(left: 8),
+                                            child: Text(
+                                                provider.profiles[index].name),
                                           ),
                                         ],
                                       ),
                                     );
-                                  }
-                                ),
-                              ),
-                            ],
-                          );
-                        }
-                      ),
+                                  }),
+                            ),
+                          ],
+                        );
+                      }),
                     )
                   ],
                 ),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -263,18 +263,18 @@ Future<void> profileListDialog(BuildContext context) async {
                       margin: const EdgeInsets.all(16),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
-                        children: [                          
+                        children: [
                           InkWell(
-                            onTap: (){
+                            onTap: () {
                               Navigator.pop(context);
                             },
                             child: Container(
                               height: 40,
                               width: 100,
                               decoration: BoxDecoration(
-                                border: Border.all(color: Colors.white, width: 1),
-                                borderRadius: BorderRadius.circular(4)
-                              ),
+                                  border:
+                                      Border.all(color: Colors.white, width: 1),
+                                  borderRadius: BorderRadius.circular(4)),
                               child: const Center(
                                 child: Padding(
                                   padding: EdgeInsets.all(8.0),
@@ -283,9 +283,9 @@ Future<void> profileListDialog(BuildContext context) async {
                               ),
                             ),
                           ),
-
-                          const SizedBox(width: 20,),
-
+                          const SizedBox(
+                            width: 20,
+                          ),
                           Container(
                             child: TextButton(
                               onPressed: () => addProfile(context),
@@ -310,7 +310,6 @@ Future<void> profileListDialog(BuildContext context) async {
                     ),
                   ],
                 ),
-
               ],
             ),
           ),
