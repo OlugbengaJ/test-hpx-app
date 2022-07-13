@@ -36,7 +36,8 @@ class ScrollbarProvider with ChangeNotifier {
 
   /// [_workspaceConstraints] holds the contraints of the workspace,
   /// which is used to position other widgets in the tree.
-  BoxConstraints? _workspaceConstraints;
+  double? _workspaceMaxWidth;
+  double? _workspaceMaxHeight;
 
   /// [initHorizontalScroll] sets the horizontal thumb and offset on changes.
   void initHorizontalScroll(BoxConstraints constraints, double? offset,
@@ -46,13 +47,13 @@ class ScrollbarProvider with ChangeNotifier {
     final width = constraints.maxWidth + offset!; // - offsetMultiplier;
     final height = constraints.maxHeight + offset;
 
-    if (_workspaceConstraints == null ||
+    if (_workspaceMaxWidth == null ||
         initThumbSizeH == null ||
-        _workspaceConstraints?.maxWidth != constraints.maxWidth ||
-        _workspaceConstraints?.maxHeight != constraints.maxHeight ||
+        _workspaceMaxWidth != constraints.maxWidth ||
+        // _workspaceConstraints?.maxHeight != constraints.maxHeight ||
         reset == true) {
       // update workspace contraints
-      _workspaceConstraints = constraints;
+      _workspaceMaxWidth = constraints.maxWidth;
 
       scaleFactorH = maxScale - minScale;
       initThumbSizeH = width * 0.5;
@@ -65,7 +66,7 @@ class ScrollbarProvider with ChangeNotifier {
     // double scaleRatio = _scaleChange(scale, scaleFactorH);
 
     final scaleDiff = (scale - minScale);
-    thumbSizeH = initThumbSizeH! - scaleDiff;
+    thumbSizeH = (initThumbSizeH! - scaleDiff).abs();
 
     // if (scale != scaleFactorH) {
     // if (scaleRatio == 0) {
@@ -129,13 +130,13 @@ class ScrollbarProvider with ChangeNotifier {
     final height = constraints.maxHeight + offset!; //- offsetMultiplier;
 
     // if (_scrollHeightIsError || scaleFactorV == null || reset == true) {
-    if (_workspaceConstraints == null ||
+    if (_workspaceMaxHeight == null ||
         initThumbSizeV == null ||
-        _workspaceConstraints?.maxWidth != constraints.maxWidth ||
-        _workspaceConstraints?.maxHeight != constraints.maxHeight ||
+        // _workspaceConstraints?.maxWidth != constraints.maxWidth ||
+        _workspaceMaxHeight != constraints.maxHeight ||
         reset == true) {
       // update workspace contraints
-      _workspaceConstraints = constraints;
+      _workspaceMaxHeight = constraints.maxHeight;
 
       scaleFactorV = maxScale - minScale;
       initThumbSizeV = height.abs() * 0.6;
@@ -148,7 +149,7 @@ class ScrollbarProvider with ChangeNotifier {
     // double scaleRatio = _scaleChange(scale, scaleFactorH);
 
     final scaleDiff = (scale - minScale);
-    thumbSizeV = initThumbSizeV! - scaleDiff;
+    thumbSizeV = (initThumbSizeV! - scaleDiff).abs();
 
     // // determine the ratio change in scale
     // final scaleRatio = _scaleChange(scale, scaleFactorV);
