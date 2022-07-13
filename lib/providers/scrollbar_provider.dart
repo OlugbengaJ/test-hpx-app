@@ -28,15 +28,29 @@ class ScrollbarProvider with ChangeNotifier {
   /// [scaleFactorV] scales the vertical thumb to update [thumbSizeV].
   double? scaleFactorV;
 
+  /// [_workspaceMaxWidth] holds the max width contraints of the workspace,
+  /// which is used to position other widgets in the tree.
+  double? _workspaceMaxWidth;
+
+  /// [_workspaceMaxHeight] holds the max height contraints of the workspace,
+  /// which is used to position other widgets in the tree.
+  double? _workspaceMaxHeight;
+
   /// [initHorizontalScroll] sets the horizontal thumb and offset on changes.
   void initHorizontalScroll(BoxConstraints constraints, double? offset,
       double scale, double minScale, double maxScale,
       {bool? reset}) {
-    final width = constraints.maxWidth - (3 * offset!);
+    final width = constraints.maxWidth + offset!;
 
-    if (scaleFactorH == null || reset == true) {
+    if (_workspaceMaxWidth == null ||
+        initThumbSizeH == null ||
+        _workspaceMaxWidth != constraints.maxWidth ||
+        reset == true) {
+      // update workspace contraints
+      _workspaceMaxWidth = constraints.maxWidth;
+
       scaleFactorH = maxScale - minScale;
-      initThumbSizeH = width * 0.4;
+      initThumbSizeH = width * 0.5;
       _left = (width - initThumbSizeH!) / 2;
     }
 
@@ -44,7 +58,7 @@ class ScrollbarProvider with ChangeNotifier {
     // double scaleRatio = _scaleChange(scale, scaleFactorH);
 
     final scaleDiff = (scale - minScale);
-    thumbSizeH = initThumbSizeH! - scaleDiff;
+    thumbSizeH = (initThumbSizeH! - scaleDiff).abs();
 
     // if (scale != scaleFactorH) {
     // if (scaleRatio == 0) {
@@ -98,19 +112,25 @@ class ScrollbarProvider with ChangeNotifier {
   void initVerticalScroll(BoxConstraints constraints, double? offset,
       double scale, double minScale, double maxScale,
       {bool? reset}) {
-    final height = constraints.maxHeight - (3 * offset!);
+    final height = constraints.maxHeight + offset!;
 
-    if (scaleFactorV == null || reset == true) {
+    if (_workspaceMaxHeight == null ||
+        initThumbSizeV == null ||
+        _workspaceMaxHeight != constraints.maxHeight ||
+        reset == true) {
+      // update workspace contraints
+      _workspaceMaxHeight = constraints.maxHeight;
+
       scaleFactorV = maxScale - minScale;
-      initThumbSizeV = height * 0.6;
-      _top = (height - initThumbSizeV!) / 2;
+      initThumbSizeV = height.abs() * 0.6;
+      _top = (height.abs() - initThumbSizeV!) / 2;
     }
 
     // determine the ratio change in scale
     // double scaleRatio = _scaleChange(scale, scaleFactorH);
 
     final scaleDiff = (scale - minScale);
-    thumbSizeV = initThumbSizeV! - scaleDiff;
+    thumbSizeV = (initThumbSizeV! - scaleDiff).abs();
 
     // // determine the ratio change in scale
     // final scaleRatio = _scaleChange(scale, scaleFactorV);

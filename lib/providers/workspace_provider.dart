@@ -9,6 +9,7 @@ import 'package:hpx/models/apps/zlightspace_models/workspace_models/box_zone.dar
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/selection_offset.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/utils/common.dart';
+import 'package:hpx/widgets/components/picker_dropdown.dart';
 
 /// [WorkspaceProvider] handles the workspace events.
 ///
@@ -20,8 +21,20 @@ class WorkspaceProvider with ChangeNotifier {
   /// [_stripNotificationText] holds text used by the strip notifcation.
   String? _stripNotificationText;
 
-  /// [_modalWidgets] holds widgets that are rendered in the modal notifcation.
+  /// [_modalWidgets] holds widgets that are rendered in the modal notification.
   List<Widget>? _modalWidgets;
+
+  PickerModel? _currentProfile;
+  PickerModel? get getProfile => _currentProfile;
+
+  void initProfile(PickerModel? value) => _currentProfile ??= value;
+
+  void setProfile(PickerModel? value) async {
+    _currentProfile = value;
+
+    await Future.delayed(const Duration(microseconds: 1));
+    notifyListeners();
+  }
 
   final double _resizableThreshold = 20;
 
@@ -417,15 +430,20 @@ class WorkspaceProvider with ChangeNotifier {
         case DraggableRegionName.center:
 
           // selector move hence update left and top limited to view.
-          if (left > 0 &&
-              (left + ltwh.resizableLTWH!.width!) <
-                  _workspaceRect.width - scrollOffset!) {
+          final leftPlusWidth = left + ltwh.resizableLTWH!.width!;
+          final workspaceWidth = _workspaceRect.width - scrollOffset!;
+          if (left > 0 && leftPlusWidth < workspaceWidth ||
+              (leftPlusWidth > workspaceWidth && details.delta.dx.isNegative) ||
+              (left < 0 && !details.delta.dx.isNegative)) {
             ltwh.resizableLTWH!.left = left;
           }
 
-          if (top > 0 &&
-              (top + ltwh.resizableLTWH!.height!) <
-                  _workspaceRect.height - scrollOffset!) {
+          final topPlusHeight = top + ltwh.resizableLTWH!.height!;
+          final workspaceHeight = _workspaceRect.height - scrollOffset!;
+          if (top > 0 && topPlusHeight < workspaceHeight ||
+              (topPlusHeight > workspaceHeight &&
+                  details.delta.dy.isNegative) ||
+              (top < 0 && !details.delta.dy.isNegative)) {
             ltwh.resizableLTWH!.top = top;
           }
           break;
@@ -846,9 +864,20 @@ class WorkspaceProvider with ChangeNotifier {
     layersLTWH.remove('$id');
   }
 
+  /// [_workspaceConstraints] holds the contraints of the workspace,
+  /// which is used to position other widgets in the tree.
+  BoxConstraints? _workspaceConstraints;
+
   /// [recenter] sets the left and top position of the workspace children
   void recenter(BoxConstraints constraints, bool reset) {
-    if (keyboardPosLeft == null || keyboardPosTop == null || reset) {
+    if (_workspaceConstraints == null ||
+        _workspaceConstraints?.maxWidth != constraints.maxWidth ||
+        _workspaceConstraints?.maxHeight != constraints.maxHeight ||
+        reset) {
+      // update workspace contraints
+      _workspaceConstraints = constraints;
+
+      // recalculate keyboard position
       keyboardPosLeft = (constraints.maxWidth - scrollOffset!) / 5;
       keyboardPosTop = (constraints.maxHeight - scrollOffset!) / 8;
     }
