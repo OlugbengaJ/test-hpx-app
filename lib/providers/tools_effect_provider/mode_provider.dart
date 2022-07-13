@@ -222,8 +222,9 @@ class ModeProvider extends ChangeNotifier {
         Provider.of<LayersProvider>(context, listen: false);
     ShortcutWidgetProvider shortcutWidgetProvider =
         Provider.of<ShortcutWidgetProvider>(context, listen: false);
-    TooltipTutorialProvider tutorialProvider =
-        Provider.of<TooltipTutorialProvider>(context, listen: false);
+    contacProvider =
+        Provider.of<ContactSupportWidgetProvider>(context, listen: false);
+    appContext = context;
 
     /// if last mode was interactive
     if (currentMode.value == EnumModes.interactive) {
@@ -328,9 +329,6 @@ class ModeProvider extends ChangeNotifier {
         for (var element in contactsupportlist) {
           currentColors.add(element.colorCode[0]);
         }
-        contacProvider =
-            Provider.of<ContactSupportWidgetProvider>(context, listen: false);
-        appContext = context;
         preset = const ContactSupportPreset();
         break;
       default:
@@ -381,7 +379,6 @@ class ModeProvider extends ChangeNotifier {
                 ? currentMode.name
                 : pickerChoice.title));
     layerProvider.toolsEffectsUpdated(modeChanged: changeComp);
-    tutorialProvider.generateDialogTurorial(context);
   }
 
   // get current mode information
