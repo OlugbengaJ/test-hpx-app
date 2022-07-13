@@ -18,7 +18,6 @@ void browse(BuildContext context) async{
         parentDir = file.parent.toString().split("\\").toList().last;      
       }else if(Platform.isLinux){
         File file = File(result.files.single.path!);
-        print(file.parent.toString());
       }
 
       if(parentDir.endsWith("'")){
@@ -240,7 +239,7 @@ Future<void> profileListDialog(BuildContext context) async {
                                           ),
                                           Container(
                                             padding: const EdgeInsets.only(left: 8),
-                                            child: const Text("Default"),
+                                            child:  Text(provider.profiles[index].name),
                                           ),
                                         ],
                                       ),
@@ -289,7 +288,7 @@ Future<void> profileListDialog(BuildContext context) async {
 
                           Container(
                             child: TextButton(
-                              onPressed: () => {},
+                              onPressed: () => addProfile(context),
                               style: textBtnStyleWhite,
                               child: const SizedBox(
                                 height: 40,

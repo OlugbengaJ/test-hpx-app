@@ -53,11 +53,24 @@ class ProfileProvider extends ChangeNotifier {
   }
 
   void addProfile(){
+    Profile newProfile = Profile(
+      id: 1,
+      name: profileName,
+      layers: [],
+      associatedApps: []
+    );
 
+    _profiles.add(newProfile);
+    notifyListeners();
+  }
+
+  void deleteProfile(int profileID){
+  }
+
+  void renameProfile(String name){
   }
 
   void setProfileImage(){
-    
   }
 
 
