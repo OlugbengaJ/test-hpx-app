@@ -1,77 +1,86 @@
-import 'package:flutter/widgets.dart';
-import 'package:hpx/models/apps/zlightspace_models/profiles/profiles_model.dart';
-
 import 'package:flutter/material.dart';
-///[ProfileProvider] to controle the layers state
+import 'package:hpx/models/apps/zlightspace_models/profiles/profiles_model.dart';
+import 'package:hpx/utils/constants.dart';
 
-
+///[ProfileProvider] to control the layers state
 class ProfileProvider extends ChangeNotifier {
-  final List<Profile> _profiles = [];
-  List<Profile> get profiles => _profiles;
-  late Profile currentProfile;
+  final List<Profile> _profiles = [
+    // init with a default profile
+    Profile(
+      id: 0,
+      name: "Default",
+      imageUrl: Constants.zImage,
+      layers: [],
+      associatedApps: [],
+    )
+  ];
+
+  /// [profiles] returns the list of profile
+  List<Profile> get profiles => [..._profiles];
+
+  late Profile _currentProfile;
+
   bool creatingProfile = false;
-  String profileName = "";
+
   int profileID = 0;
-  
+  String _profileName = '';
+  String _imageUrl = '';
 
+  // Profile defaultProfile =
+  //     Profile(id: 0, name: "Default", layers: [], associatedApps: []);
 
-  Profile defaultProfile = Profile(
-    id: 0,
-    name: "Default",
-    layers: [],
-    associatedApps: []
-
-  );
-
-  void setProfileName(String name){
-    profileName = name;
+  void setProfileName(String name) {
+    _profileName = name;
     notifyListeners();
   }
 
-
-  String getProfileName(){
-    if(profileName.isNotEmpty){
-      return profileName;
-    }else{
-      return defaultProfile.name;
+  String get profileName {
+    if (_profileName.isNotEmpty) {
+      return _profileName;
     }
+
+    return profiles.first.name;
   }
 
-
-  Profile getCurrentProfile(){
-    currentProfile = Profile(
-      id: 1,
-      name: "Current",
-      layers: [],
-      associatedApps: []
-    );
+  Profile get currentProfile {
     try {
-       return currentProfile;
+      return _currentProfile;
     } catch (e) {
-       return defaultProfile;
-    }    
+      _currentProfile = profiles.first;
+    }
+
+    return _currentProfile;
   }
 
-  void addProfile(){
-    Profile newProfile = Profile(
-      id: 1,
-      name: profileName,
+  int get _nextId {
+    int id = 0;
+    for (var p in profiles) {
+      if (p.id > id) id = p.id;
+    }
+
+    return id + 1;
+  }
+
+  void addProfile() {
+    Profile profile = Profile(
+      id: _nextId,
+      name: _profileName,
+      imageUrl: _imageUrl,
       layers: [],
-      associatedApps: []
+      associatedApps: [],
     );
 
-    _profiles.add(newProfile);
+    _profiles.add(profile);
     notifyListeners();
   }
 
-  void deleteProfile(int profileID){
+  void deleteProfile(int id) {
+    if (profileID == 0) return;
+
+    profiles.removeWhere((p) => p.id == id);
   }
 
-  void renameProfile(String name){
-  }
+  void renameProfile(String name) {}
 
-  void setProfileImage(){
-  }
-
-
+  void setProfileImage() {}
 }

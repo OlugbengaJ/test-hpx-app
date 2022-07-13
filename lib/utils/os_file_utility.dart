@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/globals.dart';
+import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -209,23 +210,88 @@ class OSFileUtility {
   /// [_processWindowsFile] process Windows specific file
   static void _processWindowsFile(FilePickerResult? result) {
     if (result != null) {
-      debugPrint('\r\npicker id ${result.files.map((e) => e.identifier)}');
+      final profileProvider = Provider.of<ProfileProvider>(
+          navigatorKeys.currentContext!,
+          listen: false);
+
       debugPrint('\r\npicker name ${result.files.map((e) => e.name)}');
       debugPrint('\r\npicker path ${result.files.map((e) => e.path)}');
       debugPrint(
           '\r\npicker extension ${result.files.map((e) => e.extension)}');
 
-      // TODO: use wmic to list properties of the exe
-      // e.g. wmic datafile where "name='C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE'" list full
+      // use wmic (Windows Management Instrumentation Concsole)
+      // to get properties of the EXE file.
+      // e.g.
+      // wmic datafile where name='C:\\Program Files\\WINWORD.EXE' list full
+      // wmic datafile where name='C:\\Program Files\\WINWORD.EXE' list /format:list
+      // wmic product get name,version
+      //
+
+      /**
+       * Using Shell object via Powershell
+       * 
+       * 
+       * ## To run Powershell command via cmd process.
+       * 
+       * Powershell -Command "$Shell = New-Object -COMObject Shell.Application; 
+       * $ShellFolder = $Shell.NameSpace('C:\Program Files\Google\Chrome\Application'); 
+       * $ShellFile = $ShellFolder.ParseName('chrome.exe'); 
+       * Write-Host $ShellFile.ExtendedProperty('infotip')"
+       * 
+       * 
+       * Here is a reference to win32 shell
+       * https://docs.microsoft.com/en-us/windows/win32/shell/shellfolderitem-extendedproperty
+       * 
+       * 
+       * ## To run directly in Powershell
+       * 
+       * $Shell = New-Object -COMObject Shell.Application
+       * $ShellFolder = $Shell.NameSpace("C:\Program Files\Google\Chrome\Application")
+       * $ShellFile = $ShellFolder.ParseName("chrome.exe")
+       * Write-Host $ShellFile.ExtendedProperty("infotip")
+       * 
+       * infotip returns a summary so you could substitute with
+       * e.g. company, productname, name, type, size, productversion.
+       * 
+       * 
+       * ## To run from a ps1 file
+       * void main() {
+       *   print(runPowerShellScript(r'C:\tmp\SumScript.ps1', ['1', '2']));
+       *   // $sum from Powershell
+       *   // 3
+       * }
+       * 
+       * String runPowerShellScript(String scriptPath, List<String> argumentsToScript) {
+       *   return Process.runSync(
+       *           'Powershell.exe', ['-File', scriptPath, ...argumentsToScript]).stdout
+       *       as String;
+       * }
+       * 
+       * // Powershell Code: 
+       * $Shell = New-Object -COMObject Shell.Application
+       * $ShellFolder = $Shell.NameSpace($args[0])
+       * $ShellFile = $ShellFolder.ParseName($args[1])
+       * $result = $ShellFile.ExtendedProperty("infotip")
+       * Write-Host $result
+       * return $result
+       * 
+       * 
+      */
       final file =
-          '"name=\'${result.files.first.path?.replaceAll(RegExp(r'\\'), '\\\\')}\'"';
+          "name='${result.files.first.path?.replaceAll(RegExp(r'\\'), '\\\\')}'";
       debugPrint('file regex: $file');
-      // Process.run('wmic', ['datafile', 'where', file, 'list', 'full'])
-      Process.run('wmic', ['product', 'get', 'name,version']).then((value) {
-        debugPrint('stdout ${value.stdout}');
-        debugPrint('stderr ${value.stderr}');
-        debugPrint('exit code: ${value.exitCode}');
+
+      Process.run('wmic', ['datafile', 'where', file, 'list', 'full'])
+          .then((ProcessResult value) {
+        if (value.exitCode == 0) {
+          debugPrint('stdout ${value.stdout}');
+        } else {
+          debugPrint('stderr ${value.stderr}');
+          debugPrint('exit code: ${value.exitCode}');
+        }
       }).catchError((e) {});
+
+      profileProvider.addProfile();
     }
   }
 }

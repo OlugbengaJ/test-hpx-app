@@ -54,7 +54,7 @@ class ProfileDropdown extends StatelessWidget {
                       ),
                       Container(
                         padding: const EdgeInsets.only(left: 8),
-                        child: Text(provider.getCurrentProfile().name),
+                        child: Text(provider.currentProfile.name),
                       ),
                     ],
                   );
@@ -147,7 +147,7 @@ class ProfileDropdown extends StatelessWidget {
                       ),
                       Container(
                         padding: const EdgeInsets.only(left: 8),
-                        child: Text(provider.getCurrentProfile().name),
+                        child: Text(provider.currentProfile.name),
                       ),
                     ],
                   );

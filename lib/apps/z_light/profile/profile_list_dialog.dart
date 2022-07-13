@@ -3,33 +3,33 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/utils/constants.dart';
+import 'package:hpx/utils/os_file_utility.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
-import 'package:file_picker/file_picker.dart';
 
-void browse(BuildContext context) async {
-  ProfileProvider profileProvider =
-      Provider.of<ProfileProvider>(context, listen: false);
-  FilePickerResult? result = await FilePicker.platform.pickFiles();
-  String parentDir = "";
-  if (result != null) {
-    if (!kIsWeb) {
-      if (Platform.isWindows) {
-        File file = File(result.files.single.path!);
-        parentDir = file.parent.toString().split("\\").toList().last;
-      } else if (Platform.isLinux) {
-        File file = File(result.files.single.path!);
-      }
+// void browse(BuildContext context) async {
+//   ProfileProvider profileProvider =
+//       Provider.of<ProfileProvider>(context, listen: false);
+//   FilePickerResult? result = await FilePicker.platform.pickFiles();
+//   String parentDir = "";
+//   if (result != null) {
+//     if (!kIsWeb) {
+//       if (Platform.isWindows) {
+//         File file = File(result.files.single.path!);
+//         parentDir = file.parent.toString().split("\\").toList().last;
+//       } else if (Platform.isLinux) {
+//         File file = File(result.files.single.path!);
+//       }
 
-      if (parentDir.endsWith("'")) {
-        parentDir = parentDir.substring(0, parentDir.length - 1);
-      }
-      profileProvider.setProfileName(parentDir);
-    } else {}
-  } else {
-    // User canceled the picker
-  }
-}
+//       if (parentDir.endsWith("'")) {
+//         parentDir = parentDir.substring(0, parentDir.length - 1);
+//       }
+//       profileProvider.setProfileName(parentDir);
+//     } else {}
+//   } else {
+//     // User canceled the picker
+//   }
+// }
 
 void addProfile(BuildContext context) {
   ProfileProvider profileProvider =
@@ -38,19 +38,6 @@ void addProfile(BuildContext context) {
 }
 
 Future<void> profileListDialog(BuildContext context) async {
-  final List<String> entries = <String>[
-    'A',
-    'B',
-    'A',
-    'B',
-    'A',
-    'B',
-    'A',
-    'B',
-    'A',
-    'B',
-  ];
-
   return showDialog<void>(
     context: context,
     barrierDismissible: false, // user must tap button!
@@ -102,14 +89,16 @@ Future<void> profileListDialog(BuildContext context) async {
                             child: MouseRegion(
                               cursor: SystemMouseCursors.click,
                               child: GestureDetector(
-                                onTap: () => browse(context),
+                                onTap: () => OSFileUtility.openFilePicker(),
+                                // browse(context),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: const [
                                     Text(
-                                      "Browse",
-                                      style:
-                                          TextStyle(color: Color(0xFF212121)),
+                                      'Browse',
+                                      style: TextStyle(
+                                        color: Color(0xFF212121),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -130,7 +119,7 @@ Future<void> profileListDialog(BuildContext context) async {
                                 children: const [
                                   Padding(
                                     padding: EdgeInsets.all(4),
-                                    child: Text("A - Z"),
+                                    child: Text('A - Z'),
                                   ),
                                   Icon(Icons.arrow_drop_down)
                                 ],
@@ -162,7 +151,7 @@ Future<void> profileListDialog(BuildContext context) async {
                           ),
                           Container(
                             child: const Text(
-                              "Upload a picture",
+                              'Upload a picture',
                               style: TextStyle(
                                   decoration: TextDecoration.underline),
                             ),
@@ -181,7 +170,7 @@ Future<void> profileListDialog(BuildContext context) async {
                                     builder: (_, provider, __) {
                                   return Padding(
                                     padding: EdgeInsets.all(8.0),
-                                    child: Text(provider.getProfileName()),
+                                    child: Text(provider.profileName),
                                   );
                                 }),
                               ],
@@ -195,32 +184,12 @@ Future<void> profileListDialog(BuildContext context) async {
                       width: 600,
                       height: 450,
                       color: const Color(0xFF212121),
-                      child:
-                          Consumer<ProfileProvider>(builder: (_, provider, __) {
-                        return Column(
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: Colors.white, width: 1),
-                              ),
-                              height: 70,
-                              child: Row(
-                                children: [
-                                  Image.asset(
-                                    Constants.zImage,
-                                    height: 40,
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.only(left: 8),
-                                    child: const Text("Default"),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              child: ListView.builder(
+                      child: Consumer<ProfileProvider>(
+                        builder: (_, provider, __) {
+                          return Column(
+                            children: [
+                              Expanded(
+                                child: ListView.builder(
                                   padding: const EdgeInsets.all(2),
                                   itemCount: provider.profiles.length,
                                   itemBuilder:
@@ -235,24 +204,27 @@ Future<void> profileListDialog(BuildContext context) async {
                                       child: Row(
                                         children: [
                                           Image.asset(
-                                            Constants.zImage,
+                                            provider.profiles[index].imageUrl,
                                             height: 40,
                                           ),
                                           Container(
                                             padding:
                                                 const EdgeInsets.only(left: 8),
                                             child: Text(
-                                                provider.profiles[index].name),
+                                              provider.profiles[index].name,
+                                            ),
                                           ),
                                         ],
                                       ),
                                     );
-                                  }),
-                            ),
-                          ],
-                        );
-                      }),
-                    )
+                                  },
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
                   ],
                 ),
                 Row(

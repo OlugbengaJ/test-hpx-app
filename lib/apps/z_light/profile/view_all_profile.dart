@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/utils/constants.dart';
-import 'package:hpx/widgets/theme.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 void browse(BuildContext context) {
@@ -155,7 +154,7 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                           labels: const ['OFF', 'ON'],
                                           radiusStyle: true,
                                           onToggle: (index) {
-                                            print('switched to: $index');
+                                            debugPrint('switched to: $index');
                                           },
                                         ),
                                       ),
