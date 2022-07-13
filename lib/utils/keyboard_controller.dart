@@ -1,4 +1,5 @@
 import 'package:hpx/providers/layers_provider/layers.dart';
+import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/utils/hardware_effect.dart';
 import 'dart:isolate';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';

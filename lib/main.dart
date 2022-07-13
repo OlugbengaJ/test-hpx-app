@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/providers/keys_provider.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
+import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/providers/scrollbar_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
@@ -33,6 +34,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => KeysProvider()),
         ChangeNotifierProvider(create: (context) => WorkspaceProvider()),
         ChangeNotifierProvider(create: (context) => ScrollbarProvider()),
+        ChangeNotifierProvider(create: (context) => ProfileProvider()),
       ],
       child: const MyApp(),
     ),
@@ -41,10 +43,11 @@ void main() {
 
   doWhenWindowReady(() {
     const initialSize = Size(1280, 720);
-    appWindow.minSize = initialSize;
-    appWindow.size = initialSize;
+    // appWindow.minSize = initialSize;
+    // appWindow.size = initialSize;
     appWindow.alignment = Alignment.center;
-    appWindow.show();
+    // appWindow.show();
+    appWindow.maximize();
   });
 }
 

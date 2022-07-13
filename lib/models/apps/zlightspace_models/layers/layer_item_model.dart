@@ -23,6 +23,7 @@ class LayerItemModel {
     this.right = 0,
     this.icon = Icons.mood,
   });
+
   final int id;
   int parentID;
   String layerText;
@@ -38,6 +39,7 @@ class LayerItemModel {
   List<KeyModel> _keys = [];
 
   List<KeyModel> get keys => _keys;
+
   void setKeys(List<KeyModel> keys) {
     _keys = [...keys];
   }
@@ -72,4 +74,44 @@ class LayerItemModel {
   double bottom = 0.0;
   double left = 0.0;
   double right = 0.0;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'parentId': parentID,
+      'layerText': layerText,
+      'visible': visible.toString(),
+      'visibleOnStack': visibleOnStack.toString(),
+      'isSublayer': isSublayer.toString(),
+      'hasSublayer': hasSublayer.toString(),
+      'listDisplayColor': listDisplayColor.value,
+      'paintColor': paintColor.value,
+      'shortcutColor': shortcutColor.value,
+      'top': top,
+      'bottom': bottom,
+      'left': left,
+      'right': right,
+      'mode' : mode?.toMap(),
+      'icon' : {'codePoint' : icon.codePoint, 'fontFamily': icon.fontFamily}
+    };
+  }
+
+  LayerItemModel.fromJson(Map<String, dynamic> item)
+      : id = item['id'],
+        parentID = item['parentId'],
+        layerText = item['layerText'],
+        visible = item['visible'] == 'true',
+        visibleOnStack = item['visibleOnStack'] == 'true',
+        isSublayer = item['isSublayer'] == 'true',
+        hasSublayer = item['hasSublayer'] == 'true',
+        listDisplayColor = Color(item['listDisplayColor']),
+        paintColor = Color(item['paintColor']),
+        shortcutColor = Color(item['shortcutColor']),
+        //mode = ToolsModeModel.fromJson(item['mode']),
+        top = item['top'],
+        bottom = item['bottom'],
+        left = item['left'],
+        right = item['right'],
+        icon = IconData(item['codePoint'],
+            fontFamily: item['fontFamily']) ;
 }

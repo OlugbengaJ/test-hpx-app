@@ -20,6 +20,7 @@ import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/contact_support_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/image_mode_provder.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/shortcut_widget_provider.dart';
+import 'package:hpx/providers/tutorial_provider/tutorial_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
@@ -221,6 +222,9 @@ class ModeProvider extends ChangeNotifier {
         Provider.of<LayersProvider>(context, listen: false);
     ShortcutWidgetProvider shortcutWidgetProvider =
         Provider.of<ShortcutWidgetProvider>(context, listen: false);
+    contacProvider =
+        Provider.of<ContactSupportWidgetProvider>(context, listen: false);
+    appContext = context;
 
     /// if last mode was interactive
     if (currentMode.value == EnumModes.interactive) {
@@ -325,9 +329,6 @@ class ModeProvider extends ChangeNotifier {
         for (var element in contactsupportlist) {
           currentColors.add(element.colorCode[0]);
         }
-        contacProvider =
-            Provider.of<ContactSupportWidgetProvider>(context, listen: false);
-        appContext = context;
         preset = const ContactSupportPreset();
         break;
       default:

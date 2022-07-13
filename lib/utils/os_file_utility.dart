@@ -4,7 +4,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/providers/workspace_provider.dart';
-import 'package:process_run/cmd_run.dart';
 import 'package:provider/provider.dart';
 
 class OSFileUtility {
