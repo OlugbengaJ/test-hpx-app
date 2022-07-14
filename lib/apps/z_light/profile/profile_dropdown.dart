@@ -6,27 +6,32 @@ import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 
-class ProfileDropdown extends StatelessWidget {
+class ProfileDropdown extends StatefulWidget {
   const ProfileDropdown({Key? key}) : super(key: key);
 
   @override
+  State<ProfileDropdown> createState() => _ProfileDropdownState();
+}
+
+class _ProfileDropdownState extends State<ProfileDropdown> {
+  final tooltipController = JustTheController();
+
+  void closeTooltip() {
+    tooltipController.hideTooltip();
+  }
+
+  void newProfile() {
+    tooltipController.hideTooltip();
+    profileListDialog(context);
+  }
+
+  void viewAllProfile() {
+    tooltipController.hideTooltip();
+    viewAllProfileDialog(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final tooltipController = JustTheController();
-
-    void closeTooltip() {
-      tooltipController.hideTooltip();
-    }
-
-    void newProfile() {
-      tooltipController.hideTooltip();
-      profileListDialog(context);
-    }
-
-    void viewAllProfile() {
-      tooltipController.hideTooltip();
-      viewAllProfileDialog(context);
-    }
-
     return JustTheTooltip(
       tailLength: 5,
       tailBaseWidth: 0,

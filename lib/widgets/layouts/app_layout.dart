@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/profile/profile_dropdown.dart';
 import 'package:hpx/apps/z_light/wrapper.dart';
-import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
+import 'package:hpx/providers/tools_effect_provider/widget/contact_support_provider.dart';
 import 'package:hpx/providers/tutorial_provider/tutorial_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/utils/constants.dart';
@@ -23,24 +23,20 @@ class AppLayout extends StatefulWidget {
 }
 
 class _AppLayoutState extends State<AppLayout> {
-  final _modeProvider = ModeProvider();
-  // final tutorialProvider = TooltipTutorialProvider();
-
+  // this function creates the dialog width for the help icons
   void openDialogOption() {
     final tutorialProvider =
         Provider.of<TooltipTutorialProvider>(context, listen: false);
+    final contacProvider =
+        Provider.of<ContactSupportWidgetProvider>(context, listen: false);
     showDialog(
         context: context,
-        // barrierColor: Colors.white.withOpacity(0),
-        // barrierDismissible: false,
         builder: (context) {
           return SimpleDialog(
             insetPadding: EdgeInsets.only(
                 bottom: 90, left: MediaQuery.of(context).size.width * 0.03),
             backgroundColor: Colors.white,
             alignment: Alignment.bottomLeft,
-            // contentPadding: const EdgeInsets.only(
-            //     top: 20, right: 10, bottom: 20, left: 10),
             children: <Widget>[
               Container(
                 width: 150,
@@ -83,13 +79,16 @@ class _AppLayoutState extends State<AppLayout> {
                 width: 150,
                 padding: const EdgeInsets.only(left: 20.0),
                 height: 40,
-                child: const Text(
-                  'Visit Support Page',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700),
-                ),
+                child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      contacProvider.showContactOptionsDialog(context);
+                    },
+                    child: const Text('Visit Support Page',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700))),
               ),
               Container(
                 width: 150,
@@ -110,15 +109,11 @@ class _AppLayoutState extends State<AppLayout> {
 
   @override
   Widget build(BuildContext context) {
-    WorkspaceProvider workspaceProvider =
-        Provider.of<WorkspaceProvider>(context);
+    final workspaceProvider = Provider.of<WorkspaceProvider>(context);
     TooltipTutorialProvider tutorialProvider =
         Provider.of<TooltipTutorialProvider>(context, listen: false);
     tutorialProvider.showTutorial = true;
     tutorialProvider.direction = AxisDirection.down;
-
-    workspaceProvider
-        .initProfile(_modeProvider.getPickerModes('profile').first);
 
     return Scaffold(
       appBar: AppBar(
@@ -129,7 +124,7 @@ class _AppLayoutState extends State<AppLayout> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             CustomToolTip(
-              height: 130,
+              height: 140,
               tooltipController: tutorialProvider.tooltipController,
               title: 'Take a quick tour of your Z Light space application',
               description:
@@ -150,9 +145,7 @@ class _AppLayoutState extends State<AppLayout> {
                 height: 50,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: Svg(
-                      'assets/images/zlight_logo.svg',
-                    ),
+                    image: Svg(Constants.zLightLogoSvg),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -174,11 +167,11 @@ class _AppLayoutState extends State<AppLayout> {
                 tutorialProvider.showTutorialTooltip(
                     tipToShow: Constants.light);
                 tutorialProvider.hideTutorialTooltip(
-                    tipToHide: Constants.workspace);
+                    tipToHide: Constants.profile);
               },
               btn2Pressed: () {
                 tutorialProvider.hideTutorialTooltip(
-                    tipToHide: Constants.workspace);
+                    tipToHide: Constants.profile);
                 tutorialProvider.showTutorialTooltip(
                     tipToShow: Constants.highlight);
               },
@@ -192,7 +185,13 @@ class _AppLayoutState extends State<AppLayout> {
               ),
             ),
           ]),
-          const ProfileDropdown(),
+          const Padding(
+            padding: EdgeInsets.all(4.0),
+            child: ProfileDropdown(),
+          ),
+          Container(
+            margin: const EdgeInsets.only(right: 50),
+          ),
           const WindowButtons(),
         ],
       ),
@@ -323,7 +322,7 @@ class _AppLayoutState extends State<AppLayout> {
                         tutorialProvider.hideTutorialTooltip(
                             tipToHide: Constants.light);
                         tutorialProvider.showTutorialTooltip(
-                            tipToShow: Constants.workspace);
+                            tipToShow: Constants.profile);
                       },
                       widget: TextButton(
                         style: TextButton.styleFrom(

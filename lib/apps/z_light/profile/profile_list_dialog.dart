@@ -8,12 +8,6 @@ import 'package:hpx/utils/os_file_utility.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
-// void addProfile(BuildContext context) {
-//   ProfileProvider profileProvider =
-//       Provider.of<ProfileProvider>(context, listen: false);
-//   profileProvider.addProfile();
-// }
-
 Future<void> profileListDialog(BuildContext context) async {
   return showDialog<void>(
     context: context,
