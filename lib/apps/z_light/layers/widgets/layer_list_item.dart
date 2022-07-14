@@ -28,50 +28,25 @@ class _LayerListItemState extends State<LayerListItem> {
   bool _editing = false;
   final double _iconSize = 16;
   TextEditingController _layerNameController = TextEditingController(text: '');
-  final tooltipController = JustTheController();
+  
   GlobalKey deleteKey = GlobalKey<State<Tooltip>>();
   GlobalKey<FormFieldState> editLayerKey = GlobalKey<
       FormFieldState>(); // Each layer should have a key for its editing field
+      
+  final tooltipController = JustTheController();
+  Path defaultTailBuilder(Offset tip, Offset point2, Offset point3) {
+    return Path()
+      ..moveTo(tip.dx, tip.dy)
+      ..lineTo(point2.dx, point2.dy)
+      ..lineTo(point3.dx, point3.dy)
+      ..close();
+  }
 
-  Future<void> _deleteLayerDialog(LayersProvider provider) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Delete a layer'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                const Text('Do you wish to delete this layer?'),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text("Cancel"),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          provider.removeItem(widget.layerIndex);
-                          Navigator.of(context).pop();
-                        },
-                        style: textBtnStyleWhite,
-                        child: const Text("Delete"),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-        );
-      },
-    );
+  showDeleteTooltip(){
+    setState(() {
+      _showDeleteTooltip = true;
+      tooltipController.showTooltip();
+    });
   }
 
   _onHover(isHovering) {
@@ -80,6 +55,13 @@ class _LayerListItemState extends State<LayerListItem> {
         _showActions = isHovering;
       });
     }
+  }
+
+  _onDeleteTooltipDismiss(){
+    setState(() {
+      _showDeleteTooltip = false;
+      _showActions = false;
+    });
   }
 
   _toggleLayer(LayersProvider provider) {
@@ -126,11 +108,12 @@ class _LayerListItemState extends State<LayerListItem> {
     provider.saveEditingLayer();
   }
 
+
+
   /// Use to delete a layer from the list
   _deleteLayer(LayersProvider provider) {
     if (provider.length >= 2) {
-      tooltipController.hideTooltip();
-      //_deleteLayerDialog(provider);
+      showDeleteTooltip();
     }
 
     //provider.removeItem(widget.layerIndex);
@@ -173,8 +156,7 @@ class _LayerListItemState extends State<LayerListItem> {
 
   @override
   Widget build(BuildContext context) {
-    _editing =
-        context.read<LayersProvider>().isTheCurrentLayerEditing(editLayerKey);
+    _editing = context.read<LayersProvider>().isTheCurrentLayerEditing(editLayerKey);
 
     return Consumer<LayersProvider>(
       builder: (context, _value, child) {
@@ -321,13 +303,49 @@ class _LayerListItemState extends State<LayerListItem> {
                                                     ),
                                                   ),
 
-                                                  JustTheTooltip(
-                                                    
+                                                  JustTheTooltip( 
+                                                    onDismiss: _onDeleteTooltipDismiss,
                                                     isModal: true,
                                                     controller: tooltipController,
-                                                    content: Container(
-                                                      height: 50,
-                                                      child: Text("OK"),
+                                                    tailBuilder:  defaultTailBuilder,
+                                                    content: SizedBox(
+                                                      width: 150,
+                                                      height: 100,
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                        children: [
+                                                          const SizedBox(
+                                                            height: 30,
+                                                            child: Center(child: Text("Delete this layer ?")),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 50,
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                              children: [
+                                                                TextButton(
+                                                                  style: textBtnStyleBlack.copyWith(
+                                                                    backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                                                                  ),
+                                                                  onPressed: () => _onDeleteTooltipDismiss() ,
+                                                                  child: const Text("Cancel"),
+                                                                ),
+                                                                TextButton(
+                                                                  style: textBtnStyleWhite.copyWith(
+                                                                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                                      RoundedRectangleBorder(
+                                                                        borderRadius: BorderRadius.circular(4),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  onPressed: () => value.removeItem(widget.layerIndex) ,
+                                                                  child: const Text("Delete"),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                     child: GestureDetector(
                                                       child: Tooltip(
@@ -340,8 +358,10 @@ class _LayerListItemState extends State<LayerListItem> {
                                                                 .layerItemModel
                                                                 .listDisplayColor,
                                                           ),
-                                                          onTap: () =>
-                                                              _deleteLayer(value),
+                                                          onTap: (){
+                                                            _deleteLayer(value);
+                                                          }
+                                                              
                                                         ),
                                                       ),
                                                     ),

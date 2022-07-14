@@ -3,6 +3,7 @@ import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart'
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:just_the_tooltip/just_the_tooltip.dart';
 import 'package:provider/provider.dart';
 
 class SublayerItem extends StatefulWidget {
@@ -18,10 +19,28 @@ class SublayerItem extends StatefulWidget {
 
 class _SublayerItemState extends State<SublayerItem> {
   bool _showActions = false;
+  bool _showDeleteTooltip = false;
+
   final double _iconSize = 16;
   TextEditingController _layerNameController = TextEditingController(text: "");
   GlobalKey<FormFieldState> editLayerKey = GlobalKey<
       FormFieldState>(); // Each layer should have a key for its editing field
+
+  final tooltipController = JustTheController();
+  Path defaultTailBuilder(Offset tip, Offset point2, Offset point3) {
+    return Path()
+      ..moveTo(tip.dx, tip.dy)
+      ..lineTo(point2.dx, point2.dy)
+      ..lineTo(point3.dx, point3.dy)
+      ..close();
+  }
+
+  showDeleteTooltip(){
+    setState(() {
+      _showDeleteTooltip = true;
+      tooltipController.showTooltip();
+    });
+  }
 
   Future<void> _deleteLayerDialog(LayersProvider provider) async {
     return showDialog<void>(
@@ -70,6 +89,13 @@ class _SublayerItemState extends State<SublayerItem> {
     });
   }
 
+  _onDeleteTooltipDismiss(){
+    setState(() {
+      _showDeleteTooltip = false;
+      _showActions = false;
+    });
+  }
+
   /// Save the current editing layer if the textfield loses focus
   _onFocusChange(LayersProvider provider) {
     provider.saveEditingSubLayer();
@@ -100,7 +126,8 @@ class _SublayerItemState extends State<SublayerItem> {
 
   _deleteLayer(LayersProvider provider) {
     if (provider.getSublayers(widget.layerItemModel.parentID).length >= 2) {
-      _deleteLayerDialog(provider);
+      //_deleteLayerDialog(provider);
+      showDeleteTooltip();
     }
   }
 
@@ -216,7 +243,7 @@ class _SublayerItemState extends State<SublayerItem> {
                                         },
                                       ),
                                     ),
-                              (_showActions)
+                              (_showActions || _showDeleteTooltip)
                                   ? Consumer<LayersProvider>(
                                       builder: (context, value, child) {
                                       return Container(
@@ -239,20 +266,86 @@ class _SublayerItemState extends State<SublayerItem> {
                                                     _toggleEditing(value),
                                               ),
                                             ),
-                                            Tooltip(
-                                              message: "Delete",
-                                              preferBelow: false,
-                                              child: InkWell(
-                                                child: Icon(
-                                                  Ionicons.trash,
-                                                  size: _iconSize,
-                                                  color: widget.layerItemModel
-                                                      .listDisplayColor,
+
+                                            JustTheTooltip( 
+                                              onDismiss: _onDeleteTooltipDismiss,
+                                              isModal: true,
+                                              controller: tooltipController,
+                                              tailBuilder:  defaultTailBuilder,
+                                              content: SizedBox(
+                                                width: 150,
+                                                height: 100,
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                  children: [
+                                                    const SizedBox(
+                                                      height: 30,
+                                                      child: Center(child: Text("Delete this layer ?")),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 50,
+                                                      child: Row(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                        children: [
+                                                          TextButton(
+                                                            style: textBtnStyleBlack.copyWith(
+                                                              backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+                                                            ),
+                                                            onPressed: () => _onDeleteTooltipDismiss() ,
+                                                            child: const Text("Cancel"),
+                                                          ),
+                                                          TextButton(
+                                                            style: textBtnStyleWhite.copyWith(
+                                                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                                RoundedRectangleBorder(
+                                                                  borderRadius: BorderRadius.circular(4),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            onPressed: () => value.removeSubItem(widget.layerItemModel),
+                                                            child: const Text("Delete"),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                                onTap: () =>
-                                                    _deleteLayer(value),
+                                              ),
+                                              child: GestureDetector(
+                                                child: Tooltip(
+                                                  message: 'Delete',
+                                                  child: InkWell(
+                                                    child: Icon(
+                                                      Ionicons.trash,
+                                                      size: _iconSize,
+                                                      color: widget
+                                                          .layerItemModel
+                                                          .listDisplayColor,
+                                                    ),
+                                                    onTap: (){
+                                                      _deleteLayer(value);
+                                                    }
+                                                        
+                                                  ),
+                                                ),
                                               ),
                                             ),
+
+
+                                            // Tooltip(
+                                            //   message: "Delete",
+                                            //   preferBelow: false,
+                                            //   child: InkWell(
+                                            //     child: Icon(
+                                            //       Ionicons.trash,
+                                            //       size: _iconSize,
+                                            //       color: widget.layerItemModel
+                                            //           .listDisplayColor,
+                                            //     ),
+                                            //     onTap: () =>
+                                            //         _deleteLayer(value),
+                                            //   ),
+                                            // ),
                                           ],
                                         ),
                                       );
