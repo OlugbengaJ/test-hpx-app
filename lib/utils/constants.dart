@@ -16,6 +16,7 @@ class Constants {
 
   // ui labels
   static const String app = 'App';
+  static const String defaultText = 'Default';
   static const String help = 'Help';
   static const String highlight = 'Highlight';
   static const String light = 'Light';

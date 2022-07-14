@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/profiles/profiles_model.dart';
+import 'package:hpx/utils/constants.dart';
 
 ///[ProfileProvider] to control the layers state
 class ProfileProvider extends ChangeNotifier {
@@ -23,7 +24,7 @@ class ProfileProvider extends ChangeNotifier {
 
   late Profile _selectedProfile = profiles.first.copyWith(
     id: _nextId,
-    name: 'Default (1)',
+    name: '${Constants.defaultText} (1)',
   );
 
   Profile get selectedProfile => _selectedProfile;
@@ -78,6 +79,8 @@ class ProfileProvider extends ChangeNotifier {
   void renameProfile(String name) {}
 
   void selectProfile(String name, String icon, String file) {
+    if (name == Constants.defaultText) name = '${Constants.defaultText} (1)';
+
     _selectedProfile = Profile(
       id: _nextId,
       name: name,
