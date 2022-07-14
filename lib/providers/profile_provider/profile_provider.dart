@@ -129,6 +129,7 @@ class ProfileProvider extends ChangeNotifier {
       id: _selectedProfile.id,
       name: name,
       icon: icon,
+      // use existing layers incase duplicate profile mode is active
       layers: _selectedProfile.layers,
       associatedApps:
           file.isEmpty ? [] : [Application(name: name, icon: icon, file: file)],
