@@ -237,10 +237,13 @@ Future<void> profileListDialog(
                                                 name: provider.apps[index].name,
                                                 icon: provider.apps[index].icon,
                                                 tapHandler: () {
-                                                  provider.selectAppAsProfile(
-                                                      provider.apps[index].name,
-                                                      provider.apps[index].icon,
-                                                      '');
+                                                  provider
+                                                      .updateSelectedProfile(
+                                                          provider
+                                                              .apps[index].name,
+                                                          provider
+                                                              .apps[index].icon,
+                                                          '');
                                                   textController.text = provider
                                                       .selectedProfile.name;
                                                 },
