@@ -8,6 +8,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 
 
 TextEditingController _textCtrl = TextEditingController();
+int editingProfileID = 0;
 
 void browse(BuildContext context) {
   Navigator.pop(context);
@@ -42,13 +43,7 @@ Future<void> _showDefaultMoreDialog(BuildContext context) async {
               onPressed: () {},
               child: const Text('Export'),
             ),
-            SimpleDialogOption(
-              onPressed: () {
-                Navigator.of(context).pop();
-                confirmDeleteProfileDialog(context);
-              },
-              child: const Text('Delete'),
-            ),
+            
           ],
         );
       });
@@ -109,7 +104,7 @@ Future<void> confirmDeleteProfileDialog(BuildContext context) async {
                             children: [
                               TextButton(
                                   onPressed: () {
-                                    profileProvider.deleteProfile(1);
+                                    profileProvider.deleteProfile(editingProfileID);
                                     Navigator.of(context).pop();
                                   },
                                   style: textBtnStyleBlack,
@@ -150,7 +145,10 @@ Future<void> _showMoreDialog(BuildContext context) async {
               child: const Text('Export'),
             ),
             SimpleDialogOption(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pop();
+                confirmDeleteProfileDialog(context);
+              },
               child: const Text('Delete'),
             ),
           ],
@@ -390,8 +388,14 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                                           child:
                                                               GestureDetector(
                                                             onTap: () {
-                                                              _showDefaultMoreDialog(
-                                                                  context);
+                                                              editingProfileID = profile.id;
+                                                              print(profile.id);
+                                                              if(profile.id==0){
+                                                                _showDefaultMoreDialog(context);
+                                                              }else{
+                                                                _showMoreDialog(context);
+                                                              }
+                                                              
                                                             },
                                                             child: Container(
                                                               padding:
