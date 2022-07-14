@@ -33,7 +33,7 @@ class Profile {
   Profile.fromMap(Map<String, dynamic> item)
       : id = item["id"],
         name = item["name"],
-        icon = item["imageUrl"],
+        icon = item["icon"],
         layers = getLayersFromMap(item["layers"]),
         associatedApps = getAssociatedAppsFromMap(item["associatedApps"]);
 
@@ -41,7 +41,7 @@ class Profile {
     return {
       "id": id,
       "name": name,
-      "imageUrl": icon,
+      "icon": icon,
       "layers": getLayersAsMap(),
       "associatedApps": getAssociatedAppsAsMap()
     };

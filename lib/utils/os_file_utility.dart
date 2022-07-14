@@ -4,7 +4,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/providers/profile_provider/profile_provider.dart';
-import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/utils/constants.dart';
 import 'package:provider/provider.dart';
 
@@ -60,6 +59,7 @@ class OSFileUtility {
     return null;
   }
 
+  // TODO: refactor this to read all apps from a default location
   static void osApps() {
     final dir = Directory(appsDir!.initialDirectory!);
 
@@ -75,16 +75,6 @@ class OSFileUtility {
       debugPrint('file mode ${stat.modeString()}');
       debugPrint('');
     }
-  }
-
-  static List<String> get osAppsIconDir {
-    debugPrint(
-        '${Platform.operatingSystem} ${Platform.operatingSystemVersion} ${Platform.version}');
-    // if (isWindows) return ['c:\\Program Files', 'c:\\Program Files (x86)'];
-
-    // if (isLinux) return ['/usr/share/pixmaps'];
-
-    return [];
   }
 
   static void openFilePicker() async {
@@ -111,31 +101,11 @@ class OSFileUtility {
 
   /// [_processLinuxFile] process Linux specific file
   static void _processLinuxFile(FilePickerResult? result) async {
-    // process result
     if (result != null) {
       for (var file in result.files) {
-        // debugPrint('\r\nfile path \t=> ${file.path}');
-        // debugPrint('file name \t=> ${file.name}');
-        // debugPrint('file ext \t=> ${file.extension}');
-
-        // Process.run('ls', ['-l', '${file.path}']).then((value) {
-        //   if (value.exitCode == 0) {
-        //     debugPrint('stdout ${value.stdout}');
-        //   } else {
-        //     debugPrint('stderr ${value.stderr}');
-        //     debugPrint('exit code: ${value.exitCode}');
-        //   }
-        // });
-
         final f = File(file.path!);
         if (f.existsSync()) {
-          final workspaceProvider = Provider.of<WorkspaceProvider>(
-              navigatorKeys.currentContext!,
-              listen: false);
-
-          debugPrint('\r\n\tReading file contents...\r\n');
-
-          List<Widget> widgets = [];
+          // read each line in .desktop file
           f.readAsLines().then((value) {
             final appInfo = <String, String>{};
             String section = '';
@@ -144,10 +114,9 @@ class OSFileUtility {
               if (section.contains('[desktop entry]')) {
                 final entry = text.split('=');
 
-                if (appInfo.keys.any((e) => e == 'name' && e == 'icon')) {
-                  // only name and icon are required.
-                  break;
-                }
+                // only name and icon are required.
+                final k = appInfo.keys.where((e) => e == 'name' || e == 'icon');
+                if (k.length == 2) break;
 
                 if (entry.length == 2) {
                   // add key value pair
@@ -169,31 +138,6 @@ class OSFileUtility {
               _getLinuxIcon(appInfo['icon']!),
               file.path!,
             );
-
-            widgets.addAll(appInfo.entries.map((e) {
-              // if (e.key.toLowerCase() == 'icon') {
-              //   // get icon file
-              //   final iconFound = _processLinuxIcon(e.value);
-
-              //   return Row(
-              //     mainAxisAlignment: MainAxisAlignment.start,
-              //     children: [
-              //       if (iconFound.isNotEmpty)
-              //         Container(
-              //           margin: EdgeInsets.zero,
-              //           child: Image.memory(
-              //             File(e.value).readAsBytesSync(),
-              //             width: 50.0,
-              //             height: 50.0,
-              //           ),
-              //         ),
-              //       Text('${e.key}: ${e.value}'),
-              //     ],
-              //   );
-              // }
-
-              return Text('${e.key}: ${e.value}');
-            }));
           });
         }
       }
@@ -230,7 +174,7 @@ class OSFileUtility {
        * # READ BELOW TO UNDERSTAND HOW APP NAMES WERE GENERATED IN WINDOWS.
        * 
        * 
-       * Using wmic (Windows Management Instrumentation Concsole)
+       * Using wmic (Windows Management Instrumentation Console)
        * to get properties of the EXE file.
        * e.g.
        * wmic datafile where name='C:\\Program Files\\WINWORD.EXE' list full
