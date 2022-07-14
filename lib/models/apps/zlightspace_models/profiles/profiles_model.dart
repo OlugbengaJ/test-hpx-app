@@ -1,23 +1,39 @@
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 
 class Profile {
-  Profile(
-      {required this.id,
-      required this.name,
-      required this.imageUrl,
-      required this.layers,
-      required this.associatedApps});
+  Profile({
+    required this.id,
+    required this.name,
+    required this.icon,
+    required this.layers,
+    required this.associatedApps,
+  });
 
   final int id;
   final String name;
-  final String imageUrl;
+  final String icon;
   List<LayerItemModel> layers = [];
   List<Application> associatedApps = [];
+
+  /// [copyWith] returns a new instance of [Profile].
+  Profile copyWith({
+    int? id,
+    String? name,
+    String? icon,
+  }) {
+    return Profile(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      icon: icon ?? this.icon,
+      layers: [...layers],
+      associatedApps: [...associatedApps],
+    );
+  }
 
   Profile.fromMap(Map<String, dynamic> item)
       : id = item["id"],
         name = item["name"],
-        imageUrl = item["imageUrl"],
+        icon = item["imageUrl"],
         layers = getLayersFromMap(item["layers"]),
         associatedApps = getAssociatedAppsFromMap(item["associatedApps"]);
 
@@ -25,7 +41,7 @@ class Profile {
     return {
       "id": id,
       "name": name,
-      "imageUrl": imageUrl,
+      "imageUrl": icon,
       "layers": getLayersAsMap(),
       "associatedApps": getAssociatedAppsAsMap()
     };
@@ -62,11 +78,26 @@ class Profile {
 }
 
 class Application {
+  Application({
+    required this.name,
+    required this.icon,
+    required this.file,
+  });
+
+  final String name;
+  final String icon;
+  final String file;
+
   Map<String, dynamic> toMap() {
-    throw UnimplementedError("error");
+    return {
+      "name": name,
+      "icon": icon,
+      "file": file,
+    };
   }
 
-  Application.fromJson(e) {
-    throw UnimplementedError("error");
-  }
+  Application.fromJson(Map<String, dynamic> item)
+      : name = item['name'],
+        icon = item['icon'],
+        file = item['file'];
 }

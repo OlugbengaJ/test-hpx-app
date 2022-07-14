@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
+import 'package:hpx/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class OSFileUtility {
@@ -88,15 +89,14 @@ class OSFileUtility {
 
   static void openFilePicker() async {
     if (appsDir != null) {
-      FilePicker.platform
-          .pickFiles(
-            dialogTitle: 'Select Application',
-            type: FileType.custom,
-            initialDirectory: appsDir?.initialDirectory,
-            allowedExtensions: appsDir?.extensions,
-          )
-          .then((result) => processFile(result))
-          .catchError((e) {});
+      final filePickerResult = await FilePicker.platform.pickFiles(
+        dialogTitle: Constants.selectApp,
+        type: FileType.custom,
+        initialDirectory: appsDir?.initialDirectory,
+        allowedExtensions: appsDir?.extensions,
+      );
+
+      processFile(filePickerResult);
     }
   }
 
@@ -210,22 +210,35 @@ class OSFileUtility {
   /// [_processWindowsFile] process Windows specific file
   static void _processWindowsFile(FilePickerResult? result) {
     if (result != null) {
+      final file = result.files.first;
       final profileProvider = Provider.of<ProfileProvider>(
           navigatorKeys.currentContext!,
           listen: false);
 
-      debugPrint('\r\npicker name ${result.files.map((e) => e.name)}');
-      debugPrint('\r\npicker path ${result.files.map((e) => e.path)}');
-      debugPrint(
-          '\r\npicker extension ${result.files.map((e) => e.extension)}');
-
-      // use wmic (Windows Management Instrumentation Concsole)
-      // to get properties of the EXE file.
-      // e.g.
-      // wmic datafile where name='C:\\Program Files\\WINWORD.EXE' list full
-      // wmic datafile where name='C:\\Program Files\\WINWORD.EXE' list /format:list
-      // wmic product get name,version
-      //
+      /**
+       * Using wmic (Windows Management Instrumentation Concsole)
+       * to get properties of the EXE file.
+       * e.g.
+       * wmic datafile where name='C:\\Program Files\\WINWORD.EXE' list full
+       * wmic datafile where name='C:\\Program Files\\WINWORD.EXE' list /format:list
+       * wmic product get name,version
+       * 
+       * e.g.
+       * 
+       * final file =
+       *     "name='${result.files.first.path?.replaceAll(RegExp(r'\\'), '\\\\')}'";
+       * debugPrint('file regex: $file');
+       * Process.run('wmic', ['datafile', 'where', file, 'list', 'full'])
+       *     .then((ProcessResult value) {
+       *   if (value.exitCode == 0) {
+       *     debugPrint('stdout ${value.stdout}');
+       *   } else {
+       *     debugPrint('stderr ${value.stderr}');
+       *     debugPrint('exit code: ${value.exitCode}');
+       *   }
+       * }).catchError((e) {});
+       * 
+       */
 
       /**
        * Using Shell object via Powershell
@@ -251,10 +264,12 @@ class OSFileUtility {
        * Write-Host $ShellFile.ExtendedProperty("infotip")
        * 
        * infotip returns a summary so you could substitute with
-       * e.g. company, productname, name, type, size, productversion.
+       * e.g. company, filedescription, productname, name, type, size, productversion.
        * 
        * 
        * ## To run from a ps1 file
+       * ## (WOULD NOT WORK IF "...running scripts is disabled on this system")
+       * 
        * void main() {
        *   print(runPowerShellScript(r'C:\tmp\SumScript.ps1', ['1', '2']));
        *   // $sum from Powershell
@@ -275,23 +290,25 @@ class OSFileUtility {
        * Write-Host $result
        * return $result
        * 
-       * 
       */
-      final file =
-          "name='${result.files.first.path?.replaceAll(RegExp(r'\\'), '\\\\')}'";
-      debugPrint('file regex: $file');
 
-      Process.run('wmic', ['datafile', 'where', file, 'list', 'full'])
-          .then((ProcessResult value) {
-        if (value.exitCode == 0) {
-          debugPrint('stdout ${value.stdout}');
-        } else {
-          debugPrint('stderr ${value.stderr}');
-          debugPrint('exit code: ${value.exitCode}');
+      final namespace = file.path!.replaceFirst('\\${file.name}', '');
+      final shellCmd = '\$Shell = New-Object -COMObject Shell.Application; '
+          '\$ShellFolder = \$Shell.NameSpace(\'$namespace\'); '
+          '\$ShellFile = \$ShellFolder.ParseName(\'${file.name}\'); '
+          'Write-Host \$ShellFile.ExtendedProperty(\'filedescription\')';
+
+      // execute Powershell .ps1 file
+      Process.run('Powershell.exe', ['-Command', shellCmd])
+          .then((processResult) {
+        if (processResult.exitCode == 0) {
+          debugPrint('ps stdout ${processResult.stdout}');
+          profileProvider.addSystemApp(
+              processResult.stdout as String, '', file.path!);
         }
-      }).catchError((e) {});
-
-      profileProvider.addProfile();
+      }).catchError((e) {
+        debugPrint('powershell error occured');
+      });
     }
   }
 }

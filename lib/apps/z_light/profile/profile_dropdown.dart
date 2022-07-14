@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/apps/z_light/profile/profile_app_icon.dart';
 import 'package:hpx/apps/z_light/profile/profile_list_dialog.dart';
 import 'package:hpx/apps/z_light/profile/view_all_profile.dart';
 import 'package:hpx/providers/profile_provider/profile_provider.dart';
@@ -141,10 +142,7 @@ class ProfileDropdown extends StatelessWidget {
                 builder: (_, provider, __) {
                   return Row(
                     children: [
-                      Image.asset(
-                        Constants.zImage,
-                        height: 16,
-                      ),
+                      AppIcon(icon: provider.currentProfile.icon, size: 16),
                       Container(
                         padding: const EdgeInsets.only(left: 8),
                         child: Text(provider.currentProfile.name),

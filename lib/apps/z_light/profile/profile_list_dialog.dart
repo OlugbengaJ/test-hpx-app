@@ -1,35 +1,10 @@
-import 'dart:io';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:hpx/apps/z_light/profile/profile_app_icon.dart';
 import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/utils/constants.dart';
 import 'package:hpx/utils/os_file_utility.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
-
-// void browse(BuildContext context) async {
-//   ProfileProvider profileProvider =
-//       Provider.of<ProfileProvider>(context, listen: false);
-//   FilePickerResult? result = await FilePicker.platform.pickFiles();
-//   String parentDir = "";
-//   if (result != null) {
-//     if (!kIsWeb) {
-//       if (Platform.isWindows) {
-//         File file = File(result.files.single.path!);
-//         parentDir = file.parent.toString().split("\\").toList().last;
-//       } else if (Platform.isLinux) {
-//         File file = File(result.files.single.path!);
-//       }
-
-//       if (parentDir.endsWith("'")) {
-//         parentDir = parentDir.substring(0, parentDir.length - 1);
-//       }
-//       profileProvider.setProfileName(parentDir);
-//     } else {}
-//   } else {
-//     // User canceled the picker
-//   }
-// }
 
 void addProfile(BuildContext context) {
   ProfileProvider profileProvider =
@@ -62,7 +37,7 @@ Future<void> profileListDialog(BuildContext context) async {
                         children: [
                           Container(
                             padding: const EdgeInsets.all(16),
-                            child: const Text("Select an application"),
+                            child: const Text(Constants.selectApp),
                           ),
                         ],
                       ),
@@ -82,15 +57,14 @@ Future<void> profileListDialog(BuildContext context) async {
                             width: 111,
                             height: 28,
                             decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: Colors.white, width: 1),
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(4)),
+                              border: Border.all(color: Colors.white, width: 1),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
                             child: MouseRegion(
                               cursor: SystemMouseCursors.click,
                               child: GestureDetector(
                                 onTap: () => OSFileUtility.openFilePicker(),
-                                // browse(context),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: const [
@@ -142,18 +116,28 @@ Future<void> profileListDialog(BuildContext context) async {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
-                            height: 80,
-                            width: 80,
-                            child: Image.asset(
-                              Constants.zlightIcon,
-                              height: 40,
+                            margin: EdgeInsets.zero,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                            height: 60,
+                            width: 60,
+                            child: Consumer<ProfileProvider>(
+                              builder: (_, provider, __) {
+                                return AppIcon(
+                                    icon: provider.selectedProfile.icon);
+                              },
                             ),
                           ),
                           Container(
+                            margin: const EdgeInsets.only(top: 5),
                             child: const Text(
                               'Upload a picture',
                               style: TextStyle(
-                                  decoration: TextDecoration.underline),
+                                decoration: TextDecoration.underline,
+                              ),
                             ),
                           ),
                           Container(
@@ -169,8 +153,8 @@ Future<void> profileListDialog(BuildContext context) async {
                                 Consumer<ProfileProvider>(
                                     builder: (_, provider, __) {
                                   return Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text(provider.profileName),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(provider.selectedProfile.name),
                                   );
                                 }),
                               ],
@@ -182,36 +166,38 @@ Future<void> profileListDialog(BuildContext context) async {
                     Container(
                       margin: const EdgeInsets.all(16),
                       width: 600,
-                      height: 450,
+                      height: 350,
                       color: const Color(0xFF212121),
                       child: Consumer<ProfileProvider>(
                         builder: (_, provider, __) {
+                          // list of OS apps including the default Z app
                           return Column(
                             children: [
                               Expanded(
                                 child: ListView.builder(
                                   padding: const EdgeInsets.all(2),
-                                  itemCount: provider.profiles.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
+                                  itemCount: provider.apps.length,
+                                  itemBuilder: (context, index) {
                                     return Container(
                                       margin: const EdgeInsets.all(8),
                                       decoration: BoxDecoration(
                                         border: Border.all(
-                                            color: Colors.white, width: 1),
+                                          color: Colors.white,
+                                          width: 1,
+                                        ),
                                       ),
-                                      height: 70,
+                                      height: 60,
                                       child: Row(
                                         children: [
-                                          Image.asset(
-                                            provider.profiles[index].imageUrl,
-                                            height: 40,
+                                          AppIcon(
+                                            icon: provider.apps[index].icon,
+                                            size: 40.0,
                                           ),
                                           Container(
                                             padding:
                                                 const EdgeInsets.only(left: 8),
                                             child: Text(
-                                              provider.profiles[index].name,
+                                              provider.apps[index].name,
                                             ),
                                           ),
                                         ],
@@ -250,7 +236,7 @@ Future<void> profileListDialog(BuildContext context) async {
                               child: const Center(
                                 child: Padding(
                                   padding: EdgeInsets.all(8.0),
-                                  child: Text("Cancel"),
+                                  child: Text(Constants.cancel),
                                 ),
                               ),
                             ),
