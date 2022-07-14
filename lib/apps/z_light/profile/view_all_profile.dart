@@ -389,6 +389,7 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                                               GestureDetector(
                                                             onTap: () {
                                                               editingProfileID = profile.id;
+                                                              print(profile.id);
                                                               if(profile.id==0){
                                                                 _showDefaultMoreDialog(context);
                                                               }else{
