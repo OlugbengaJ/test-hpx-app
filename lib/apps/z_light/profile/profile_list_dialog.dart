@@ -291,9 +291,14 @@ Future<void> profileListDialog(
                                         builder: (_, provider, __) =>
                                             TextButton(
                                           onPressed: () {
-                                            provider.addProfile(
-                                                textController.text);
-                                            Navigator.pop(context);
+                                            if (provider.profileExists(
+                                                textController.text)) {
+                                              // show modal
+                                            } else {
+                                              provider.addProfile(
+                                                  textController.text);
+                                              Navigator.pop(context);
+                                            }
                                           },
                                           style: textBtnStyleWhite,
                                           child: const SizedBox(
