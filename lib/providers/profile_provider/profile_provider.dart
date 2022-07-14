@@ -24,6 +24,8 @@ class ProfileProvider extends ChangeNotifier {
 
   int get _nextId => profiles.last.id + 1;
 
+  bool allowEdit = true;
+
   /// [currentProfile] returns the value ([_currentProfile])
   /// of the currently active profile.
   late Profile _currentProfile;
@@ -94,7 +96,13 @@ class ProfileProvider extends ChangeNotifier {
   ///
   /// This is used when user clicks on an app in the New Profile window.
   void updateSelectedProfile(String name, String icon, String file) {
-    if (name == Constants.defaultText) name = '${Constants.defaultText} (1)';
+    if (name == Constants.defaultText) {
+      // update the default name to include number (1)
+      name = _defaultProfile.name;
+    }
+
+    // disables editing when default app is not selected
+    allowEdit = name == _defaultProfile.name;
 
     _selectedProfile = Profile(
       id: _nextId,

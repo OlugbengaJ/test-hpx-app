@@ -90,17 +90,21 @@ Future<void> profileListDialog(
                               border: Border.all(color: Colors.white, width: 1),
                             ),
                             height: 40,
-                            child: TextField(
-                              controller: textController,
-                              decoration: InputDecoration(
-                                border: const OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide.none),
-                                fillColor: Theme.of(context).primaryColor,
-                                filled: true,
-                                contentPadding: const EdgeInsets.all(0),
+                            child: Consumer<ProfileProvider>(
+                              builder: (_, provider, __) => TextField(
+                                controller: textController,
+                                enabled: provider.allowEdit,
+                                decoration: InputDecoration(
+                                  border: const OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.zero),
+                                      borderSide: BorderSide.none),
+                                  fillColor: Theme.of(context).primaryColor,
+                                  filled: true,
+                                  contentPadding: const EdgeInsets.all(0),
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                              textAlign: TextAlign.center,
                             ),
                             // Row(
                             //   crossAxisAlignment: CrossAxisAlignment.center,
