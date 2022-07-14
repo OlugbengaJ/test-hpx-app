@@ -69,35 +69,36 @@ class _ProfileDropdownState extends State<ProfileDropdown> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                constraints: const BoxConstraints(minHeight: 40),
-                child: Consumer<ProfileProvider>(builder: (_, provider, __) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ...provider.profiles.map(
-                        (e) => Column(
-                          children: [
-                            InkWell(
-                              onTap: () => provider.selectProfile(e.id),
-                              child: Row(
-                                children: [
-                                  AppIcon(icon: e.icon, size: 16),
-                                  Container(
-                                    padding: const EdgeInsets.only(left: 8),
-                                    child: Text(e.name),
-                                  ),
-                                ],
+              Expanded(
+                child: Container(
+                  constraints: const BoxConstraints(minHeight: 40),
+                  child: Consumer<ProfileProvider>(builder: (_, provider, __) {
+                    return ListView(
+                      children: [
+                        ...provider.profiles.map(
+                          (e) => Column(
+                            children: [
+                              InkWell(
+                                onTap: () => provider.selectProfile(e.id),
+                                child: Row(
+                                  children: [
+                                    AppIcon(icon: e.icon, size: 16),
+                                    Container(
+                                      padding: const EdgeInsets.only(left: 8),
+                                      child: Text(e.name),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            // adds space between the profiles
-                            const SizedBox(height: 10.0)
-                          ],
+                              // adds space between the profiles
+                              const SizedBox(height: 10.0)
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                }),
+                      ],
+                    );
+                  }),
+                ),
               ),
               SizedBox(
                 height: 50,
