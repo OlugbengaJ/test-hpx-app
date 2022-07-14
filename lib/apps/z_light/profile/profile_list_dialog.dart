@@ -90,30 +90,23 @@ Future<void> profileListDialog(
                               border: Border.all(color: Colors.white, width: 1),
                             ),
                             height: 40,
-                            child: TextField(
-                              controller: textController,
-                              decoration: InputDecoration(
-                                border: const OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide.none),
-                                fillColor: Theme.of(context).primaryColor,
-                                filled: true,
-                                contentPadding: const EdgeInsets.all(0),
+                            child: Consumer<ProfileProvider>(
+                              builder: (_, provider, __) => TextField(
+                                controller: textController,
+                                enabled: provider.allowEdit,
+                                keyboardType: TextInputType.text,
+                                decoration: InputDecoration(
+                                  border: const OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.zero),
+                                      borderSide: BorderSide.none),
+                                  fillColor: Theme.of(context).primaryColor,
+                                  filled: true,
+                                  contentPadding: const EdgeInsets.all(0),
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                              textAlign: TextAlign.center,
                             ),
-                            // Row(
-                            //   crossAxisAlignment: CrossAxisAlignment.center,
-                            //   children: [
-                            //     Consumer<ProfileProvider>(
-                            //         builder: (_, provider, __) {
-                            //       return Padding(
-                            //         padding: const EdgeInsets.all(8.0),
-                            //         child: Text(provider.selectedProfile.name),
-                            //       );
-                            //     }),
-                            //   ],
-                            // ),
                           )
                         ],
                       ),
@@ -237,10 +230,13 @@ Future<void> profileListDialog(
                                                 name: provider.apps[index].name,
                                                 icon: provider.apps[index].icon,
                                                 tapHandler: () {
-                                                  provider.selectAppAsProfile(
-                                                      provider.apps[index].name,
-                                                      provider.apps[index].icon,
-                                                      '');
+                                                  provider
+                                                      .updateSelectedProfile(
+                                                          provider
+                                                              .apps[index].name,
+                                                          provider
+                                                              .apps[index].icon,
+                                                          '');
                                                   textController.text = provider
                                                       .selectedProfile.name;
                                                 },
