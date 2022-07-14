@@ -6,7 +6,6 @@ import 'package:hpx/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 
-
 class ProfileDropdown extends StatefulWidget {
   const ProfileDropdown({Key? key}) : super(key: key);
 
@@ -31,7 +30,6 @@ class _ProfileDropdownState extends State<ProfileDropdown> {
     viewAllProfileDialog(context);
   }
 
-  
   @override
   Widget build(BuildContext context) {
     final tooltipController = JustTheController();
@@ -73,7 +71,7 @@ class _ProfileDropdownState extends State<ProfileDropdown> {
                       Container(
                         padding: const EdgeInsets.only(left: 20),
                         child: Image.asset(
-                          "assets/images/z.png",
+                          Constants.zImage,
                           height: 20,
                         ),
                       ),
@@ -185,4 +183,3 @@ class _ProfileDropdownState extends State<ProfileDropdown> {
     );
   }
 }
-
