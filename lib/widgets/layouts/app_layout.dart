@@ -192,7 +192,7 @@ class _AppLayoutState extends State<AppLayout> {
               ),
             ),
           ]),
-          const ProfileDropdown(),
+          ProfileDropdown(),
           const WindowButtons(),
         ],
       ),
