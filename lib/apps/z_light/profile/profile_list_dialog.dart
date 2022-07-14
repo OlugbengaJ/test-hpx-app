@@ -94,6 +94,7 @@ Future<void> profileListDialog(
                               builder: (_, provider, __) => TextField(
                                 controller: textController,
                                 enabled: provider.allowEdit,
+                                keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
                                   border: const OutlineInputBorder(
                                       borderRadius:
@@ -106,18 +107,6 @@ Future<void> profileListDialog(
                                 textAlign: TextAlign.center,
                               ),
                             ),
-                            // Row(
-                            //   crossAxisAlignment: CrossAxisAlignment.center,
-                            //   children: [
-                            //     Consumer<ProfileProvider>(
-                            //         builder: (_, provider, __) {
-                            //       return Padding(
-                            //         padding: const EdgeInsets.all(8.0),
-                            //         child: Text(provider.selectedProfile.name),
-                            //       );
-                            //     }),
-                            //   ],
-                            // ),
                           )
                         ],
                       ),

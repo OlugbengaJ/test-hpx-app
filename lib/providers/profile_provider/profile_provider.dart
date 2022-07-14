@@ -79,7 +79,7 @@ class ProfileProvider extends ChangeNotifier {
   void deleteProfile(int id) {
     if (id == 0) return;
 
-    profiles.removeWhere((p) => p.id == id);
+    _profiles.removeWhere((p) => p.id == id);
     notifyListeners();
   }
 

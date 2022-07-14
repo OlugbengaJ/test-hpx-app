@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/profile/profile_dropdown.dart';
 import 'package:hpx/apps/z_light/wrapper.dart';
+import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/contact_support_provider.dart';
 import 'package:hpx/providers/tutorial_provider/tutorial_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
@@ -23,6 +24,271 @@ class AppLayout extends StatefulWidget {
 }
 
 class _AppLayoutState extends State<AppLayout> {
+  final modeProvider = ModeProvider();
+  int step = 0;
+  List<String> walkthroughTitle = [
+    "Workspace & Lightning option tabs",
+    "Profiles",
+    "Layers",
+    "Tools & Effect Panel",
+    "Learn more by using the help icon"
+  ];
+  List<String> walkthroughDesc = [
+    'Workspace: Use this tab to rearrange your supported devices to match the layout of your physical workspace Lightning Options: Use this tab to create pprofiles and layers , select devices zones, and apply lighting tools and effects',
+    "Use profiles to assign, edit and save the lighting configuration to be displayed when you open the application. When you don’t have an application profile, the default (All Application) profile will be applied to your hardware",
+    "Create new layers or select an existing layers to edit the lighting configuration. You can reorder layers, which will determine the visibility of the configured lighting tools or effect",
+    "Selecting a lighting tool or effect from the dropdown menu to apply to your hardware. Use Mood to create an ambience, Short Colors to color-code your application shortcuts, or production to create a more color-accurate workspace.",
+    "Select the “Help” icon in the Navigation Menu to view this tutorial again, or visit our support website to learn more about Z Light Space’s feature"
+  ];
+
+  walkthroughTutorialWidget() {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return SimpleDialog(
+              backgroundColor: const Color(0xff121212),
+              contentPadding: const EdgeInsets.all(0),
+              children: [
+                Container(
+                    padding: const EdgeInsets.only(top: 40, bottom: 10),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.white, width: 1)),
+                    width: 900,
+                    height: 500,
+                    child: Column(children: [
+                      Text(
+                        walkthroughTitle[step],
+                        style: h1Style,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 20),
+                        padding: const EdgeInsets.only(left: 50, right: 50),
+                        child: Text(
+                          walkthroughDesc[step],
+                          style: const TextStyle(
+                              fontSize: 14, height: 1.5, color: Colors.white),
+                        ),
+                      ),
+                      Container(
+                        width: 200,
+                        height: 200,
+                        margin: const EdgeInsets.only(top: 40, bottom: 10),
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: Svg('assets/images/walkthrough_image.svg'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 60),
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  TextButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          step -= 1;
+                                        });
+                                        Navigator.of(context).pop();
+                                        if (step < 0) {
+                                          generateDialogTutorial();
+                                        }
+                                        if (step >= 0) {
+                                          walkthroughTutorialWidget();
+                                        }
+                                      },
+                                      style: textBtnStyleWhite,
+                                      child: SizedBox(
+                                          height: 40,
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: const [
+                                                Padding(
+                                                    padding:
+                                                        EdgeInsets.all(8.0),
+                                                    child: Text('Previous'))
+                                              ]))),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: Container(),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  TextButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          step += 1;
+                                        });
+                                        Navigator.of(context).pop();
+                                        if (step < 4) {
+                                          walkthroughTutorialWidget();
+                                        }
+                                      },
+                                      style: textBtnStyleWhite,
+                                      child: SizedBox(
+                                          height: 40,
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: const [
+                                                Padding(
+                                                    padding:
+                                                        EdgeInsets.all(8.0),
+                                                    child: Text('Next'))
+                                              ]))),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      style: textBtnStyleBlack,
+                                      child: SizedBox(
+                                          height: 40,
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: const [
+                                                Padding(
+                                                    padding:
+                                                        EdgeInsets.all(8.0),
+                                                    child:
+                                                        Text('Skip Tutorial'))
+                                              ]))),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ]))
+              ]);
+        });
+  }
+
+  generateDialogTutorial() {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return SimpleDialog(
+              backgroundColor: const Color(0xff121212),
+              contentPadding: const EdgeInsets.all(0),
+              children: [
+                Container(
+                    padding: const EdgeInsets.only(top: 40, bottom: 10),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.white, width: 1)),
+                    width: 900,
+                    height: 500,
+                    child: Column(children: [
+                      Text(
+                        'Welcome to Z Light Space',
+                        style: h1Style,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 20),
+                      ),
+                      Text(
+                        'Personalize your workspace lightning to enhance your creative workflow',
+                        style: pStyle,
+                      ),
+                      Container(
+                        width: 200,
+                        height: 200,
+                        margin: const EdgeInsets.only(top: 70, bottom: 10),
+                        child: Image.asset(
+                          Constants.zLightIconPng,
+                          height: 200,
+                          width: 200,
+                        ),
+                      ),
+                      Container(
+                        width: 250,
+                        margin: const EdgeInsets.only(top: 50),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  TextButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          step = 0;
+                                        });
+                                        Navigator.of(context).pop();
+                                        walkthroughTutorialWidget();
+                                      },
+                                      style: textBtnStyleWhite,
+                                      child: SizedBox(
+                                          height: 40,
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: const [
+                                                Padding(
+                                                    padding:
+                                                        EdgeInsets.all(8.0),
+                                                    child: Text('Lets Go'))
+                                              ]))),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      style: textBtnStyleBlack,
+                                      child: SizedBox(
+                                          height: 40,
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: const [
+                                                Padding(
+                                                    padding:
+                                                        EdgeInsets.all(8.0),
+                                                    child:
+                                                        Text('Skip Tutorial'))
+                                              ]))),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ])),
+              ]);
+        });
+  }
+
   // this function creates the dialog width for the help icons
   void openDialogOption() {
     final tutorialProvider =
@@ -64,7 +330,7 @@ class _AppLayoutState extends State<AppLayout> {
                 child: InkWell(
                   onTap: () {
                     Navigator.of(context).pop();
-                    tutorialProvider.generateDialogTutorial(context);
+                    generateDialogTutorial();
                   },
                   child: const Text(
                     'Reset Onboarding',
