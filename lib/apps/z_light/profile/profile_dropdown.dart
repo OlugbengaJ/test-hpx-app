@@ -70,9 +70,12 @@ class _ProfileDropdownState extends State<ProfileDropdown> {
                 child: Consumer<ProfileProvider>(builder: (_, provider, __) {
                   return Row(
                     children: [
-                      Image.asset(
-                        Constants.zImage,
-                        height: 20,
+                      Container(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: Image.asset(
+                          "assets/images/z.png",
+                          height: 20,
+                        ),
                       ),
                       Container(
                         padding: const EdgeInsets.only(left: 8),

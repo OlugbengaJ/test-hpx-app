@@ -122,12 +122,10 @@ class TooltipTutorialProvider extends ChangeNotifier {
                       width: 200,
                       height: 200,
                       margin: const EdgeInsets.only(top: 70, bottom: 10),
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: Svg(
-                              'assets/images/tutorial_z.svg',
-                            ),
-                            fit: BoxFit.fill),
+                      child: Image.asset(
+                        Constants.zLightIconPng,
+                        height: 200,
+                        width: 200,
                       ),
                     ),
                     Container(
@@ -242,17 +240,13 @@ class CustomToolTip extends StatelessWidget {
                   children: [
                     Text(title,
                         style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                            fontFamily: "Metropolis")),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.black)),
                     Container(margin: const EdgeInsets.only(top: 10)),
                     Text(description,
                         style: const TextStyle(
-                            height: 1.3,
-                            fontSize: 12,
-                            color: Colors.black,
-                            fontFamily: "Metropolis")),
+                            height: 1.3, fontSize: 12, color: Colors.black)),
                     Container(margin: const EdgeInsets.only(top: 10)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
