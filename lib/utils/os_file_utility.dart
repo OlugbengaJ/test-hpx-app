@@ -17,14 +17,14 @@ class OSFileUtility {
   static String get path => Platform.script.path;
 
   static AppDirInfo? get appsDir {
-    debugPrint(
-        '${Platform.operatingSystem} ${Platform.operatingSystemVersion} ${Platform.version}');
+    debugPrint(Platform.operatingSystem);
+    debugPrint(Platform.operatingSystemVersion);
+    debugPrint(Platform.version);
 
     String path = '';
 
     // Windows app dir info
     if (isWindows) {
-      // C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Git
       final dir = Directory(
           'c:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs');
 
