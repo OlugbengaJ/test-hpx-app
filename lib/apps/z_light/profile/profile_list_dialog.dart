@@ -8,27 +8,23 @@ import 'package:hpx/utils/os_file_utility.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
-
-
+// duplicate name dialog
 Future<void> profileExistDialog(BuildContext context, String name) async {
-
-
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
       return SimpleDialog(
-        title: const Text("Try a different name"),
+        title: const Text('Try a different name'),
         children: <Widget>[
           Container(
-              padding: const EdgeInsets.only(top: 40, bottom: 10),
-              child: Column(children: [
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              children: [
                 Text(
-                  'A profile with the same name ($name) already exists',
+                  'A profile with the name ($name) already exists.',
                   style: h4Style,
                 ),
-                
                 Container(
-                  
                   margin: const EdgeInsets.only(top: 50),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -39,42 +35,47 @@ Future<void> profileExistDialog(BuildContext context, String name) async {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                style: textBtnStyleWhite.copyWith(
-                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                     RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(4),
-                                    ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              style: textBtnStyleWhite.copyWith(
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                 ),
-                                child: SizedBox(
-                                    height: 40,
-                                    width: 100,
-                                    child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: const [
-                                          Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Text('Ok'))
-                                        ]))),
+                              ),
+                              child: SizedBox(
+                                height: 40,
+                                width: 100,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text('Ok'),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
                         ],
                       ),
-                      
-                      
                     ],
                   ),
                 ),
-              ])),
+              ],
+            ),
+          ),
         ],
       );
-    }
+    },
   );
 }
 
+// profile list dialog
 Future<void> profileListDialog(
     BuildContext context, TextEditingController textController) async {
   return showDialog<void>(
@@ -360,7 +361,9 @@ Future<void> profileListDialog(
                                           onPressed: () {
                                             if (provider.profileExists(
                                                 textController.text)) {
-                                                profileExistDialog(context, textController.text);
+                                              // show modal warning name exists
+                                              profileExistDialog(
+                                                  context, textController.text);
                                             } else {
                                               provider.addProfile(
                                                   textController.text);
