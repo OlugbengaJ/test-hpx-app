@@ -3,7 +3,8 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/globals.dart';
-import 'package:hpx/providers/workspace_provider.dart';
+import 'package:hpx/providers/profile_provider/profile_provider.dart';
+import 'package:hpx/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class OSFileUtility {
@@ -16,14 +17,14 @@ class OSFileUtility {
   static String get path => Platform.script.path;
 
   static AppDirInfo? get appsDir {
-    debugPrint(
-        '${Platform.operatingSystem} ${Platform.operatingSystemVersion} ${Platform.version}');
+    debugPrint(Platform.operatingSystem);
+    debugPrint(Platform.operatingSystemVersion);
+    debugPrint(Platform.version);
 
     String path = '';
 
     // Windows app dir info
     if (isWindows) {
-      // C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Git
       final dir = Directory(
           'c:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs');
 
@@ -58,6 +59,7 @@ class OSFileUtility {
     return null;
   }
 
+  // TODO: refactor this to read all apps from a default location
   static void osApps() {
     final dir = Directory(appsDir!.initialDirectory!);
 
@@ -75,73 +77,50 @@ class OSFileUtility {
     }
   }
 
-  static List<String> get osAppsIconDir {
-    debugPrint(
-        '${Platform.operatingSystem} ${Platform.operatingSystemVersion} ${Platform.version}');
-    // if (isWindows) return ['c:\\Program Files', 'c:\\Program Files (x86)'];
-
-    // if (isLinux) return ['/usr/share/pixmaps'];
-
-    return [];
-  }
-
   static void openFilePicker() async {
     if (appsDir != null) {
-      FilePicker.platform
-          .pickFiles(
-            dialogTitle: 'Select Application',
-            type: FileType.custom,
-            initialDirectory: appsDir?.initialDirectory,
-            allowedExtensions: appsDir?.extensions,
-          )
-          .then((result) => processFile(result))
-          .catchError((e) {});
+      final filePickerResult = await FilePicker.platform.pickFiles(
+        dialogTitle: Constants.selectAppTitle,
+        type: FileType.custom,
+        initialDirectory: appsDir?.initialDirectory,
+        allowedExtensions: appsDir?.extensions,
+      );
+
+      processFile(filePickerResult);
     }
   }
-
-  static final appInfo = <String, String>{};
 
   static void processFile(FilePickerResult? result) {
     if (isWindows) _processWindowsFile(result);
     if (isLinux) _processLinuxFile(result);
   }
 
+  static final profileProvider = Provider.of<ProfileProvider>(
+      navigatorKeys.currentContext!,
+      listen: false);
+
   /// [_processLinuxFile] process Linux specific file
   static void _processLinuxFile(FilePickerResult? result) async {
-    // process result
     if (result != null) {
       for (var file in result.files) {
-        debugPrint('\r\nfile path \t=> ${file.path}');
-        debugPrint('file name \t=> ${file.name}');
-        debugPrint('file ext \t=> ${file.extension}');
-
-        Process.run('ls', ['-l', '${file.path}']).then((value) {
-          if (value.exitCode == 0) {
-            debugPrint('stdout ${value.stdout}');
-          } else {
-            debugPrint('stderr ${value.stderr}');
-            debugPrint('exit code: ${value.exitCode}');
-          }
-        });
-
         final f = File(file.path!);
         if (f.existsSync()) {
-          final workspaceProvider = Provider.of<WorkspaceProvider>(
-              navigatorKeys.currentContext!,
-              listen: false);
-
-          debugPrint('\r\n\tReading file contents...\r\n');
-
-          List<Widget> widgets = [];
+          // read each line in .desktop file
           f.readAsLines().then((value) {
+            final appInfo = <String, String>{};
             String section = '';
-            appInfo.clear();
 
             for (var text in value) {
-              if (section.contains('[Desktop Entry]')) {
+              if (section.contains('[desktop entry]')) {
                 final entry = text.split('=');
+
+                // only name and icon are required.
+                final k = appInfo.keys.where((e) => e == 'name' || e == 'icon');
+                if (k.length == 2) break;
+
                 if (entry.length == 2) {
-                  appInfo[entry.first] = entry.last;
+                  // add key value pair
+                  appInfo[entry.first.toLowerCase()] = entry.last;
                 }
               }
 
@@ -150,44 +129,24 @@ class OSFileUtility {
                 if (section.isNotEmpty) break;
 
                 // adds first section.
-                section = text;
+                section = text.toLowerCase();
               }
             }
 
-            widgets.addAll(appInfo.entries.map((e) {
-              if (e.key.toLowerCase() == 'icon') {
-                // get icon file
-                final iconFound = _processLinuxIcon(e.value);
-
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    if (iconFound.isNotEmpty)
-                      Container(
-                        margin: EdgeInsets.zero,
-                        child: Image.memory(
-                          File(e.value).readAsBytesSync(),
-                          width: 50.0,
-                          height: 50.0,
-                        ),
-                      ),
-                    Text('${e.key}: ${e.value}'),
-                  ],
-                );
-              }
-
-              return Text('${e.key}: ${e.value}');
-            }));
-
-            // open modal
-            workspaceProvider.toggleModal(widgets);
+            profileProvider.addSystemApp(
+              appInfo['name']!,
+              _getLinuxIcon(appInfo['icon']!),
+              file.path!,
+            );
           });
         }
       }
     }
   }
 
-  static String _processLinuxIcon(String path) {
+  static String _getLinuxIcon(String? path) {
+    path ??= '';
+
     final f = File(path);
     if (!f.existsSync()) {
       // icon not found; find it from other dir based on dimentions mxn.
@@ -209,23 +168,105 @@ class OSFileUtility {
   /// [_processWindowsFile] process Windows specific file
   static void _processWindowsFile(FilePickerResult? result) {
     if (result != null) {
-      debugPrint('\r\npicker id ${result.files.map((e) => e.identifier)}');
-      debugPrint('\r\npicker name ${result.files.map((e) => e.name)}');
-      debugPrint('\r\npicker path ${result.files.map((e) => e.path)}');
-      debugPrint(
-          '\r\npicker extension ${result.files.map((e) => e.extension)}');
+      final file = result.files.first;
 
-      // TODO: use wmic to list properties of the exe
-      // e.g. wmic datafile where "name='C:\\Program Files\\Microsoft Office\\root\\Office16\\WINWORD.EXE'" list full
-      final file =
-          '"name=\'${result.files.first.path?.replaceAll(RegExp(r'\\'), '\\\\')}\'"';
-      debugPrint('file regex: $file');
-      // Process.run('wmic', ['datafile', 'where', file, 'list', 'full'])
-      Process.run('wmic', ['product', 'get', 'name,version']).then((value) {
-        debugPrint('stdout ${value.stdout}');
-        debugPrint('stderr ${value.stderr}');
-        debugPrint('exit code: ${value.exitCode}');
-      }).catchError((e) {});
+      /**
+       * # READ BELOW TO UNDERSTAND HOW APP NAMES WERE GENERATED IN WINDOWS.
+       * 
+       * 
+       * Using wmic (Windows Management Instrumentation Console)
+       * to get properties of the EXE file.
+       * e.g.
+       * wmic datafile where name='C:\\Program Files\\WINWORD.EXE' list full
+       * wmic datafile where name='C:\\Program Files\\WINWORD.EXE' list /format:list
+       * wmic product get name,version
+       * 
+       * e.g.
+       * 
+       * final file =
+       *     "name='${result.files.first.path?.replaceAll(RegExp(r'\\'), '\\\\')}'";
+       * debugPrint('file regex: $file');
+       * Process.run('wmic', ['datafile', 'where', file, 'list', 'full'])
+       *     .then((ProcessResult value) {
+       *   if (value.exitCode == 0) {
+       *     debugPrint('stdout ${value.stdout}');
+       *   } else {
+       *     debugPrint('stderr ${value.stderr}');
+       *     debugPrint('exit code: ${value.exitCode}');
+       *   }
+       * }).catchError((e) {});
+       * 
+       */
+
+      /**
+       * Using Shell object via Powershell
+       * 
+       * 
+       * ## To run Powershell command via cmd process.
+       * 
+       * Powershell -Command "$Shell = New-Object -COMObject Shell.Application; 
+       * $ShellFolder = $Shell.NameSpace('C:\Program Files\Google\Chrome\Application'); 
+       * $ShellFile = $ShellFolder.ParseName('chrome.exe'); 
+       * Write-Host $ShellFile.ExtendedProperty('infotip')"
+       * 
+       * 
+       * Here is a reference to win32 shell
+       * https://docs.microsoft.com/en-us/windows/win32/shell/shellfolderitem-extendedproperty
+       * 
+       * 
+       * ## To run directly in Powershell
+       * 
+       * $Shell = New-Object -COMObject Shell.Application
+       * $ShellFolder = $Shell.NameSpace("C:\Program Files\Google\Chrome\Application")
+       * $ShellFile = $ShellFolder.ParseName("chrome.exe")
+       * Write-Host $ShellFile.ExtendedProperty("infotip")
+       * 
+       * infotip returns a summary so you could substitute with
+       * e.g. company, filedescription, productname, name, type, size, productversion.
+       * 
+       * 
+       * ## To run from a ps1 file
+       * ## (WOULD NOT WORK IF "...running scripts is disabled on this system")
+       * 
+       * void main() {
+       *   print(runPowerShellScript(r'C:\tmp\SumScript.ps1', ['1', '2']));
+       *   // $sum from Powershell
+       *   // 3
+       * }
+       * 
+       * String runPowerShellScript(String scriptPath, List<String> argumentsToScript) {
+       *   return Process.runSync(
+       *           'Powershell.exe', ['-File', scriptPath, ...argumentsToScript]).stdout
+       *       as String;
+       * }
+       * 
+       * // Powershell Code: 
+       * $Shell = New-Object -COMObject Shell.Application
+       * $ShellFolder = $Shell.NameSpace($args[0])
+       * $ShellFile = $ShellFolder.ParseName($args[1])
+       * $result = $ShellFile.ExtendedProperty("infotip")
+       * Write-Host $result
+       * return $result
+       * 
+      */
+
+      final namespace = file.path!.replaceFirst('\\${file.name}', '');
+      final shellCmd = '\$Shell = New-Object -COMObject Shell.Application; '
+          '\$ShellFolder = \$Shell.NameSpace(\'$namespace\'); '
+          '\$ShellFile = \$ShellFolder.ParseName(\'${file.name}\'); '
+          'Write-Host \$ShellFile.ExtendedProperty(\'filedescription\')';
+
+      // execute Powershell .ps1 file
+      Process.run('Powershell.exe', ['-Command', shellCmd])
+          .then((processResult) {
+        if (processResult.exitCode == 0) {
+          debugPrint('ps stdout ${processResult.stdout}');
+          profileProvider.addSystemApp(
+              processResult.stdout as String, '', file.path!);
+        }
+      }).catchError((e) {
+        debugPrint('powershell error occured');
+      });
     }
   }
 }

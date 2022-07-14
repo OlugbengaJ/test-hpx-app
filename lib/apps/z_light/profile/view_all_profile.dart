@@ -288,7 +288,7 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                           labels: const ['OFF', 'ON'],
                                           radiusStyle: true,
                                           onToggle: (index) {
-                                            print('switched to: $index');
+                                            debugPrint('switched to: $index');
                                           },
                                         ),
                                       ),
@@ -461,7 +461,7 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: const [
                                   Text(
-                                    "Done",
+                                    Constants.done,
                                     style: TextStyle(color: Color(0xFF212121)),
                                   ),
                                 ],

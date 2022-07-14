@@ -375,14 +375,11 @@ class _AppLayoutState extends State<AppLayout> {
 
   @override
   Widget build(BuildContext context) {
-    WorkspaceProvider workspaceProvider =
-        Provider.of<WorkspaceProvider>(context);
+    final workspaceProvider = Provider.of<WorkspaceProvider>(context);
     TooltipTutorialProvider tutorialProvider =
         Provider.of<TooltipTutorialProvider>(context, listen: false);
     tutorialProvider.showTutorial = true;
     tutorialProvider.direction = AxisDirection.down;
-
-    workspaceProvider.initProfile(modeProvider.getPickerModes('profile').first);
 
     return Scaffold(
       appBar: AppBar(

@@ -1,42 +1,64 @@
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 
 class Profile {
-  final int id;
-  final String name;
-  List<LayerItemModel> layers = [];
-  List<Application> associatedApps = [];
-
   Profile({
     required this.id,
     required this.name,
+    required this.icon,
     required this.layers,
-    required this.associatedApps
+    required this.associatedApps,
   });
 
-  Profile.fromMap(Map<String, dynamic> item):
-        id = item["id"],
+  final int id;
+  final String name;
+  final String icon;
+  List<LayerItemModel> layers = [];
+  List<Application> associatedApps = [];
+
+  /// [copyWith] returns a new instance of [Profile].
+  Profile copyWith({
+    int? id,
+    String? name,
+    String? icon,
+    List<LayerItemModel>? layers,
+    List<Application>? associatedApps,
+  }) {
+    return Profile(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      icon: icon ?? this.icon,
+      layers: layers ?? [...this.layers],
+      associatedApps: associatedApps ?? [...this.associatedApps],
+    );
+  }
+
+  Profile.fromMap(Map<String, dynamic> item)
+      : id = item["id"],
         name = item["name"],
+        icon = item["icon"],
         layers = getLayersFromMap(item["layers"]),
         associatedApps = getAssociatedAppsFromMap(item["associatedApps"]);
 
-  Map<String, Object> toMap(){
+  Map<String, Object> toMap() {
     return {
-      "id":id,
+      "id": id,
       "name": name,
-      "layers":  getLayersAsMap(),
+      "icon": icon,
+      "layers": getLayersAsMap(),
       "associatedApps": getAssociatedAppsAsMap()
     };
   }
 
   static getLayersFromMap(List<Map<String, dynamic>>? layersJson) {
     var result = layersJson?.map((e) => LayerItemModel.fromJson(e)).toList();
-    if(result != null) return result;
+    if (result != null) return result;
     return <LayerItemModel>[];
   }
 
-  static getAssociatedAppsFromMap(List<Map<String, dynamic>>? associatedAppsJson) {
+  static getAssociatedAppsFromMap(
+      List<Map<String, dynamic>>? associatedAppsJson) {
     var apps = associatedAppsJson?.map((e) => Application.fromJson(e)).toList();
-    if(apps != null) return apps;
+    if (apps != null) return apps;
     return <Application>[];
   }
 
@@ -57,15 +79,27 @@ class Profile {
   }
 }
 
-
 class Application {
+  Application({
+    required this.name,
+    required this.icon,
+    required this.file,
+  });
+
+  final String name;
+  final String icon;
+  final String file;
+
   Map<String, dynamic> toMap() {
-    throw UnimplementedError("error");
+    return {
+      "name": name,
+      "icon": icon,
+      "file": file,
+    };
   }
 
-  Application.fromJson(e) {
-    throw UnimplementedError("error");
-  }
+  Application.fromJson(Map<String, dynamic> item)
+      : name = item['name'],
+        icon = item['icon'],
+        file = item['file'];
 }
-
-
