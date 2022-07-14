@@ -66,7 +66,9 @@ class ProfileProvider extends ChangeNotifier {
       name: textEditName,
       icon: _selectedProfile.icon,
       layers: _selectedProfile.layers,
-      associatedApps: _selectedProfile.associatedApps,
+      associatedApps: [
+        ..._selectedProfile.associatedApps.map((e) => e.copyWith())
+      ],
     );
 
     _profiles.add(profile);
@@ -126,10 +128,11 @@ class ProfileProvider extends ChangeNotifier {
     allowEdit = name == _defaultProfile.name;
 
     _selectedProfile = Profile(
-      id: _nextId,
+      id: _selectedProfile.id,
       name: name,
       icon: icon,
-      layers: [],
+      // use existing layers incase duplicate profile mode is active
+      layers: _selectedProfile.layers,
       associatedApps:
           file.isEmpty ? [] : [Application(name: name, icon: icon, file: file)],
     );
