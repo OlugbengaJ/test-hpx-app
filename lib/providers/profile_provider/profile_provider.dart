@@ -126,10 +126,10 @@ class ProfileProvider extends ChangeNotifier {
     allowEdit = name == _defaultProfile.name;
 
     _selectedProfile = Profile(
-      id: _nextId,
+      id: _selectedProfile.id,
       name: name,
       icon: icon,
-      layers: [],
+      layers: _selectedProfile.layers,
       associatedApps:
           file.isEmpty ? [] : [Application(name: name, icon: icon, file: file)],
     );
