@@ -60,82 +60,83 @@ Future<void> _showDefaultMoreDialog(BuildContext context) async {
 Future<void> confirmDeleteProfileDialog(BuildContext context) async {
   final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
   return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          children: <Widget>[
-            Container(
-                padding: const EdgeInsets.only(top: 40, bottom: 10),
-                child: Column(children: [
-                  Text(
-                    'Delete ${editingProfile!.name} profile?',
-                    style: h4Style,
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 20),
-                  ),
-                  Container(
-                    width: 250,
-                    margin: const EdgeInsets.only(top: 50),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  style: textBtnStyleWhite,
-                                  child: SizedBox(
-                                      height: 40,
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: const [
-                                            Padding(
-                                                padding: EdgeInsets.all(8.0),
-                                                child: Text('Cancel'))
-                                          ]))),
-                            ],
-                          ),
+    context: context,
+    builder: (BuildContext context) {
+      return SimpleDialog(
+        children: <Widget>[
+          Container(
+              padding: const EdgeInsets.only(top: 40, bottom: 10),
+              child: Column(children: [
+                Text(
+                  'Delete ${editingProfile!.name} profile?',
+                  style: h4Style,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 20),
+                ),
+                Container(
+                  width: 250,
+                  margin: const EdgeInsets.only(top: 50),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                style: textBtnStyleWhite,
+                                child: SizedBox(
+                                    height: 40,
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: const [
+                                          Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: Text('Cancel'))
+                                        ]))),
+                          ],
                         ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Container(),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            TextButton(
+                                onPressed: () {
+                                  profileProvider.deleteProfile(editingProfile!.id);
+                                  Navigator.of(context).pop();
+                                },
+                                style: textBtnStyleBlack,
+                                child: SizedBox(
+                                    height: 40,
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: const [
+                                          Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: Text('Delete'))
+                                        ]))),
+                          ],
                         ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              TextButton(
-                                  onPressed: () {
-                                    profileProvider.deleteProfile(editingProfile!.id);
-                                    Navigator.of(context).pop();
-                                  },
-                                  style: textBtnStyleBlack,
-                                  child: SizedBox(
-                                      height: 40,
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: const [
-                                            Padding(
-                                                padding: EdgeInsets.all(8.0),
-                                                child: Text('Delete'))
-                                          ]))),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ])),
-          ],
-        );
-      });
+                ),
+              ])),
+        ],
+      );
+    }
+  );
 }
 
 Future<void> _showMoreDialog(BuildContext context) async {
