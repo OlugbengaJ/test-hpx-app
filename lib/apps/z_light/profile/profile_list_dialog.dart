@@ -8,8 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
 
 void browse(BuildContext context) async {
-  ProfileProvider profileProvider =
-      Provider.of<ProfileProvider>(context, listen: false);
+  ProfileProvider profileProvider =  Provider.of<ProfileProvider>(context, listen: false);
   FilePickerResult? result = await FilePicker.platform.pickFiles();
   String parentDir = "";
   if (result != null) {
