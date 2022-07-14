@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/profile/profile_dropdown.dart';
 import 'package:hpx/apps/z_light/wrapper.dart';
-import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/contact_support_provider.dart';
 import 'package:hpx/providers/tutorial_provider/tutorial_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
@@ -24,8 +23,6 @@ class AppLayout extends StatefulWidget {
 }
 
 class _AppLayoutState extends State<AppLayout> {
-  final modeProvider = ModeProvider();
-
   // this function creates the dialog width for the help icons
   void openDialogOption() {
     final tutorialProvider =
@@ -112,14 +109,11 @@ class _AppLayoutState extends State<AppLayout> {
 
   @override
   Widget build(BuildContext context) {
-    WorkspaceProvider workspaceProvider =
-        Provider.of<WorkspaceProvider>(context);
+    final workspaceProvider = Provider.of<WorkspaceProvider>(context);
     TooltipTutorialProvider tutorialProvider =
         Provider.of<TooltipTutorialProvider>(context, listen: false);
     tutorialProvider.showTutorial = true;
     tutorialProvider.direction = AxisDirection.down;
-
-    workspaceProvider.initProfile(modeProvider.getPickerModes('profile').first);
 
     return Scaffold(
       appBar: AppBar(

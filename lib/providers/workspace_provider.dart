@@ -24,18 +24,6 @@ class WorkspaceProvider with ChangeNotifier {
   /// [_modalWidgets] holds widgets that are rendered in the modal notification.
   List<Widget>? _modalWidgets;
 
-  PickerModel? _currentProfile;
-  PickerModel? get getProfile => _currentProfile;
-
-  void initProfile(PickerModel? value) => _currentProfile ??= value;
-
-  void setProfile(PickerModel? value) async {
-    _currentProfile = value;
-
-    await Future.delayed(const Duration(microseconds: 1));
-    notifyListeners();
-  }
-
   final double _resizableThreshold = 20;
 
   /// [scrollOffset] used to determine actual the workspace width and height minus scrollbars.

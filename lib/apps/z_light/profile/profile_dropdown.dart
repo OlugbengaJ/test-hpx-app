@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/apps/z_light/profile/profile_app_icon.dart';
 import 'package:hpx/apps/z_light/profile/profile_list_dialog.dart';
 import 'package:hpx/apps/z_light/profile/view_all_profile.dart';
 import 'package:hpx/providers/profile_provider/profile_provider.dart';
-import 'package:hpx/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
-
 
 class ProfileDropdown extends StatefulWidget {
   const ProfileDropdown({Key? key}) : super(key: key);
@@ -16,6 +15,7 @@ class ProfileDropdown extends StatefulWidget {
 
 class _ProfileDropdownState extends State<ProfileDropdown> {
   final tooltipController = JustTheController();
+  late TextEditingController _textCtrl;
 
   void closeTooltip() {
     tooltipController.hideTooltip();
@@ -23,7 +23,15 @@ class _ProfileDropdownState extends State<ProfileDropdown> {
 
   void newProfile() {
     tooltipController.hideTooltip();
-    profileListDialog(context);
+
+    // set the text controller default
+    final profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
+    profileProvider.resetSelectedProfile();
+    _textCtrl.text = profileProvider.selectedProfile.name;
+
+    // open the profile list dialog
+    profileListDialog(context, _textCtrl);
   }
 
   void viewAllProfile() {
@@ -31,25 +39,21 @@ class _ProfileDropdownState extends State<ProfileDropdown> {
     viewAllProfileDialog(context);
   }
 
-  
+  @override
+  void initState() {
+    super.initState();
+
+    _textCtrl = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _textCtrl.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final tooltipController = JustTheController();
-
-    void closeTooltip() {
-      tooltipController.hideTooltip();
-    }
-
-    void newProfile() {
-      tooltipController.hideTooltip();
-      profileListDialog(context);
-    }
-
-    void viewAllProfile() {
-      tooltipController.hideTooltip();
-      viewAllProfileDialog(context);
-    }
-
     return JustTheTooltip(
       tailLength: 5,
       tailBaseWidth: 0,
@@ -65,21 +69,31 @@ class _ProfileDropdownState extends State<ProfileDropdown> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
-                height: 40,
+              Container(
+                constraints: const BoxConstraints(minHeight: 40),
                 child: Consumer<ProfileProvider>(builder: (_, provider, __) {
-                  return Row(
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: Image.asset(
-                          "assets/images/z.png",
-                          height: 20,
+                      ...provider.profiles.map(
+                        (e) => Column(
+                          children: [
+                            InkWell(
+                              onTap: () => provider.selectProfile(e.id),
+                              child: Row(
+                                children: [
+                                  AppIcon(icon: e.icon, size: 16),
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: Text(e.name),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            // adds space between the profiles
+                            const SizedBox(height: 10.0)
+                          ],
                         ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: Text(provider.getCurrentProfile().name),
                       ),
                     ],
                   );
@@ -110,7 +124,7 @@ class _ProfileDropdownState extends State<ProfileDropdown> {
                                   color: Color(0xFF212121),
                                 ),
                                 Text(
-                                  "New Profile",
+                                  'New Profile',
                                   style: TextStyle(color: Color(0xFF212121)),
                                 ),
                               ],
@@ -134,7 +148,7 @@ class _ProfileDropdownState extends State<ProfileDropdown> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: const [
                                 Icon(Icons.grid_view_outlined),
-                                Text("View All"),
+                                Text('View All'),
                               ],
                             ),
                           ),
@@ -166,13 +180,10 @@ class _ProfileDropdownState extends State<ProfileDropdown> {
                 builder: (_, provider, __) {
                   return Row(
                     children: [
-                      Image.asset(
-                        Constants.zImage,
-                        height: 16,
-                      ),
+                      AppIcon(icon: provider.currentProfile.icon, size: 16),
                       Container(
                         padding: const EdgeInsets.only(left: 8),
-                        child: Text(provider.getCurrentProfile().name),
+                        child: Text(provider.currentProfile.name),
                       ),
                     ],
                   );
@@ -185,4 +196,3 @@ class _ProfileDropdownState extends State<ProfileDropdown> {
     );
   }
 }
-

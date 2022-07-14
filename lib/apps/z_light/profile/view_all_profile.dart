@@ -8,58 +8,53 @@ void browse(BuildContext context) {
   Navigator.pop(context);
 }
 
-
-Future<void> _showDefaultMoreDialog(BuildContext context) async{
+Future<void> _showDefaultMoreDialog(BuildContext context) async {
   return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) {
-      return SimpleDialog(
-        children: <Widget>[
-          SimpleDialogOption(
-            onPressed: () {  },
-            child: const Text('Rename'),
-          ),
-          SimpleDialogOption(
-            onPressed: () { },
-            child: const Text('Duplicate'),
-          ),
-          SimpleDialogOption(
-            onPressed: () { },
-            child: const Text('Export'),
-          ),
-        ],
-      );
-    }
-  );
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          children: <Widget>[
+            SimpleDialogOption(
+              onPressed: () {},
+              child: const Text('Rename'),
+            ),
+            SimpleDialogOption(
+              onPressed: () {},
+              child: const Text('Duplicate'),
+            ),
+            SimpleDialogOption(
+              onPressed: () {},
+              child: const Text('Export'),
+            ),
+          ],
+        );
+      });
 }
 
-Future<void> _showMoreDialog(BuildContext context) async{
+Future<void> _showMoreDialog(BuildContext context) async {
   return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) {
-      return SimpleDialog(
-        children: <Widget>[
-          SimpleDialogOption(
-            onPressed: () {  },
-            child: const Text('Duplicate'),
-          ),
-          SimpleDialogOption(
-            onPressed: () { },
-            child: const Text('Export'),
-          ),
-          SimpleDialogOption(
-            onPressed: () { },
-            child: const Text('Delete'),
-          ),
-        ],
-      );
-    }
-  );
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          children: <Widget>[
+            SimpleDialogOption(
+              onPressed: () {},
+              child: const Text('Duplicate'),
+            ),
+            SimpleDialogOption(
+              onPressed: () {},
+              child: const Text('Export'),
+            ),
+            SimpleDialogOption(
+              onPressed: () {},
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      });
 }
-
 
 Future<void> viewAllProfileDialog(BuildContext context) async {
-  
   return showDialog<void>(
     context: context,
     barrierDismissible: false, // user must tap button!
@@ -204,7 +199,7 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                           labels: const ['OFF', 'ON'],
                                           radiusStyle: true,
                                           onToggle: (index) {
-                                            print('switched to: $index');
+                                            debugPrint('switched to: $index');
                                           },
                                         ),
                                       ),
@@ -243,98 +238,115 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                 Row(
                   children: [
                     Expanded(
-                      child: Consumer<ProfileProvider>(builder: (_, provider, __){
-                          return Container(
+                      child:
+                          Consumer<ProfileProvider>(builder: (_, provider, __) {
+                        return Container(
                             margin: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 8),
                             width: 621,
                             height: 328,
                             color: const Color(0xFF212121),
-                            child: GridView.count(                            
-                              padding: const EdgeInsets.all(2),
-                              crossAxisCount: 5,
-                              //childAspectRatio: 1.5,
-                              children:  <Widget>[
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      child: Container(                                  
-                                        margin: const EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.white, width: 1),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                          children: [
-                                            const SizedBox(width: 20,),
-                                            Image.asset(
-                                              Constants.zlightIcon,
-                                              height: 60,
-                                            ),
-                                             Column(
-                                               children: [
-                                                 SizedBox(
-                                                  width: 20,
-                                                  child: MouseRegion(
-                                                    cursor: SystemMouseCursors.click,
-                                                    child: GestureDetector(
-                                                      onTap: (){_showDefaultMoreDialog(context);},
-                                                      child: Container(
-                                                        padding: const EdgeInsets.only(top: 8),
-                                                        child: const Icon(Icons.more_vert),
-                                                      ),
-                                                    ),
+                            child: GridView.count(
+                                padding: const EdgeInsets.all(2),
+                                crossAxisCount: 5,
+                                //childAspectRatio: 1.5,
+                                children: <Widget>[
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              margin: const EdgeInsets.all(8),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.white,
+                                                    width: 1),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  const SizedBox(
+                                                    width: 20,
                                                   ),
+                                                  Image.asset(
+                                                    Constants.zlightIcon,
+                                                    height: 60,
+                                                  ),
+                                                  Column(
+                                                    children: [
+                                                      SizedBox(
+                                                        width: 20,
+                                                        child: MouseRegion(
+                                                          cursor:
+                                                              SystemMouseCursors
+                                                                  .click,
+                                                          child:
+                                                              GestureDetector(
+                                                            onTap: () {
+                                                              _showDefaultMoreDialog(
+                                                                  context);
+                                                            },
+                                                            child: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      top: 8),
+                                                              child: const Icon(
+                                                                  Icons
+                                                                      .more_vert),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                               ],
-                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                          Container(
+                                            padding:
+                                                const EdgeInsets.only(left: 8),
+                                            child: const Text("Default"),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.only(left: 8),
-                                      child: const Text("Default"),
-                                    ),
-                                  ],
-                                ),
-                              ] +
-                                provider.profiles.map((profile){
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      child: Container(                                  
-                                        margin: const EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: Colors.white, width: 1),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            Image.asset(
-                                              Constants.zlightIcon,
-                                              height: 50,
+                                    ] +
+                                    provider.profiles.map((profile) {
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              margin: const EdgeInsets.all(8),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.white,
+                                                    width: 1),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  Image.asset(
+                                                    Constants.zlightIcon,
+                                                    height: 50,
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                            
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.only(left: 8),
-                                      child: const Text("Default"),
-                                    ),
-                                  ],
-                                );
-                              }).toList()
-                               
-                            )
-                          );
-                        }
-                      ),
+                                          ),
+                                          Container(
+                                            padding:
+                                                const EdgeInsets.only(left: 8),
+                                            child: const Text("Default"),
+                                          ),
+                                        ],
+                                      );
+                                    }).toList()));
+                      }),
                     )
                   ],
                 ),
@@ -360,7 +372,7 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: const [
                                   Text(
-                                    "Done",
+                                    Constants.done,
                                     style: TextStyle(color: Color(0xFF212121)),
                                   ),
                                 ],
