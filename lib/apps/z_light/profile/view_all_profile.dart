@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/profile/profile_list_dialog.dart';
+import 'package:hpx/models/apps/zlightspace_models/profiles/profiles_model.dart';
 import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/theme.dart';
@@ -8,7 +9,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 
 
 TextEditingController _textCtrl = TextEditingController();
-int editingProfileID = 0;
+Profile? editingProfile;
 
 void browse(BuildContext context) {
   Navigator.pop(context);
@@ -25,6 +26,13 @@ void newProfile(BuildContext context) {
   profileListDialog(context, _textCtrl);
 }
 
+void duplicateProfile(BuildContext context){
+  final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+  profileProvider.duplicateProfile(editingProfile!.id);
+  Navigator.pop(context);
+  newProfile(context);
+}
+
 Future<void> _showDefaultMoreDialog(BuildContext context) async {
   return showDialog<void>(
       context: context,
@@ -36,7 +44,7 @@ Future<void> _showDefaultMoreDialog(BuildContext context) async {
               child: const Text('Rename'),
             ),
             SimpleDialogOption(
-              onPressed: () {},
+              onPressed: () {duplicateProfile(context);},
               child: const Text('Duplicate'),
             ),
             SimpleDialogOption(
@@ -60,7 +68,7 @@ Future<void> confirmDeleteProfileDialog(BuildContext context) async {
                 padding: const EdgeInsets.only(top: 40, bottom: 10),
                 child: Column(children: [
                   Text(
-                    'Delete ~profile name~ profile?',
+                    'Delete ${editingProfile!.name} profile?',
                     style: h4Style,
                   ),
                   Container(
@@ -104,7 +112,7 @@ Future<void> confirmDeleteProfileDialog(BuildContext context) async {
                             children: [
                               TextButton(
                                   onPressed: () {
-                                    profileProvider.deleteProfile(editingProfileID);
+                                    profileProvider.deleteProfile(editingProfile!.id);
                                     Navigator.of(context).pop();
                                   },
                                   style: textBtnStyleBlack,
@@ -137,7 +145,7 @@ Future<void> _showMoreDialog(BuildContext context) async {
         return SimpleDialog(
           children: <Widget>[
             SimpleDialogOption(
-              onPressed: () {},
+              onPressed: () {duplicateProfile(context);},
               child: const Text('Duplicate'),
             ),
             SimpleDialogOption(
@@ -388,8 +396,7 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                                           child:
                                                               GestureDetector(
                                                             onTap: () {
-                                                              editingProfileID = profile.id;
-                                                              print(profile.id);
+                                                              editingProfile = profile;
                                                               if(profile.id==0){
                                                                 _showDefaultMoreDialog(context);
                                                               }else{
