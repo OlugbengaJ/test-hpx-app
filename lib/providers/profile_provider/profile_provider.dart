@@ -66,7 +66,9 @@ class ProfileProvider extends ChangeNotifier {
       name: textEditName,
       icon: _selectedProfile.icon,
       layers: _selectedProfile.layers,
-      associatedApps: _selectedProfile.associatedApps,
+      associatedApps: [
+        ..._selectedProfile.associatedApps.map((e) => e.copyWith())
+      ],
     );
 
     _profiles.add(profile);
