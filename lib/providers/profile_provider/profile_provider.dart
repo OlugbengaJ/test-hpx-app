@@ -89,6 +89,21 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// [duplicateProfile] creates a new profile from an existing profile.
+  void duplicateProfile(int id) {
+    final profile = profiles.firstWhere((e) => e.id == id);
+
+    // set selected profile as new profile but keeping the existing layers.
+    _selectedProfile = profile.copyWith(
+      id: _nextId,
+      name: _defaultProfile.name,
+      icon: _defaultProfile.icon,
+      associatedApps: [],
+    );
+
+    notifyListeners();
+  }
+
   void renameProfile(String name) {}
 
   /// [selectProfile] sets the current profile to the selected profile
