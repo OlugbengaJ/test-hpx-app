@@ -80,6 +80,12 @@ class ProfileProvider extends ChangeNotifier {
     if (id == 0) return;
 
     _profiles.removeWhere((p) => p.id == id);
+
+    if (id == _currentProfile.id) {
+      // current profile was deleted hence change to default profile
+      _currentProfile = profiles.first.copyWith();
+    }
+
     notifyListeners();
   }
 
