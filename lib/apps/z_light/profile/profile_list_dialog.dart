@@ -293,7 +293,7 @@ Future<void> profileListDialog(
                                           onPressed: () {
                                             if (provider.profileExists(
                                                 textController.text)) {
-                                              // show modal
+                                              // show modal warning name exists
                                             } else {
                                               provider.addProfile(
                                                   textController.text);
