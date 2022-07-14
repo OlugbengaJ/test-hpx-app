@@ -73,7 +73,7 @@ class _ContactSupportPresetState extends State<ContactSupportPreset> {
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
-                                  fontFamily: "GoogleSans")),
+                                  fontFamily: "Metropolis")),
                         ],
                       )),
                       Expanded(
@@ -86,7 +86,7 @@ class _ContactSupportPresetState extends State<ContactSupportPreset> {
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
-                                  fontFamily: "GoogleSans")),
+                                  fontFamily: "Metropolis")),
                         ],
                       ))
                     ]))

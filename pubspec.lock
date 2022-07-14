@@ -29,6 +29,41 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.9.4"
+  bitsdojo_window:
+    dependency: "direct main"
+    description:
+      name: bitsdojo_window
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.2"
+  bitsdojo_window_linux:
+    dependency: transitive
+    description:
+      name: bitsdojo_window_linux
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.2"
+  bitsdojo_window_macos:
+    dependency: transitive
+    description:
+      name: bitsdojo_window_macos
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.2"
+  bitsdojo_window_platform_interface:
+    dependency: transitive
+    description:
+      name: bitsdojo_window_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.2"
+  bitsdojo_window_windows:
+    dependency: transitive
+    description:
+      name: bitsdojo_window_windows
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.2"
   boolean_selector:
     dependency: transitive
     description:
@@ -174,6 +209,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  flutter_svg_provider:
+    dependency: "direct main"
+    description:
+      name: flutter_svg_provider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.3"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -233,6 +275,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.5.0"
+  just_the_tooltip:
+    dependency: "direct main"
+    description:
+      name: just_the_tooltip
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.12"
   knob_widget:
     dependency: "direct main"
     description:
@@ -429,13 +478,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.4"
-  process_run:
-    dependency: "direct main"
-    description:
-      name: process_run
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.12.3+2"
   provider:
     dependency: "direct main"
     description:
@@ -443,13 +485,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.0.3"
-  pub_semver:
-    dependency: transitive
-    description:
-      name: pub_semver
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.1"
   rational:
     dependency: transitive
     description:
@@ -490,6 +525,41 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.2"
+  sqflite:
+    dependency: "direct main"
+    description:
+      name: sqflite
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.3"
+  sqflite_common:
+    dependency: "direct main"
+    description:
+      name: sqflite_common
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.1+1"
+  sqflite_common_ffi:
+    dependency: "direct main"
+    description:
+      name: sqflite_common_ffi
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.1+1"
+  sqlite3:
+    dependency: transitive
+    description:
+      name: sqlite3
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.7.2"
+  sqlite3_flutter_libs:
+    dependency: "direct main"
+    description:
+      name: sqlite3_flutter_libs
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.8"
   stack_trace:
     dependency: transitive
     description:
@@ -532,6 +602,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.9"
+  toggle_switch:
+    dependency: "direct main"
+    description:
+      name: toggle_switch
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
   typed_data:
     dependency: transitive
     description:
@@ -653,4 +730,4 @@ packages:
     version: "3.1.1"
 sdks:
   dart: ">=2.17.0 <3.0.0"
-  flutter: ">=2.11.0-0.1.pre"
+  flutter: ">=3.0.0"

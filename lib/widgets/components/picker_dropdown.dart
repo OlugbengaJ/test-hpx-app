@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
-import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/utils/comparer.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
@@ -58,7 +57,7 @@ class _PickerDropdownState extends State<PickerDropdown> {
         decoration: BoxDecoration(
           border: Border.all(
             width: 1,
-            color: Colors.grey.shade700,
+            color: Colors.white,
           ),
         ),
         child: DropdownButton<PickerModel>(
@@ -66,6 +65,7 @@ class _PickerDropdownState extends State<PickerDropdown> {
           focusColor: Colors.transparent,
           value: widget.defaultPicker ?? currentPickerValue,
           dropdownColor: Colors.grey.shade900,
+          isExpanded: true,
           hint: SizedBox(
             child: Row(
               children: [
@@ -75,7 +75,8 @@ class _PickerDropdownState extends State<PickerDropdown> {
           ),
           icon: const Icon(
             Icons.arrow_drop_down_outlined,
-            size: 20,
+            size: 30,
+            color: Colors.white,
           ),
           elevation: 2,
           alignment: AlignmentDirectional.bottomStart,
@@ -103,7 +104,7 @@ class _PickerDropdownState extends State<PickerDropdown> {
                     value.enabled == false || value.icon == null
                         ? Container()
                         : const SizedBox(
-                            width: 20,
+                            width: 10,
                           ),
                     Text(
                       value.title,

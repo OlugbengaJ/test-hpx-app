@@ -7,6 +7,7 @@ import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
+import 'package:just_the_tooltip/just_the_tooltip.dart';
 
 class LayerListItem extends StatefulWidget {
   const LayerListItem(
@@ -26,49 +27,25 @@ class _LayerListItemState extends State<LayerListItem> {
   bool _editing = false;
   final double _iconSize = 16;
   TextEditingController _layerNameController = TextEditingController(text: '');
+
   GlobalKey deleteKey = GlobalKey<State<Tooltip>>();
   GlobalKey<FormFieldState> editLayerKey = GlobalKey<
       FormFieldState>(); // Each layer should have a key for its editing field
 
-  Future<void> _deleteLayerDialog(LayersProvider provider) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Delete a layer'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                const Text('Do you wish to delete this layer?'),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text("Cancel"),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          provider.removeItem(widget.layerIndex);
-                          Navigator.of(context).pop();
-                        },
-                        style: textBtnStyleWhite,
-                        child: const Text("Delete"),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-        );
-      },
-    );
+  final tooltipController = JustTheController();
+  Path defaultTailBuilder(Offset tip, Offset point2, Offset point3) {
+    return Path()
+      ..moveTo(tip.dx, tip.dy)
+      ..lineTo(point2.dx, point2.dy)
+      ..lineTo(point3.dx, point3.dy)
+      ..close();
+  }
+
+  showDeleteTooltip() {
+    setState(() {
+      _showDeleteTooltip = true;
+      tooltipController.showTooltip();
+    });
   }
 
   _onHover(isHovering) {
@@ -77,6 +54,13 @@ class _LayerListItemState extends State<LayerListItem> {
         _showActions = isHovering;
       });
     }
+  }
+
+  _onDeleteTooltipDismiss() {
+    setState(() {
+      _showDeleteTooltip = false;
+      _showActions = false;
+    });
   }
 
   _toggleLayer(LayersProvider provider) {
@@ -126,7 +110,7 @@ class _LayerListItemState extends State<LayerListItem> {
   /// Use to delete a layer from the list
   _deleteLayer(LayersProvider provider) {
     if (provider.length >= 2) {
-      _deleteLayerDialog(provider);
+      showDeleteTooltip();
     }
 
     //provider.removeItem(widget.layerIndex);
@@ -316,110 +300,90 @@ class _LayerListItemState extends State<LayerListItem> {
                                                           _toggleEditing(value),
                                                     ),
                                                   ),
-                                                  GestureDetector(
-                                                    child: Tooltip(
-                                                      message: 'Delete',
-                                                      child: InkWell(
-                                                        child: Icon(
-                                                          Ionicons.trash,
-                                                          size: _iconSize,
-                                                          color: widget
-                                                              .layerItemModel
-                                                              .listDisplayColor,
-                                                        ),
-                                                        onTap: () =>
-                                                            _deleteLayer(value),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Tooltip(
-                                                    key: deleteKey,
-                                                    showDuration:
-                                                        const Duration(
-                                                      seconds: 2,
-                                                    ),
-                                                    padding: EdgeInsets.zero,
-                                                    richMessage: TextSpan(
-                                                      children: [
-                                                        WidgetSpan(
-                                                          alignment:
-                                                              PlaceholderAlignment
-                                                                  .baseline,
-                                                          baseline: TextBaseline
-                                                              .alphabetic,
-                                                          child: Container(
-                                                            color: Colors.black,
-                                                            constraints:
-                                                                const BoxConstraints(
-                                                                    maxWidth:
-                                                                        150),
-                                                            child: Column(
+                                                  JustTheTooltip(
+                                                    onDismiss:
+                                                        _onDeleteTooltipDismiss,
+                                                    isModal: true,
+                                                    controller:
+                                                        tooltipController,
+                                                    tailBuilder:
+                                                        defaultTailBuilder,
+                                                    content: SizedBox(
+                                                      width: 150,
+                                                      height: 100,
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceAround,
+                                                        children: [
+                                                          const SizedBox(
+                                                            height: 30,
+                                                            child: Center(
+                                                                child: Text(
+                                                                    "Delete this layer ?")),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 50,
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceAround,
                                                               children: [
-                                                                Container(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .all(4),
-                                                                  child:
-                                                                      const Center(
-                                                                    child: Text(
-                                                                      'Delete this layer',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        backgroundColor:
-                                                                            Colors.black,
+                                                                TextButton(
+                                                                  style: textBtnStyleBlack
+                                                                      .copyWith(
+                                                                    backgroundColor: MaterialStateProperty.all<
+                                                                            Color>(
+                                                                        Colors
+                                                                            .transparent),
+                                                                  ),
+                                                                  onPressed: () =>
+                                                                      _onDeleteTooltipDismiss(),
+                                                                  child: const Text(
+                                                                      "Cancel"),
+                                                                ),
+                                                                TextButton(
+                                                                  style: textBtnStyleWhite
+                                                                      .copyWith(
+                                                                    shape: MaterialStateProperty
+                                                                        .all<
+                                                                            RoundedRectangleBorder>(
+                                                                      RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(4),
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                ),
-                                                                Container(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                          .all(4),
-                                                                  child: Row(
-                                                                    children: [
-                                                                      Expanded(
-                                                                        child:
-                                                                            Column(
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.stretch,
-                                                                          children: [
-                                                                            GestureDetector(
-                                                                              child: const Text('Cancel'),
-                                                                              onTap: () {
-                                                                                debugPrint('OK');
-                                                                              },
-                                                                            )
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                      Expanded(
-                                                                        child:
-                                                                            Column(
-                                                                          crossAxisAlignment:
-                                                                              CrossAxisAlignment.stretch,
-                                                                          children: [
-                                                                            TextButton(
-                                                                              style: TextButton.styleFrom(
-                                                                                primary: Colors.black,
-                                                                                backgroundColor: Colors.white,
-                                                                              ),
-                                                                              onPressed: () {},
-                                                                              child: const Text('Got It'),
-                                                                            )
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
+                                                                  onPressed: () =>
+                                                                      value.removeItem(
+                                                                          widget
+                                                                              .layerIndex),
+                                                                  child: const Text(
+                                                                      "Delete"),
+                                                                )
                                                               ],
                                                             ),
                                                           ),
-                                                        ),
-                                                      ],
+                                                        ],
+                                                      ),
                                                     ),
-                                                    preferBelow: false,
-                                                    child: Container(),
+                                                    child: GestureDetector(
+                                                      child: Tooltip(
+                                                        message: 'Delete',
+                                                        child: InkWell(
+                                                            child: Icon(
+                                                              Ionicons.trash,
+                                                              size: _iconSize,
+                                                              color: widget
+                                                                  .layerItemModel
+                                                                  .listDisplayColor,
+                                                            ),
+                                                            onTap: () {
+                                                              _deleteLayer(
+                                                                  value);
+                                                            }),
+                                                      ),
+                                                    ),
                                                   ),
                                                   Tooltip(
                                                     message: 'Rearrange',

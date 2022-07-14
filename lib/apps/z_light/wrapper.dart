@@ -1,18 +1,14 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/layers/layers.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_list_item.dart';
 import 'package:hpx/apps/z_light/tools_effects/tools_effects_wrapper.dart';
 import 'package:hpx/apps/z_light/workspace/workspace.dart';
-import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
-import 'package:hpx/widgets/components/dropdown.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/layouts/three_columns.dart';
 import 'package:hpx/widgets/theme.dart';
-import 'package:provider/provider.dart';
+
 
 class Wrapper extends StatefulWidget {
   const Wrapper({Key? key}) : super(key: key);
@@ -54,85 +50,13 @@ class _WrapperState extends State<Wrapper> {
 
   @override
   Widget build(BuildContext context) {
-    final workspaceProvider = Provider.of<WorkspaceProvider>(context);
-
-    return Scaffold(
-      appBar: AppBar(
-        bottomOpacity: 0.0,
-        elevation: 0.0,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            TextButton(
-              style: TextButton.styleFrom(
-                  fixedSize: const Size(150, 50),
-                  primary: workspaceProvider.isWorkspaceView
-                      ? Colors.white
-                      : Colors.grey,
-                  backgroundColor: Colors.transparent,
-                  textStyle: h5Style),
-              child: const Text('Workspace'),
-              onPressed: () {
-                workspaceProvider.toggleView(WorkspaceView.workspace);
-              },
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                  fixedSize: const Size(150, 50),
-                  primary: workspaceProvider.isLightingView
-                      ? Colors.white
-                      : Colors.grey,
-                  backgroundColor: Colors.transparent,
-                  textStyle: h5Style),
-              child: const Text('Lighting Options'),
-              onPressed: () {
-                workspaceProvider.toggleView(WorkspaceView.lighting);
-              },
-            ),
-          ],
+    return Expanded(
+      child: ThreeColumns(
+        leftChild: Layers(onReorder: _updateLayers, layers: _layersListItems),
+        centerChild: Stack(
+          children: const [Workspace()],
         ),
-        actions: [
-          Container(
-            margin: const EdgeInsets.only(top: 20, right: 20),
-            child: Text(
-              "Selected Profile",
-              textAlign: TextAlign.left,
-              style: h5Style,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              margin: EdgeInsets.zero,
-              width: 180,
-              child: DropDown(
-                hint: 'Select profile...',
-                hintStyle: pStyle,
-                initialValue: _modeProvider.getPickerModes('profile').first,
-                isExpanded: true,
-                items: [
-                  ..._modeProvider.getPickerModes('profile').map(
-                        (e) => DropdownMenuItem(
-                          enabled: e.enabled,
-                          value: e,
-                          child: GetProfileList(profile: e),
-                        ),
-                      )
-                ],
-                onChangedHandler: (o) {},
-              ),
-            ),
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: ThreeColumns(
-          leftChild: Layers(onReorder: _updateLayers, layers: _layersListItems),
-          centerChild: Stack(
-            children: const [Workspace()],
-          ),
-          rightChild: const ToolsEffectsWrapper(),
-        ),
+        rightChild: const ToolsEffectsWrapper(),
       ),
     );
   }

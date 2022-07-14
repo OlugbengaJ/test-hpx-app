@@ -14,7 +14,7 @@ class Keyboard extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.all(50.0),
+          padding: const EdgeInsets.all(15.0),
           child: SizedBox(
             width: Constants.zoomFactor * zoomScale * 1.01,
             child: Image.asset(

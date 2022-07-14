@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class DropDown extends StatelessWidget {
+class DropDown<T> extends StatelessWidget {
   /// [DropDown] is convenient widget that returns a [DropdownButton].
   ///
   /// Intended to centralize behavior of and all dropdown buttons in the app.
@@ -10,7 +10,7 @@ class DropDown extends StatelessWidget {
     this.height = 30.0,
     required this.hint,
     this.hintStyle,
-    this.initialValue,
+    this.dropdownValue,
     this.isExpanded = false,
     required this.items,
     this.menuMaxHeight = 400.0,
@@ -30,16 +30,16 @@ class DropDown extends StatelessWidget {
   final bool isExpanded;
 
   /// [items] children of the dropdown button that user can select.
-  final List<DropdownMenuItem<Object>>? items;
+  final List<DropdownMenuItem<T>>? items;
 
   /// [onChangedHandler] callback function for the dropdown.
-  final void Function(Object?)? onChangedHandler;
+  final void Function(T?)? onChangedHandler;
 
   /// [enabled] disables the dropdown selection if false.
   final bool enabled;
 
-  /// [initialValue] is the default value for the dropdown menu.
-  final Object? initialValue;
+  /// [dropdownValue] is the default value for the dropdown menu.
+  final T? dropdownValue;
 
   final double? menuMaxHeight;
 
@@ -56,7 +56,7 @@ class DropDown extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(3.0),
         child: DropdownButton(
-          value: initialValue,
+          value: dropdownValue,
           menuMaxHeight: menuMaxHeight,
           hint: Text(hint, style: hintStyle),
           underline: const SizedBox(),

@@ -130,7 +130,8 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                           width: (widget.colors.length > 1) ? 250 : 30,
                           height: 20,
                           decoration: generatePreviewBox(true),
-                        )
+                        ),
+                        // Row(children: [generatePresetBox(2, lastcolors.first)])
                       ],
                     ),
                   ],
@@ -145,8 +146,12 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Solid Color",
-                              textAlign: TextAlign.left, style: labelStyle),
+                          Text(
+                              (widget.colors.length > 1)
+                                  ? 'Gradient Color'
+                                  : "Solid Color",
+                              textAlign: TextAlign.left,
+                              style: labelStyle),
                           SizedBox(
                               width: 200,
                               child: ColorPicker(
@@ -164,12 +169,7 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                                   onColorChanged: (Color selectedcolor) {
                                     changeColor(selectedcolor);
                                   },
-                                  colorHistory: (widget.colors.length == 1)
-                                      ? []
-                                      : widget.colors,
-                                  onHistoryChanged: (List<Color> colors) {
-                                    print(colors);
-                                  })),
+                                  colorHistory: [])),
                         ],
                       ),
                       Container(margin: const EdgeInsets.only(left: 10.0)),
@@ -307,8 +307,6 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
   }
 
   generatePreviewBox(bool? preview) {
-    ColorPickerProvider colorPickerProviderInstance =
-        Provider.of<ColorPickerProvider>(context, listen: false);
     return (widget.colors.length > 1 && preview == true)
         ? BoxDecoration(
             gradient: LinearGradient(colors: widget.colors),
@@ -484,10 +482,8 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                                 activeColor: Colors.green,
                                 value: _value,
                                 onChanged: (bool? value) {
-                                  ColorPickerProvider
-                                      colorPickerProviderInstance =
-                                      Provider.of<ColorPickerProvider>(context,
-                                          listen: false);
+                                  final colorPickerProviderInstance =
+                                      ColorPickerProvider();
                                   setState(() {
                                     _value = value!;
                                     widget.hasBorder = (!_value) ? true : false;

@@ -9,6 +9,7 @@ import 'package:hpx/models/apps/zlightspace_models/workspace_models/box_zone.dar
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/selection_offset.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/utils/common.dart';
+import 'package:hpx/widgets/components/picker_dropdown.dart';
 
 /// [WorkspaceProvider] handles the workspace events.
 ///
@@ -20,7 +21,7 @@ class WorkspaceProvider with ChangeNotifier {
   /// [_stripNotificationText] holds text used by the strip notifcation.
   String? _stripNotificationText;
 
-  /// [_modalWidgets] holds widgets that are rendered in the modal notifcation.
+  /// [_modalWidgets] holds widgets that are rendered in the modal notification.
   List<Widget>? _modalWidgets;
 
   final double _resizableThreshold = 20;
@@ -417,15 +418,20 @@ class WorkspaceProvider with ChangeNotifier {
         case DraggableRegionName.center:
 
           // selector move hence update left and top limited to view.
-          if (left > 0 &&
-              (left + ltwh.resizableLTWH!.width!) <
-                  _workspaceRect.width - scrollOffset!) {
+          final leftPlusWidth = left + ltwh.resizableLTWH!.width!;
+          final workspaceWidth = _workspaceRect.width - scrollOffset!;
+          if (left > 0 && leftPlusWidth < workspaceWidth ||
+              (leftPlusWidth > workspaceWidth && details.delta.dx.isNegative) ||
+              (left < 0 && !details.delta.dx.isNegative)) {
             ltwh.resizableLTWH!.left = left;
           }
 
-          if (top > 0 &&
-              (top + ltwh.resizableLTWH!.height!) <
-                  _workspaceRect.height - scrollOffset!) {
+          final topPlusHeight = top + ltwh.resizableLTWH!.height!;
+          final workspaceHeight = _workspaceRect.height - scrollOffset!;
+          if (top > 0 && topPlusHeight < workspaceHeight ||
+              (topPlusHeight > workspaceHeight &&
+                  details.delta.dy.isNegative) ||
+              (top < 0 && !details.delta.dy.isNegative)) {
             ltwh.resizableLTWH!.top = top;
           }
           break;
@@ -761,28 +767,26 @@ class WorkspaceProvider with ChangeNotifier {
 
         layerLTWH = SelectionOffset()
           ..id = '${layer.id}'
+          ..mode = (layer.mode?.value as EnumModes).name
           ..dragMode = WorkspaceDragMode.resizable
           ..highlightLTWH = LTWH(0.0, 0.0, 0.0, 0.0)
           ..resizableLTWH = LTWH(left - halfSize, top - halfSize, size, size);
-
-        // debugPrint('layer null ${_layersProvider?.layeritems.length}');
       } else {
         // layer exist but need to reinsert as it's index may have changed.
         _deleteLayerLTWH(layer.id);
-
-        // debugPrint('layer exist ${_layersProvider?.layeritems.length}');
       }
 
       // add the layerLTHW to the map.
       _addLayerLTWH(layerLTWH);
 
       if (_currentLayerId == layer.id) {
-        final curentLayerLTWH = _getLayerLTWH(_currentLayerId);
+        final currentLayerLTWH = _getLayerLTWH(_currentLayerId);
 
         // set highlight selector for shortcut colors
         switch (layer.mode?.value) {
           case EnumModes.contactsupport:
-            curentLayerLTWH?.dragMode = _keyDragMode = null;
+            currentLayerLTWH?.mode = EnumModes.contactsupport.name;
+            currentLayerLTWH?.dragMode = _keyDragMode = null;
 
             // disable zone selection icons
             _disableZoneHighlight = true;
@@ -790,12 +794,22 @@ class WorkspaceProvider with ChangeNotifier {
             _disableZoneClick = true;
             break;
           case EnumModes.shortcut:
+            if (currentLayerLTWH?.mode != EnumModes.shortcut.name) {
+              // clear key selection
+              currentLayerLTWH?.highlightLTWH = LTWH(0.0, 0.0, 0.0, 0.0);
+            }
+
             _selectorVisible = _isPanning;
-            _keyDragMode = WorkspaceDragMode.highlight;
-            curentLayerLTWH?.dragMode = _keyDragMode;
+
+            currentLayerLTWH?.mode = EnumModes.shortcut.name;
+            final sublayer = _layersProvider?.getCurrentSublayer();
+
+            _keyDragMode =
+                sublayer == null ? null : WorkspaceDragMode.highlight;
+            currentLayerLTWH?.dragMode = _keyDragMode;
 
             // disable zone selection icons
-            _disableZoneHighlight = false;
+            _disableZoneHighlight = sublayer == null ? true : false;
             _disableZoneResizable = true;
             _disableZoneClick = true;
             break;
@@ -805,11 +819,13 @@ class WorkspaceProvider with ChangeNotifier {
             _disableZoneHighlight = false;
             _disableZoneClick = false;
             _disableZoneResizable = false;
+
+            currentLayerLTWH?.mode = (layer.mode?.value as EnumModes).name;
         }
 
         // set workspace drag mode to the current layer's last drag mode
         if (_keyDragMode != null) {
-          _keyDragMode = curentLayerLTWH?.dragMode;
+          _keyDragMode = currentLayerLTWH?.dragMode;
         }
 
         if (isDragModeResizable) {
@@ -836,9 +852,20 @@ class WorkspaceProvider with ChangeNotifier {
     layersLTWH.remove('$id');
   }
 
+  /// [_workspaceConstraints] holds the contraints of the workspace,
+  /// which is used to position other widgets in the tree.
+  BoxConstraints? _workspaceConstraints;
+
   /// [recenter] sets the left and top position of the workspace children
   void recenter(BoxConstraints constraints, bool reset) {
-    if (keyboardPosLeft == null || keyboardPosTop == null || reset) {
+    if (_workspaceConstraints == null ||
+        _workspaceConstraints?.maxWidth != constraints.maxWidth ||
+        _workspaceConstraints?.maxHeight != constraints.maxHeight ||
+        reset) {
+      // update workspace contraints
+      _workspaceConstraints = constraints;
+
+      // recalculate keyboard position
       keyboardPosLeft = (constraints.maxWidth - scrollOffset!) / 5;
       keyboardPosTop = (constraints.maxHeight - scrollOffset!) / 8;
     }

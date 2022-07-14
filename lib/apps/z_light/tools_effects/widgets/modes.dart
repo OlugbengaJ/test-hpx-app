@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
+import 'package:hpx/providers/tutorial_provider/tutorial_provider.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +17,7 @@ class ToolModes extends StatefulWidget {
 class _ToolModesState extends State<ToolModes> {
   @override
   void initState() {
-    setDefaultMode();
+    // setDefaultMode();
     super.initState();
   }
 
@@ -34,9 +35,6 @@ class _ToolModesState extends State<ToolModes> {
   changeMode(PickerModel value) {
     ModeProvider modeProvider =
         Provider.of<ModeProvider>(context, listen: false);
-    // /// initialize the layers provider to use to send notification accross the layers
-    LayersProvider layerProvider =
-        Provider.of<LayersProvider>(context, listen: false);
     setState(() {
       modeProvider.changeModeComponent(value, context, false, changeComp: true);
     });
@@ -98,31 +96,54 @@ class _ToolModesState extends State<ToolModes> {
   @override
   Widget build(BuildContext context) {
     ModeProvider modeProvider = Provider.of<ModeProvider>(context);
+    TooltipTutorialProvider tutorialProvider =
+        Provider.of<TooltipTutorialProvider>(context);
+    tutorialProvider.direction = AxisDirection.left;
+
     return Container(
         margin: EdgeInsets.zero,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text("Tools & Effects", textAlign: TextAlign.left, style: h5Style),
-            SizedBox(
-                width: MediaQuery.of(context).size.width * 0.45,
-                child: PickerDropdown(
-                  onChange: (PickerModel? returnValue) {
-                    if (modeProvider.currentMode.value == EnumModes.shortcut &&
-                        returnValue?.value != EnumModes.shortcut) {
-                      shortcutAlertDialogOnChangeMode(returnValue!);
-                    } else {
-                      setState(() {
-                        modeProvider.changeModeComponent(
-                            returnValue, context, false,
-                            changeComp: true);
-                      });
-                    }
-                  },
-                  pickerHintText: "Picker a tool or effect mode ....",
-                  pickerList: modeProvider.getPickerModes('mood'),
-                  defaultPicker: modeProvider.modePicker,
-                )),
+            CustomToolTip(
+              height: 100,
+              tooltipController: tutorialProvider.tooltipControllerToolsEffects,
+              title: 'Tools & Effects',
+              description:
+                  'Take the tool and effects for a spin and customize your work space to meet all preference',
+              btn1Txt: "Close",
+              btn2Txt: "Next",
+              btn1Pressed: () {
+                tutorialProvider.showTutorialTooltip(tipToShow: 'Click');
+                tutorialProvider.hideTutorialTooltip(
+                    tipToHide: 'Tools_Effects');
+              },
+              btn2Pressed: () {
+                tutorialProvider.hideTutorialTooltip(
+                    tipToHide: 'Tools_Effects');
+                tutorialProvider.showTutorialTooltip(tipToShow: 'Help');
+              },
+              widget: SizedBox(
+                  // width: MediaQuery.of(context).size.width * 0.45,
+                  child: PickerDropdown(
+                onChange: (PickerModel? returnValue) {
+                  if (modeProvider.currentMode.value == EnumModes.shortcut &&
+                      returnValue?.value != EnumModes.shortcut) {
+                    shortcutAlertDialogOnChangeMode(returnValue!);
+                  } else {
+                    setState(() {
+                      modeProvider.changeModeComponent(
+                          returnValue, context, false,
+                          changeComp: true);
+                    });
+                  }
+                },
+                pickerHintText: "Picker a tool or effect mode and manage ",
+                pickerList: modeProvider.getPickerModes('mood'),
+                defaultPicker: modeProvider.modePicker,
+              )),
+            ),
             Container(
               margin: const EdgeInsets.only(top: 0.0, bottom: 20.0),
               child: modeProvider.preset,

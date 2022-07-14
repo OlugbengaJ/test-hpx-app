@@ -4,6 +4,7 @@ import 'package:hpx/apps/z_light/workspace/widgets/imports.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/scrollbar_provider.dart';
+import 'package:hpx/providers/tutorial_provider/tutorial_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/utils/comparer.dart';
 import 'package:hpx/utils/constants.dart';
@@ -27,7 +28,7 @@ class _WorkspaceState extends State<Workspace>
   late TextEditingController _zoomTextCtrl;
   late double _zoomValue;
   late double _zoomScale;
-  static const double _zoomScaleFactor = 0.4;
+  late double _zoomScaleFactor;
 
   static const double _zoomInThreshold = 250;
   static const double _zoomOutThreshold = 60;
@@ -51,7 +52,7 @@ class _WorkspaceState extends State<Workspace>
 
       setState(() {
         _zoomValue = value!;
-        _zoomScale = _zoomScaleFactor * _zoomValue / 60;
+        _zoomScale = _zoomScaleFactor * _zoomValue / 100;
         updateZoomText();
       });
     }
@@ -91,10 +92,10 @@ class _WorkspaceState extends State<Workspace>
     zoomTextSubmitted('${_zoomValue - 10}');
   }
 
-  /// [zoomCollapse] sets the zoomValue to the zoomOut threshold.
-  void zoomCollapse() {
+  /// [recenterView] sets the zoomValue to the zoomOut threshold.
+  void recenterView() {
     _resetZoom = true;
-    zoomTextSubmitted('$_zoomOutThreshold');
+    zoomTextSubmitted('100');
   }
 
   @override
@@ -106,8 +107,9 @@ class _WorkspaceState extends State<Workspace>
         AnimationController(vsync: this, duration: const Duration(seconds: 1));
 
     // Initialize zoom value and scale.
-    _zoomValue = 60;
-    _zoomScale = _zoomScaleFactor;
+    _zoomValue = 100;
+    _zoomScaleFactor = 0.5;
+    _zoomScale = _zoomScaleFactor * _zoomValue / _zoomValue;
     _zoomTextCtrl = TextEditingController(text: '${_zoomValue.ceil()}%');
   }
 
@@ -121,6 +123,9 @@ class _WorkspaceState extends State<Workspace>
   @override
   Widget build(BuildContext context) {
     final workspaceProvider = Provider.of<WorkspaceProvider>(context);
+    final tutorialProvider =
+        Provider.of<TooltipTutorialProvider>(context, listen: false);
+    tutorialProvider.direction = AxisDirection.down;
 
     final themeData = Theme.of(context);
 
@@ -159,45 +164,111 @@ class _WorkspaceState extends State<Workspace>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 20.0),
-                        child: Tooltip(
-                          message: 'Highlight selector',
-                          child: RoundButton(
-                            onTapDown: workspaceProvider.zoneHighlightFnc,
-                            size: _buttonSize,
-                            icon: Icons.highlight_alt,
-                            iconColor: workspaceProvider.isDragModeHighlight
-                                ? Theme.of(context).colorScheme.primary
-                                : null,
+                      CustomToolTip(
+                        height: 100,
+                        tooltipController:
+                            tutorialProvider.tooltipControllerHighlight,
+                        title: 'Highlight selector',
+                        description:
+                            'The highlight selector allows you to select multiple keys by dragging ...',
+                        btn1Txt: "Close",
+                        btn2Txt: "Next",
+                        btn1Pressed: () {
+                          tutorialProvider.hideTutorialTooltip(
+                              tipToHide: 'Highlight');
+                          tutorialProvider.showTutorialTooltip(
+                              tipToShow: 'Profile');
+                        },
+                        btn2Pressed: () {
+                          tutorialProvider.hideTutorialTooltip(
+                              tipToHide: 'Highlight');
+                          tutorialProvider.showTutorialTooltip(
+                              tipToShow: 'Resizable');
+                        },
+                        widget: Padding(
+                          padding: const EdgeInsets.only(right: 20.0),
+                          child: Tooltip(
+                            message: 'Highlight selector',
+                            child: RoundButton(
+                              onTapDown: workspaceProvider.zoneHighlightFnc,
+                              size: _buttonSize,
+                              icon: Icons.highlight_alt,
+                              iconColor: workspaceProvider.isDragModeHighlight
+                                  ? Theme.of(context).colorScheme.primary
+                                  : null,
+                            ),
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 20.0),
-                        child: Tooltip(
-                          message: 'Resizable selector',
-                          child: RoundButton(
-                            onTapDown: workspaceProvider.zoneResizableFnc,
-                            size: _buttonSize,
-                            icon: Icons.select_all,
-                            iconColor: workspaceProvider.isDragModeResizable
-                                ? Theme.of(context).colorScheme.primary
-                                : null,
+                      CustomToolTip(
+                        height: 100,
+                        tooltipController:
+                            tutorialProvider.tooltipControllerResize,
+                        title: 'Resizable selector',
+                        description:
+                            'The resizable selector allows you to select multiple keys over an area using a resizable overlay box',
+                        btn1Txt: "Close",
+                        btn2Txt: "Next",
+                        btn1Pressed: () {
+                          tutorialProvider.hideTutorialTooltip(
+                              tipToHide: 'Resizable');
+                          tutorialProvider.showTutorialTooltip(
+                              tipToShow: 'Highlight');
+                        },
+                        btn2Pressed: () {
+                          tutorialProvider.hideTutorialTooltip(
+                              tipToHide: 'Resizable');
+                          tutorialProvider.showTutorialTooltip(
+                              tipToShow: 'Click');
+                        },
+                        widget: Padding(
+                          padding: const EdgeInsets.only(right: 20.0),
+                          child: Tooltip(
+                            message: 'Resizable selector',
+                            child: RoundButton(
+                              onTapDown: workspaceProvider.zoneResizableFnc,
+                              size: _buttonSize,
+                              icon: Icons.select_all,
+                              iconColor: workspaceProvider.isDragModeResizable
+                                  ? Theme.of(context).colorScheme.primary
+                                  : null,
+                            ),
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 20.0),
-                        child: Tooltip(
-                          message: 'Click selector',
-                          child: RoundButton(
-                            onTapDown: workspaceProvider.zoneClickFnc,
-                            size: _buttonSize,
-                            icon: Icons.mouse,
-                            iconColor: workspaceProvider.isDragModeClick
-                                ? Theme.of(context).colorScheme.primary
-                                : null,
+                      CustomToolTip(
+                        height: 100,
+                        tooltipController:
+                            tutorialProvider.tooltipControllerClick,
+                        title: 'Click selector',
+                        description:
+                            'The resizable selector allows you to select multiple keys over an area using a resizable overlay box',
+                        btn1Txt: "Close",
+                        btn2Txt: "Next",
+                        btn1Pressed: () {
+                          tutorialProvider.hideTutorialTooltip(
+                              tipToHide: 'Click');
+                          tutorialProvider.showTutorialTooltip(
+                              tipToShow: 'Resizable');
+                        },
+                        btn2Pressed: () {
+                          tutorialProvider.hideTutorialTooltip(
+                              tipToHide: 'Click');
+                          tutorialProvider.showTutorialTooltip(
+                              tipToShow: 'Tools_Effects');
+                        },
+                        widget: Padding(
+                          padding: const EdgeInsets.only(right: 20.0),
+                          child: Tooltip(
+                            message: 'Click selector',
+                            child: RoundButton(
+                              onTapDown: workspaceProvider.zoneClickFnc,
+                              size: _buttonSize,
+                              icon: Icons.mouse,
+                              iconColor: workspaceProvider.isDragModeClick
+                                  ? Theme.of(context).colorScheme.primary
+                                  : null,
+                            ),
                           ),
                         ),
                       ),
@@ -262,6 +333,15 @@ class _WorkspaceState extends State<Workspace>
                             top: workspaceProvider.keyboardPosTop,
                             // alignment: Alignment.center,
                             child: Keyboard(zoomScale: _zoomScale),
+                          ),
+
+                          OverlaySelector(
+                            showCrossHair:
+                                workspaceProvider.isDragModeResizable,
+                            onPanDown: workspaceProvider.onPanDown,
+                            onPanUpdate: workspaceProvider.onPanUpdate,
+                            onPanEnd: workspaceProvider.onPanEnd,
+                            isVisible: workspaceProvider.selectorVisible,
                           ),
 
                           if (workspaceProvider.isModalNotify)
@@ -387,18 +467,13 @@ class _WorkspaceState extends State<Workspace>
                           zoomInHandler: zoomIn,
                           zoomExpandHandler: zoomExpand,
                           zoomOutHandler: zoomOut,
-                          zoomCollapseHandler: zoomCollapse,
+                          zoomCollapseHandler: recenterView,
                           zoomEndHandler: zoomEnd,
                         ),
                       ),
                     ),
-                    OverlaySelector(
-                      showCrossHair: workspaceProvider.isDragModeResizable,
-                      onPanDown: workspaceProvider.onPanDown,
-                      onPanUpdate: workspaceProvider.onPanUpdate,
-                      onPanEnd: workspaceProvider.onPanEnd,
-                      isVisible: workspaceProvider.selectorVisible,
-                    ),
+
+                    // TODO: previous overlay location
                   ],
                 );
               },

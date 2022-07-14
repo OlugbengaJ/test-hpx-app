@@ -1,3 +1,4 @@
+import 'dart:core';
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
@@ -48,4 +49,33 @@ class EffectsModel {
 
   /// effect image for the extract colors matrix
   Uint8List? imageBytes;
+
+  /// mode id for relation in database
+  int? modeId;
+
+  EffectsModel.fromJson(Map<String, dynamic> item)
+      : degree = item['degree'],
+        size = item['size'],
+        speed = item['speed'],
+        updatePerSecond = item['updatePerSecond'],
+        imageQuality = item['imageQuality'],
+        effectType = item['effectType'],
+        effectName = item['effectName'],
+        extractedColors = item['extractedColors'],
+        imageBytes = item['imageBytes'],
+        modeId = item['modeId'];
+
+  Map<String, dynamic> toMap() {
+    return {
+      'degree': degree,
+      'size': size,
+      'speed': speed,
+      'updatePerSecond': updatePerSecond,
+      'imageQuality': imageQuality,
+      'effectType': effectType,
+      'effectName': effectName.toString(),
+      'extractedColors': extractedColors,
+      'imageBytes': imageBytes
+    };
+  }
 }
