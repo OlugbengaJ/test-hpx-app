@@ -15,6 +15,7 @@ class ProfileDropdown extends StatefulWidget {
 
 class _ProfileDropdownState extends State<ProfileDropdown> {
   final tooltipController = JustTheController();
+  late TextEditingController _textCtrl;
 
   void closeTooltip() {
     tooltipController.hideTooltip();
@@ -22,12 +23,33 @@ class _ProfileDropdownState extends State<ProfileDropdown> {
 
   void newProfile() {
     tooltipController.hideTooltip();
-    profileListDialog(context);
+
+    // set the text controller default
+    final profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
+    profileProvider.resetSelectedProfile();
+    _textCtrl.text = profileProvider.selectedProfile.name;
+
+    // open the profile list dialog
+    profileListDialog(context, _textCtrl);
   }
 
   void viewAllProfile() {
     tooltipController.hideTooltip();
     viewAllProfileDialog(context);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _textCtrl = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _textCtrl.dispose();
+    super.dispose();
   }
 
   @override
@@ -102,7 +124,7 @@ class _ProfileDropdownState extends State<ProfileDropdown> {
                                   color: Color(0xFF212121),
                                 ),
                                 Text(
-                                  "New Profile",
+                                  'New Profile',
                                   style: TextStyle(color: Color(0xFF212121)),
                                 ),
                               ],
@@ -126,7 +148,7 @@ class _ProfileDropdownState extends State<ProfileDropdown> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: const [
                                 Icon(Icons.grid_view_outlined),
-                                Text("View All"),
+                                Text('View All'),
                               ],
                             ),
                           ),

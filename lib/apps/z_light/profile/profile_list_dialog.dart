@@ -8,7 +8,8 @@ import 'package:hpx/utils/os_file_utility.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
-Future<void> profileListDialog(BuildContext context) async {
+Future<void> profileListDialog(
+    BuildContext context, TextEditingController textController) async {
   return showDialog<void>(
     context: context,
     barrierDismissible: false, // user must tap button!
@@ -89,18 +90,30 @@ Future<void> profileListDialog(BuildContext context) async {
                               border: Border.all(color: Colors.white, width: 1),
                             ),
                             height: 40,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Consumer<ProfileProvider>(
-                                    builder: (_, provider, __) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(provider.selectedProfile.name),
-                                  );
-                                }),
-                              ],
+                            child: TextField(
+                              controller: textController,
+                              decoration: InputDecoration(
+                                border: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.zero),
+                                    borderSide: BorderSide.none),
+                                fillColor: Theme.of(context).primaryColor,
+                                filled: true,
+                                contentPadding: const EdgeInsets.all(0),
+                              ),
+                              textAlign: TextAlign.center,
                             ),
+                            // Row(
+                            //   crossAxisAlignment: CrossAxisAlignment.center,
+                            //   children: [
+                            //     Consumer<ProfileProvider>(
+                            //         builder: (_, provider, __) {
+                            //       return Padding(
+                            //         padding: const EdgeInsets.all(8.0),
+                            //         child: Text(provider.selectedProfile.name),
+                            //       );
+                            //     }),
+                            //   ],
+                            // ),
                           )
                         ],
                       ),
@@ -224,10 +237,12 @@ Future<void> profileListDialog(BuildContext context) async {
                                                 name: provider.apps[index].name,
                                                 icon: provider.apps[index].icon,
                                                 tapHandler: () {
-                                                  provider.initProfile(
+                                                  provider.selectAppAsProfile(
                                                       provider.apps[index].name,
                                                       provider.apps[index].icon,
                                                       '');
+                                                  textController.text = provider
+                                                      .selectedProfile.name;
                                                 },
                                               );
                                             },
@@ -280,7 +295,8 @@ Future<void> profileListDialog(BuildContext context) async {
                                         builder: (_, provider, __) =>
                                             TextButton(
                                           onPressed: () {
-                                            provider.addProfile();
+                                            provider.addProfile(
+                                                textController.text);
                                             Navigator.pop(context);
                                           },
                                           style: textBtnStyleWhite,

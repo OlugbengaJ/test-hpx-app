@@ -20,13 +20,15 @@ class Profile {
     int? id,
     String? name,
     String? icon,
+    List<LayerItemModel>? layers,
+    List<Application>? associatedApps,
   }) {
     return Profile(
       id: id ?? this.id,
       name: name ?? this.name,
       icon: icon ?? this.icon,
-      layers: [...layers],
-      associatedApps: [...associatedApps],
+      layers: layers ?? [...this.layers],
+      associatedApps: associatedApps ?? [...this.associatedApps],
     );
   }
 

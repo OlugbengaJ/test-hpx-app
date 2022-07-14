@@ -22,30 +22,16 @@ class ProfileProvider extends ChangeNotifier {
 
   late Profile _currentProfile;
 
-  late Profile _selectedProfile = profiles.first.copyWith(
-    id: _nextId,
-    name: '${Constants.defaultText} (1)',
-  );
-
+  late Profile _selectedProfile = _defaultProfile;
   Profile get selectedProfile => _selectedProfile;
 
-  bool creatingProfile = false;
-
-  // Profile defaultProfile =
-  //     Profile(id: 0, name: "Default", layers: [], associatedApps: []);
-
-  // void setProfileName(String name) {
-  //   _profileName = name;
-  //   notifyListeners();
-  // }
-
-  // String get profileName {
-  //   if (_profileName.isNotEmpty) {
-  //     return _profileName;
-  //   }
-
-  //   return profiles.first.name;
-  // }
+  Profile get _defaultProfile => profiles.first.copyWith(
+        id: _nextId,
+        name: '${Constants.defaultText} (1)',
+        icon: '',
+        layers: [],
+        associatedApps: [],
+      );
 
   Profile get currentProfile {
     try {
@@ -57,10 +43,14 @@ class ProfileProvider extends ChangeNotifier {
     return _currentProfile;
   }
 
-  void addProfile() {
+  void resetSelectedProfile() {
+    _selectedProfile = _defaultProfile;
+  }
+
+  void addProfile(String textEditName) {
     Profile profile = Profile(
       id: _selectedProfile.id,
-      name: _selectedProfile.name,
+      name: textEditName,
       icon: _selectedProfile.icon,
       layers: _selectedProfile.layers,
       associatedApps: _selectedProfile.associatedApps,
@@ -85,7 +75,7 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void initProfile(String name, String icon, String file) {
+  void selectAppAsProfile(String name, String icon, String file) {
     if (name == Constants.defaultText) name = '${Constants.defaultText} (1)';
 
     _selectedProfile = Profile(
