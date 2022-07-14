@@ -62,18 +62,18 @@ class ProfileProvider extends ChangeNotifier {
   /// [profileExists] checks if a profile,
   /// other than the selected profile, exists with name.
   bool profileExists(String name) {
-    return profiles.any(
-        (element) => element.name == name && element.id != _selectedProfile.id);
+    return profiles.any((element) =>
+        element.name == name.trim() && element.id != _selectedProfile.id);
   }
 
   /// [addProfile] adds a new profile to the profiles list.
   void addProfile(String textEditName) {
-    if (profileExists(textEditName)) return;
+    if (profileExists(textEditName) || textEditName.isEmpty) return;
 
     Profile profile = Profile(
       id: _selectedProfile.id,
-      name: textEditName,
-      icon: _selectedProfile.icon,
+      name: textEditName.trim(),
+      icon: _selectedProfile.icon.trim(),
       layers: _selectedProfile.layers,
       associatedApps: [
         ..._selectedProfile.associatedApps.map((e) => e.copyWith())
