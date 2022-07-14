@@ -59,14 +59,16 @@ class ProfileProvider extends ChangeNotifier {
 
   void addProfile() {
     Profile profile = Profile(
-      id: _nextId,
+      id: _selectedProfile.id,
       name: _selectedProfile.name,
       icon: _selectedProfile.icon,
-      layers: [],
-      associatedApps: [],
+      layers: _selectedProfile.layers,
+      associatedApps: _selectedProfile.associatedApps,
     );
 
     _profiles.add(profile);
+    _currentProfile = profile;
+
     notifyListeners();
   }
 
@@ -78,7 +80,12 @@ class ProfileProvider extends ChangeNotifier {
 
   void renameProfile(String name) {}
 
-  void selectProfile(String name, String icon, String file) {
+  void selectProfile(int id) {
+    _currentProfile = profiles.firstWhere((element) => element.id == id);
+    notifyListeners();
+  }
+
+  void initProfile(String name, String icon, String file) {
     if (name == Constants.defaultText) name = '${Constants.defaultText} (1)';
 
     _selectedProfile = Profile(
@@ -86,7 +93,8 @@ class ProfileProvider extends ChangeNotifier {
       name: name,
       icon: icon,
       layers: [],
-      associatedApps: [],
+      associatedApps:
+          file.isEmpty ? [] : [Application(name: name, icon: icon, file: file)],
     );
 
     notifyListeners();

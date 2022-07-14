@@ -3,7 +3,6 @@ import 'package:hpx/apps/z_light/profile/profile_app_icon.dart';
 import 'package:hpx/apps/z_light/profile/profile_list_dialog.dart';
 import 'package:hpx/apps/z_light/profile/view_all_profile.dart';
 import 'package:hpx/providers/profile_provider/profile_provider.dart';
-import 'package:hpx/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:just_the_tooltip/just_the_tooltip.dart';
 
@@ -12,7 +11,6 @@ class ProfileDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ProfileProvider profileProvider = Provider.of<ProfileProvider>(context);
     final tooltipController = JustTheController();
 
     void closeTooltip() {
@@ -44,18 +42,31 @@ class ProfileDropdown extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
-                height: 40,
+              Container(
+                constraints: const BoxConstraints(minHeight: 40),
                 child: Consumer<ProfileProvider>(builder: (_, provider, __) {
-                  return Row(
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Image.asset(
-                        Constants.zImage,
-                        height: 20,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.only(left: 8),
-                        child: Text(provider.currentProfile.name),
+                      ...provider.profiles.map(
+                        (e) => Column(
+                          children: [
+                            InkWell(
+                              onTap: () => provider.selectProfile(e.id),
+                              child: Row(
+                                children: [
+                                  AppIcon(icon: e.icon, size: 16),
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 8),
+                                    child: Text(e.name),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            // adds space between the profiles
+                            const SizedBox(height: 10.0)
+                          ],
+                        ),
                       ),
                     ],
                   );

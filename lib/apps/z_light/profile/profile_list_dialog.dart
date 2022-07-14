@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/apps/z_light/profile/app_list_tile.dart';
 import 'package:hpx/apps/z_light/profile/profile_app_icon.dart';
+import 'package:hpx/apps/z_light/workspace/widgets/round_button.dart';
 import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/utils/constants.dart';
 import 'package:hpx/utils/os_file_utility.dart';
@@ -27,6 +29,30 @@ Future<void> profileListDialog(BuildContext context) async {
           child: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
+                // close dialog toolbar
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 8.0, right: 8.0),
+                        child: Tooltip(
+                          message: Constants.close,
+                          child: RoundButton(
+                            onTapDown: () => Navigator.pop(context),
+                            onTapUp: () {},
+                            size: 24,
+                            icon: Icons.close,
+                            iconColor: Theme.of(context).primaryColorLight,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                // content area
                 Row(
                   children: [
                     // left section: app preview
@@ -39,7 +65,6 @@ Future<void> profileListDialog(BuildContext context) async {
                         children: [
                           Container(
                             margin: EdgeInsets.zero,
-                            // alignment: Alignment.center,
                             decoration: BoxDecoration(
                               color: Colors.black,
                               borderRadius: BorderRadius.circular(2),
@@ -201,11 +226,11 @@ Future<void> profileListDialog(BuildContext context) async {
                                             padding: const EdgeInsets.all(2.0),
                                             itemCount: provider.apps.length,
                                             itemBuilder: (context, index) {
-                                              return AppListItem(
+                                              return AppListTile(
                                                 name: provider.apps[index].name,
                                                 icon: provider.apps[index].icon,
                                                 tapHandler: () {
-                                                  provider.selectProfile(
+                                                  provider.initProfile(
                                                       provider.apps[index].name,
                                                       provider.apps[index].icon,
                                                       '');
@@ -236,9 +261,7 @@ Future<void> profileListDialog(BuildContext context) async {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     InkWell(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
+                                      onTap: () => Navigator.pop(context),
                                       child: Container(
                                         height: 40,
                                         width: 100,
@@ -262,8 +285,10 @@ Future<void> profileListDialog(BuildContext context) async {
                                       child: Consumer<ProfileProvider>(
                                         builder: (_, provider, __) =>
                                             TextButton(
-                                          onPressed: () =>
-                                              provider.addProfile(),
+                                          onPressed: () {
+                                            provider.addProfile();
+                                            Navigator.pop(context);
+                                          },
                                           style: textBtnStyleWhite,
                                           child: const SizedBox(
                                             height: 40,
@@ -299,35 +324,4 @@ Future<void> profileListDialog(BuildContext context) async {
       );
     },
   );
-}
-
-class AppListItem extends StatelessWidget {
-  const AppListItem({
-    Key? key,
-    required this.name,
-    required this.icon,
-    required this.tapHandler,
-  }) : super(key: key);
-
-  final String name;
-  final String icon;
-  final VoidCallback tapHandler;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.white, width: 1),
-      ),
-      child: ListTile(
-        onTap: tapHandler,
-        leading: AppIcon(
-          icon: icon,
-          size: 40.0,
-        ),
-        title: Text(name),
-      ),
-    );
-  }
 }

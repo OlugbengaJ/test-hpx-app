@@ -100,30 +100,32 @@ class OSFileUtility {
     }
   }
 
-  static final appInfo = <String, String>{};
-
   static void processFile(FilePickerResult? result) {
     if (isWindows) _processWindowsFile(result);
     if (isLinux) _processLinuxFile(result);
   }
+
+  static final profileProvider = Provider.of<ProfileProvider>(
+      navigatorKeys.currentContext!,
+      listen: false);
 
   /// [_processLinuxFile] process Linux specific file
   static void _processLinuxFile(FilePickerResult? result) async {
     // process result
     if (result != null) {
       for (var file in result.files) {
-        debugPrint('\r\nfile path \t=> ${file.path}');
-        debugPrint('file name \t=> ${file.name}');
-        debugPrint('file ext \t=> ${file.extension}');
+        // debugPrint('\r\nfile path \t=> ${file.path}');
+        // debugPrint('file name \t=> ${file.name}');
+        // debugPrint('file ext \t=> ${file.extension}');
 
-        Process.run('ls', ['-l', '${file.path}']).then((value) {
-          if (value.exitCode == 0) {
-            debugPrint('stdout ${value.stdout}');
-          } else {
-            debugPrint('stderr ${value.stderr}');
-            debugPrint('exit code: ${value.exitCode}');
-          }
-        });
+        // Process.run('ls', ['-l', '${file.path}']).then((value) {
+        //   if (value.exitCode == 0) {
+        //     debugPrint('stdout ${value.stdout}');
+        //   } else {
+        //     debugPrint('stderr ${value.stderr}');
+        //     debugPrint('exit code: ${value.exitCode}');
+        //   }
+        // });
 
         final f = File(file.path!);
         if (f.existsSync()) {
@@ -135,14 +137,21 @@ class OSFileUtility {
 
           List<Widget> widgets = [];
           f.readAsLines().then((value) {
+            final appInfo = <String, String>{};
             String section = '';
-            appInfo.clear();
 
             for (var text in value) {
-              if (section.contains('[Desktop Entry]')) {
+              if (section.contains('[desktop entry]')) {
                 final entry = text.split('=');
+
+                if (appInfo.keys.any((e) => e == 'name' && e == 'icon')) {
+                  // only name and icon are required.
+                  break;
+                }
+
                 if (entry.length == 2) {
-                  appInfo[entry.first] = entry.last;
+                  // add key value pair
+                  appInfo[entry.first.toLowerCase()] = entry.last;
                 }
               }
 
@@ -151,44 +160,49 @@ class OSFileUtility {
                 if (section.isNotEmpty) break;
 
                 // adds first section.
-                section = text;
+                section = text.toLowerCase();
               }
             }
 
-            widgets.addAll(appInfo.entries.map((e) {
-              if (e.key.toLowerCase() == 'icon') {
-                // get icon file
-                final iconFound = _processLinuxIcon(e.value);
+            profileProvider.addSystemApp(
+              appInfo['name']!,
+              _getLinuxIcon(appInfo['icon']!),
+              file.path!,
+            );
 
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    if (iconFound.isNotEmpty)
-                      Container(
-                        margin: EdgeInsets.zero,
-                        child: Image.memory(
-                          File(e.value).readAsBytesSync(),
-                          width: 50.0,
-                          height: 50.0,
-                        ),
-                      ),
-                    Text('${e.key}: ${e.value}'),
-                  ],
-                );
-              }
+            widgets.addAll(appInfo.entries.map((e) {
+              // if (e.key.toLowerCase() == 'icon') {
+              //   // get icon file
+              //   final iconFound = _processLinuxIcon(e.value);
+
+              //   return Row(
+              //     mainAxisAlignment: MainAxisAlignment.start,
+              //     children: [
+              //       if (iconFound.isNotEmpty)
+              //         Container(
+              //           margin: EdgeInsets.zero,
+              //           child: Image.memory(
+              //             File(e.value).readAsBytesSync(),
+              //             width: 50.0,
+              //             height: 50.0,
+              //           ),
+              //         ),
+              //       Text('${e.key}: ${e.value}'),
+              //     ],
+              //   );
+              // }
 
               return Text('${e.key}: ${e.value}');
             }));
-
-            // open modal
-            workspaceProvider.toggleModal(widgets);
           });
         }
       }
     }
   }
 
-  static String _processLinuxIcon(String path) {
+  static String _getLinuxIcon(String? path) {
+    path ??= '';
+
     final f = File(path);
     if (!f.existsSync()) {
       // icon not found; find it from other dir based on dimentions mxn.
@@ -211,11 +225,11 @@ class OSFileUtility {
   static void _processWindowsFile(FilePickerResult? result) {
     if (result != null) {
       final file = result.files.first;
-      final profileProvider = Provider.of<ProfileProvider>(
-          navigatorKeys.currentContext!,
-          listen: false);
 
       /**
+       * # READ BELOW TO UNDERSTAND HOW APP NAMES WERE GENERATED IN WINDOWS.
+       * 
+       * 
        * Using wmic (Windows Management Instrumentation Concsole)
        * to get properties of the EXE file.
        * e.g.
