@@ -14,14 +14,14 @@ Future<void> profileExistDialog(BuildContext context, String name) async {
     context: context,
     builder: (BuildContext context) {
       return SimpleDialog(
-        title: const Text("Try a different name"),
+        title: const Text('Try a different name'),
         children: <Widget>[
           Container(
-            padding: const EdgeInsets.only(top: 40, bottom: 10),
+            padding: const EdgeInsets.all(15),
             child: Column(
               children: [
                 Text(
-                  'A profile with the same name ($name) already exists',
+                  'A profile with the name ($name) already exists.',
                   style: h4Style,
                 ),
                 Container(
