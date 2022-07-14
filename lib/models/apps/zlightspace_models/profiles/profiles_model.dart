@@ -90,6 +90,19 @@ class Application {
   final String icon;
   final String file;
 
+  /// [copyWith] returns a new instance of [Application].
+  Application copyWith({
+    String? name,
+    String? icon,
+    String? file,
+  }) {
+    return Application(
+      name: name ?? this.name,
+      icon: icon ?? this.icon,
+      file: file ?? this.file,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       "name": name,
