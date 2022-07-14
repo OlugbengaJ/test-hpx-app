@@ -7,6 +7,7 @@ class Constants {
   static const String zlightIcon = 'assets/images/zlight_icon.png';
 
   // action buttons
+  static const String add = 'Add';
   static const String cancel = 'Cancel';
   static const String click = 'Click';
   static const String close = 'Close';
@@ -21,7 +22,7 @@ class Constants {
   static const String lightingOptions = 'Lighting Options';
   static const String profile = 'Profile';
   static const String resizable = 'Resizable';
-  static const String selectApp = 'Select Application';
+  static const String selectAppTitle = 'Select Application';
   static const String selectedProfile = 'Selected Profile';
   static const String workspace = 'Workspace';
 

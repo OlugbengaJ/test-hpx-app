@@ -90,7 +90,7 @@ class OSFileUtility {
   static void openFilePicker() async {
     if (appsDir != null) {
       final filePickerResult = await FilePicker.platform.pickFiles(
-        dialogTitle: Constants.selectApp,
+        dialogTitle: Constants.selectAppTitle,
         type: FileType.custom,
         initialDirectory: appsDir?.initialDirectory,
         allowedExtensions: appsDir?.extensions,
