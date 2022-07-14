@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/apps/z_light/profile/profile_list_dialog.dart';
 import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
+
+TextEditingController _textCtrl = TextEditingController();
+
 void browse(BuildContext context) {
   Navigator.pop(context);
+}
+
+void newProfile(BuildContext context) {
+  // set the text controller default
+  final profileProvider =
+      Provider.of<ProfileProvider>(context, listen: false);
+  profileProvider.resetSelectedProfile();
+  _textCtrl.text = profileProvider.selectedProfile.name;
+
+  // open the profile list dialog
+  profileListDialog(context, _textCtrl);
 }
 
 Future<void> _showDefaultMoreDialog(BuildContext context) async {
@@ -200,7 +215,7 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                     child: MouseRegion(
                                       cursor: SystemMouseCursors.click,
                                       child: GestureDetector(
-                                        onTap: () => browse(context),
+                                        onTap: () => newProfile(context),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
@@ -339,10 +354,10 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                 padding: const EdgeInsets.all(2),
                                 crossAxisCount: 5,
                                 //childAspectRatio: 1.5,
-                                children: <Widget>[
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                children:
+                                    provider.profiles.map((profile) {
+                                      return Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Expanded(
                                             child: Container(
@@ -399,38 +414,7 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                           Container(
                                             padding:
                                                 const EdgeInsets.only(left: 8),
-                                            child: const Text("Default"),
-                                          ),
-                                        ],
-                                      ),
-                                    ] +
-                                    provider.profiles.map((profile) {
-                                      return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Expanded(
-                                            child: Container(
-                                              margin: const EdgeInsets.all(8),
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: Colors.white,
-                                                    width: 1),
-                                              ),
-                                              child: Row(
-                                                children: [
-                                                  Image.asset(
-                                                    Constants.zlightIcon,
-                                                    height: 50,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            padding:
-                                                const EdgeInsets.only(left: 8),
-                                            child: const Text("Default"),
+                                            child: Text(profile.name),
                                           ),
                                         ],
                                       );
