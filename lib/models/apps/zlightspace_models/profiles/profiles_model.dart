@@ -28,7 +28,8 @@ class Profile {
       name: name ?? this.name,
       icon: icon ?? this.icon,
       layers: layers ?? [...this.layers],
-      associatedApps: associatedApps ?? [...this.associatedApps],
+      associatedApps:
+          associatedApps ?? [...this.associatedApps.map((e) => e.copyWith())],
     );
   }
 
