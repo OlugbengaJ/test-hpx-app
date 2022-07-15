@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/key_model.dart';
+import 'package:hpx/utils/custom_converters.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'layer_item_model.g.dart';
 
 const Color defaultColor = Colors.white;
 const Color defaultPaintColor = Colors.white;
 
+@JsonSerializable()
 class LayerItemModel {
   LayerItemModel({
     required this.id,
@@ -29,13 +34,25 @@ class LayerItemModel {
   String layerText;
   bool visible = true;
   bool isSublayer = false;
+
+  @IconDataConverter()
   IconData icon = Icons.mood;
   bool hasSublayer;
   bool visibleOnStack;
+
+  @ColorConverter()
   Color listDisplayColor;
+
+  @ColorConverter()
   Color paintColor;
+
+  @ColorConverter()
   Color shortcutColor;
+
+  @ToolsModeConverter()
   ToolsModeModel? mode;
+
+  @KeyModelConverter()
   List<KeyModel> _keys = [];
 
   List<KeyModel> get keys => _keys;
@@ -75,43 +92,8 @@ class LayerItemModel {
   double left = 0.0;
   double right = 0.0;
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'parentId': parentID,
-      'layerText': layerText,
-      'visible': visible.toString(),
-      'visibleOnStack': visibleOnStack.toString(),
-      'isSublayer': isSublayer.toString(),
-      'hasSublayer': hasSublayer.toString(),
-      'listDisplayColor': listDisplayColor.value,
-      'paintColor': paintColor.value,
-      'shortcutColor': shortcutColor.value,
-      'top': top,
-      'bottom': bottom,
-      'left': left,
-      'right': right,
-      'mode' : mode?.toMap(),
-      'icon' : {'codePoint' : icon.codePoint, 'fontFamily': icon.fontFamily}
-    };
-  }
+  Map<String, dynamic> toJson() => _$LayerItemModelToJson(this);
 
-  LayerItemModel.fromJson(Map<String, dynamic> item)
-      : id = item['id'],
-        parentID = item['parentId'],
-        layerText = item['layerText'],
-        visible = item['visible'] == 'true',
-        visibleOnStack = item['visibleOnStack'] == 'true',
-        isSublayer = item['isSublayer'] == 'true',
-        hasSublayer = item['hasSublayer'] == 'true',
-        listDisplayColor = Color(item['listDisplayColor']),
-        paintColor = Color(item['paintColor']),
-        shortcutColor = Color(item['shortcutColor']),
-        //mode = ToolsModeModel.fromJson(item['mode']),
-        top = item['top'],
-        bottom = item['bottom'],
-        left = item['left'],
-        right = item['right'],
-        icon = IconData(item['codePoint'],
-            fontFamily: item['fontFamily']) ;
+  factory LayerItemModel.fromJson(Map<String, dynamic> json) =>
+      _$LayerItemModelFromJson(json);
 }
