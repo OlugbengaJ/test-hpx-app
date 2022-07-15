@@ -28,7 +28,8 @@ class Profile {
       name: name ?? this.name,
       icon: icon ?? this.icon,
       layers: layers ?? [...this.layers],
-      associatedApps: associatedApps ?? [...this.associatedApps],
+      associatedApps:
+          associatedApps ?? [...this.associatedApps.map((e) => e.copyWith())],
     );
   }
 
@@ -89,6 +90,19 @@ class Application {
   final String name;
   final String icon;
   final String file;
+
+  /// [copyWith] returns a new instance of [Application].
+  Application copyWith({
+    String? name,
+    String? icon,
+    String? file,
+  }) {
+    return Application(
+      name: name ?? this.name,
+      icon: icon ?? this.icon,
+      file: file ?? this.file,
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {

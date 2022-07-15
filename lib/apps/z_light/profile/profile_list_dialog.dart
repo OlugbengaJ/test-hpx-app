@@ -8,6 +8,74 @@ import 'package:hpx/utils/os_file_utility.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
+// duplicate name dialog
+Future<void> profileExistDialog(BuildContext context, String name) async {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return SimpleDialog(
+        title: const Text('Try a different name'),
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              children: [
+                Text(
+                  'A profile with the name ($name) already exists.',
+                  style: h4Style,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 50),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Column(
+                        //crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              style: textBtnStyleWhite.copyWith(
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                ),
+                              ),
+                              child: SizedBox(
+                                height: 40,
+                                width: 100,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text('Ok'),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+// profile list dialog
 Future<void> profileListDialog(
     BuildContext context, TextEditingController textController) async {
   return showDialog<void>(
@@ -90,30 +158,23 @@ Future<void> profileListDialog(
                               border: Border.all(color: Colors.white, width: 1),
                             ),
                             height: 40,
-                            child: TextField(
-                              controller: textController,
-                              decoration: InputDecoration(
-                                border: const OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(Radius.zero),
-                                    borderSide: BorderSide.none),
-                                fillColor: Theme.of(context).primaryColor,
-                                filled: true,
-                                contentPadding: const EdgeInsets.all(0),
+                            child: Consumer<ProfileProvider>(
+                              builder: (_, provider, __) => TextField(
+                                controller: textController,
+                                enabled: provider.allowEdit,
+                                keyboardType: TextInputType.text,
+                                decoration: InputDecoration(
+                                  border: const OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.zero),
+                                      borderSide: BorderSide.none),
+                                  fillColor: Theme.of(context).primaryColor,
+                                  filled: true,
+                                  contentPadding: const EdgeInsets.all(0),
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                              textAlign: TextAlign.center,
                             ),
-                            // Row(
-                            //   crossAxisAlignment: CrossAxisAlignment.center,
-                            //   children: [
-                            //     Consumer<ProfileProvider>(
-                            //         builder: (_, provider, __) {
-                            //       return Padding(
-                            //         padding: const EdgeInsets.all(8.0),
-                            //         child: Text(provider.selectedProfile.name),
-                            //       );
-                            //     }),
-                            //   ],
-                            // ),
                           )
                         ],
                       ),
@@ -237,10 +298,13 @@ Future<void> profileListDialog(
                                                 name: provider.apps[index].name,
                                                 icon: provider.apps[index].icon,
                                                 tapHandler: () {
-                                                  provider.selectAppAsProfile(
-                                                      provider.apps[index].name,
-                                                      provider.apps[index].icon,
-                                                      '');
+                                                  provider
+                                                      .updateSelectedProfile(
+                                                          provider
+                                                              .apps[index].name,
+                                                          provider
+                                                              .apps[index].icon,
+                                                          '');
                                                   textController.text = provider
                                                       .selectedProfile.name;
                                                 },
@@ -295,9 +359,16 @@ Future<void> profileListDialog(
                                         builder: (_, provider, __) =>
                                             TextButton(
                                           onPressed: () {
-                                            provider.addProfile(
-                                                textController.text);
-                                            Navigator.pop(context);
+                                            if (provider.profileExists(
+                                                textController.text)) {
+                                              // show modal warning name exists
+                                              profileExistDialog(
+                                                  context, textController.text);
+                                            } else {
+                                              provider.addProfile(
+                                                  textController.text);
+                                              Navigator.pop(context);
+                                            }
                                           },
                                           style: textBtnStyleWhite,
                                           child: const SizedBox(

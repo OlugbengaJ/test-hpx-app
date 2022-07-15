@@ -1,12 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/apps/z_light/profile/profile_list_dialog.dart';
+import 'package:hpx/models/apps/zlightspace_models/profiles/profiles_model.dart';
 import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
+
+TextEditingController _textCtrl = TextEditingController();
+Profile? editingProfile;
+
 void browse(BuildContext context) {
   Navigator.pop(context);
+}
+
+void newProfile(BuildContext context) {
+  // set the text controller default
+  final profileProvider =
+      Provider.of<ProfileProvider>(context, listen: false);
+  profileProvider.resetSelectedProfile();
+  _textCtrl.text = profileProvider.selectedProfile.name;
+
+  // open the profile list dialog
+  profileListDialog(context, _textCtrl);
+}
+
+void duplicateProfile(BuildContext context){
+  final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+  profileProvider.duplicateProfile(editingProfile!.id);
+  Navigator.pop(context);
+  newProfile(context);
 }
 
 Future<void> _showDefaultMoreDialog(BuildContext context) async {
@@ -20,7 +44,109 @@ Future<void> _showDefaultMoreDialog(BuildContext context) async {
               child: const Text('Rename'),
             ),
             SimpleDialogOption(
+              onPressed: () {duplicateProfile(context);},
+              child: const Text('Duplicate'),
+            ),
+            SimpleDialogOption(
               onPressed: () {},
+              child: const Text('Export'),
+            ),
+            
+          ],
+        );
+      });
+}
+
+Future<void> confirmDeleteProfileDialog(BuildContext context) async {
+  final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return SimpleDialog(
+        children: <Widget>[
+          Container(
+              padding: const EdgeInsets.only(top: 40, bottom: 10),
+              child: Column(children: [
+                Text(
+                  'Delete ${editingProfile!.name} profile?',
+                  style: h4Style,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 20),
+                ),
+                Container(
+                  width: 250,
+                  margin: const EdgeInsets.only(top: 50),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                style: textBtnStyleWhite,
+                                child: SizedBox(
+                                    height: 40,
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: const [
+                                          Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: Text('Cancel'))
+                                        ]))),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Container(),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            TextButton(
+                                onPressed: () {
+                                  profileProvider.deleteProfile(editingProfile!.id);
+                                  Navigator.of(context).pop();
+                                },
+                                style: textBtnStyleBlack,
+                                child: SizedBox(
+                                    height: 40,
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: const [
+                                          Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: Text('Delete'))
+                                        ]))),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ])),
+        ],
+      );
+    }
+  );
+}
+
+Future<void> _showMoreDialog(BuildContext context) async {
+  return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          children: <Widget>[
+            SimpleDialogOption(
+              onPressed: () {duplicateProfile(context);},
               child: const Text('Duplicate'),
             ),
             SimpleDialogOption(
@@ -32,110 +158,6 @@ Future<void> _showDefaultMoreDialog(BuildContext context) async {
                 Navigator.of(context).pop();
                 confirmDeleteProfileDialog(context);
               },
-              child: const Text('Delete'),
-            ),
-          ],
-        );
-      });
-}
-
-Future<void> confirmDeleteProfileDialog(BuildContext context) async {
-  final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
-  return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          children: <Widget>[
-            Container(
-                padding: const EdgeInsets.only(top: 40, bottom: 10),
-                child: Column(children: [
-                  Text(
-                    'Delete ~profile name~ profile?',
-                    style: h4Style,
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 20),
-                  ),
-                  Container(
-                    width: 250,
-                    margin: const EdgeInsets.only(top: 50),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  style: textBtnStyleWhite,
-                                  child: SizedBox(
-                                      height: 40,
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: const [
-                                            Padding(
-                                                padding: EdgeInsets.all(8.0),
-                                                child: Text('Cancel'))
-                                          ]))),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(),
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              TextButton(
-                                  onPressed: () {
-                                    profileProvider.deleteProfile(1);
-                                    Navigator.of(context).pop();
-                                  },
-                                  style: textBtnStyleBlack,
-                                  child: SizedBox(
-                                      height: 40,
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: const [
-                                            Padding(
-                                                padding: EdgeInsets.all(8.0),
-                                                child: Text('Delete'))
-                                          ]))),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ])),
-          ],
-        );
-      });
-}
-
-Future<void> _showMoreDialog(BuildContext context) async {
-  return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return SimpleDialog(
-          children: <Widget>[
-            SimpleDialogOption(
-              onPressed: () {},
-              child: const Text('Duplicate'),
-            ),
-            SimpleDialogOption(
-              onPressed: () {},
-              child: const Text('Export'),
-            ),
-            SimpleDialogOption(
-              onPressed: () {},
               child: const Text('Delete'),
             ),
           ],
@@ -200,7 +222,7 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                     child: MouseRegion(
                                       cursor: SystemMouseCursors.click,
                                       child: GestureDetector(
-                                        onTap: () => browse(context),
+                                        onTap: () => newProfile(context),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
@@ -339,10 +361,10 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                 padding: const EdgeInsets.all(2),
                                 crossAxisCount: 5,
                                 //childAspectRatio: 1.5,
-                                children: <Widget>[
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                children:
+                                    provider.profiles.map((profile) {
+                                      return Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Expanded(
                                             child: Container(
@@ -375,8 +397,13 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                                           child:
                                                               GestureDetector(
                                                             onTap: () {
-                                                              _showDefaultMoreDialog(
-                                                                  context);
+                                                              editingProfile = profile;
+                                                              if(profile.id==0){
+                                                                _showDefaultMoreDialog(context);
+                                                              }else{
+                                                                _showMoreDialog(context);
+                                                              }
+                                                              
                                                             },
                                                             child: Container(
                                                               padding:
@@ -399,38 +426,7 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                           Container(
                                             padding:
                                                 const EdgeInsets.only(left: 8),
-                                            child: const Text("Default"),
-                                          ),
-                                        ],
-                                      ),
-                                    ] +
-                                    provider.profiles.map((profile) {
-                                      return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Expanded(
-                                            child: Container(
-                                              margin: const EdgeInsets.all(8),
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: Colors.white,
-                                                    width: 1),
-                                              ),
-                                              child: Row(
-                                                children: [
-                                                  Image.asset(
-                                                    Constants.zlightIcon,
-                                                    height: 50,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            padding:
-                                                const EdgeInsets.only(left: 8),
-                                            child: const Text("Default"),
+                                            child: Text(profile.name),
                                           ),
                                         ],
                                       );
