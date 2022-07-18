@@ -179,19 +179,14 @@ class OSFileUtility {
           }
         }
 
-        if (iconFound) {
-          break;
-        }
+        if (iconFound) break;
       }
 
-      // icon does not exist in root dir, check each sub dir + /apps folder
-      path = '';
+      // icon does not exist in any dir.
+      if (!iconFound) path = '';
     }
 
-    // icon found
-    // final stat = f.statSync();
-
-    return path;
+    return path!;
   }
 
   /// [_processWindowsFile] process Windows specific file
