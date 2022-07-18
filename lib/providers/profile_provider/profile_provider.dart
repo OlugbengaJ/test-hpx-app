@@ -195,6 +195,8 @@ class ProfileProvider extends ChangeNotifier {
         break;
       default:
     }
+
+    notifyListeners();
   }
 
   /// [apps] returns list of default apps including the Z app.
@@ -249,6 +251,8 @@ class ProfileProvider extends ChangeNotifier {
         break;
       default:
     }
+
+    notifyListeners();
   }
 }
 
