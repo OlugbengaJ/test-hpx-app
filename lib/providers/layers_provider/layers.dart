@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 
@@ -15,6 +16,7 @@ class LayersProvider extends ChangeNotifier {
   final List<LayerItemModel> _layeritems = [];
   final List<LayerItemModel> _sublayers = [];
   ModeProvider? _modeProvider;
+  ProfileProvider? _profileProvider; 
   bool isLayerEditing = false; // Used to check wether a layer is in edit mode
   int currentEditingID = 0; // if the ID is 0 then no layer is in edit mode
   int currentSublayerID = 0;
@@ -28,23 +30,6 @@ class LayersProvider extends ChangeNotifier {
   late KeyboardController physicalKeyboardController;
   BuildContext? _context;
 
-  LayersProvider() {
-    physicalKeyboardController = KeyboardController(this);
-  }
-
-  setBuildContext(BuildContext context) {
-    _context = context;
-    notifyListeners();
-  }
-
-  /// retrieve [_currentSublayer] only if [isSublayerSelected] is true
-  LayerItemModel? getCurrentSublayer() {
-    if (isSublayerSelected) {
-      return _currentSublayer;
-    }
-    return null;
-  }
-
   /// [hideDraggable] use to show or hide the stack layers for resizable widget
   bool hideDraggable = false;
   bool isLayerVisible = true;
@@ -56,15 +41,81 @@ class LayersProvider extends ChangeNotifier {
   int get listIndex => _listIndex;
   ModeProvider? get modeProvider => _modeProvider;
 
-  List<LayerItemModel> get layeritems =>
-      _layeritems; // Should return only mainlayers
+  List<LayerItemModel> get layeritems => _layeritems;  //.where((item) => item.profileID== _profileProvider!.currentProfile.id).toList(); // Should return only mainlayers
   List<LayerItemModel> get sublayerItems =>
       _sublayers; // Should return only sublayers
+
+  LayersProvider() {
+    physicalKeyboardController = KeyboardController(this);
+  }
+
+
+  // Set build context
+  setBuildContext(BuildContext context) {
+    _context = context;
+    notifyListeners();
+  }
+
+
+  List<LayerItemModel> getLayers(){
+    return _layeritems.where((item) => item.profileID== _profileProvider!.currentProfile.id).toList();
+  }
+
+
+  // Use this to update layers when the profile changes
+  getProfileLayers(){
+    // List<LayerItemModel> layers = [];
+    // layers = _profileProvider!.selectedProfile.layers;
+    // _layeritems.clear();
+
+    // if (layers.isNotEmpty) {
+    //   layers.forEach((layer) {
+    //      _layeritems.insert(0, layer);
+    //   });
+    // }else{
+    //   LayerItemModel itemModel = LayerItemModel(
+    //       id: 1,
+    //       layerText: 'Mood',
+    //       //mode: modeProvider.currentMode,
+    //       icon: Icons.mood);
+
+    //   add(itemModel);
+
+    //   modeProvider!.changeModeComponent(
+    //     PickerModel(
+    //         title: itemModel.mode!.name,
+    //         value: itemModel.mode!.value,
+    //         enabled: true,
+    //         icon: itemModel.mode!.icon),
+    //     _context!,
+    //     false);
+    // }
+    if(getLayers().isEmpty){
+
+    }
+    debugPrint("${getLayers()}");
+
+    _layeritems.forEach((element) {
+      debugPrint("Profile ID: ${element.profileID}");
+    });
+
+    notifyListeners();
+  }
+
+  /// retrieve [_currentSublayer] only if [isSublayerSelected] is true
+  LayerItemModel? getCurrentSublayer() {
+    if (isSublayerSelected) {
+      return _currentSublayer;
+    }
+    return null;
+  }
+
+  
 
   /// [getItem] retrieve the layer using the index.
   /// This is to get the layer's informations
   LayerItemModel getItem(int i) {
-    return _layeritems[i];
+    return layeritems[i];
   }
 
   /// [getItem] retrieve the layer using the index.
@@ -138,6 +189,11 @@ class LayersProvider extends ChangeNotifier {
   /// [setModeProvider] to set the mode provider to use on layers
   void setModeProvider(ModeProvider modeProvider) {
     _modeProvider = modeProvider;
+  }
+
+  /// [setModeProvider] to set the mode provider to use on layers
+  void setProfileProvider(ProfileProvider profileProvider) {
+    _profileProvider = profileProvider;
   }
 
   /// listen to any change from the tools and effects so the current layers can be updated
