@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/profiles/profiles_model.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/utils/constants.dart';
 import 'package:hpx/utils/datetime_util.dart';
 
@@ -9,6 +11,7 @@ import 'package:hpx/utils/datetime_util.dart';
 /// which allows a user to persist different customizations
 /// as different profiles, and change from one to another.
 class ProfileProvider extends ChangeNotifier {
+  LayersProvider? _layersProvider;
   final List<Profile> _profiles = [
     // init with a default profile
     Profile(
@@ -19,6 +22,10 @@ class ProfileProvider extends ChangeNotifier {
       associatedApps: [],
     )
   ];
+
+  setLayersProvider(LayersProvider layersProvider){
+    _layersProvider = layersProvider;
+  }
 
   /// [profiles] returns the list of profile
   List<Profile> get profiles => [..._profiles];
@@ -83,7 +90,8 @@ class ProfileProvider extends ChangeNotifier {
     );
 
     _profiles.add(profile);
-    _currentProfile = profile;
+    //_currentProfile = profile;
+    selectProfile(profile.id);
 
     notifyListeners();
   }
@@ -123,6 +131,8 @@ class ProfileProvider extends ChangeNotifier {
   /// from the list of profiles.
   void selectProfile(int id) {
     _currentProfile = profiles.firstWhere((element) => element.id == id);
+    _selectedProfile = _currentProfile;
+    _layersProvider!.getProfileLayers(); // Update layers when profile changes
     notifyListeners();
   }
 

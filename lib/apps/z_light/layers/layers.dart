@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:hpx/apps/z_light/layers/widgets/layer_list_item.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
+import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 import 'package:hpx/utils/common.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
@@ -35,11 +36,16 @@ class _LayersState extends State<Layers> {
 
   /// [initialLayer] add a default layer to the workspace if there no layer available
   void initialLayer() {
+    LayersProvider provider = context.read<LayersProvider>();
     ModeProvider modeProvider = context.read<ModeProvider>();
 
-    LayersProvider provider = context.read<LayersProvider>();
+    ProfileProvider profileProvider = context.read<ProfileProvider>();
+    profileProvider.setLayersProvider(provider);
+    provider.setProfileProvider(profileProvider);
+    
     provider.setBuildContext(context);
     provider.setModeProvider(modeProvider);
+    
     if (provider.length < 1) {
       _addLayer();
     }
@@ -49,6 +55,7 @@ class _LayersState extends State<Layers> {
   /// use the [ModeProvider] the set the newly created layer name
   _addLayer() {
     ModeProvider modeProvider = context.read<ModeProvider>();
+    ProfileProvider profileProvider = context.read<ProfileProvider>();
     var provider = context.read<LayersProvider>();
 
     if (!provider.isLayerEditing) {
@@ -66,6 +73,7 @@ class _LayersState extends State<Layers> {
 
       LayerItemModel itemModel = LayerItemModel(
           id: id,
+          profileID: profileProvider.currentProfile.id,
           layerText: 'Mood',
           //mode: modeProvider.currentMode,
           icon: Icons.mood);
@@ -135,16 +143,18 @@ class _LayersState extends State<Layers> {
                       return ReorderableListView.builder(
                         buildDefaultDragHandles: false,
                         padding: const EdgeInsets.all(2),
-                        itemCount: provider.length,
+                        itemCount: provider.layeritems.length,
                         scrollController:
                             ScrollController(keepScrollOffset: false),
                         itemBuilder: (BuildContext context, int index) {
                           return Container(
                             key: Key('$index'),
-                            child: LayerListItem(
+                            child:
+                            (provider.layerProfile(provider.layeritems[index]))?                            
+                            LayerListItem(
                               layerIndex: index,
-                              layerItemModel: provider.getItem(index),
-                            ),
+                              layerItemModel: provider.layeritems[index],
+                            ):Container(),
                           );
                         },
                         onReorder: provider.reorder,

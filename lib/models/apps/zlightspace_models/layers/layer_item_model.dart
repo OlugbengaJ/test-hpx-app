@@ -9,6 +9,7 @@ class LayerItemModel {
   LayerItemModel({
     required this.id,
     this.parentID = 0,
+    required this.profileID,
     required this.layerText,
     this.visible = true,
     this.visibleOnStack = true,
@@ -26,6 +27,7 @@ class LayerItemModel {
 
   final int id;
   int parentID;
+  int profileID;
   String layerText;
   bool visible = true;
   bool isSublayer = false;
@@ -79,6 +81,7 @@ class LayerItemModel {
     return {
       'id': id,
       'parentId': parentID,
+      'profileID': profileID,
       'layerText': layerText,
       'visible': visible.toString(),
       'visibleOnStack': visibleOnStack.toString(),
@@ -99,6 +102,7 @@ class LayerItemModel {
   LayerItemModel.fromJson(Map<String, dynamic> item)
       : id = item['id'],
         parentID = item['parentId'],
+        profileID = item['profileID'],
         layerText = item['layerText'],
         visible = item['visible'] == 'true',
         visibleOnStack = item['visibleOnStack'] == 'true',
