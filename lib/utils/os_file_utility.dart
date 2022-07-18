@@ -170,6 +170,7 @@ class OSFileUtility {
           for (var f in fileList) {
             if (f.path.contains('16x16') ||
                 f.path.contains('22x22') ||
+                f.path.contains('24x24') ||
                 f.path.contains('scalable')) {
               // exclude low resolution icons
               continue;
