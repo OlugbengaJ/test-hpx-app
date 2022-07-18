@@ -158,6 +158,11 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// [sortProfiles] sorts [_profiles] by a given [SortOrder]
+  ///
+  /// e.g. [SortOrder.asc] sorts profiles by name in ascending order,
+  /// and [SortOrder.leastRecently] sorts by created date with least first.
+
   void sortProfiles(SortOrder sortOrder) {
     switch (sortOrder) {
       case SortOrder.asc:
@@ -208,6 +213,10 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// [sortApps] sorts [_systemApps] by a given [SortOrder]
+  ///
+  /// e.g. [SortOrder.asc] sorts apps by name in ascending order,
+  /// and [SortOrder.leastRecently] sorts by created date with least first.
   void sortApps(SortOrder sortOrder) {
     switch (sortOrder) {
       case SortOrder.asc:
