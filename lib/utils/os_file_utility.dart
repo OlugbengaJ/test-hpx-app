@@ -59,7 +59,7 @@ class OSFileUtility {
     return null;
   }
 
-  // TODO: refactor this to read all apps from a default location
+  // TODO: refactor this to read all apps from default location
   static void osApps() {
     final dir = Directory(appsDir!.initialDirectory!);
 
@@ -155,7 +155,31 @@ class OSFileUtility {
         '/usr/share/icons/Humanity/48x48/apps',
         '/usr/share/icons/gnome/48x48/apps',
         '/usr/share/icons/Yaru/48x48/apps',
+        '/usr/share/pixmaps',
       ];
+
+      // check icon in each root directory
+      for (var dir in iconDirs) {
+        final d = Directory(dir);
+        if (d.existsSync()) {
+          // if dir exists, check file name
+          final fileList = d.listSync(recursive: true, followLinks: false);
+
+          for (var f in fileList) {
+            debugPrint('abs: ${f.absolute} parent: ${f.parent}'
+                ' path: ${f.path} uri: ${f.uri} ${f.statSync()}');
+
+            if (f.path.contains(path!)) {
+              path = f.path;
+              break;
+            }
+          }
+        }
+
+        if (path!.isNotEmpty) break;
+      }
+
+      // icon does not exist in root dir, check each sub dir + /apps folder
       path = '';
     }
 
