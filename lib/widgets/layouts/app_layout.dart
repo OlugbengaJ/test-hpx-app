@@ -51,7 +51,7 @@ class _AppLayoutState extends State<AppLayout> {
               contentPadding: const EdgeInsets.all(0),
               children: [
                 Container(
-                    padding: const EdgeInsets.only(top: 40, bottom: 10),
+                    padding: const EdgeInsets.only(top: 30, bottom: 10),
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.white, width: 1)),
                     width: 900,
@@ -71,8 +71,8 @@ class _AppLayoutState extends State<AppLayout> {
                         ),
                       ),
                       Container(
-                        width: 200,
-                        height: 200,
+                        width: 600,
+                        height: 250,
                         margin: const EdgeInsets.only(top: 40, bottom: 10),
                         decoration: const BoxDecoration(
                           image: DecorationImage(
@@ -82,7 +82,7 @@ class _AppLayoutState extends State<AppLayout> {
                         ),
                       ),
                       Container(
-                        margin: const EdgeInsets.only(top: 60),
+                        margin: const EdgeInsets.only(top: 20),
                         padding: const EdgeInsets.only(left: 20, right: 20),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -135,7 +135,7 @@ class _AppLayoutState extends State<AppLayout> {
                                           step += 1;
                                         });
                                         Navigator.of(context).pop();
-                                        if (step < 4) {
+                                        if (step < 5) {
                                           walkthroughTutorialWidget();
                                         }
                                       },
@@ -304,62 +304,48 @@ class _AppLayoutState extends State<AppLayout> {
             backgroundColor: Colors.white,
             alignment: Alignment.bottomLeft,
             children: <Widget>[
-              Container(
-                width: 150,
-                padding: const EdgeInsets.only(left: 20.0),
-                height: 40,
-                child: InkWell(
-                  onTap: () {
-                    tutorialProvider.showTutorialTooltip(
-                        tipToShow: Constants.app);
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text(
-                    'Launch Tutorial',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700),
-                  ),
+              SimpleDialogOption(
+                onPressed: () {
+                  tutorialProvider.showTutorialTooltip(
+                      tipToShow: Constants.app);
+                  Navigator.of(context).pop();
+                },
+                child: const Text(
+                  'Launch Tutorial',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700),
                 ),
               ),
-              Container(
-                width: 150,
-                padding: const EdgeInsets.only(left: 20.0),
-                height: 40,
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    generateDialogTutorial();
-                  },
-                  child: const Text(
-                    'Reset Onboarding',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700),
-                  ),
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  generateDialogTutorial();
+                },
+                child: const Text(
+                  'Reset Onboarding',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700),
                 ),
               ),
-              Container(
-                width: 150,
-                padding: const EdgeInsets.only(left: 20.0),
-                height: 40,
-                child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      contacProvider.showContactOptionsDialog(context);
-                    },
-                    child: const Text('Visit Support Page',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700))),
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  contacProvider.showContactOptionsDialog(context);
+                },
+                child: const Text(
+                  'Visit Support Page',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700),
+                ),
               ),
-              Container(
-                width: 150,
-                padding: const EdgeInsets.only(left: 20.0),
-                height: 40,
+              SimpleDialogOption(
+                onPressed: () {},
                 child: const Text(
                   'Request Help',
                   style: TextStyle(
@@ -367,7 +353,7 @@ class _AppLayoutState extends State<AppLayout> {
                       fontSize: 14,
                       fontWeight: FontWeight.w700),
                 ),
-              ),
+              )
             ],
           );
         });
