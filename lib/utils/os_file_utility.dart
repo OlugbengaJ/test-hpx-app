@@ -150,11 +150,12 @@ class OSFileUtility {
     final f = File(path);
     if (!f.existsSync()) {
       // icon not found; find it from other dir based on dimentions mxn.
+      // e.g. /usr/share/icons/hicolor/48x48/apps
       final List<String> iconDirs = [
-        '/usr/share/icons/hicolor/48x48/apps',
-        '/usr/share/icons/Humanity/48x48/apps',
-        '/usr/share/icons/gnome/48x48/apps',
-        '/usr/share/icons/Yaru/48x48/apps',
+        '/usr/share/icons/hicolor',
+        '/usr/share/icons/Humanity',
+        '/usr/share/icons/gnome',
+        '/usr/share/icons/Yaru',
         '/usr/share/pixmaps',
       ];
 
