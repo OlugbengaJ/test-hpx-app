@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/profiles/profiles_model.dart';
 import 'package:hpx/utils/constants.dart';
+import 'package:hpx/utils/database_manager.dart';
 
 /// [ProfileProvider] allows to manage profiles
 ///
@@ -8,16 +9,8 @@ import 'package:hpx/utils/constants.dart';
 /// which allows a user to persist different customizations
 /// as different profiles, and change from one to another.
 class ProfileProvider extends ChangeNotifier {
-  final List<Profile> _profiles = [
+  final List<Profile> _profiles = DatabaseManager.getAllProfiles();
     // init with a default profile
-    Profile(
-      id: 0,
-      name: 'Default',
-      icon: '',
-      layers: [],
-      associatedApps: [],
-    )
-  ];
 
   /// [profiles] returns the list of profile
   List<Profile> get profiles => [..._profiles];
@@ -82,6 +75,7 @@ class ProfileProvider extends ChangeNotifier {
 
     _profiles.add(profile);
     _currentProfile = profile;
+    DatabaseManager.createProfile(profile);
 
     notifyListeners();
   }
@@ -97,6 +91,7 @@ class ProfileProvider extends ChangeNotifier {
       _currentProfile = profiles.first.copyWith();
     }
 
+    DatabaseManager.deleteProfile(id);
     notifyListeners();
   }
 
@@ -112,6 +107,7 @@ class ProfileProvider extends ChangeNotifier {
       associatedApps: [],
     );
 
+    DatabaseManager.createProfile(_selectedProfile);
     notifyListeners();
   }
 
@@ -146,6 +142,7 @@ class ProfileProvider extends ChangeNotifier {
           file.isEmpty ? [] : [Application(name: name, icon: icon, file: file)],
     );
 
+    DatabaseManager.createProfile(_selectedProfile);
     notifyListeners();
   }
 

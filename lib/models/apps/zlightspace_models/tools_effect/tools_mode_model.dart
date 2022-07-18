@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
+import 'package:hpx/utils/custom_converters.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'tools_mode_model.g.dart';
 
 //// class interface model for Tools mode
+@JsonSerializable()
 class ToolsModeModel {
   //// Tools mode model initialization model
   ToolsModeModel(
@@ -48,78 +53,30 @@ class ToolsModeModel {
   dynamic display;
 
   /// icon variable to set the icon data for that tools and effects mode
+  @IconDataConverter()
   IconData? icon;
 
   /// value is either and enum or string used to specify which toole and effects mode the user is current on
   final dynamic value;
 
   /// current color holds a list of colors been current in used by the color picker
+  @ColorConverter()
   late final List<dynamic> currentColor;
 
   /// shortcutKey holds a list of shortcut keyboard keys been currently in used by the shortcut mode
   List<List<String>>? shortcutKeys;
 
   /// effects holds the current effect been used by the effects provider and tools and effects mode
+  @EffectsModelConverter()
   late final EffectsModel effects;
 
   //unique id for storing this object in database
   int? id;
 
-  ToolsModeModel.fromJson(item)
-      : id = item['id'],
-        currentColor = transformToColors(item['currentColor']),
-        name = item['name'],
-        modeType = EnumModeType.values
-            .singleWhere((element) => element.toString() == item['modeType']),
-        subMode = EnumModeType.values
-          .firstWhereOrNull((element) => element.toString() == item['subMode']),
-        shortcutKeys = [(item['shortcutKeys'] as String).split(' ')],
-        display = EnumModeType.values
-            .firstWhereOrNull((element) => element.toString() == item['display']),
-        value = EnumModeType.values
-            .firstWhereOrNull((element) => element.toString() == item['value']),
-        effects = EffectsModel.fromJson(item),
-        icon = IconData(item['codePoint'],
-            fontFamily: item['fontFamily']);
+  Map<String, dynamic> toJson() => _$ToolsModeModelToJson(this);
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'currentColor': getCurrentColorAsMap(),
-      'name': name,
-      'modeType': modeType.toString(),
-      'subMode': subMode.toString(),
-      'shortcutKeys': getShortcutKeysAsMap(),
-      'display': display.toString(),
-      'value': value.toString(),
-      'effects': effects.toMap(),
-      'icon': {'codePoint': icon?.codePoint,
-        'fontFamily': icon?.fontFamily}
-    };
-  }
-
-  getCurrentColorAsMap() {
-    var colors = "";
-    for (var element in currentColor) {
-      colors += " ${(element as MaterialAccentColor).value}";
-    }
-    return colors;
-  }
-
-  getShortcutKeysAsMap() {
-    var keys = "";
-    shortcutKeys?.forEach((element) {
-      keys += '${element.first}';
-    });
-    return keys;
-  }
-
-  static transformToColors(String colors) {
-    List<String> colorsList = colors.split(", ");
-    //return colorsList.map((e) => Color(int.parse(e))).toList();
-    //TODO convert color string to actual color
-    return <dynamic>[];
-  }
+  factory ToolsModeModel.fromJson(Map<String, dynamic> json) =>
+      _$ToolsModeModelFromJson(json);
 }
 
 //// enum value for mode  picker

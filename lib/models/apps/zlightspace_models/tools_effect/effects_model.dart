@@ -1,9 +1,13 @@
 import 'dart:core';
 import 'dart:typed_data';
-
 import 'package:flutter/cupertino.dart';
+import 'package:hpx/utils/custom_converters.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'effects_model.g.dart';
 
 //// class interface model for Effects
+@JsonSerializable()
 class EffectsModel {
   //// Effects model initialization model and value default set
   /// default degree value = 0.0
@@ -45,37 +49,18 @@ class EffectsModel {
   dynamic? effectName;
 
   /// effect extractColors for the extract colors matrix from image
+  @ColorConverter()
   List<List<Color>>? extractedColors;
 
   /// effect image for the extract colors matrix
+  @ImageConverter()
   Uint8List? imageBytes;
 
   /// mode id for relation in database
   int? modeId;
 
-  EffectsModel.fromJson(Map<String, dynamic> item)
-      : degree = item['degree'],
-        size = item['size'],
-        speed = item['speed'],
-        updatePerSecond = item['updatePerSecond'],
-        imageQuality = item['imageQuality'],
-        effectType = item['effectType'],
-        effectName = item['effectName'],
-        extractedColors = item['extractedColors'],
-        imageBytes = item['imageBytes'],
-        modeId = item['modeId'];
+  Map<String, dynamic> toJson() => _$EffectsModelToJson(this);
 
-  Map<String, dynamic> toMap() {
-    return {
-      'degree': degree,
-      'size': size,
-      'speed': speed,
-      'updatePerSecond': updatePerSecond,
-      'imageQuality': imageQuality,
-      'effectType': effectType,
-      'effectName': effectName.toString(),
-      'extractedColors': extractedColors,
-      'imageBytes': imageBytes
-    };
-  }
+  factory EffectsModel.fromJson(Map<String, dynamic> json) =>
+      _$EffectsModelFromJson(json);
 }
