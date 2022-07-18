@@ -7,6 +7,7 @@ class Profile {
     required this.icon,
     required this.layers,
     required this.associatedApps,
+    this.createdDate,
   });
 
   final int id;
@@ -14,6 +15,7 @@ class Profile {
   final String icon;
   List<LayerItemModel> layers = [];
   List<Application> associatedApps = [];
+  final DateTime? createdDate;
 
   /// [copyWith] returns a new instance of [Profile].
   Profile copyWith({
@@ -30,23 +32,28 @@ class Profile {
       layers: layers ?? [...this.layers],
       associatedApps:
           associatedApps ?? [...this.associatedApps.map((e) => e.copyWith())],
+      createdDate: createdDate,
     );
   }
 
   Profile.fromMap(Map<String, dynamic> item)
-      : id = item["id"],
-        name = item["name"],
-        icon = item["icon"],
-        layers = getLayersFromMap(item["layers"]),
-        associatedApps = getAssociatedAppsFromMap(item["associatedApps"]);
+      : id = item['id'],
+        name = item['name'],
+        icon = item['icon'],
+        createdDate = item['createdDate'],
+        layers = getLayersFromMap(item['layers']),
+        associatedApps = getAssociatedAppsFromMap(
+          item['associatedApps'],
+        );
 
-  Map<String, Object> toMap() {
+  Map<String, dynamic> toMap() {
     return {
-      "id": id,
-      "name": name,
-      "icon": icon,
-      "layers": getLayersAsMap(),
-      "associatedApps": getAssociatedAppsAsMap()
+      'id': id,
+      'name': name,
+      'icon': icon,
+      'layers': getLayersAsMap(),
+      'associatedApps': getAssociatedAppsAsMap(),
+      'createdDate': createdDate,
     };
   }
 
@@ -85,11 +92,13 @@ class Application {
     required this.name,
     required this.icon,
     required this.file,
+    this.createdDate,
   });
 
   final String name;
   final String icon;
   final String file;
+  final DateTime? createdDate;
 
   /// [copyWith] returns a new instance of [Application].
   Application copyWith({
@@ -101,19 +110,22 @@ class Application {
       name: name ?? this.name,
       icon: icon ?? this.icon,
       file: file ?? this.file,
+      createdDate: createdDate,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      "name": name,
-      "icon": icon,
-      "file": file,
+      'name': name,
+      'icon': icon,
+      'file': file,
+      'createdDate': createdDate,
     };
   }
 
   Application.fromJson(Map<String, dynamic> item)
       : name = item['name'],
         icon = item['icon'],
-        file = item['file'];
+        file = item['file'],
+        createdDate = item['createdDate'];
 }

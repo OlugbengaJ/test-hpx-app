@@ -17,9 +17,9 @@ class OSFileUtility {
   static String get path => Platform.script.path;
 
   static AppDirInfo? get appsDir {
-    debugPrint(Platform.operatingSystem);
-    debugPrint(Platform.operatingSystemVersion);
-    debugPrint(Platform.version);
+    debugPrint('os=> ${Platform.operatingSystem}'
+        ' os version=> ${Platform.operatingSystemVersion}'
+        ' version=> ${Platform.version}');
 
     String path = '';
 
@@ -59,7 +59,7 @@ class OSFileUtility {
     return null;
   }
 
-  // TODO: refactor this to read all apps from a default location
+  // TODO: refactor this to read all apps from default location
   static void osApps() {
     final dir = Directory(appsDir!.initialDirectory!);
 
@@ -150,19 +150,49 @@ class OSFileUtility {
     final f = File(path);
     if (!f.existsSync()) {
       // icon not found; find it from other dir based on dimentions mxn.
+      // e.g. /usr/share/icons/hicolor/48x48/apps
       final List<String> iconDirs = [
-        '/usr/share/icons/hicolor/48x48/apps',
-        '/usr/share/icons/Humanity/48x48/apps',
-        '/usr/share/icons/gnome/48x48/apps',
-        '/usr/share/icons/Yaru/48x48/apps',
+        '/usr/share/icons/hicolor',
+        '/usr/share/icons/Humanity',
+        '/usr/share/icons/gnome',
+        '/usr/share/icons/Yaru',
+        '/usr/share/pixmaps',
       ];
-      path = '';
+
+      // check icon in each root directory
+      bool iconFound = false;
+      for (var dir in iconDirs) {
+        final d = Directory(dir);
+        if (d.existsSync()) {
+          // if dir exists, check file name
+          final fileList = d.listSync(recursive: true, followLinks: false);
+
+          for (var f in fileList) {
+            if (f.path.contains('16x16') ||
+                f.path.contains('22x22') ||
+                f.path.contains('24x24') ||
+                f.path.contains('scalable')) {
+              // exclude low resolution icons
+              continue;
+            }
+
+            if (f.path.contains('$path.png') || f.path.contains('$path.jpg')) {
+              path = f.path;
+              iconFound = true;
+
+              break;
+            }
+          }
+        }
+
+        if (iconFound) break;
+      }
+
+      // icon does not exist in any dir.
+      if (!iconFound) path = '';
     }
 
-    // icon found
-    // final stat = f.statSync();
-
-    return path;
+    return path!;
   }
 
   /// [_processWindowsFile] process Windows specific file
@@ -260,7 +290,6 @@ class OSFileUtility {
       Process.run('Powershell.exe', ['-Command', shellCmd])
           .then((processResult) {
         if (processResult.exitCode == 0) {
-          debugPrint('ps stdout ${processResult.stdout}');
           profileProvider.addSystemApp(
               processResult.stdout as String, '', file.path!);
         }

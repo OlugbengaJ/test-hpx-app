@@ -66,13 +66,6 @@ class LayersProvider extends ChangeNotifier {
 
 
   List<LayerItemModel> getLayers(){
-    for (var element in _layeritems) {
-      print(element.layerText);
-      print(element.id);
-    }
-
-    print("-------");
-
     return _layeritems.where((item) => item.profileID== _profileProvider!.currentProfile.id).toList();
   }
 
@@ -100,11 +93,19 @@ class LayersProvider extends ChangeNotifier {
       changeIndex(0);
     }
 
-    debugPrint("${getLayers()}");
-
-    for (var element in _layeritems) {
-      debugPrint("Profile ID: ${element.profileID}");
+    for (var item in _layeritems) {
+      if(!(item.profileID == _profileProvider!.currentProfile.id)){
+        item.visible = false;
+      }else{
+        item.visible = true;
+      }
     }
+
+    int index = _layeritems.indexWhere((item) => getLayers().first.id==item.id);
+    changeIndex(index);
+
+
+
 
     notifyListeners();
   }
