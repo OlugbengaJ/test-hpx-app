@@ -176,7 +176,9 @@ class OSFileUtility {
           }
         }
 
-        if (path!.isNotEmpty) break;
+        if (path!.isNotEmpty) {
+          break;
+        }
       }
 
       // icon does not exist in root dir, check each sub dir + /apps folder
