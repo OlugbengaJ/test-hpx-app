@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/profiles/profiles_model.dart';
 import 'package:hpx/utils/constants.dart';
+import 'package:hpx/utils/datetime_util.dart';
 
 /// [ProfileProvider] allows to manage profiles
 ///
@@ -78,6 +79,7 @@ class ProfileProvider extends ChangeNotifier {
       associatedApps: [
         ..._selectedProfile.associatedApps.map((e) => e.copyWith())
       ],
+      createdDate: DateTimeUtil.utc,
     );
 
     _profiles.add(profile);
@@ -142,11 +144,52 @@ class ProfileProvider extends ChangeNotifier {
       icon: icon,
       // use existing layers incase duplicate profile mode is active
       layers: _selectedProfile.layers,
-      associatedApps:
-          file.isEmpty ? [] : [Application(name: name, icon: icon, file: file)],
+      associatedApps: file.isEmpty
+          ? []
+          : [
+              Application(
+                  name: name,
+                  icon: icon,
+                  file: file,
+                  createdDate: DateTimeUtil.utc)
+            ],
     );
 
     notifyListeners();
+  }
+
+  void sortProfiles(SortOrder sortOrder) {
+    switch (sortOrder) {
+      case SortOrder.asc:
+        _profiles.sort((a, b) {
+          if (a.name == Constants.defaultText) return -1;
+          return a.name.compareTo(b.name);
+        });
+        break;
+      case SortOrder.desc:
+        _profiles.sort((a, b) {
+          if (a.name == Constants.defaultText) return -1;
+          return b.name.compareTo(a.name);
+        });
+        break;
+      case SortOrder.mostRecently:
+        _profiles.sort((a, b) {
+          if (a.createdDate == null) return -1;
+          if (b.createdDate == null) return -1;
+
+          return b.createdDate!.compareTo(a.createdDate!);
+        });
+        break;
+      case SortOrder.leastRecently:
+        _profiles.sort((a, b) {
+          if (a.createdDate == null) return -1;
+          if (b.createdDate == null) return -1;
+
+          return a.createdDate!.compareTo(b.createdDate!);
+        });
+        break;
+      default:
+    }
   }
 
   /// [apps] returns list of default apps including the Z app.
@@ -160,7 +203,56 @@ class ProfileProvider extends ChangeNotifier {
     // don't add existing app
     if (apps.any((element) => element.name == name)) return;
 
-    _systemApps.add(Application(name: name, icon: icon, file: file));
+    _systemApps.add(Application(
+        name: name, icon: icon, file: file, createdDate: DateTimeUtil.utc));
     notifyListeners();
   }
+
+  void sortApps(SortOrder sortOrder) {
+    switch (sortOrder) {
+      case SortOrder.asc:
+        _systemApps.sort((a, b) {
+          if (a.name == Constants.defaultText) return -1;
+          return a.name.compareTo(b.name);
+        });
+        break;
+      case SortOrder.desc:
+        _systemApps.sort((a, b) {
+          if (a.name == Constants.defaultText) return -1;
+          return b.name.compareTo(a.name);
+        });
+        break;
+      case SortOrder.mostRecently:
+        _systemApps.sort((a, b) {
+          if (a.createdDate == null) return -1;
+          if (b.createdDate == null) return -1;
+
+          return b.createdDate!.compareTo(a.createdDate!);
+        });
+        break;
+      case SortOrder.leastRecently:
+        _systemApps.sort((a, b) {
+          if (a.createdDate == null) return -1;
+          if (b.createdDate == null) return -1;
+
+          return a.createdDate!.compareTo(b.createdDate!);
+        });
+        break;
+      default:
+    }
+  }
+}
+
+enum SortOrder {
+  /// [asc] sort in asending order
+  asc,
+
+  /// [desc] sort in desending order
+  desc,
+
+  /// [leastRecently] sort by least recent (applicable where date is used)
+  leastRecently,
+
+  /// [mostRecently] sort by most recent (applicable where date is used)
+  mostRecently,
 }
