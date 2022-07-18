@@ -56,9 +56,6 @@ dependencies:
   toggle_switch: ^2.0.1
   bitsdojo_window: ^0.1.2
   flutter_svg_provider: ^1.0.3
-  json_annotation: ^4.6.0
-  json_serializable: ^6.3.1
-  build_runner: 2.2.0
 
 dev_dependencies:
   flutter_test:

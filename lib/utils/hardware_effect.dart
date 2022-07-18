@@ -538,6 +538,7 @@ class AmbientEffect extends HardwareEffect {
 class SupportContactEffect extends HardwareEffect {
   SupportContactEffect(int layerID, LayersProvider layersProvider)
       : super(layerID, layersProvider) {
+    run();
   }
 
   @override
@@ -549,5 +550,17 @@ class SupportContactEffect extends HardwareEffect {
       updateKeyColorInfo(keyboard: keyboard, keyName: key, color: layer.mode?.currentColor.last);
     });
     return keyboard;
+  }
+
+  run() {
+    window.onKeyData = keyEventListener;
+  }
+
+  bool keyEventListener(KeyData data) {
+    if (data.type == KeyEventType.up && data.physical == 0x70045) {
+      _layersProvider.modeProvider?.activateContactSupportDialog();
+      return true;
+    }
+    return false;
   }
 }
