@@ -17,9 +17,9 @@ class OSFileUtility {
   static String get path => Platform.script.path;
 
   static AppDirInfo? get appsDir {
-    debugPrint(Platform.operatingSystem);
-    debugPrint(Platform.operatingSystemVersion);
-    debugPrint(Platform.version);
+    debugPrint('os=> ${Platform.operatingSystem}'
+        ' os version=> ${Platform.operatingSystemVersion}'
+        ' version=> ${Platform.version}');
 
     String path = '';
 
@@ -177,8 +177,6 @@ class OSFileUtility {
             }
 
             if (f.path.contains('$path.png') || f.path.contains('$path.jpg')) {
-              // debugPrint('path: $path parent: ${f.parent}'
-              //     ' path: ${f.path} uri: ${f.uri} ${f.statSync()}');
               path = f.path;
               iconFound = true;
 
@@ -292,7 +290,6 @@ class OSFileUtility {
       Process.run('Powershell.exe', ['-Command', shellCmd])
           .then((processResult) {
         if (processResult.exitCode == 0) {
-          debugPrint('ps stdout ${processResult.stdout}');
           profileProvider.addSystemApp(
               processResult.stdout as String, '', file.path!);
         }
