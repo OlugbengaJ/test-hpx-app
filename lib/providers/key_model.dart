@@ -2,11 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/key_code.dart';
-import 'package:json_annotation/json_annotation.dart';
 
-part 'key_model.g.dart';
-
-@JsonSerializable()
 class KeyModel with ChangeNotifier {
   KeyModel({
     required this.keyRow,
@@ -155,11 +151,6 @@ class KeyModel with ChangeNotifier {
   void removeChip(String chipKey) {
     _chips.removeWhere((key, value) => key == chipKey);
   }
-
-  Map<String, dynamic> toJson() => _$KeyModelToJson(this);
-
-  factory KeyModel.fromJson(Map<String, dynamic> json) =>
-      _$KeyModelFromJson(json);
 }
 
 enum ChipKey {

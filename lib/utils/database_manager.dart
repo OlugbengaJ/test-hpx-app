@@ -30,21 +30,12 @@ class DatabaseManager {
     );
   }
 
-  static List<Profile> getAllProfiles() {
-    List<Profile> profiles = [];
-    _getAllProfiles().then((value) => {
-      value.forEach((element) {profiles.add(element);})
-    });
-
-    return profiles;
-  }
-
-  static Future<List<Profile>> _getAllProfiles() async {
+  static Future<List<Profile>> getAllProfiles() async {
     final Database database = await _initDatabase();
     final List<Map<String, Object?>> profilesQueryResult =
         await database.query('profiles');
     List<Profile> loadedProfiles = profilesQueryResult.map((e) =>
-        Profile.fromJson(e)).toList();
+        Profile.fromMap(e)).toList();
 
     for (var profile in loadedProfiles) {
       final List<Map<String, Object?>> layersQueryResult =
@@ -75,7 +66,7 @@ class DatabaseManager {
     final List<Map<String, Object?>> queryResult =
         await database.query('profiles');
     return queryResult
-        .map((e) => Profile.fromJson(e))
+        .map((e) => Profile.fromMap(e))
         .toList()
         .firstWhereOrNull((element) => element.id == profileId);
   }
@@ -87,7 +78,7 @@ class DatabaseManager {
     //Save profile in database
     var layers = profile.layers;
     var apps = profile.associatedApps;
-    var profileMap = profile.toJson();
+    var profileMap = profile.toMap();
     profileMap.remove('layers');
     profileMap.remove('associatedApps');
 
@@ -101,7 +92,7 @@ class DatabaseManager {
     for (var layer in layers) {
 
       //Save layer in database
-      var layerMap = layer.toJson();
+      var layerMap = layer.toMap();
       layerMap.remove('mode');
       layerMap.remove('icon');
       layerMap['profileId'] = profile.id;
@@ -117,7 +108,7 @@ class DatabaseManager {
       });
 
       //Save mode in database
-      var modeMap = layer.mode?.toJson();
+      var modeMap = layer.mode?.toMap();
       if (modeMap != null && modeMap.isNotEmpty) {
         modeMap['layerId'] = layer.id;
         modeMap.remove('effects');
@@ -134,7 +125,7 @@ class DatabaseManager {
         });
 
         //Save mode effect in database
-        var effectMap = layer.mode?.effects.toJson();
+        var effectMap = layer.mode?.effects.toMap();
         if (effectMap != null && effectMap.isNotEmpty) {
           effectMap['modeId'] = modeId;
           await database.insert('effects', effectMap,
@@ -238,22 +229,5 @@ class DatabaseManager {
       " ON DELETE CASCADE"
       ")",
     );
-
-    await database.execute(
-      "CREATE TABLE associatedApps("
-          "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-          "profileId INTEGER,"
-          "name VARCHAR(50),"
-          "file TEXT, "
-          "icon TEXT, "
-          "FOREIGN KEY (profileId)"
-          "REFERENCES profiles (id) "
-          " ON UPDATE CASCADE "
-          " ON DELETE CASCADE"
-          ")",
-    );
-
-    Profile defaultProfile = Profile(id: 1, name: 'Default', icon: '', layers: [], associatedApps: []);
-    await database.insert('profiles', defaultProfile.toJson());
   }
 }

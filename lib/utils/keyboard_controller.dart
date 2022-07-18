@@ -4,7 +4,6 @@ import 'package:hpx/utils/hardware_effect.dart';
 import 'dart:isolate';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/utils/keyboard_driver_wrapper.dart';
-import 'dart:ui';
 
 class KeyboardController {
   Isolate? isolate;
@@ -693,7 +692,6 @@ class KeyboardController {
   }
 
   Future<void> run(int speed) async {
-    window.onKeyData = keyEventListener;
     while (true) {
       await sendCombinedCommandToDriver();
       resetKeysForNewCommand();
@@ -707,14 +705,5 @@ class KeyboardController {
       value["greenOpacity"] = 0;
       value["blueOpacity"] = 0;
     });
-  }
-
-
-  bool keyEventListener(KeyData data) {
-    if (data.type == KeyEventType.up && data.physical == 0x70045) {
-      layersProvider.modeProvider?.activateContactSupportDialog();
-      return true;
-    }
-    return false;
   }
 }
