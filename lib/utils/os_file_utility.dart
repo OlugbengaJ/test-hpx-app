@@ -168,8 +168,8 @@ class OSFileUtility {
           final fileList = d.listSync(recursive: true, followLinks: false);
 
           for (var f in fileList) {
-            // if (f.path.contains('$path.png') || f.path.contains('$path.jpg')) {
-            if (f.path.contains(path!)) {
+            if (f.path.contains('$path.png') || f.path.contains('$path.jpg')) {
+              // if (f.path.contains(path!)) {
               debugPrint('path: $path parent: ${f.parent}'
                   ' path: ${f.path} uri: ${f.uri} ${f.statSync()}');
               path = f.path;
