@@ -160,6 +160,7 @@ class OSFileUtility {
       ];
 
       // check icon in each root directory
+      bool iconFound = false;
       for (var dir in iconDirs) {
         final d = Directory(dir);
         if (d.existsSync()) {
@@ -172,12 +173,13 @@ class OSFileUtility {
 
             if (f.path.contains(path!)) {
               path = f.path;
+              iconFound = true;
               break;
             }
           }
         }
 
-        if (path!.isNotEmpty) {
+        if (iconFound) {
           break;
         }
       }
