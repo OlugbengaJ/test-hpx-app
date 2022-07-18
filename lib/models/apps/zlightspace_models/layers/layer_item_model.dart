@@ -9,7 +9,7 @@ class LayerItemModel {
   LayerItemModel({
     required this.id,
     this.parentID = 0,
-    this.profileID = 0,
+    required this.profileID,
     required this.layerText,
     this.visible = true,
     this.visibleOnStack = true,

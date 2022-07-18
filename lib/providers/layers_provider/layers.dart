@@ -41,12 +41,20 @@ class LayersProvider extends ChangeNotifier {
   int get listIndex => _listIndex;
   ModeProvider? get modeProvider => _modeProvider;
 
-  List<LayerItemModel> get layeritems => _layeritems;  //.where((item) => item.profileID== _profileProvider!.currentProfile.id).toList(); // Should return only mainlayers
+  List<LayerItemModel> get layeritems => _layeritems; //.where((item) => item.profileID== _profileProvider!.currentProfile.id).toList(); // Should return only mainlayers
   List<LayerItemModel> get sublayerItems =>
       _sublayers; // Should return only sublayers
 
   LayersProvider() {
     physicalKeyboardController = KeyboardController(this);
+  }
+
+
+  bool layerProfile(LayerItemModel layerItemModel){
+    if(layerItemModel.profileID==_profileProvider!.currentProfile.id){
+      return true;
+    }
+    return false;
   }
 
 
@@ -58,46 +66,45 @@ class LayersProvider extends ChangeNotifier {
 
 
   List<LayerItemModel> getLayers(){
+    for (var element in _layeritems) {
+      print(element.layerText);
+      print(element.id);
+    }
+
+    print("-------");
+
     return _layeritems.where((item) => item.profileID== _profileProvider!.currentProfile.id).toList();
   }
 
 
   // Use this to update layers when the profile changes
   getProfileLayers(){
-    // List<LayerItemModel> layers = [];
-    // layers = _profileProvider!.selectedProfile.layers;
-    // _layeritems.clear();
-
-    // if (layers.isNotEmpty) {
-    //   layers.forEach((layer) {
-    //      _layeritems.insert(0, layer);
-    //   });
-    // }else{
-    //   LayerItemModel itemModel = LayerItemModel(
-    //       id: 1,
-    //       layerText: 'Mood',
-    //       //mode: modeProvider.currentMode,
-    //       icon: Icons.mood);
-
-    //   add(itemModel);
-
-    //   modeProvider!.changeModeComponent(
-    //     PickerModel(
-    //         title: itemModel.mode!.name,
-    //         value: itemModel.mode!.value,
-    //         enabled: true,
-    //         icon: itemModel.mode!.icon),
-    //     _context!,
-    //     false);
-    // }
     if(getLayers().isEmpty){
+      LayerItemModel itemModel = LayerItemModel(
+        id: getTheBiggestID(),
+        profileID: _profileProvider!.currentProfile.id,
+        layerText: 'Mood',
+        icon: Icons.mood);
 
+      add(itemModel);
+
+      _modeProvider!.changeModeComponent(
+        PickerModel(
+            title: itemModel.mode!.name,
+            value: itemModel.mode!.value,
+            enabled: true,
+            icon: itemModel.mode!.icon),
+        _context!,
+        false);
+      //disableCreatingNewLayerMode();
+      changeIndex(0);
     }
+
     debugPrint("${getLayers()}");
 
-    _layeritems.forEach((element) {
+    for (var element in _layeritems) {
       debugPrint("Profile ID: ${element.profileID}");
-    });
+    }
 
     notifyListeners();
   }
@@ -361,6 +368,7 @@ class LayersProvider extends ChangeNotifier {
       {bool sublayer = false}) {
     LayerItemModel duplicatedItem = LayerItemModel(
       id: (sublayer) ? getTheBiggestSubID() : getTheBiggestID(),
+      profileID: _profileProvider!.currentProfile.id,
       layerText: "Copy ${item.layerText}",
       isSublayer: sublayer,
     );
@@ -400,7 +408,7 @@ class LayersProvider extends ChangeNotifier {
 
     final item = _layeritems[_listIndex];
     item.listDisplayColor = Colors.white;
-    _layeritems[_listIndex] = item;
+    //_layeritems[_listIndex] = item;
 
     if (item.mode!.value == EnumModes.shortcut) {
       //_modeProvider!.setModeType(true);

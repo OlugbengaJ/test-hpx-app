@@ -149,10 +149,12 @@ class _LayersState extends State<Layers> {
                         itemBuilder: (BuildContext context, int index) {
                           return Container(
                             key: Key('$index'),
-                            child: LayerListItem(
+                            child:
+                            (provider.layerProfile(provider.layeritems[index]))?                            
+                            LayerListItem(
                               layerIndex: index,
                               layerItemModel: provider.layeritems[index],
-                            ),
+                            ):Container(),
                           );
                         },
                         onReorder: provider.reorder,
