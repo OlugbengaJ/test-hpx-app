@@ -61,6 +61,7 @@ class MyApp extends StatelessWidget {
       navigatorKey: navigatorKeys,
       scaffoldMessengerKey: scaffoldKey,
       darkTheme: darkTheme.copyWith(
+        disabledColor: Colors.grey,
         sliderTheme: SliderTheme.of(context).copyWith(
           thumbColor: Colors.white,
           inactiveTrackColor: Colors.grey.shade900,

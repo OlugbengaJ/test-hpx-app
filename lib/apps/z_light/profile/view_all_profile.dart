@@ -4,6 +4,7 @@ import 'package:hpx/apps/z_light/profile/profile_list_dialog.dart';
 import 'package:hpx/models/apps/zlightspace_models/profiles/profiles_model.dart';
 import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/utils/constants.dart';
+import 'package:hpx/widgets/components/dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -350,7 +351,6 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                             InkWell(
                               child: Container(
                                 height: 28,
-                                width: 82,
                                 decoration: BoxDecoration(
                                   border:
                                       Border.all(color: Colors.white, width: 1),
@@ -358,12 +358,32 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-                                  children: const [
-                                    Padding(
-                                      padding: EdgeInsets.all(2),
-                                      child: Text("A - Z"),
+                                  children: [
+                                    Consumer<ProfileProvider>(
+                                      builder: (context, provider, child) =>
+                                          DropDown<SortOption>(
+                                        dropdownValue: provider.appSort,
+                                        hint: 'Sort',
+                                        items: [
+                                          ...provider.sortOptions.map(
+                                            (e) => DropdownMenuItem<SortOption>(
+                                              value: e,
+                                              child: Text(e.title),
+                                            ),
+                                          )
+                                        ],
+                                        onChangedHandler: (o) {
+                                          if (o != null) {
+                                            provider.sortProfiles(o.sortOrder);
+                                          }
+                                        },
+                                      ),
                                     ),
-                                    Icon(Icons.arrow_drop_down)
+                                    // Padding(
+                                    //   padding: EdgeInsets.all(2),
+                                    //   child: Text("A - Z"),
+                                    // ),
+                                    // Icon(Icons.arrow_drop_down)
                                   ],
                                 ),
                               ),
