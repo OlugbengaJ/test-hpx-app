@@ -176,9 +176,11 @@ class OSFileUtility {
               continue;
             }
 
-            if (f.path.contains('$path.png') ||
-                f.path.contains('$path.jpg') ||
-                f.path.contains('$path.svg')) {
+            // if (f.path.contains('$path.png') ||
+            //     f.path.contains('$path.jpg') ||
+            //     f.path.contains('$path.svg')) {
+            if (f.path.contains(path!)) {
+              debugPrint(f.path);
               path = f.path;
               iconFound = true;
 
