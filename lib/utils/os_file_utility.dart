@@ -153,11 +153,11 @@ class OSFileUtility {
       // e.g. /usr/share/icons/hicolor/48x48/apps
       final List<String> iconDirs = [
         '/usr/share/icons/Adwaita',
-        '/usr/share/icons/HighContrast',
-        '/usr/share/icons/hicolor',
+        '/usr/share/icons/Yaru',
         '/usr/share/icons/Humanity',
         '/usr/share/icons/gnome',
-        '/usr/share/icons/Yaru',
+        '/usr/share/icons/HighContrast',
+        '/usr/share/icons/hicolor',
         '/usr/share/pixmaps',
       ];
 
