@@ -15,7 +15,7 @@ class AppIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     if (iconPath.isEmpty) {
       return Image.asset(
-        Constants.zImage,
+        Constants.zLightIconPng,
         width: size,
         height: size,
       );
