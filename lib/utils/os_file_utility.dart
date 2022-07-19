@@ -172,15 +172,16 @@ class OSFileUtility {
           for (var f in fileList) {
             if (f.path.contains('16x16') ||
                 f.path.contains('22x22') ||
-                f.path.contains('24x24') ||
-                f.path.contains('scalable')) {
+                f.path.contains('24x24')) {
               // exclude low resolution icons
               continue;
             }
 
-            if (f.path.contains('$path.png') || f.path.contains('$path.jpg')) {
+            if (f.path.contains('$path.png') ||
+                f.path.contains('$path.jpg') ||
+                f.path.contains('$path.svg')) {
               // if (f.path.contains(path!)) {
-              debugPrint(f.path);
+              debugPrint('icon => $path \tfilePath => ${f.path}');
               path = f.path;
               iconFound = true;
 
