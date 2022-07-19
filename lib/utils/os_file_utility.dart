@@ -152,6 +152,8 @@ class OSFileUtility {
       // icon not found; find it from other dir based on dimentions mxn.
       // e.g. /usr/share/icons/hicolor/48x48/apps
       final List<String> iconDirs = [
+        '/usr/share/icons/Adwaita',
+        '/usr/share/icons/HighContrast',
         '/usr/share/icons/hicolor',
         '/usr/share/icons/Humanity',
         '/usr/share/icons/gnome',
@@ -176,10 +178,8 @@ class OSFileUtility {
               continue;
             }
 
-            // if (f.path.contains('$path.png') ||
-            //     f.path.contains('$path.jpg') ||
-            //     f.path.contains('$path.svg')) {
-            if (f.path.contains(path!)) {
+            if (f.path.contains('$path.png') || f.path.contains('$path.jpg')) {
+              // if (f.path.contains(path!)) {
               debugPrint(f.path);
               path = f.path;
               iconFound = true;
