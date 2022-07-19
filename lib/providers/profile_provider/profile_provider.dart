@@ -23,7 +23,7 @@ class ProfileProvider extends ChangeNotifier {
     )
   ];
 
-  setLayersProvider(LayersProvider layersProvider){
+  setLayersProvider(LayersProvider layersProvider) {
     _layersProvider = layersProvider;
   }
 
@@ -90,7 +90,6 @@ class ProfileProvider extends ChangeNotifier {
     );
 
     _profiles.add(profile);
-    //_currentProfile = profile;
     selectProfile(profile.id);
 
     notifyListeners();
