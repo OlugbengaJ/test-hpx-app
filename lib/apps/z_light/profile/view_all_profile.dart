@@ -362,7 +362,7 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                     Consumer<ProfileProvider>(
                                       builder: (context, provider, child) =>
                                           DropDown<SortOption>(
-                                        dropdownValue: provider.appSort,
+                                        dropdownValue: provider.profileSort,
                                         hint: 'Sort',
                                         items: [
                                           ...provider.sortOptions.map(
