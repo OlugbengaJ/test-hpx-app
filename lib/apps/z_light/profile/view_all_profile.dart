@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/apps/z_light/profile/profile_app_icon.dart';
 import 'package:hpx/apps/z_light/profile/profile_list_dialog.dart';
 import 'package:hpx/models/apps/zlightspace_models/profiles/profiles_model.dart';
 import 'package:hpx/providers/profile_provider/profile_provider.dart';
@@ -404,10 +405,14 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                             MainAxisAlignment.spaceAround,
                                         children: [
                                           const SizedBox(width: 20),
-                                          Image.asset(
-                                            Constants.zlightIcon,
-                                            height: 60,
+                                          AppIcon(
+                                            iconPath: profile.icon,
+                                            size: 60,
                                           ),
+                                          // Image.asset(
+                                          //   Constants.zlightIcon,
+                                          //   height: 60,
+                                          // ),
                                           Column(
                                             children: [
                                               SizedBox(
