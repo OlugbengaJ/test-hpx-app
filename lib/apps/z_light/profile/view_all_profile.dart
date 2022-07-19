@@ -409,10 +409,6 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                             iconPath: profile.icon,
                                             size: 60,
                                           ),
-                                          // Image.asset(
-                                          //   Constants.zlightIcon,
-                                          //   height: 60,
-                                          // ),
                                           Column(
                                             children: [
                                               SizedBox(
