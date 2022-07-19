@@ -23,7 +23,7 @@ class AppListTile extends StatelessWidget {
       child: ListTile(
         onTap: tapHandler,
         leading: AppIcon(
-          icon: icon,
+          iconPath: icon,
           size: 40.0,
         ),
         title: Text(name),

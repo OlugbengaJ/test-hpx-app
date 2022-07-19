@@ -137,7 +137,7 @@ Future<void> profileListDialog(
                             child: Consumer<ProfileProvider>(
                               builder: (_, provider, __) {
                                 return AppIcon(
-                                    icon: provider.selectedProfile.icon);
+                                    iconPath: provider.selectedProfile.icon);
                               },
                             ),
                           ),
