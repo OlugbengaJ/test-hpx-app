@@ -151,6 +151,9 @@ class OSFileUtility {
     if (!f.existsSync()) {
       // icon not found; find it from other dir based on dimentions mxn.
       // e.g. /usr/share/icons/hicolor/48x48/apps
+      // Flatpak apps: /var/lib/flatpak/exports/share/applications/
+      // Snap apps: /var/lib/snapd/desktop/applications/
+      // Wine: ~/.local/share/applications/wine/Programs/
       final List<String> iconDirs = [
         '/usr/share/icons/Humanity',
         '/usr/share/icons/Yaru',
