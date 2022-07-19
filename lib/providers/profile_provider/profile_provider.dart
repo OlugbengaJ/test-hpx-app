@@ -135,10 +135,13 @@ class ProfileProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  String? selectedApp;
+
   /// [updateSelectedProfile] updates the [_selectedProfile].
   ///
   /// This is used when user clicks on an app in the New Profile window.
   void updateSelectedProfile(String name, String icon, String file) {
+    selectedApp = name;
     if (name == Constants.defaultText) {
       // update the default name to include number (1)
       name = _defaultProfile.name;
@@ -205,6 +208,8 @@ class ProfileProvider extends ChangeNotifier {
       default:
     }
 
+    profileSort = sortOptions.firstWhere((e) => e.sortOrder == sortOrder);
+
     notifyListeners();
   }
 
@@ -261,8 +266,25 @@ class ProfileProvider extends ChangeNotifier {
       default:
     }
 
+    appSort = sortOptions.firstWhere((e) => e.sortOrder == sortOrder);
+
     notifyListeners();
   }
+
+  /// [appSort] is the sort value used by [_systemApps].
+  late SortOption appSort = sortOptions.last;
+
+  /// [profileSort] is the sort value used by [_profiles].
+  late SortOption profileSort = sortOptions.last;
+
+  /// [sortOptions] defines list of sorts available.
+  final List<SortOption> sortOptions = [
+    const SortOption(title: 'A - Z', sortOrder: SortOrder.asc),
+    const SortOption(title: 'Z - A', sortOrder: SortOrder.desc),
+    const SortOption(title: 'Most Recently', sortOrder: SortOrder.mostRecently),
+    const SortOption(
+        title: 'Least Recently', sortOrder: SortOrder.leastRecently),
+  ];
 }
 
 enum SortOrder {
@@ -277,4 +299,11 @@ enum SortOrder {
 
   /// [mostRecently] sort by most recent (applicable where date is used)
   mostRecently,
+}
+
+class SortOption {
+  const SortOption({Key? key, required this.title, required this.sortOrder});
+
+  final String title;
+  final SortOrder sortOrder;
 }
