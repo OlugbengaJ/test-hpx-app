@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/effects_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
+import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
 
@@ -15,6 +16,7 @@ class LayersProvider extends ChangeNotifier {
   final List<LayerItemModel> _layeritems = [];
   final List<LayerItemModel> _sublayers = [];
   ModeProvider? _modeProvider;
+  ProfileProvider? _profileProvider;
   bool isLayerEditing = false; // Used to check wether a layer is in edit mode
   int currentEditingID = 0; // if the ID is 0 then no layer is in edit mode
   int currentSublayerID = 0;
@@ -28,23 +30,6 @@ class LayersProvider extends ChangeNotifier {
   late KeyboardController physicalKeyboardController;
   BuildContext? _context;
 
-  LayersProvider() {
-    physicalKeyboardController = KeyboardController(this);
-  }
-
-  setBuildContext(BuildContext context) {
-    _context = context;
-    notifyListeners();
-  }
-
-  /// retrieve [_currentSublayer] only if [isSublayerSelected] is true
-  LayerItemModel? getCurrentSublayer() {
-    if (isSublayerSelected) {
-      return _currentSublayer;
-    }
-    return null;
-  }
-
   /// [hideDraggable] use to show or hide the stack layers for resizable widget
   bool hideDraggable = false;
   bool isLayerVisible = true;
@@ -57,14 +42,83 @@ class LayersProvider extends ChangeNotifier {
   ModeProvider? get modeProvider => _modeProvider;
 
   List<LayerItemModel> get layeritems =>
-      _layeritems; // Should return only mainlayers
+      _layeritems; //.where((item) => item.profileID== _profileProvider!.currentProfile.id).toList(); // Should return only mainlayers
   List<LayerItemModel> get sublayerItems =>
       _sublayers; // Should return only sublayers
+
+  LayersProvider() {
+    physicalKeyboardController = KeyboardController(this);
+  }
+
+  bool layerProfile(LayerItemModel layerItemModel) {
+    if (layerItemModel.profileID == _profileProvider!.currentProfile.id) {
+      return true;
+    }
+    return false;
+  }
+
+  // Set build context
+  setBuildContext(BuildContext context) {
+    _context = context;
+    notifyListeners();
+  }
+
+  List<LayerItemModel> getLayers() {
+    return _layeritems
+        .where((item) => item.profileID == _profileProvider!.currentProfile.id)
+        .toList();
+  }
+
+  // Use this to update layers when the profile changes
+  getProfileLayers() {
+    if (getLayers().isEmpty) {
+      LayerItemModel itemModel = LayerItemModel(
+          id: getTheBiggestID(),
+          profileID: _profileProvider!.currentProfile.id,
+          layerText: 'Mood',
+          icon: Icons.mood);
+
+      add(itemModel);
+
+      _modeProvider!.changeModeComponent(
+          PickerModel(
+              title: itemModel.mode!.name,
+              value: itemModel.mode!.value,
+              enabled: true,
+              icon: itemModel.mode!.icon),
+          _context!,
+          false);
+      //disableCreatingNewLayerMode();
+      changeIndex(0);
+    }
+
+    for (var item in _layeritems) {
+      if (!(item.profileID == _profileProvider!.currentProfile.id)) {
+        item.visible = false;
+      } else {
+        item.visible = true;
+      }
+    }
+
+    int index =
+        _layeritems.indexWhere((item) => getLayers().first.id == item.id);
+    changeIndex(index);
+
+    notifyListeners();
+  }
+
+  /// retrieve [_currentSublayer] only if [isSublayerSelected] is true
+  LayerItemModel? getCurrentSublayer() {
+    if (isSublayerSelected) {
+      return _currentSublayer;
+    }
+    return null;
+  }
 
   /// [getItem] retrieve the layer using the index.
   /// This is to get the layer's informations
   LayerItemModel getItem(int i) {
-    return _layeritems[i];
+    return layeritems[i];
   }
 
   /// [getItem] retrieve the layer using the index.
@@ -138,6 +192,11 @@ class LayersProvider extends ChangeNotifier {
   /// [setModeProvider] to set the mode provider to use on layers
   void setModeProvider(ModeProvider modeProvider) {
     _modeProvider = modeProvider;
+  }
+
+  /// [setModeProvider] to set the mode provider to use on layers
+  void setProfileProvider(ProfileProvider profileProvider) {
+    _profileProvider = profileProvider;
   }
 
   /// listen to any change from the tools and effects so the current layers can be updated
@@ -305,6 +364,7 @@ class LayersProvider extends ChangeNotifier {
       {bool sublayer = false}) {
     LayerItemModel duplicatedItem = LayerItemModel(
       id: (sublayer) ? getTheBiggestSubID() : getTheBiggestID(),
+      profileID: _profileProvider!.currentProfile.id,
       layerText: "Copy ${item.layerText}",
       isSublayer: sublayer,
     );
@@ -344,7 +404,7 @@ class LayersProvider extends ChangeNotifier {
 
     final item = _layeritems[_listIndex];
     item.listDisplayColor = Colors.white;
-    _layeritems[_listIndex] = item;
+    //_layeritems[_listIndex] = item;
 
     if (item.mode!.value == EnumModes.shortcut) {
       //_modeProvider!.setModeType(true);

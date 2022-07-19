@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/profiles/profiles_model.dart';
+import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/utils/constants.dart';
+import 'package:hpx/utils/datetime_util.dart';
 
 /// [ProfileProvider] allows to manage profiles
 ///
@@ -8,6 +10,7 @@ import 'package:hpx/utils/constants.dart';
 /// which allows a user to persist different customizations
 /// as different profiles, and change from one to another.
 class ProfileProvider extends ChangeNotifier {
+  LayersProvider? _layersProvider;
   final List<Profile> _profiles = [
     // init with a default profile
     Profile(
@@ -18,6 +21,10 @@ class ProfileProvider extends ChangeNotifier {
       associatedApps: [],
     )
   ];
+
+  setLayersProvider(LayersProvider layersProvider) {
+    _layersProvider = layersProvider;
+  }
 
   /// [profiles] returns the list of profile
   List<Profile> get profiles => [..._profiles];
@@ -78,10 +85,11 @@ class ProfileProvider extends ChangeNotifier {
       associatedApps: [
         ..._selectedProfile.associatedApps.map((e) => e.copyWith())
       ],
+      createdDate: DateTimeUtil.utc,
     );
 
     _profiles.add(profile);
-    _currentProfile = profile;
+    selectProfile(profile.id);
 
     notifyListeners();
   }
@@ -121,6 +129,8 @@ class ProfileProvider extends ChangeNotifier {
   /// from the list of profiles.
   void selectProfile(int id) {
     _currentProfile = profiles.firstWhere((element) => element.id == id);
+    _selectedProfile = _currentProfile;
+    _layersProvider!.getProfileLayers(); // Update layers when profile changes
     notifyListeners();
   }
 
@@ -142,9 +152,57 @@ class ProfileProvider extends ChangeNotifier {
       icon: icon,
       // use existing layers incase duplicate profile mode is active
       layers: _selectedProfile.layers,
-      associatedApps:
-          file.isEmpty ? [] : [Application(name: name, icon: icon, file: file)],
+      associatedApps: file.isEmpty
+          ? []
+          : [
+              Application(
+                  name: name,
+                  icon: icon,
+                  file: file,
+                  createdDate: DateTimeUtil.utc)
+            ],
     );
+
+    notifyListeners();
+  }
+
+  /// [sortProfiles] sorts [_profiles] by a given [SortOrder]
+  ///
+  /// e.g. [SortOrder.asc] sorts profiles by name in ascending order,
+  /// and [SortOrder.leastRecently] sorts by created date with least first.
+
+  void sortProfiles(SortOrder sortOrder) {
+    switch (sortOrder) {
+      case SortOrder.asc:
+        _profiles.sort((a, b) {
+          if (a.name == Constants.defaultText) return -1;
+          return a.name.compareTo(b.name);
+        });
+        break;
+      case SortOrder.desc:
+        _profiles.sort((a, b) {
+          if (a.name == Constants.defaultText) return -1;
+          return b.name.compareTo(a.name);
+        });
+        break;
+      case SortOrder.mostRecently:
+        _profiles.sort((a, b) {
+          if (a.createdDate == null) return -1;
+          if (b.createdDate == null) return -1;
+
+          return b.createdDate!.compareTo(a.createdDate!);
+        });
+        break;
+      case SortOrder.leastRecently:
+        _profiles.sort((a, b) {
+          if (a.createdDate == null) return -1;
+          if (b.createdDate == null) return -1;
+
+          return a.createdDate!.compareTo(b.createdDate!);
+        });
+        break;
+      default:
+    }
 
     notifyListeners();
   }
@@ -160,7 +218,62 @@ class ProfileProvider extends ChangeNotifier {
     // don't add existing app
     if (apps.any((element) => element.name == name)) return;
 
-    _systemApps.add(Application(name: name, icon: icon, file: file));
+    _systemApps.add(Application(
+        name: name, icon: icon, file: file, createdDate: DateTimeUtil.utc));
     notifyListeners();
   }
+
+  /// [sortApps] sorts [_systemApps] by a given [SortOrder]
+  ///
+  /// e.g. [SortOrder.asc] sorts apps by name in ascending order,
+  /// and [SortOrder.leastRecently] sorts by created date with least first.
+  void sortApps(SortOrder sortOrder) {
+    switch (sortOrder) {
+      case SortOrder.asc:
+        _systemApps.sort((a, b) {
+          if (a.name == Constants.defaultText) return -1;
+          return a.name.compareTo(b.name);
+        });
+        break;
+      case SortOrder.desc:
+        _systemApps.sort((a, b) {
+          if (a.name == Constants.defaultText) return -1;
+          return b.name.compareTo(a.name);
+        });
+        break;
+      case SortOrder.mostRecently:
+        _systemApps.sort((a, b) {
+          if (a.createdDate == null) return -1;
+          if (b.createdDate == null) return -1;
+
+          return b.createdDate!.compareTo(a.createdDate!);
+        });
+        break;
+      case SortOrder.leastRecently:
+        _systemApps.sort((a, b) {
+          if (a.createdDate == null) return -1;
+          if (b.createdDate == null) return -1;
+
+          return a.createdDate!.compareTo(b.createdDate!);
+        });
+        break;
+      default:
+    }
+
+    notifyListeners();
+  }
+}
+
+enum SortOrder {
+  /// [asc] sort in asending order
+  asc,
+
+  /// [desc] sort in desending order
+  desc,
+
+  /// [leastRecently] sort by least recent (applicable where date is used)
+  leastRecently,
+
+  /// [mostRecently] sort by most recent (applicable where date is used)
+  mostRecently,
 }

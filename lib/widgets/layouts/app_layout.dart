@@ -43,250 +43,263 @@ class _AppLayoutState extends State<AppLayout> {
 
   walkthroughTutorialWidget() {
     showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return SimpleDialog(
-              backgroundColor: const Color(0xff121212),
-              contentPadding: const EdgeInsets.all(0),
-              children: [
-                Container(
-                    padding: const EdgeInsets.only(top: 40, bottom: 10),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white, width: 1)),
-                    width: 900,
-                    height: 500,
-                    child: Column(children: [
-                      Text(
-                        walkthroughTitle[step],
-                        style: h1Style,
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return SimpleDialog(
+          backgroundColor: const Color(0xff121212),
+          contentPadding: const EdgeInsets.all(0),
+          children: [
+            Container(
+              padding: const EdgeInsets.only(top: 30, bottom: 10),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.white, width: 1)),
+              width: 900,
+              height: 500,
+              child: Column(
+                children: [
+                  Text(
+                    walkthroughTitle[step],
+                    style: h1Style,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 20),
+                    padding: const EdgeInsets.only(left: 50, right: 50),
+                    child: Text(
+                      walkthroughDesc[step],
+                      style: const TextStyle(
+                          fontSize: 14, height: 1.5, color: Colors.white),
+                    ),
+                  ),
+                  Container(
+                    width: 600,
+                    height: 250,
+                    margin: const EdgeInsets.only(top: 40, bottom: 10),
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: Svg('assets/images/walkthrough_image.svg'),
+                        fit: BoxFit.cover,
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        padding: const EdgeInsets.only(left: 50, right: 50),
-                        child: Text(
-                          walkthroughDesc[step],
-                          style: const TextStyle(
-                              fontSize: 14, height: 1.5, color: Colors.white),
-                        ),
-                      ),
-                      Container(
-                        width: 200,
-                        height: 200,
-                        margin: const EdgeInsets.only(top: 40, bottom: 10),
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: Svg('assets/images/walkthrough_image.svg'),
-                            fit: BoxFit.cover,
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 20),
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    step -= 1;
+                                  });
+                                  Navigator.of(context).pop();
+                                  if (step < 0) {
+                                    generateDialogTutorial();
+                                  }
+                                  if (step >= 0) {
+                                    walkthroughTutorialWidget();
+                                  }
+                                },
+                                style: textBtnStyleWhite,
+                                child: SizedBox(
+                                  height: 40,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text('Previous'))
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 60),
-                        padding: const EdgeInsets.only(left: 20, right: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  TextButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          step -= 1;
-                                        });
-                                        Navigator.of(context).pop();
-                                        if (step < 0) {
-                                          generateDialogTutorial();
-                                        }
-                                        if (step >= 0) {
-                                          walkthroughTutorialWidget();
-                                        }
-                                      },
-                                      style: textBtnStyleWhite,
-                                      child: SizedBox(
-                                          height: 40,
-                                          child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: const [
-                                                Padding(
-                                                    padding:
-                                                        EdgeInsets.all(8.0),
-                                                    child: Text('Previous'))
-                                              ]))),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              flex: 3,
-                              child: Container(),
-                            ),
-                            Expanded(
-                              flex: 1,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  TextButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          step += 1;
-                                        });
-                                        Navigator.of(context).pop();
-                                        if (step < 4) {
-                                          walkthroughTutorialWidget();
-                                        }
-                                      },
-                                      style: textBtnStyleWhite,
-                                      child: SizedBox(
-                                          height: 40,
-                                          child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: const [
-                                                Padding(
-                                                    padding:
-                                                        EdgeInsets.all(8.0),
-                                                    child: Text('Next'))
-                                              ]))),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              flex: 1,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      style: textBtnStyleBlack,
-                                      child: SizedBox(
-                                          height: 40,
-                                          child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: const [
-                                                Padding(
-                                                    padding:
-                                                        EdgeInsets.all(8.0),
-                                                    child:
-                                                        Text('Skip Tutorial'))
-                                              ]))),
-                                ],
-                              ),
-                            ),
-                          ],
+                        Expanded(
+                          flex: 3,
+                          child: Container(),
                         ),
-                      ),
-                    ]))
-              ]);
-        });
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    step += 1;
+                                  });
+                                  Navigator.of(context).pop();
+                                  if (step < 5) {
+                                    walkthroughTutorialWidget();
+                                  }
+                                },
+                                style: textBtnStyleWhite,
+                                child: SizedBox(
+                                  height: 40,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text('Next'))
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                style: textBtnStyleBlack,
+                                child: SizedBox(
+                                  height: 40,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text('Skip Tutorial'))
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        );
+      },
+    );
   }
 
   generateDialogTutorial() {
     showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return SimpleDialog(
-              backgroundColor: const Color(0xff121212),
-              contentPadding: const EdgeInsets.all(0),
-              children: [
-                Container(
-                    padding: const EdgeInsets.only(top: 40, bottom: 10),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.white, width: 1)),
-                    width: 900,
-                    height: 500,
-                    child: Column(children: [
-                      Text(
-                        'Welcome to Z Light Space',
-                        style: h1Style,
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 20),
-                      ),
-                      Text(
-                        'Personalize your workspace lightning to enhance your creative workflow',
-                        style: pStyle,
-                      ),
-                      Container(
-                        width: 200,
-                        height: 200,
-                        margin: const EdgeInsets.only(top: 70, bottom: 10),
-                        child: Image.asset(
-                          Constants.zLightIconPng,
-                          height: 200,
-                          width: 200,
-                        ),
-                      ),
-                      Container(
-                        width: 250,
-                        margin: const EdgeInsets.only(top: 50),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  TextButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          step = 0;
-                                        });
-                                        Navigator.of(context).pop();
-                                        walkthroughTutorialWidget();
-                                      },
-                                      style: textBtnStyleWhite,
-                                      child: SizedBox(
-                                          height: 40,
-                                          child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: const [
-                                                Padding(
-                                                    padding:
-                                                        EdgeInsets.all(8.0),
-                                                    child: Text('Lets Go'))
-                                              ]))),
-                                ],
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return SimpleDialog(
+          backgroundColor: const Color(0xff121212),
+          contentPadding: const EdgeInsets.all(0),
+          children: [
+            Container(
+              padding: const EdgeInsets.only(top: 40, bottom: 10),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.white, width: 1)),
+              width: 900,
+              height: 500,
+              child: Column(
+                children: [
+                  Text(
+                    'Welcome to Z Light Space',
+                    style: h1Style,
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 20),
+                  ),
+                  Text(
+                    'Personalize your workspace lightning to enhance your creative workflow',
+                    style: pStyle,
+                  ),
+                  Container(
+                    width: 200,
+                    height: 200,
+                    margin: const EdgeInsets.only(top: 70, bottom: 10),
+                    child: Image.asset(
+                      Constants.zLightIconPng,
+                      height: 200,
+                      width: 200,
+                    ),
+                  ),
+                  Container(
+                    width: 250,
+                    margin: const EdgeInsets.only(top: 50),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    step = 0;
+                                  });
+                                  Navigator.of(context).pop();
+                                  walkthroughTutorialWidget();
+                                },
+                                style: textBtnStyleWhite,
+                                child: SizedBox(
+                                  height: 40,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text('Lets Go'))
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: [
-                                  TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      style: textBtnStyleBlack,
-                                      child: SizedBox(
-                                          height: 40,
-                                          child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: const [
-                                                Padding(
-                                                    padding:
-                                                        EdgeInsets.all(8.0),
-                                                    child:
-                                                        Text('Skip Tutorial'))
-                                              ]))),
-                                ],
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ])),
-              ]);
-        });
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                style: textBtnStyleBlack,
+                                child: SizedBox(
+                                  height: 40,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text('Skip Tutorial'))
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   // this function creates the dialog width for the help icons
@@ -296,81 +309,67 @@ class _AppLayoutState extends State<AppLayout> {
     final contacProvider =
         Provider.of<ContactSupportWidgetProvider>(context, listen: false);
     showDialog(
-        context: context,
-        builder: (context) {
-          return SimpleDialog(
-            insetPadding: EdgeInsets.only(
-                bottom: 90, left: MediaQuery.of(context).size.width * 0.03),
-            backgroundColor: Colors.white,
-            alignment: Alignment.bottomLeft,
-            children: <Widget>[
-              Container(
-                width: 150,
-                padding: const EdgeInsets.only(left: 20.0),
-                height: 40,
-                child: InkWell(
-                  onTap: () {
-                    tutorialProvider.showTutorialTooltip(
-                        tipToShow: Constants.app);
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text(
-                    'Launch Tutorial',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700),
-                  ),
-                ),
+      context: context,
+      builder: (context) {
+        return SimpleDialog(
+          insetPadding: EdgeInsets.only(
+              bottom: 90, left: MediaQuery.of(context).size.width * 0.03),
+          backgroundColor: Colors.white,
+          alignment: Alignment.bottomLeft,
+          children: <Widget>[
+            SimpleDialogOption(
+              onPressed: () {
+                tutorialProvider.showTutorialTooltip(tipToShow: Constants.app);
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                'Launch Tutorial',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700),
               ),
-              Container(
-                width: 150,
-                padding: const EdgeInsets.only(left: 20.0),
-                height: 40,
-                child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop();
-                    generateDialogTutorial();
-                  },
-                  child: const Text(
-                    'Reset Onboarding',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700),
-                  ),
-                ),
+            ),
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.of(context).pop();
+                generateDialogTutorial();
+              },
+              child: const Text(
+                'Reset Onboarding',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700),
               ),
-              Container(
-                width: 150,
-                padding: const EdgeInsets.only(left: 20.0),
-                height: 40,
-                child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      contacProvider.showContactOptionsDialog(context);
-                    },
-                    child: const Text('Visit Support Page',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700))),
+            ),
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.of(context).pop();
+                contacProvider.showContactOptionsDialog(context);
+              },
+              child: const Text(
+                'Visit Support Page',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700),
               ),
-              Container(
-                width: 150,
-                padding: const EdgeInsets.only(left: 20.0),
-                height: 40,
-                child: const Text(
-                  'Request Help',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700),
-                ),
+            ),
+            SimpleDialogOption(
+              onPressed: () {},
+              child: const Text(
+                'Request Help',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700),
               ),
-            ],
-          );
-        });
+            )
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -420,37 +419,39 @@ class _AppLayoutState extends State<AppLayout> {
           ],
         ),
         actions: [
-          Wrap(children: [
-            CustomToolTip(
-              height: 100,
-              tooltipController: tutorialProvider.tooltipControllerProfile,
-              title: Constants.selectedProfile,
-              description:
-                  'You can presave a lot of customizations as profiles for later use',
-              btn1Txt: Constants.close,
-              btn2Txt: Constants.next,
-              btn1Pressed: () {
-                tutorialProvider.showTutorialTooltip(
-                    tipToShow: Constants.light);
-                tutorialProvider.hideTutorialTooltip(
-                    tipToHide: Constants.profile);
-              },
-              btn2Pressed: () {
-                tutorialProvider.hideTutorialTooltip(
-                    tipToHide: Constants.profile);
-                tutorialProvider.showTutorialTooltip(
-                    tipToShow: Constants.highlight);
-              },
-              widget: Container(
-                margin: const EdgeInsets.only(top: 23, right: 30),
-                child: Text(
-                  Constants.selectedProfile,
-                  textAlign: TextAlign.left,
-                  style: h5Style,
+          Wrap(
+            children: [
+              CustomToolTip(
+                height: 100,
+                tooltipController: tutorialProvider.tooltipControllerProfile,
+                title: Constants.selectedProfile,
+                description:
+                    'You can presave a lot of customizations as profiles for later use',
+                btn1Txt: Constants.close,
+                btn2Txt: Constants.next,
+                btn1Pressed: () {
+                  tutorialProvider.showTutorialTooltip(
+                      tipToShow: Constants.light);
+                  tutorialProvider.hideTutorialTooltip(
+                      tipToHide: Constants.profile);
+                },
+                btn2Pressed: () {
+                  tutorialProvider.hideTutorialTooltip(
+                      tipToHide: Constants.profile);
+                  tutorialProvider.showTutorialTooltip(
+                      tipToShow: Constants.highlight);
+                },
+                widget: Container(
+                  margin: const EdgeInsets.only(top: 23, right: 30),
+                  child: Text(
+                    Constants.selectedProfile,
+                    textAlign: TextAlign.left,
+                    style: h5Style,
+                  ),
                 ),
               ),
-            ),
-          ]),
+            ],
+          ),
           const Padding(
             padding: EdgeInsets.all(4.0),
             child: ProfileDropdown(),
@@ -500,17 +501,17 @@ class _AppLayoutState extends State<AppLayout> {
             ),
           ),
           Expanded(
-              child: Column(
-            children: [
-              AppBar(
-                toolbarHeight: 70.0,
-                backgroundColor: const Color(0xff1E1E1E),
-                bottomOpacity: 0.0,
-                elevation: 0.0,
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    CustomToolTip(
+            child: Column(
+              children: [
+                AppBar(
+                  toolbarHeight: 70.0,
+                  backgroundColor: const Color(0xff1E1E1E),
+                  bottomOpacity: 0.0,
+                  elevation: 0.0,
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      CustomToolTip(
                         height: 100,
                         tooltipController:
                             tutorialProvider.tooltipControllerWorkSpace,
@@ -540,65 +541,69 @@ class _AppLayoutState extends State<AppLayout> {
                               backgroundColor: Colors.transparent,
                               textStyle: h5Style),
                           child: Stack(
-                              alignment: Alignment.topCenter,
-                              fit: StackFit.passthrough,
-                              children: [
-                                const Positioned(
-                                    top: 10, child: Text(Constants.workspace)),
-                                Container(
-                                    height: 2,
-                                    margin: const EdgeInsets.only(top: 40.0),
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                          colors: workspaceProvider
-                                                      .isWorkspaceView ==
-                                                  false
-                                              ? [
-                                                  Colors.transparent,
-                                                  Colors.transparent
-                                                ]
-                                              : [
-                                                  Colors.lightBlue,
-                                                  Colors.blue.shade900,
-                                                  Colors.purple
-                                                ]),
-                                    ))
-                              ]),
+                            alignment: Alignment.topCenter,
+                            fit: StackFit.passthrough,
+                            children: [
+                              const Positioned(
+                                  top: 10, child: Text(Constants.workspace)),
+                              Container(
+                                height: 2,
+                                margin: const EdgeInsets.only(top: 40.0),
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: workspaceProvider.isWorkspaceView ==
+                                            false
+                                        ? [
+                                            Colors.transparent,
+                                            Colors.transparent
+                                          ]
+                                        : [
+                                            Colors.lightBlue,
+                                            Colors.blue.shade900,
+                                            Colors.purple
+                                          ],
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
                           onPressed: () {
                             workspaceProvider
                                 .toggleView(WorkspaceView.workspace);
                           },
-                        )),
-                    CustomToolTip(
-                      height: 115,
-                      tooltipController:
-                          tutorialProvider.tooltipControllerLight,
-                      title: Constants.lightingOptions,
-                      description:
-                          'Our lighting option allows you full customization of your keyboard with a dazzling stack of ama- zing effects to help your productivity',
-                      btn1Txt: Constants.close,
-                      btn2Txt: Constants.next,
-                      btn1Pressed: () {
-                        tutorialProvider.showTutorialTooltip(
-                            tipToShow: Constants.workspace);
-                        tutorialProvider.hideTutorialTooltip(
-                            tipToHide: Constants.light);
-                      },
-                      btn2Pressed: () {
-                        tutorialProvider.hideTutorialTooltip(
-                            tipToHide: Constants.light);
-                        tutorialProvider.showTutorialTooltip(
-                            tipToShow: Constants.profile);
-                      },
-                      widget: TextButton(
-                        style: TextButton.styleFrom(
+                        ),
+                      ),
+                      CustomToolTip(
+                        height: 115,
+                        tooltipController:
+                            tutorialProvider.tooltipControllerLight,
+                        title: Constants.lightingOptions,
+                        description:
+                            'Our lighting option allows you full customization of your keyboard with a dazzling stack of ama- zing effects to help your productivity',
+                        btn1Txt: Constants.close,
+                        btn2Txt: Constants.next,
+                        btn1Pressed: () {
+                          tutorialProvider.showTutorialTooltip(
+                              tipToShow: Constants.workspace);
+                          tutorialProvider.hideTutorialTooltip(
+                              tipToHide: Constants.light);
+                        },
+                        btn2Pressed: () {
+                          tutorialProvider.hideTutorialTooltip(
+                              tipToHide: Constants.light);
+                          tutorialProvider.showTutorialTooltip(
+                              tipToShow: Constants.profile);
+                        },
+                        widget: TextButton(
+                          style: TextButton.styleFrom(
                             fixedSize: const Size(150, 50),
                             primary: workspaceProvider.isLightingView
                                 ? Colors.white
                                 : Colors.grey,
                             backgroundColor: Colors.transparent,
-                            textStyle: h5Style),
-                        child: Stack(
+                            textStyle: h5Style,
+                          ),
+                          child: Stack(
                             alignment: Alignment.topCenter,
                             fit: StackFit.passthrough,
                             children: [
@@ -610,32 +615,35 @@ class _AppLayoutState extends State<AppLayout> {
                                 margin: const EdgeInsets.only(top: 40.0),
                                 decoration: BoxDecoration(
                                   gradient: LinearGradient(
-                                      colors: workspaceProvider
-                                                  .isLightingView ==
-                                              false
-                                          ? [
-                                              Colors.transparent,
-                                              Colors.transparent
-                                            ]
-                                          : [
-                                              Colors.lightBlue,
-                                              Colors.blue.shade900,
-                                              Colors.purple
-                                            ]),
+                                    colors: workspaceProvider.isLightingView ==
+                                            false
+                                        ? [
+                                            Colors.transparent,
+                                            Colors.transparent
+                                          ]
+                                        : [
+                                            Colors.lightBlue,
+                                            Colors.blue.shade900,
+                                            Colors.purple
+                                          ],
+                                  ),
                                 ),
                               )
-                            ]),
-                        onPressed: () {
-                          workspaceProvider.toggleView(WorkspaceView.lighting);
-                        },
+                            ],
+                          ),
+                          onPressed: () {
+                            workspaceProvider
+                                .toggleView(WorkspaceView.lighting);
+                          },
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              const Wrapper(),
-            ],
-          ))
+                const Wrapper(),
+              ],
+            ),
+          )
         ],
       ),
     );
