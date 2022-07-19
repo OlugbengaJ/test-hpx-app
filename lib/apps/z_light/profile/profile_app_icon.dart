@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/src/utilities/file.dart' as file;
 import 'package:hpx/utils/constants.dart';
 
 class AppIcon extends StatelessWidget {
@@ -23,7 +24,7 @@ class AppIcon extends StatelessWidget {
 
     if (iconPath.toLowerCase().endsWith('.svg')) {
       return SvgPicture.file(
-        File(iconPath),
+        file.File(iconPath),
         width: size,
         height: size,
       );
