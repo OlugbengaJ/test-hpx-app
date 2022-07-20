@@ -2,6 +2,7 @@ class Constants {
   // images
   static const String backdropImage = 'assets/images/backdrop.png';
   static const String walkthroughImage = 'assets/images/walkthrough_image.svg';
+  static const String walkthroughImagePng = 'assets/images/walkthrough.png';
   static const String zLightIconPng = 'assets/images/zlight_icon.png';
   static const String zLightIconJpg = 'assets/images/zlight_icon.jpg';
   static const String zLightIconSvg = 'assets/images/zlight_icon.svg';

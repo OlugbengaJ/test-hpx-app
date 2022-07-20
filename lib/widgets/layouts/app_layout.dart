@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/profile/profile_dropdown.dart';
 import 'package:hpx/apps/z_light/wrapper.dart';
@@ -12,7 +13,6 @@ import 'package:hpx/providers/tutorial_provider/tutorial_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/theme.dart';
-import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 
@@ -75,10 +75,10 @@ class _AppLayoutState extends State<AppLayout> {
                     width: 600,
                     height: 250,
                     margin: const EdgeInsets.only(top: 40, bottom: 10),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: Svg(Constants.backdropImage),
-                        fit: BoxFit.cover,
+                        image: Image.asset(Constants.walkthroughImagePng).image,
+                        fit: BoxFit.contain,
                       ),
                     ),
                   ),
@@ -414,12 +414,8 @@ class _AppLayoutState extends State<AppLayout> {
                 margin: const EdgeInsets.only(top: 5),
                 width: 123,
                 height: 50,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: Svg(Constants.zLightLogoSvg),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                child: SvgPicture.memory(
+                    File(Constants.zLightLogoSvg).readAsBytesSync()),
               ),
             ),
           ],
