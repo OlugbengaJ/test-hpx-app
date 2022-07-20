@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hpx/apps/z_light/app_enum.dart';
 import 'package:hpx/apps/z_light/profile/profile_dropdown.dart';
 import 'package:hpx/apps/z_light/wrapper.dart';
@@ -12,7 +13,6 @@ import 'package:hpx/providers/tutorial_provider/tutorial_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/theme.dart';
-import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:provider/provider.dart';
 
@@ -75,10 +75,10 @@ class _AppLayoutState extends State<AppLayout> {
                     width: 600,
                     height: 250,
                     margin: const EdgeInsets.only(top: 40, bottom: 10),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: Svg('assets/images/walkthrough_image.svg'),
-                        fit: BoxFit.cover,
+                        image: Image.asset(Constants.walkthroughImagePng).image,
+                        fit: BoxFit.contain,
                       ),
                     ),
                   ),
@@ -113,8 +113,9 @@ class _AppLayoutState extends State<AppLayout> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: const [
                                       Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Text('Previous'))
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Text('Previous'),
+                                      )
                                     ],
                                   ),
                                 ),
@@ -148,8 +149,9 @@ class _AppLayoutState extends State<AppLayout> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: const [
                                       Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Text('Next'))
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Text('Next'),
+                                      )
                                     ],
                                   ),
                                 ),
@@ -173,8 +175,9 @@ class _AppLayoutState extends State<AppLayout> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: const [
                                       Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Text('Skip Tutorial'))
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Text('Skip Tutorial'),
+                                      )
                                     ],
                                   ),
                                 ),
@@ -206,7 +209,8 @@ class _AppLayoutState extends State<AppLayout> {
             Container(
               padding: const EdgeInsets.only(top: 40, bottom: 10),
               decoration: BoxDecoration(
-                  border: Border.all(color: Colors.white, width: 1)),
+                border: Border.all(color: Colors.white, width: 1),
+              ),
               width: 900,
               height: 500,
               child: Column(
@@ -219,7 +223,7 @@ class _AppLayoutState extends State<AppLayout> {
                     margin: const EdgeInsets.only(top: 20),
                   ),
                   Text(
-                    'Personalize your workspace lightning to enhance your creative workflow',
+                    'Personalize your workspace lighting to enhance your creative workflow',
                     style: pStyle,
                   ),
                   Container(
@@ -257,8 +261,9 @@ class _AppLayoutState extends State<AppLayout> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: const [
                                       Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Text('Lets Go'))
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Text('Lets Go'),
+                                      )
                                     ],
                                   ),
                                 ),
@@ -281,8 +286,9 @@ class _AppLayoutState extends State<AppLayout> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: const [
                                       Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Text('Skip Tutorial'))
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Text('Skip Tutorial'),
+                                      )
                                     ],
                                   ),
                                 ),
@@ -391,9 +397,9 @@ class _AppLayoutState extends State<AppLayout> {
             CustomToolTip(
               height: 140,
               tooltipController: tutorialProvider.tooltipController,
-              title: 'Take a quick tour of your Z Light space application',
+              title: 'Take a quick tour of your Z Light Space application',
               description:
-                  'See how to customize your physical keyboard using the Z Light space app based on your mood, preferences and more',
+                  'See how to customize your physical keyboard using the Z Light Space app based on your mood, preferences and more',
               btn1Txt: Constants.close,
               btn2Txt: Constants.next,
               btn1Pressed: () {
@@ -408,12 +414,8 @@ class _AppLayoutState extends State<AppLayout> {
                 margin: const EdgeInsets.only(top: 5),
                 width: 123,
                 height: 50,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: Svg(Constants.zLightLogoSvg),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                child: SvgPicture.memory(
+                    File(Constants.zLightLogoSvg).readAsBytesSync()),
               ),
             ),
           ],

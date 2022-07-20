@@ -6,24 +6,31 @@ class AppListTile extends StatelessWidget {
     Key? key,
     required this.name,
     required this.icon,
+    required this.selected,
     required this.tapHandler,
   }) : super(key: key);
 
   final String name;
   final String icon;
+  final bool selected;
   final VoidCallback tapHandler;
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+
     return Container(
       margin: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.white, width: 1),
+        border: Border.all(
+          color: selected ? Colors.white : themeData.disabledColor,
+          width: 1,
+        ),
       ),
       child: ListTile(
         onTap: tapHandler,
         leading: AppIcon(
-          icon: icon,
+          iconPath: icon,
           size: 40.0,
         ),
         title: Text(name),

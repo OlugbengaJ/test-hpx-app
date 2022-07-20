@@ -5,6 +5,7 @@ import 'package:hpx/apps/z_light/workspace/widgets/round_button.dart';
 import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/utils/constants.dart';
 import 'package:hpx/utils/os_file_utility.dart';
+import 'package:hpx/widgets/components/dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -137,7 +138,7 @@ Future<void> profileListDialog(
                             child: Consumer<ProfileProvider>(
                               builder: (_, provider, __) {
                                 return AppIcon(
-                                    icon: provider.selectedProfile.icon);
+                                    iconPath: provider.selectedProfile.icon);
                               },
                             ),
                           ),
@@ -165,12 +166,18 @@ Future<void> profileListDialog(
                                 keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
                                   border: const OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.zero),
-                                      borderSide: BorderSide.none),
+                                    borderRadius: BorderRadius.all(Radius.zero),
+                                    borderSide: BorderSide.none,
+                                  ),
                                   fillColor: Theme.of(context).primaryColor,
                                   filled: true,
                                   contentPadding: const EdgeInsets.all(0),
+                                  enabled: provider.allowEdit,
+                                ),
+                                style: TextStyle(
+                                  color: provider.allowEdit
+                                      ? Colors.white
+                                      : Theme.of(context).disabledColor,
                                 ),
                                 textAlign: TextAlign.center,
                               ),
@@ -249,7 +256,6 @@ Future<void> profileListDialog(
                                     InkWell(
                                       child: Container(
                                         height: 28,
-                                        width: 120,
                                         decoration: BoxDecoration(
                                           border: Border.all(
                                               color: Colors.white, width: 1),
@@ -257,12 +263,30 @@ Future<void> profileListDialog(
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
-                                          children: const [
-                                            Padding(
-                                              padding: EdgeInsets.all(4),
-                                              child: Text('A - Z'),
+                                          children: [
+                                            Consumer<ProfileProvider>(
+                                              builder:
+                                                  (context, provider, child) =>
+                                                      DropDown<SortOption>(
+                                                dropdownValue: provider.appSort,
+                                                hint: 'Sort',
+                                                items: [
+                                                  ...provider.sortOptions.map(
+                                                    (e) => DropdownMenuItem<
+                                                        SortOption>(
+                                                      value: e,
+                                                      child: Text(e.title),
+                                                    ),
+                                                  )
+                                                ],
+                                                onChangedHandler: (o) {
+                                                  if (o != null) {
+                                                    provider
+                                                        .sortApps(o.sortOrder);
+                                                  }
+                                                },
+                                              ),
                                             ),
-                                            Icon(Icons.arrow_drop_down)
                                           ],
                                         ),
                                       ),
@@ -297,6 +321,9 @@ Future<void> profileListDialog(
                                               return AppListTile(
                                                 name: provider.apps[index].name,
                                                 icon: provider.apps[index].icon,
+                                                selected:
+                                                    provider.apps[index].name ==
+                                                        provider.selectedApp,
                                                 tapHandler: () {
                                                   provider
                                                       .updateSelectedProfile(

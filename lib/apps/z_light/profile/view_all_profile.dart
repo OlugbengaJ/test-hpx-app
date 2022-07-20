@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/apps/z_light/profile/profile_app_icon.dart';
 import 'package:hpx/apps/z_light/profile/profile_list_dialog.dart';
 import 'package:hpx/models/apps/zlightspace_models/profiles/profiles_model.dart';
 import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/utils/constants.dart';
+import 'package:hpx/widgets/components/dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -73,78 +75,82 @@ Future<void> confirmDeleteProfileDialog(BuildContext context) async {
         children: <Widget>[
           Container(
             padding: const EdgeInsets.only(top: 40, bottom: 10),
-            child: Column(children: [
-              Text(
-                'Delete ${editingProfile!.name} profile?',
-                style: h4Style,
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 20),
-              ),
-              Container(
-                width: 250,
-                margin: const EdgeInsets.only(top: 50),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            style: textBtnStyleWhite,
-                            child: SizedBox(
-                              height: 40,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text('Cancel'),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: Container(),
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          TextButton(
-                            onPressed: () {
-                              profileProvider.deleteProfile(editingProfile!.id);
-                              Navigator.of(context).pop();
-                            },
-                            style: textBtnStyleBlack,
-                            child: SizedBox(
-                              height: 40,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text('Delete'))
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+            child: Column(
+              children: [
+                Text(
+                  'Delete ${editingProfile!.name} profile?',
+                  style: h4Style,
                 ),
-              ),
-            ]),
+                Container(
+                  margin: const EdgeInsets.only(top: 20),
+                ),
+                Container(
+                  width: 250,
+                  margin: const EdgeInsets.only(top: 50),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              style: textBtnStyleWhite,
+                              child: SizedBox(
+                                height: 40,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text('Cancel'),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Container(),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            TextButton(
+                              onPressed: () {
+                                profileProvider
+                                    .deleteProfile(editingProfile!.id);
+                                Navigator.of(context).pop();
+                              },
+                              style: textBtnStyleBlack,
+                              child: SizedBox(
+                                height: 40,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text('Delete'),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       );
@@ -201,6 +207,7 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
+                      margin: EdgeInsets.zero,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -268,10 +275,11 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                     height: 28,
                                     width: 141,
                                     decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: Colors.white, width: 1),
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(4)),
+                                      border: Border.all(
+                                          color: Colors.white, width: 1),
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
                                     child: MouseRegion(
                                       cursor: SystemMouseCursors.click,
                                       child: GestureDetector(
@@ -303,6 +311,7 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Container(
+                                  margin: EdgeInsets.zero,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -313,6 +322,7 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                             "Auto profile switching"),
                                       ),
                                       Container(
+                                        margin: EdgeInsets.zero,
                                         height: 28,
                                         child: ToggleSwitch(
                                           minWidth: 50,
@@ -341,7 +351,6 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                             InkWell(
                               child: Container(
                                 height: 28,
-                                width: 82,
                                 decoration: BoxDecoration(
                                   border:
                                       Border.all(color: Colors.white, width: 1),
@@ -349,12 +358,32 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-                                  children: const [
-                                    Padding(
-                                      padding: EdgeInsets.all(2),
-                                      child: Text("A - Z"),
+                                  children: [
+                                    Consumer<ProfileProvider>(
+                                      builder: (context, provider, child) =>
+                                          DropDown<SortOption>(
+                                        dropdownValue: provider.profileSort,
+                                        hint: 'Sort',
+                                        items: [
+                                          ...provider.sortOptions.map(
+                                            (e) => DropdownMenuItem<SortOption>(
+                                              value: e,
+                                              child: Text(e.title),
+                                            ),
+                                          )
+                                        ],
+                                        onChangedHandler: (o) {
+                                          if (o != null) {
+                                            provider.sortProfiles(o.sortOrder);
+                                          }
+                                        },
+                                      ),
                                     ),
-                                    Icon(Icons.arrow_drop_down)
+                                    // Padding(
+                                    //   padding: EdgeInsets.all(2),
+                                    //   child: Text("A - Z"),
+                                    // ),
+                                    // Icon(Icons.arrow_drop_down)
                                   ],
                                 ),
                               ),
@@ -395,12 +424,10 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceAround,
                                         children: [
-                                          const SizedBox(
-                                            width: 20,
-                                          ),
-                                          Image.asset(
-                                            Constants.zlightIcon,
-                                            height: 60,
+                                          const SizedBox(width: 20),
+                                          AppIcon(
+                                            iconPath: profile.icon,
+                                            size: 60,
                                           ),
                                           Column(
                                             children: [
@@ -473,7 +500,9 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                 children: const [
                                   Text(
                                     Constants.done,
-                                    style: TextStyle(color: Color(0xFF212121)),
+                                    style: TextStyle(
+                                      color: Color(0xFF212121),
+                                    ),
                                   ),
                                 ],
                               ),

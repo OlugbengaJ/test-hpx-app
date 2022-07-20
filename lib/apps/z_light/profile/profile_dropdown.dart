@@ -82,7 +82,7 @@ class _ProfileDropdownState extends State<ProfileDropdown> {
                                 onTap: () => provider.selectProfile(e.id),
                                 child: Row(
                                   children: [
-                                    AppIcon(icon: e.icon, size: 16),
+                                    AppIcon(iconPath: e.icon, size: 16),
                                     Container(
                                       padding: const EdgeInsets.only(left: 8),
                                       child: Text(e.name),
@@ -181,7 +181,7 @@ class _ProfileDropdownState extends State<ProfileDropdown> {
                 builder: (_, provider, __) {
                   return Row(
                     children: [
-                      AppIcon(icon: provider.currentProfile.icon, size: 16),
+                      AppIcon(iconPath: provider.currentProfile.icon, size: 16),
                       Container(
                         padding: const EdgeInsets.only(left: 8),
                         child: Text(provider.currentProfile.name),

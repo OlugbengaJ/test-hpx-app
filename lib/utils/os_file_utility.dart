@@ -151,11 +151,16 @@ class OSFileUtility {
     if (!f.existsSync()) {
       // icon not found; find it from other dir based on dimentions mxn.
       // e.g. /usr/share/icons/hicolor/48x48/apps
+      // Flatpak apps: /var/lib/flatpak/exports/share/applications/
+      // Snap apps: /var/lib/snapd/desktop/applications/
+      // Wine: ~/.local/share/applications/wine/Programs/
       final List<String> iconDirs = [
-        '/usr/share/icons/hicolor',
         '/usr/share/icons/Humanity',
-        '/usr/share/icons/gnome',
         '/usr/share/icons/Yaru',
+        '/usr/share/icons/gnome',
+        '/usr/share/icons/Adwaita',
+        '/usr/share/icons/HighContrast',
+        '/usr/share/icons/hicolor',
         '/usr/share/pixmaps',
       ];
 
@@ -170,13 +175,13 @@ class OSFileUtility {
           for (var f in fileList) {
             if (f.path.contains('16x16') ||
                 f.path.contains('22x22') ||
-                f.path.contains('24x24') ||
-                f.path.contains('scalable')) {
+                f.path.contains('24x24')) {
               // exclude low resolution icons
               continue;
             }
 
-            if (f.path.contains('$path.png') || f.path.contains('$path.jpg')) {
+            if (f.path.contains(RegExp('${path!}(.*).(jpg|png|svg)'))) {
+              debugPrint('icon => $path \tfilePath => ${f.path}');
               path = f.path;
               iconFound = true;
 
