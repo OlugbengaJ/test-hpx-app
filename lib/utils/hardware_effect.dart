@@ -553,14 +553,6 @@ class SupportContactEffect extends HardwareEffect {
   }
 
   run() {
-    window.onKeyData = keyEventListener;
-  }
 
-  bool keyEventListener(KeyData data) {
-    if (data.type == KeyEventType.up && data.physical == 0x70045) {
-      _layersProvider.modeProvider?.activateContactSupportDialog();
-      return true;
-    }
-    return false;
   }
 }

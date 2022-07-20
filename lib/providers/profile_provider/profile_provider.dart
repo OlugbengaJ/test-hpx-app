@@ -1,9 +1,19 @@
+import 'dart:convert';
+import 'dart:io' as io;
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/profiles/profiles_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/utils/constants.dart';
 import 'package:hpx/utils/datetime_util.dart';
+
+import 'package:hpx/utils/database_manager.dart';
+
+import '../workspace_provider.dart';
 
 /// [ProfileProvider] allows to manage profiles
 ///
@@ -12,6 +22,7 @@ import 'package:hpx/utils/datetime_util.dart';
 /// as different profiles, and change from one to another.
 class ProfileProvider extends ChangeNotifier {
   LayersProvider? _layersProvider;
+  WorkspaceProvider? _workspaceProvider;
   final List<Profile> _profiles = [
     // init with a default profile
     Profile(
@@ -20,11 +31,20 @@ class ProfileProvider extends ChangeNotifier {
       icon: '',
       layers: [],
       associatedApps: [],
+      createdDate: DateTimeUtil.utc
     )
   ];
 
+  ProfileProvider()  {
+    prePopulateProfiles();
+  }
+
   setLayersProvider(LayersProvider layersProvider) {
     _layersProvider = layersProvider;
+  }
+
+  setWorkspaceProvider(WorkspaceProvider workspaceProvider) {
+    _workspaceProvider = workspaceProvider;
   }
 
   /// [profiles] returns the list of profile
@@ -92,6 +112,7 @@ class ProfileProvider extends ChangeNotifier {
     _profiles.add(profile);
     selectProfile(profile.id);
 
+    DatabaseManager.createProfile(profile);
     notifyListeners();
   }
 
@@ -106,6 +127,7 @@ class ProfileProvider extends ChangeNotifier {
       _currentProfile = profiles.first.copyWith();
     }
 
+    DatabaseManager.deleteProfile(id);
     notifyListeners();
   }
 
@@ -167,6 +189,7 @@ class ProfileProvider extends ChangeNotifier {
             ],
     );
 
+    DatabaseManager.createProfile(_selectedProfile);
     notifyListeners();
   }
 
@@ -285,6 +308,47 @@ class ProfileProvider extends ChangeNotifier {
     const SortOption(
         title: 'Least Recently', sortOrder: SortOrder.leastRecently),
   ];
+
+  void updateCurrentProfileInDB(LayerItemModel layer) {
+    if (!_currentProfile.layers.contains(layer)) {
+      _currentProfile.layers.add(layer);
+    }
+    DatabaseManager.createProfile(currentProfile);
+  }
+
+  prePopulateProfiles() async {
+    var profilesFromDB = await DatabaseManager.getAllProfiles();
+    for (var p in profilesFromDB) {
+      _layersProvider?.layeritems.addAll(p.layers);
+      if(p.name != 'Default') _profiles.add(p);
+    }
+    notifyListeners();
+  }
+
+  Future<void> exportProfile(int id) async {
+    var p = profiles.firstWhereOrNull((element) => element.id == id);
+    String? outputFile = await FilePicker.platform.saveFile(
+        dialogTitle: 'Save Your File to desired location',
+        fileName: '${p?.name}.json');
+    try {
+      io.File returnedFile = io.File(outputFile!);
+      await returnedFile.writeAsString(jsonEncode(p?.toMap()),
+          mode: io.FileMode.write, flush: true);
+    } catch (e) {
+    }
+  }
+
+  importProfile(String filePath) {
+    File(filePath).readAsString().then((String contents) {
+      var profileJson = jsonDecode(contents);
+      profileJson['id'] = _nextId;
+      var newProfile = Profile.fromJson(profileJson);
+      _profiles.add(newProfile);
+      DatabaseManager.createProfile(newProfile);
+      notifyListeners();
+    });
+
+  }
 }
 
 enum SortOrder {

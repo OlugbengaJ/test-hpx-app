@@ -395,10 +395,7 @@ class ModeProvider extends ChangeNotifier {
   }
 
   void activateContactSupportDialog() {
-    isLost = true;
-    if (isLost == true) {
-      contacProvider.showContactOptionsDialog(appContext);
-    }
+    contacProvider.showContactOptionsDialog(appContext);
     notifyListeners();
   }
 }

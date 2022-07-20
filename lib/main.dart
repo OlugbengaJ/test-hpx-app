@@ -22,7 +22,7 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => LayersProvider()),
+        ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => ColorPickerProvider()),
         ChangeNotifierProvider(create: (_) => ModeProvider()),
         ChangeNotifierProvider(create: (_) => ShortcutWidgetProvider()),
@@ -34,7 +34,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => KeysProvider()),
         ChangeNotifierProvider(create: (context) => WorkspaceProvider()),
         ChangeNotifierProvider(create: (context) => ScrollbarProvider()),
-        ChangeNotifierProvider(create: (context) => ProfileProvider()),
+        ChangeNotifierProvider(create: (context) => LayersProvider()),
       ],
       child: const MyApp(),
     ),
