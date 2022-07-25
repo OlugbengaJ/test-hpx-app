@@ -414,8 +414,11 @@ class _AppLayoutState extends State<AppLayout> {
                 margin: const EdgeInsets.only(top: 5),
                 width: 123,
                 height: 50,
-                child: SvgPicture.memory(
-                    File(Constants.zLightLogoSvg).readAsBytesSync()),
+                child: SvgPicture.asset(
+                  Constants.zLightLogoSvg,
+                  height: 50,
+                  width: 50,
+                ),
               ),
             ),
           ],

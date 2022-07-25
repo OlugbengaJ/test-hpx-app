@@ -116,8 +116,5 @@ class LayerItemModel {
         bottom = item['bottom'],
         left = item['left'],
         right = item['right'],
-        icon = IconData(
-          item['codePoint'],
-          fontFamily: item['fontFamily'],
-        );
+        icon = IconData(item['codePoint'], fontFamily: item['fontFamily']);
 }
