@@ -11,6 +11,7 @@ import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/components/dropdown.dart';
 import 'package:hpx/widgets/components/scrollbar/custom_h_scrollbar.dart';
 import 'package:hpx/widgets/components/scrollbar/custom_v_scrollbar.dart';
+import 'package:hpx/widgets/components/scrollbar/scroll_detector.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -297,189 +298,194 @@ class _WorkspaceState extends State<Workspace>
             closeHandler: workspaceProvider.toggleStripNotification,
           ),
         Expanded(
-          child: Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(Constants.backdropImage),
-                repeat: ImageRepeat.repeat,
+          child: ScrollDetector(
+            onPointerScroll: (event) {
+              debugPrint('scrolling in view ${event.position}');
+            },
+            child: Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(Constants.backdropImage),
+                  repeat: ImageRepeat.repeat,
+                ),
               ),
-            ),
-            child: LayoutBuilder(
-              builder: (_, constraints) {
-                // set the keyboard center
-                workspaceProvider.recenter(constraints, _resetZoom);
+              child: LayoutBuilder(
+                builder: (_, constraints) {
+                  // set the keyboard center
+                  workspaceProvider.recenter(constraints, _resetZoom);
 
-                return Stack(
-                  children: [
-                    GestureDetector(
-                      behavior: HitTestBehavior.translucent,
-                      onPanDown: (details) {
-                        workspaceProvider.onPanDown(details);
-                      },
-                      onPanUpdate: (details) =>
-                          workspaceProvider.onPanUpdate(details),
-                      onPanEnd: (details) =>
-                          workspaceProvider.onPanEnd(details),
-                      onPanCancel: () => workspaceProvider.onPanClear(),
-                      child: Stack(
-                        key: workspaceStackKey,
-                        alignment: Alignment.bottomLeft,
-                        fit: StackFit.expand,
-                        children: [
-                          // Keyboard widget takes a zoom scale which is applied to all keys.
-                          // This ensures seamless zooming of the entire keyboard.
-                          Positioned(
-                            left: workspaceProvider.keyboardPosLeft,
-                            top: workspaceProvider.keyboardPosTop,
-                            // alignment: Alignment.center,
-                            child: Keyboard(zoomScale: _zoomScale),
-                          ),
-
-                          OverlaySelector(
-                            showCrossHair:
-                                workspaceProvider.isDragModeResizable,
-                            onPanDown: workspaceProvider.onPanDown,
-                            onPanUpdate: workspaceProvider.onPanUpdate,
-                            onPanEnd: workspaceProvider.onPanEnd,
-                            isVisible: workspaceProvider.selectorVisible,
-                          ),
-
-                          if (workspaceProvider.isModalNotify)
-                            ModalNotification(
-                              closeHandler: workspaceProvider.toggleModal,
-                              children: workspaceProvider.modalWidgets,
+                  return Stack(
+                    children: [
+                      GestureDetector(
+                        behavior: HitTestBehavior.translucent,
+                        onPanDown: (details) {
+                          workspaceProvider.onPanDown(details);
+                        },
+                        onPanUpdate: (details) =>
+                            workspaceProvider.onPanUpdate(details),
+                        onPanEnd: (details) =>
+                            workspaceProvider.onPanEnd(details),
+                        onPanCancel: () => workspaceProvider.onPanClear(),
+                        child: Stack(
+                          key: workspaceStackKey,
+                          alignment: Alignment.bottomLeft,
+                          fit: StackFit.expand,
+                          children: [
+                            // Keyboard widget takes a zoom scale which is applied to all keys.
+                            // This ensures seamless zooming of the entire keyboard.
+                            Positioned(
+                              left: workspaceProvider.keyboardPosLeft,
+                              top: workspaceProvider.keyboardPosTop,
+                              // alignment: Alignment.center,
+                              child: Keyboard(zoomScale: _zoomScale),
                             ),
-                        ],
-                      ),
-                    ),
 
-                    // Vertical custom scrollbar
-                    Consumer<ScrollbarProvider>(
-                        builder: (context, scrollProvider, child) {
-                      // initialize vertical scroll offset
-                      scrollProvider.initVerticalScroll(
-                          constraints,
-                          workspaceProvider.scrollOffset,
-                          _zoomValue,
-                          _zoomOutThreshold,
-                          _zoomInThreshold,
-                          reset: _resetZoom);
+                            OverlaySelector(
+                              showCrossHair:
+                                  workspaceProvider.isDragModeResizable,
+                              onPanDown: workspaceProvider.onPanDown,
+                              onPanUpdate: workspaceProvider.onPanUpdate,
+                              onPanEnd: workspaceProvider.onPanEnd,
+                              isVisible: workspaceProvider.selectorVisible,
+                            ),
 
-                      return CustomVScrollbar(
-                        top: 0,
-                        end: 0,
-                        bottom: workspaceProvider.scrollOffset,
-                        buttonSize: workspaceProvider.scrollOffset,
-                        thumbSize: scrollProvider.thumbSizeV,
-                        thumbOffset: scrollProvider.top,
-                        primaryColor: themeData.primaryColor,
-                        secondaryColor: themeData.primaryColorLight,
-                        onPanVertical: (details, name) {
-                          _resetZoom = false;
-
-                          // update scrollbar and keyboard top position
-                          final isScroll =
-                              scrollProvider.onPanVertical(details);
-                          workspaceProvider.updateKeyboardPosTop(
-                              isScroll, details, _zoomScale / _zoomScaleFactor);
-                        },
-                        onTapMinus: () {
-                          _resetZoom = false;
-
-                          final scrollDetails = scrollProvider.onTapUp();
-                          workspaceProvider.updateKeyboardPosTop(
-                              scrollDetails.scrolling,
-                              scrollDetails.details,
-                              _zoomScale / _zoomScaleFactor);
-                        },
-                        onTapPlus: () {
-                          _resetZoom = false;
-
-                          final scrollDetails = scrollProvider.onTapDown();
-                          workspaceProvider.updateKeyboardPosTop(
-                              scrollDetails.scrolling,
-                              scrollDetails.details,
-                              _zoomScale / _zoomScaleFactor);
-                        },
-                      );
-                    }),
-
-                    // Horizontal custom scrollbar
-                    Consumer<ScrollbarProvider>(
-                        builder: (context, scrollProvider, child) {
-                      // initialize horizontal scroll offset
-                      scrollProvider.initHorizontalScroll(
-                          constraints,
-                          workspaceProvider.scrollOffset,
-                          _zoomValue,
-                          _zoomOutThreshold,
-                          _zoomInThreshold,
-                          reset: _resetZoom);
-
-                      return CustomHScrollbar(
-                        start: 0,
-                        end: workspaceProvider.scrollOffset,
-                        bottom: 0,
-                        buttonSize: workspaceProvider.scrollOffset,
-                        thumbSize: scrollProvider.thumbSizeH,
-                        thumbOffset: scrollProvider.left,
-                        primaryColor: themeData.primaryColor,
-                        secondaryColor: themeData.primaryColorLight,
-                        onPanHorizontal: (details, name) {
-                          _resetZoom = false;
-
-                          // update scrollbar and keyboard left position
-                          final isScroll =
-                              scrollProvider.onPanHorizontal(details);
-                          workspaceProvider.updateKeyboardPosLeft(
-                              isScroll, details, _zoomScale / _zoomScaleFactor);
-                        },
-                        onTapMinus: () {
-                          _resetZoom = false;
-
-                          final scrollDetails = scrollProvider.onTapLeft();
-                          workspaceProvider.updateKeyboardPosLeft(
-                              scrollDetails.scrolling,
-                              scrollDetails.details,
-                              _zoomScale / _zoomScaleFactor);
-                        },
-                        onTapPlus: () {
-                          _resetZoom = false;
-
-                          final scrollDetails = scrollProvider.onTapRight();
-                          workspaceProvider.updateKeyboardPosLeft(
-                              scrollDetails.scrolling,
-                              scrollDetails.details,
-                              _zoomScale / _zoomScaleFactor);
-                        },
-                      );
-                    }),
-
-                    // zoom toolbar
-                    Positioned(
-                      bottom: workspaceProvider.scrollOffset,
-                      left: 0,
-                      right: 0,
-                      child: Center(
-                        child: ZoomToolbar(
-                          onSubmitted: zoomTextSubmitted,
-                          zoomTextController: _zoomTextCtrl,
-                          zoomInHandler: zoomIn,
-                          zoomExpandHandler: zoomExpand,
-                          zoomOutHandler: zoomOut,
-                          zoomCollapseHandler: recenterView,
-                          zoomEndHandler: zoomEnd,
+                            if (workspaceProvider.isModalNotify)
+                              ModalNotification(
+                                closeHandler: workspaceProvider.toggleModal,
+                                children: workspaceProvider.modalWidgets,
+                              ),
+                          ],
                         ),
                       ),
-                    ),
 
-                    // TODO: previous overlay location
-                  ],
-                );
-              },
+                      // Vertical custom scrollbar
+                      Consumer<ScrollbarProvider>(
+                          builder: (context, scrollProvider, child) {
+                        // initialize vertical scroll offset
+                        scrollProvider.initVerticalScroll(
+                            constraints,
+                            workspaceProvider.scrollOffset,
+                            _zoomValue,
+                            _zoomOutThreshold,
+                            _zoomInThreshold,
+                            reset: _resetZoom);
+
+                        return CustomVScrollbar(
+                          top: 0,
+                          end: 0,
+                          bottom: workspaceProvider.scrollOffset,
+                          buttonSize: workspaceProvider.scrollOffset,
+                          thumbSize: scrollProvider.thumbSizeV,
+                          thumbOffset: scrollProvider.top,
+                          primaryColor: themeData.primaryColor,
+                          secondaryColor: themeData.primaryColorLight,
+                          onPanVertical: (details, name) {
+                            _resetZoom = false;
+
+                            // update scrollbar and keyboard top position
+                            final isScroll =
+                                scrollProvider.onPanVertical(details);
+                            workspaceProvider.updateKeyboardPosTop(isScroll,
+                                details, _zoomScale / _zoomScaleFactor);
+                          },
+                          onTapMinus: () {
+                            _resetZoom = false;
+
+                            final scrollDetails = scrollProvider.onTapUp();
+                            workspaceProvider.updateKeyboardPosTop(
+                                scrollDetails.scrolling,
+                                scrollDetails.details,
+                                _zoomScale / _zoomScaleFactor);
+                          },
+                          onTapPlus: () {
+                            _resetZoom = false;
+
+                            final scrollDetails = scrollProvider.onTapDown();
+                            workspaceProvider.updateKeyboardPosTop(
+                                scrollDetails.scrolling,
+                                scrollDetails.details,
+                                _zoomScale / _zoomScaleFactor);
+                          },
+                        );
+                      }),
+
+                      // Horizontal custom scrollbar
+                      Consumer<ScrollbarProvider>(
+                          builder: (context, scrollProvider, child) {
+                        // initialize horizontal scroll offset
+                        scrollProvider.initHorizontalScroll(
+                            constraints,
+                            workspaceProvider.scrollOffset,
+                            _zoomValue,
+                            _zoomOutThreshold,
+                            _zoomInThreshold,
+                            reset: _resetZoom);
+
+                        return CustomHScrollbar(
+                          start: 0,
+                          end: workspaceProvider.scrollOffset,
+                          bottom: 0,
+                          buttonSize: workspaceProvider.scrollOffset,
+                          thumbSize: scrollProvider.thumbSizeH,
+                          thumbOffset: scrollProvider.left,
+                          primaryColor: themeData.primaryColor,
+                          secondaryColor: themeData.primaryColorLight,
+                          onPanHorizontal: (details, name) {
+                            _resetZoom = false;
+
+                            // update scrollbar and keyboard left position
+                            final isScroll =
+                                scrollProvider.onPanHorizontal(details);
+                            workspaceProvider.updateKeyboardPosLeft(isScroll,
+                                details, _zoomScale / _zoomScaleFactor);
+                          },
+                          onTapMinus: () {
+                            _resetZoom = false;
+
+                            final scrollDetails = scrollProvider.onTapLeft();
+                            workspaceProvider.updateKeyboardPosLeft(
+                                scrollDetails.scrolling,
+                                scrollDetails.details,
+                                _zoomScale / _zoomScaleFactor);
+                          },
+                          onTapPlus: () {
+                            _resetZoom = false;
+
+                            final scrollDetails = scrollProvider.onTapRight();
+                            workspaceProvider.updateKeyboardPosLeft(
+                                scrollDetails.scrolling,
+                                scrollDetails.details,
+                                _zoomScale / _zoomScaleFactor);
+                          },
+                        );
+                      }),
+
+                      // zoom toolbar
+                      Positioned(
+                        bottom: workspaceProvider.scrollOffset,
+                        left: 0,
+                        right: 0,
+                        child: Center(
+                          child: ZoomToolbar(
+                            onSubmitted: zoomTextSubmitted,
+                            zoomTextController: _zoomTextCtrl,
+                            zoomInHandler: zoomIn,
+                            zoomExpandHandler: zoomExpand,
+                            zoomOutHandler: zoomOut,
+                            zoomCollapseHandler: recenterView,
+                            zoomEndHandler: zoomEnd,
+                          ),
+                        ),
+                      ),
+
+                      // TODO: previous overlay location
+                    ],
+                  );
+                },
+              ),
             ),
           ),
-        )
+        ),
       ],
     );
   }
