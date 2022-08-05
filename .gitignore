@@ -27,7 +27,6 @@
 .flutter-plugins
 .flutter-plugins-dependencies
 .packages
-.dccache
 .pub-cache/
 .pub/
 /build/

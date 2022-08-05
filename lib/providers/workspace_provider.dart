@@ -378,12 +378,13 @@ class WorkspaceProvider with ChangeNotifier {
 
       _isPanning = true;
 
-      // call onPanUpdate which allows box zone update on click of a key.
-      // e.g. in shortcut mode
-      // if (_currentLayer?.mode?.value == EnumModes.shortcut) {
-      onPanUpdate(_panUpdateDetails!);
+      // call onPanUpdate in shortcut mode which
+      // allows box zone update on click of a key.
+      if (_currentLayer?.mode?.value == EnumModes.shortcut) {
+        onPanUpdate(_panUpdateDetails!);
+      }
 
-      // notifyListeners();
+      notifyListeners();
     }
   }
 
