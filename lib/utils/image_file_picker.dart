@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:hpx/providers/profile_provider/profile_provider.dart';
+import 'package:hpx/utils/constants.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +24,7 @@ class ImageFilePicker{
   static void openFilePicker() async {
 
     final filePickerResult = await FilePicker.platform.pickFiles(
-      dialogTitle: "Pick an image for the profile",
+      dialogTitle: Constants.pickImageProfile,
       type: FileType.image,
     );
 
@@ -33,7 +34,7 @@ class ImageFilePicker{
       // Save the file to a new location
       // TODO: Need to refactor this part
       final directory = await getApplicationDocumentsDirectory();      
-      File newFile = File("${directory.path}/${profileProvider.selectedProfile.name}.${filePickerResult.files.single.extension}");
+      File newFile = File('${directory.path}/${profileProvider.selectedProfile.name}.${filePickerResult.files.single.extension}');
       newFile.writeAsBytes(await file.readAsBytes());
 
       profileProvider.updateSelectedProfile(profileProvider.selectedProfile.name, newFile.path, "");

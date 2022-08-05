@@ -153,7 +153,7 @@ Future<void> profileListDialog(
                             child: InkWell(
                               onTap: () =>  ImageFilePicker.openFilePicker(),
                               child: const Text(
-                                'Upload a picture',
+                                Constants.uploadPicture,
                                 style: TextStyle(
                                   decoration: TextDecoration.underline,
                                 ),
@@ -252,7 +252,7 @@ Future<void> profileListDialog(
                                                 MainAxisAlignment.center,
                                             children: const [
                                               Text(
-                                                'Browse',
+                                                Constants.browse,
                                                 style: TextStyle(
                                                   color: Color(0xFF212121),
                                                 ),

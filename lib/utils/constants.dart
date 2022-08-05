@@ -23,6 +23,8 @@ class Constants {
 
   // ui labels
   static const String app = 'App';
+  static const String browse= 'Browse';
+  static const String pickImageProfile = 'Pick an image for the profile';
   static const String defaultText = 'Default';
   static const String help = 'Help';
   static const String highlight = 'Highlight';
@@ -32,6 +34,7 @@ class Constants {
   static const String resizable = 'Resizable';
   static const String selectAppTitle = 'Select Application';
   static const String selectedProfile = 'Selected Profile';
+  static const String uploadPicture = 'Upload a picture';
   static const String workspace = 'Workspace';
 
   static const double zoomFactor = 800.0;
