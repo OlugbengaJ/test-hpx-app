@@ -20,45 +20,6 @@ class ImageFilePicker{
       navigatorKeys.currentContext!,
       listen: false);
 
-  // static PicturesDirInfo? get picturesDir {
-  //   String path = '';
-
-  //   // Windows app dir info
-  //   if (isWindows) {
-  //     final dir = Directory(
-  //         'c:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs');
-
-  //     if (dir.existsSync()) {
-  //       path = dir.path;
-  //     } else {
-  //       path = Directory.current.path;
-  //     }
-
-  //     return PicturesDirInfo(
-  //       extensions: ['exe'],
-  //       initialDirectory: path,
-  //     );
-  //   }
-
-  //   // Linux app dir info
-  //   if (isLinux) {
-  //     final dir = Directory('/home/syk1k/Pictures/');
-
-  //     if (dir.existsSync()) {
-  //       path = dir.path;
-  //     } else {
-  //       path = Directory.current.path;
-  //     }
-
-  //     return PicturesDirInfo(
-  //       extensions: ['jpg'],
-  //       initialDirectory: path,
-  //     );
-  //   }
-
-  //   return null;
-  // }
-
   static void openFilePicker() async {
 
     final filePickerResult = await FilePicker.platform.pickFiles(
@@ -75,7 +36,7 @@ class ImageFilePicker{
       final directory = await getApplicationDocumentsDirectory();      
       File newFile = File("${directory.path}/${profileProvider.selectedProfile.name}.${filePickerResult.files.single.extension}");
       newFile.writeAsBytes(await file.readAsBytes());
-      //profileProvider.uploadProfilePicture(newFile.path);
+      
       profileProvider.updateSelectedProfile(profileProvider.selectedProfile.name, newFile.path, "");
 
     } else {

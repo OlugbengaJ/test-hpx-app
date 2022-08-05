@@ -23,23 +23,10 @@ class ProfileProvider extends ChangeNotifier {
     )
   ];
 
-  bool uploadingProfile = false;
-  String profileFilePath = "";
+  
 
   setLayersProvider(LayersProvider layersProvider) {
     _layersProvider = layersProvider;
-  }
-
-
-  void uploadProfilePicture(String path){
-    profileFilePath = path;
-    uploadingProfile = true;
-    notifyListeners();
-  }
-
-  void profileUploadedOrCanceled(){
-    uploadingProfile = false;
-    notifyListeners();
   }
 
   /// [profiles] returns the list of profile
