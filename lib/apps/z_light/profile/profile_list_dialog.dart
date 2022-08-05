@@ -327,10 +327,6 @@ Future<void> profileListDialog(
                                             padding: const EdgeInsets.all(2.0),
                                             itemCount: provider.apps.length,
                                             itemBuilder: (context, index) {
-                                              // return Container(
-                                              //   child: const Text("OK"),
-                                              // );
-
                                               return AppListTile(
                                                 name: provider.apps[index].name,
                                                 icon: provider.apps[index].icon,
