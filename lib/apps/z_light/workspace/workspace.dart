@@ -9,9 +9,7 @@ import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/utils/comparer.dart';
 import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/components/dropdown.dart';
-import 'package:hpx/widgets/components/scrollbar/custom_h_scrollbar.dart';
-import 'package:hpx/widgets/components/scrollbar/custom_v_scrollbar.dart';
-import 'package:hpx/widgets/components/scrollbar/scroll_detector.dart';
+import 'package:hpx/widgets/components/scrollbar/scrollbar.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
