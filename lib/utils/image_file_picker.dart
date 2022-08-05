@@ -25,7 +25,6 @@ class ImageFilePicker{
     final filePickerResult = await FilePicker.platform.pickFiles(
       dialogTitle: "Pick an image for the profile",
       type: FileType.image,
-      //initialDirectory: picturesDir!.initialDirectory,
     );
 
     if (filePickerResult != null) {
@@ -36,7 +35,7 @@ class ImageFilePicker{
       final directory = await getApplicationDocumentsDirectory();      
       File newFile = File("${directory.path}/${profileProvider.selectedProfile.name}.${filePickerResult.files.single.extension}");
       newFile.writeAsBytes(await file.readAsBytes());
-      
+
       profileProvider.updateSelectedProfile(profileProvider.selectedProfile.name, newFile.path, "");
 
     } else {
