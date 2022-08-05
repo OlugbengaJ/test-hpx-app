@@ -23,7 +23,6 @@ class ProfileProvider extends ChangeNotifier {
     )
   ];
 
-
   setLayersProvider(LayersProvider layersProvider) {
     _layersProvider = layersProvider;
   }
