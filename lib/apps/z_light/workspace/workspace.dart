@@ -455,7 +455,7 @@ class _WorkspaceState extends State<Workspace>
                       );
                     }),
 
-                    // zoom toolbar
+                    // zoom toolbar section
                     Positioned(
                       bottom: workspaceProvider.scrollOffset,
                       left: 0,
