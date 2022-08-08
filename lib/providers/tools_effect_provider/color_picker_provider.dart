@@ -425,6 +425,7 @@ class ColorPickerProvider extends ChangeNotifier {
 
           /// get the first element color of the colorcode list been used
           colors: element.colorCode,
+          context: context,
           title: element.name,
           width: element.width,
           height: element.height,
