@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/color_picker_model.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
+import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/colors.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
@@ -109,7 +110,7 @@ class ColorPickerWidget extends StatelessWidget {
               contentPadding: const EdgeInsets.only(
                   top: 20, right: 10, bottom: 20, left: 10),
               children: <Widget>[
-                Text("Color Editor",
+                Text(Constants.colorEditor,
                     textAlign: TextAlign.left, style: labelStyle),
                 Row(
                   children: [
@@ -122,7 +123,6 @@ class ColorPickerWidget extends StatelessWidget {
                           height: 20,
                           decoration: generatePreviewBox(true),
                         ),
-                        // Row(children: [generatePresetBox(2, lastcolors.first)])
                       ],
                     ),
                   ],
@@ -139,8 +139,8 @@ class ColorPickerWidget extends StatelessWidget {
                         children: [
                           Text(
                               (colors.length > 1)
-                                  ? 'Gradient Color'
-                                  : "Solid Color",
+                                  ? Constants.gradientColor
+                                  : Constants.solidColor,
                               textAlign: TextAlign.left,
                               style: labelStyle),
                           SizedBox(
@@ -175,7 +175,7 @@ class ColorPickerWidget extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Recent",
+                                  Text(Constants.recent,
                                       textAlign: TextAlign.left,
                                       style: labelStyle),
                                   Container(
@@ -198,7 +198,8 @@ class ColorPickerWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-                Text("Preset", textAlign: TextAlign.left, style: labelStyle),
+                Text(Constants.preset,
+                    textAlign: TextAlign.left, style: labelStyle),
                 Container(margin: const EdgeInsets.only(top: 7.0)),
                 SizedBox(
                     width: 250,
@@ -213,7 +214,8 @@ class ColorPickerWidget extends StatelessWidget {
                         children: generatePresetBox(
                             9, colorPickerProviderInstance.presetColors[1]))),
                 Container(margin: const EdgeInsets.only(bottom: 10.0)),
-                Text("Current", textAlign: TextAlign.left, style: labelStyle),
+                Text(Constants.current,
+                    textAlign: TextAlign.left, style: labelStyle),
                 Container(margin: const EdgeInsets.only(top: 7.0)),
                 SizedBox(
                     width: 250,
@@ -241,7 +243,7 @@ class ColorPickerWidget extends StatelessWidget {
                                   colorPickerProviderInstance.lastColors.last);
                               closeDialog(context);
                             },
-                            child: const Text("Cancel"))
+                            child: const Text(Constants.cancel))
                       ])),
                   const VerticalDivider(
                     width: 10,
@@ -263,7 +265,7 @@ class ColorPickerWidget extends StatelessWidget {
                               setCurrentColor();
                               closeDialog(context);
                             },
-                            child: const Text("Got It"))
+                            child: const Text(Constants.gotIt))
                       ])),
                 ]),
               ]);
@@ -347,7 +349,6 @@ class ColorPickerWidget extends StatelessWidget {
           },
           onHover: (bool hover) {
             isHover = hover;
-            // (isHover) ? '' : setCurrentColor(element);
           },
           child: Container(
             width: (width == null)
@@ -356,7 +357,6 @@ class ColorPickerWidget extends StatelessWidget {
                 : width,
             height: (width == null) ? 20.0 : height,
             color: Colors.transparent,
-            // color: element,
           )));
     }
     return Row(
@@ -393,11 +393,9 @@ class ColorPickerWidget extends StatelessWidget {
                       isHover = false;
                       isFocused = true;
                       hasBorder = true;
-                      // hasBorder = true;
                       (picker == false) ? '' : selectcolor(context);
                     },
                     onHover: (bool hover) {
-                      // isFocused = true;
                       isHover = hover;
                     },
                     child: Container(
@@ -405,7 +403,6 @@ class ColorPickerWidget extends StatelessWidget {
                           ? MediaQuery.of(context).size.width * 0.3
                           : width,
                       height: (width == null) ? 20.0 : height,
-                      // color: (currentColor != null) ? currentColor : color,
                       decoration: generatePreviewBox(true),
                     )),
                 Positioned(
@@ -423,7 +420,6 @@ class ColorPickerWidget extends StatelessWidget {
                       isHover = false;
                       isFocused = true;
                       hasBorder = true;
-                      // hasBorder = true;
                       (picker == false) ? '' : selectcolor(context);
                     },
                     child: Row(children: [
@@ -489,7 +485,7 @@ class ColorPickerWidget extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text("Random Color",
+                                  Text(Constants.randomColor,
                                       textAlign: TextAlign.left,
                                       style: labelStyle),
                                 ],
