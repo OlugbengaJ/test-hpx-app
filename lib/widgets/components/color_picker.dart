@@ -378,7 +378,7 @@ class ColorPickerWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            (label == "")
+            (label == '')
                 ? Container()
                 : Text(label!, textAlign: TextAlign.left, style: h5Style),
             Container(margin: const EdgeInsets.only(top: 10.0)),
