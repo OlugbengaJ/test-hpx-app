@@ -3,6 +3,7 @@ import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/imports.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
+import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/providers/scrollbar_provider.dart';
 import 'package:hpx/providers/tutorial_provider/tutorial_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
@@ -126,6 +127,15 @@ class _WorkspaceState extends State<Workspace>
     final tutorialProvider =
         Provider.of<TooltipTutorialProvider>(context, listen: false);
     tutorialProvider.direction = AxisDirection.down;
+
+    ProfileProvider profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+
+    /// Make sure the function is only called if apps lenght is less than 2
+    /// The first time the app is launched its called, when apps are fetched, no more call is needed
+    if(profileProvider.apps.length<2){
+      profileProvider.getSystemApps();
+    }
+    
 
     final themeData = Theme.of(context);
 
