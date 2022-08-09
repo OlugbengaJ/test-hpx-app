@@ -4,6 +4,7 @@ import 'package:hpx/apps/z_light/profile/profile_app_icon.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/round_button.dart';
 import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/utils/constants.dart';
+import 'package:hpx/utils/image_file_picker.dart';
 import 'package:hpx/utils/os_file_utility.dart';
 import 'package:hpx/widgets/components/dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
@@ -79,6 +80,8 @@ Future<void> profileExistDialog(BuildContext context, String name) async {
 // profile list dialog
 Future<void> profileListDialog(
     BuildContext context, TextEditingController textController) async {
+  debugPrint("Launching the applications list");
+
   return showDialog<void>(
     context: context,
     barrierDismissible: false, // user must tap button!
@@ -144,10 +147,13 @@ Future<void> profileListDialog(
                           ),
                           Container(
                             margin: const EdgeInsets.only(top: 5),
-                            child: const Text(
-                              'Upload a picture',
-                              style: TextStyle(
-                                decoration: TextDecoration.underline,
+                            child: InkWell(
+                              onTap: () => ImageFilePicker.openFilePicker(),
+                              child: const Text(
+                                Constants.uploadPicture,
+                                style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                ),
                               ),
                             ),
                           ),
@@ -243,7 +249,7 @@ Future<void> profileListDialog(
                                                 MainAxisAlignment.center,
                                             children: const [
                                               Text(
-                                                'Browse',
+                                                Constants.browse,
                                                 style: TextStyle(
                                                   color: Color(0xFF212121),
                                                 ),

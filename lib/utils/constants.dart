@@ -12,6 +12,15 @@ class Constants {
   static const String zImage = 'assets/images/z.png';
   static const String zlightIcon = 'assets/images/zlight_icon.png';
 
+  // COLOR PICKER LABELS
+  static const String gradientColor = 'Gradient Color';
+  static const String solidColor = 'Solid Color';
+  static const String randomColor = 'Random Color';
+  static const String current = 'Current';
+  static const String recent = 'Recent';
+  static const String preset = 'Preset';
+  static const String colorEditor = 'Color Editor';
+
   // action buttons
   static const String add = 'Add';
   static const String cancel = 'Cancel';
@@ -20,9 +29,12 @@ class Constants {
   static const String done = 'Done';
   static const String next = 'Next';
   static const String finish = 'Finish';
+  static const String gotIt = 'Got It';
 
   // ui labels
   static const String app = 'App';
+  static const String browse = 'Browse';
+  static const String pickImageProfile = 'Pick an image for the profile';
   static const String defaultText = 'Default';
   static const String help = 'Help';
   static const String highlight = 'Highlight';
@@ -32,6 +44,7 @@ class Constants {
   static const String resizable = 'Resizable';
   static const String selectAppTitle = 'Select Application';
   static const String selectedProfile = 'Selected Profile';
+  static const String uploadPicture = 'Upload a picture';
   static const String workspace = 'Workspace';
 
   static const double zoomFactor = 800.0;

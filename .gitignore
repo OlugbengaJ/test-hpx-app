@@ -30,6 +30,7 @@
 .pub-cache/
 .pub/
 /build/
+.dccache
 
 # Web related
 lib/generated_plugin_registrant.dart
@@ -44,7 +45,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-.dccache
 
 # Debian packages
 /debian/packages

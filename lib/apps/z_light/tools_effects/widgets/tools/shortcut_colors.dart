@@ -117,6 +117,7 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
         Container(
           margin: const EdgeInsets.only(top: 5, bottom: 20),
           child: ColorPickerWidget(
+            context: context,
             color: subLayer != null
                 ? subLayer!.shortcutColor
                 : shortcutList[0].colorCode.first,
