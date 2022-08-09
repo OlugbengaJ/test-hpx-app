@@ -1,6 +1,4 @@
 import 'dart:typed_data';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/providers/keys_provider.dart';
@@ -20,8 +18,8 @@ abstract class HardwareEffect {
 
   updateKeyColorInfo(
       {required Map<String, Map<String, Object>> keyboard,
-      required String keyName,
-      required Color color}) {
+        required String keyName,
+        required Color color}) {
     keyboard[keyName]!["redOpacity"] = color.red;
     keyboard[keyName]!["greenOpacity"] = color.green;
     keyboard[keyName]!["blueOpacity"] = color.blue;
@@ -54,65 +52,6 @@ abstract class HardwareEffect {
       interpolatedColorArray
           .addAll(generateInterpolation(colors[i], colors[next], 4));
     }
-
-/*
-    if(colors.length == 2) {
-      interpolatedColorArray = [...generateInterpolation(colors.first, colors.last, 5),
-        ...generateInterpolation(colors.last, colors.first, 5)];
-    }
-
-    if(colors.length == 3) {
-      interpolatedColorArray = [...generateInterpolation(colors[0], colors[1], 3),
-      ...generateInterpolation(colors[1], colors[2], 3),
-        ...generateInterpolation(colors[2], colors[3], 3),
-        ...generateInterpolation(colors[3], colors[0], 3)];
-    }
-
-    if(colors.length == 4) {
-      interpolatedColorArray = [...generateInterpolation(colors[0], colors[1], 3),
-        ...generateInterpolation(colors[1], colors[2], 3),
-        ...generateInterpolation(colors[2], colors[3], 3),
-        ...generateInterpolation(colors[3], colors[0], 3)];
-    }
-
-    if(colors.length == 5) {
-      interpolatedColorArray = [...generateInterpolation(colors[0], colors[1], 2),
-        ...generateInterpolation(colors[1], colors[2], 2),
-        ...generateInterpolation(colors[2], colors[3], 2),
-        ...generateInterpolation(colors[3], colors[4], 2),
-        ...generateInterpolation(colors[4], colors[0], 2)];
-    }
-
-    if(colors.length == 6) {
-      interpolatedColorArray = [...generateInterpolation(colors[0], colors[1], 1),
-        ...generateInterpolation(colors[1], colors[2], 1),
-        ...generateInterpolation(colors[2], colors[3], 1),
-        ...generateInterpolation(colors[3], colors[4], 1),
-        ...generateInterpolation(colors[4], colors[5], 1),
-        ...generateInterpolation(colors[5], colors[0], 1)];
-    }
-
-    if(colors.length == 7) {
-      interpolatedColorArray = [...generateInterpolation(colors[0], colors[1], 1),
-        ...generateInterpolation(colors[1], colors[2], 1),
-        ...generateInterpolation(colors[2], colors[3], 1),
-        ...generateInterpolation(colors[3], colors[4], 1),
-        ...generateInterpolation(colors[4], colors[5], 1),
-        ...generateInterpolation(colors[5], colors[6], 1),
-        ...generateInterpolation(colors[6], colors[0], 1)];
-    }
-
-    if(colors.length == 8) {
-      interpolatedColorArray = [...generateInterpolation(colors[0], colors[1], 1),
-        ...generateInterpolation(colors[1], colors[2], 1),
-        ...generateInterpolation(colors[2], colors[3], 1),
-        ...generateInterpolation(colors[3], colors[4], 1),
-        ...generateInterpolation(colors[4], colors[5], 1),
-        ...generateInterpolation(colors[5], colors[6], 1),
-        ...generateInterpolation(colors[6], colors[7], 1),
-        ...generateInterpolation(colors[7], colors[8], 1)];
-    }*/
-
     return interpolatedColorArray;
   }
 }
@@ -261,8 +200,8 @@ class WaveEffect extends HardwareEffect {
 
   applyColorToSpecificZone(
       {required Map<String, Map<String, Object>> keyboard,
-      required List<dynamic> keyboardZone,
-      required Color color}) {
+        required List<dynamic> keyboardZone,
+        required Color color}) {
     for (var key in keyboardZone) {
       updateKeyColorInfo(keyboard: keyboard, keyName: key, color: color);
     }
@@ -421,7 +360,7 @@ class BlinkingEffect extends HardwareEffect {
       }
 
       await Future.delayed(const Duration(milliseconds: 600),
-          () => currentColor = layer.mode?.currentColor.first);
+              () => currentColor = layer.mode?.currentColor.first);
       await Future.delayed(Duration(milliseconds: 3300 - speed), () => null);
     }
   }
@@ -437,7 +376,7 @@ class ShortcutColorsEffect extends HardwareEffect {
     var sublayer = _layersProvider.getCurrentSublayer();
     var mainLayer = _layersProvider.layeritems.first;
     var keysProvider =
-        Provider.of<KeysProvider>(navigatorKeys.currentContext!, listen: false);
+    Provider.of<KeysProvider>(navigatorKeys.currentContext!, listen: false);
     keysProvider.shortcutKeys.forEach((key, value) {
       for (var element in value) {
         updateKeyColorInfo(
@@ -476,7 +415,7 @@ class ImageEffect extends HardwareEffect {
       noOfPixelsPerAxis = 3;
     }
     var imageColors =
-        extractPixelsColors(layer.mode?.effects.imageBytes, noOfPixelsPerAxis);
+    extractPixelsColors(layer.mode?.effects.imageBytes, noOfPixelsPerAxis);
 
     for (int i = 0; i < layer.keys.length; i++) {
       updateKeyColorInfo(
@@ -538,7 +477,6 @@ class AmbientEffect extends HardwareEffect {
 class SupportContactEffect extends HardwareEffect {
   SupportContactEffect(int layerID, LayersProvider layersProvider)
       : super(layerID, layersProvider) {
-    run();
   }
 
   @override
@@ -550,17 +488,5 @@ class SupportContactEffect extends HardwareEffect {
       updateKeyColorInfo(keyboard: keyboard, keyName: key, color: layer.mode?.currentColor.last);
     });
     return keyboard;
-  }
-
-  run() {
-    window.onKeyData = keyEventListener;
-  }
-
-  bool keyEventListener(KeyData data) {
-    if (data.type == KeyEventType.up && data.physical == 0x70045) {
-      _layersProvider.modeProvider?.activateContactSupportDialog();
-      return true;
-    }
-    return false;
   }
 }

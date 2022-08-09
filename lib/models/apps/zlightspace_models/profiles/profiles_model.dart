@@ -31,16 +31,16 @@ class Profile {
       icon: icon ?? this.icon,
       layers: layers ?? [...this.layers],
       associatedApps:
-          associatedApps ?? [...this.associatedApps.map((e) => e.copyWith())],
+      associatedApps ?? [...this.associatedApps.map((e) => e.copyWith())],
       createdDate: createdDate,
     );
   }
 
-  Profile.fromMap(Map<String, dynamic> item)
+  Profile.fromJson(Map<String, dynamic> item)
       : id = item['id'],
         name = item['name'],
         icon = item['icon'],
-        createdDate = item['createdDate'],
+        createdDate = DateTime.parse(item['createdDate']),
         layers = getLayersFromMap(item['layers']),
         associatedApps = getAssociatedAppsFromMap(
           item['associatedApps'],
@@ -53,18 +53,18 @@ class Profile {
       'icon': icon,
       'layers': getLayersAsMap(),
       'associatedApps': getAssociatedAppsAsMap(),
-      'createdDate': createdDate,
+      'createdDate': createdDate.toString(),
     };
   }
 
-  static getLayersFromMap(List<Map<String, dynamic>>? layersJson) {
+  static getLayersFromMap(List<dynamic>? layersJson) {
     var result = layersJson?.map((e) => LayerItemModel.fromJson(e)).toList();
     if (result != null) return result;
     return <LayerItemModel>[];
   }
 
   static getAssociatedAppsFromMap(
-      List<Map<String, dynamic>>? associatedAppsJson) {
+      List<dynamic>? associatedAppsJson) {
     var apps = associatedAppsJson?.map((e) => Application.fromJson(e)).toList();
     if (apps != null) return apps;
     return <Application>[];
@@ -73,7 +73,7 @@ class Profile {
   List<Map<String, dynamic>> getLayersAsMap() {
     List<Map<String, dynamic>> layerMaps = [];
     layers.forEach((element) {
-      layerMaps.add(element.toMap());
+      layerMaps.add(element.toJson());
     });
     return layerMaps;
   }
@@ -81,7 +81,7 @@ class Profile {
   List<Map<String, dynamic>> getAssociatedAppsAsMap() {
     List<Map<String, dynamic>> appMaps = [];
     associatedApps.forEach((element) {
-      appMaps.add(element.toMap());
+      appMaps.add(element.toJson());
     });
     return appMaps;
   }
@@ -114,12 +114,12 @@ class Application {
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'name': name,
       'icon': icon,
       'file': file,
-      'createdDate': createdDate,
+      'createdDate': createdDate.toString(),
     };
   }
 
@@ -127,5 +127,5 @@ class Application {
       : name = item['name'],
         icon = item['icon'],
         file = item['file'],
-        createdDate = item['createdDate'];
+        createdDate = DateTime.parse(item['createdDate']);
 }

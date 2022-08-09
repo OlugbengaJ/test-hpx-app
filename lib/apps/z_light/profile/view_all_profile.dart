@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/profile/profile_app_icon.dart';
 import 'package:hpx/apps/z_light/profile/profile_list_dialog.dart';
@@ -12,7 +13,14 @@ import 'package:toggle_switch/toggle_switch.dart';
 TextEditingController _textCtrl = TextEditingController();
 Profile? editingProfile;
 
-void browse(BuildContext context) {
+Future<void> browse(BuildContext context) async {
+  final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+  final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+
+  // if no file is picked
+  if (result == null) return;
+
+  profileProvider.importProfile(result.files.first.path!);
   Navigator.pop(context);
 }
 
@@ -33,6 +41,11 @@ void duplicateProfile(BuildContext context) {
   newProfile(context);
 }
 
+void exportProfile(BuildContext context) {
+  final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+  profileProvider.exportProfile(editingProfile!.id);
+}
+
 Future<void> _showDefaultMoreDialog(BuildContext context) async {
   return showDialog<void>(
     context: context,
@@ -50,7 +63,9 @@ Future<void> _showDefaultMoreDialog(BuildContext context) async {
             child: const Text('Duplicate'),
           ),
           SimpleDialogOption(
-            onPressed: () {},
+            onPressed: () {
+              exportProfile(context);
+            },
             child: const Text('Export'),
           ),
           SimpleDialogOption(
@@ -171,7 +186,9 @@ Future<void> _showMoreDialog(BuildContext context) async {
             child: const Text('Duplicate'),
           ),
           SimpleDialogOption(
-            onPressed: () {},
+            onPressed: () {
+              exportProfile(context);
+            },
             child: const Text('Export'),
           ),
           SimpleDialogOption(
@@ -249,7 +266,7 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                         onTap: () => newProfile(context),
                                         child: Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          MainAxisAlignment.center,
                                           children: const [
                                             Icon(
                                               Icons.add,
@@ -286,7 +303,7 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                         onTap: () => browse(context),
                                         child: Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          MainAxisAlignment.center,
                                           children: const [
                                             ImageIcon(
                                               AssetImage(
@@ -353,31 +370,31 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                 height: 28,
                                 decoration: BoxDecoration(
                                   border:
-                                      Border.all(color: Colors.white, width: 1),
+                                  Border.all(color: Colors.white, width: 1),
                                 ),
                                 child: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
                                     Consumer<ProfileProvider>(
                                       builder: (context, provider, child) =>
                                           DropDown<SortOption>(
-                                        dropdownValue: provider.profileSort,
-                                        hint: 'Sort',
-                                        items: [
-                                          ...provider.sortOptions.map(
-                                            (e) => DropdownMenuItem<SortOption>(
-                                              value: e,
-                                              child: Text(e.title),
-                                            ),
-                                          )
-                                        ],
-                                        onChangedHandler: (o) {
-                                          if (o != null) {
-                                            provider.sortProfiles(o.sortOrder);
-                                          }
-                                        },
-                                      ),
+                                            dropdownValue: provider.profileSort,
+                                            hint: 'Sort',
+                                            items: [
+                                              ...provider.sortOptions.map(
+                                                    (e) => DropdownMenuItem<SortOption>(
+                                                  value: e,
+                                                  child: Text(e.title),
+                                                ),
+                                              )
+                                            ],
+                                            onChangedHandler: (o) {
+                                              if (o != null) {
+                                                provider.sortProfiles(o.sortOrder);
+                                              }
+                                            },
+                                          ),
                                     ),
                                     // Padding(
                                     //   padding: EdgeInsets.all(2),
@@ -398,7 +415,7 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                   children: [
                     Expanded(
                       child:
-                          Consumer<ProfileProvider>(builder: (_, provider, __) {
+                      Consumer<ProfileProvider>(builder: (_, provider, __) {
                         return Container(
                           margin: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 8),
@@ -422,7 +439,7 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                       ),
                                       child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
+                                        MainAxisAlignment.spaceAround,
                                         children: [
                                           const SizedBox(width: 20),
                                           AppIcon(
@@ -435,7 +452,7 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                                 width: 20,
                                                 child: MouseRegion(
                                                   cursor:
-                                                      SystemMouseCursors.click,
+                                                  SystemMouseCursors.click,
                                                   child: GestureDetector(
                                                     onTap: () {
                                                       editingProfile = profile;
@@ -449,8 +466,8 @@ Future<void> viewAllProfileDialog(BuildContext context) async {
                                                     },
                                                     child: Container(
                                                       padding:
-                                                          const EdgeInsets.only(
-                                                              top: 8),
+                                                      const EdgeInsets.only(
+                                                          top: 8),
                                                       child: const Icon(
                                                           Icons.more_vert),
                                                     ),

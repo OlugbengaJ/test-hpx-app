@@ -1,9 +1,16 @@
+import 'dart:convert';
+import 'dart:io' as io;
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
 import 'package:hpx/models/apps/zlightspace_models/profiles/profiles_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/utils/constants.dart';
 import 'package:hpx/utils/datetime_util.dart';
+import 'package:hpx/utils/database_manager.dart';
+import 'package:hpx/providers/workspace_provider.dart';
 
 /// [ProfileProvider] allows to manage profiles
 ///
@@ -12,19 +19,29 @@ import 'package:hpx/utils/datetime_util.dart';
 /// as different profiles, and change from one to another.
 class ProfileProvider extends ChangeNotifier {
   LayersProvider? _layersProvider;
+  WorkspaceProvider? _workspaceProvider;
   final List<Profile> _profiles = [
     // init with a default profile
     Profile(
-      id: 0,
-      name: 'Default',
-      icon: '',
-      layers: [],
-      associatedApps: [],
+        id: 0,
+        name: 'Default',
+        icon: '',
+        layers: [],
+        associatedApps: [],
+        createdDate: DateTimeUtil.utc
     )
   ];
 
+  ProfileProvider()  {
+    prePopulateProfiles();
+  }
+
   setLayersProvider(LayersProvider layersProvider) {
     _layersProvider = layersProvider;
+  }
+
+  setWorkspaceProvider(WorkspaceProvider workspaceProvider) {
+    _workspaceProvider = workspaceProvider;
   }
 
   /// [profiles] returns the list of profile
@@ -43,7 +60,6 @@ class ProfileProvider extends ChangeNotifier {
     } catch (e) {
       _currentProfile = profiles.first.copyWith();
     }
-
     return _currentProfile;
   }
 
@@ -55,12 +71,12 @@ class ProfileProvider extends ChangeNotifier {
   /// [_defaultProfile] returns a default profile
   /// used for creating a new profile.
   Profile get _defaultProfile => profiles.first.copyWith(
-        id: _nextId,
-        name: '${Constants.defaultText} (1)',
-        icon: '',
-        layers: [],
-        associatedApps: [],
-      );
+    id: _nextId,
+    name: '${Constants.defaultText} (1)',
+    icon: '',
+    layers: [],
+    associatedApps: [],
+  );
 
   /// [resetSelectedProfile] restores [_selectedProfile] to the default.
   void resetSelectedProfile() {
@@ -71,7 +87,7 @@ class ProfileProvider extends ChangeNotifier {
   /// other than the selected profile, exists with name.
   bool profileExists(String name) {
     return profiles.any((element) =>
-        element.name == name.trim() && element.id != _selectedProfile.id);
+    element.name == name.trim() && element.id != _selectedProfile.id);
   }
 
   /// [addProfile] adds a new profile to the profiles list.
@@ -91,7 +107,7 @@ class ProfileProvider extends ChangeNotifier {
 
     _profiles.add(profile);
     selectProfile(profile.id);
-
+    DatabaseManager.createProfile(profile);
     notifyListeners();
   }
 
@@ -100,12 +116,11 @@ class ProfileProvider extends ChangeNotifier {
     if (id == 0) return;
 
     _profiles.removeWhere((p) => p.id == id);
-
     if (id == _currentProfile.id) {
       // current profile was deleted hence change to default profile
       _currentProfile = profiles.first.copyWith();
     }
-
+    DatabaseManager.deleteItem('profiles', id);
     notifyListeners();
   }
 
@@ -120,7 +135,6 @@ class ProfileProvider extends ChangeNotifier {
       icon: _defaultProfile.icon,
       associatedApps: [],
     );
-
     notifyListeners();
   }
 
@@ -159,14 +173,15 @@ class ProfileProvider extends ChangeNotifier {
       associatedApps: file.isEmpty
           ? []
           : [
-              Application(
-                  name: name,
-                  icon: icon,
-                  file: file,
-                  createdDate: DateTimeUtil.utc)
-            ],
+        Application(
+            name: name,
+            icon: icon,
+            file: file,
+            createdDate: DateTimeUtil.utc)
+      ],
     );
 
+    DatabaseManager.createProfile(_selectedProfile);
     notifyListeners();
   }
 
@@ -209,7 +224,6 @@ class ProfileProvider extends ChangeNotifier {
     }
 
     profileSort = sortOptions.firstWhere((e) => e.sortOrder == sortOrder);
-
     notifyListeners();
   }
 
@@ -267,7 +281,6 @@ class ProfileProvider extends ChangeNotifier {
     }
 
     appSort = sortOptions.firstWhere((e) => e.sortOrder == sortOrder);
-
     notifyListeners();
   }
 
@@ -285,6 +298,63 @@ class ProfileProvider extends ChangeNotifier {
     const SortOption(
         title: 'Least Recently', sortOrder: SortOrder.leastRecently),
   ];
+
+  void updateProfileByAddingLayer(LayerItemModel layer) {
+    if (!_currentProfile.layers.contains(layer)) {
+      _currentProfile.layers.add(layer);
+    }
+    DatabaseManager.createProfile(_currentProfile);
+  }
+
+  void updateProfileByRemovingLayer(LayerItemModel layer) {
+    if (_currentProfile.layers.contains(layer)) {
+      _currentProfile.layers.remove(layer);
+    }
+    DatabaseManager.deleteItem('layers', layer.id);
+  }
+
+  prePopulateProfiles() async {
+    final profilesFromDB = await DatabaseManager.getAllProfiles();
+    for (Profile p in profilesFromDB) {
+      _layersProvider?.layeritems.addAll(p.layers);
+      if(p.name != 'Default') _profiles.add(p);
+    }
+    notifyListeners();
+  }
+
+  Future<void> exportProfile(int id) async {
+    final p = profiles.firstWhereOrNull((element) => element.id == id);
+    String? outputFile = await FilePicker.platform.saveFile(
+        dialogTitle: 'Save Your File to desired location',
+        fileName: '${p?.name}.json');
+    try {
+      io.File returnedFile = io.File(outputFile!);
+      await returnedFile.writeAsString(jsonEncode(p?.toMap()),
+          mode: io.FileMode.write, flush: true);
+    } catch (e) {
+      debugPrint("Unable to save profile");
+    }
+  }
+
+  importProfile(String filePath) {
+    File(filePath).readAsString().then((String contents) async {
+      Map<String, dynamic> profileJson = jsonDecode(contents);
+      profileJson['id'] = await DatabaseManager.getNextAvailableId('profiles');
+      int firstLayerId = await DatabaseManager.getNextAvailableId('layers');
+      int firstModeId = await DatabaseManager.getNextAvailableId('tools_mode');;
+
+      for (var layer in profileJson['layers']) {
+        layer['id'] = firstLayerId++;
+        layer['mode']['id'] = firstModeId++;
+      }
+
+      final newProfile = Profile.fromJson(profileJson);
+      _layersProvider?.layeritems.addAll(newProfile.layers);
+      _profiles.add(newProfile);
+      await DatabaseManager.createProfile(newProfile);
+      notifyListeners();
+    });
+  }
 }
 
 enum SortOrder {

@@ -14,14 +14,14 @@ class EffectsModel {
   /// default effectName value = "mood"
   EffectsModel(
       {this.degree = 0.0,
-      this.size = 0.0,
-      this.speed = 0,
-      this.updatePerSecond = 0.0,
-      this.imageQuality = 0.0,
-      this.effectType,
-      this.extractedColors,
-      this.imageBytes,
-      this.effectName = "mood"});
+        this.size = 0.0,
+        this.speed = 0,
+        this.updatePerSecond = 0.0,
+        this.imageQuality = 0.0,
+        this.effectType,
+        this.extractedColors,
+        this.imageBytes,
+        this.effectName = "mood"});
 
   /// degree variable with type double
   double? degree;
@@ -65,7 +65,7 @@ class EffectsModel {
         imageBytes = item['imageBytes'],
         modeId = item['modeId'];
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'degree': degree,
       'size': size,
