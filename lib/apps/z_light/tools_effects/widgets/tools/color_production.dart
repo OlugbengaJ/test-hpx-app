@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 
-class ColorProductionPreset extends StatefulWidget {
-  const ColorProductionPreset({Key? key}) : super(key: key);
+class ColorProductionPreset extends StatelessWidget {
+  ColorProductionPreset({Key? key}) : super(key: key);
 
-  @override
-  State<ColorProductionPreset> createState() => _ColorProductionPresetState();
-}
-
-class _ColorProductionPresetState extends State<ColorProductionPreset> {
   final _toolsProvider = ColorPickerProvider();
 
   @override

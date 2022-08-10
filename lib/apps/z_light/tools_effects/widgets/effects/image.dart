@@ -55,37 +55,32 @@ class _ImagePresetState extends State<ImagePreset> {
   Widget build(BuildContext context) {
     ModeProvider modeProvider =
         Provider.of<ModeProvider>(context, listen: false);
-    return Container(
-      margin: const EdgeInsets.only(top: 20, bottom: 20.0),
-      child: Row(
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Container(
-                height: 170,
-                width: MediaQuery.of(context).size.width * 0.2,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: Image.memory(
-                              modeProvider.currentMode.effects.imageBytes!)
+          Container(
+            margin: const EdgeInsets.only(top: 20),
+            height: 170,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image:
+                      Image.memory(modeProvider.currentMode.effects.imageBytes!)
                           .image,
-                      fit: BoxFit.fill),
-                ),
-              ),
-              Container(margin: const EdgeInsets.only(top: 5.0)),
-              InkWell(
-                highlightColor: Colors.transparent,
-                focusColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                onTap: () {
-                  _showPhotoLibrary();
-                },
-                child: Text("Browse",
-                    style: labelStyle, textAlign: TextAlign.right),
-              )
-            ],
+                  fit: BoxFit.fill),
+            ),
           ),
+          Container(margin: const EdgeInsets.only(top: 5.0)),
+          InkWell(
+            highlightColor: Colors.transparent,
+            focusColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            onTap: () {
+              _showPhotoLibrary();
+            },
+            child:
+                Text("Browse", style: labelStyle, textAlign: TextAlign.right),
+          )
         ],
       ),
     );
