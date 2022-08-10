@@ -5,10 +5,12 @@ import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model
 import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
+import 'package:hpx/utils/database_manager.dart';
 
 import 'package:hpx/utils/keyboard_controller.dart';
 import 'package:hpx/widgets/components/layers.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
+import 'package:sqflite/sqflite.dart';
 //
 ///[LayersProvider] to controle the layers state
 
@@ -16,7 +18,7 @@ class LayersProvider extends ChangeNotifier {
   final List<LayerItemModel> _layeritems = [];
   final List<LayerItemModel> _sublayers = [];
   ModeProvider? _modeProvider;
-  ProfileProvider? _profileProvider; 
+  ProfileProvider? _profileProvider;
   bool isLayerEditing = false; // Used to check wether a layer is in edit mode
   int currentEditingID = 0; // if the ID is 0 then no layer is in edit mode
   int currentSublayerID = 0;
@@ -74,21 +76,21 @@ class LayersProvider extends ChangeNotifier {
   getProfileLayers(){
     if(getLayers().isEmpty){
       LayerItemModel itemModel = LayerItemModel(
-        id: getTheBiggestID(),
-        profileID: _profileProvider!.currentProfile.id,
-        layerText: 'Mood',
-        icon: Icons.mood);
+          id: getTheBiggestID(),
+          profileID: _profileProvider!.currentProfile.id,
+          layerText: 'Mood',
+          icon: Icons.mood);
 
       add(itemModel);
 
       _modeProvider!.changeModeComponent(
-        PickerModel(
-            title: itemModel.mode!.name,
-            value: itemModel.mode!.value,
-            enabled: true,
-            icon: itemModel.mode!.icon),
-        _context!,
-        false);
+          PickerModel(
+              title: itemModel.mode!.name,
+              value: itemModel.mode!.value,
+              enabled: true,
+              icon: itemModel.mode!.icon),
+          _context!,
+          false);
       //disableCreatingNewLayerMode();
       changeIndex(0);
     }
@@ -103,10 +105,6 @@ class LayersProvider extends ChangeNotifier {
 
     int index = _layeritems.indexWhere((item) => getLayers().first.id==item.id);
     changeIndex(index);
-
-
-
-
     notifyListeners();
   }
 
@@ -118,7 +116,7 @@ class LayersProvider extends ChangeNotifier {
     return null;
   }
 
-  
+
 
   /// [getItem] retrieve the layer using the index.
   /// This is to get the layer's informations
@@ -214,8 +212,8 @@ class LayersProvider extends ChangeNotifier {
 
     /// check if there is already a layer with shortcut mode
     if (modeChanged &
-        shortcutAvalaible &
-        (_modeProvider!.getModeInformation().value == EnumModes.shortcut)) {
+    shortcutAvalaible &
+    (_modeProvider!.getModeInformation().value == EnumModes.shortcut)) {
       layerAlertDialog(_context!);
     } else {
       if (_modeProvider!.getModeInformation().value == EnumModes.shortcut) {
@@ -252,13 +250,13 @@ class LayersProvider extends ChangeNotifier {
         }
       } else {
         int index =
-            _sublayers.indexWhere((item) => item.id == _currentSublayer.id);
+        _sublayers.indexWhere((item) => item.id == _currentSublayer.id);
         item = _currentSublayer;
 
         //debugPrint("${item.layerText}");
         item.mode = _modeProvider!.getModeInformation();
         item.shortcutColor =
-            _modeProvider!.getModeInformation().currentColor[0];
+        _modeProvider!.getModeInformation().currentColor[0];
         _sublayers[index] = item;
       }
     }
@@ -274,10 +272,11 @@ class LayersProvider extends ChangeNotifier {
     if (isSublayerSelected) {
       //changeToolsEffectMode(getItemByID(item.parentID).mode!);
       int parentIndex =
-          _layeritems.indexWhere((layer) => layer.id == item.parentID);
+      _layeritems.indexWhere((layer) => layer.id == item.parentID);
       //changeIndex(parentIndex);
     }
 
+    _profileProvider?.updateProfileByAddingLayer(item);
     physicalKeyboardController.addLayer(item);
     notifyListeners();
   }
@@ -292,7 +291,7 @@ class LayersProvider extends ChangeNotifier {
     item.left = newLeft;
     item.right = newRight;
     _layeritems[listIndex] = item;
-
+    _profileProvider?.updateProfileByAddingLayer(item);
     notifyListeners();
   }
 
@@ -359,6 +358,7 @@ class LayersProvider extends ChangeNotifier {
 
     _layeritems.insert(0, item);
 
+    _profileProvider?.updateProfileByAddingLayer(item);
     physicalKeyboardController.addLayer(item);
     notifyListeners();
   }
@@ -411,7 +411,7 @@ class LayersProvider extends ChangeNotifier {
     item.listDisplayColor = Colors.white;
     //_layeritems[_listIndex] = item;
 
-    if (item.mode!.value == EnumModes.shortcut) {
+    if (item.mode?.value == EnumModes.shortcut) {
       //_modeProvider!.setModeType(true);
     }
     changeToolsEffectMode(item.mode!);
@@ -446,6 +446,7 @@ class LayersProvider extends ChangeNotifier {
     item.layerText = text;
     int editingIndex = layeritems.indexWhere((item) => item.id == id);
     _layeritems[editingIndex] = item;
+    _profileProvider?.updateProfileByAddingLayer(item);
     notifyListeners();
   }
 
@@ -459,6 +460,7 @@ class LayersProvider extends ChangeNotifier {
     _layeritems[index] = item;
 
     toggleHideStackedLayers(!item.visible);
+    _profileProvider?.updateProfileByAddingLayer(item);
     notifyListeners();
   }
 
@@ -485,7 +487,6 @@ class LayersProvider extends ChangeNotifier {
       newIndex -= 1;
     }
     final item = _layeritems.removeAt(oldIndex);
-    _layeritems.insert(newIndex, item);
     notifyListeners();
   }
 
@@ -503,6 +504,7 @@ class LayersProvider extends ChangeNotifier {
 
         _layeritems.remove(item);
         physicalKeyboardController.removeLayer(item);
+        _profileProvider?.updateProfileByRemovingLayer(item);
 
         if (_layeritems.isNotEmpty) {
           changeIndex(0);

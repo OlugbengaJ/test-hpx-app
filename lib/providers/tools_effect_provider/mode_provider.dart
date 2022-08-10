@@ -74,7 +74,7 @@ List<PickerModel> interactiveList = [
 // default varaible for the ambient display dropdown picker
 List<PickerModel> ambientDisplayList = [
   PickerModel(
-      // title: 'Display 1: X:0, Y:0, W:3840, H:2400',
+    // title: 'Display 1: X:0, Y:0, W:3840, H:2400',
       title: 'Display 1: X:0, Y:0, W:3840',
       enabled: true,
       value: AmbientDisplayEnum.display1),
@@ -169,7 +169,7 @@ class ModeProvider extends ChangeNotifier {
 
   // default variable for settin tools and effects widget in this function
   PickerModel modePicker =
-      PickerModel(title: 'Mood', value: EnumModes.mood, enabled: true);
+  PickerModel(title: 'Mood', value: EnumModes.mood, enabled: true);
 
   late ContactSupportWidgetProvider contacProvider;
   late BuildContext appContext;
@@ -212,16 +212,16 @@ class ModeProvider extends ChangeNotifier {
 
     /// initialize the workspace provider to use to send notification accross the workspace
     WorkspaceProvider workProvider =
-        Provider.of<WorkspaceProvider>(context, listen: false);
+    Provider.of<WorkspaceProvider>(context, listen: false);
     ImageModeProvider imageModeProvider =
-        Provider.of<ImageModeProvider>(context, listen: false);
+    Provider.of<ImageModeProvider>(context, listen: false);
     //// set the current effects to the effects provider
     EffectProvider effectsProvider =
-        Provider.of<EffectProvider>(context, listen: false);
+    Provider.of<EffectProvider>(context, listen: false);
     LayersProvider layerProvider =
-        Provider.of<LayersProvider>(context, listen: false);
+    Provider.of<LayersProvider>(context, listen: false);
     ShortcutWidgetProvider shortcutWidgetProvider =
-        Provider.of<ShortcutWidgetProvider>(context, listen: false);
+    Provider.of<ShortcutWidgetProvider>(context, listen: false);
     contacProvider =
         Provider.of<ContactSupportWidgetProvider>(context, listen: false);
     appContext = context;
@@ -290,7 +290,7 @@ class ModeProvider extends ChangeNotifier {
         preset = const BlinkingPreset();
         break;
       case EnumModes.interactive:
-        ////  set an notification message for interactive mode
+      ////  set an notification message for interactive mode
         workProvider.toggleStripNotification(
             "Interactive effect will only work with your keyboard. Please assign the keys thatare used for triggering the effect. Hold down the Ctrl key for multiple selection");
         for (var element in interactiveColorList) {
@@ -301,7 +301,7 @@ class ModeProvider extends ChangeNotifier {
         break;
       case EnumModes.image:
 
-        /// convert the default image into color paltte
+      /// convert the default image into color paltte
         ByteData image = await rootBundle.load(Constants.defaultImageMode);
         currentColors.add(Colors.transparent);
 
@@ -343,7 +343,7 @@ class ModeProvider extends ChangeNotifier {
             ? currentMode.effects.effectName
             : effects.effectName,
         degree:
-            (isChange == true) ? currentMode.effects.degree : effects.degree,
+        (isChange == true) ? currentMode.effects.degree : effects.degree,
         imageQuality: (isChange == true)
             ? currentMode.effects.imageQuality
             : effects.imageQuality,
@@ -362,22 +362,22 @@ class ModeProvider extends ChangeNotifier {
     //// set the current mode to the mode been selected and change to and apply all current colors and effects
     setCurrentMode(ToolsModeModel(
         currentColor:
-            (isChange == true) ? currentMode.currentColor : currentColors,
+        (isChange == true) ? currentMode.currentColor : currentColors,
         value: (isChange == true) ? currentMode.value : pickerChoice.value,
         icon: (isChange == true) ? currentMode.icon : pickerChoice.icon,
         shortcutKeys: (isChange == true)
             ? currentMode.shortcutKeys
             : shortcutWidgetProvider.keys,
         modeType:
-            (isChange == true) ? currentMode.modeType : currentMode.modeType,
+        (isChange == true) ? currentMode.modeType : currentMode.modeType,
         effects: (isChange == true)
             ? currentMode.effects
             : effectsProvider.currentEffect!,
         name: (isChange == true)
             ? currentMode.name
             : (currentMode.value == pickerChoice.value)
-                ? currentMode.name
-                : pickerChoice.title));
+            ? currentMode.name
+            : pickerChoice.title));
     layerProvider.toolsEffectsUpdated(modeChanged: changeComp);
   }
 
@@ -389,16 +389,13 @@ class ModeProvider extends ChangeNotifier {
   // change the mode type for the current mode between sublayer and layer based on the value passed
   setModeType(bool isSubLayer) {
     currentMode.modeType =
-        (isSubLayer) ? EnumModeType.sublayer : EnumModeType.layers;
+    (isSubLayer) ? EnumModeType.sublayer : EnumModeType.layers;
     // print(currentMode.modeType);
     notifyListeners();
   }
 
   void activateContactSupportDialog() {
-    isLost = true;
-    if (isLost == true) {
-      contacProvider.showContactOptionsDialog(appContext);
-    }
+    contacProvider.showContactOptionsDialog(appContext);
     notifyListeners();
   }
 }

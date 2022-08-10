@@ -8,32 +8,32 @@ class ToolsModeModel {
   ToolsModeModel(
       {
 
-      /// currentColor is required while using toolsmode model
-      required this.currentColor,
+        /// currentColor is required while using toolsmode model
+        required this.currentColor,
 
-      /// effects is required while using toolsmode model
-      required this.effects,
+        /// effects is required while using toolsmode model
+        required this.effects,
 
-      /// mode name is required while using toolsmode model
-      required this.name,
+        /// mode name is required while using toolsmode model
+        required this.name,
 
-      /// mode type is set to Enum.layer for default while using toolsmode model
-      this.modeType = EnumModeType.layers,
+        /// mode type is set to Enum.layer for default while using toolsmode model
+        this.modeType = EnumModeType.layers,
 
-      /// icon is not required while using toolsmode model
-      this.icon,
+        /// icon is not required while using toolsmode model
+        this.icon,
 
-      /// submode is not required while using toolsmode model
-      this.subMode,
+        /// submode is not required while using toolsmode model
+        this.subMode,
 
-      /// submode is not required while using toolsmode model
-      this.shortcutKeys,
+        /// submode is not required while using toolsmode model
+        this.shortcutKeys,
 
-      /// display is not required while using toolsmode model
-      this.display,
+        /// display is not required while using toolsmode model
+        this.display,
 
-      /// mode value is not required while using toolsmode model but highly advised to be set
-      this.value});
+        /// mode value is not required while using toolsmode model but highly advised to be set
+        this.value});
 
   /// variable property hold the name of the tools and effects mode
   final String name;
@@ -72,17 +72,17 @@ class ToolsModeModel {
         modeType = EnumModeType.values
             .singleWhere((element) => element.toString() == item['modeType']),
         subMode = EnumModeType.values
-          .firstWhereOrNull((element) => element.toString() == item['subMode']),
+            .firstWhereOrNull((element) => element.toString() == item['subMode']),
         shortcutKeys = [(item['shortcutKeys'] as String).split(' ')],
         display = EnumModeType.values
             .firstWhereOrNull((element) => element.toString() == item['display']),
-        value = EnumModeType.values
+        value = EnumModes.values
             .firstWhereOrNull((element) => element.toString() == item['value']),
         effects = EffectsModel.fromJson(item),
-        icon = IconData(item['codePoint'],
-            fontFamily: item['fontFamily']);
+        icon = IconData(item['icon']['codePoint'],
+            fontFamily: item['icon']['fontFamily']);
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'id': id,
       'currentColor': getCurrentColorAsMap(),
@@ -92,7 +92,7 @@ class ToolsModeModel {
       'shortcutKeys': getShortcutKeysAsMap(),
       'display': display.toString(),
       'value': value.toString(),
-      'effects': effects.toMap(),
+      'effects': effects.toJson(),
       'icon': {'codePoint': icon?.codePoint,
         'fontFamily': icon?.fontFamily}
     };
@@ -101,7 +101,7 @@ class ToolsModeModel {
   getCurrentColorAsMap() {
     var colors = "";
     for (var element in currentColor) {
-      colors += " ${(element as MaterialAccentColor).value}";
+      colors += " ${(element as Color).value}";
     }
     return colors;
   }
@@ -116,9 +116,7 @@ class ToolsModeModel {
 
   static transformToColors(String colors) {
     List<String> colorsList = colors.split(", ");
-    //return colorsList.map((e) => Color(int.parse(e))).toList();
-    //TODO convert color string to actual color
-    return <dynamic>[];
+    return colorsList.map((e) => Color(int.parse(e))).toList();
   }
 }
 
