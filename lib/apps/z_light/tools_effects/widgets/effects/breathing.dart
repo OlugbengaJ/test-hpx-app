@@ -63,9 +63,6 @@ class _BreathingPresetState extends State<BreathingPreset> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Wrap(
-          //   children: _toolsProvider.generateColorPickerWidget(breathingList),
-          // ),
           Wrap(
             children: [
               ColorPickerWidget(
