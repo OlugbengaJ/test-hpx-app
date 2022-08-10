@@ -5,9 +5,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
-import 'package:flutter/material.dart';
-import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/profiles/profiles_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/utils/constants.dart';
@@ -249,7 +246,7 @@ class ProfileProvider extends ChangeNotifier {
   /// [getSystemApps] fetch all applications installed on the OS
   void getSystemApps() async {
     if(isLinux){
-      var result = await Process.run('ls', ['/usr/share/applications/']);
+      ProcessResult result = await Process.run('ls', ['/usr/share/applications/']);
       List<String> listApps = result.stdout.toString().split("\n");
       final dir = Directory('/usr/share/applications/');
 
@@ -287,7 +284,7 @@ class ProfileProvider extends ChangeNotifier {
             try {
               addSystemApp(
                 appInfo['name']!,
-                _getLinuxIcon(appInfo['icon']!),
+                _getLinuxIcon(path:appInfo['icon']!),
                 f.path,
               );
             } catch (e) {
@@ -300,7 +297,8 @@ class ProfileProvider extends ChangeNotifier {
     }
 
     if (isWindows) {
-      var shell = Shell();
+      Shell shell = Shell();
+
       await shell.run("wmic product get name").then((value){
         List<String> resultToList = value.outText.toString().split("\n");
         // Start with index 1 cause the first element is 'Name'
@@ -472,8 +470,7 @@ class SortOption {
 
 
 
-  String _getLinuxIcon(String? path) {
-    path ??= '';
+  String _getLinuxIcon({String path=""}) {
 
     final f = File(path);
     if (!f.existsSync()) {
@@ -508,7 +505,7 @@ class SortOption {
               continue;
             }
 
-            if (f.path.contains(RegExp('${path!}(.*).(jpg|png|svg)'))) {
+            if (f.path.contains(RegExp('$path(.*).(jpg|png|svg)'))) {
               path = f.path;
               iconFound = true;
 
@@ -524,5 +521,5 @@ class SortOption {
       if (!iconFound) path = '';
     }
 
-    return path!;
+    return path;
   }
