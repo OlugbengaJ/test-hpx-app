@@ -5,12 +5,15 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
+import 'package:flutter/material.dart';
 import 'package:hpx/models/apps/zlightspace_models/profiles/profiles_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/utils/constants.dart';
 import 'package:hpx/utils/datetime_util.dart';
 import 'package:hpx/utils/database_manager.dart';
 import 'package:hpx/providers/workspace_provider.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:process_run/shell.dart';
 
 /// [ProfileProvider] allows to manage profiles
 ///
@@ -18,6 +21,13 @@ import 'package:hpx/providers/workspace_provider.dart';
 /// which allows a user to persist different customizations
 /// as different profiles, and change from one to another.
 class ProfileProvider extends ChangeNotifier {
+  bool get isWindows => Platform.isWindows;
+
+  bool get isLinux => Platform.isLinux;
+
+  bool get isMac => Platform.isMacOS;
+
+
   LayersProvider? _layersProvider;
   WorkspaceProvider? _workspaceProvider;
   final List<Profile> _profiles = [
@@ -237,56 +247,77 @@ class ProfileProvider extends ChangeNotifier {
   /// Should be called when the app is first launched
   /// [getSystemApps] fetch all applications installed on the OS
   void getSystemApps() async {
-    var result = await Process.run('ls', ['/usr/share/applications/']);
-    print(result.stdout.toString());
-    List<String> listApps = result.stdout.toString().split("\n");
-    final dir = Directory('/usr/share/applications/');
+    if(isLinux){
+      var result = await Process.run('ls', ['/usr/share/applications/']);
+      List<String> listApps = result.stdout.toString().split("\n");
+      final dir = Directory('/usr/share/applications/');
 
-    for (var i = 0; i < listApps.length; i++) {
-      File f =  File("${dir.path}${listApps[i]}");
-      if (f.existsSync()) {
-        // read each line in .desktop file
-        f.readAsLines().then((value) {
-          final appInfo = <String, String>{};
-          String section = '';
+      for (var i = 0; i < listApps.length; i++) {
+        File f =  File("${dir.path}${listApps[i]}");
+        if (f.existsSync()) {
+          // read each line in .desktop file
+          f.readAsLines().then((value) {
+            final appInfo = <String, String>{};
+            String section = '';
 
-          for (var text in value) {
-            if (section.contains('[desktop entry]')) {
-              final entry = text.split('=');
+            for (var text in value) {
+              if (section.contains('[desktop entry]')) {
+                final entry = text.split('=');
 
-              // only name and icon are required.
-              final k = appInfo.keys.where((e) => e == 'name' || e == 'icon');
-              if (k.length == 2) break;
+                // only name and icon are required.
+                final k = appInfo.keys.where((e) => e == 'name' || e == 'icon');
+                if (k.length == 2) break;
 
-              if (entry.length == 2) {
-                // add key value pair
-                appInfo[entry.first.toLowerCase()] = entry.last;
+                if (entry.length == 2) {
+                  // add key value pair
+                  appInfo[entry.first.toLowerCase()] = entry.last;
+                }
+              }
+
+              if (text.startsWith('[')) {
+                // quit on any other section
+                if (section.isNotEmpty) break;
+
+                // adds first section.
+                section = text.toLowerCase();
               }
             }
 
-            if (text.startsWith('[')) {
-              // quit on any other section
-              if (section.isNotEmpty) break;
-
-              // adds first section.
-              section = text.toLowerCase();
+            try {
+              addSystemApp(
+                appInfo['name']!,
+                _getLinuxIcon(appInfo['icon']!),
+                f.path,
+              );
+            } catch (e) {
+              //
             }
-          }
-
-          try {
-            addSystemApp(
-              appInfo['name']!,
-              _getLinuxIcon(appInfo['icon']!),
-              f.path,
-            );
-          } catch (e) {
-            print('ERROR AT');
-            print(listApps[i]);
-          }
-          
-          //print(appInfo);
-        });
+            
+          });
+        }
       }
+    }
+
+    if (isWindows) {
+      var shell = Shell();
+      await shell.run("wmic product get name").then((value){
+        List<String> resultToList = value.outText.toString().split("\n");
+        // Start with index 1 cause the first element is 'Name'
+        for (var i = 1; i < resultToList.length; i++) {
+          if(resultToList[i] !="" && resultToList[i] != "Name"){
+            try {
+              addSystemApp(
+                resultToList[i].trim(),
+                "",
+                "",
+              );
+            } catch (e) {
+              //              
+            }
+          }          
+        }
+      });
+     
     }
     
   }
