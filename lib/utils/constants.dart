@@ -44,6 +44,7 @@ class Constants {
   static const String resizable = 'Resizable';
   static const String selectAppTitle = 'Select Application';
   static const String selectedProfile = 'Selected Profile';
+  static const String shortcutColorStripNotificationText = 'This layer will not be visible due to an active Shortcuts Color layer above it';
   static const String uploadPicture = 'Upload a picture';
   static const String workspace = 'Workspace';
 

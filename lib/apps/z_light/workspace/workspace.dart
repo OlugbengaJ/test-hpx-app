@@ -129,6 +129,7 @@ class _WorkspaceState extends State<Workspace>
     tutorialProvider.direction = AxisDirection.down;
 
     ProfileProvider profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    LayersProvider layersProvider = Provider.of<LayersProvider>(context, listen: false);
 
     /// Make sure the function is only called if apps lenght is less than 2
     /// The first time the app is launched its called, when apps are fetched, no more call is needed
@@ -302,10 +303,16 @@ class _WorkspaceState extends State<Workspace>
             ),
           ),
         if (workspaceProvider.isStripNotify)
-          StripNotification(
-            message: workspaceProvider.stripNotificationText,
-            closeHandler: workspaceProvider.toggleStripNotification,
-          ),
+        StripNotification(
+          message: workspaceProvider.stripNotificationText,
+          closeHandler: workspaceProvider.toggleStripNotification,
+        ),
+        // Show shortcut colors stripnotification
+        if (layersProvider.shortcutColorWarningIsStripNotify)
+        StripNotification(
+          message: Constants.shortcutColorStripNotificationText,
+          closeHandler: layersProvider.hideStripNotification,
+        ),
         Expanded(
           child: Container(
             decoration: const BoxDecoration(
