@@ -19,7 +19,7 @@ class LayersProvider extends ChangeNotifier {
   bool isLayerEditing = false; // Used to check wether a layer is in edit mode
   int currentEditingID = 0; // if the ID is 0 then no layer is in edit mode
   int currentSublayerID = 0;
-  bool shortcutColorWarningIsStripNotify = true;
+  bool shortcutColorWarningIsStripNotify = false;
 
   /// if the currentSubLayerID is 0 that means there is no sublayer selected
   bool isSublayerSelected = false;
@@ -206,7 +206,13 @@ class LayersProvider extends ChangeNotifier {
     if (isSublayerSelected & !creatingNewLayer) {
       item = getCurrentSublayer()!;
     }
-    var subLayers = getSublayers(item.id);
+    List<LayerItemModel> subLayers = getSublayers(item.id);
+
+    if (length>1) {
+      if(_modeProvider!.getModeInformation().value == EnumModes.shortcut){
+        shortcutColorWarningIsStripNotify = true;
+      }
+    }
 
     /// check if there is already a layer with shortcut mode
     if (modeChanged &
