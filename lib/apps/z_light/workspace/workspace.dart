@@ -124,6 +124,10 @@ class _WorkspaceState extends State<Workspace>
   @override
   Widget build(BuildContext context) {
     final workspaceProvider = Provider.of<WorkspaceProvider>(context);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      workspaceProvider.recenter();
+    });
+
     final tutorialProvider =
         Provider.of<TooltipTutorialProvider>(context, listen: false);
     tutorialProvider.direction = AxisDirection.down;
@@ -159,10 +163,7 @@ class _WorkspaceState extends State<Workspace>
         /// sub-widgets cliped only to the view.
         if (workspaceProvider.isLightingView)
           ConstrainedBox(
-            key: workspaceZoneToolsKey,
-            constraints: const BoxConstraints(
-              maxHeight: 85,
-            ),
+            constraints: const BoxConstraints(maxHeight: 85),
             child: Container(
               margin: const EdgeInsets.all(15.0),
               child: Column(
@@ -170,7 +171,7 @@ class _WorkspaceState extends State<Workspace>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: Text('Zone Selection', style: h5Style),
+                    child: Text(Constants.zoneSelection, style: h5Style),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -271,7 +272,7 @@ class _WorkspaceState extends State<Workspace>
                         widget: Padding(
                           padding: const EdgeInsets.only(right: 20.0),
                           child: Tooltip(
-                            message: 'Click selector',
+                            message: Constants.clickSelector,
                             child: RoundButton(
                               onTapDown: workspaceProvider.zoneClickFnc,
                               size: _buttonSize,
@@ -324,7 +325,8 @@ class _WorkspaceState extends State<Workspace>
             child: LayoutBuilder(
               builder: (_, constraints) {
                 // set the keyboard center
-                workspaceProvider.recenter(constraints, _resetZoom);
+                workspaceProvider.setWorkspaceConstraints(
+                    constraints, _resetZoom);
 
                 return Stack(
                   children: [
@@ -345,11 +347,19 @@ class _WorkspaceState extends State<Workspace>
                         children: [
                           // Keyboard widget takes a zoom scale which is applied to all keys.
                           // This ensures seamless zooming of the entire keyboard.
-                          Positioned(
-                            left: workspaceProvider.keyboardPosLeft,
-                            top: workspaceProvider.keyboardPosTop,
-                            // alignment: Alignment.center,
-                            child: Keyboard(zoomScale: _zoomScale),
+                          ValueListenableBuilder<Offset>(
+                            valueListenable:
+                                workspaceProvider.keyboardOffsetValueNotifier,
+                            builder: (context, value, child) {
+                              return Positioned(
+                                left: value.dx,
+                                top: value.dy,
+                                child: Keyboard(
+                                  key: keyboardStackKey,
+                                  zoomScale: _zoomScale,
+                                ),
+                              );
+                            },
                           ),
 
                           OverlaySelector(
@@ -484,7 +494,10 @@ class _WorkspaceState extends State<Workspace>
                           zoomInHandler: zoomIn,
                           zoomExpandHandler: zoomExpand,
                           zoomOutHandler: zoomOut,
-                          zoomCollapseHandler: recenterView,
+                          zoomRecenterHandler: () {
+                            recenterView();
+                            workspaceProvider.recenter();
+                          },
                           zoomEndHandler: zoomEnd,
                         ),
                       ),

@@ -18,10 +18,24 @@ class SelectionOffset {
 
 class LTWH {
   /// [LTWH] stores location information and could be used to draw out a Rect
-  LTWH([this.left, this.top, this.width, this.height]);
+  LTWH([
+    this.left,
+    this.top,
+    this.width,
+    this.height,
+    this.leftToCenter,
+    this.topToCenter,
+  ]);
 
   late double? left;
   late double? top;
   late double? width;
   late double? height;
+  late double? leftToCenter;
+  late double? topToCenter;
+
+  @override
+  String toString() {
+    return 'l: $left t: $top w: $width h: $height l2c: $leftToCenter t2c: $topToCenter';
+  }
 }

@@ -11,6 +11,7 @@ class Keyboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
+      fit: StackFit.loose,
       alignment: Alignment.center,
       children: [
         Padding(
@@ -20,6 +21,8 @@ class Keyboard extends StatelessWidget {
             child: Image.asset(
               Constants.laptopg9Image,
               fit: BoxFit.contain,
+              width: Constants.zoomFactor * zoomScale * 1.01,
+              height: Constants.zoomFactor * zoomScale * 1.01,
             ),
           ),
         ),

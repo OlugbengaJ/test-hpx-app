@@ -9,7 +9,6 @@ import 'package:hpx/models/apps/zlightspace_models/workspace_models/box_zone.dar
 import 'package:hpx/models/apps/zlightspace_models/workspace_models/selection_offset.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/utils/common.dart';
-import 'package:hpx/widgets/components/picker_dropdown.dart';
 
 /// [WorkspaceProvider] handles the workspace events.
 ///
@@ -29,16 +28,19 @@ class WorkspaceProvider with ChangeNotifier {
   /// [scrollOffset] used to determine actual the workspace width and height minus scrollbars.
   late double? scrollOffset;
 
-  /// [_selectorVisible] determines overlay selectors visibility.
+  /// [selectorVisible] determines overlay selectors visibility.
   bool _selectorVisible = false;
-
-  /// [keyboardPosLeft] holds the left position of the keyboard in workspace.
-  double? keyboardPosLeft;
-
-  /// [keyboardPosTop] holds the top position of the keyboard in workspace.
-  double? keyboardPosTop;
-
   bool get selectorVisible => _selectorVisible;
+
+  /// [_keyboardRect] returns a [Rect] of the rendered keyboard stack.
+  ///
+  /// This is necessary to determine the keyboard's global position.
+  Rect get _keyboardRect {
+    final keyboardRender =
+        keyboardStackKey.currentContext?.findRenderObject() as RenderBox?;
+
+    return keyboardRender!.localToGlobal(Offset.zero) & keyboardRender.size;
+  }
 
   /// [_workspaceRect] returns a [Rect] of the rendered workspace stack.
   ///
@@ -48,31 +50,6 @@ class WorkspaceProvider with ChangeNotifier {
         workspaceStackKey.currentContext?.findRenderObject() as RenderBox?;
 
     return workspaceRender!.localToGlobal(Offset.zero) & workspaceRender.size;
-  }
-
-  /// [_getWorkspaceOffset] returns an offset from the workspace left and top.
-  Offset get _getWorkspaceOffset {
-    return Offset(_workspaceRect.left, _workspaceRect.top);
-  }
-
-  /// [_zoneToolsRect] returns a nullable [Rect] of the
-  /// rendered workspace zone selection tools section.
-  ///
-  /// This is necessary to determine the overlay selector's global position.
-  Rect? get _zoneToolsRect {
-    final zoneToolsRender =
-        workspaceZoneToolsKey.currentContext?.findRenderObject() as RenderBox?;
-
-    if (zoneToolsRender == null) return null;
-    return zoneToolsRender.localToGlobal(Offset.zero) & zoneToolsRender.size;
-  }
-
-  /// [zoneToolsHeight] gives the value of the zone selection constrained widget.
-  double? _zoneToolsHeight;
-  double get zoneToolsHeight {
-    // initialize variable if null
-    _zoneToolsHeight ??= _zoneToolsRect?.height;
-    return _zoneToolsHeight!;
   }
 
   /// [isStripNotify] returns if strip notifcation is displayed.
@@ -105,24 +82,30 @@ class WorkspaceProvider with ChangeNotifier {
   bool _isPanning = true;
 
   /// [toggleView] is used to switch views within the app.
-  void toggleView(WorkspaceView view) {
+  void toggleView(WorkspaceView view) async {
     if (view != _workspaceView) {
       // view changed, update the layers LTWH offsets.
-      // since this method can only called after the widget tree is built,
+      // since this method is only called after the widget tree is built,
       // we can safely iterate the layers LTWH here without checking for null.
 
-      for (var ltwh in layersLTWH.values) {
-        if (ltwh.dragMode == WorkspaceDragMode.resizable) {
-          resetLTWHOffset(ltwh.resizableLTWH!, view);
-        } else {
-          resetLTWHOffset(ltwh.highlightLTWH!, view);
+      _workspaceView = view;
+      notifyListeners();
+
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        for (var ltwh in layersLTWH.values) {
+          switch (ltwh.dragMode) {
+            case WorkspaceDragMode.resizable:
+              resetLTWHOffset(ltwh.resizableLTWH!, view);
+
+              break;
+            default:
+              resetLTWHOffset(ltwh.highlightLTWH!, view);
+          }
         }
-      }
+
+        notifyListeners();
+      });
     }
-
-    _workspaceView = view;
-
-    notifyListeners();
   }
 
   /// [_animSpeed] is the animation speed in milliseconds and defaults to 0s.
@@ -363,13 +346,6 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [onPanDown] indicates the the primary mouse is down and pan started.
   void onPanDown(DragDownDetails details, [DraggableRegionName? handleName]) {
-    // preserve the workspace offset on pan down when pan down offset is null,
-    // which is used to reinitialize the workspace offset on pan end.
-    _workspacePanDownOffset ??= _getWorkspaceOffset;
-
-    // set workspace offset to null to allow drag without offset.
-    _workspaceOffset = null;
-
     if (_keyDragMode == WorkspaceDragMode.highlight) {
       // initialize panDown and panUpdate details to avoid positions null errors.
       _panDownDetails = details;
@@ -400,6 +376,8 @@ class WorkspaceProvider with ChangeNotifier {
       ltwh.highlightLTWH!.width = _dragW;
       ltwh.highlightLTWH!.height = _dragH;
 
+      updateLTWHToCenter(ltwh.highlightLTWH!, _dragL, _dragT);
+
       _selectorVisible = true;
     } else if (isDragModeResizable && handleName != null) {
       // based on the handle name update the overlay selector's position.
@@ -420,7 +398,8 @@ class WorkspaceProvider with ChangeNotifier {
           if (left > 0 && leftPlusWidth < workspaceWidth ||
               (leftPlusWidth > workspaceWidth && details.delta.dx.isNegative) ||
               (left < 0 && !details.delta.dx.isNegative)) {
-            ltwh.resizableLTWH!.left = left;
+            // recalculate left to center
+            updateLTWHToCenter(ltwh.resizableLTWH!, left, top);
           }
 
           final topPlusHeight = top + ltwh.resizableLTWH!.height!;
@@ -437,8 +416,10 @@ class WorkspaceProvider with ChangeNotifier {
           // resize from top-left, set selector's left, top, width, and height.
           // width must be greater than threshold and within view.
           if (left > 0 && widthMinus >= _resizableThreshold) {
-            ltwh.resizableLTWH!.left = left;
             ltwh.resizableLTWH!.width = widthMinus;
+
+            // recalculate left to center
+            updateLTWHToCenter(ltwh.resizableLTWH!, left, top);
           }
 
           // height must be greater than threshold and within view.
@@ -485,8 +466,11 @@ class WorkspaceProvider with ChangeNotifier {
           // resize from bottom-left, set selector's left, width, and height.
           // width must be greater than threshold and within view.
           if (left > 0 && widthMinus >= _resizableThreshold) {
-            ltwh.resizableLTWH!.left = left;
             ltwh.resizableLTWH!.width = widthMinus;
+
+            // recalculate left to center
+            updateLTWHToCenter(
+                ltwh.resizableLTWH!, left, ltwh.resizableLTWH!.top!);
           }
 
           // height must be greater than threshold and within view.
@@ -512,9 +496,6 @@ class WorkspaceProvider with ChangeNotifier {
 
   /// [onPanClear] resets variables used to indicate pan in progress.
   void onPanClear() {
-    // reinitialize workspace offset from its offset at pan down.
-    _workspaceOffset = _workspacePanDownOffset;
-
     // disable panning and selector visibility in highlight mode.
     if (isDragModeHighlight) {
       _isPanning = false;
@@ -617,14 +598,8 @@ class WorkspaceProvider with ChangeNotifier {
         _panUpdateDetails!.localPosition.dx, _panDownDetails!.localPosition.dx);
   }
 
-  /// [_workspaceOffset] holds the offset of the workspace stack.
-  ///
-  /// This offset is used to adjust the offset of the overlay selector.
-  Offset? _workspaceOffset;
-  Offset? _workspacePanDownOffset;
-
   /// [boxZone] checks a widget intersects with the selector.
-  BoxZone? boxZone(RenderBox? box, int? layerId) {
+  BoxZone? boxZone(RenderBox? box, int? layerId, [String keyCode = '']) {
     final Rect selectorRect;
 
     switch (_keyDragMode) {
@@ -639,31 +614,8 @@ class WorkspaceProvider with ChangeNotifier {
           // check the last drag mode used and paint widget with LTWH.
           // LTWH used by the overlay selectors uses local offsets, hence the
           // need to add workspace left and top to get their global offsets.
-          double leftOffset;
-          double topOffset;
-
-          if (isLightingView) {
-            // lighting view is activated.
-
-            leftOffset = _workspaceOffset?.dx ?? _workspaceRect.left;
-
-            // set top offset to workspace top if it has not changed,
-            // else use workspace top minus half of the zone tools height.
-            topOffset = _workspaceOffset?.dy == null ||
-                    _workspaceOffset?.dy == _workspaceRect.top
-                ? _workspaceRect.top
-                : _workspaceOffset!.dy - (zoneToolsHeight / 2);
-          } else {
-            // workspace view is activated.
-
-            leftOffset = 0;
-
-            // set top offset to workspace top if it has changed,
-            // else use workspace top offset minus half of the zone tools height.
-            topOffset = (_workspaceOffset?.dy != _workspaceRect.top
-                ? _workspaceRect.top
-                : _workspaceOffset!.dy - (zoneToolsHeight / 2));
-          }
+          double leftOffset = _workspaceRect.left;
+          double topOffset = _workspaceRect.top;
 
           if (ltwh.dragMode == WorkspaceDragMode.resizable) {
             selectorRect = Rect.fromLTWH(
@@ -696,25 +648,22 @@ class WorkspaceProvider with ChangeNotifier {
     }
   }
 
+  void updateLTWHToCenter(LTWH ltwh, double left, double top) {
+    // recalculate left to center
+    final centerScreenW = _workspaceRect.width / 2;
+    final centerScreenH = _workspaceRect.height / 2;
+
+    ltwh.leftToCenter = centerScreenW - left;
+    ltwh.topToCenter = centerScreenH - top;
+    resetLTWHOffset(ltwh, _workspaceView);
+  }
+
   /// [resetLTWHOffset] updates a LTHW left and top values using the
   /// workspace offsets based on the current view in focus.
   void resetLTWHOffset(LTWH d, WorkspaceView selectedView) {
-    final topOffset = (zoneToolsHeight / 2);
-
-    if (selectedView == WorkspaceView.workspace) {
-      // subtract workspace left from selection offset's left
-      // and add half of zone tools height to offset's top.
-      d.left = d.left! + _workspaceRect.left;
-      d.top = d.top! + topOffset;
-
-      // set the workspace offset.
-      _workspaceOffset = _getWorkspaceOffset;
-    } else {
-      // subtract workspace offset left from selection offset's left
-      // and subtract half of zone tools height from offset's top.
-      d.left = d.left! - (_workspaceOffset?.dx ?? _workspaceRect.left);
-      d.top = d.top! - topOffset;
-    }
+    // recalculate left & top to center
+    d.left = (_workspaceRect.width / 2) - d.leftToCenter!;
+    d.top = (_workspaceRect.height / 2) - d.topToCenter!;
   }
 
   /// [layersLTWH] maintains each layer selections and allows the user to switch
@@ -748,26 +697,30 @@ class WorkspaceProvider with ChangeNotifier {
   void _initLayerLTWH() {
     if (_layersProvider?.layeritems == null) return;
 
+    // TODO:
+
     for (var layer in _layersProvider!.layeritems) {
       SelectionOffset? layerLTWH = _getLayerLTWH(layer.id);
 
       if (layerLTWH == null) {
         // layer does not exist, hence set the LTWH to defaults
         // get the workspace stack via its global key and use its size
-
-        final left = (_workspaceRect.size.width - scrollOffset!) / 2;
-        final top = (_workspaceRect.size.height - scrollOffset!) / 2;
-        const double halfSize = 70.0;
+        // final left = (_workspaceRect.size.width - scrollOffset!) / 2;
+        // final top = (_workspaceRect.size.height - scrollOffset!) / 2;
+        // const double halfSize = 80.0;
+        const double size = 160.0;
+        const double halfSize = size / 2;
+        double centerScreenW = _workspaceRect.width / 2;
+        double centerScreenH = _workspaceRect.height / 2;
 
         // actual size of the overlay
-        const double size = halfSize * 2;
-
         layerLTWH = SelectionOffset()
           ..id = '${layer.id}'
           ..mode = (layer.mode?.value as EnumModes).name
           ..dragMode = WorkspaceDragMode.resizable
-          ..highlightLTWH = LTWH(0.0, 0.0, 0.0, 0.0)
-          ..resizableLTWH = LTWH(left - halfSize, top - halfSize, size, size);
+          ..highlightLTWH = LTWH(0.0, 0.0, 0.0, 0.0, halfSize, halfSize)
+          ..resizableLTWH = LTWH(centerScreenW - halfSize,
+              centerScreenH - halfSize, size, size, halfSize, halfSize);
       } else {
         // layer exist but need to reinsert as it's index may have changed.
         _deleteLayerLTWH(layer.id);
@@ -849,34 +802,46 @@ class WorkspaceProvider with ChangeNotifier {
     layersLTWH.remove('$id');
   }
 
-  /// [_workspaceConstraints] holds the contraints of the workspace,
-  /// which is used to position other widgets in the tree.
-  BoxConstraints? _workspaceConstraints;
+  final ValueNotifier<Offset> keyboardOffsetValueNotifier =
+      ValueNotifier(const Offset(0.0, 0.0));
 
-  /// [recenter] sets the left and top position of the workspace children
-  void recenter(BoxConstraints constraints, bool reset) {
-    if (_workspaceConstraints == null ||
-        _workspaceConstraints?.maxWidth != constraints.maxWidth ||
-        _workspaceConstraints?.maxHeight != constraints.maxHeight ||
-        reset) {
-      // update workspace contraints
-      _workspaceConstraints = constraints;
+  void recenter() {
+    final centerScreenW = _workspaceRect.width / 2;
+    final centerScreenH = _workspaceRect.height / 2;
+    final centerKeyboardW = _keyboardRect.width / 2;
+    final centerKeyboardH = _keyboardRect.height / 2;
 
-      // recalculate keyboard position
-      keyboardPosLeft = (constraints.maxWidth - scrollOffset!) / 5;
-      keyboardPosTop = (constraints.maxHeight - scrollOffset!) / 8;
-    }
+    keyboardOffsetValueNotifier.value = Offset(
+        centerScreenW - centerKeyboardW, centerScreenH - centerKeyboardH);
   }
 
-  /// [updateKeyboardPosTop] changes [keyboardPosLeft] when scrolling horizontally.
-  ///
-  /// [keyboardPosLeft] is consumed by the keyboard portion of the workspace
-  /// to position its children's left i.e. keyboard and overlay selectors.
+  /// [setWorkspaceConstraints] sets the left and top position of the workspace children
+  void setWorkspaceConstraints(BoxConstraints constraints, bool reset) {
+    // if (_workspaceConstraints == null ||
+    //     _workspaceConstraints?.maxWidth != constraints.maxWidth ||
+    //     _workspaceConstraints?.maxHeight != constraints.maxHeight ||
+    //     reset) {
+    //   // update workspace contraints
+    //   _workspaceConstraints = constraints;
+
+    //   // recalculate keyboard position
+    //   // keyboardPosLeft = (constraints.maxWidth - scrollOffset!) / 5;
+    //   // keyboardPosTop = (constraints.maxHeight - scrollOffset!) / 8;
+    // }
+  }
+
+  /// [updateKeyboardPosTop] changes laptop's left position
+  /// when scrolling horizontally.
   void updateKeyboardPosLeft(
       bool scrolling, DragUpdateDetails details, double scale) {
+    debugPrint('init w $_workspaceRect');
+    debugPrint('init k $_keyboardRect');
+    // debugPrint('init center WxH $centerScreenW} $centerScreenH');
+    // debugPrint(
+    //     'init rez L x T ${centerScreenW - (size / 2)} ${centerScreenH - (size / 2)}');
     if (scrolling) {
       final dx = details.delta.dx * scale;
-      keyboardPosLeft = keyboardPosLeft! - dx;
+      // keyboardPosLeft = keyboardPosLeft! - dx;
 
       // update layers overlay selector position
       layersLTWH.forEach(
@@ -897,15 +862,13 @@ class WorkspaceProvider with ChangeNotifier {
     }
   }
 
-  /// [updateKeyboardPosTop] changes [keyboardPosTop] when scrolling vertically.
-  ///
-  /// [keyboardPosTop] is consumed by the keyboard portion of the workspace
-  /// to position its children's top i.e. keyboard and overlay selectors.
+  /// [updateKeyboardPosTop] changes laptop's top position
+  /// when scrolling vertically.
   void updateKeyboardPosTop(
       bool scrolling, DragUpdateDetails details, double scale) {
     if (scrolling) {
       final dy = details.delta.dy * scale;
-      keyboardPosTop = keyboardPosTop! - dy;
+      // keyboardPosTop = keyboardPosTop! - dy;
 
       // update layers overlay selector position
       layersLTWH.forEach(
