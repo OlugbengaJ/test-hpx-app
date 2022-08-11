@@ -247,7 +247,7 @@ List<ColorPickerWidgetModel> moodThemesList = [
   ColorPickerWidgetModel(
     action: '',
     name: "Night Mode",
-    hasBorder: false,
+    hasBorder: true,
     colorCode: [Colors.orangeAccent],
   ),
   ColorPickerWidgetModel(
@@ -353,9 +353,11 @@ List<ColorPickerWidgetModel> audioVisualGradientList = [
 //// color picker provider class to handle the color picker generate ui functions, and set the current color
 class ColorPickerProvider extends ChangeNotifier {
   ColorPickerWidgetModel? currentColor;
-  bool hasBorder = false;
+  List<bool> hasBorder = [];
   Timer? timer;
   Color color = Colors.transparent;
+
+  ColorGradientEnum gradientType = ColorGradientEnum.linear;
 
   /// current color
   List<Color> lastColors = [
@@ -409,6 +411,11 @@ class ColorPickerProvider extends ChangeNotifier {
   // function to set the current color and notify the provider listener
   void setCurrentPickerWidget(ColorPickerWidgetModel data) {
     currentColor = data;
+    notifyListeners();
+  }
+
+  void choooseGradientType(ColorGradientEnum choice) {
+    gradientType = choice;
     notifyListeners();
   }
 

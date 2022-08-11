@@ -40,12 +40,10 @@ class ColorPickerWidget extends StatelessWidget {
   final double? height;
 
   BoxDecoration? previewBox;
-  Timer? time;
   Color? currentColor;
   List<Color> currentColors = [];
   int colorPosition = 0;
   bool isHover = false;
-  bool _value = false;
   bool isFocused = false;
   TextEditingController colorController = TextEditingController();
 
@@ -78,10 +76,12 @@ class ColorPickerWidget extends StatelessWidget {
   void closeDialog(BuildContext context) {
     ColorPickerProvider colorPickerProviderInstance =
         Provider.of<ColorPickerProvider>(context, listen: false);
-    colors = currentColors;
-    if (colorPickerProviderInstance.lastColors.contains(currentColor) ==
-        false) {
-      colorPickerProviderInstance.lastColors.add(currentColor!);
+    if (colorPickerProviderInstance.lastColors.isNotEmpty) {
+      colors = currentColors;
+      if (colorPickerProviderInstance.lastColors.contains(currentColor) ==
+          false) {
+        colorPickerProviderInstance.lastColors.add(currentColor!);
+      }
     }
     Navigator.of(context).pop();
   }
@@ -112,13 +112,73 @@ class ColorPickerWidget extends StatelessWidget {
               children: <Widget>[
                 Text(Constants.colorEditor,
                     textAlign: TextAlign.left, style: labelStyle),
+                (colors.length < 2)
+                    ? Container()
+                    : Row(
+                        children: [
+                          InkWell(
+                            highlightColor: Colors.transparent,
+                            focusColor: Colors.transparent,
+                            hoverColor: Colors.transparent,
+                            onTap: () {
+                              colorPickerProviderInstance.choooseGradientType(
+                                  ColorGradientEnum.linear);
+                            },
+                            child: Container(
+                              width: 20,
+                              height: 20,
+                              margin: const EdgeInsets.only(
+                                  top: 10.0, bottom: 4.0, right: 10),
+                              decoration: BoxDecoration(
+                                  gradient: const LinearGradient(colors: [
+                                    Color(0xFFCFCFCF),
+                                    Color(0xFF878787)
+                                  ]),
+                                  border: Border.all(
+                                      width: 1,
+                                      color: (colorPickerProviderInstance
+                                                  .gradientType ==
+                                              ColorGradientEnum.radial)
+                                          ? Colors.transparent
+                                          : Colors.white)),
+                            ),
+                          ),
+                          InkWell(
+                            highlightColor: Colors.transparent,
+                            focusColor: Colors.transparent,
+                            hoverColor: Colors.transparent,
+                            onTap: () {
+                              colorPickerProviderInstance.choooseGradientType(
+                                  ColorGradientEnum.radial);
+                            },
+                            child: Container(
+                              width: 20,
+                              height: 20,
+                              margin: const EdgeInsets.only(
+                                  top: 10.0, bottom: 4.0, right: 5),
+                              decoration: BoxDecoration(
+                                  gradient: const RadialGradient(colors: [
+                                    Color(0xFFC7C7C7),
+                                    Color(0xFF757575)
+                                  ]),
+                                  border: Border.all(
+                                      width: 1,
+                                      color: (colorPickerProviderInstance
+                                                  .gradientType ==
+                                              ColorGradientEnum.linear)
+                                          ? Colors.transparent
+                                          : Colors.white)),
+                            ),
+                          ),
+                        ],
+                      ),
                 Row(
                   children: [
                     Column(
                       children: [
                         Container(
                           margin:
-                              const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                              const EdgeInsets.only(top: 10.0, bottom: 20.0),
                           width: (colors.length > 1) ? 250 : 30,
                           height: 20,
                           decoration: generatePreviewBox(true),
@@ -150,7 +210,7 @@ class ColorPickerWidget extends StatelessWidget {
                                   enableAlpha: true,
                                   paletteType: PaletteType.hueWheel,
                                   portraitOnly: true,
-                                  colorPickerWidth: 200,
+                                  colorPickerWidth: 180,
                                   displayThumbColor: true,
                                   hexInputController: colorController,
                                   pickerColor: (currentColor != null)
@@ -198,25 +258,32 @@ class ColorPickerWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-                Text(Constants.preset,
-                    textAlign: TextAlign.left, style: labelStyle),
-                Container(margin: const EdgeInsets.only(top: 7.0)),
-                SizedBox(
-                    width: 250,
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: generatePresetBox(
-                            9, colorPickerProviderInstance.presetColors[0]))),
-                SizedBox(
-                    width: 250,
-                    child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: generatePresetBox(
-                            9, colorPickerProviderInstance.presetColors[1]))),
-                Container(margin: const EdgeInsets.only(bottom: 10.0)),
-                Text(Constants.current,
-                    textAlign: TextAlign.left, style: labelStyle),
-                Container(margin: const EdgeInsets.only(top: 7.0)),
+                Container(
+                    margin: const EdgeInsets.only(top: 7.0),
+                    child: SizedBox(
+                        width: 250,
+                        child: Column(
+                          children: [
+                            Text(Constants.preset,
+                                textAlign: TextAlign.left, style: labelStyle),
+                            Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: generatePresetBox(
+                                    9,
+                                    colorPickerProviderInstance
+                                        .presetColors[0])),
+                            Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: generatePresetBox(
+                                    9,
+                                    colorPickerProviderInstance
+                                        .presetColors[1]))
+                          ],
+                        ))),
+                Container(
+                    margin: const EdgeInsets.only(bottom: 10.0, top: 7.0),
+                    child: Text(Constants.current,
+                        textAlign: TextAlign.left, style: labelStyle)),
                 SizedBox(
                     width: 250,
                     child: Row(
@@ -239,8 +306,11 @@ class ColorPickerWidget extends StatelessWidget {
                               backgroundColor: Colors.red,
                             ),
                             onPressed: () {
-                              changeColor(
-                                  colorPickerProviderInstance.lastColors.last);
+                              if (colorPickerProviderInstance
+                                  .lastColors.isNotEmpty) {
+                                changeColor(colorPickerProviderInstance
+                                    .lastColors.last);
+                              }
                               closeDialog(context);
                             },
                             child: const Text(Constants.cancel))
@@ -303,13 +373,17 @@ class ColorPickerWidget extends StatelessWidget {
   generatePreviewBox(bool? preview) {
     return (colors.length > 1 && preview == true)
         ? BoxDecoration(
-            gradient: LinearGradient(colors: colors),
+            gradient: (Provider.of<ColorPickerProvider>(context, listen: false)
+                        .gradientType ==
+                    ColorGradientEnum.linear)
+                ? LinearGradient(colors: colors)
+                : RadialGradient(colors: colors),
             border: Border.all(
                 width: (isFocused)
-                    ? 2
+                    ? 1.5
                     : (isHover || hasBorder == true)
-                        ? 2
-                        : 1,
+                        ? 1.5
+                        : 0.6,
                 color: (isFocused)
                     ? Colors.white
                     : (isHover || hasBorder == true)
@@ -319,10 +393,10 @@ class ColorPickerWidget extends StatelessWidget {
             color: color,
             border: Border.all(
                 width: (isFocused)
-                    ? 2
+                    ? 1.5
                     : (isHover || hasBorder == true)
-                        ? 2
-                        : 1,
+                        ? 1.5
+                        : 0.6,
                 color: (isFocused)
                     ? Colors.white
                     : (isHover || hasBorder == true)
@@ -362,11 +436,6 @@ class ColorPickerWidget extends StatelessWidget {
     return Row(
       children: ui,
     );
-  }
-
-  proccessRandom() {
-    Color color = Colors.transparent;
-    return color;
   }
 
   @override
@@ -410,9 +479,8 @@ class ColorPickerWidget extends StatelessWidget {
               ],
             ),
             Container(margin: const EdgeInsets.only(top: 5.0)),
-            (setRandom == true)
-                ? Container(margin: const EdgeInsets.only(top: 5.0))
-                : InkWell(
+            (setRandom == false)
+                ? InkWell(
                     highlightColor: Colors.transparent,
                     focusColor: Colors.transparent,
                     hoverColor: Colors.transparent,
@@ -440,64 +508,101 @@ class ColorPickerWidget extends StatelessWidget {
                         ],
                       ))
                     ]),
-                  ),
-            (setRandom == false)
-                ? Container()
-                : SizedBox(
-                    width: 150,
-                    child: Column(
-                      children: [
-                        Row(children: [
-                          Expanded(
-                              child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Checkbox(
-                                activeColor: Colors.green,
-                                value: _value,
-                                onChanged: (bool? value) {
-                                  ColorPickerProvider
-                                      colorPickerProviderInstance =
-                                      Provider.of<ColorPickerProvider>(context,
-                                          listen: false);
-                                  _value = value!;
-                                  hasBorder = (!_value) ? true : false;
-                                  picker = (!_value) ? true : false;
-
-                                  if (value == true) {
-                                    time = Timer.periodic(
-                                        const Duration(seconds: 1), (timer) {
-                                      onchange!([
-                                        colorPickerProviderInstance
-                                            .generateRandomColor()
-                                      ]);
-                                    });
-                                  } else {
-                                    time!.cancel();
-                                    onchange!([color]);
-                                  }
-                                },
-                              )
-                            ],
-                          )),
-                          Expanded(
-                              flex: 3,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(Constants.randomColor,
-                                      textAlign: TextAlign.left,
-                                      style: labelStyle),
-                                ],
-                              ))
-                        ]),
-                      ],
-                    ),
-                  ),
-            (setRandom == false)
-                ? Container()
-                : Container(margin: const EdgeInsets.only(bottom: 20.0))
+                  )
+                : Container(
+                    margin: const EdgeInsets.only(bottom: 20.0, top: 10.0),
+                    child: RandomColorPicker(
+                      onChange: (Color? newcolor) {
+                        hasBorder = (newcolor != null) ? false : true;
+                        isFocused = true;
+                        onchange!([newcolor ?? color]);
+                      },
+                    ))
           ],
         ));
+  }
+}
+
+class ColorPickerBox extends StatefulWidget {
+  ColorPickerBox({Key? key, required this.onChange}) : super(key: key);
+  Function(Color? color) onChange;
+
+  @override
+  State<ColorPickerBox> createState() => _ColorPickerBox();
+}
+
+class _ColorPickerBox extends State<ColorPickerBox> {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox();
+  }
+}
+
+class RandomColorPicker extends StatefulWidget {
+  RandomColorPicker({Key? key, required this.onChange}) : super(key: key);
+  Function(Color? color) onChange;
+
+  @override
+  State<RandomColorPicker> createState() => _RandomColorPicker();
+}
+
+class _RandomColorPicker extends State<RandomColorPicker> {
+  Timer? time;
+  bool _value = false;
+  ColorPickerProvider colorPickerProviderInstance = ColorPickerProvider();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    time?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 150,
+      child: Column(
+        children: [
+          Row(children: [
+            Expanded(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Checkbox(
+                  activeColor: Colors.green,
+                  value: _value,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      _value = (_value == true) ? false : true;
+                    });
+
+                    if (value == true) {
+                      time =
+                          Timer.periodic(const Duration(seconds: 1), (timer) {
+                        widget.onChange(
+                            colorPickerProviderInstance.generateRandomColor());
+                      });
+                    } else {
+                      time!.cancel();
+                      widget.onChange(null);
+                    }
+                  },
+                )
+              ],
+            )),
+            Expanded(
+                flex: 3,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(Constants.randomColor,
+                        textAlign: TextAlign.left, style: labelStyle),
+                  ],
+                ))
+          ]),
+        ],
+      ),
+    );
   }
 }
