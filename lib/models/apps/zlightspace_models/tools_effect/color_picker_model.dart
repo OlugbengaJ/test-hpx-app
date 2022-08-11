@@ -47,3 +47,5 @@ class ColorPickerWidgetModel {
   /// the gradient variable get input of the type of gradient been used (linear or circular)
   String? gradient;
 }
+
+enum ColorGradientEnum { linear, radial }
