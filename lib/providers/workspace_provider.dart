@@ -802,8 +802,9 @@ class WorkspaceProvider with ChangeNotifier {
     layersLTWH.remove('$id');
   }
 
-  final ValueNotifier<Offset> keyboardOffsetValueNotifier =
-      ValueNotifier(const Offset(0.0, 0.0));
+  final keyboardOffsetNotifier = ValueNotifier<Offset>(Offset.zero);
+  set keyboardOffset(Offset offset) => keyboardOffsetNotifier.value = offset;
+  Offset get keyboardOffset => keyboardOffsetNotifier.value;
 
   void recenter() {
     final centerScreenW = _workspaceRect.width / 2;
@@ -811,37 +812,20 @@ class WorkspaceProvider with ChangeNotifier {
     final centerKeyboardW = _keyboardRect.width / 2;
     final centerKeyboardH = _keyboardRect.height / 2;
 
-    keyboardOffsetValueNotifier.value = Offset(
+    debugPrint('===================================');
+    debugPrint('\tRECENTER');
+
+    keyboardOffset = Offset(
         centerScreenW - centerKeyboardW, centerScreenH - centerKeyboardH);
   }
 
-  /// [setWorkspaceConstraints] sets the left and top position of the workspace children
-  void setWorkspaceConstraints(BoxConstraints constraints, bool reset) {
-    // if (_workspaceConstraints == null ||
-    //     _workspaceConstraints?.maxWidth != constraints.maxWidth ||
-    //     _workspaceConstraints?.maxHeight != constraints.maxHeight ||
-    //     reset) {
-    //   // update workspace contraints
-    //   _workspaceConstraints = constraints;
-
-    //   // recalculate keyboard position
-    //   // keyboardPosLeft = (constraints.maxWidth - scrollOffset!) / 5;
-    //   // keyboardPosTop = (constraints.maxHeight - scrollOffset!) / 8;
-    // }
-  }
-
-  /// [updateKeyboardPosTop] changes laptop's left position
+  /// [updateKeyboardPosLeft] changes laptop's left position
   /// when scrolling horizontally.
   void updateKeyboardPosLeft(
-      bool scrolling, DragUpdateDetails details, double scale) {
-    debugPrint('init w $_workspaceRect');
-    debugPrint('init k $_keyboardRect');
-    // debugPrint('init center WxH $centerScreenW} $centerScreenH');
-    // debugPrint(
-    //     'init rez L x T ${centerScreenW - (size / 2)} ${centerScreenH - (size / 2)}');
-    if (scrolling) {
+      bool? scrolling, DragUpdateDetails details, double scale) {
+    if (scrolling == true) {
       final dx = details.delta.dx * scale;
-      // keyboardPosLeft = keyboardPosLeft! - dx;
+      keyboardOffset = Offset(keyboardOffset.dx - dx, keyboardOffset.dy);
 
       // update layers overlay selector position
       layersLTWH.forEach(
@@ -865,8 +849,8 @@ class WorkspaceProvider with ChangeNotifier {
   /// [updateKeyboardPosTop] changes laptop's top position
   /// when scrolling vertically.
   void updateKeyboardPosTop(
-      bool scrolling, DragUpdateDetails details, double scale) {
-    if (scrolling) {
+      bool? scrolling, DragUpdateDetails details, double scale) {
+    if (scrolling == true) {
       final dy = details.delta.dy * scale;
       // keyboardPosTop = keyboardPosTop! - dy;
 

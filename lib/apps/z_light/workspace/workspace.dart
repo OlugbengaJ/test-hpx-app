@@ -124,8 +124,12 @@ class _WorkspaceState extends State<Workspace>
   @override
   Widget build(BuildContext context) {
     final workspaceProvider = Provider.of<WorkspaceProvider>(context);
+    final scrollbarProvider = Provider.of<ScrollbarProvider>(context);
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      workspaceProvider.recenter();
+      if (scrollbarProvider.scrolling == false) {
+        workspaceProvider.recenter();
+      }
     });
 
     final tutorialProvider =
@@ -324,10 +328,6 @@ class _WorkspaceState extends State<Workspace>
             ),
             child: LayoutBuilder(
               builder: (_, constraints) {
-                // set the keyboard center
-                workspaceProvider.setWorkspaceConstraints(
-                    constraints, _resetZoom);
-
                 return Stack(
                   children: [
                     GestureDetector(
@@ -349,7 +349,7 @@ class _WorkspaceState extends State<Workspace>
                           // This ensures seamless zooming of the entire keyboard.
                           ValueListenableBuilder<Offset>(
                             valueListenable:
-                                workspaceProvider.keyboardOffsetValueNotifier,
+                                workspaceProvider.keyboardOffsetNotifier,
                             builder: (context, value, child) {
                               return Positioned(
                                 left: value.dx,
@@ -405,17 +405,18 @@ class _WorkspaceState extends State<Workspace>
                           _resetZoom = false;
 
                           // update scrollbar and keyboard top position
-                          final isScroll =
-                              scrollProvider.onPanVertical(details);
+                          scrollProvider.onPanVertical(details);
                           workspaceProvider.updateKeyboardPosTop(
-                              isScroll, details, _zoomScale / _zoomScaleFactor);
+                              scrollProvider.scrolling,
+                              details,
+                              _zoomScale / _zoomScaleFactor);
                         },
                         onTapMinus: () {
                           _resetZoom = false;
 
                           final scrollDetails = scrollProvider.onTapUp();
                           workspaceProvider.updateKeyboardPosTop(
-                              scrollDetails.scrolling,
+                              scrollProvider.scrolling,
                               scrollDetails.details,
                               _zoomScale / _zoomScaleFactor);
                         },
@@ -424,7 +425,7 @@ class _WorkspaceState extends State<Workspace>
 
                           final scrollDetails = scrollProvider.onTapDown();
                           workspaceProvider.updateKeyboardPosTop(
-                              scrollDetails.scrolling,
+                              scrollProvider.scrolling,
                               scrollDetails.details,
                               _zoomScale / _zoomScaleFactor);
                         },
@@ -456,17 +457,18 @@ class _WorkspaceState extends State<Workspace>
                           _resetZoom = false;
 
                           // update scrollbar and keyboard left position
-                          final isScroll =
-                              scrollProvider.onPanHorizontal(details);
+                          scrollProvider.onPanHorizontal(details);
                           workspaceProvider.updateKeyboardPosLeft(
-                              isScroll, details, _zoomScale / _zoomScaleFactor);
+                              scrollProvider.scrolling,
+                              details,
+                              _zoomScale / _zoomScaleFactor);
                         },
                         onTapMinus: () {
                           _resetZoom = false;
 
                           final scrollDetails = scrollProvider.onTapLeft();
                           workspaceProvider.updateKeyboardPosLeft(
-                              scrollDetails.scrolling,
+                              scrollProvider.scrolling,
                               scrollDetails.details,
                               _zoomScale / _zoomScaleFactor);
                         },
@@ -475,7 +477,7 @@ class _WorkspaceState extends State<Workspace>
 
                           final scrollDetails = scrollProvider.onTapRight();
                           workspaceProvider.updateKeyboardPosLeft(
-                              scrollDetails.scrolling,
+                              scrollProvider.scrolling,
                               scrollDetails.details,
                               _zoomScale / _zoomScaleFactor);
                         },
