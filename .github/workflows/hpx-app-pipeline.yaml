@@ -215,8 +215,8 @@ jobs:
   Notify:
     name: Nofify on Slack
     if: |
-      github.ref == 'refs/heads/qa' && 
-      github.event_name == 'push'
+      github.ref == 'refs/heads/developement' && 
+      github.event_name == 'pull_request' 
     runs-on: ubuntu-latest
     needs: [Andriod, WEB, Windows, Linux]
     steps:
