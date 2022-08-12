@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/globals.dart';
 
 class ScrollbarProvider with ChangeNotifier {
+  final ValueNotifier<bool?> scrollingValueNotifier = ValueNotifier(false);
+
+  set scrolling(bool? scroll) => scrollingValueNotifier.value = scroll;
+  bool? get scrolling => scrollingValueNotifier.value;
+
   /// [_left] is the left offset used by the horizontal scrollbar.
   double? _left;
 
@@ -178,33 +183,31 @@ class ScrollbarProvider with ChangeNotifier {
   }
 
   /// [onPanHorizontal] is the callback function for horizontal scrolling.
-  bool onPanHorizontal(DragUpdateDetails details) {
+  void onPanHorizontal(DragUpdateDetails details) {
     // drag updated
     final left = _left! + (details.delta.dx);
 
     if (left >= 0 && left <= hScrollSize.width - thumbSizeH!) {
       _left = left;
 
-      notifyListeners();
-      return true;
+      scrolling = true;
+    } else {
+      scrolling = null;
     }
-
-    return false;
   }
 
   /// [onPanVertical] is the callback function for vertical scrolling.
-  bool onPanVertical(DragUpdateDetails details) {
+  void onPanVertical(DragUpdateDetails details) {
     // drag updated
     final top = _top! + (details.delta.dy);
 
     if (top >= 0 && top <= vScrollSize.height - thumbSizeV!) {
       _top = top;
 
-      notifyListeners();
-      return true;
+      scrolling = true;
+    } else {
+      scrolling = null;
     }
-
-    return false;
   }
 
   /// [onTapUp] handles the scroll up button.
@@ -218,8 +221,8 @@ class ScrollbarProvider with ChangeNotifier {
 
     final details =
         DragUpdateDetails(globalPosition: Offset.zero, delta: Offset(0, diff));
-
-    return ScrollDetails(onPanVertical(details), details);
+    onPanVertical(details);
+    return ScrollDetails(details);
   }
 
   /// [onTapDown] handles the scroll down button.
@@ -234,8 +237,8 @@ class ScrollbarProvider with ChangeNotifier {
 
     final details =
         DragUpdateDetails(globalPosition: Offset.zero, delta: Offset(0, diff));
-
-    return ScrollDetails(onPanVertical(details), details);
+    onPanVertical(details);
+    return ScrollDetails(details);
   }
 
   /// [onTapLeft] handles the scroll left button.
@@ -249,8 +252,8 @@ class ScrollbarProvider with ChangeNotifier {
 
     final details =
         DragUpdateDetails(globalPosition: Offset.zero, delta: Offset(diff, 0));
-
-    return ScrollDetails(onPanHorizontal(details), details);
+    onPanHorizontal(details);
+    return ScrollDetails(details);
   }
 
   /// [onTapRight] handles the scroll right button.
@@ -265,8 +268,8 @@ class ScrollbarProvider with ChangeNotifier {
 
     final details =
         DragUpdateDetails(globalPosition: Offset.zero, delta: Offset(diff, 0));
-
-    return ScrollDetails(onPanHorizontal(details), details);
+    onPanHorizontal(details);
+    return ScrollDetails(details);
   }
 
   void onPanDown(DragDownDetails details) {
@@ -280,8 +283,7 @@ class ScrollbarProvider with ChangeNotifier {
 
 class ScrollDetails {
   /// [ScrollDetails] returns scrolling state and [DragUpdateDetails].
-  const ScrollDetails(this.scrolling, this.details);
+  const ScrollDetails(this.details);
 
   final DragUpdateDetails details;
-  final bool scrolling;
 }

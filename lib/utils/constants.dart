@@ -34,18 +34,21 @@ class Constants {
   // ui labels
   static const String app = 'App';
   static const String browse = 'Browse';
-  static const String pickImageProfile = 'Pick an image for the profile';
+  static const String clickSelector = 'Click selector';
   static const String defaultText = 'Default';
   static const String help = 'Help';
   static const String highlight = 'Highlight';
   static const String light = 'Light';
   static const String lightingOptions = 'Lighting Options';
+  static const String pickImageProfile = 'Pick an image for the profile';
   static const String profile = 'Profile';
   static const String resizable = 'Resizable';
   static const String selectAppTitle = 'Select Application';
   static const String selectedProfile = 'Selected Profile';
+  static const String shortcutColorStripNotificationText = 'This layer will not be visible due to an active Shortcuts Color layer above it';
   static const String uploadPicture = 'Upload a picture';
   static const String workspace = 'Workspace';
+  static const String zoneSelection = 'Zone Selection';
 
   static const double zoomFactor = 800.0;
   static const double defaultZoom = 100;

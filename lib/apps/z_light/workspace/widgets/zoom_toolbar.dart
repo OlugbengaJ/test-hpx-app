@@ -11,7 +11,7 @@ class ZoomToolbar extends StatelessWidget {
     required this.zoomInHandler,
     required this.zoomExpandHandler,
     required this.zoomOutHandler,
-    required this.zoomCollapseHandler,
+    required this.zoomRecenterHandler,
     required this.zoomEndHandler,
   }) : super(key: key);
 
@@ -20,7 +20,7 @@ class ZoomToolbar extends StatelessWidget {
   final VoidCallback zoomInHandler;
   final VoidCallback zoomExpandHandler;
   final VoidCallback zoomOutHandler;
-  final VoidCallback zoomCollapseHandler;
+  final VoidCallback zoomRecenterHandler;
   final VoidCallback zoomEndHandler;
 
   final double buttonSize = 24;
@@ -101,7 +101,7 @@ class ZoomToolbar extends StatelessWidget {
                 child: RoundButton(
                   icon: Icons.center_focus_strong_sharp,
                   size: buttonSize,
-                  onTapDown: zoomCollapseHandler,
+                  onTapDown: zoomRecenterHandler,
                   onTapUp: zoomEndHandler,
                 ),
               ),

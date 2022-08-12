@@ -11,6 +11,7 @@ import 'package:hpx/utils/constants.dart';
 import 'package:hpx/utils/datetime_util.dart';
 import 'package:hpx/utils/database_manager.dart';
 import 'package:hpx/providers/workspace_provider.dart';
+import 'package:process_run/shell.dart';
 
 /// [ProfileProvider] allows to manage profiles
 ///
@@ -18,6 +19,13 @@ import 'package:hpx/providers/workspace_provider.dart';
 /// which allows a user to persist different customizations
 /// as different profiles, and change from one to another.
 class ProfileProvider extends ChangeNotifier {
+  bool get isWindows => Platform.isWindows;
+
+  bool get isLinux => Platform.isLinux;
+
+  bool get isMac => Platform.isMacOS;
+
+
   LayersProvider? _layersProvider;
   WorkspaceProvider? _workspaceProvider;
   final List<Profile> _profiles = [
@@ -233,6 +241,88 @@ class ProfileProvider extends ChangeNotifier {
     Application(name: 'Default', icon: '', file: ''),
   ];
 
+
+  /// Should be called when the app is first launched
+  /// [getSystemApps] fetch all applications installed on the OS
+  void getSystemApps() async {
+    if(isLinux){
+      ProcessResult result = await Process.run('ls', ['/usr/share/applications/']);
+      List<String> listApps = result.stdout.toString().split("\n");
+      final dir = Directory('/usr/share/applications/');
+
+      for (var i = 0; i < listApps.length; i++) {
+        File f =  File("${dir.path}${listApps[i]}");
+        if (f.existsSync()) {
+          // read each line in .desktop file
+          f.readAsLines().then((value) {
+            final appInfo = <String, String>{};
+            String section = '';
+
+            for (var text in value) {
+              if (section.contains('[desktop entry]')) {
+                final entry = text.split('=');
+
+                // only name and icon are required.
+                final k = appInfo.keys.where((e) => e == 'name' || e == 'icon');
+                if (k.length == 2) break;
+
+                if (entry.length == 2) {
+                  // add key value pair
+                  appInfo[entry.first.toLowerCase()] = entry.last;
+                }
+              }
+
+              if (text.startsWith('[')) {
+                // quit on any other section
+                if (section.isNotEmpty) break;
+
+                // adds first section.
+                section = text.toLowerCase();
+              }
+            }
+
+            try {
+              addSystemApp(
+                appInfo['name']!,
+                _getLinuxIcon(path:appInfo['icon']!),
+                f.path,
+              );
+            } catch (e) {
+              //
+            }
+            
+          });
+        }
+      }
+    }
+
+    if (isWindows) {
+      Shell shell = Shell();
+
+      await shell.run("wmic product get name").then((value){
+        List<String> resultToList = value.outText.toString().split("\n");
+        // Start with index 1 cause the first element is 'Name'
+        for (var i = 1; i < resultToList.length; i++) {
+          if(resultToList[i] !="" && resultToList[i] != "Name"){
+            try {
+              addSystemApp(
+                resultToList[i].trim(),
+                "",
+                "",
+              );
+            } catch (e) {
+              //              
+            }
+          }          
+        }
+      });
+     
+    }
+    
+  }
+
+
+
   /// [addSystemApp] adds a new [Application] to [apps].
   void addSystemApp(String name, String icon, String file) {
     // don't add existing app
@@ -377,3 +467,59 @@ class SortOption {
   final String title;
   final SortOrder sortOrder;
 }
+
+
+
+  String _getLinuxIcon({String path=""}) {
+
+    final f = File(path);
+    if (!f.existsSync()) {
+      // icon not found; find it from other dir based on dimentions mxn.
+      // e.g. /usr/share/icons/hicolor/48x48/apps
+      // Flatpak apps: /var/lib/flatpak/exports/share/applications/
+      // Snap apps: /var/lib/snapd/desktop/applications/
+      // Wine: ~/.local/share/applications/wine/Programs/
+      final List<String> iconDirs = [
+        '/usr/share/icons/Humanity',
+        '/usr/share/icons/Yaru',
+        '/usr/share/icons/gnome',
+        '/usr/share/icons/Adwaita',
+        '/usr/share/icons/HighContrast',
+        '/usr/share/icons/hicolor',
+        '/usr/share/pixmaps',
+      ];
+
+      // check icon in each root directory
+      bool iconFound = false;
+      for (var dir in iconDirs) {
+        final d = Directory(dir);
+        if (d.existsSync()) {
+          // if dir exists, check file name
+          final fileList = d.listSync(recursive: true, followLinks: false);
+
+          for (var f in fileList) {
+            if (f.path.contains('16x16') ||
+                f.path.contains('22x22') ||
+                f.path.contains('24x24')) {
+              // exclude low resolution icons
+              continue;
+            }
+
+            if (f.path.contains(RegExp('$path(.*).(jpg|png|svg)'))) {
+              path = f.path;
+              iconFound = true;
+
+              break;
+            }
+          }
+        }
+
+        if (iconFound) break;
+      }
+
+      // icon does not exist in any dir.
+      if (!iconFound) path = '';
+    }
+
+    return path;
+  }

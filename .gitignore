@@ -30,7 +30,6 @@
 .pub-cache/
 .pub/
 /build/
-.dccache
 
 # Web related
 lib/generated_plugin_registrant.dart
@@ -48,3 +47,7 @@ app.*.map.json
 
 # Debian packages
 /debian/packages
+.dccache
+linux
+macos
+windows
