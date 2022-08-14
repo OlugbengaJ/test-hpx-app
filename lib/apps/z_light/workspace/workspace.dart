@@ -112,6 +112,8 @@ class _WorkspaceState extends State<Workspace>
     _zoomScaleFactor = 0.5;
     _zoomScale = _zoomScaleFactor * _zoomValue / _zoomValue;
     _zoomTextCtrl = TextEditingController(text: '${_zoomValue.ceil()}%');
+
+    _getOSApps();
   }
 
   @override
@@ -119,6 +121,14 @@ class _WorkspaceState extends State<Workspace>
     _zoomTextCtrl.dispose();
     _controller.dispose();
     super.dispose();
+  }
+
+  void _getOSApps(){
+    debugPrint("Access to OS apps");
+    ProfileProvider profileProvider = Provider.of<ProfileProvider>(context, listen: false);
+    if(profileProvider.apps.length<2){
+      profileProvider.getSystemApps();
+    }
   }
 
   @override
@@ -136,15 +146,7 @@ class _WorkspaceState extends State<Workspace>
         Provider.of<TooltipTutorialProvider>(context, listen: false);
     tutorialProvider.direction = AxisDirection.down;
 
-    ProfileProvider profileProvider = Provider.of<ProfileProvider>(context, listen: false);
     LayersProvider layersProvider = Provider.of<LayersProvider>(context, listen: false);
-
-    /// Make sure the function is only called if apps lenght is less than 2
-    /// The first time the app is launched its called, when apps are fetched, no more call is needed
-    if(profileProvider.apps.length<2){
-      //profileProvider.getSystemApps();
-    }
-    
 
     final themeData = Theme.of(context);
 
