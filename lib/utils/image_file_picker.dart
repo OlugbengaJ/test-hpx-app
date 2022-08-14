@@ -33,11 +33,20 @@ class ImageFilePicker{
 
       // Save the file to a new location
       // TODO: Need to refactor this part
-      final directory = await getApplicationDocumentsDirectory();      
-      File newFile = File('${directory.path}/${profileProvider.selectedProfile.name}.${filePickerResult.files.single.extension}');
-      newFile.writeAsBytes(await file.readAsBytes());
+      final directory = await getApplicationDocumentsDirectory();   
+      if(isLinux){
+        File newFile = File('${directory.path}/${profileProvider.selectedProfile.name}.${filePickerResult.files.single.extension}');
+        newFile.writeAsBytes(await file.readAsBytes());
 
-      profileProvider.updateSelectedProfile(profileProvider.selectedProfile.name, newFile.path, '');
+        profileProvider.updateSelectedProfile(profileProvider.selectedProfile.name, newFile.path, '');
+      }
+      if(isWindows){
+        File newFile = File('${directory.path}/name.${filePickerResult.files.single.extension}');
+        newFile.writeAsBytes(await file.readAsBytes());
+
+        profileProvider.updateSelectedProfile(profileProvider.selectedProfile.name, newFile.path, '');
+      }
+      
 
     } else {
       // User canceled the picker

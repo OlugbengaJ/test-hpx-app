@@ -80,7 +80,6 @@ Future<void> profileExistDialog(BuildContext context, String name) async {
 // profile list dialog
 Future<void> profileListDialog(
     BuildContext context, TextEditingController textController) async {
-  debugPrint("Launching the applications list");
 
   return showDialog<void>(
     context: context,

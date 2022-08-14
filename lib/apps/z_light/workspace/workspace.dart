@@ -142,7 +142,7 @@ class _WorkspaceState extends State<Workspace>
     /// Make sure the function is only called if apps lenght is less than 2
     /// The first time the app is launched its called, when apps are fetched, no more call is needed
     if(profileProvider.apps.length<2){
-      profileProvider.getSystemApps();
+      //profileProvider.getSystemApps();
     }
     
 
