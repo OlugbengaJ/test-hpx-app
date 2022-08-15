@@ -9,7 +9,7 @@ import 'package:hpx/widgets/colors.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
-class ColorPickerWidget extends StatelessWidget {
+class ColorPickerWidget extends StatefulWidget {
   ColorPickerWidget(
       {Key? key,
       required this.title,
@@ -39,57 +39,69 @@ class ColorPickerWidget extends StatelessWidget {
   final BuildContext context;
   final double? height;
 
-  BoxDecoration? previewBox;
-  Color? currentColor;
-  List<Color> currentColors = [];
-  int colorPosition = 0;
+  @override
+  State<ColorPickerWidget> createState() => _ColorPickerWidgetState();
+}
+
+class _ColorPickerWidgetState extends State<ColorPickerWidget> {
   bool isHover = false;
   bool isFocused = false;
   TextEditingController colorController = TextEditingController();
 
-  void initState() {
-    // TODO: implement initState
-    currentColors = colors;
-  }
-
   void changeColor(Color selectedColor) {
-    currentColors[colorPosition] = color = currentColor = selectedColor;
+    ColorPickerProvider colorPickerProviderInstance =
+        Provider.of<ColorPickerProvider>(context, listen: false);
+    setState(() {
+      colorPickerProviderInstance.color = widget.color = selectedColor;
+      colorPickerProviderInstance
+              .currentColors[colorPickerProviderInstance.position] =
+          widget.colors[colorPickerProviderInstance.position] = selectedColor;
+    });
+    rebuildAllChildren(context);
     setCurrentColor();
-    generatePreviewBox(true);
   }
 
   void setCurrentColor() {
     ColorPickerProvider colorPickerProviderInstance =
         Provider.of<ColorPickerProvider>(context, listen: false);
     colorPickerProviderInstance.setCurrentPickerWidget(ColorPickerWidgetModel(
-      action: title,
-      name: title,
-      canEdit: picker,
-      colorCode: currentColors,
+      action: widget.title,
+      name: widget.title,
+      canEdit: widget.picker,
+      colorCode: colorPickerProviderInstance.currentColors,
       label: colorPickerProviderInstance.currentColor?.label,
       setRandom: colorPickerProviderInstance.currentColor?.setRandom,
       hasBorder: colorPickerProviderInstance.currentColor?.hasBorder,
     ));
-    onchange!(colors);
+    widget.onchange!(widget.colors);
   }
 
   void closeDialog(BuildContext context) {
+    setLastColor();
+    Navigator.of(context).pop();
+    rebuildAllChildren(context);
+  }
+
+  void setLastColor() {
     ColorPickerProvider colorPickerProviderInstance =
         Provider.of<ColorPickerProvider>(context, listen: false);
     if (colorPickerProviderInstance.lastColors.isNotEmpty) {
-      colors = currentColors;
-      if (colorPickerProviderInstance.lastColors.contains(currentColor) ==
+      if (colorPickerProviderInstance.lastColors
+              .contains(colorPickerProviderInstance.color) ==
           false) {
-        colorPickerProviderInstance.lastColors.add(currentColor!);
+        colorPickerProviderInstance.lastColors
+            .add(colorPickerProviderInstance.color);
       }
     }
-    Navigator.of(context).pop();
   }
 
   void selectcolor(BuildContext context) {
     ColorPickerProvider colorPickerProviderInstance =
         Provider.of<ColorPickerProvider>(context, listen: false);
-    currentColor = color;
+    setState(() {
+      colorPickerProviderInstance.currentColors = widget.colors;
+      colorPickerProviderInstance.color = widget.color;
+    });
     List lastcolors = [
       colorPickerProviderInstance.lastColors.reversed.toList().take(9).toList(),
       colorPickerProviderInstance.lastColors.reversed
@@ -112,83 +124,40 @@ class ColorPickerWidget extends StatelessWidget {
               children: <Widget>[
                 Text(Constants.colorEditor,
                     textAlign: TextAlign.left, style: labelStyle),
-                (colors.length < 2)
-                    ? Container()
-                    : Row(
-                        children: [
-                          InkWell(
-                            highlightColor: Colors.transparent,
-                            focusColor: Colors.transparent,
-                            hoverColor: Colors.transparent,
-                            onTap: () {
-                              colorPickerProviderInstance.choooseGradientType(
-                                  ColorGradientEnum.linear);
-                            },
-                            child: Container(
-                              width: 20,
-                              height: 20,
-                              margin: const EdgeInsets.only(
-                                  top: 10.0, bottom: 4.0, right: 10),
-                              decoration: BoxDecoration(
-                                  gradient: const LinearGradient(colors: [
-                                    Color(0xFFCFCFCF),
-                                    Color(0xFF878787)
-                                  ]),
-                                  border: Border.all(
-                                      width: 1,
-                                      color: (colorPickerProviderInstance
-                                                  .gradientType ==
-                                              ColorGradientEnum.radial)
-                                          ? Colors.transparent
-                                          : Colors.white)),
-                            ),
-                          ),
-                          InkWell(
-                            highlightColor: Colors.transparent,
-                            focusColor: Colors.transparent,
-                            hoverColor: Colors.transparent,
-                            onTap: () {
-                              colorPickerProviderInstance.choooseGradientType(
-                                  ColorGradientEnum.radial);
-                            },
-                            child: Container(
-                              width: 20,
-                              height: 20,
-                              margin: const EdgeInsets.only(
-                                  top: 10.0, bottom: 4.0, right: 5),
-                              decoration: BoxDecoration(
-                                  gradient: const RadialGradient(colors: [
-                                    Color(0xFFC7C7C7),
-                                    Color(0xFF757575)
-                                  ]),
-                                  border: Border.all(
-                                      width: 1,
-                                      color: (colorPickerProviderInstance
-                                                  .gradientType ==
-                                              ColorGradientEnum.linear)
-                                          ? Colors.transparent
-                                          : Colors.white)),
-                            ),
-                          ),
-                        ],
-                      ),
+                (widget.colors.length < 2)
+                    ? Container(
+                        margin: const EdgeInsets.only(top: 10.0),
+                      )
+                    : const GradientSelector(),
                 Row(
                   children: [
                     Column(
                       children: [
-                        Container(
-                          margin:
-                              const EdgeInsets.only(top: 10.0, bottom: 20.0),
-                          width: (colors.length > 1) ? 250 : 30,
-                          height: 20,
-                          decoration: generatePreviewBox(true),
-                        ),
+                        SizedBox(
+                            width: (widget.colors.length > 1) ? 250 : 30,
+                            height: 20,
+                            child: ColorPickerBox(
+                              hasBorder: true,
+                              showGradientPicker: true,
+                              onSelected: (Color newcolor, int position) {
+                                setState(() {
+                                  colorPickerProviderInstance.position =
+                                      position;
+                                  colorController.text =
+                                      colorPickerProviderInstance
+                                          .currentColors[position]
+                                          .toHex();
+                                });
+                              },
+                              colors: colorPickerProviderInstance.currentColors,
+                            )),
                       ],
                     ),
                   ],
                 ),
                 Container(
-                  padding: const EdgeInsets.only(right: 0.0, left: 0.0),
+                  padding:
+                      const EdgeInsets.only(top: 20.0, right: 0.0, left: 0.0),
                   width: 250,
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,7 +167,7 @@ class ColorPickerWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                              (colors.length > 1)
+                              (widget.colors.length > 1)
                                   ? Constants.gradientColor
                                   : Constants.solidColor,
                               textAlign: TextAlign.left,
@@ -213,15 +182,19 @@ class ColorPickerWidget extends StatelessWidget {
                                   colorPickerWidth: 180,
                                   displayThumbColor: true,
                                   hexInputController: colorController,
-                                  pickerColor: (currentColor != null)
-                                      ? currentColor!
-                                      : color,
+                                  pickerColor:
+                                      colorPickerProviderInstance.color,
                                   pickerAreaHeightPercent: 0.8,
                                   onColorChanged: (Color selectedcolor) {
+                                    setState(() {
+                                      colorController.text =
+                                          selectedcolor.toHex();
+                                    });
                                     changeColor(selectedcolor);
                                   },
-                                  colorHistory:
-                                      (colors.length == 1) ? [] : colors)),
+                                  colorHistory: (widget.colors.length == 1)
+                                      ? []
+                                      : widget.colors)),
                         ],
                       ),
                       Container(margin: const EdgeInsets.only(left: 10.0)),
@@ -244,10 +217,11 @@ class ColorPickerWidget extends StatelessWidget {
                                     width: 50,
                                     height: 20,
                                     decoration: BoxDecoration(
-                                        border: Border.all(
-                                            width: 0.5,
-                                            color: Colors.grey.shade400),
-                                        color: currentColors[colorPosition]),
+                                      border: Border.all(
+                                          width: 0.5,
+                                          color: Colors.grey.shade400),
+                                      // color: currentColors[colorPosition]
+                                    ),
                                   ),
                                 ],
                               ),
@@ -332,7 +306,6 @@ class ColorPickerWidget extends StatelessWidget {
                               backgroundColor: Colors.white,
                             ),
                             onPressed: () {
-                              setCurrentColor();
                               closeDialog(context);
                             },
                             child: const Text(Constants.gotIt))
@@ -370,132 +343,79 @@ class ColorPickerWidget extends StatelessWidget {
     return boxes;
   }
 
-  generatePreviewBox(bool? preview) {
-    return (colors.length > 1 && preview == true)
-        ? BoxDecoration(
-            gradient: (Provider.of<ColorPickerProvider>(context, listen: false)
-                        .gradientType ==
-                    ColorGradientEnum.linear)
-                ? LinearGradient(colors: colors)
-                : RadialGradient(colors: colors),
-            border: Border.all(
-                width: (isFocused)
-                    ? 1.5
-                    : (isHover || hasBorder == true)
-                        ? 1.5
-                        : 0.6,
-                color: (isFocused)
-                    ? Colors.white
-                    : (isHover || hasBorder == true)
-                        ? Colors.white
-                        : Colors.grey.shade700))
-        : BoxDecoration(
-            color: color,
-            border: Border.all(
-                width: (isFocused)
-                    ? 1.5
-                    : (isHover || hasBorder == true)
-                        ? 1.5
-                        : 0.6,
-                color: (isFocused)
-                    ? Colors.white
-                    : (isHover || hasBorder == true)
-                        ? Colors.white
-                        : Colors.grey.shade700));
-  }
-
-  generateGradientClickBoxes(BuildContext context) {
-    List<Widget> ui = [];
-    currentColors = colors;
-    for (int i = 0; i < currentColors.length; i++) {
-      Color element = currentColors[i];
-      ui.add(InkWell(
-          highlightColor: Colors.transparent,
-          focusColor: Colors.transparent,
-          hoverColor: Colors.transparent,
-          onTap: () {
-            isHover = false;
-            hasBorder = true;
-            color = element;
-            colorPosition = i;
-            changeColor(element);
-            (picker == null || picker == false) ? '' : selectcolor(context);
-          },
-          onHover: (bool hover) {
-            isHover = hover;
-          },
-          child: Container(
-            width: (width == null)
-                ? (MediaQuery.of(context).size.width * 0.18) /
-                    currentColors.length
-                : width,
-            height: (width == null) ? 20.0 : height,
-            color: Colors.transparent,
-          )));
+  void rebuildAllChildren(BuildContext context) {
+    void rebuild(Element el) {
+      el.markNeedsBuild();
+      el.visitChildren(rebuild);
     }
-    return Row(
-      children: ui,
-    );
+
+    (context as Element).visitChildren(rebuild);
   }
 
   @override
   Widget build(BuildContext context) {
     context = context;
+    setState(() {
+      if (widget.colors.length > 1) {
+        Provider.of<ColorPickerProvider>(context, listen: false).currentColors =
+            widget.colors;
+      }
+    });
     return Container(
         margin:
             const EdgeInsets.only(left: 0.0, top: 5.0, right: 0.0, bottom: 5.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            (label == '')
+            (widget.label == '')
                 ? Container()
-                : Text(label!, textAlign: TextAlign.left, style: h5Style),
-            Container(margin: const EdgeInsets.only(top: 10.0)),
-            Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                InkWell(
-                    highlightColor: Colors.transparent,
-                    focusColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    onTap: () {
-                      isHover = false;
-                      isFocused = true;
-                      hasBorder = true;
-                      (picker == false) ? '' : selectcolor(context);
-                    },
-                    onHover: (bool hover) {
-                      isHover = hover;
-                    },
-                    child: Container(
-                      width: (width == null)
-                          ? MediaQuery.of(context).size.width * 0.3
-                          : width,
-                      height: (width == null) ? 20.0 : height,
-                      decoration: generatePreviewBox(true),
-                    )),
-                Positioned(
-                    bottom: 0, child: generateGradientClickBoxes(context)),
-              ],
-            ),
-            Container(margin: const EdgeInsets.only(top: 5.0)),
-            (setRandom == false)
+                : Text(widget.label!,
+                    textAlign: TextAlign.left, style: h5Style),
+            Container(
+                width: widget.width,
+                margin: const EdgeInsets.only(top: 10.0, bottom: 5.0),
+                child: ColorPickerBox(
+                  hasBorder: widget.hasBorder!,
+                  colors: widget.colors,
+                  onSelected: (Color selectedColor, int position) {
+                    setState(() {
+                      if (widget.colors.length < 2) {
+                        Provider.of<ColorPickerProvider>(context, listen: false)
+                            .currentColors = widget.colors;
+                      }
+                    });
+                    if (widget.picker == false) {
+                      changeColor(selectedColor);
+                    } else {
+                      selectcolor(context);
+                    }
+                  },
+                )),
+            (widget.setRandom == false)
                 ? InkWell(
                     highlightColor: Colors.transparent,
                     focusColor: Colors.transparent,
                     hoverColor: Colors.transparent,
                     onTap: () {
-                      isHover = false;
-                      isFocused = true;
-                      hasBorder = true;
-                      (picker == false) ? '' : selectcolor(context);
+                      setState(() {
+                        if (widget.colors.length < 2) {
+                          Provider.of<ColorPickerProvider>(context,
+                                  listen: false)
+                              .currentColors = widget.colors;
+                        }
+                        isHover = false;
+                        isFocused = true;
+                        widget.hasBorder = true;
+                        (widget.picker == false) ? '' : selectcolor(context);
+                      });
+                      rebuildAllChildren(context);
                     },
                     child: Row(children: [
                       Expanded(
                           child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(title,
+                          Text(widget.title,
                               textAlign: TextAlign.left, style: labelStyle),
                         ],
                       )),
@@ -503,7 +423,7 @@ class ColorPickerWidget extends StatelessWidget {
                           child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Text(leftTitle,
+                          Text(widget.leftTitle,
                               textAlign: TextAlign.right, style: labelStyle),
                         ],
                       ))
@@ -513,9 +433,12 @@ class ColorPickerWidget extends StatelessWidget {
                     margin: const EdgeInsets.only(bottom: 20.0, top: 10.0),
                     child: RandomColorPicker(
                       onChange: (Color? newcolor) {
-                        hasBorder = (newcolor != null) ? false : true;
-                        isFocused = true;
-                        onchange!([newcolor ?? color]);
+                        setState(() {
+                          widget.hasBorder = (newcolor != null) ? false : true;
+                          isFocused = true;
+                          widget.onchange!([newcolor ?? widget.color]);
+                        });
+                        rebuildAllChildren(context);
                       },
                     ))
           ],
@@ -524,23 +447,172 @@ class ColorPickerWidget extends StatelessWidget {
 }
 
 class ColorPickerBox extends StatefulWidget {
-  ColorPickerBox({Key? key, required this.onChange}) : super(key: key);
-  Function(Color? color) onChange;
+  const ColorPickerBox(
+      {Key? key,
+      required this.colors,
+      required this.onSelected,
+      required this.hasBorder,
+      this.showGradientPicker = false})
+      : super(key: key);
+  final Function(Color color, int position) onSelected;
+  final List<Color> colors;
+  final bool? showGradientPicker;
+  final bool hasBorder;
 
   @override
   State<ColorPickerBox> createState() => _ColorPickerBox();
 }
 
 class _ColorPickerBox extends State<ColorPickerBox> {
+  Widget generateGradientClickBoxes(BuildContext context) {
+    List<Widget> ui = [];
+    for (int i = 0; i < widget.colors.length; i++) {
+      Color element = widget.colors[i];
+      ui.add(InkWell(
+          highlightColor: Colors.transparent,
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          onTap: () {
+            widget.onSelected(element, i);
+          },
+          child: Container(
+              margin: const EdgeInsets.only(bottom: 2.5),
+              alignment: Alignment.center,
+              width: 250 / widget.colors.length,
+              child: Container(
+                  width: 15.0,
+                  height: 15.0,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(width: 1, color: Colors.black),
+                      borderRadius: BorderRadius.circular(100))))));
+    }
+    return Wrap(
+      children: ui,
+    );
+  }
+
+  BoxDecoration generatePreviewBox() {
+    return (widget.colors.length > 1)
+        ? BoxDecoration(
+            gradient: (Provider.of<ColorPickerProvider>(context, listen: false)
+                        .gradientType ==
+                    ColorGradientEnum.linear)
+                ? LinearGradient(colors: widget.colors)
+                : RadialGradient(colors: widget.colors),
+            // gradient: LinearGradient(colors: widget.colors),
+            border: Border.all(
+                width: 1.5,
+                color: (widget.hasBorder == true)
+                    ? Colors.white
+                    : Colors.transparent))
+        : BoxDecoration(
+            color: widget.colors[0],
+            border: Border.all(
+                width: 1.5,
+                color: (widget.hasBorder == true)
+                    ? Colors.white
+                    : Colors.transparent));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox();
+    return InkWell(
+        highlightColor: Colors.transparent,
+        focusColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        onTap: () {
+          if (widget.colors.length == 1) {
+            widget.onSelected(widget.colors[0], 0);
+          }
+        },
+        child: Stack(children: [
+          Container(
+            height: 20.0,
+            decoration: generatePreviewBox(),
+          ),
+          Positioned(
+              bottom: 0,
+              child: (widget.colors.length > 1 &&
+                      widget.showGradientPicker == true)
+                  ? generateGradientClickBoxes(context)
+                  : Container())
+        ]));
+  }
+}
+
+class GradientSelector extends StatefulWidget {
+  const GradientSelector({Key? key}) : super(key: key);
+
+  @override
+  State<GradientSelector> createState() => _GradientSelector();
+}
+
+class _GradientSelector extends State<GradientSelector> {
+  @override
+  Widget build(BuildContext context) {
+    ColorPickerProvider colorPickerProviderInstance =
+        Provider.of<ColorPickerProvider>(context, listen: false);
+    return Row(
+      children: [
+        InkWell(
+          highlightColor: Colors.transparent,
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          onTap: () {
+            setState(() {
+              colorPickerProviderInstance
+                  .choooseGradientType(ColorGradientEnum.linear);
+            });
+          },
+          child: Container(
+            width: 20,
+            height: 20,
+            margin: const EdgeInsets.only(top: 10.0, bottom: 4.0, right: 10),
+            decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                    colors: [Color(0xFFCFCFCF), Color(0xFF878787)]),
+                border: Border.all(
+                    width: 2,
+                    color: (colorPickerProviderInstance.gradientType ==
+                            ColorGradientEnum.radial)
+                        ? Colors.transparent
+                        : Colors.white)),
+          ),
+        ),
+        InkWell(
+          highlightColor: Colors.transparent,
+          focusColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          onTap: () {
+            setState(() {
+              colorPickerProviderInstance
+                  .choooseGradientType(ColorGradientEnum.radial);
+            });
+          },
+          child: Container(
+            width: 20,
+            height: 20,
+            margin: const EdgeInsets.only(top: 10.0, bottom: 4.0, right: 5),
+            decoration: BoxDecoration(
+                gradient: const RadialGradient(
+                    colors: [Color(0xFFC7C7C7), Color(0xFF757575)]),
+                border: Border.all(
+                    width: 2,
+                    color: (colorPickerProviderInstance.gradientType ==
+                            ColorGradientEnum.linear)
+                        ? Colors.transparent
+                        : Colors.white)),
+          ),
+        ),
+      ],
+    );
   }
 }
 
 class RandomColorPicker extends StatefulWidget {
-  RandomColorPicker({Key? key, required this.onChange}) : super(key: key);
-  Function(Color? color) onChange;
+  const RandomColorPicker({Key? key, required this.onChange}) : super(key: key);
+  final Function(Color? color) onChange;
 
   @override
   State<RandomColorPicker> createState() => _RandomColorPicker();
