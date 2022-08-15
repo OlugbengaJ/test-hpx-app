@@ -491,6 +491,7 @@ class LayersProvider extends ChangeNotifier {
       newIndex -= 1;
     }
     final item = _layeritems.removeAt(oldIndex);
+    _layeritems.insert(newIndex, item);
     notifyListeners();
   }
 
