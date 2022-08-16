@@ -212,17 +212,16 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                                       textAlign: TextAlign.left,
                                       style: labelStyle),
                                   Container(
-                                    margin: const EdgeInsets.only(
-                                        top: 10, bottom: 10),
-                                    width: 50,
-                                    height: 20,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 0.5,
-                                          color: Colors.grey.shade400),
-                                      // color: currentColors[colorPosition]
-                                    ),
-                                  ),
+                                      margin: const EdgeInsets.only(
+                                          top: 10, bottom: 10),
+                                      width: 50,
+                                      height: 20,
+                                      decoration: BoxDecoration(
+                                        color: colorPickerProviderInstance
+                                            .lastColors.last,
+                                        border: Border.all(
+                                            width: 0.5, color: Colors.white),
+                                      )),
                                 ],
                               ),
                             ],
