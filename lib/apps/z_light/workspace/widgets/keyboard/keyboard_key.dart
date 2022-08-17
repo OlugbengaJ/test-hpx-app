@@ -132,18 +132,19 @@ KeyModel _updateKeyInfo(
       layer.removeKey(keyModel);
 
       KeyPaintRect chip = KeyPaintRect('$layerId');
-      if ('${currentLayer.id}' == chip.chipKey) {
-        // use the default color for current layer
-        chip.color = currentLayer.mode?.currentColor.last;
-        chip.showOutline = true;
-      } else {
-        // use existing color for non-current layer
-        final foundKeys = krect.where((e) => e.chipKey == chip.chipKey);
-        if (foundKeys.isNotEmpty) {
-          chip.color = foundKeys.first.color;
-          chip.showOutline = false;
-        }
-      }
+      bool isCurrentLayer = '${currentLayer.id}' == chip.chipKey;
+
+      // use the default color for current layer
+      // use existing color for non-current layer
+      final krectColor = krect.where((e) => e.chipKey == chip.chipKey);
+      chip.color = isCurrentLayer
+          ? layer.mode?.currentColor.last
+          : krectColor.isEmpty
+              ? layer.mode?.currentColor.last
+              : krectColor.first.color;
+
+      // display outline for current layer
+      chip.showOutline = isCurrentLayer;
 
       if (boxZone != null) {
         // insert new chip with the layer id as key

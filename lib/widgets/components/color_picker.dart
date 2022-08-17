@@ -16,7 +16,7 @@ class ColorPickerWidget extends StatelessWidget {
       required this.color,
       required this.colors,
       this.picker,
-      this.label = "",
+      this.label = '',
       this.hasBorder = true,
       this.onchange,
       this.setRandom = false,

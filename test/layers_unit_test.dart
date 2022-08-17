@@ -27,13 +27,13 @@
 //   );
 
 
-//   ToolsModeModel currentMode = ToolsModeModel(currentColor: [], effects: EffectsModel(), name: "");
+//   ToolsModeModel currentMode = ToolsModeModel(currentColor: [], effects: EffectsModel(), name: '');
 
 
 //   LayerItemModel itemModel =
-//       LayerItemModel(id: 1, layerText: "layerText", controller: controller, mode: currentMode);
+//       LayerItemModel(id: 1, layerText: 'layerText', controller: controller, mode: currentMode);
 //   LayerItemModel itemModel2 =
-//       LayerItemModel(id: 2, layerText: "layerText 2", controller: controller, mode: currentMode);
+//       LayerItemModel(id: 2, layerText: 'layerText 2', controller: controller, mode: currentMode);
 //   LayersProvider provider = LayersProvider();
 
 //   /// Create layer, using the [LayersProvider] and [LayerItemModel]. Keep track of all layers available

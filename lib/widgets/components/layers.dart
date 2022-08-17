@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 Future<void> layerAlertDialog(BuildContext context) async {
-  debugPrint("Alert dialod");
+  debugPrint('Alert dialod');
   return showDialog<void>(
     context: context,
     barrierDismissible: false, // user must tap button!
@@ -11,19 +11,20 @@ Future<void> layerAlertDialog(BuildContext context) async {
         content: SingleChildScrollView(
           child: ListBody(
             children: <Widget>[
-              const Text('You are about to create a new layer with shortcut color mode.'),
-              const Text('You can rather create a sublayer from the existing shortcut color mode'),
+              const Text(
+                  'You are about to create a new layer with shortcut color mode.'),
+              const Text(
+                  'You can rather create a sublayer from the existing shortcut color mode'),
               Padding(
-                padding: const EdgeInsets.only(top:8.0),
+                padding: const EdgeInsets.only(top: 8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
-                      onPressed: (){
+                      onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: const Text("Ok"),
-                      
+                      child: const Text('Ok'),
                     ),
                   ],
                 ),
@@ -31,7 +32,6 @@ Future<void> layerAlertDialog(BuildContext context) async {
             ],
           ),
         ),
-        
       );
     },
   );

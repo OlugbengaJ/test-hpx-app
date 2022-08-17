@@ -45,7 +45,7 @@ class TooltipTutorialProvider extends ChangeNotifier {
       case Constants.profile:
         tooltipControllerProfile.showTooltip();
         break;
-      case "Tools_Effects":
+      case 'Tools_Effects':
         tooltipControllerToolsEffects.showTooltip();
         break;
       case Constants.workspace:
@@ -73,7 +73,7 @@ class TooltipTutorialProvider extends ChangeNotifier {
       case Constants.light:
         tooltipControllerLight.hideTooltip();
         break;
-      case "Tools_Effects":
+      case 'Tools_Effects':
         tooltipControllerToolsEffects.hideTooltip();
         break;
       case Constants.help:
