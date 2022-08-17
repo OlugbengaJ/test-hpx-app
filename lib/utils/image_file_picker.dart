@@ -42,6 +42,7 @@ class ImageFilePicker{
           profileProvider.updateSelectedProfile(profileProvider.selectedProfile.name, newFile.path, '');
         }
         
+        profileProvider.updateSelectedProfile(profileProvider.selectedProfile.name, newFile.path, '');
       }
       if(isWindows){
         File newFile = File('${directory.path}/name.${filePickerResult.files.single.extension}');
@@ -50,6 +51,8 @@ class ImageFilePicker{
           profileProvider.updateSelectedProfile(profileProvider.selectedProfile.name, newFile.path, '');
         }
         
+
+        profileProvider.updateSelectedProfile(profileProvider.selectedProfile.name, newFile.path, '');
       }
       
 
