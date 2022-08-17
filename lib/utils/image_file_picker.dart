@@ -41,7 +41,6 @@ class ImageFilePicker{
         if(newFile.existsSync()){
           profileProvider.updateSelectedProfile(profileProvider.selectedProfile.name, newFile.path, '');
         }
-        
         profileProvider.updateSelectedProfile(profileProvider.selectedProfile.name, newFile.path, '');
       }
       if(isWindows){

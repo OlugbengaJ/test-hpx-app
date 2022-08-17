@@ -147,6 +147,15 @@ class _WorkspaceState extends State<Workspace>
     tutorialProvider.direction = AxisDirection.down;
 
     LayersProvider layersProvider = Provider.of<LayersProvider>(context, listen: false);
+<<<<<<< HEAD
+=======
+
+    /// Make sure the function is only called if apps lenght is less than 2
+    /// The first time the app is launched its called, when apps are fetched, no more call is needed
+    if(profileProvider.apps.length<2){
+      //profileProvider.getSystemApps();
+    }
+>>>>>>> 4042c77 (Remove unused code)
     
     final themeData = Theme.of(context);
 
