@@ -47,7 +47,6 @@ app.*.map.json
 
 # Debian packages
 /debian/packages
-<<<<<<< HEAD
 .dccache
 linux
 macos
@@ -55,5 +54,3 @@ windows
 
 macos/Flutter/ephemeral/Flutter-Generated.xcconfig
 macos/Flutter/ephemeral/flutter_export_environment.sh
-=======
->>>>>>> 5389060 (.)
