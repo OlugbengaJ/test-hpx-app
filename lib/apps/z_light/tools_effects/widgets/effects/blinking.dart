@@ -65,43 +65,35 @@ class _BlinkingPresetState extends State<BlinkingPreset> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Wrap(
-                //   children: colorPickerProviderInstance
-                //       .generateColorPickerWidget(blinkingList),
-                // ),
-                Wrap(
-                  children: [
-                    ColorPickerWidget(
-                      context: context,
-                      color: blinkingList[0].colorCode.first,
-                      colors: blinkingList[0].colorCode,
-                      title: blinkingList[0].name,
-                      label: blinkingList[0].label,
-                      width: blinkingList[0].width,
-                      height: blinkingList[0].height,
-                      picker: blinkingList[0].canEdit,
-                      leftTitle: blinkingList[0].action!,
-                      setRandom: blinkingList[1].setRandom!,
-                      onchange: (colors) {
-                        resetCurrentColors(colors, 0);
-                      },
-                    ),
-                    ColorPickerWidget(
-                      context: context,
-                      color: blinkingList[1].colorCode.first,
-                      colors: blinkingList[1].colorCode,
-                      title: blinkingList[1].name,
-                      label: blinkingList[1].label,
-                      width: blinkingList[1].width,
-                      height: blinkingList[1].height,
-                      picker: blinkingList[1].canEdit,
-                      leftTitle: blinkingList[1].action!,
-                      setRandom: blinkingList[1].setRandom!,
-                      onchange: (colors) {
-                        resetCurrentColors(colors, 1);
-                      },
-                    )
-                  ],
+                ColorPickerWidget(
+                  context: context,
+                  color: blinkingList[0].colorCode.first,
+                  colors: blinkingList[0].colorCode,
+                  title: blinkingList[0].name,
+                  label: blinkingList[0].label,
+                  width: blinkingList[0].width,
+                  height: blinkingList[0].height,
+                  picker: blinkingList[0].canEdit,
+                  leftTitle: blinkingList[0].action!,
+                  setRandom: blinkingList[1].setRandom!,
+                  onchange: (colors) {
+                    resetCurrentColors(colors, 0);
+                  },
+                ),
+                ColorPickerWidget(
+                  context: context,
+                  color: blinkingList[1].colorCode.first,
+                  colors: blinkingList[1].colorCode,
+                  title: blinkingList[1].name,
+                  label: blinkingList[1].label,
+                  width: blinkingList[1].width,
+                  height: blinkingList[1].height,
+                  picker: blinkingList[1].canEdit,
+                  leftTitle: blinkingList[1].action!,
+                  setRandom: blinkingList[1].setRandom!,
+                  onchange: (colors) {
+                    resetCurrentColors(colors, 1);
+                  },
                 ),
                 Container(margin: const EdgeInsets.only(bottom: 10.0)),
                 Divider(

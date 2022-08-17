@@ -17,7 +17,6 @@ class BreathingPreset extends StatefulWidget {
 }
 
 class _BreathingPresetState extends State<BreathingPreset> {
-  final _toolsProvider = ColorPickerProvider();
   TextEditingController degreeController = TextEditingController();
 
   void _setSliderValue(double returnValue) {
@@ -63,39 +62,35 @@ class _BreathingPresetState extends State<BreathingPreset> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Wrap(
-            children: [
-              ColorPickerWidget(
-                context: context,
-                color: breathingList[0].colorCode.first,
-                colors: breathingList[0].colorCode,
-                title: breathingList[0].name,
-                label: breathingList[0].label,
-                width: breathingList[0].width,
-                height: breathingList[0].height,
-                picker: breathingList[0].canEdit,
-                leftTitle: breathingList[0].action!,
-                setRandom: breathingList[1].setRandom!,
-                onchange: (colors) {
-                  resetCurrentColors(colors, 0);
-                },
-              ),
-              ColorPickerWidget(
-                context: context,
-                color: breathingList[1].colorCode.first,
-                colors: breathingList[1].colorCode,
-                title: breathingList[1].name,
-                label: breathingList[1].label,
-                width: breathingList[1].width,
-                height: breathingList[1].height,
-                picker: breathingList[1].canEdit,
-                leftTitle: breathingList[1].action!,
-                setRandom: breathingList[1].setRandom!,
-                onchange: (colors) {
-                  resetCurrentColors(colors, 1);
-                },
-              )
-            ],
+          ColorPickerWidget(
+            context: context,
+            color: breathingList[0].colorCode.first,
+            colors: breathingList[0].colorCode,
+            title: breathingList[0].name,
+            label: breathingList[0].label,
+            width: breathingList[0].width,
+            height: breathingList[0].height,
+            picker: breathingList[0].canEdit,
+            leftTitle: breathingList[0].action!,
+            setRandom: breathingList[1].setRandom!,
+            onchange: (colors) {
+              resetCurrentColors(colors, 0);
+            },
+          ),
+          ColorPickerWidget(
+            context: context,
+            color: breathingList[1].colorCode.first,
+            colors: breathingList[1].colorCode,
+            title: breathingList[1].name,
+            label: breathingList[1].label,
+            width: breathingList[1].width,
+            height: breathingList[1].height,
+            picker: breathingList[1].canEdit,
+            leftTitle: breathingList[1].action!,
+            setRandom: breathingList[1].setRandom!,
+            onchange: (colors) {
+              resetCurrentColors(colors, 1);
+            },
           ),
           Container(margin: const EdgeInsets.only(bottom: 10.0)),
           Divider(

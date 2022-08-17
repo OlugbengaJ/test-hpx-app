@@ -183,7 +183,7 @@ List<ColorPickerWidgetModel> interactiveColorList = [
   //   action: 'Edit',
   //   canEdit: true,
   //   name: "Custom 4",
-  //   colorCode: [Colors.grey.shade900],
+  //   colorCode: [Color(0xFF424242)],
   // )
 ];
 
@@ -218,7 +218,7 @@ List<ColorPickerWidgetModel> shortcutList = [
     action: '',
     canEdit: true,
     name: "sublayer",
-    colorCode: [Colors.grey.shade900],
+    colorCode: [Colors.transparent],
   )
 ];
 
@@ -280,31 +280,31 @@ List<ColorPickerWidgetModel> moodCustomList = [
     action: 'Edit',
     name: "Custom 1",
     canEdit: true,
-    colorCode: [Colors.grey.shade900],
+    colorCode: [Colors.transparent],
   ),
   ColorPickerWidgetModel(
     action: 'Edit',
     name: "Custom 2",
     canEdit: true,
-    colorCode: [Colors.grey.shade900],
+    colorCode: [Colors.transparent],
   ),
   ColorPickerWidgetModel(
     action: 'Edit',
     canEdit: true,
     name: "Custom 3",
-    colorCode: [Colors.grey.shade900],
+    colorCode: [Colors.transparent],
   ),
   ColorPickerWidgetModel(
     action: 'Edit',
     canEdit: true,
     name: "Custom 4",
-    colorCode: [Colors.grey.shade900],
+    colorCode: [Colors.transparent],
   ),
   ColorPickerWidgetModel(
     action: 'Edit',
     canEdit: true,
     name: "Custom 5",
-    colorCode: [Colors.grey.shade900],
+    colorCode: [Colors.transparent],
   ),
 ];
 
@@ -353,9 +353,12 @@ List<ColorPickerWidgetModel> audioVisualGradientList = [
 //// color picker provider class to handle the color picker generate ui functions, and set the current color
 class ColorPickerProvider extends ChangeNotifier {
   ColorPickerWidgetModel? currentColor;
+  List<Color> currentColors = [];
+  Color colors = Colors.transparent;
   List<bool> hasBorder = [];
   Timer? timer;
   Color color = Colors.transparent;
+  int position = 0;
 
   ColorGradientEnum gradientType = ColorGradientEnum.linear;
 
@@ -455,12 +458,6 @@ class ColorPickerProvider extends ChangeNotifier {
         Provider.of<ModeProvider>(context, listen: false);
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
-    // setCurrentPickerWidget(ColorPickerWidgetModel(
-    //   action: widget.title,
-    //   name: widget.title,
-    //   canEdit: widget.picker,
-    //   colorCode: currentColors,
-    // ));
     modeProvider.setCurrentMode(ToolsModeModel(
         currentColor: currentColor!.colorCode,
         value: modeProvider.currentMode.value,

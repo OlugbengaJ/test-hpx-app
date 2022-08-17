@@ -5,6 +5,7 @@ import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
+import 'package:hpx/widgets/components/color_picker.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
@@ -67,6 +68,22 @@ class _InteractivePresetState extends State<InteractivePreset> {
     layerProvider.toolsEffectsUpdated();
   }
 
+  void resetCurrentColors(List<Color> colors, int index) {
+    ModeProvider modeProvider =
+        Provider.of<ModeProvider>(context, listen: false);
+    modeProvider.currentMode.currentColor[index] = colors.first;
+    modeProvider.setCurrentMode(ToolsModeModel(
+        currentColor: modeProvider.currentMode.currentColor,
+        value: modeProvider.currentMode.value,
+        effects: modeProvider.currentMode.effects,
+        icon: modeProvider.currentMode.icon,
+        name: modeProvider.currentMode.name));
+
+    LayersProvider layerProvider =
+        Provider.of<LayersProvider>(context, listen: false);
+    layerProvider.toolsEffectsUpdated();
+  }
+
   @override
   Widget build(BuildContext context) {
     EffectProvider effectsProvider =
@@ -91,9 +108,35 @@ class _InteractivePresetState extends State<InteractivePreset> {
               height: 1,
             ),
             Container(margin: const EdgeInsets.only(bottom: 10.0)),
-            Wrap(
-              children: _toolsProvider.generateColorPickerWidget(
-                  interactiveColorList, context),
+            ColorPickerWidget(
+              context: context,
+              color: interactiveColorList[0].colorCode.first,
+              colors: interactiveColorList[0].colorCode,
+              title: interactiveColorList[0].name,
+              label: interactiveColorList[0].label,
+              width: interactiveColorList[0].width,
+              height: interactiveColorList[0].height,
+              picker: interactiveColorList[0].canEdit,
+              leftTitle: interactiveColorList[0].action!,
+              setRandom: interactiveColorList[1].setRandom!,
+              onchange: (colors) {
+                resetCurrentColors(colors, 0);
+              },
+            ),
+            ColorPickerWidget(
+              context: context,
+              color: interactiveColorList[1].colorCode.first,
+              colors: interactiveColorList[1].colorCode,
+              title: interactiveColorList[1].name,
+              label: interactiveColorList[1].label,
+              width: interactiveColorList[1].width,
+              height: interactiveColorList[1].height,
+              picker: interactiveColorList[1].canEdit,
+              leftTitle: interactiveColorList[1].action!,
+              setRandom: interactiveColorList[1].setRandom!,
+              onchange: (colors) {
+                resetCurrentColors(colors, 1);
+              },
             ),
             Container(margin: const EdgeInsets.only(bottom: 50.0)),
             Divider(

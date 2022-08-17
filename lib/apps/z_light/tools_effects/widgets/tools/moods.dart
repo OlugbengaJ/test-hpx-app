@@ -102,15 +102,11 @@ class _MoodPresetState extends State<MoodPreset> {
               margin: const EdgeInsets.only(top: 20.0, bottom: 20.0),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Wrap(
-                        children:
-                            _colorPickerProvider.generateColorPickerWidget(
-                                activatedButton == 'Themes'
-                                    ? moodThemesList
-                                    : moodCustomList,
-                                context))
-                  ]),
+                  children: _colorPickerProvider.generateColorPickerWidget(
+                      activatedButton == 'Themes'
+                          ? moodThemesList
+                          : moodCustomList,
+                      context)),
             ),
           ],
         ));
