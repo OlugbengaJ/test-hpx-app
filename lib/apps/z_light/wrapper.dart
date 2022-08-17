@@ -9,7 +9,6 @@ import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/layouts/three_columns.dart';
 import 'package:hpx/widgets/theme.dart';
 
-
 class Wrapper extends StatefulWidget {
   const Wrapper({Key? key}) : super(key: key);
 
@@ -29,11 +28,11 @@ class _WrapperState extends State<Wrapper> {
 
   _updateLayers(int oldIndex, int newIndex) {
     log([
-      "old:",
+      'old:',
       oldIndex,
-      ":new:",
+      ':new:',
       newIndex,
-      ":length:",
+      ':length:',
       _layersListItems.length
     ].toString());
     setState(() {
@@ -41,7 +40,7 @@ class _WrapperState extends State<Wrapper> {
         newIndex -= 1;
       }
       final item = _layersListItems.removeAt(oldIndex);
-      log(["layerIndex:", item.layerIndex.toString(), ':New Index:', newIndex]
+      log(['layerIndex:', item.layerIndex.toString(), ':New Index:', newIndex]
           .toString());
       _layersListItems.insert(newIndex, item);
       log(_layersListItems[newIndex].layerIndex.toString());

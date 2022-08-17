@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io' as io;
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +24,6 @@ class ProfileProvider extends ChangeNotifier {
 
   bool get isMac => Platform.isMacOS;
 
-
   LayersProvider? _layersProvider;
   WorkspaceProvider? _workspaceProvider;
   final List<Profile> _profiles = [
@@ -36,11 +34,10 @@ class ProfileProvider extends ChangeNotifier {
         icon: '',
         layers: [],
         associatedApps: [],
-        createdDate: DateTimeUtil.utc
-    )
+        createdDate: DateTimeUtil.utc)
   ];
 
-  ProfileProvider()  {
+  ProfileProvider() {
     prePopulateProfiles();
   }
 
@@ -79,12 +76,12 @@ class ProfileProvider extends ChangeNotifier {
   /// [_defaultProfile] returns a default profile
   /// used for creating a new profile.
   Profile get _defaultProfile => profiles.first.copyWith(
-    id: _nextId,
-    name: '${Constants.defaultText} (1)',
-    icon: '',
-    layers: [],
-    associatedApps: [],
-  );
+        id: _nextId,
+        name: '${Constants.defaultText} (1)',
+        icon: '',
+        layers: [],
+        associatedApps: [],
+      );
 
   /// [resetSelectedProfile] restores [_selectedProfile] to the default.
   void resetSelectedProfile() {
@@ -95,7 +92,7 @@ class ProfileProvider extends ChangeNotifier {
   /// other than the selected profile, exists with name.
   bool profileExists(String name) {
     return profiles.any((element) =>
-    element.name == name.trim() && element.id != _selectedProfile.id);
+        element.name == name.trim() && element.id != _selectedProfile.id);
   }
 
   /// [addProfile] adds a new profile to the profiles list.
@@ -115,7 +112,7 @@ class ProfileProvider extends ChangeNotifier {
 
     _profiles.add(profile);
     selectProfile(profile.id);
-    DatabaseManager.createProfile(profile);
+    // DatabaseManager.createProfile(profile);
     notifyListeners();
   }
 
@@ -128,7 +125,7 @@ class ProfileProvider extends ChangeNotifier {
       // current profile was deleted hence change to default profile
       _currentProfile = profiles.first.copyWith();
     }
-    DatabaseManager.deleteItem('profiles', id);
+    // DatabaseManager.deleteItem('profiles', id);
     notifyListeners();
   }
 
@@ -181,15 +178,15 @@ class ProfileProvider extends ChangeNotifier {
       associatedApps: file.isEmpty
           ? []
           : [
-        Application(
-            name: name,
-            icon: icon,
-            file: file,
-            createdDate: DateTimeUtil.utc)
-      ],
+              Application(
+                  name: name,
+                  icon: icon,
+                  file: file,
+                  createdDate: DateTimeUtil.utc)
+            ],
     );
 
-    DatabaseManager.createProfile(_selectedProfile);
+    // DatabaseManager.createProfile(_selectedProfile);
     notifyListeners();
   }
 
@@ -241,17 +238,17 @@ class ProfileProvider extends ChangeNotifier {
     Application(name: 'Default', icon: '', file: ''),
   ];
 
-
   /// Should be called when the app is first launched
   /// [getSystemApps] fetch all applications installed on the OS
   void getSystemApps() async {
-    if(isLinux){
-      ProcessResult result = await Process.run('ls', ['/usr/share/applications/']);
-      List<String> listApps = result.stdout.toString().split("\n");
+    if (isLinux) {
+      ProcessResult result =
+          await Process.run('ls', ['/usr/share/applications/']);
+      List<String> listApps = result.stdout.toString().split('\n');
       final dir = Directory('/usr/share/applications/');
 
       for (var i = 0; i < listApps.length; i++) {
-        File f =  File("${dir.path}${listApps[i]}");
+        File f = File('${dir.path}${listApps[i]}');
         if (f.existsSync()) {
           // read each line in .desktop file
           f.readAsLines().then((value) {
@@ -284,13 +281,12 @@ class ProfileProvider extends ChangeNotifier {
             try {
               addSystemApp(
                 appInfo['name']!,
-                _getLinuxIcon(path:appInfo['icon']!),
+                _getLinuxIcon(path: appInfo['icon']!),
                 f.path,
               );
             } catch (e) {
               //
             }
-            
           });
         }
       }
@@ -299,29 +295,27 @@ class ProfileProvider extends ChangeNotifier {
     if (isWindows) {
       Shell shell = Shell();
 
-      await shell.run("wmic product get name").then((value){
-        List<String> resultToList = value.outText.toString().split("\n");
+      await shell.run('wmic product get name').then((value) {
+        List<String> resultToList = value.outText.toString().split('\n');
         // Start with index 1 cause the first element is 'Name'
         for (var i = 1; i < resultToList.length; i++) {
-          if(resultToList[i] !="" && resultToList[i] != "Name"){
+          if (resultToList[i] != '' && resultToList[i] != 'Name') {
             try {
               addSystemApp(
                 resultToList[i].trim(),
-                "",
-                "",
+                '',
+                '',
               );
             } catch (e) {
-              //              
+              //
             }
-          }          
+          }
         }
+      }).catchError((e) {
+        debugPrint('error from future');
       });
-     
     }
-    
   }
-
-
 
   /// [addSystemApp] adds a new [Application] to [apps].
   void addSystemApp(String name, String icon, String file) {
@@ -393,55 +387,62 @@ class ProfileProvider extends ChangeNotifier {
     if (!_currentProfile.layers.contains(layer)) {
       _currentProfile.layers.add(layer);
     }
-    DatabaseManager.createProfile(_currentProfile);
+    // DatabaseManager.createProfile(_currentProfile);
   }
 
   void updateProfileByRemovingLayer(LayerItemModel layer) {
     if (_currentProfile.layers.contains(layer)) {
       _currentProfile.layers.remove(layer);
     }
-    DatabaseManager.deleteItem('layers', layer.id);
+    // DatabaseManager.deleteItem('layers', layer.id);
   }
 
   prePopulateProfiles() async {
-    final profilesFromDB = await DatabaseManager.getAllProfiles();
-    for (Profile p in profilesFromDB) {
-      _layersProvider?.layeritems.addAll(p.layers);
-      if(p.name != 'Default') _profiles.add(p);
-    }
+    // final profilesFromDB = await DatabaseManager.getAllProfiles();
+    // for (Profile p in profilesFromDB) {
+    //   _layersProvider?.layeritems.addAll(p.layers);
+    //   if(p.name != 'Default') _profiles.add(p);
+    // }
     notifyListeners();
   }
 
   Future<void> exportProfile(int id) async {
-    final p = profiles.firstWhereOrNull((element) => element.id == id);
-    String? outputFile = await FilePicker.platform.saveFile(
-        dialogTitle: 'Save Your File to desired location',
-        fileName: '${p?.name}.json');
     try {
-      io.File returnedFile = io.File(outputFile!);
+      final p = profiles.firstWhereOrNull((element) => element.id == id);
+
+      // check file is not null
+      if (p == null || p.name.isEmpty) {
+        // don't save non existent profile
+        throw Exception();
+      }
+
+      String? outputFile = await FilePicker.platform.saveFile(
+          dialogTitle: 'Save Your File to desired location',
+          fileName: '${p?.name}.json');
+      File returnedFile = File(outputFile!);
       await returnedFile.writeAsString(jsonEncode(p?.toMap()),
-          mode: io.FileMode.write, flush: true);
+          mode: FileMode.write, flush: true);
     } catch (e) {
-      debugPrint("Unable to save profile");
+      debugPrint('Unable to save profile');
     }
   }
 
   importProfile(String filePath) {
     File(filePath).readAsString().then((String contents) async {
       Map<String, dynamic> profileJson = jsonDecode(contents);
-      profileJson['id'] = await DatabaseManager.getNextAvailableId('profiles');
-      int firstLayerId = await DatabaseManager.getNextAvailableId('layers');
-      int firstModeId = await DatabaseManager.getNextAvailableId('tools_mode');;
+      // profileJson['id'] = await DatabaseManager.getNextAvailableId('profiles');
+      // int firstLayerId = await DatabaseManager.getNextAvailableId('layers');
+      // int firstModeId = await DatabaseManager.getNextAvailableId('tools_mode');
 
-      for (var layer in profileJson['layers']) {
-        layer['id'] = firstLayerId++;
-        layer['mode']['id'] = firstModeId++;
-      }
+      // for (var layer in profileJson['layers']) {
+      //   layer['id'] = firstLayerId++;
+      //   layer['mode']['id'] = firstModeId++;
+      // }
 
       final newProfile = Profile.fromJson(profileJson);
       _layersProvider?.layeritems.addAll(newProfile.layers);
       _profiles.add(newProfile);
-      await DatabaseManager.createProfile(newProfile);
+      // await DatabaseManager.createProfile(newProfile);
       notifyListeners();
     });
   }
@@ -468,58 +469,55 @@ class SortOption {
   final SortOrder sortOrder;
 }
 
+String _getLinuxIcon({String path = ''}) {
+  final f = File(path);
+  if (!f.existsSync()) {
+    // icon not found; find it from other dir based on dimentions mxn.
+    // e.g. /usr/share/icons/hicolor/48x48/apps
+    // Flatpak apps: /var/lib/flatpak/exports/share/applications/
+    // Snap apps: /var/lib/snapd/desktop/applications/
+    // Wine: ~/.local/share/applications/wine/Programs/
+    final List<String> iconDirs = [
+      '/usr/share/icons/Humanity',
+      '/usr/share/icons/Yaru',
+      '/usr/share/icons/gnome',
+      '/usr/share/icons/Adwaita',
+      '/usr/share/icons/HighContrast',
+      '/usr/share/icons/hicolor',
+      '/usr/share/pixmaps',
+    ];
 
+    // check icon in each root directory
+    bool iconFound = false;
+    for (var dir in iconDirs) {
+      final d = Directory(dir);
+      if (d.existsSync()) {
+        // if dir exists, check file name
+        final fileList = d.listSync(recursive: true, followLinks: false);
 
-  String _getLinuxIcon({String path=""}) {
+        for (var f in fileList) {
+          if (f.path.contains('16x16') ||
+              f.path.contains('22x22') ||
+              f.path.contains('24x24')) {
+            // exclude low resolution icons
+            continue;
+          }
 
-    final f = File(path);
-    if (!f.existsSync()) {
-      // icon not found; find it from other dir based on dimentions mxn.
-      // e.g. /usr/share/icons/hicolor/48x48/apps
-      // Flatpak apps: /var/lib/flatpak/exports/share/applications/
-      // Snap apps: /var/lib/snapd/desktop/applications/
-      // Wine: ~/.local/share/applications/wine/Programs/
-      final List<String> iconDirs = [
-        '/usr/share/icons/Humanity',
-        '/usr/share/icons/Yaru',
-        '/usr/share/icons/gnome',
-        '/usr/share/icons/Adwaita',
-        '/usr/share/icons/HighContrast',
-        '/usr/share/icons/hicolor',
-        '/usr/share/pixmaps',
-      ];
+          if (f.path.contains(RegExp('$path(.*).(jpg|png|svg)'))) {
+            path = f.path;
+            iconFound = true;
 
-      // check icon in each root directory
-      bool iconFound = false;
-      for (var dir in iconDirs) {
-        final d = Directory(dir);
-        if (d.existsSync()) {
-          // if dir exists, check file name
-          final fileList = d.listSync(recursive: true, followLinks: false);
-
-          for (var f in fileList) {
-            if (f.path.contains('16x16') ||
-                f.path.contains('22x22') ||
-                f.path.contains('24x24')) {
-              // exclude low resolution icons
-              continue;
-            }
-
-            if (f.path.contains(RegExp('$path(.*).(jpg|png|svg)'))) {
-              path = f.path;
-              iconFound = true;
-
-              break;
-            }
+            break;
           }
         }
-
-        if (iconFound) break;
       }
 
-      // icon does not exist in any dir.
-      if (!iconFound) path = '';
+      if (iconFound) break;
     }
 
-    return path;
+    // icon does not exist in any dir.
+    if (!iconFound) path = '';
   }
+
+  return path;
+}

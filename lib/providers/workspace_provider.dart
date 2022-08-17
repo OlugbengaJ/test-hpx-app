@@ -95,11 +95,11 @@ class WorkspaceProvider with ChangeNotifier {
         for (var ltwh in layersLTWH.values) {
           switch (ltwh.dragMode) {
             case WorkspaceDragMode.resizable:
-              resetLTWHOffset(ltwh.resizableLTWH!, view);
+              resetLTWHOffset(ltwh.resizableLTWH!);
 
               break;
             default:
-              resetLTWHOffset(ltwh.highlightLTWH!, view);
+              resetLTWHOffset(ltwh.highlightLTWH!);
           }
         }
 
@@ -655,12 +655,12 @@ class WorkspaceProvider with ChangeNotifier {
 
     ltwh.leftToCenter = centerScreenW - left;
     ltwh.topToCenter = centerScreenH - top;
-    resetLTWHOffset(ltwh, _workspaceView);
+    resetLTWHOffset(ltwh);
   }
 
   /// [resetLTWHOffset] updates a LTHW left and top values using the
-  /// workspace offsets based on the current view in focus.
-  void resetLTWHOffset(LTWH d, WorkspaceView selectedView) {
+  /// workspace center to the rect's center.
+  void resetLTWHOffset(LTWH d) {
     // recalculate left & top to center
     d.left = (_workspaceRect.width / 2) - d.leftToCenter!;
     d.top = (_workspaceRect.height / 2) - d.topToCenter!;
@@ -852,7 +852,7 @@ class WorkspaceProvider with ChangeNotifier {
       bool? scrolling, DragUpdateDetails details, double scale) {
     if (scrolling == true) {
       final dy = details.delta.dy * scale;
-      // keyboardPosTop = keyboardPosTop! - dy;
+      keyboardOffset = Offset(keyboardOffset.dx, keyboardOffset.dy - dy);
 
       // update layers overlay selector position
       layersLTWH.forEach(

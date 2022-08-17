@@ -19,7 +19,7 @@ class PickerDropdown extends StatefulWidget {
       {Key? key,
       required this.pickerList,
       this.defaultPicker,
-      this.pickerHintText = "Choose an option ..",
+      this.pickerHintText = 'Choose an option ..',
       required this.onChange})
       : super(key: key);
 
