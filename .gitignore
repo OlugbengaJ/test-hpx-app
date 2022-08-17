@@ -47,10 +47,13 @@ app.*.map.json
 
 # Debian packages
 /debian/packages
+<<<<<<< HEAD
 .dccache
 linux
 macos
 windows
+=======
+>>>>>>> b2add24 (Review changes)
 
 macos/Flutter/ephemeral/Flutter-Generated.xcconfig
 macos/Flutter/ephemeral/flutter_export_environment.sh
