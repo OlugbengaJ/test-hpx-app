@@ -38,13 +38,18 @@ class ImageFilePicker{
         File newFile = File('${directory.path}/${profileProvider.selectedProfile.name}.${filePickerResult.files.single.extension}');
         newFile.writeAsBytes(await file.readAsBytes());
 
-        profileProvider.updateSelectedProfile(profileProvider.selectedProfile.name, newFile.path, '');
+        if(newFile.existsSync()){
+          profileProvider.updateSelectedProfile(profileProvider.selectedProfile.name, newFile.path, '');
+        }
+        
       }
       if(isWindows){
         File newFile = File('${directory.path}/name.${filePickerResult.files.single.extension}');
         newFile.writeAsBytes(await file.readAsBytes());
-
-        profileProvider.updateSelectedProfile(profileProvider.selectedProfile.name, newFile.path, '');
+        if(newFile.existsSync()){
+          profileProvider.updateSelectedProfile(profileProvider.selectedProfile.name, newFile.path, '');
+        }
+        
       }
       
 
