@@ -9,21 +9,15 @@ import 'package:hpx/widgets/components/color_picker.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
-class ShortcutColorsPreset extends StatefulWidget {
-  const ShortcutColorsPreset({Key? key}) : super(key: key);
-
-  @override
-  State<ShortcutColorsPreset> createState() => _ShortcutColorsPresetState();
-}
-
-class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
+class ShortcutColorsPreset extends StatelessWidget {
+  ShortcutColorsPreset({Key? key}) : super(key: key);
   String activatedButton = "Custom";
 
   LayerItemModel? subLayer;
 
   activationDialog() {}
 
-  List<Widget> generatePreset() {
+  List<Widget> generatePreset(BuildContext context) {
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
     KeysProvider keysProvider =
@@ -72,7 +66,7 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
     return ui;
   }
 
-  Widget presetSubLayer() {
+  Widget presetSubLayer(BuildContext context) {
     return Container(
       decoration: BoxDecoration(color: Colors.grey.shade900),
       margin: const EdgeInsets.only(top: 20),
@@ -102,13 +96,13 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
               ),
             ))
           ]),
-          Wrap(children: generatePreset())
+          Wrap(children: generatePreset(context))
         ],
       ),
     );
   }
 
-  Widget processSubLayer() {
+  Widget processSubLayer(BuildContext context) {
     ShortcutWidgetProvider shortcutProvider =
         Provider.of<ShortcutWidgetProvider>(context, listen: false);
     subLayer = Provider.of<LayersProvider>(context).getCurrentSublayer();
@@ -117,6 +111,7 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
         Container(
           margin: const EdgeInsets.only(top: 5, bottom: 20),
           child: ColorPickerWidget(
+            context: context,
             color: subLayer != null
                 ? subLayer!.shortcutColor
                 : shortcutList[0].colorCode.first,
@@ -127,9 +122,7 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
             picker: shortcutList[0].canEdit,
             leftTitle: shortcutList[0].action!,
             onchange: (colors) {
-              setState(() {
-                subLayer?.shortcutColor = colors.first;
-              });
+              subLayer?.shortcutColor = colors.first;
             },
           ),
         ),
@@ -198,91 +191,16 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
     );
   }
 
-  Widget generateCustomWidget() {
-    ShortcutWidgetProvider shortcutProvider =
-        Provider.of<ShortcutWidgetProvider>(context, listen: false);
+  Widget generateCustomWidget(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: 30),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text("Shortcut Group", textAlign: TextAlign.left, style: h5Style),
-          // Container(
-          //   margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-          //   child: Row(
-          //     children: [
-          //       Expanded(
-          //         child: Column(
-          //             crossAxisAlignment: CrossAxisAlignment.stretch,
-          //             children: [
-          //               TextButton(
-          //                 onPressed: () {
-          //                   setState(() {
-          //                     activatedButton = "Custom";
-          //                   });
-          //                 },
-          //                 style: (activatedButton != 'Custom')
-          //                     ? textBtnStyleBlack
-          //                     : textBtnStyleWhite,
-          //                 child: SizedBox(
-          //                   height: 40,
-          //                   child: Row(
-          //                     mainAxisAlignment: MainAxisAlignment.center,
-          //                     children: [
-          //                       Padding(
-          //                         padding: const EdgeInsets.all(8.0),
-          //                         child: Text(
-          //                           'CUSTOM',
-          //                           style: TextStyle(
-          //                               color: (activatedButton != 'Custom')
-          //                                   ? Colors.white
-          //                                   : Colors.black),
-          //                         ),
-          //                       ),
-          //                     ],
-          //                   ),
-          //                 ),
-          //               ),
-          //             ]),
-          //       ),
-          //       Expanded(
-          //         child: Column(
-          //             crossAxisAlignment: CrossAxisAlignment.stretch,
-          //             children: [
-          //               TextButton(
-          //                 onPressed: () {
-          //                   setState(() {
-          //                     activatedButton = "Preset";
-          //                   });
-          //                 },
-          //                 style: (activatedButton == 'Custom')
-          //                     ? textBtnStyleBlack
-          //                     : textBtnStyleWhite,
-          //                 child: SizedBox(
-          //                   height: 40,
-          //                   child: Row(
-          //                     mainAxisAlignment: MainAxisAlignment.center,
-          //                     children: [
-          //                       Padding(
-          //                         padding: const EdgeInsets.all(8.0),
-          //                         child: Text(
-          //                           'PRESETS',
-          //                           style: TextStyle(
-          //                               color: (activatedButton == 'Custom')
-          //                                   ? Colors.white
-          //                                   : Colors.black),
-          //                         ),
-          //                       ),
-          //                     ],
-          //                   ),
-          //                 ),
-          //               ),
-          //             ]),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          (activatedButton == 'Custom') ? processSubLayer() : presetSubLayer()
+          (activatedButton == 'Custom')
+              ? processSubLayer(context)
+              : presetSubLayer(context)
         ],
       ),
     );
@@ -292,6 +210,6 @@ class _ShortcutColorsPresetState extends State<ShortcutColorsPreset> {
   Widget build(BuildContext context) {
     return (Provider.of<LayersProvider>(context).isSublayerSelected == false)
         ? Container()
-        : generateCustomWidget();
+        : generateCustomWidget(context);
   }
 }

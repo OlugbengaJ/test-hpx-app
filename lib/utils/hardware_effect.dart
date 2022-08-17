@@ -1,6 +1,4 @@
 import 'dart:typed_data';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/providers/keys_provider.dart';
@@ -54,65 +52,6 @@ abstract class HardwareEffect {
       interpolatedColorArray
           .addAll(generateInterpolation(colors[i], colors[next], 4));
     }
-
-/*
-    if(colors.length == 2) {
-      interpolatedColorArray = [...generateInterpolation(colors.first, colors.last, 5),
-        ...generateInterpolation(colors.last, colors.first, 5)];
-    }
-
-    if(colors.length == 3) {
-      interpolatedColorArray = [...generateInterpolation(colors[0], colors[1], 3),
-      ...generateInterpolation(colors[1], colors[2], 3),
-        ...generateInterpolation(colors[2], colors[3], 3),
-        ...generateInterpolation(colors[3], colors[0], 3)];
-    }
-
-    if(colors.length == 4) {
-      interpolatedColorArray = [...generateInterpolation(colors[0], colors[1], 3),
-        ...generateInterpolation(colors[1], colors[2], 3),
-        ...generateInterpolation(colors[2], colors[3], 3),
-        ...generateInterpolation(colors[3], colors[0], 3)];
-    }
-
-    if(colors.length == 5) {
-      interpolatedColorArray = [...generateInterpolation(colors[0], colors[1], 2),
-        ...generateInterpolation(colors[1], colors[2], 2),
-        ...generateInterpolation(colors[2], colors[3], 2),
-        ...generateInterpolation(colors[3], colors[4], 2),
-        ...generateInterpolation(colors[4], colors[0], 2)];
-    }
-
-    if(colors.length == 6) {
-      interpolatedColorArray = [...generateInterpolation(colors[0], colors[1], 1),
-        ...generateInterpolation(colors[1], colors[2], 1),
-        ...generateInterpolation(colors[2], colors[3], 1),
-        ...generateInterpolation(colors[3], colors[4], 1),
-        ...generateInterpolation(colors[4], colors[5], 1),
-        ...generateInterpolation(colors[5], colors[0], 1)];
-    }
-
-    if(colors.length == 7) {
-      interpolatedColorArray = [...generateInterpolation(colors[0], colors[1], 1),
-        ...generateInterpolation(colors[1], colors[2], 1),
-        ...generateInterpolation(colors[2], colors[3], 1),
-        ...generateInterpolation(colors[3], colors[4], 1),
-        ...generateInterpolation(colors[4], colors[5], 1),
-        ...generateInterpolation(colors[5], colors[6], 1),
-        ...generateInterpolation(colors[6], colors[0], 1)];
-    }
-
-    if(colors.length == 8) {
-      interpolatedColorArray = [...generateInterpolation(colors[0], colors[1], 1),
-        ...generateInterpolation(colors[1], colors[2], 1),
-        ...generateInterpolation(colors[2], colors[3], 1),
-        ...generateInterpolation(colors[3], colors[4], 1),
-        ...generateInterpolation(colors[4], colors[5], 1),
-        ...generateInterpolation(colors[5], colors[6], 1),
-        ...generateInterpolation(colors[6], colors[7], 1),
-        ...generateInterpolation(colors[7], colors[8], 1)];
-    }*/
-
     return interpolatedColorArray;
   }
 }
@@ -537,9 +476,7 @@ class AmbientEffect extends HardwareEffect {
 
 class SupportContactEffect extends HardwareEffect {
   SupportContactEffect(int layerID, LayersProvider layersProvider)
-      : super(layerID, layersProvider) {
-    run();
-  }
+      : super(layerID, layersProvider) {}
 
   @override
   Map<String, Map<String, Object>> updateKeyboardInfo(
@@ -556,17 +493,5 @@ class SupportContactEffect extends HardwareEffect {
           color: layer.mode?.currentColor.last);
     });
     return keyboard;
-  }
-
-  run() {
-    window.onKeyData = keyEventListener;
-  }
-
-  bool keyEventListener(KeyData data) {
-    if (data.type == KeyEventType.up && data.physical == 0x70045) {
-      _layersProvider.modeProvider?.activateContactSupportDialog();
-      return true;
-    }
-    return false;
   }
 }

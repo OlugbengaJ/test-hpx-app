@@ -46,7 +46,7 @@ class ContactSupportWidgetProvider extends ChangeNotifier {
                         style: (isChoice == SupportTypesEnum.browser)
                             ? textBtnStyleSupportActive
                             : textBtnStyleSupportDefault,
-                        child: const Text("Via Browser"),
+                        child: const Text('Via Browser'),
                       ),
                       TextButton(
                         onHover: (value) {
@@ -59,7 +59,7 @@ class ContactSupportWidgetProvider extends ChangeNotifier {
                         style: (isChoice == SupportTypesEnum.audio)
                             ? textBtnStyleSupportActive
                             : textBtnStyleSupportDefault,
-                        child: const Text("Via Audio Call"),
+                        child: const Text('Via Audio Call'),
                       ),
                       TextButton(
                         onHover: (value) {
@@ -72,7 +72,7 @@ class ContactSupportWidgetProvider extends ChangeNotifier {
                         style: (isChoice == SupportTypesEnum.video)
                             ? textBtnStyleSupportActive
                             : textBtnStyleSupportDefault,
-                        child: const Text("Via Video Call"),
+                        child: const Text('Via Video Call'),
                       ),
                     ],
                   ),

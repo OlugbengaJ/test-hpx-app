@@ -1,5 +1,5 @@
+import 'dart:ui';
 import 'package:hpx/providers/layers_provider/layers.dart';
-import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/utils/hardware_effect.dart';
 import 'dart:isolate';
 import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart';
@@ -575,6 +575,7 @@ class KeyboardController {
 
   KeyboardController(this.layersProvider) {
     run(overallEffectsSpeed);
+    window.onKeyData = keyEventListener;
   }
 
   addLayer(LayerItemModel layer) {
@@ -705,5 +706,13 @@ class KeyboardController {
       value["greenOpacity"] = 0;
       value["blueOpacity"] = 0;
     });
+  }
+
+  bool keyEventListener(KeyData data) {
+    if (data.type == KeyEventType.up && data.physical == 0x70045) {
+      layersProvider.modeProvider?.activateContactSupportDialog();
+      return true;
+    }
+    return false;
   }
 }

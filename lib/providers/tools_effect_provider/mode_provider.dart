@@ -20,7 +20,6 @@ import 'package:hpx/providers/tools_effect_provider/effects_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/contact_support_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/image_mode_provder.dart';
 import 'package:hpx/providers/tools_effect_provider/widget/shortcut_widget_provider.dart';
-import 'package:hpx/providers/tutorial_provider/tutorial_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
@@ -240,7 +239,7 @@ class ModeProvider extends ChangeNotifier {
           currentColors.add(element.colorCode[0]);
         }
         effects.effectName = pickerChoice.value;
-        preset = const ShortcutColorsPreset();
+        preset = ShortcutColorsPreset();
         break;
       case EnumModes.mood:
         currentColors = moodThemesList.first.colorCode;
@@ -250,7 +249,7 @@ class ModeProvider extends ChangeNotifier {
       case EnumModes.colorproduction:
         currentColors = colorProductionList.first.colorCode;
         effects.effectName = pickerChoice.value;
-        preset = const ColorProductionPreset();
+        preset = ColorProductionPreset();
         break;
       case EnumModes.audiovisualizer:
         for (var element in audioVisualSolidList) {
@@ -279,7 +278,7 @@ class ModeProvider extends ChangeNotifier {
         }
         defaultBreathingEffectValues.effectName = pickerChoice.value;
         effects = defaultBreathingEffectValues;
-        preset = const BreathingPreset();
+        preset = BreathingPreset();
         break;
       case EnumModes.blinking:
         defaultBlinkingEffectValues.effectName = pickerChoice.value;
@@ -287,7 +286,7 @@ class ModeProvider extends ChangeNotifier {
         for (var element in blinkingList) {
           currentColors.add(element.colorCode[0]);
         }
-        preset = const BlinkingPreset();
+        preset = BlinkingPreset();
         break;
       case EnumModes.interactive:
         ////  set an notification message for interactive mode
@@ -330,10 +329,6 @@ class ModeProvider extends ChangeNotifier {
           currentColors.add(element.colorCode[0]);
         }
         preset = const ContactSupportPreset();
-        break;
-      default:
-        currentColors.add(Colors.transparent);
-        preset = Container();
         break;
     }
 
@@ -395,10 +390,7 @@ class ModeProvider extends ChangeNotifier {
   }
 
   void activateContactSupportDialog() {
-    isLost = true;
-    if (isLost == true) {
-      contacProvider.showContactOptionsDialog(appContext);
-    }
+    contacProvider.showContactOptionsDialog(appContext);
     notifyListeners();
   }
 }

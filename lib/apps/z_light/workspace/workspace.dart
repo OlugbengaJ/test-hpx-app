@@ -3,6 +3,7 @@ import 'package:hpx/apps/z_light/globals.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/imports.dart';
 import 'package:hpx/apps/z_light/workspace/widgets/keyboard/keyboard.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
+import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/providers/scrollbar_provider.dart';
 import 'package:hpx/providers/tutorial_provider/tutorial_provider.dart';
 import 'package:hpx/providers/workspace_provider.dart';
@@ -111,6 +112,8 @@ class _WorkspaceState extends State<Workspace>
     _zoomScaleFactor = 0.5;
     _zoomScale = _zoomScaleFactor * _zoomValue / _zoomValue;
     _zoomTextCtrl = TextEditingController(text: '${_zoomValue.ceil()}%');
+
+    _getOSApps();
   }
 
   @override
@@ -120,12 +123,35 @@ class _WorkspaceState extends State<Workspace>
     super.dispose();
   }
 
+  void _getOSApps() {
+    debugPrint("Access to OS apps");
+    ProfileProvider profileProvider =
+        Provider.of<ProfileProvider>(context, listen: false);
+    if (profileProvider.apps.length < 2) {
+      profileProvider.getSystemApps();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final workspaceProvider = Provider.of<WorkspaceProvider>(context);
+    final scrollbarProvider = Provider.of<ScrollbarProvider>(context);
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (scrollbarProvider.scrolling == false) {
+        workspaceProvider.recenter();
+      }
+    });
+
     final tutorialProvider =
         Provider.of<TooltipTutorialProvider>(context, listen: false);
     tutorialProvider.direction = AxisDirection.down;
+
+    LayersProvider layersProvider =
+        Provider.of<LayersProvider>(context, listen: false);
+
+    /// Make sure the function is only called if apps lenght is less than 2
+    /// The first time the app is launched its called, when apps are fetched, no more call is needed
 
     final themeData = Theme.of(context);
 
@@ -148,10 +174,7 @@ class _WorkspaceState extends State<Workspace>
         /// sub-widgets cliped only to the view.
         if (workspaceProvider.isLightingView)
           ConstrainedBox(
-            key: workspaceZoneToolsKey,
-            constraints: const BoxConstraints(
-              maxHeight: 85,
-            ),
+            constraints: const BoxConstraints(maxHeight: 85),
             child: Container(
               margin: const EdgeInsets.all(15.0),
               child: Column(
@@ -159,7 +182,7 @@ class _WorkspaceState extends State<Workspace>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
-                    child: Text('Zone Selection', style: h5Style),
+                    child: Text(Constants.zoneSelection, style: h5Style),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -260,7 +283,7 @@ class _WorkspaceState extends State<Workspace>
                         widget: Padding(
                           padding: const EdgeInsets.only(right: 20.0),
                           child: Tooltip(
-                            message: 'Click selector',
+                            message: Constants.clickSelector,
                             child: RoundButton(
                               onTapDown: workspaceProvider.zoneClickFnc,
                               size: _buttonSize,
@@ -296,6 +319,12 @@ class _WorkspaceState extends State<Workspace>
             message: workspaceProvider.stripNotificationText,
             closeHandler: workspaceProvider.toggleStripNotification,
           ),
+        // Show shortcut colors stripnotification
+        if (layersProvider.shortcutColorWarningIsStripNotify)
+          StripNotification(
+            message: Constants.shortcutColorStripNotificationText,
+            closeHandler: layersProvider.hideStripNotification,
+          ),
         Expanded(
           child: Container(
             decoration: const BoxDecoration(
@@ -306,9 +335,6 @@ class _WorkspaceState extends State<Workspace>
             ),
             child: LayoutBuilder(
               builder: (_, constraints) {
-                // set the keyboard center
-                workspaceProvider.recenter(constraints, _resetZoom);
-
                 return Stack(
                   children: [
                     GestureDetector(
@@ -328,11 +354,19 @@ class _WorkspaceState extends State<Workspace>
                         children: [
                           // Keyboard widget takes a zoom scale which is applied to all keys.
                           // This ensures seamless zooming of the entire keyboard.
-                          Positioned(
-                            left: workspaceProvider.keyboardPosLeft,
-                            top: workspaceProvider.keyboardPosTop,
-                            // alignment: Alignment.center,
-                            child: Keyboard(zoomScale: _zoomScale),
+                          ValueListenableBuilder<Offset>(
+                            valueListenable:
+                                workspaceProvider.keyboardOffsetNotifier,
+                            builder: (context, value, child) {
+                              return Positioned(
+                                left: value.dx,
+                                top: value.dy,
+                                child: Keyboard(
+                                  key: keyboardStackKey,
+                                  zoomScale: _zoomScale,
+                                ),
+                              );
+                            },
                           ),
 
                           OverlaySelector(
@@ -378,17 +412,18 @@ class _WorkspaceState extends State<Workspace>
                           _resetZoom = false;
 
                           // update scrollbar and keyboard top position
-                          final isScroll =
-                              scrollProvider.onPanVertical(details);
+                          scrollProvider.onPanVertical(details);
                           workspaceProvider.updateKeyboardPosTop(
-                              isScroll, details, _zoomScale / _zoomScaleFactor);
+                              scrollProvider.scrolling,
+                              details,
+                              _zoomScale / _zoomScaleFactor);
                         },
                         onTapMinus: () {
                           _resetZoom = false;
 
                           final scrollDetails = scrollProvider.onTapUp();
                           workspaceProvider.updateKeyboardPosTop(
-                              scrollDetails.scrolling,
+                              scrollProvider.scrolling,
                               scrollDetails.details,
                               _zoomScale / _zoomScaleFactor);
                         },
@@ -397,7 +432,7 @@ class _WorkspaceState extends State<Workspace>
 
                           final scrollDetails = scrollProvider.onTapDown();
                           workspaceProvider.updateKeyboardPosTop(
-                              scrollDetails.scrolling,
+                              scrollProvider.scrolling,
                               scrollDetails.details,
                               _zoomScale / _zoomScaleFactor);
                         },
@@ -429,17 +464,18 @@ class _WorkspaceState extends State<Workspace>
                           _resetZoom = false;
 
                           // update scrollbar and keyboard left position
-                          final isScroll =
-                              scrollProvider.onPanHorizontal(details);
+                          scrollProvider.onPanHorizontal(details);
                           workspaceProvider.updateKeyboardPosLeft(
-                              isScroll, details, _zoomScale / _zoomScaleFactor);
+                              scrollProvider.scrolling,
+                              details,
+                              _zoomScale / _zoomScaleFactor);
                         },
                         onTapMinus: () {
                           _resetZoom = false;
 
                           final scrollDetails = scrollProvider.onTapLeft();
                           workspaceProvider.updateKeyboardPosLeft(
-                              scrollDetails.scrolling,
+                              scrollProvider.scrolling,
                               scrollDetails.details,
                               _zoomScale / _zoomScaleFactor);
                         },
@@ -448,14 +484,14 @@ class _WorkspaceState extends State<Workspace>
 
                           final scrollDetails = scrollProvider.onTapRight();
                           workspaceProvider.updateKeyboardPosLeft(
-                              scrollDetails.scrolling,
+                              scrollProvider.scrolling,
                               scrollDetails.details,
                               _zoomScale / _zoomScaleFactor);
                         },
                       );
                     }),
 
-                    // zoom toolbar
+                    // zoom toolbar section
                     Positioned(
                       bottom: workspaceProvider.scrollOffset,
                       left: 0,
@@ -467,7 +503,10 @@ class _WorkspaceState extends State<Workspace>
                           zoomInHandler: zoomIn,
                           zoomExpandHandler: zoomExpand,
                           zoomOutHandler: zoomOut,
-                          zoomCollapseHandler: recenterView,
+                          zoomRecenterHandler: () {
+                            recenterView();
+                            workspaceProvider.recenter();
+                          },
                           zoomEndHandler: zoomEnd,
                         ),
                       ),

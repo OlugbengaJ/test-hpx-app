@@ -77,11 +77,11 @@ class LayerItemModel {
   double left = 0.0;
   double right = 0.0;
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'id': id,
       'parentId': parentID,
-      'profileID': profileID,
+      'profileId': profileID,
       'layerText': layerText,
       'visible': visible.toString(),
       'visibleOnStack': visibleOnStack.toString(),
@@ -94,7 +94,7 @@ class LayerItemModel {
       'bottom': bottom,
       'left': left,
       'right': right,
-      'mode': mode?.toMap(),
+      'mode': mode?.toJson(),
       'icon': {'codePoint': icon.codePoint, 'fontFamily': icon.fontFamily}
     };
   }
@@ -102,7 +102,7 @@ class LayerItemModel {
   LayerItemModel.fromJson(Map<String, dynamic> item)
       : id = item['id'],
         parentID = item['parentId'],
-        profileID = item['profileID'],
+        profileID = item['profileId'],
         layerText = item['layerText'],
         visible = item['visible'] == 'true',
         visibleOnStack = item['visibleOnStack'] == 'true',
@@ -111,10 +111,11 @@ class LayerItemModel {
         listDisplayColor = Color(item['listDisplayColor']),
         paintColor = Color(item['paintColor']),
         shortcutColor = Color(item['shortcutColor']),
-        //mode = ToolsModeModel.fromJson(item['mode']),
+        mode = ToolsModeModel.fromJson(item['mode']),
         top = item['top'],
         bottom = item['bottom'],
         left = item['left'],
         right = item['right'],
-        icon = IconData(item['codePoint'], fontFamily: item['fontFamily']);
+        icon = IconData(item['icon']['codePoint'],
+            fontFamily: item['icon']['fontFamily']);
 }

@@ -43,10 +43,10 @@ jobs:
       #- run: flutter test
 
       - name: Build APK
-        run: flutter build apk --obfuscate --split-debug-info=./debug/debug --split-per-abi --release
+        run: flutter build apk --no-tree-shake-icons --obfuscate --split-debug-info=./debug/debug --split-per-abi --release
       
       - name: Build APPBUNDLE
-        run: flutter build appbundle --obfuscate --split-debug-info=./debug/debug --release
+        run: flutter build appbundle --no-tree-shake-icons --obfuscate --split-debug-info=./debug/debug --release
 
       - name: Publish Andriod Build
         if: |

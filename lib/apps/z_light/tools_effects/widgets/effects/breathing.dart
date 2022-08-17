@@ -63,12 +63,10 @@ class _BreathingPresetState extends State<BreathingPreset> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Wrap(
-          //   children: _toolsProvider.generateColorPickerWidget(breathingList),
-          // ),
           Wrap(
             children: [
               ColorPickerWidget(
+                context: context,
                 color: breathingList[0].colorCode.first,
                 colors: breathingList[0].colorCode,
                 title: breathingList[0].name,
@@ -83,6 +81,7 @@ class _BreathingPresetState extends State<BreathingPreset> {
                 },
               ),
               ColorPickerWidget(
+                context: context,
                 color: breathingList[1].colorCode.first,
                 colors: breathingList[1].colorCode,
                 title: breathingList[1].name,

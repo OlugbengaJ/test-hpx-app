@@ -65,7 +65,7 @@ class EffectsModel {
         imageBytes = item['imageBytes'],
         modeId = item['modeId'];
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'degree': degree,
       'size': size,

@@ -5,6 +5,7 @@ import 'package:hpx/models/apps/zlightspace_models/layers/layer_item_model.dart'
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
+import 'package:hpx/providers/workspace_provider.dart';
 import 'package:hpx/utils/common.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
 import 'package:hpx/widgets/theme.dart';
@@ -41,6 +42,8 @@ class _LayersState extends State<Layers> {
 
     ProfileProvider profileProvider = context.read<ProfileProvider>();
     profileProvider.setLayersProvider(provider);
+    WorkspaceProvider workspaceProvider = context.read<WorkspaceProvider>();
+    profileProvider.setWorkspaceProvider(workspaceProvider);
     provider.setProfileProvider(profileProvider);
 
     provider.setBuildContext(context);
@@ -70,7 +73,6 @@ class _LayersState extends State<Layers> {
       }
 
       /// Add a new provider to the layeritems, using the LayersProvider
-
       LayerItemModel itemModel = LayerItemModel(
           id: id,
           profileID: profileProvider.currentProfile.id,

@@ -71,18 +71,18 @@ class ToolsModeModel {
         name = item['name'],
         modeType = EnumModeType.values
             .singleWhere((element) => element.toString() == item['modeType']),
-        subMode = EnumModeType.values
-          .firstWhereOrNull((element) => element.toString() == item['subMode']),
+        subMode = EnumModeType.values.firstWhereOrNull(
+            (element) => element.toString() == item['subMode']),
         shortcutKeys = [(item['shortcutKeys'] as String).split(' ')],
-        display = EnumModeType.values
-            .firstWhereOrNull((element) => element.toString() == item['display']),
-        value = EnumModeType.values
+        display = EnumModeType.values.firstWhereOrNull(
+            (element) => element.toString() == item['display']),
+        value = EnumModes.values
             .firstWhereOrNull((element) => element.toString() == item['value']),
         effects = EffectsModel.fromJson(item),
-        icon = IconData(item['codePoint'],
-            fontFamily: item['fontFamily']);
+        icon = IconData(item['icon']['codePoint'],
+            fontFamily: item['icon']['fontFamily']);
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'id': id,
       'currentColor': getCurrentColorAsMap(),
@@ -92,16 +92,15 @@ class ToolsModeModel {
       'shortcutKeys': getShortcutKeysAsMap(),
       'display': display.toString(),
       'value': value.toString(),
-      'effects': effects.toMap(),
-      'icon': {'codePoint': icon?.codePoint,
-        'fontFamily': icon?.fontFamily}
+      'effects': effects.toJson(),
+      'icon': {'codePoint': icon?.codePoint, 'fontFamily': icon?.fontFamily}
     };
   }
 
   getCurrentColorAsMap() {
     var colors = "";
     for (var element in currentColor) {
-      colors += " ${(element as MaterialAccentColor).value}";
+      colors += " ${(element as Color).value}";
     }
     return colors;
   }
@@ -116,9 +115,7 @@ class ToolsModeModel {
 
   static transformToColors(String colors) {
     List<String> colorsList = colors.split(", ");
-    //return colorsList.map((e) => Color(int.parse(e))).toList();
-    //TODO convert color string to actual color
-    return <dynamic>[];
+    return colorsList.map((e) => Color(int.parse(e))).toList();
   }
 }
 

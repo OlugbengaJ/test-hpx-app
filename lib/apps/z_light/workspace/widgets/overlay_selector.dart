@@ -55,10 +55,10 @@ class OverlaySelector extends StatelessWidget {
     );
   }
 
-  final double crosshairSize = 5.0;
+  final double crosshairSize = 6.0;
   BoxBorder? get getBorder {
     if (!showCrossHair) return null;
-    return Border.all(width: 0.5, color: crossHairColor);
+    return Border.all(width: 1, color: crossHairColor);
   }
 
   Widget? get getCrossHair {

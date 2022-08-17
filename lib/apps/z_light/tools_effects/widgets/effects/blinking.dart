@@ -72,6 +72,7 @@ class _BlinkingPresetState extends State<BlinkingPreset> {
                 Wrap(
                   children: [
                     ColorPickerWidget(
+                      context: context,
                       color: blinkingList[0].colorCode.first,
                       colors: blinkingList[0].colorCode,
                       title: blinkingList[0].name,
@@ -86,6 +87,7 @@ class _BlinkingPresetState extends State<BlinkingPreset> {
                       },
                     ),
                     ColorPickerWidget(
+                      context: context,
                       color: blinkingList[1].colorCode.first,
                       colors: blinkingList[1].colorCode,
                       title: blinkingList[1].name,

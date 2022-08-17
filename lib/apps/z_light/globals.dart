@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 final GlobalKey<ScaffoldMessengerState> scaffoldKey =
     GlobalKey<ScaffoldMessengerState>();
 
-final workspaceStackKey = GlobalKey();
+final keyboardStackKey = GlobalKey();
 final hScrollbarKey = GlobalKey();
 final vScrollbarKey = GlobalKey();
-final workspaceZoneToolsKey = GlobalKey();
+final workspaceStackKey = GlobalKey();
 final navigatorKeys = GlobalKey<NavigatorState>();

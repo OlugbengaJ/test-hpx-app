@@ -5,7 +5,6 @@ import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model
 import 'package:hpx/providers/profile_provider/profile_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
-
 import 'package:hpx/utils/keyboard_controller.dart';
 import 'package:hpx/widgets/components/layers.dart';
 import 'package:hpx/widgets/components/picker_dropdown.dart';
@@ -20,6 +19,7 @@ class LayersProvider extends ChangeNotifier {
   bool isLayerEditing = false; // Used to check wether a layer is in edit mode
   int currentEditingID = 0; // if the ID is 0 then no layer is in edit mode
   int currentSublayerID = 0;
+  bool shortcutColorWarningIsStripNotify = false;
 
   /// if the currentSubLayerID is 0 that means there is no sublayer selected
   bool isSublayerSelected = false;
@@ -103,7 +103,6 @@ class LayersProvider extends ChangeNotifier {
     int index =
         _layeritems.indexWhere((item) => getLayers().first.id == item.id);
     changeIndex(index);
-
     notifyListeners();
   }
 
@@ -205,7 +204,13 @@ class LayersProvider extends ChangeNotifier {
     if (isSublayerSelected & !creatingNewLayer) {
       item = getCurrentSublayer()!;
     }
-    var subLayers = getSublayers(item.id);
+    List<LayerItemModel> subLayers = getSublayers(item.id);
+
+    if (length > 1) {
+      if (_modeProvider!.getModeInformation().value == EnumModes.shortcut) {
+        shortcutColorWarningIsStripNotify = true;
+      }
+    }
 
     /// check if there is already a layer with shortcut mode
     if (modeChanged &
@@ -273,6 +278,7 @@ class LayersProvider extends ChangeNotifier {
       //changeIndex(parentIndex);
     }
 
+    _profileProvider?.updateProfileByAddingLayer(item);
     physicalKeyboardController.addLayer(item);
     notifyListeners();
   }
@@ -287,7 +293,7 @@ class LayersProvider extends ChangeNotifier {
     item.left = newLeft;
     item.right = newRight;
     _layeritems[listIndex] = item;
-
+    _profileProvider?.updateProfileByAddingLayer(item);
     notifyListeners();
   }
 
@@ -354,6 +360,7 @@ class LayersProvider extends ChangeNotifier {
 
     _layeritems.insert(0, item);
 
+    _profileProvider?.updateProfileByAddingLayer(item);
     physicalKeyboardController.addLayer(item);
     notifyListeners();
   }
@@ -406,7 +413,7 @@ class LayersProvider extends ChangeNotifier {
     item.listDisplayColor = Colors.white;
     //_layeritems[_listIndex] = item;
 
-    if (item.mode!.value == EnumModes.shortcut) {
+    if (item.mode?.value == EnumModes.shortcut) {
       //_modeProvider!.setModeType(true);
     }
     changeToolsEffectMode(item.mode!);
@@ -441,6 +448,7 @@ class LayersProvider extends ChangeNotifier {
     item.layerText = text;
     int editingIndex = layeritems.indexWhere((item) => item.id == id);
     _layeritems[editingIndex] = item;
+    _profileProvider?.updateProfileByAddingLayer(item);
     notifyListeners();
   }
 
@@ -454,6 +462,7 @@ class LayersProvider extends ChangeNotifier {
     _layeritems[index] = item;
 
     toggleHideStackedLayers(!item.visible);
+    _profileProvider?.updateProfileByAddingLayer(item);
     notifyListeners();
   }
 
@@ -498,6 +507,7 @@ class LayersProvider extends ChangeNotifier {
 
         _layeritems.remove(item);
         physicalKeyboardController.removeLayer(item);
+        _profileProvider?.updateProfileByRemovingLayer(item);
 
         if (_layeritems.isNotEmpty) {
           changeIndex(0);
@@ -592,5 +602,10 @@ class LayersProvider extends ChangeNotifier {
             icon: mode.icon),
         _context!,
         true);
+  }
+
+  void hideStripNotification() {
+    shortcutColorWarningIsStripNotify = false;
+    notifyListeners();
   }
 }

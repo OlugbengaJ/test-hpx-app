@@ -27,18 +27,18 @@ class _AppLayoutState extends State<AppLayout> {
   final modeProvider = ModeProvider();
   int step = 0;
   List<String> walkthroughTitle = [
-    "Workspace & Lightning option tabs",
-    "Profiles",
-    "Layers",
-    "Tools & Effect Panel",
-    "Learn more by using the help icon"
+    'Workspace & Lighting option tabs',
+    'Profiles',
+    'Layers',
+    'Tools & Effect Panel',
+    'Learn more by using the help icon'
   ];
   List<String> walkthroughDesc = [
     'Workspace: Use this tab to rearrange your supported devices to match the layout of your physical workspace Lightning Options: Use this tab to create pprofiles and layers , select devices zones, and apply lighting tools and effects',
-    "Use profiles to assign, edit and save the lighting configuration to be displayed when you open the application. When you don’t have an application profile, the default (All Application) profile will be applied to your hardware",
-    "Create new layers or select an existing layers to edit the lighting configuration. You can reorder layers, which will determine the visibility of the configured lighting tools or effect",
-    "Selecting a lighting tool or effect from the dropdown menu to apply to your hardware. Use Mood to create an ambience, Short Colors to color-code your application shortcuts, or production to create a more color-accurate workspace.",
-    "Select the “Help” icon in the Navigation Menu to view this tutorial again, or visit our support website to learn more about Z Light Space’s feature"
+    'Use profiles to assign, edit and save the lighting configuration to be displayed when you open the application. When you don’t have an application profile, the default (All Application) profile will be applied to your hardware',
+    'Create new layers or select an existing layers to edit the lighting configuration. You can reorder layers, which will determine the visibility of the configured lighting tools or effect',
+    'Selecting a lighting tool or effect from the dropdown menu to apply to your hardware. Use Mood to create an ambience, Short Colors to color-code your application shortcuts, or production to create a more color-accurate workspace.',
+    'Select the “Help” icon in the Navigation Menu to view this tutorial again, or visit our support website to learn more about Z Light Space’s feature'
   ];
 
   walkthroughTutorialWidget() {
@@ -479,7 +479,7 @@ class _AppLayoutState extends State<AppLayout> {
               child: CustomToolTip(
                 height: 120,
                 tooltipController: tutorialProvider.tooltipControllerHelp,
-                title: "Help Option",
+                title: 'Help Option',
                 description:
                     'Use the help otion to settle all your concerns about the Z Light space app. You can also speak to a live agent to onblock you',
                 btn1Txt: Constants.close,

@@ -74,9 +74,9 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.dark,
       title: 'HP Xperience',
       debugShowCheckedModeBanner: false,
-      initialRoute: "/",
+      initialRoute: '/',
       routes: {
-        "/": (context) => const AppLayout(),
+        '/': (context) => const AppLayout(),
       },
     );
   }
