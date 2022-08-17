@@ -51,7 +51,6 @@ class ImageFilePicker{
           profileProvider.updateSelectedProfile(profileProvider.selectedProfile.name, newFile.path, '');
         }
         
-
         profileProvider.updateSelectedProfile(profileProvider.selectedProfile.name, newFile.path, '');
       }
       
