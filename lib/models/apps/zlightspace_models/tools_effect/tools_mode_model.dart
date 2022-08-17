@@ -8,32 +8,32 @@ class ToolsModeModel {
   ToolsModeModel(
       {
 
-        /// currentColor is required while using toolsmode model
-        required this.currentColor,
+      /// currentColor is required while using toolsmode model
+      required this.currentColor,
 
-        /// effects is required while using toolsmode model
-        required this.effects,
+      /// effects is required while using toolsmode model
+      required this.effects,
 
-        /// mode name is required while using toolsmode model
-        required this.name,
+      /// mode name is required while using toolsmode model
+      required this.name,
 
-        /// mode type is set to Enum.layer for default while using toolsmode model
-        this.modeType = EnumModeType.layers,
+      /// mode type is set to Enum.layer for default while using toolsmode model
+      this.modeType = EnumModeType.layers,
 
-        /// icon is not required while using toolsmode model
-        this.icon,
+      /// icon is not required while using toolsmode model
+      this.icon,
 
-        /// submode is not required while using toolsmode model
-        this.subMode,
+      /// submode is not required while using toolsmode model
+      this.subMode,
 
-        /// submode is not required while using toolsmode model
-        this.shortcutKeys,
+      /// submode is not required while using toolsmode model
+      this.shortcutKeys,
 
-        /// display is not required while using toolsmode model
-        this.display,
+      /// display is not required while using toolsmode model
+      this.display,
 
-        /// mode value is not required while using toolsmode model but highly advised to be set
-        this.value});
+      /// mode value is not required while using toolsmode model but highly advised to be set
+      this.value});
 
   /// variable property hold the name of the tools and effects mode
   final String name;
@@ -71,11 +71,11 @@ class ToolsModeModel {
         name = item['name'],
         modeType = EnumModeType.values
             .singleWhere((element) => element.toString() == item['modeType']),
-        subMode = EnumModeType.values
-            .firstWhereOrNull((element) => element.toString() == item['subMode']),
+        subMode = EnumModeType.values.firstWhereOrNull(
+            (element) => element.toString() == item['subMode']),
         shortcutKeys = [(item['shortcutKeys'] as String).split(' ')],
-        display = EnumModeType.values
-            .firstWhereOrNull((element) => element.toString() == item['display']),
+        display = EnumModeType.values.firstWhereOrNull(
+            (element) => element.toString() == item['display']),
         value = EnumModes.values
             .firstWhereOrNull((element) => element.toString() == item['value']),
         effects = EffectsModel.fromJson(item),
@@ -93,8 +93,7 @@ class ToolsModeModel {
       'display': display.toString(),
       'value': value.toString(),
       'effects': effects.toJson(),
-      'icon': {'codePoint': icon?.codePoint,
-        'fontFamily': icon?.fontFamily}
+      'icon': {'codePoint': icon?.codePoint, 'fontFamily': icon?.fontFamily}
     };
   }
 
@@ -154,3 +153,6 @@ enum EnumModeType { layers, sublayer }
 
 //// enum value for profile picker
 enum ProfileEnum { defaultprofile, calculator }
+
+//// enum value for different moods
+enum MoodTypesEnum { themes, custom }

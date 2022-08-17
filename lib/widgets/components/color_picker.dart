@@ -57,7 +57,7 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
               .currentColors[colorPickerProviderInstance.position] =
           widget.colors[colorPickerProviderInstance.position] = selectedColor;
     });
-    rebuildAllChildren(context);
+    // rebuildAllChildren(context);
     setCurrentColor();
   }
 
@@ -69,9 +69,9 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
       name: widget.title,
       canEdit: widget.picker,
       colorCode: colorPickerProviderInstance.currentColors,
-      label: colorPickerProviderInstance.currentColor?.label,
-      setRandom: colorPickerProviderInstance.currentColor?.setRandom,
-      hasBorder: colorPickerProviderInstance.currentColor?.hasBorder,
+      label: colorPickerProviderInstance.currentColor.label,
+      setRandom: colorPickerProviderInstance.currentColor.setRandom,
+      hasBorder: colorPickerProviderInstance.currentColor.hasBorder,
     ));
     widget.onchange!(widget.colors);
   }
@@ -137,6 +137,8 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                             width: (widget.colors.length > 1) ? 250 : 30,
                             height: 20,
                             child: ColorPickerBox(
+                              hover: false,
+                              focus: false,
                               hasBorder: true,
                               showGradientPicker: true,
                               onSelected: (Color newcolor, int position) {
@@ -374,20 +376,25 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                 width: widget.width,
                 margin: const EdgeInsets.only(top: 10.0, bottom: 5.0),
                 child: ColorPickerBox(
+                  hover: isHover,
+                  focus: isFocused,
                   hasBorder: widget.hasBorder!,
                   colors: widget.colors,
                   onSelected: (Color selectedColor, int position) {
                     setState(() {
-                      if (widget.colors.length < 2) {
+                      if (widget.colors.length == 1) {
                         Provider.of<ColorPickerProvider>(context, listen: false)
                             .currentColors = widget.colors;
                       }
+                      if (widget.picker == false) {
+                        changeColor(selectedColor);
+                        isHover = false;
+                        // isFocused = true;
+                        widget.hasBorder = false;
+                      } else {
+                        selectcolor(context);
+                      }
                     });
-                    if (widget.picker == false) {
-                      changeColor(selectedColor);
-                    } else {
-                      selectcolor(context);
-                    }
                   },
                 )),
             (widget.setRandom == false)
@@ -402,10 +409,13 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
                                   listen: false)
                               .currentColors = widget.colors;
                         }
-                        isHover = false;
-                        isFocused = true;
-                        widget.hasBorder = true;
-                        (widget.picker == false) ? '' : selectcolor(context);
+                        if (widget.picker == false) {
+                          // isHover = false;
+                          // isFocused = true;
+                          // widget.hasBorder = false;
+                        } else {
+                          selectcolor(context);
+                        }
                       });
                       rebuildAllChildren(context);
                     },
@@ -446,17 +456,21 @@ class _ColorPickerWidgetState extends State<ColorPickerWidget> {
 }
 
 class ColorPickerBox extends StatefulWidget {
-  const ColorPickerBox(
+  ColorPickerBox(
       {Key? key,
       required this.colors,
       required this.onSelected,
-      required this.hasBorder,
+      this.hasBorder,
+      this.hover,
+      this.focus,
       this.showGradientPicker = false})
       : super(key: key);
   final Function(Color color, int position) onSelected;
   final List<Color> colors;
   final bool? showGradientPicker;
-  final bool hasBorder;
+  final bool? hasBorder;
+  bool? hover;
+  bool? focus;
 
   @override
   State<ColorPickerBox> createState() => _ColorPickerBox();
@@ -501,15 +515,19 @@ class _ColorPickerBox extends State<ColorPickerBox> {
                 : RadialGradient(colors: widget.colors),
             // gradient: LinearGradient(colors: widget.colors),
             border: Border.all(
-                width: 1.5,
-                color: (widget.hasBorder == true)
+                width: 2,
+                color: (widget.hasBorder == true ||
+                        widget.hover == true ||
+                        widget.focus == true)
                     ? Colors.white
                     : Colors.transparent))
         : BoxDecoration(
             color: widget.colors[0],
             border: Border.all(
-                width: 1.5,
-                color: (widget.hasBorder == true)
+                width: 2,
+                color: (widget.hasBorder == true ||
+                        widget.hover == true ||
+                        widget.focus == true)
                     ? Colors.white
                     : Colors.transparent));
   }
@@ -520,8 +538,15 @@ class _ColorPickerBox extends State<ColorPickerBox> {
         highlightColor: Colors.transparent,
         focusColor: Colors.transparent,
         hoverColor: Colors.transparent,
+        onHover: (bool? hover) {
+          setState(() {
+            widget.hover = hover!;
+          });
+        },
         onTap: () {
-          if (widget.colors.length == 1) {
+          if (widget.colors.length == 1 ||
+              (widget.colors.length > 1 &&
+                  widget.showGradientPicker == false)) {
             widget.onSelected(widget.colors[0], 0);
           }
         },

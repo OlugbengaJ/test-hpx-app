@@ -6,6 +6,7 @@ import 'package:hpx/models/apps/zlightspace_models/tools_effect/color_picker_mod
 import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/layers_provider/layers.dart';
 import 'package:hpx/providers/tools_effect_provider/mode_provider.dart';
+import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/components/color_picker.dart';
 import 'package:provider/provider.dart';
 
@@ -57,8 +58,8 @@ List<ColorPickerWidgetModel> colorcycleDefaultsList = [
 ];
 List<ColorPickerWidgetModel> colorcycleCustomList = [
   ColorPickerWidgetModel(
-    action: 'Edit',
-    name: "",
+    action: Constants.edit,
+    name: Constants.nullValue,
     canEdit: true,
     colorCode: [
       Colors.red.shade900,
@@ -119,8 +120,8 @@ List<ColorPickerWidgetModel> waveDefaultsList = [
 ];
 List<ColorPickerWidgetModel> waveCustomList = [
   ColorPickerWidgetModel(
-    action: 'Edit',
-    name: "",
+    action: Constants.edit,
+    name: Constants.nullValue,
     canEdit: true,
     colorCode: [
       Colors.red.shade900,
@@ -137,21 +138,21 @@ List<ColorPickerWidgetModel> waveCustomList = [
 List<ColorPickerWidgetModel> breathingList = [
   ColorPickerWidgetModel(
     label: "Primary Color",
-    action: '',
+    action: Constants.nullValue,
     width: 30.0,
     height: 30.0,
     canEdit: true,
-    name: "",
+    name: Constants.nullValue,
     colorCode: [Colors.red.shade900],
     setRandom: true,
   ),
   ColorPickerWidgetModel(
     label: "Secondary Color",
-    action: '',
+    action: Constants.nullValue,
     width: 30.0,
     height: 30.0,
     canEdit: true,
-    name: "",
+    name: Constants.nullValue,
     colorCode: [Colors.yellow.shade900],
     setRandom: true,
   )
@@ -161,51 +162,45 @@ List<ColorPickerWidgetModel> breathingList = [
 List<ColorPickerWidgetModel> interactiveColorList = [
   ColorPickerWidgetModel(
     label: "Primary Color",
-    action: '',
+    action: Constants.nullValue,
     width: 30.0,
     height: 30.0,
     canEdit: true,
-    name: "",
+    name: Constants.nullValue,
     colorCode: [Colors.red.shade900],
     setRandom: true,
   ),
   ColorPickerWidgetModel(
     label: "Secondary Color",
-    action: '',
+    action: Constants.nullValue,
     width: 30.0,
     height: 30.0,
     canEdit: true,
-    name: "",
+    name: Constants.nullValue,
     colorCode: [Colors.yellow.shade900],
     setRandom: true,
-  ),
-  // ColorPickerWidgetModel(
-  //   action: 'Edit',
-  //   canEdit: true,
-  //   name: "Custom 4",
-  //   colorCode: [Color(0xFF424242)],
-  // )
+  )
 ];
 
 // blinking pickermodel lists
 List<ColorPickerWidgetModel> blinkingList = [
   ColorPickerWidgetModel(
     label: "Primary Color",
-    action: '',
+    action: Constants.nullValue,
     width: 30.0,
     height: 30.0,
     canEdit: true,
-    name: "",
+    name: Constants.nullValue,
     colorCode: [Colors.red.shade900],
     setRandom: true,
   ),
   ColorPickerWidgetModel(
     label: "Secondary Color",
-    action: '',
+    action: Constants.nullValue,
     width: 30.0,
     height: 30.0,
     canEdit: true,
-    name: "",
+    name: Constants.nullValue,
     colorCode: [Colors.yellow.shade900],
     setRandom: true,
   )
@@ -214,8 +209,8 @@ List<ColorPickerWidgetModel> blinkingList = [
 // shortcut pickermodel lists
 List<ColorPickerWidgetModel> shortcutList = [
   ColorPickerWidgetModel(
-    label: "",
-    action: '',
+    label: Constants.nullValue,
+    action: Constants.nullValue,
     canEdit: true,
     name: "sublayer",
     colorCode: [Colors.transparent],
@@ -225,10 +220,10 @@ List<ColorPickerWidgetModel> shortcutList = [
 // shortcut pickermodel lists
 List<ColorPickerWidgetModel> contactsupportlist = [
   ColorPickerWidgetModel(
-    label: "",
-    action: '',
+    label: Constants.nullValue,
+    action: Constants.nullValue,
     canEdit: true,
-    name: "",
+    name: Constants.nullValue,
     colorCode: [Colors.blue],
   )
 ];
@@ -236,7 +231,7 @@ List<ColorPickerWidgetModel> contactsupportlist = [
 // color production pickermodel lists
 List<ColorPickerWidgetModel> colorProductionList = [
   ColorPickerWidgetModel(
-    action: '',
+    action: Constants.nullValue,
     name: "Netural (D65 White Point)",
     colorCode: [Colors.yellow],
   )
@@ -245,31 +240,31 @@ List<ColorPickerWidgetModel> colorProductionList = [
 // mood pickermodel lists
 List<ColorPickerWidgetModel> moodThemesList = [
   ColorPickerWidgetModel(
-    action: '',
+    action: Constants.nullValue,
     name: "Night Mode",
     hasBorder: true,
     colorCode: [Colors.orangeAccent],
   ),
   ColorPickerWidgetModel(
-    action: '',
+    action: Constants.nullValue,
     name: "Focus",
     hasBorder: false,
     colorCode: [Colors.lightBlue],
   ),
   ColorPickerWidgetModel(
-    action: '',
+    action: Constants.nullValue,
     name: "Relax",
     hasBorder: false,
     colorCode: [Colors.greenAccent],
   ),
   ColorPickerWidgetModel(
-    action: '',
+    action: Constants.nullValue,
     name: "Create",
     hasBorder: false,
     colorCode: [Colors.deepOrange],
   ),
   ColorPickerWidgetModel(
-    action: '',
+    action: Constants.nullValue,
     name: "Ideate",
     hasBorder: false,
     colorCode: [Colors.purple],
@@ -277,33 +272,33 @@ List<ColorPickerWidgetModel> moodThemesList = [
 ];
 List<ColorPickerWidgetModel> moodCustomList = [
   ColorPickerWidgetModel(
-    action: 'Edit',
-    name: "Custom 1",
+    action: Constants.edit,
+    name: Constants.custom1,
     canEdit: true,
     colorCode: [Colors.transparent],
   ),
   ColorPickerWidgetModel(
-    action: 'Edit',
-    name: "Custom 2",
+    action: Constants.edit,
+    name: Constants.custom2,
     canEdit: true,
     colorCode: [Colors.transparent],
   ),
   ColorPickerWidgetModel(
-    action: 'Edit',
+    action: Constants.edit,
     canEdit: true,
-    name: "Custom 3",
+    name: Constants.custom3,
     colorCode: [Colors.transparent],
   ),
   ColorPickerWidgetModel(
-    action: 'Edit',
+    action: Constants.edit,
     canEdit: true,
-    name: "Custom 4",
+    name: Constants.custom4,
     colorCode: [Colors.transparent],
   ),
   ColorPickerWidgetModel(
-    action: 'Edit',
+    action: Constants.edit,
     canEdit: true,
-    name: "Custom 5",
+    name: Constants.custom5,
     colorCode: [Colors.transparent],
   ),
 ];
@@ -312,34 +307,34 @@ List<ColorPickerWidgetModel> audioVisualSolidList = [
   ColorPickerWidgetModel(
       canEdit: true,
       label: "Primary Color",
-      action: '',
+      action: Constants.nullValue,
       width: 30.0,
       height: 30.0,
-      name: "",
+      name: Constants.nullValue,
       colorCode: [Colors.red.shade900]),
   ColorPickerWidgetModel(
       canEdit: true,
       label: "Secondary Color",
-      action: '',
+      action: Constants.nullValue,
       width: 30.0,
       height: 30.0,
-      name: "",
+      name: Constants.nullValue,
       colorCode: [Colors.yellow.shade900]),
   ColorPickerWidgetModel(
       canEdit: true,
       label: "Background Color",
-      action: '',
+      action: Constants.nullValue,
       width: 30.0,
       height: 30.0,
-      name: "",
+      name: Constants.nullValue,
       colorCode: [Colors.transparent])
 ];
 List<ColorPickerWidgetModel> audioVisualGradientList = [
   ColorPickerWidgetModel(
       canEdit: true,
-      label: "",
-      action: 'Edit',
-      name: "",
+      label: Constants.nullValue,
+      action: Constants.edit,
+      name: Constants.nullValue,
       colorCode: [
         Colors.red.shade900,
         Colors.yellow,
@@ -352,7 +347,8 @@ List<ColorPickerWidgetModel> audioVisualGradientList = [
 
 //// color picker provider class to handle the color picker generate ui functions, and set the current color
 class ColorPickerProvider extends ChangeNotifier {
-  ColorPickerWidgetModel? currentColor;
+  ColorPickerWidgetModel currentColor =
+      ColorPickerWidgetModel(name: Constants.nullValue, colorCode: []);
   List<Color> currentColors = [];
   Color colors = Colors.transparent;
   List<bool> hasBorder = [];
@@ -459,7 +455,7 @@ class ColorPickerProvider extends ChangeNotifier {
     LayersProvider layerProvider =
         Provider.of<LayersProvider>(context, listen: false);
     modeProvider.setCurrentMode(ToolsModeModel(
-        currentColor: currentColor!.colorCode,
+        currentColor: currentColor.colorCode,
         value: modeProvider.currentMode.value,
         effects: modeProvider.currentMode.effects,
         icon: modeProvider.currentMode.icon,

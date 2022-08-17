@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hpx/models/apps/zlightspace_models/tools_effect/tools_mode_model.dart';
 import 'package:hpx/providers/tools_effect_provider/color_picker_provider.dart';
+import 'package:hpx/utils/constants.dart';
 import 'package:hpx/widgets/theme.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +13,7 @@ class MoodPreset extends StatefulWidget {
 }
 
 class _MoodPresetState extends State<MoodPreset> {
-  String activatedButton = "Themes";
+  MoodTypesEnum activatedButton = MoodTypesEnum.themes;
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +36,10 @@ class _MoodPresetState extends State<MoodPreset> {
                           TextButton(
                             onPressed: () {
                               setState(() {
-                                activatedButton = "Themes";
+                                activatedButton = MoodTypesEnum.themes;
                               });
                             },
-                            style: (activatedButton == 'Custom')
+                            style: (activatedButton == MoodTypesEnum.custom)
                                 ? textBtnStyleBlack
                                 : textBtnStyleWhite,
                             child: SizedBox(
@@ -48,9 +50,10 @@ class _MoodPresetState extends State<MoodPreset> {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      'THEMES',
+                                      Constants.themes,
                                       style: TextStyle(
-                                          color: (activatedButton == 'Custom')
+                                          color: (activatedButton ==
+                                                  MoodTypesEnum.custom)
                                               ? Colors.white
                                               : Colors.black),
                                     ),
@@ -68,10 +71,10 @@ class _MoodPresetState extends State<MoodPreset> {
                           TextButton(
                             onPressed: () {
                               setState(() {
-                                activatedButton = "Custom";
+                                activatedButton = MoodTypesEnum.custom;
                               });
                             },
-                            style: (activatedButton != 'Custom')
+                            style: (activatedButton != MoodTypesEnum.custom)
                                 ? textBtnStyleBlack
                                 : textBtnStyleWhite,
                             child: SizedBox(
@@ -82,9 +85,10 @@ class _MoodPresetState extends State<MoodPreset> {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Text(
-                                      'CUSTOM',
+                                      Constants.custom,
                                       style: TextStyle(
-                                          color: (activatedButton != 'Custom')
+                                          color: (activatedButton !=
+                                                  MoodTypesEnum.custom)
                                               ? Colors.white
                                               : Colors.black),
                                     ),
@@ -103,7 +107,7 @@ class _MoodPresetState extends State<MoodPreset> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: _colorPickerProvider.generateColorPickerWidget(
-                      activatedButton == 'Themes'
+                      activatedButton == MoodTypesEnum.themes
                           ? moodThemesList
                           : moodCustomList,
                       context)),

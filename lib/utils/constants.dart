@@ -45,10 +45,21 @@ class Constants {
   static const String resizable = 'Resizable';
   static const String selectAppTitle = 'Select Application';
   static const String selectedProfile = 'Selected Profile';
-  static const String shortcutColorStripNotificationText = 'This layer will not be visible due to an active Shortcuts Color layer above it';
+  static const String shortcutColorStripNotificationText =
+      'This layer will not be visible due to an active Shortcuts Color layer above it';
   static const String uploadPicture = 'Upload a picture';
   static const String workspace = 'Workspace';
   static const String zoneSelection = 'Zone Selection';
+
+  static const String themes = 'Themes';
+  static const String custom = 'Custom';
+  static const String custom1 = 'Custom 1';
+  static const String custom2 = 'Custom 2';
+  static const String custom3 = 'Custom 3';
+  static const String custom4 = 'Custom 4';
+  static const String custom5 = 'Custom 5';
+  static const String edit = 'Edit';
+  static const String nullValue = '';
 
   static const double zoomFactor = 800.0;
   static const double defaultZoom = 100;
