@@ -47,7 +47,10 @@ app.*.map.json
 
 # Debian packages
 /debian/packages
+<<<<<<< HEAD
 .dccache
 linux
 macos
 windows
+=======
+>>>>>>> 5389060 (.)
